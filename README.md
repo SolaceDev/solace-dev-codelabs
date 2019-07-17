@@ -1,5 +1,3 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b90d4895-1340-4831-a0cb-21ac6f8c36b6/deploy-status)](https://app.netlify.com/sites/musing-darwin-82a461/deploys)
-
 # Solace Codelabs
 
 This repository is a submodule of the [site repo](https://github.com/SolaceDev/solace-dev-codelabs-site)
