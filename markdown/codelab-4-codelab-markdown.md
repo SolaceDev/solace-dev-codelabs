@@ -24,7 +24,7 @@ Here is an example image of another CodeLab that I created:
 
 
 **Resources:** 
-* The markdown for this codelab is located here: [codelab.md](https://github.com/Mrc0113/codelab-4-codelab/blob/master/codelab.md)
+* The markdown for this codelab is located here: [codelab.md](https://github.com/SolaceDev/codelab-4-codelab/blob/master/codelab.md)
 * [Google CodeLabs Tools Github](https://github.com/googlecodelabs/tools) - The repo that contains the claat tool we'll be using today
 * [Google Group for CodeLab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
 * [A blog that I used when getting started with Google Codelabs](https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816)
