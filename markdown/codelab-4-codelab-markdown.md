@@ -5,7 +5,7 @@ categories: codelab,markdown
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/codelab-4-codelab
-analytics account: UA-139902608-1
+analytics account: UA-3921398-1
 
 # CodeLab to Create a CodeLab
 
@@ -98,7 +98,7 @@ categories: codelab,markdown
 environments: Web
 status: Published
 feedback link: A link where users can go to provide feedback (Maybe the git repo)
-analytics account: Google Analytics ID
+analytics account: UA-3921398-1
 ```
 
 Metadata consists of key-value pairs of the form "key: value". Keys cannot
