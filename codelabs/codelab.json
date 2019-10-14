@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2019-07-23T11:06:57-04:00",
-  "id": "codelab-4-codelab-markdown",
-  "duration": 14,
+  "updated": "2019-10-14T16:00:24-04:00",
+  "id": "codelab-4-codelab",
+  "duration": 19,
   "title": "CodeLab to Create a CodeLab",
   "summary": "Create a CodeLab Using Markdown",
-  "source": "codelab-4-codelab-markdown.md",
+  "source": "codelab-4-codelab.md",
   "theme": "",
   "status": [
     "published"
@@ -20,7 +20,7 @@
   "tags": [
     "web"
   ],
-  "feedback": "https://github.com/Mrc0113/codelab-4-codelab",
-  "ga": "UA-139902608-1",
-  "url": "codelab-4-codelab-markdown"
+  "feedback": "https://github.com/SolaceDev/codelab-4-codelab",
+  "ga": "UA-3921398-1",
+  "url": "codelab-4-codelab"
 }
