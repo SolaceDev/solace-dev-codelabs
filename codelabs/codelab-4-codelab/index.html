@@ -22,7 +22,7 @@
 <body>
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
   <google-codelab codelab-gaid="UA-3921398-1"
-                  id="codelab-4-codelab-markdown"
+                  id="codelab-4-codelab"
                   title="CodeLab to Create a CodeLab"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/codelab-4-codelab">
@@ -49,15 +49,20 @@
       <google-codelab-step label="Environment Setup" duration="4">
         <p>In order to create a CodeLab you need <em>Go</em> and <em>claat</em> (the codelabs command line tool) installed.</p>
 <p>The instructions below are what worked for me on Mac, but you can also find instructions <a href="https://github.com/googlecodelabs/tools/tree/master/claat" target="_blank">here</a></p>
-<h3 is-upgraded>Install Go &amp; claat</h3>
+<h3 is-upgraded>Install Go</h3>
+<p>Install <a href="https://golang.org/dl/" target="_blank">Go</a> if you don&#39;t have it.<br>You can use Homebrew if you have it on mac</p>
 <pre><code>$ brew install go
-$ go get -u -v -x github.com/googlecodelabs/tools/claat
 </code></pre>
-<h3 is-upgraded>Setup Environment Variables</h3>
+<h3 is-upgraded>Setup Go Environment Variables</h3>
+<p>Below is what I set on mac, but instructions are <a href="https://golang.org/doc/install" target="_blank">here</a> for other OS options</p>
 <pre><code>$ export GOPATH=$HOME/Go
 $ export GOROOT=/usr/local/opt/go/libexec
 $ export PATH=$PATH:$GOPATH/bin
 $ export PATH=$PATH:$GOROOT/bin
+</code></pre>
+<h3 is-upgraded>Install claat</h3>
+<p>Install claat</p>
+<pre><code>$ go get -u -v -x github.com/googlecodelabs/tools/claat
 </code></pre>
 <p>You should now have the <em>claat</em> command available to you.</p>
 <pre><code>$ claat
@@ -66,9 +71,8 @@ $ export PATH=$PATH:$GOROOT/bin
 
       </google-codelab-step>
     
-      <google-codelab-step label="Solace Guidelines" duration="0">
-        <p>Duration 0:05:00</p>
-<p>Please follow these guidelines when creating codelabs that will be hosted at solace.dev/codelabs</p>
+      <google-codelab-step label="Solace Guidelines" duration="5">
+        <p>Please follow these guidelines when creating codelabs that will be hosted at <a href="https://solace.dev/codelabs" target="_blank">solace.dev/codelabs</a></p>
 <h2 is-upgraded>Content Guidance</h2>
 <ul>
 <li>Each codelab should be focused on one topic or a very small group of related topics.</li>
@@ -79,7 +83,7 @@ $ export PATH=$PATH:$GOROOT/bin
 <li>Provide code used in a public git repo</li>
 </ul>
 <h2 is-upgraded>Where to create your codelab</h2>
-<p>It is recommended that you create your codelab in a git repository for version tracking. This can be in the SolaceDev or SolaceSe git organizations.<br>It is fine to keep the codelab markdown in the same repository as sample code if desired.</p>
+<p>It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.<br><br>It is fine to keep the codelab markdown in the same repository as sample code if desired.</p>
 <p>An example structure for a codelab repo can be seen <a href="https://github.com/SolaceDev/codelab-4-codelab" target="_blank">here</a></p>
 
 
@@ -87,6 +91,8 @@ $ export PATH=$PATH:$GOROOT/bin
     
       <google-codelab-step label="Create your initial CodeLab" duration="5">
         <p>Now that we have the environment setup let&#39;s go ahead and create a markdown file where we&#39;ll create the actual codelab.<br>Please have your markdown file name match the &#34;id&#34; in the header metadata that you will set in the next subsection.</p>
+<aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
 <pre><code>$ vim unique-codelab-identifier.md
 </code></pre>
 <h3 is-upgraded>Fill-in the header metadata</h3>
@@ -150,17 +156,28 @@ Plain Text followed by bullets
 * World
 
 You created bullets!
+
+### Numbered List
+1. List
+1. Using
+1. Numbers
+
+You created a numbered list!
+
 </code></pre>
 <p>Copy into section 2 (Below Duration):</p>
 <pre><code>### Add a Link
-Let&#39;s add a link!
+Add a link!
 [Example of a Link](https://www.google.com)
 
 ### Add an Image
-Let&#39;s add an image!
+Add an image!
 ![image_caption](https://googlecloud.tips/img/031/codelabs.png)
+
+### Embed an iframe
+![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg &#34;Try Me Publisher&#34;)
 </code></pre>
-<p>See the &#34;Markdown Syntax Backup&#34; section for more examples of what can be done.<br>More Markdown Parser examples can be found <a href="https://github.com/googlecodelabs/tools/tree/master/claat/parser/md" target="_blank">here</a>.</p>
+<p>More Markdown Parser examples can be found <a href="https://github.com/googlecodelabs/tools/tree/master/claat/parser/md" target="_blank">here</a>.</p>
 
 
       </google-codelab-step>
@@ -200,36 +217,6 @@ git push
 <h2 is-upgraded>Create a Pull Request</h2>
 <p>Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.<br>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></p>
 <p>Since your commit has already been pushed to the <code>dev</code> branch you should see a highlighted box near the top of the page with your newly pushed git branch name.<br>Choose the &#34;Pull Request&#34; button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site.</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Markdown Syntax Backup" duration="0">
-        <pre><code>public static void main(String args[]){
-  System.out.println(&#34;Hello World!&#34;);
-  }
-</code></pre>
-<p>Adding an <code>inline code</code> snippet</p>
-<aside class="special"><p>This will appear in a green info box.</p>
-</aside>
-<aside class="warning"><p>This will appear in a yellow info box.</p>
-</aside>
-<p><a href="https://www.google.com" target="_blank">Example of a Link</a></p>
-<p>Adding an image<br><img alt="image_caption" src="img/3c1a18672fbd28c8.png"></p>
-<ul>
-<li>List</li>
-<li>using</li>
-<li>bullets</li>
-</ul>
-<ol type="1">
-<li>List</li>
-<li>Using</li>
-<li>Numbers</li>
-</ol>
-<h3 is-upgraded>Embed an iframe</h3>
-<aside class="warning"><p>Note that the content you embed must be whitelisted in the &#34;IframeWhitelist&#34; var <a href="https://github.com/googlecodelabs/tools/blob/master/claat/types/node.go" target="_blank">here</a><br>Currently whitelisted include content starting with google.com, google.dev, dartlang.org, web.dev, observablehq.com, repl.it &amp; codepen.io</p>
-</aside>
-<iframe class="youtube-video" src="https://codepen.io/tzoght/embed/yRNZaP"></iframe>
 
 
       </google-codelab-step>
