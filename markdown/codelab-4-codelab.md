@@ -1,6 +1,7 @@
 author: Marc DiPasquale
 summary: Create a CodeLab Using Markdown
 id: codelab-4-codelab
+tags: 
 categories: codelab,markdown
 environments: Web
 status: Published
@@ -79,10 +80,9 @@ Please follow these guidelines when creating codelabs that will be hosted at [so
 * Provide code used in a public git repo
 
 ### Where to create your codelab
-It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.  
-It is fine to keep the codelab markdown in the same repository as sample code if desired.
-
-An example structure for a codelab repo can be seen [here](https://github.com/SolaceDev/codelab-4-codelab)
+* It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.  
+* It is fine to keep the codelab markdown in the same repository as sample code if desired.
+* An example structure for a codelab repo can be seen [here](https://github.com/SolaceDev/codelab-4-codelab)
 
 
 ## Create your initial CodeLab
@@ -104,11 +104,12 @@ $ vim unique-codelab-identifier.md
 Copy and paste the headers below into your markdown file and change the values appropriately. 
 Guidelines are available below the sample headers. 
 
-``` bash
+``` 
 author: Author Name
 summary: Summary of your codelab that is human readable
 id: unique-codelab-identifier
-categories: codelab,markdown
+tags: workshop,iguide
+categories: Java,Spring
 environments: Web
 status: Published
 feedback link: A link where users can go to provide feedback (Maybe the git repo)
@@ -120,24 +121,22 @@ contain colons, and separate metadata fields must be separated by blank lines.
 At present, values must all be on one line. All metadata must come before the
 title. Any arbitrary keys and values may be used; however, only the following
 will be understood by the renderer:
-
+* Author: Author name or git username
 * Summary: A human-readable summary of the codelab. Defaults to blank.
 * Id: An identifier composed of lowercase letters ideally describing the
   content of the codelab. This field should be unique among
-  codelabs.
-* Categories: A comma-separated list of the topics the codelab covers.
-* Environments: A list of environments the codelab should be discoverable in.
-  Codelabs marked "Web" will be visible at the codelabs index. Codelabs marked
-  "Kiosk" will only be available at codelabs kiosks, which have special
-  equipment attached.
+  codelabs. This will be in the URL of the codelab. 
+* Tags: Leave "workshop" if creating a Developer workshop or "iguide" if creating an integration guide. Remove both if neither. 
+* Categories: A comma-separated list of the topics or technologies the codelab covers. Include items such as language(s) and protocol(s) used. 
+* Environments: Leave as "Web"
 * Status: The publication status of the codelab. Valid values are:
   - Draft: Codelab is not finished.
   - Published: Codelab is finished and visible.
   - Deprecated: Codelab is considered stale and should not be widely advertised.
   - Hidden: Codelab is not shown in index.
 * Feedback Link: A link to send users to if they wish to leave feedback on the
-  codelab.
-* Analytics Account: A Google Analytics ID to include with all codelab pages.
+  codelab. Link to git repo where code for the tutorial will live.
+* Analytics Account: A Google Analytics ID to include with all codelab pages. Leave as shown above. 
 
 #### Add the Title
 Next add your title using a single '#' character
@@ -257,8 +256,6 @@ git push
 ```
 
 ### Create a Pull Request
-Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs. 
-Do this by navigating to the github repo at: [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)
-
-Since your commit has already been pushed to the `dev` branch you should see a highlighted box near the top of the page with your newly pushed git branch name. 
-Choose the "Pull Request" button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site. 
+* Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs. 
+* Do this by navigating to the github repo at: [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)
+* Since your commit has already been pushed to the `dev` branch you should see a highlighted box near the top of the page; Choose the "Pull Request" button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site. 
