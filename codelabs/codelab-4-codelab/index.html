@@ -83,8 +83,11 @@ $ export PATH=$PATH:$GOROOT/bin
 <li>Provide code used in a public git repo</li>
 </ul>
 <h2 is-upgraded>Where to create your codelab</h2>
-<p>It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.<br><br>It is fine to keep the codelab markdown in the same repository as sample code if desired.</p>
-<p>An example structure for a codelab repo can be seen <a href="https://github.com/SolaceDev/codelab-4-codelab" target="_blank">here</a></p>
+<ul>
+<li>It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.<br></li>
+<li>It is fine to keep the codelab markdown in the same repository as sample code if desired.</li>
+<li>An example structure for a codelab repo can be seen <a href="https://github.com/SolaceDev/codelab-4-codelab" target="_blank">here</a></li>
+</ul>
 
 
       </google-codelab-step>
@@ -100,7 +103,8 @@ $ export PATH=$PATH:$GOROOT/bin
 <pre><code>author: Author Name
 summary: Summary of your codelab that is human readable
 id: unique-codelab-identifier
-categories: codelab,markdown
+tags: workshop,iguide
+categories: Java,Spring
 environments: Web
 status: Published
 feedback link: A link where users can go to provide feedback (Maybe the git repo)
@@ -108,10 +112,12 @@ analytics account: UA-3921398-1
 </code></pre>
 <p>Metadata consists of key-value pairs of the form &#34;key: value&#34;. Keys cannot<br>contain colons, and separate metadata fields must be separated by blank lines.<br>At present, values must all be on one line. All metadata must come before the<br>title. Any arbitrary keys and values may be used; however, only the following<br>will be understood by the renderer:</p>
 <ul>
+<li>Author: Author name or git username</li>
 <li>Summary: A human-readable summary of the codelab. Defaults to blank.</li>
-<li>Id: An identifier composed of lowercase letters ideally describing the<br>content of the codelab. This field should be unique among<br>codelabs.</li>
-<li>Categories: A comma-separated list of the topics the codelab covers.</li>
-<li>Environments: A list of environments the codelab should be discoverable in.<br>Codelabs marked &#34;Web&#34; will be visible at the codelabs index. Codelabs marked<br>&#34;Kiosk&#34; will only be available at codelabs kiosks, which have special<br>equipment attached.</li>
+<li>Id: An identifier composed of lowercase letters ideally describing the<br>content of the codelab. This field should be unique among<br>codelabs. This will be in the URL of the codelab.</li>
+<li>Tags: Leave &#34;workshop&#34; if creating a Developer workshop or &#34;iguide&#34; if creating an integration guide. Remove both if neither.</li>
+<li>Categories: A comma-separated list of the topics or technologies the codelab covers. Include items such as language(s) and protocol(s) used.</li>
+<li>Environments: Leave as &#34;Web&#34;</li>
 <li>Status: The publication status of the codelab. Valid values are:<br><br><ul>
 <li>Draft: Codelab is not finished.</li>
 <li>Published: Codelab is finished and visible.</li>
@@ -119,8 +125,8 @@ analytics account: UA-3921398-1
 <li>Hidden: Codelab is not shown in index.</li>
 </ul>
 </li>
-<li>Feedback Link: A link to send users to if they wish to leave feedback on the<br>codelab.</li>
-<li>Analytics Account: A Google Analytics ID to include with all codelab pages.</li>
+<li>Feedback Link: A link to send users to if they wish to leave feedback on the<br>codelab. Link to git repo where code for the tutorial will live.</li>
+<li>Analytics Account: A Google Analytics ID to include with all codelab pages. Leave as shown above.</li>
 </ul>
 <h3 is-upgraded>Add the Title</h3>
 <p>Next add your title using a single ‘#&#39; character</p>
@@ -215,8 +221,11 @@ cp -r /path/to/&lt;header-metadata-id&gt;.md markdown/
 git push 
 </code></pre>
 <h2 is-upgraded>Create a Pull Request</h2>
-<p>Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.<br>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></p>
-<p>Since your commit has already been pushed to the <code>dev</code> branch you should see a highlighted box near the top of the page with your newly pushed git branch name.<br>Choose the &#34;Pull Request&#34; button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site.</p>
+<ul>
+<li>Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.</li>
+<li>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></li>
+<li>Since your commit has already been pushed to the <code>dev</code> branch you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site.</li>
+</ul>
 
 
       </google-codelab-step>
