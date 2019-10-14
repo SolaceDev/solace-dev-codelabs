@@ -1,6 +1,6 @@
 author: Marc DiPasquale
 summary: Create a CodeLab Using Markdown
-id: codelab-4-codelab-markdown
+id: codelab-4-codelab
 categories: codelab,markdown
 environments: Web
 status: Published
@@ -36,18 +36,28 @@ In order to create a CodeLab you need *Go* and *claat* (the codelabs command lin
 
 The instructions below are what worked for me on Mac, but you can also find instructions [here](https://github.com/googlecodelabs/tools/tree/master/claat) 
 
-#### Install Go & claat
+#### Install Go 
+
+Install [Go](https://golang.org/dl/) if you don't have it.
+You can use Homebrew if you have it on mac 
 ``` bash
 $ brew install go
-$ go get -u -v -x github.com/googlecodelabs/tools/claat
 ```
 
-#### Setup Environment Variables
+#### Setup Go Environment Variables
+Below is what I set on mac, but instructions are [here](https://golang.org/doc/install) for other OS options
+
 ``` bash
 $ export GOPATH=$HOME/Go
 $ export GOROOT=/usr/local/opt/go/libexec
 $ export PATH=$PATH:$GOPATH/bin
 $ export PATH=$PATH:$GOROOT/bin
+```
+
+#### Install claat
+Install claat
+``` bash
+$ go get -u -v -x github.com/googlecodelabs/tools/claat
 ```
 
 You should now have the *claat* command available to you. 
@@ -56,9 +66,9 @@ $ claat
 ```
 
 ## Solace Guidelines
-Duration 0:05:00
+Duration: 0:05:00
 
-Please follow these guidelines when creating codelabs that will be hosted at solace.dev/codelabs
+Please follow these guidelines when creating codelabs that will be hosted at [solace.dev/codelabs](https://solace.dev/codelabs)
 
 ### Content Guidance
 * Each codelab should be focused on one topic or a very small group of related topics. 
@@ -69,7 +79,7 @@ Please follow these guidelines when creating codelabs that will be hosted at sol
 * Provide code used in a public git repo
 
 ### Where to create your codelab
-It is recommended that you create your codelab in a git repository for version tracking. This can be in the SolaceDev or SolaceSe git organizations. 
+It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.  
 It is fine to keep the codelab markdown in the same repository as sample code if desired.
 
 An example structure for a codelab repo can be seen [here](https://github.com/SolaceDev/codelab-4-codelab)
@@ -81,6 +91,10 @@ Duration: 0:05:00
 Now that we have the environment setup let's go ahead and create a markdown file where we'll create the actual codelab. 
 Please have your markdown file name match the "id" in the header metadata that you will set in the next subsection. 
 
+Negative
+: If you're using Windows make sure to set your text editor to use UNIX line endings! 
+
+####
 ``` bash
 $ vim unique-codelab-identifier.md
 ```
@@ -169,20 +183,29 @@ Plain Text followed by bullets
 * World
 
 You created bullets!
+
+### Numbered List
+1. List
+1. Using
+1. Numbers
+
+You created a numbered list!
+
 ```
 
 Copy into section 2 (Below Duration): 
 ```
 ### Add a Link
-Let's add a link!
+Add a link!
 [Example of a Link](https://www.google.com)
 
 ### Add an Image
-Let's add an image!
+Add an image!
 ![image_caption](https://googlecloud.tips/img/031/codelabs.png)
-```
 
-See the "Markdown Syntax Backup" section for more examples of what can be done. 
+### Embed an iframe
+![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
+```
 More Markdown Parser examples can be found [here](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md).
 
 ## Export & Serve Locally
@@ -239,45 +262,3 @@ Do this by navigating to the github repo at: [https://github.com/SolaceDev/solac
 
 Since your commit has already been pushed to the `dev` branch you should see a highlighted box near the top of the page with your newly pushed git branch name. 
 Choose the "Pull Request" button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site. 
-
-## Markdown Syntax Backup
-Duration: 0:00:00
-
-``` Java
-public static void main(String args[]){
-  System.out.println("Hello World!");
-  }
-```
-
-Adding an `inline code` snippet
-
-Positive
-: This will appear in a green info box.
-
-Negative
-: This will appear in a yellow info box.
-
- [Example of a Link](https://www.google.com)
-
-Adding an image
-![image_caption](https://s3-eu-west-1.amazonaws.com/released-artifacts-3.x/assets/tutorial_images/creating-styles/step1.png)
-
-* List
-* using 
-* bullets
-
-###
-
-1. List
-1. Using
-1. Numbers
-
-###
-
-#### Embed an iframe
-Negative
-: Note that the content you embed must be whitelisted in the "IframeWhitelist" var [here](https://github.com/googlecodelabs/tools/blob/master/claat/types/node.go)
-Currently whitelisted include content starting with google.com, google.dev, dartlang.org, web.dev, observablehq.com, repl.it & codepen.io
-
-###
-![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
