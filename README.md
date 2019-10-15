@@ -19,7 +19,7 @@ There are two directories in this repo.
 * Be sure to update the headers in your codelab
   - Ensure the unique ID field: `id:` is present. This ID will be used in the URL so try to keep it short and human-readable. 
   - Add tags for filtering: Currently either _workshop_ for a Developer Workshop guide or _iguide_ for an Integration Guide 
-  - Add a few items to `categories:` that identify technologies used such as the language, protocol, library and/or feature covered.   
+  - Add a few items to `categories:` that identify technologies used such as the language, protocol, library and/or feature covered. *List the main technology first as right now that is the only item that is filterable on solace.dev/codelabs*   
   - Add analytics account: UA-3921398-1
 * Store your codelab & referenced code (if any) in a public github repo that you reference in the codelab. 
 * Clone this repo to your local machine
