@@ -23,8 +23,8 @@ There are two directories in this repo.
   - Add analytics account: UA-3921398-1
 * Store your codelab & referenced code (if any) in a public github repo that you reference in the codelab. 
 * Clone this repo to your local machine
-* Checkout the _dev_ branch
-  - `git checkout dev`
+* Checkout a new branch for your codelab with a name that makes sense
+  - `git checkout -b add-my-codelab`
 * Create a directory under the _markdown_ directory with your unique codelab id
   - `mkdir /path/to/solace-dev-codelabs/markdown/<unique_id> 
 * Copy your new codelab's markdown file under the _markdown/<unique_id>_ directory
@@ -40,14 +40,14 @@ There are two directories in this repo.
   - Verify all looks good; if not then make changes and redo the export & verification.  
 * Commit & Push your changes
   - `git commit -a -m 'Added a new codelab <unique_id>'`
-  - `git push` 
+  - `git push --set-upstream origin add-my-codelab` 
 * Make a Pull Request via the github UI (Allow edits so the reviewer can fix simple items) 
   - A member of the _SolaceDev_ team will review & merge the codelab or get back to you with needed updates. 
 
 ### Update an existing CodeLab
 * Clone the solace-dev-codelabs repo
-* Checkout the _dev_ branch
-  - `git checkout dev`
+* Checkout a new branch for your changes with a name that makes sense
+  - `git checkout -b update-codelab-foo-bar`
 * Make updates to the markdown file for your codelab in the _markdown/<unique_id>_ directory
 * Use `claat export` to export the updates and move them into the codelabs directory
   - `cd /path/to/solace-dev-codelabs/markdown/<unique_id>`
@@ -60,6 +60,6 @@ There are two directories in this repo.
   - Verify all looks good; if not then make changes and redo the export & verification.  
 * Commit & Push your changes
   - `git commit -a -m 'Added a new codelab'`
-  - `git push` 
+  - `git push --set-upstream origin update-codelab-foo-bar` 
 * Make a Pull Request via the github UI (Allow edits so the reviewer can fix simple items) 
   - A member of the _SolaceDev_ team will review & merge the codelab or get back to you with needed updates. 
