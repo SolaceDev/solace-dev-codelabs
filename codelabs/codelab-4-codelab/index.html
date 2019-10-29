@@ -207,25 +207,31 @@ $ claat serve
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
 </aside>
 <h2 is-upgraded>Stage your Codelab</h2>
-<p>Clone the solace-dev-codelabs repo and checkout the dev branch</p>
+<p>Clone the solace-dev-codelabs repo and checkout a new branch with a name that makes sense</p>
 <pre><code>git clone git@github.com:SolaceDev/solace-dev-codelabs.git
 cd solace-dev-codelabs
-git checkout dev
+git checkout -b add-codelab-foo
 </code></pre>
-<p>Add your markdown file to the <code>markdown</code> folder and your claat exported web content to the <code>codelabs</code> folder.<br>Remember that the <code>claat export</code> command ran in the previous section generated your static web content in a folder that has the same name as your <code>id</code> in the header metadata.<br>Please ensure that your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
-<pre><code>cp -r /path/to/&lt;header-metadata-id&gt; codelabs/
-cp -r /path/to/&lt;header-metadata-id&gt;.md markdown/
+<p>Add your markdown file and related artifacts (such as images) to the <code>markdown</code> folder.<br>Export your static web content and add it to the <code>codelabs</code> folder.<br>Please ensure that your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
+<pre><code>cd /path/to/solace-dev-codelabs
+mkdir markdown/&lt;header-metadata-id&gt; #Only necessary if creating a new codelab
+cp /path/to/&lt;header-metadata-id&gt;.md markdown/&lt;header-metadata-id&gt;/
+cp -r /path/to/&lt;header-metadata-id&gt;/img markdown/&lt;header-metadata-id&gt;/
+cd markdown/&lt;header-metadata-id&gt;
+claat export &lt;header-metadata-id&gt;.md
+rm -rf ../../codelabs/&lt;header-metadata-id&gt; #Only necessary if updating an existing codelab
+mv &lt;header-metadata-id&gt; ../../codelabs/
 </code></pre>
-<p>Commit &amp; Push your changes on the Dev Branch</p>
+<p>Commit &amp; Push your changes</p>
 <pre><code>git commit -a -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
-git push 
+git push --set-upstream origin add-codelab-foo
 </code></pre>
 <h2 is-upgraded>Create a Pull Request</h2>
-<ul>
-<li>Now that your changes have been pushed to the dev branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.</li>
-<li>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></li>
-<li>Since your commit has already been pushed to the <code>dev</code> branch you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the for with comments on what changes are being requested. Upon submitting the Pull Request the marketing team will be notified, perform a review and ensure the codelab goes live on the site.</li>
-</ul>
+<p>Now that your changes have been pushed to a new branch branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.</p>
+<p>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></p>
+<p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
+<h2 is-upgraded>Thank You!</h2>
+<p>Thank you for contributing to Solace Codelabs!<br>Please reach out to the Solace DevRel team with any questions.</p>
 
 
       </google-codelab-step>
