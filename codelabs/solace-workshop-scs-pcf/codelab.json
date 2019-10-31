@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-49880327-14",
+  "mainga": "UA-3921398-10",
   "updated": "2019-10-15T16:10:48-04:00",
   "id": "solace-workshop-scs-pcf",
   "duration": 175,
@@ -23,6 +23,6 @@
     "workshop"
   ],
   "feedback": "github.com/SolaceTraining/solace-workshop-scs",
-  "ga": "UA-3921398-1",
+  "ga": "UA-3921398-10",
   "url": "solace-workshop-scs-pcf"
 }

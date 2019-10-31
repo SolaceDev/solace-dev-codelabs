@@ -6,7 +6,7 @@ tags: workshop
 environments: Web
 status: published
 feedback link: github.com/SolaceTraining/solace-workshop-scs
-analytics account: UA-3921398-1
+analytics account: UA-3921398-10
 
 # Developer Workshop: Using Spring Cloud Stream with Solace PubSub+ in PCF
 

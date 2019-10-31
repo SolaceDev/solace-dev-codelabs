@@ -6,7 +6,7 @@ categories: Spring,Java
 environments: Web
 status: published
 feedback link: github.com/SolaceTraining/solace-workshop-scs
-analytics account: UA-3921398-1
+analytics account: UA-3921398-10
 
 # Developer Workshop: Spring Cloud Streams with Solace PubSub+
 

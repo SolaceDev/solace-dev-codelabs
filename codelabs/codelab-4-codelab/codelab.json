@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-49880327-14",
+  "mainga": "UA-3921398-10",
   "updated": "2019-10-29T16:40:13-04:00",
   "id": "codelab-4-codelab",
   "duration": 19,
@@ -21,6 +21,6 @@
     "web"
   ],
   "feedback": "https://github.com/SolaceDev/codelab-4-codelab",
-  "ga": "UA-3921398-1",
+  "ga": "UA-3921398-10",
   "url": "codelab-4-codelab"
 }
