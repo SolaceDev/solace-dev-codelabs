@@ -49,9 +49,9 @@
 </ol>
 <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Welcome]()</li>
-<li>[Event Driven Architecture]()</li>
-<li>[Who is Solace]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17710366#overview" target="_blank">Welcome</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741832#overview" target="_blank">Event Driven Architecture</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741846#overview" target="_blank">Who is Solace</a></li>
 </ul>
 <h2 is-upgraded>What We&#39;ll Be Building</h2>
 <p>Our goal is to build a working version of Battleship.</p>
@@ -113,9 +113,9 @@
       <google-codelab-step label="Lesson 1 - Connect and Publish" duration="20">
         <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Battleship - Section 1 Overview]()</li>
-<li>[Battleship Client Side Flow]()</li>
-<li>[Solace Topics]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741870#overview" target="_blank">Battleship - Section 1 Overview</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742486#overview" target="_blank">Battleship Client Side Flow</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741892#overview" target="_blank">Solace Topics</a></li>
 </ul>
 <h2 is-upgraded>Objectives</h2>
 <ul>
@@ -261,8 +261,8 @@ this.solaceClient
       <google-codelab-step label="Lesson 2 - Setting Up Subscriptions and Transitioning Page States" duration="20">
         <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Topic Dispatch]()</li>
-<li>[Request Reply]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741902#overview" target="_blank">Topic Dispatch</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741912#overview" target="_blank">Request Reply</a></li>
 </ul>
 <h2 is-upgraded>Objectives</h2>
 <ul>
@@ -608,7 +608,7 @@ this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + params.session
       <google-codelab-step label="Lesson 5 - Creating a Battleship Dashboard" duration="5">
         <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Microservices]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742532#overview" target="_blank">Adding New Microservices</a></li>
 </ul>
 <h2 is-upgraded>Objectives</h2>
 <ul>
@@ -648,7 +648,7 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REPLY/*/*`, msg =&g
 <p>And your game activity will be reflected in real time!</p>
 <p>You can optionally also run the <code>now</code> command again in the battleship_frontend directory to update your deployment to ZEIT.</p>
 <h2 is-upgraded>Summary</h2>
-<p><a href="https://www.youtube.com/watch?v=2cYGDxG6j2c" target="_blank">Udemy Summary Video</a></p>
+<p><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741924#overview" target="_blank">Udemy Summary Video</a></p>
 <p>In this lesson you learned about the benefits of doing a request-reply interaction over Solace. You were able to add an additional widget that listend to all player reply events without interrupting your critical path. You essentially are able to spin up additional microservices that tap events in realtime ‘for free&#39;.</p>
 <p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson5&#34;</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-5-building-a-dashboard-solution" target="_blank">battleship-lesson-5-building-a-dashboard-solution</a> using the command:</p>
@@ -660,9 +660,9 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REPLY/*/*`, msg =&g
       <google-codelab-step label="Lesson 6 - Creating a Spring Cloud Stream server skeleton for the battleship backend" duration="20">
         <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Battleship: Adding Serverside]()</li>
-<li>[Topic to Queue Mappings]()</li>
-<li>[Overview of Spring Cloud Stream]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741942#overview" target="_blank">Battleship: Adding Serverside</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741950#overview" target="_blank">Topic to Queue Mappings</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741960#overview" target="_blank">Overview of Spring Cloud Stream</a></li>
 </ul>
 <h2 is-upgraded>Objectives</h2>
 <ul>
@@ -888,7 +888,6 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MATCH-START/CONTROLLER`,
 <p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
 <p>Now navigate to <a href="http://localhost:12345" target="_blank">http://localhost:12345</a>, the game should operate exactly as before but now the Join Requests are being handled by the Battleship Spring Cloud Stream server.</p>
 <h2 is-upgraded>Summary</h2>
-<p>[Udemy Summary Video]()</p>
 <p class="image-container"><img alt="Lesson 8 Summary" src="img\5fded5ee0086efb4.png"></p>
 <p>In this lesson, you implemented another message handler in our Spring Cloud Stream application using the same pattern we used in lesson 7. Spring Cloud Stream does a lot of the heavy lifting in terms of session management, connect logic, etc. when it comes to Solace. As you saw, all you had to do was implement your business logic and modify the <code>application.yml</code> configuration file to make sure the correct messages are being attracted and queued.</p>
 <p>Additionally, we modified the client-side controller app further so that it is no longer responsible for responding to board set requests. Instead of responding to the board set requests, all the client-side controller app has to do is listen for board set reponses.</p>
@@ -966,7 +965,7 @@ this.solaceClient.subscribe(
 <p>Now navigate to <a href="http://localhost:12345" target="_blank">http://localhost:12345</a>, the game should operate exactly as before but now the Join Requests are being handled by the Battleship Spring Cloud Stream server.</p>
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Lesson 9 Summary" src="img\68149511d9a7e47.png"></p>
-<p>[Udemy Summary Video]()</p>
+<p><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742000#overview" target="_blank">Udemy Summary Video</a></p>
 <p>In this final lesson of the course, you implemented another message handler in Spring Cloud Stream using the same patter we used in lessons 7 and 8. Lessons 7-9 show you how building applications using event-driven architecture allows you to build microservices in a decoupled manner. Instead of modifying a single orchestrating &#34;backend service,&#34; we&#39;re able to add flow processors that act independently.</p>
 <p>Additionally, you modified the client-side controller app further so that it is not responsible for any game state. Instead, it is able to derive the match&#39;s state from events it receives from our more secure Spring Cloud Stream backend application. Better yet, we were able to implement this transition without a major overhaul of our client application because it was built using event-driven architecture and a message broker instead of tightly coupled REST microservices exposed via an API.</p>
 <p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson9&#34;</code></p>
@@ -981,9 +980,8 @@ this.solaceClient.subscribe(
 <p>This section of the Codelab is entirely optional. If you&#39;re interested in learning more about the lifecycle of a Solace client, read on. Otherwise, feel free to skip this section and jump to Lesson 1.</p>
 <h2 is-upgraded>Udemy Videos</h2>
 <ul>
-<li>[Client Connections]()</li>
-<li>[Subscription Lifecycle]()</li>
-<li>[Topic Dispatch]()</li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742052#overview" target="_blank">Client Connections</a></li>
+<li><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742056#overview" target="_blank">Subscription Lifecycle</a></li>
 </ul>
 <h2 is-upgraded>Connect Logic</h2>
 <p>The connect function performs three main tasks:</p>
