@@ -40,7 +40,8 @@ The repository is split up into branches that correspond to the lessons. Each le
 Accessing the Udemy Video links in the codelab requires a few things:
 
   1. An account on [Udemy](https://www.udemy.com)
-  2. Enroll in the Battleship With PubSub+ Udemy Course
+  2. Enroll in the [Battleship With PubSub+ Udemy Course](https://www.udemy.com/course/battleship-over-pubsub/?referralCode=BF575AB68D88AEF7289C)
+  3. Remain logged into [Udemy](https://www.udemy.com)
 
 ### Udemy Videos
 
