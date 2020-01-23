@@ -136,7 +136,7 @@ git clone https://github.com/solacetraining/solace-battleship
 Your working directory for the course will then be
 
 ```
-cd battleship
+cd solace-battleship
 ```
 
 ## Lesson 1 - Connect and Publish
