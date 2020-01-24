@@ -189,7 +189,7 @@ Navigate to [Environment Setup](#environment-setup) to get these details from th
 
 ```ts
 export const gameConfig = {
-  solace_hostUrl: "", // Secured Web Messaging URI
+  solace_hostUrl: "", // Secured Web Messaging host
   solace_vpn: "", // Message VPN
   solace_userName: "", // Username
   solace_password: "", // Password
@@ -235,7 +235,7 @@ The code connects to Solace and then changes a message to confirm connectivity t
 
 ### Running the application
 
-From the `battleship` directory, type the following commands:
+From the `solace-battleship` directory, type the following commands:
 
 ```
 cd battleship_frontend
@@ -817,8 +817,6 @@ Note that because of the randomly generated session-id appended to the topic pre
 You can optionally also run the `now` command again in the battleship_frontend directory to update your deployment to ZEIT.
 
 ### Summary
-
-[Summary Udemy Video]()
 
 In this lesson you learned about the flexibility of topic routing. By simply adding a random string to the prefix of your topic and persisting that prefix through the lifecycle of your application, you can now have more than one game going on at once. No major changes were needed for your game logic to deal with this.
 
