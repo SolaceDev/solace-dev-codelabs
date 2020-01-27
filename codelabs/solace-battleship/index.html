@@ -144,7 +144,7 @@
 <p>Navigate to Environment Setup to get these details from the connect details in your Solace Cloud tab:</p>
 <p class="image-container"><img alt="Solace Web Messaging Tab" title="Solace Web Messaging Tab" src="img\f708b4da3ca15283.png"></p>
 <pre><code>export const gameConfig = {
-  solace_hostUrl: &#34;&#34;, // Secured Web Messaging URI
+  solace_hostUrl: &#34;&#34;, // Secured Web Messaging host
   solace_vpn: &#34;&#34;, // Message VPN
   solace_userName: &#34;&#34;, // Username
   solace_password: &#34;&#34;, // Password
@@ -178,7 +178,7 @@ this.solaceClient
 </code></pre>
 <p>The code connects to Solace and then changes a message to confirm connectivity to Solace.</p>
 <h2 is-upgraded>Running the application</h2>
-<p>From the <code>battleship</code> directory, type the following commands:</p>
+<p>From the <code>solace-battleship</code> directory, type the following commands:</p>
 <pre><code>cd battleship_frontend
 npm install
 au run watch
@@ -597,7 +597,6 @@ this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + params.session
 <p>Note that because of the randomly generated session-id appended to the topic prefix, game sessions will not overlap.</p>
 <p>You can optionally also run the <code>now</code> command again in the battleship_frontend directory to update your deployment to ZEIT.</p>
 <h2 is-upgraded>Summary</h2>
-<p>[Summary Udemy Video]()</p>
 <p>In this lesson you learned about the flexibility of topic routing. By simply adding a random string to the prefix of your topic and persisting that prefix through the lifecycle of your application, you can now have more than one game going on at once. No major changes were needed for your game logic to deal with this.</p>
 <p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson4&#34;</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-4-enabling-multiple-sessions-solution" target="_blank">battleship-lesson-4-enabling-multiple-sessions-solution</a> using the command:</p>
