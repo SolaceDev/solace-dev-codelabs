@@ -1,14 +1,14 @@
 author: Thomas Kunnumpurath, Andrew Roberts
 summary: Build Battleship, a popular board game, and learn advanced messaging techniques
 id: solace-battleship
-tags: udemy,microservices,
-categories: Java,Spring,Javascript,Aurelia,TypeScript
+tags: workshop,udemy,microservices,
+categories: Solace,Java,Spring,Javascript,Aurelia,TypeScript
 environments: Web
-status: Draft
+status: Published
 feedback link: http://github.com/solacetraining/solace-battleship/issues
 analytics account: UA-3921398-10
 
-# Building Battleship with TypeScript, Java and Solace PubSub+
+# Developer Workshop: Building Battleship with TypeScript, Java and Solace PubSub+
 
 ## Welcome!
 
