@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-01-23T22:10:25-05:00",
+  "updated": "2020-02-10T17:00:51-05:00",
   "id": "solace-battleship",
   "duration": 130,
   "title": "Building Battleship with TypeScript, Java and Solace PubSub+",
   "summary": "Build Battleship, a popular board game, and learn advanced messaging techniques",
-  "source": "codelab.md",
+  "source": "..\\markdown\\solace-battleship\\codelab.md",
   "theme": "",
   "status": [
     "draft"

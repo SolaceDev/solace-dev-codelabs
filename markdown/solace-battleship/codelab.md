@@ -85,9 +85,16 @@ This project is built using Aurelia, Node.js and Java via Spring Cloud Streams. 
 
 Navigate to [this link](https://console.solace.cloud/login/new-account) and fill out the required information. No credit card required! If you already have an account, skip right to #2.
 
+
+
 **(2) Create a messaging service**
 
-After you create your Solace Cloud account and sign in to the Solace Cloud Console, you'll be routed to a page that lists all the messaging services associated with your account. To create a service, click either button as depicted in the image below:
+After you create your Solace Cloud account and sign in to the Solace Cloud Console, you'll be routed to the event mesh page.
+
+![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.png "Solace Cloud Event Mesh")
+
+
+Click on 'Messaging Services' and all the messaging services associated with your account. To create a service, click either button as depicted in the image below:
 
 ![Solace Cloud Landing Page](img/landing-page-signup.png "Solace Cloud Landing Page")
 
