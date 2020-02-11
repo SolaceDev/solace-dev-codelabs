@@ -16,13 +16,14 @@
   "category": [
     "spring",
     "java",
+    "solace",
     "pcf"
   ],
   "tags": [
     "web",
     "workshop"
   ],
-  "feedback": "github.com/SolaceTraining/solace-workshop-scs",
+  "feedback": "https://github.com/SolaceTraining/solace-workshop-scs/issues",
   "ga": "UA-3921398-10",
   "url": "solace-workshop-scs-pcf"
 }
