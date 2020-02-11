@@ -94,7 +94,7 @@ After you create your Solace Cloud account and sign in to the Solace Cloud Conso
 ![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.png "Solace Cloud Event Mesh")
 
 
-Click on 'Messaging Services' and all the messaging services associated with your account. To create a service, click either button as depicted in the image below:
+Click on 'Messaging Services' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
 
 ![Solace Cloud Landing Page](img/landing-page-signup.png "Solace Cloud Landing Page")
 
