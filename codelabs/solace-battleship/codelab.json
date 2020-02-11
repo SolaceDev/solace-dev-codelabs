@@ -8,7 +8,7 @@
   "duration": 130,
   "title": "Developer Workshop: Building Battleship with TypeScript, Java and Solace PubSub+",
   "summary": "Build Battleship, a popular board game, and learn advanced messaging techniques",
-  "source": "codelab.md",
+  "source": "..\\markdown\\solace-battleship\\codelab.md",
   "theme": "",
   "status": [
     "published"
