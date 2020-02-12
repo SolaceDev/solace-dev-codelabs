@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-01-28T11:26:35-05:00",
+  "updated": "2020-02-12T14:26:51-05:00",
   "id": "solace-battleship",
   "duration": 130,
   "title": "Developer Workshop: Building Battleship with TypeScript, Java and Solace PubSub+",
