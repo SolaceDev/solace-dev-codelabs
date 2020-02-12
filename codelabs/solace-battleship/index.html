@@ -295,7 +295,7 @@ this.solaceClient.subscribe(
       if (!this.gameStart[playerJoined.playerName]) {
         // update client statuses
         this.gameStart[playerJoined.playerName] = playerJoined;
-        if (playerJoined.playerName == &#34;player1&#34;) {
+        if (playerJoined.playerName == &#34;Player1&#34;) {
           this.player1Status = &#34;Player1 Joined!&#34;;
         } else {
           this.player2Status = &#34;Player2 Joined!&#34;;
@@ -385,7 +385,7 @@ this.solaceClient.subscribe(
     let boardSetEvent: BoardSetEvent = JSON.parse(msg.getBinaryAttachment());
     boardSetResult.playerName = boardSetEvent.playerName;
     //Set the response object appropriately
-    if (boardSetEvent.playerName == &#34;player1&#34;) {
+    if (boardSetEvent.playerName == &#34;Player1&#34;) {
       if (this.player1Status === &#34;Player1 Board Set!&#34;) {
         boardSetResult.message = &#34;Board already set by Player1&#34;;
         boardSetResult.success = false;
