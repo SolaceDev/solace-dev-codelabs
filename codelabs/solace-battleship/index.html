@@ -512,12 +512,12 @@ this.solaceClient
     //Update the approrpaite score/icons based on the move response
     if (moveResponseEvent.moveResult == &#34;ship&#34;) {
       this.enemyBoard[move.x][move.y] = &#34;hit&#34;;
-      this.shipHit(this.player.name == &#34;player1&#34; ? &#34;player2&#34; : &#34;player1&#34;);
+      this.shipHit(this.player.name == &#34;Player1&#34; ? &#34;Player2&#34; : &#34;Player1&#34;);
     } else {
       this.enemyBoard[move.x][move.y] = &#34;miss&#34;;
     }
     //Change the page state
-    this.pageState = this.player.name == &#34;player1&#34; ? &#34;player2&#34; : &#34;player1&#34;;
+    this.pageState = this.player.name == &#34;Player1&#34; ? &#34;Player2&#34; : &#34;Player1&#34;;
     //Rotate the turn message
     this.rotateTurnMessage();
   })
