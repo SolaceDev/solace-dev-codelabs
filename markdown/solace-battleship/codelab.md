@@ -96,7 +96,6 @@ After you create your Solace Cloud account and sign in to the Solace Cloud Conso
 
 Click on 'Messaging Services' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
 
-
 ![Solace Cloud Landing Page](img/landing-page-signup.png "Solace Cloud Landing Page")
 
 Fill out all the details for your messaging service, and then click "Create" at the bottom of the page.
@@ -689,12 +688,12 @@ this.solaceClient
     //Update the approrpaite score/icons based on the move response
     if (moveResponseEvent.moveResult == "ship") {
       this.enemyBoard[move.x][move.y] = "hit";
-      this.shipHit(this.player.name == "player1" ? "player2" : "player1");
+      this.shipHit(this.player.name == "Player1" ? "Player2" : "Player1");
     } else {
       this.enemyBoard[move.x][move.y] = "miss";
     }
     //Change the page state
-    this.pageState = this.player.name == "player1" ? "player2" : "player1";
+    this.pageState = this.player.name == "Player1" ? "Player2" : "Player1";
     //Rotate the turn message
     this.rotateTurnMessage();
   })
