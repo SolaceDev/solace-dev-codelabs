@@ -685,7 +685,7 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REPLY/*/*`, msg =&g
 <p>At a high-level, the end state of your application flow will be as follows:</p>
 <p class="image-container"><img alt="End State" src="img\9b5abc0343ca4e4e.png"></p>
 <h2 is-upgraded>Topic-to-Queue Mappings in Solace PubSub+</h2>
-<p>Up until now, you implemented the publish-subscribe model where you published a message to a well defined topic and had the subscribe subscribe to the same topic.</p>
+<p>Up until now, you implemented the publish-subscribe model where you published a message to a well defined topic and had the subscriber subscribe to the same topic.</p>
 <p>An additional pattern that Solace PubSub+ supports is the ability to publish and subscribe to Message Queues. In addition, Solace PubSub+ allows you to set Topic Subscriptions on message queues themselves.</p>
 <p>The animation below shows how topic-to-queue mappings provides the Battleship Server with a mechanism to preserve all Join Requests in order and process the messages once at a time from Solace PubSub+ :</p>
 <p class="image-container"><img alt="Topic-To-Queue-Mapping" src="img\8dd40690adc25d82.gif"></p>
