@@ -52,6 +52,7 @@ There are two directories in this repo.
 * Use `claat export` to export the updates and move them into the codelabs directory
   - `cd /path/to/solace-dev-codelabs/markdown/<unique_id>`
   - `claat export <unique_id>.md`
+  - `rm -fr ../../codelabs/<unique_id>`
   - `mv <unique_id> ../../codelabs/`
 * Serve & Review your codelab in **Incognito** mode to ensure your changes look good
   - `cd ../../codelabs`
