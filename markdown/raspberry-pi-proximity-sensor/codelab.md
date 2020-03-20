@@ -2,7 +2,7 @@ author: Thomas Kunnumpurath
 summary: An intro to Raspberry-PI setup
 id: raspberry-pi-proximity-sensor
 tags: iot, raspberry-pi
-categories: raspberry-pi
+categories: iot,raspberry-pi
 environments: Web
 status: Published
 feedback link: https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt/issues
