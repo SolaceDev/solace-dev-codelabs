@@ -26,8 +26,8 @@ There are two directories in this repo.
 * Checkout a new branch for your codelab with a name that makes sense
   - `git checkout -b add-my-codelab`
 * Create a directory under the _markdown_ directory with your unique codelab id
-  - `mkdir /path/to/solace-dev-codelabs/markdown/<unique_id> 
-* Copy your new codelab's markdown file under the _markdown/<unique_id>_ directory
+  - `mkdir /path/to/solace-dev-codelabs/markdown/<unique_id>`
+* Copy your new codelab's markdown file under the `markdown/<unique_id>` directory
 * If applicable, copy your _img_, _images_, or other files necessary for your codelab into the _markdown/<unique_id>_ directory as well
 * Use `claat export` to export the codelab tutorial & then move it into the codelabs directory
   - `cd /path/to/solace-dev-codelabs/markdown/<unique_id>`
