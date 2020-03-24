@@ -340,7 +340,7 @@ Scroll down to the section on REST and verify the username, password, port, and 
 ## [A] Enable REST (Micro)Gateway Mode
 Duration: 0:03:00
 
-In this section, we will switch the REST mode for our Message VPN from _Messaging_ (the default) to _Gateway_.
+In this section, we will switch the REST mode for our Message VPN from _Messaging_ (the default) to _Gateway_. Microgateways allow Solace PubSub+ event brokers to act as HTTP load balancers, or simple API gateways between RESTful API clients and RESTful API service providers. Learn more about Microgateways [here](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
 
 
 ### PubSub+ Manager
@@ -592,7 +592,7 @@ Should result in the following response (pretty-printed for visibility):
 ## [B] Create a New Queue 
 Duration: 0:04:00
 
-When sending an outbound REST request, we need to configure a **Queue** to (temporarily) store the message before it gets sent out the RDP.
+When sending an outbound REST request, we need to configure a **Queue** to (temporarily) store the message before it gets sent out from the RDP.
 
 Negative
 : **Note:** if creating a _new_ Message VPN, remember that the VPN's `max-spool-quota` size defaults to **0MB**. So when creating a new Message VPN, you must also increase the spool quota for your new VPN.
@@ -627,7 +627,7 @@ Add the subscription `GET/>` for the queue to attract _any_ HTTP GET requests to
 Negative
 : **Note:** if you'd like to use another HTTP verb -- e.g. HTTP POST -- then enter a different/another subscription here: e.g. `POST/>` or restrict it to just the path you want: `GET/query`)
 
-[https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm](Link to Solace Wildcards)
+You can read more about Wilecard Topic Subscriptions [here](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
 
 ### SEMP
@@ -794,7 +794,7 @@ Click on "+ REST Consumer" in the top-right to create a new consumer:
 Enter a name for your new consumer. E.g. `rc_get`.  Click "Create":
 ![alt-text-here](gfx/rc_03.png)
 
-Enable the REST Consumer, and add the remote **host**, **port**, and any authentication required by the downstream REST server. Click "Apply" when finished:
+Enable the REST Consumer, and add the remote **host**, **port**, and any authentication required by the downstream REST server. In this example, the host is `postman-echo.com` and the port is `80`. Toggle the enable option and click "Apply"
 ![alt-text-here](gfx/rc_04.png)
 
 Refresh the screen, and ensure the REST Consumer reports an Operational State of **Up**:
@@ -978,7 +978,7 @@ Duration: 0:04:00
 
 Just like we did on the last step of Section A, use the **Try Me!** functionality of the PubSub+ Manager to "snoop" or "sniff" the messages going through Solace:
 
-Enter the subscriptions `GET/>` and `#P2P/*/#rest*/>` into the text field. The 2nd subscription will receive all point-to-point replies for REST requests.
+Enter the subscriptions `GET/>` and `#P2P/*/#rest*/>` into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests.
 ![alt-text-here](gfx/proxy_tryme1.png)
 
 Re-run the same cURL command from the previous section:
@@ -1015,7 +1015,7 @@ Duration: 0:15:00
 
 Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let's take a look at some sample/example code to generate a response using a messaging topic consumer.
 
-The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our samples GitHub repo: [https://github.com/SolaceSamples/solace-samples-java](https://github.com/SolaceSamples/solace-samples-java). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available here: [https://github.com/solacesamples/](https://github.com/solacesamples/)
+The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our [Samples GitHub repo](https://github.com/SolaceSamples/solace-samples-java). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available on https://github.com/solacesamples/
 
 Positive
 : For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: [Solace Java Samples Part 1](https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5) and [Solace Java Samples Part 2](https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4)
