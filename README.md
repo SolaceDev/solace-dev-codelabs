@@ -22,16 +22,17 @@ There are two directories in this repo.
   - Add a few items to `categories:` that identify technologies used such as the language, protocol, library and/or feature covered. **List the main technology first as right now that is the only item that is filterable on codelabs.solace.dev
   - Add analytics account: UA-3921398-10
 * Store your codelab & referenced code (if any) in a public github repo that you reference in the codelab. 
-* Clone this repo to your local machine
+* Fork this repo (click the "Fork" button at the top right of the screen) 
+* Clone the forked repo to your local machine
 * Checkout a new branch for your codelab with a name that makes sense
   - `git checkout -b add-my-codelab`
 * Create a directory under the _markdown_ directory with your unique codelab id
-  - `mkdir /path/to/solace-dev-codelabs/markdown/<unique_id> 
-* Copy your new codelab's markdown file under the _markdown/<unique_id>_ directory
-* If applicable, copy your _img_, _images_, or other files necessary for your codelab into the _markdown/<unique_id>_ directory as well
+  - `mkdir /path/to/solace-dev-codelabs/markdown/<unique_id>`
+* Copy your new codelab's markdown file under the `markdown/<unique_id>` directory
+* If applicable, copy your _img_, _images_, or other files necessary for your codelab into the _markdown/<unique_id>/_ directory as well
 * Use `claat export` to export the codelab tutorial & then move it into the codelabs directory
   - `cd /path/to/solace-dev-codelabs/markdown/<unique_id>`
-  - `claat export <unique_id>.md`
+  - `claat export -ga UA-3921398-10 <unique_id>.md`
   - `mv <unique_id> ../../codelabs/`
 * Serve & Review your codelab in **Incognito** mode to ensure your changes look good
   - `cd ../../codelabs`
@@ -45,13 +46,15 @@ There are two directories in this repo.
   - A member of the _SolaceDev_ team will review & merge the codelab or get back to you with needed updates. 
 
 ### Update an existing CodeLab
-* Clone the solace-dev-codelabs repo
+* Fork this repo (click the "Fork" button at the top right of the screen) 
+* Clone the forked solace-dev-codelabs repo
 * Checkout a new branch for your changes with a name that makes sense
   - `git checkout -b update-codelab-foo-bar`
 * Make updates to the markdown file for your codelab in the _markdown/<unique_id>_ directory
 * Use `claat export` to export the updates and move them into the codelabs directory
   - `cd /path/to/solace-dev-codelabs/markdown/<unique_id>`
-  - `claat export <unique_id>.md`
+  - `claat export -ga UA-3921398-10 <unique_id>.md`
+  - `rm -fr ../../codelabs/<unique_id>`
   - `mv <unique_id> ../../codelabs/`
 * Serve & Review your codelab in **Incognito** mode to ensure your changes look good
   - `cd ../../codelabs`

@@ -1003,6 +1003,17 @@ spring.cloud.stream.binders.solace_cloud.environment.solace.java.clientPassword=
 
 ```
 
+If you do not have access to Solace Cloud, follow the [instructions](https://solace.com/products/event-broker/software/getting-started/) to get a docker instance of Solace PubSub+ running in a local environment.
+
+In this case, your connectivity details will be as follows:
+
+```
+spring.cloud.stream.binders.solace_cloud.environment.solace.java.host=localhost:55555
+spring.cloud.stream.binders.solace_cloud.environment.solace.java.msgVpn=default //Message VPN
+spring.cloud.stream.binders.solace_cloud.environment.solace.java.clientUsername=default //Username
+spring.cloud.stream.binders.solace_cloud.environment.solace.java.clientPassword= //Password
+```
+
 Once you entered in the credentials, navigate to `battleship_backend` and type the following command:
 `.\mvnw.cmd spring-boot:run` if under windows, otherwise run `chmod +x mvnw && ./mvnw spring-boot:run`.
 
@@ -1015,6 +1026,11 @@ INFO 8296 --- [  restartedMain] c.s.j.protocol.impl.TcpClientChannel     : Conne
 INFO 8296 --- [  restartedMain] c.s.j.protocol.impl.TcpClientChannel     : Connected to host 'orig=tcp://<HOST>:<PORT>, scheme=tcp://, host=localhost, port=<PORT>' (smfclient 6)
 INFO 8296 --- [  restartedMain] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creating durable queue JOIN-REQUESTS.SOLACE-BATTLESHIP for consumer group SOLACE-BATTLESHIP
 ```
+
+Note that you can also see the newly added queue under the `Queues` section in your PubSub+ Manager
+
+![PubSub+ Manager](img/lesson-06-queues-pubsub-manager.png)
+
 
 ### Summary
 

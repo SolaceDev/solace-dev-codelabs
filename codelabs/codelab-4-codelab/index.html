@@ -28,16 +28,16 @@
                   feedback-link="https://github.com/SolaceDev/codelab-4-codelab">
     
       <google-codelab-step label="CodeLab Overview" duration="2">
-        <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now.<br>When creating a Codelab you have two authoring options:</p>
+        <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now. When creating a Codelab you have two authoring options:</p>
 <ol type="1">
 <li>Using a Google Doc</li>
 <li>Using a markdown file</li>
 </ol>
 <p>In this codelab we are going to use the second option and author our codelab using a markdown file. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial.</p>
-<p>Here is an example image of another CodeLab that I created:<br><img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
+<p>Here is an example image of another CodeLab that I created: <img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
 <p><strong>Resources:</strong></p>
 <ul>
-<li>The markdown for this codelab is located here: <a href="https://github.com/SolaceDev/codelab-4-codelab/blob/master/codelab.md" target="_blank">codelab.md</a></li>
+<li>The markdown for this codelab is located here: <a href="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/codelab-4-codelab/codelab-4-codelab.md" target="_blank">codelab.md</a></li>
 <li><a href="https://github.com/googlecodelabs/tools" target="_blank">Google CodeLabs Tools Github</a> - The repo that contains the claat tool we&#39;ll be using today</li>
 <li><a href="https://groups.google.com/forum/#!forum/codelab-authors" target="_blank">Google Group for CodeLab Authors</a> - great forum for asking questions about codelabs and discussing future functionality</li>
 <li><a href="https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816" target="_blank">A blog that I used when getting started with Google Codelabs</a></li>
@@ -48,9 +48,10 @@
     
       <google-codelab-step label="Environment Setup" duration="4">
         <p>In order to create a CodeLab you need <em>Go</em> and <em>claat</em> (the codelabs command line tool) installed.</p>
-<p>The instructions below are what worked for me on Mac, but you can also find instructions <a href="https://github.com/googlecodelabs/tools/tree/master/claat" target="_blank">here</a></p>
+<p>Install <a href="https://golang.org/dl/" target="_blank">Go</a> and <a href="https://github.com/googlecodelabs/tools/tree/master/claat" target="_blank">claat</a> if you don&#39;t have it. You can follow the documentation on Go&#39;s website and the Google Codelabs github repo.</p>
+<p>Follow the instructions below to setup on MacOS</p>
+<h2 is-upgraded>MacOS setup</h2>
 <h3 is-upgraded>Install Go</h3>
-<p>Install <a href="https://golang.org/dl/" target="_blank">Go</a> if you don&#39;t have it.<br>You can use Homebrew if you have it on mac</p>
 <pre><code>$ brew install go
 </code></pre>
 <h3 is-upgraded>Setup Go Environment Variables</h3>
@@ -62,7 +63,7 @@ $ export PATH=$PATH:$GOROOT/bin
 </code></pre>
 <h3 is-upgraded>Install claat</h3>
 <p>Install claat</p>
-<pre><code>$ go get -u -v -x github.com/googlecodelabs/tools/claat
+<pre><code>$ go get -u -v github.com/googlecodelabs/tools/claat
 </code></pre>
 <p>You should now have the <em>claat</em> command available to you.</p>
 <pre><code>$ claat
@@ -79,27 +80,27 @@ $ export PATH=$PATH:$GOROOT/bin
 <li>Use sections to separate steps for ease of navigation</li>
 <li>Include an &#34;Overview&#34; or &#34;What You&#39;ll Learn Section&#34; at the beginning of a codelab</li>
 <li>Include an &#34;Environment Setup&#34; or &#34;What You&#39;ll Need Section&#34; section that sets up the environment, if necessary.</li>
-<li>Try to make the codelab fun and engaging</li>
-<li>Provide code used in a public git repo</li>
+<li>Try to make the codelab fun and engaging using images and/or gifs</li>
+<li>Provide code used in a separate public git repo</li>
 </ul>
 <h2 is-upgraded>Where to create your codelab</h2>
 <ul>
-<li>It is recommended that you create your codelab in a git repository for version tracking. This can be in a Solace git org such as SolaceDev or SolaceSe; or a personal repo if preferred.<br></li>
-<li>It is fine to keep the codelab markdown in the same repository as sample code if desired.</li>
-<li>An example structure for a codelab repo can be seen <a href="https://github.com/SolaceDev/codelab-4-codelab" target="_blank">here</a></li>
+<li>Create your codelab in the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> for version tracking</li>
+<li>All other code can be kept in a separate repo</li>
+<li>And example codelab markdown structure can be found on the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/solace-battleship" target="_blank">Battleship markdown</a> and the <a href="https://github.com/solacetraining/solace-battleship" target="_blank">Battleship source code</a></li>
 </ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Create your initial CodeLab" duration="5">
-        <p>Now that we have the environment setup let&#39;s go ahead and create a markdown file where we&#39;ll create the actual codelab.<br>Please have your markdown file name match the &#34;id&#34; in the header metadata that you will set in the next subsection.</p>
+        <p>Now that we have the environment setup let&#39;s go ahead and create a markdown file where we&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
 <aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
 </aside>
 <pre><code>$ vim unique-codelab-identifier.md
 </code></pre>
 <h3 is-upgraded>Fill-in the header metadata</h3>
-<p>Copy and paste the headers below into your markdown file and change the values appropriately.<br>Guidelines are available below the sample headers.</p>
+<p>Copy and paste the headers below into your markdown file and change the values appropriately. Guidelines are available below the sample headers.</p>
 <pre><code>author: Author Name
 summary: Summary of your codelab that is human readable
 id: unique-codelab-identifier
@@ -107,25 +108,29 @@ tags: workshop,iguide
 categories: Java,Spring
 environments: Web
 status: Published
-feedback link: A link where users can go to provide feedback (Maybe the git repo)
+feedback link: A link where users can go to provide feedback (e.g. the git repo or issue page)
 analytics account: UA-3921398-10
 </code></pre>
-<p>Metadata consists of key-value pairs of the form &#34;key: value&#34;. Keys cannot<br>contain colons, and separate metadata fields must be separated by blank lines.<br>At present, values must all be on one line. All metadata must come before the<br>title. Any arbitrary keys and values may be used; however, only the following<br>will be understood by the renderer:</p>
+<p>Metadata consists of key-value pairs of the form &#34;key: value&#34;. Keys cannot contain colons, and separate metadata fields must be separated by blank lines. At present, values must all be on one line. All metadata must come before the title. Any arbitrary keys and values may be used; however, only the following will be understood by the renderer:</p>
 <ul>
 <li>Author: Author name or git username</li>
-<li>Summary: A human-readable summary of the codelab. Defaults to blank.</li>
-<li>Id: An identifier composed of lowercase letters ideally describing the<br>content of the codelab. This field should be unique among<br>codelabs. This will be in the URL of the codelab.</li>
-<li>Tags: Leave &#34;workshop&#34; if creating a Developer workshop or &#34;iguide&#34; if creating an integration guide. Remove both if neither.</li>
-<li>Categories: A comma-separated list of the topics or technologies the codelab covers. Include items such as language(s) and protocol(s) used.</li>
+<li>Summary: A human-readable summary of the codelab. Defaults to blank</li>
+<li>Id: An identifier composed of lowercase letters ideally describing the content of the codelab. This field should be unique among codelabs. This will be in the URL of the codelab</li>
+<li>Tags: Leave &#34;workshop&#34; if creating a Developer workshop or &#34;iguide&#34; if creating an integration guide. Remove both if neither. Note: this is used for the &#34;Filter by Type&#34; feature on the <a href="solace.dev/codelabs" target="_blank">landing page</a></li>
+<li>Categories: A comma-separated list of the topics or technologies the codelab covers. Include items such as language(s) and protocol(s) used. The first one is used to create a new &#34;Filter by category&#34; feature on the <a href="solace.dev/codelabs" target="_blank">landing page</a> and the styling of the category. The remaining will be used for the filtering.  <ul>
+<li>Note that the list of available categories can be found in the main <a href="https://github.com/SolaceDev/solace-dev-codelabs-site/blob/master/site/app/styles/_categories.scss#L178-L198" target="_blank">site repo</a></li>
+<li>The current list is (case insensitive): <code>[AMQP, Boomi, Codelab, Java, JMS, Kafka, MQTT, REST, Solace, Spring]</code></li>
+</ul>
+</li>
 <li>Environments: Leave as &#34;Web&#34;</li>
-<li>Status: The publication status of the codelab. Valid values are:<br><br><ul>
+<li>Status: The publication status of the codelab. Valid values are:  <ul>
 <li>Draft: Codelab is not finished.</li>
 <li>Published: Codelab is finished and visible.</li>
 <li>Deprecated: Codelab is considered stale and should not be widely advertised.</li>
 <li>Hidden: Codelab is not shown in index.</li>
 </ul>
 </li>
-<li>Feedback Link: A link to send users to if they wish to leave feedback on the<br>codelab. Link to git repo where code for the tutorial will live.</li>
+<li>Feedback Link: A link to send users to if they wish to leave feedback on the codelab. Link to git repo where code for the tutorial will live.</li>
 <li>Analytics Account: A Google Analytics ID to include with all codelab pages. Leave as shown above.</li>
 </ul>
 <h3 is-upgraded>Add the Title</h3>
@@ -133,7 +138,7 @@ analytics account: UA-3921398-10
 <pre><code># Title of codelab
 </code></pre>
 <h3 is-upgraded>Add Sections &amp; Durations</h3>
-<p>Then for each section use Header 2 or ‘##&#39; &amp; specify an optional duration beneath for time remaining calculations<br>Optional section times will be used to automatically total &amp; remaining tutorial times<br>In markdown I&#39;ve found that the time is formatted hh:mm:ss</p>
+<p>Then for each section use Header 2 or ‘##&#39; &amp; specify an optional duration beneath for time remaining calculations Optional section times will be used to automatically total &amp; remaining tutorial times In markdown I&#39;ve found that the time is formatted hh:mm:ss</p>
 <p>Example</p>
 <pre><code>## Section 1
 Duration: 0:10:00
@@ -142,7 +147,7 @@ Duration: 0:10:00
 Duration: 0:05:00
 </code></pre>
 <h3 is-upgraded>Add Section Content</h3>
-<p>Now that we have 2 sections to our titled codelab let&#39;s go ahead and add some content to each section.<br>Make up your own or copy &amp; paste the example below:</p>
+<p>Now that we have 2 sections to our titled codelab let&#39;s go ahead and add some content to each section. Make up your own or copy &amp; paste the example below:</p>
 <p>Copy into section 1 (Below Duration and above Section 2):</p>
 <pre><code>### Info Boxes
 Plain Text followed by green &amp; yellow info boxes 
@@ -178,7 +183,7 @@ Add a link!
 
 ### Add an Image
 Add an image!
-![image_caption](https://googlecloud.tips/img/031/codelabs.png)
+![image_caption](https://solace.com/wp-content/uploads/2019/09/goodbye_otter_v3.gif)
 
 ### Embed an iframe
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg &#34;Try Me Publisher&#34;)
@@ -189,7 +194,7 @@ Add an image!
       </google-codelab-step>
     
       <google-codelab-step label="Export &amp; Serve Locally" duration="2">
-        <p>Now that you have an initial codelab defined in your markdown file let&#39;s go ahead and generate the static site content.<br>We can export &amp; serve the content locally using the <code>claat</code> command that we installed earlier.</p>
+        <p>Now that you have an initial codelab defined in your markdown file let&#39;s go ahead and generate the static site content. We can export &amp; serve the content locally using the <code>claat</code> command that we installed earlier.</p>
 <pre><code>$ claat export codelab.md
 $ claat serve
 </code></pre>
@@ -203,27 +208,34 @@ $ claat serve
       </google-codelab-step>
     
       <google-codelab-step label="Add your CodeLab to solace.dev/codelabs" duration="1">
-        <p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab.<br>It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
+        <p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
 </aside>
 <h2 is-upgraded>Stage your Codelab</h2>
 <p>Clone the solace-dev-codelabs repo and checkout a new branch with a name that makes sense</p>
-<pre><code>git clone git@github.com:SolaceDev/solace-dev-codelabs.git
+<pre><code>git clone https://github.com/SolaceDev/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-foo
 </code></pre>
-<p>Add your markdown file and related artifacts (such as images) to the <code>markdown</code> folder.<br>Export your static web content and add it to the <code>codelabs</code> folder.<br>Please ensure that your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
+<p>Create a folder under the <code>markdown</code> directory and add your markdown file and related artifacts (such as images)</p>
+<aside class="special"><p>Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
+</aside>
+<p>Export your static web content to the <code>codelabs</code> folder as follows:</p>
 <pre><code>cd /path/to/solace-dev-codelabs
-mkdir markdown/&lt;header-metadata-id&gt; #Only necessary if creating a new codelab
-cp /path/to/&lt;header-metadata-id&gt;.md markdown/&lt;header-metadata-id&gt;/
-cp -r /path/to/&lt;header-metadata-id&gt;/img markdown/&lt;header-metadata-id&gt;/
+
+# If creating a new codelab
+mkdir markdown/&lt;header-metadata-id&gt; 
+# Add your markdown content in the markdown/&lt;header-metadata-id&gt;/&lt;file-name&gt;.md directory
+# Add your images in the markdown/&lt;header-metadata-id&gt;/img directory
+
 cd markdown/&lt;header-metadata-id&gt;
-claat export &lt;header-metadata-id&gt;.md
-rm -rf ../../codelabs/&lt;header-metadata-id&gt; #Only necessary if updating an existing codelab
-mv &lt;header-metadata-id&gt; ../../codelabs/
+# Export into static content
+# Note the google analytics code used. Keep as is below
+claat export -ga UA-3921398-10 -o ../../codelabs/&lt;header-metadata-id&gt;
 </code></pre>
-<p>Commit &amp; Push your changes</p>
-<pre><code>git commit -a -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
+<p>Add your changes and any newly created files, then commit &amp; push the changes</p>
+<pre><code>git add .
+git commit -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
 git push --set-upstream origin add-codelab-foo
 </code></pre>
 <h2 is-upgraded>Create a Pull Request</h2>
@@ -231,7 +243,7 @@ git push --set-upstream origin add-codelab-foo
 <p>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
 <h2 is-upgraded>Thank You!</h2>
-<p>Thank you for contributing to Solace Codelabs!<br>Please reach out to the Solace DevRel team with any questions.</p>
+<p>Thank you for contributing to Solace Codelabs! Please reach out to the Solace DevRel team with any questions.</p>
 
 
       </google-codelab-step>
