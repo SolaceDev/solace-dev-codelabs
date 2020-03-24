@@ -27,9 +27,9 @@
                   environment="web"
                   feedback-link="https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt/issues">
     
-      <google-codelab-step label="Welcome!" duration="0">
-        <p>Duration 05:00</p>
-<p>In this codelab, you will learn about a Raspberry PI and how to set it up so that you can start building IoT applications on it.</p>
+      <google-codelab-step label="Welcome!" duration="5">
+        <p>In this codelab, you will learn about a Raspberry PI and how to set it up so that you can start building IoT applications on it.</p>
+
 <h2 is-upgraded>What is a Raspberry PI?</h2>
 <p><em>&#34;The Raspberry Pi is a series of small single-board computers developed in the United Kingdom by the Raspberry Pi Foundation to promote teaching of basic computer science in schools and in developing countries. The original model became far more popular than anticipated, selling outside its target market for uses such as robotics. It does not include peripherals (such as keyboards and mice) or cases. However, some accessories have been included in several official and unofficial bundles.&#34;</em> - <a href="https://en.wikipedia.org/wiki/Raspberry_Pi" target="_blank">Wikipedia</a></p>
 <p class="image-container"><img alt="Rasberry-PI-4B" src="img\78500fbc33bc1c99.jpg"></p>
@@ -40,9 +40,9 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Materials required" duration="0">
-        <p>Duration 05:00</p>
-<p>To assemble this kit, you will need the following materials. Links to appropriate websites are provided below but search your favorite online shop for better prices/deals:</p>
+      <google-codelab-step label="Materials required" duration="5">
+        <p>To assemble this kit, you will need the following materials. Links to appropriate websites are provided below but search your favorite online shop for better prices/deals:</p>
+
 <h2 is-upgraded>Raspberry PI and accessories</h2>
 <p>You can buy various starter kits for the raspberry pi which includes the base Raspberry PI as well as all required accesories such as display cables, but at the bear minimum you require the following ():</p>
 <ul>
@@ -66,9 +66,8 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Setting up your Raspberry-Pi" duration="0">
-        <p>Duration 15:00</p>
-<p>Once you have purchased the requisite kit, you will have to setup your raspberry pi with an O/S and connect it to your local WiFi.</p>
+      <google-codelab-step label="Setting up your Raspberry-Pi" duration="60">
+        <p>Once you have purchased the requisite kit, you will have to setup your raspberry pi with an O/S and connect it to your local WiFi.</p>
 <p>Use the following link to setup your raspberry pi:</p>
 <ul>
 <li><a href="https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up" target="_blank">Setting up your Raspberry-PI</a></li>
@@ -127,10 +126,9 @@ Distance to the object from the sensor = 1/2 * Distance that the sound travelled
 
 
       </google-codelab-step>
-    
-      <google-codelab-step label="Reading sensor events from the Raspberry PI" duration="0">
-        <p>Duration 05:00</p>
-<p>Ok now that you have the proximity sensor hooked up to your Raspberry PI, the next step is to create a simple application to read from the sensor.</p>
+        <google-codelab-step label="Reading sensor events from the Raspberry PI" duration="15">
+        <p>Ok now that you have the proximity sensor hooked up to your Raspberry PI, the next step is to create a simple application to read from the sensor.</p>
+
 <p>While there are a variety of libraries and languages that are available for you to interact with your GPIO pins and the connected sensors, we will be using the <a href="http://johnny-five.io/" target="_blank">Johnny-Five</a> JavaScript Framework.</p>
 <p>Johnny-Five is a JavaScript based Robotics and IoT Platform that works across multiple processor architectures such as Arduino, Raspberry PI, and SparkFun.</p>
 <p>Co-incidentally it is also the name of a robot in a campy 80&#39;s movie called <a href="https://en.wikipedia.org/wiki/Short_Circuit_(1986_film)" target="_blank">Short Circuit</a> which I wholly recommend against watching :)!</p>
@@ -202,9 +200,9 @@ run();
 
       </google-codelab-step>
     
-      <google-codelab-step label="Publishing your sensor events on Solace PubSub&#43;" duration="0">
-        <p>Duration 05:00</p>
-<p>Now you&#39;ve succesfully extracted distance measurements from the sensor, but wouldn&#39;t it be great if you could expose the event outside your Raspberry PI in realtime. For example you could build a low cost security system that streams out events over the internet so that it could be picked up by a dashboard and a mobile app when someone comes near your PC.</p>
+      <google-codelab-step label="Publishing your sensor events on Solace PubSub&#43;" duration="15">
+        <p>Now you&#39;ve succesfully extracted distance measurements from the sensor, but wouldn&#39;t it be great if you could expose the event outside your Raspberry PI in realtime. For example you could build a low cost security system that streams out events over the internet so that it could be picked up by a dashboard and a mobile app when someone comes near your PC.</p>
+
 <p>To accomplish this, we will now introduce an event broker into the application stack, at a high level it will work as follows:</p>
 <p class="image-container"><img alt="SensorToSolace" src="img\b82c29cd37686a8f.png"></p>
 <p>Before we start implementing this, lets do a brief primer on the MQTT protocol</p>
