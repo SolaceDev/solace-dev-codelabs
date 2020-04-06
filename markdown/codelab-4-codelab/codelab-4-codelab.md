@@ -259,7 +259,7 @@ mkdir markdown/<header-metadata-id>
 cd markdown/<header-metadata-id>
 # Export into static content
 # Note the google analytics code used. Keep as is below
-claat export -ga UA-3921398-10 -o ../../codelabs/<header-metadata-id>
+claat export -ga UA-3921398-10 -o ../../codelabs/ <header-metadata-id>.md
 ```
 
 Add your changes and any newly created files, then commit & push the changes 

@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-03-17T20:05:45-04:00",
+  "updated": "2020-04-06T09:53:52-04:00",
   "id": "solace-event-enable-rest",
   "duration": 60,
   "title": "How to Event-Enable your REST Architecture with Solace PubSub+",

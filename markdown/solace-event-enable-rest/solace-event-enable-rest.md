@@ -145,7 +145,7 @@ Positive
 
 ### SEMP Management API
 
-All of the commands and capabilities within the PusSub+ Manager can also be accomplished programmatically via the RESTful **Solace Element Management Protocol** (SEMP) API. For more information on the SEMP API, please consult the following links:
+All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful **Solace Element Management Protocol** (SEMP) API. For more information on the SEMP API, please consult the following links:
 
  - [SEMPv2 Swagger Reference Documentation](https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html)
  - [SEMP User Guide](https://docs.solace.com/SEMP/Using-SEMP.htm)

@@ -111,7 +111,7 @@
 </aside>
 <p class="image-container"><img alt="alt-text-here" src="img/c1f978145c610f80.png"></p>
 <h2 is-upgraded>SEMP Management API</h2>
-<p>All of the commands and capabilities within the PusSub+ Manager can also be accomplished programmatically via the RESTful <strong>Solace Element Management Protocol</strong> (SEMP) API. For more information on the SEMP API, please consult the following links:</p>
+<p>All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful <strong>Solace Element Management Protocol</strong> (SEMP) API. For more information on the SEMP API, please consult the following links:</p>
 <ul>
 <li><a href="https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html" target="_blank">SEMPv2 Swagger Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/SEMP/Using-SEMP.htm" target="_blank">SEMP User Guide</a></li>
@@ -233,7 +233,7 @@ enable
       </google-codelab-step>
     
       <google-codelab-step label="[A] Enable REST (Micro)Gateway Mode" duration="3">
-        <p>In this section, we will switch the REST mode for our Message VPN from <em>Messaging</em> (the default) to <em>Gateway</em>.</p>
+        <p>In this section, we will switch the REST mode for our Message VPN from <em>Messaging</em> (the default) to <em>Gateway</em>. Microgateways allow Solace PubSub+ event brokers to act as HTTP load balancers, or simple API gateways between RESTful API clients and RESTful API service providers. Learn more about Microgateways <a href="https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm" target="_blank">here</a></p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Inside the &#34;Services&#34; menu of the Message VPN, either click &#34;Edit&#34; in the top-right, or double-click the Service Mode: <img alt="alt-text-here" src="img/41a9ff54db544a79.png"></p>
 <p>Select <em>Gateway</em> from the drop-down list, and click &#34;Apply&#34;: <img alt="alt-text-here" src="img/846be83502b41b9f.png"></p>
@@ -381,7 +381,7 @@ No subscription matching topic &#34;GET/test&#34;           &lt;----
       </google-codelab-step>
     
       <google-codelab-step label="[B] Create a New Queue" duration="4">
-        <p>When sending an outbound REST request, we need to configure a <strong>Queue</strong> to (temporarily) store the message before it gets sent out the RDP.</p>
+        <p>When sending an outbound REST request, we need to configure a <strong>Queue</strong> to (temporarily) store the message before it gets sent out from the RDP.</p>
 <aside class="warning"><p><strong>Note:</strong> if creating a <em>new</em> Message VPN, remember that the VPN&#39;s <code>max-spool-quota</code> size defaults to <strong>0MB</strong>. So when creating a new Message VPN, you must also increase the spool quota for your new VPN.</p>
 </aside>
 <h2 is-upgraded>PubSub+ Manager</h2>
@@ -395,7 +395,7 @@ No subscription matching topic &#34;GET/test&#34;           &lt;----
 <p>Add the subscription <code>GET/&gt;</code> for the queue to attract <em>any</em> HTTP GET requests to the queue. Click &#34;Create&#34;: <img alt="alt-text-here" src="img/7fdee8d2ac20f98.png"></p>
 <aside class="warning"><p><strong>Note:</strong> if you&#39;d like to use another HTTP verb – e.g. HTTP POST – then enter a different/another subscription here: e.g. <code>POST/&gt;</code> or restrict it to just the path you want: <code>GET/query</code>)</p>
 </aside>
-<p><a href="Link to Solace Wildcards" target="_blank">https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm</a></p>
+<p>You can read more about Wilecard Topic Subscriptions <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">here</a></p>
 <h2 is-upgraded>SEMP</h2>
 <p>Create a new queue:</p>
 <pre><code>curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues \
@@ -489,7 +489,7 @@ show message-vpn default rest rest-delivery-point * detail
 <p>From within the newly created RDP, click on &#34;REST Consumers&#34; in the top menu: <img alt="alt-text-here" src="img/5c78fe3036b77ba8.png"></p>
 <p>Click on &#34;+ REST Consumer&#34; in the top-right to create a new consumer: <img alt="alt-text-here" src="img/48623b8b11c0f79d.png"></p>
 <p>Enter a name for your new consumer. E.g. <code>rc_get</code>.  Click &#34;Create&#34;: <img alt="alt-text-here" src="img/4f455bd437b88661.png"></p>
-<p>Enable the REST Consumer, and add the remote <strong>host</strong>, <strong>port</strong>, and any authentication required by the downstream REST server. Click &#34;Apply&#34; when finished: <img alt="alt-text-here" src="img/cf6a391678c076a2.png"></p>
+<p>Enable the REST Consumer, and add the remote <strong>host</strong>, <strong>port</strong>, and any authentication required by the downstream REST server. In this example, the host is <code>postman-echo.com</code> and the port is <code>80</code>. Toggle the enable option and click &#34;Apply&#34; <img alt="alt-text-here" src="img/cf6a391678c076a2.png"></p>
 <p>Refresh the screen, and ensure the REST Consumer reports an Operational State of <strong>Up</strong>: <img alt="alt-text-here" src="img/5766c3d98cb2d138.png"></p>
 <h2 is-upgraded>SEMP</h2>
 <p>One single SEMP API command will create and configure the REST Consumer:</p>
@@ -615,7 +615,7 @@ Remote:
     
       <google-codelab-step label="[C] Configuring a &#34;Sniffer&#34; App" duration="4">
         <p>Just like we did on the last step of Section A, use the <strong>Try Me!</strong> functionality of the PubSub+ Manager to &#34;snoop&#34; or &#34;sniff&#34; the messages going through Solace:</p>
-<p>Enter the subscriptions <code>GET/&gt;</code> and <code>#P2P/*/#rest*/&gt;</code> into the text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
+<p>Enter the subscriptions <code>GET/&gt;</code> and <code>#P2P/*/#rest*/&gt;</code> into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
 <p>Re-run the same cURL command from the previous section:</p>
 <pre><code>curl -u default:default &#39;http://localhost:9000/get?hello=world&amp;solace=cool&#39;
 </code></pre>
@@ -630,7 +630,7 @@ Remote:
       <google-codelab-step label="[C] Building a Replier Messaging App" duration="15">
         <h2 is-upgraded>(AKA Who Needs a REST Server??)</h2>
 <p>Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let&#39;s take a look at some sample/example code to generate a response using a messaging topic consumer.</p>
-<p>The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our samples GitHub repo: <a href="https://github.com/SolaceSamples/solace-samples-java" target="_blank">https://github.com/SolaceSamples/solace-samples-java</a>. However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available here: <a href="https://github.com/solacesamples/" target="_blank">https://github.com/solacesamples/</a></p>
+<p>The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our <a href="https://github.com/SolaceSamples/solace-samples-java" target="_blank">Samples GitHub repo</a>. However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available on https://github.com/solacesamples/</p>
 <aside class="special"><p>For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: <a href="https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5" target="_blank">Solace Java Samples Part 1</a> and <a href="https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4" target="_blank">Solace Java Samples Part 2</a></p>
 </aside>
 <h2 is-upgraded>Shutdown the RDP</h2>
