@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-04-14T14:16:49-04:00",
+  "id": "solace-js-mqtt-pg",
+  "duration": 87,
+  "title": "Tech Stack Tutorial: Wiring Together Solace PubSub+, JavaScript, MQTT, and PostgreSQL",
+  "summary": "A tech stack tutorial with Solace PubSub+, JavaScript, MQTT, and PostgreSQL",
+  "source": "solace-js-mqtt-pg.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "javascript",
+    "mqtt",
+    "postgresql"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/solacese/solace-js-mqtt-postgres-blog",
+  "ga": "UA-3921398-10",
+  "url": "solace-js-mqtt-pg"
+}
