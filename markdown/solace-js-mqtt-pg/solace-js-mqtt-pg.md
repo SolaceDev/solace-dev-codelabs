@@ -84,6 +84,10 @@ cd solace-js-mqtt-postgres-blog
 
 Duration: 0:05:00
 
+In this section you're going to start a Solace Messaging Service that will connect everything else we build:
+
+![Architecture Diagram](img/solace-broker.png)
+
 **⏩ Skip this section if you already have access to a Solace PubSub+ Event Broker.**
 
 There’s no better tool for beating analysis paralysis than the Solace PubSub+ Event Broker. Open protocol support and any-to-any protocol translation for its supported protocols built into the broker means there is absolutely no vendor lock-in with Solace and you get to build using whatever tools you’d like. You get to take for granted that they’re all able to connect and communicate with each other. It’s awesome.
@@ -95,6 +99,10 @@ If you do not already have access to a Solace PubSub+ Event Broker and have neve
 ## Build a Basic Node.js MQTT Producer
 
 Duration: 0:10:00
+
+In this section you're going to build the Node.js MQTT producer application:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-5.png)
 
 ![JS meme](img/javascript-meme.png)
 
@@ -140,6 +148,10 @@ If you want to re-run the producer, you should Ctrl-C and re-run the command.
 
 Duration: 0:15:00
 
+In this section you're going to learn to use Heroku to create a Postgres service:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-6.png)
+
 If you check out [database popularity rankings](https://db-engines.com/en/ranking), you'll find Postgres in the top 5. Better yet, Postgres is free, open-source, has a mature ecosystem of tooling around it, and has a large community following. If your project needs a relational database, I think Postgres is an excellent choice.
 
 Before I learned about Heroku's free tier [managed Postgres service](https://www.heroku.com/postgres), I used to pay for a micro-sized RDS instance on AWS any time I needed a database for my projects. No longer! Heroku's managed service is super easy to setup and use, includes a more than generous free tier, and scales with no operational overhead if your project needs it to. This is the type of tool I try to leverage in my projects.
@@ -171,6 +183,10 @@ Click into your Postgres add-on, click the **Settings** tab, and you'll see the 
 ## Use pgadmin4 to Administer a PostgreSQL Database
 
 Duration: 0:15:00
+
+In this section you're going to learn to use pgadmin4 to administer your Postgres service:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-7.png)
 
 **⏩ Feel free to skip this section if you prefer to interact with Postgres using a different method.**
 
@@ -230,6 +246,10 @@ If successful, your GUI should be much tidier:
 
 Duration: 0:10:00
 
+In this section you're going to learn to use pgadmin4 to add a table your Postgres service:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-8.png)
+
 Now that pgadmin4 is setup, let's walk through how to add a table to our database using the GUI. This should go without saying, but probably don't use the GUI for anything besides development.
 
 Our example producer is going to send a user registration event that includes a name, email, and phone number, so we need to create a user table that includes these fields.
@@ -251,6 +271,10 @@ Switch to the **Columns** tab and add three columns by clicking the plus button 
 ## Build a Basic Node.js MQTT Consumer
 
 Duration: 0:10:00
+
+In this section you're going to build the Node.js MQTT consumer application:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-9.png)
 
 **🔧 Resources for this section:**
 
@@ -291,6 +315,10 @@ If your consumer successfully starts up, it will listen for events on the `User/
 ## Configure Prisma Client JS on the Consumer to Create Items in the Database
 
 Duration: 0:10:00
+
+In this section you're going to enhance the Node.js MQTT consumer application by configuring Prisma Client JS to safely access your Postgres service:
+
+![Architecture Diagram](img/solace-js-mqtt-pg-10.png)
 
 [Prisma Client JS](https://github.com/prisma/prisma-client-js) is an auto-generated database client that enables type-safe database access and reduces boilerplate. You can use it as an alternative to traditional ORMs such as Sequelize, TypeORM or Knex.js. Prisma Client JS is part of the “Prisma Framework,” which is a set of open source tools to access, migrate, and administer a variety of databases (Postgres, MySQL, MongoDb). There’s been a lot of buzz around it, especially in the GraphQL community, so I wanted to give it a try. After playing around with it, in my opinion it lives up to the hype.
 
@@ -363,6 +391,12 @@ From a separate terminal, start up the MQTT producer (run `npm run start` from t
 ## Wrap Up
 
 Duration: 0:01:00
+
+You made it 🥳
+
+If you followed all the steps and everything worked, you just built:
+
+![Architecture Diagram](img/solace-js-mqtt-pg.png)
 
 ### Optional cleanup for pgadmin
 

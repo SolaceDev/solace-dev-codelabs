@@ -29,7 +29,7 @@
     
       <google-codelab-step label="Intro" duration="3">
         <p>In this codelab you&#39;re going to learn how to build and manage the tech stack shown by the architecture diagram below:</p>
-<p class="image-container"><img alt="Architecture Diagram" src="img/9cd401d1897e8c9.png"></p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/8973d327be8e37f5.png"></p>
 <h2 is-upgraded>Wordy foreword</h2>
 <p>Hi there CodeLab developer,</p>
 <p>My name is Andrew Roberts and I&#39;m a systems engineer at Solace. I&#39;m going to be the person behind the casually worded technical guide, okay?</p>
@@ -97,7 +97,9 @@ cd solace-js-mqtt-postgres-blog
       </google-codelab-step>
     
       <google-codelab-step label="Starting a Solace PubSub&#43; Event Broker: Cloud Messaging Service" duration="5">
-        <p><strong>⏩ Skip this section if you already have access to a Solace PubSub+ Event Broker.</strong></p>
+        <p>In this section you&#39;re going to start a Solace Messaging Service that will connect everything else we build:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/5a442e5c46b06526.png"></p>
+<p><strong>⏩ Skip this section if you already have access to a Solace PubSub+ Event Broker.</strong></p>
 <p>There&#39;s no better tool for beating analysis paralysis than the Solace PubSub+ Event Broker. Open protocol support and any-to-any protocol translation for its supported protocols built into the broker means there is absolutely no vendor lock-in with Solace and you get to build using whatever tools you&#39;d like. You get to take for granted that they&#39;re all able to connect and communicate with each other. It&#39;s awesome.</p>
 <p><strong>🏃Steps to get started:</strong></p>
 <p>If you do not already have access to a Solace PubSub+ Event Broker and have never set up a Solace PubSub+ Event Broker: Cloud messaging service before, follow the setup instructions here: <a href="https://solace.com/cloud-learning/group_getting_started/ggs_signup.html" target="_blank">Creating Your First Messaging Service — 1.0 documentation</a>.</p>
@@ -106,7 +108,9 @@ cd solace-js-mqtt-postgres-blog
       </google-codelab-step>
     
       <google-codelab-step label="Build a Basic Node.js MQTT Producer" duration="10">
-        <p class="image-container"><img alt="JS meme" src="img/9918d6ec4a2beb30.png"></p>
+        <p>In this section you&#39;re going to build the Node.js MQTT producer application:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/34e14d263f15cb21.png"></p>
+<p class="image-container"><img alt="JS meme" src="img/9918d6ec4a2beb30.png"></p>
 <p><strong>🔧 Resources for this section:</strong></p>
 <ul>
 <li><a href="https:/github.com/solacese/solace-js-mqtt-postgres-blog/tree/master/mqtt-producer" target="_blank">GitHub repo - producer</a></li>
@@ -136,7 +140,9 @@ npm i
       </google-codelab-step>
     
       <google-codelab-step label="Start a Free Managed PostgreSQL Service Using Heroku" duration="15">
-        <p>If you check out <a href="https://db-engines.com/en/ranking" target="_blank">database popularity rankings</a>, you&#39;ll find Postgres in the top 5. Better yet, Postgres is free, open-source, has a mature ecosystem of tooling around it, and has a large community following. If your project needs a relational database, I think Postgres is an excellent choice.</p>
+        <p>In this section you&#39;re going to learn to use Heroku to create a Postgres service:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/46d9619eca5d9f89.png"></p>
+<p>If you check out <a href="https://db-engines.com/en/ranking" target="_blank">database popularity rankings</a>, you&#39;ll find Postgres in the top 5. Better yet, Postgres is free, open-source, has a mature ecosystem of tooling around it, and has a large community following. If your project needs a relational database, I think Postgres is an excellent choice.</p>
 <p>Before I learned about Heroku&#39;s free tier <a href="https://www.heroku.com/postgres" target="_blank">managed Postgres service</a>, I used to pay for a micro-sized RDS instance on AWS any time I needed a database for my projects. No longer! Heroku&#39;s managed service is super easy to setup and use, includes a more than generous free tier, and scales with no operational overhead if your project needs it to. This is the type of tool I try to leverage in my projects.</p>
 <p><strong>🏃Steps to get started:</strong></p>
 <p>First, sign up for a Heroku account <a href="https://signup.heroku.com/" target="_blank">here</a>.</p>
@@ -155,7 +161,9 @@ npm i
       </google-codelab-step>
     
       <google-codelab-step label="Use pgadmin4 to Administer a PostgreSQL Database" duration="15">
-        <p><strong>⏩ Feel free to skip this section if you prefer to interact with Postgres using a different method.</strong></p>
+        <p>In this section you&#39;re going to learn to use pgadmin4 to administer your Postgres service:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/9147cbf50c8e124a.png"></p>
+<p><strong>⏩ Feel free to skip this section if you prefer to interact with Postgres using a different method.</strong></p>
 <p>Heroku does not have a built in GUI for administering your Postgres service. Personally, I&#39;ve found that running pgadmin4 using the <a href="https://hub.docker.com/r/dpage/pgadmin4/" target="_blank">official pgadmin4 docker</a> image is the easiest solution in this space. This section will go over how to set it up.</p>
 <p><strong>🏃Steps to get started:</strong></p>
 <p>Starting pgadmin4 in your browser is super easy using docker. Assuming you have access to docker on your machine, swap out <code>&lt;your login name&gt;</code> and <code>&lt;your password&gt;</code> in the commands listed below using any values you want, and then run them:</p>
@@ -188,7 +196,9 @@ docker run -d -p 5555:80 --name pgadmin -e PGADMIN_DEFAULT_EMAIL=&#34;&lt;your l
       </google-codelab-step>
     
       <google-codelab-step label="Use pgadmin4 to Add a Table to a PostgreSQL Database" duration="10">
-        <p>Now that pgadmin4 is setup, let&#39;s walk through how to add a table to our database using the GUI. This should go without saying, but probably don&#39;t use the GUI for anything besides development.</p>
+        <p>In this section you&#39;re going to learn to use pgadmin4 to add a table your Postgres service:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/d2ace0b9b2a9542f.png"></p>
+<p>Now that pgadmin4 is setup, let&#39;s walk through how to add a table to our database using the GUI. This should go without saying, but probably don&#39;t use the GUI for anything besides development.</p>
 <p>Our example producer is going to send a user registration event that includes a name, email, and phone number, so we need to create a user table that includes these fields.</p>
 <p><strong>🏃Steps to get started:</strong></p>
 <p>Right click Tables, then click <strong>Create &gt; Table</strong></p>
@@ -202,7 +212,9 @@ docker run -d -p 5555:80 --name pgadmin -e PGADMIN_DEFAULT_EMAIL=&#34;&lt;your l
       </google-codelab-step>
     
       <google-codelab-step label="Build a Basic Node.js MQTT Consumer" duration="10">
-        <p><strong>🔧 Resources for this section:</strong></p>
+        <p>In this section you&#39;re going to build the Node.js MQTT consumer application:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/a269ff93bd8c8a13.png"></p>
+<p><strong>🔧 Resources for this section:</strong></p>
 <ul>
 <li><a href="https://github.com/solacese/solace-js-mqtt-postgres-blog/tree/master/mqtt-consumer" target="_blank">GitHub repo - consumer</a></li>
 </ul>
@@ -230,7 +242,9 @@ npm i
       </google-codelab-step>
     
       <google-codelab-step label="Configure Prisma Client JS on the Consumer to Create Items in the Database" duration="10">
-        <p><a href="https://github.com/prisma/prisma-client-js" target="_blank">Prisma Client JS</a> is an auto-generated database client that enables type-safe database access and reduces boilerplate. You can use it as an alternative to traditional ORMs such as Sequelize, TypeORM or Knex.js. Prisma Client JS is part of the &#34;Prisma Framework,&#34; which is a set of open source tools to access, migrate, and administer a variety of databases (Postgres, MySQL, MongoDb). There&#39;s been a lot of buzz around it, especially in the GraphQL community, so I wanted to give it a try. After playing around with it, in my opinion it lives up to the hype.</p>
+        <p>In this section you&#39;re going to enhance the Node.js MQTT consumer application by configuring Prisma Client JS to safely access your Postgres service:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/752564c26914710e.png"></p>
+<p><a href="https://github.com/prisma/prisma-client-js" target="_blank">Prisma Client JS</a> is an auto-generated database client that enables type-safe database access and reduces boilerplate. You can use it as an alternative to traditional ORMs such as Sequelize, TypeORM or Knex.js. Prisma Client JS is part of the &#34;Prisma Framework,&#34; which is a set of open source tools to access, migrate, and administer a variety of databases (Postgres, MySQL, MongoDb). There&#39;s been a lot of buzz around it, especially in the GraphQL community, so I wanted to give it a try. After playing around with it, in my opinion it lives up to the hype.</p>
 <p>I&#39;m going to speed through the steps required to get Prisma up and running, but I recommend that you read Prisma&#39;s GitHub README top to bottom for a better appreciation of what the library offers.</p>
 <p><strong>🏃Steps to get started:</strong></p>
 <p>First, download Prisma&#39;s CLI using this command:</p>
@@ -275,7 +289,10 @@ prisma2 generate
       </google-codelab-step>
     
       <google-codelab-step label="Wrap Up" duration="1">
-        <h2 is-upgraded>Optional cleanup for pgadmin</h2>
+        <p>You made it 🥳</p>
+<p>If you followed all the steps and everything worked, you just built:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/8973d327be8e37f5.png"></p>
+<h2 is-upgraded>Optional cleanup for pgadmin</h2>
 <p>Run these commands to stop and remove the dpage/pgadmin4 container, and then remove the dpage/pgadmin4 image.</p>
 <pre><code>docker rm $(docker stop $(docker ps -a -q --filter ancestor=dpage/pgadmin4 --format=&#34;&#123;&#123;.ID}}&#34;))
 docker rmi &#39;dpage/pgadmin4&#39;
