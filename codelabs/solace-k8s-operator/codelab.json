@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-04-30T11:52:55-04:00",
+  "id": "solace-k8s-operator",
+  "duration": 0,
+  "title": "How to build a Solace PubSubPlus Kubernetes Operator",
+  "summary": "How to build a Solace PubSubPlus Kubernetes Operator",
+  "source": "solace-k8s-operator.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "kubernetes"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "ga": "UA-3921398-10",
+  "url": "solace-k8s-operator"
+}
