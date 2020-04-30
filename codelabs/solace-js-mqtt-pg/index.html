@@ -249,10 +249,13 @@ prisma2 generate
 <p>That&#39;s it for setup. When you ran the previous two commands, Prisma2 automatically generated data models based on your database&#39;s existing tables and installed a custom Prisma2 client package inside your node_modules that includes all the methods related to CRUD operations on your objects. Don&#39;t run <code>npm i @prisma/client</code>, the generate step does this for you. This easy-to-use client plus being able to store declarative data models in version control (schema.prisma file) is why people love Prisma.</p>
 <p>Now all that&#39;s left is to uncomment the client code that takes User Registration Events and creates an item in your database using Prisma.</p>
 <p><strong>Here are the steps:</strong></p>
-<ul>
-<li>Navigate to <code>mqtt-consumer/src/index.js</code> and uncomment Lines 18 and 41-49, delete or comment out Line 52.</li>
-<li>Navigate to <code>mqtt-consumer/src/event-handlers.js</code> and uncomment Lines 20-27.</li>
-</ul>
+<p>Navigate to <code>mqtt-consumer/src/index.js</code></p>
+<ol type="1">
+<li>uncomment <code>import { PrismaClient } from &#34;@prisma/client&#34;;</code> ,</li>
+<li>uncomment the code block after <code>//initialize and connect prisma client</code></li>
+<li>comment out <code>let prismaClient = null;</code></li>
+</ol>
+<p>Navigate to <code>mqtt-consumer/src/event-handlers.js</code> and uncomment the code block after <code>// do some business logic</code>.</p>
 <p>Double check to make sure your comments are correct, and then go ahead and start your consumer by running <code>npm run start</code> from the mqtt-consumer directory.</p>
 <p>From a separate terminal, start up the MQTT producer (run <code>npm run start</code> from the mqtt-producer directory) and you should see this:</p>
 <p class="image-container"><img alt="Working Flow" src="img/b91302bf40706687.png"></p>
