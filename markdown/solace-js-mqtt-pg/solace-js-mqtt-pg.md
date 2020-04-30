@@ -14,11 +14,21 @@ analytics account: UA-3921398-10
 
 Duration: 0:03:00
 
+In this codelab you're going to learn how to build and manage the tech stack shown by the architecture diagram below:
+
 ![Architecture Diagram](img/solace-js-mqtt-pg.png)
 
-My personal strategy for beating [analysis paralysis](https://en.wikipedia.org/wiki/Analysis_paralysis#Software_development) goes something like this: default to using well-vetted open source protocols, languages, and frameworks, and whenever possible, leverage free tier SaaS products. After picking the tools for the job, configure an event mesh using Solace's PubSub+ Event Brokers and plug the tools into it. Since both the event mesh and each one of its nodes (the tools) are scalable, you get to tinker with app specific business logic knowing that what you’re building is scalable.
+### Wordy foreword
 
-In this CodeLab, I’m going to walk through how to setup one of my favorite tech stacks: Solace PubSub+, JavaScript, MQTT, and PostgreSQL. This tech stack can be extended to support a wide range of use cases, ranging from systems programming to event-driven frontends. This CodeLab will implement a contrived user registration event flow, but don’t pay attention to the event payloads. The more important takeaways of this CodeLab are learning how to connect the services together and working with the MQTT and Postgres clients.
+Hi there CodeLab developer,
+
+My name is Andrew Roberts and I'm a systems engineer at Solace. I'm going to be the person behind the casually worded technical guide, okay?
+
+My personal strategy for beating [analysis paralysis](https://en.wikipedia.org/wiki/Analysis_paralysis#Software_development) goes something like this: default to using well-vetted open source protocols, languages, and frameworks, and whenever possible, leverage free tier SaaS products. After picking the tools for my job, I configure an event mesh using Solace's PubSub+ Event Brokers and plug the tools into it. Since both the event mesh and each one of its nodes (the tools) are scalable, I get to tinker with app specific business logic knowing that what I'm building can scale if I need it to.
+
+In this CodeLab, I’m going to put my personal strategy into action and walk through how to setup one of my favorite tech stacks: Solace PubSub+, JavaScript, MQTT, and PostgreSQL. This tech stack can be extended to support a wide range of use cases, ranging from systems programming to event-driven frontends. This CodeLab will implement a contrived user registration event flow, but don’t pay attention to the event payloads. The more important takeaways of this CodeLab are learning how to connect the services together and working with the MQTT and Postgres clients.
+
+**I hope you enjoy the CodeLab, and please do let us know on our community site if there's a topic you'd like covered.**
 
 ## What You'll Learn
 
@@ -329,10 +339,20 @@ Now all that’s left is to uncomment the client code that takes User Registrati
 
 **Here are the steps:**
 
-- Navigate to `mqtt-consumer/src/index.js` and uncomment Lines 18 and 41-49, delete or comment out Line 52.
-- Navigate to `mqtt-consumer/src/event-handlers.js` and uncomment Lines 20-27.
+Navigate to `mqtt-consumer/src/index.js`
 
-Double check to make sure your comments are correct, and then go ahead and start your consumer by running `npm run start` from the mqtt-consumer directory.
+1. uncomment `import { PrismaClient } from "@prisma/client";` ,
+2. uncomment the code block after `//initialize and connect prisma client`,
+3. comment out `let prismaClient = null;`
+
+Navigate to `mqtt-consumer/src/event-handlers.js`
+
+1. uncomment the code block after `// do some business logic`
+
+Negative
+: **⏸️ Pause. Double check to make sure your comments are correct.**
+
+Then, go ahead and start your consumer by running `npm run start` from the mqtt-consumer directory.
 
 From a separate terminal, start up the MQTT producer (run `npm run start` from the mqtt-producer directory) and you should see this:
 
@@ -343,6 +363,17 @@ From a separate terminal, start up the MQTT producer (run `npm run start` from t
 ## Wrap Up
 
 Duration: 0:01:00
+
+### Optional cleanup for pgadmin
+
+Run these commands to stop and remove the dpage/pgadmin4 container, and then remove the dpage/pgadmin4 image.
+
+```
+docker rm $(docker stop $(docker ps -a -q --filter ancestor=dpage/pgadmin4 --format="{{.ID}}"))
+docker rmi 'dpage/pgadmin4'
+```
+
+### Closing thoughts
 
 If you made it this far, you now have a referenceable example of how to wire together Solace PubSub+ Event Broker, JavaScript, MQTT, and PostgreSQL. Knowing how to use these versatile tools together gives you a foundation that you can apply to a wide range of problem categories. You can then spend less time worrying about what technologies to use and more time worrying about building awesome products.
 
