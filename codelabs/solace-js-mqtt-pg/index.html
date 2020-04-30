@@ -28,9 +28,14 @@
                   feedback-link="https://github.com/solacese/solace-js-mqtt-postgres-blog">
     
       <google-codelab-step label="Intro" duration="3">
-        <p class="image-container"><img alt="Architecture Diagram" src="img/9cd401d1897e8c9.png"></p>
-<p>My personal strategy for beating <a href="https://en.wikipedia.org/wiki/Analysis_paralysis#Software_development" target="_blank">analysis paralysis</a> goes something like this: default to using well-vetted open source protocols, languages, and frameworks, and whenever possible, leverage free tier SaaS products. After picking the tools for the job, configure an event mesh using Solace&#39;s PubSub+ Event Brokers and plug the tools into it. Since both the event mesh and each one of its nodes (the tools) are scalable, you get to tinker with app specific business logic knowing that what you&#39;re building is scalable.</p>
-<p>In this CodeLab, I&#39;m going to walk through how to setup one of my favorite tech stacks: Solace PubSub+, JavaScript, MQTT, and PostgreSQL. This tech stack can be extended to support a wide range of use cases, ranging from systems programming to event-driven frontends. This CodeLab will implement a contrived user registration event flow, but don&#39;t pay attention to the event payloads. The more important takeaways of this CodeLab are learning how to connect the services together and working with the MQTT and Postgres clients.</p>
+        <p>In this codelab you&#39;re going to learn how to build and manage the tech stack shown by the architecture diagram below:</p>
+<p class="image-container"><img alt="Architecture Diagram" src="img/9cd401d1897e8c9.png"></p>
+<h2 is-upgraded>Wordy foreword</h2>
+<p>Hi there CodeLab developer,</p>
+<p>My name is Andrew Roberts and I&#39;m a systems engineer at Solace. I&#39;m going to be the person behind the casually worded technical guide, okay?</p>
+<p>My personal strategy for beating <a href="https://en.wikipedia.org/wiki/Analysis_paralysis#Software_development" target="_blank">analysis paralysis</a> goes something like this: default to using well-vetted open source protocols, languages, and frameworks, and whenever possible, leverage free tier SaaS products. After picking the tools for my job, I configure an event mesh using Solace&#39;s PubSub+ Event Brokers and plug the tools into it. Since both the event mesh and each one of its nodes (the tools) are scalable, I get to tinker with app specific business logic knowing that what I&#39;m building can scale if I need it to.</p>
+<p>In this CodeLab, I&#39;m going to put my personal strategy into action and walk through how to setup one of my favorite tech stacks: Solace PubSub+, JavaScript, MQTT, and PostgreSQL. This tech stack can be extended to support a wide range of use cases, ranging from systems programming to event-driven frontends. This CodeLab will implement a contrived user registration event flow, but don&#39;t pay attention to the event payloads. The more important takeaways of this CodeLab are learning how to connect the services together and working with the MQTT and Postgres clients.</p>
+<p><strong>I hope you enjoy the CodeLab, and please do let us know on our community site if there&#39;s a topic you&#39;d like covered.</strong></p>
 
 
       </google-codelab-step>
@@ -252,11 +257,16 @@ prisma2 generate
 <p>Navigate to <code>mqtt-consumer/src/index.js</code></p>
 <ol type="1">
 <li>uncomment <code>import { PrismaClient } from &#34;@prisma/client&#34;;</code> ,</li>
-<li>uncomment the code block after <code>//initialize and connect prisma client</code></li>
+<li>uncomment the code block after <code>//initialize and connect prisma client</code>,</li>
 <li>comment out <code>let prismaClient = null;</code></li>
 </ol>
-<p>Navigate to <code>mqtt-consumer/src/event-handlers.js</code> and uncomment the code block after <code>// do some business logic</code>.</p>
-<p>Double check to make sure your comments are correct, and then go ahead and start your consumer by running <code>npm run start</code> from the mqtt-consumer directory.</p>
+<p>Navigate to <code>mqtt-consumer/src/event-handlers.js</code></p>
+<ol type="1">
+<li>uncomment the code block after <code>// do some business logic</code></li>
+</ol>
+<aside class="warning"><p><strong>⏸️ Pause. Double check to make sure your comments are correct.</strong></p>
+</aside>
+<p>Then, go ahead and start your consumer by running <code>npm run start</code> from the mqtt-consumer directory.</p>
 <p>From a separate terminal, start up the MQTT producer (run <code>npm run start</code> from the mqtt-producer directory) and you should see this:</p>
 <p class="image-container"><img alt="Working Flow" src="img/b91302bf40706687.png"></p>
 <p class="image-container"><img alt="Working Flow" src="img/7e2ddf60f0aa51fa.png"></p>
@@ -265,7 +275,13 @@ prisma2 generate
       </google-codelab-step>
     
       <google-codelab-step label="Wrap Up" duration="1">
-        <p>If you made it this far, you now have a referenceable example of how to wire together Solace PubSub+ Event Broker, JavaScript, MQTT, and PostgreSQL. Knowing how to use these versatile tools together gives you a foundation that you can apply to a wide range of problem categories. You can then spend less time worrying about what technologies to use and more time worrying about building awesome products.</p>
+        <h2 is-upgraded>Optional cleanup for pgadmin</h2>
+<p>Run these commands to stop and remove the dpage/pgadmin4 container, and then remove the dpage/pgadmin4 image.</p>
+<pre><code>docker rm $(docker stop $(docker ps -a -q --filter ancestor=dpage/pgadmin4 --format=&#34;&#123;&#123;.ID}}&#34;))
+docker rmi &#39;dpage/pgadmin4&#39;
+</code></pre>
+<h2 is-upgraded>Closing thoughts</h2>
+<p>If you made it this far, you now have a referenceable example of how to wire together Solace PubSub+ Event Broker, JavaScript, MQTT, and PostgreSQL. Knowing how to use these versatile tools together gives you a foundation that you can apply to a wide range of problem categories. You can then spend less time worrying about what technologies to use and more time worrying about building awesome products.</p>
 <p>I hope you found this post useful. For more information, visit <a href="https://www.solace.dev/" target="_blank">PubSub+ for Developers</a>. If you have any questions, post them to the <a href="https://solace.community/" target="_blank">Solace Developer Community</a>.</p>
 
 
