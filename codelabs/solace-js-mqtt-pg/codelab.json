@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-04-30T20:45:28-04:00",
+  "updated": "2020-05-01T11:30:57-04:00",
   "id": "solace-js-mqtt-pg",
   "duration": 87,
   "title": "Tech Stack Tutorial: Wiring Together Solace PubSub+, JavaScript, MQTT, and PostgreSQL",

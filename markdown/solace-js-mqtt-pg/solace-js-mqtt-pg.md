@@ -22,7 +22,7 @@ In this codelab you're going to learn how to build and manage the tech stack sho
 
 Hi there CodeLab developer,
 
-My name is Andrew Roberts and I'm a systems engineer at Solace. I'm going to be the person behind the casually worded technical guide, okay?
+My name is Andrew Roberts and I'm a systems engineer at Solace. I'm going to be the person behind this casually worded technical guide, okay?
 
 My personal strategy for beating [analysis paralysis](https://en.wikipedia.org/wiki/Analysis_paralysis#Software_development) goes something like this: default to using well-vetted open source protocols, languages, and frameworks, and whenever possible, leverage free tier SaaS products. After picking the tools for my job, I configure an event mesh using Solace's PubSub+ Event Brokers and plug the tools into it. Since both the event mesh and each one of its nodes (the tools) are scalable, I get to tinker with app specific business logic knowing that what I'm building can scale if I need it to.
 
