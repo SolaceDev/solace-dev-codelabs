@@ -4,7 +4,7 @@ id: codelab-4-codelab
 tags:
 categories: codelab,markdown
 environments: Web
-status: Published    
+status: Published
 feedback link: https://github.com/SolaceDev/codelab-4-codelab
 analytics account: UA-3921398-10
 
@@ -59,11 +59,19 @@ $ export PATH=$PATH:$GOROOT/bin
 ```
 
 #### Install claat
-Install claat
+
+**Option A: from CLI using go**
+
 ``` bash
 $ go get -u -v github.com/googlecodelabs/tools/claat
 ```
 
+**Option B: pre-compiled binary**
+
+Navigate to the [Google Codelabs release page](https://github.com/googlecodelabs/tools/releases) and install it from there
+
+
+#### Confirm claat installment
 You should now have the *claat* command available to you. 
 ``` bash
 $ claat
@@ -267,7 +275,7 @@ git push origin add-codelab-<id>
 ```
 
 ### Create a Pull Request
-Now that your changes have been pushed to a new branch, navigate to your fork `https://github.com/<Youe_Github_User>/solace-dev-codelabs` and create a pull request against master.
+Now that your changes have been pushed to a new branch, navigate to your fork `https://github.com/<Your_Github_User>/solace-dev-codelabs` and create a pull request against master.
 
 Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the "Pull Request" button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site. 
 
