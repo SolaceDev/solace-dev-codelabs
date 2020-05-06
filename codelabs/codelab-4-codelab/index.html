@@ -21,11 +21,11 @@
 </head>
 <body>
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid=""
+  <google-codelab codelab-gaid="UA-3921398-10"
                   id="codelab-4-codelab"
                   title="CodeLab to Create a CodeLab"
                   environment="web"
-                  feedback-link="">
+                  feedback-link="https://github.com/SolaceDev/codelab-4-codelab">
     
       <google-codelab-step label="CodeLab Overview" duration="2">
         <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now. When creating a Codelab you have two authoring options:</p>
@@ -62,9 +62,12 @@ $ export PATH=$PATH:$GOPATH/bin
 $ export PATH=$PATH:$GOROOT/bin
 </code></pre>
 <h3 is-upgraded>Install claat</h3>
-<p>Install claat</p>
+<p><strong>Option A: from CLI using go</strong></p>
 <pre><code>$ go get -u -v github.com/googlecodelabs/tools/claat
 </code></pre>
+<p><strong>Option B: pre-compiled binary</strong></p>
+<p>Navigate to the <a href="https://github.com/googlecodelabs/tools/releases" target="_blank">Google Codelabs release page</a> and install it from there</p>
+<h3 is-upgraded>Confirm claat installment</h3>
 <p>You should now have the <em>claat</em> command available to you.</p>
 <pre><code>$ claat
 </code></pre>
@@ -236,7 +239,7 @@ git commit -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
 git push origin add-codelab-&lt;id&gt;
 </code></pre>
 <h2 is-upgraded>Create a Pull Request</h2>
-<p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/&lt;Youe_Github_User&gt;/solace-dev-codelabs</code> and create a pull request against master.</p>
+<p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs</code> and create a pull request against master.</p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
 <aside class="special"><p>We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.</p>
 </aside>

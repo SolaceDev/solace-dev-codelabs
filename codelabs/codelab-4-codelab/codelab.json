@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-05-05T22:29:16-04:00",
+  "updated": "2020-05-06T11:20:49-04:00",
   "id": "codelab-4-codelab",
   "duration": 19,
   "title": "CodeLab to Create a CodeLab",
@@ -20,5 +20,7 @@
   "tags": [
     "web"
   ],
+  "feedback": "https://github.com/SolaceDev/codelab-4-codelab",
+  "ga": "UA-3921398-10",
   "url": "codelab-4-codelab"
 }

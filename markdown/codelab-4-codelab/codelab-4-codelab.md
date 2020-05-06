@@ -59,11 +59,19 @@ $ export PATH=$PATH:$GOROOT/bin
 ```
 
 #### Install claat
-Install claat
+
+**Option A: from CLI using go**
+
 ``` bash
 $ go get -u -v github.com/googlecodelabs/tools/claat
 ```
 
+**Option B: pre-compiled binary**
+
+Navigate to the [Google Codelabs release page](https://github.com/googlecodelabs/tools/releases) and install it from there
+
+
+#### Confirm claat installment
 You should now have the *claat* command available to you. 
 ``` bash
 $ claat
