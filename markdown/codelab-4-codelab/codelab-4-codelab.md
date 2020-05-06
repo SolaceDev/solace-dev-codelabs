@@ -1,12 +1,12 @@
-author: Marc DiPasquale
-summary: Create a CodeLab Using Markdown
-id: codelab-4-codelab
-tags: 
-categories: codelab,markdown
-environments: Web
-status: Published
-feedback link: https://github.com/SolaceDev/codelab-4-codelab
-analytics account: UA-3921398-10
+author: Marc DiPasquale   
+summary: Create a CodeLab Using Markdown  
+id: codelab-4-codelab  
+tags:   
+categories: codelab,markdown  
+environments: Web    
+status: Published    
+feedback link: https://github.com/SolaceDev/codelab-4-codelab   
+analytics account: UA-3921398-10    
 
 # CodeLab to Create a CodeLab
 
@@ -219,7 +219,7 @@ $ claat export codelab.md
 $ claat serve
 ```
 
-* Your browser should have opened (if it doesn't then try going to localhost:9090 in your browser). 
+* Your browser should have opened (if it doesn't then try going to http://localhost:9090/ in your browser). 
 * Choose the directory that matches your "id" that you put in the headers. 
 * Viola! You should have your first codelab!
 
@@ -234,23 +234,20 @@ Negative
 
 
 ### Stage your Codelab
-Clone the solace-dev-codelabs repo and checkout a new branch with a name that makes sense
+Start by forking the solace-dev-codelabs repo from https://github.com/SolaceDev/solace-dev-codelabs and clone your fork. Note: replace `<Your_Github_User>` with your github username
 
 ``` bash
-git clone https://github.com/SolaceDev/solace-dev-codelabs.git
+git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
 cd solace-dev-codelabs
-git checkout -b add-codelab-foo
+git checkout -b add-codelab-<id>
 ```
 
-Create a folder under the `markdown` directory and add your markdown file and related artifacts (such as images)
+Create a folder under the `markdown` directory and add your markdown file and related artifacts (such as images) and export your static web content to the `codelabs` folder.
 
 Positive
 : Make sure your markdown file name matches your header metadata `id` for ease of future updates. 
 
-Export your static web content to the `codelabs` folder as follows:
 ``` bash
-cd /path/to/solace-dev-codelabs
-
 # If creating a new codelab
 mkdir markdown/<header-metadata-id> 
 # Add your markdown content in the markdown/<header-metadata-id>/<file-name>.md directory
@@ -262,19 +259,21 @@ cd markdown/<header-metadata-id>
 claat export -ga UA-3921398-10 -o ../../codelabs/ <header-metadata-id>.md
 ```
 
-Add your changes and any newly created files, then commit & push the changes 
+Add your changes and any newly created files, then commit & push the changes. From your root directory, execute:
 ``` bash
 git add .
 git commit -m 'Added or Updated <header-metadata-id> codelab'
-git push --set-upstream origin add-codelab-foo
+git push origin add-codelab-<id>
 ```
 
 ### Create a Pull Request
-Now that your changes have been pushed to a new branch branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs. 
-
-Do this by navigating to the github repo at: [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)
+Now that your changes have been pushed to a new branch, navigate to your fork `https://github.com/<Youe_Github_User>/solace-dev-codelabs` and create a pull request against master.
 
 Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the "Pull Request" button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site. 
+
+Positive
+: We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.
+
 
 ### Thank You!
 Thank you for contributing to Solace Codelabs! 
