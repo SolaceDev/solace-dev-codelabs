@@ -21,11 +21,11 @@
 </head>
 <body>
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab codelab-gaid=""
                   id="codelab-4-codelab"
                   title="CodeLab to Create a CodeLab"
                   environment="web"
-                  feedback-link="https://github.com/SolaceDev/codelab-4-codelab">
+                  feedback-link="">
     
       <google-codelab-step label="CodeLab Overview" duration="2">
         <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now. When creating a Codelab you have two authoring options:</p>
@@ -199,7 +199,7 @@ Add an image!
 $ claat serve
 </code></pre>
 <ul>
-<li>Your browser should have opened (if it doesn&#39;t then try going to localhost:9090 in your browser).</li>
+<li>Your browser should have opened (if it doesn&#39;t then try going to http://localhost:9090/ in your browser).</li>
 <li>Choose the directory that matches your &#34;id&#34; that you put in the headers.</li>
 <li>Viola! You should have your first codelab!</li>
 </ul>
@@ -212,18 +212,15 @@ $ claat serve
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
 </aside>
 <h2 is-upgraded>Stage your Codelab</h2>
-<p>Clone the solace-dev-codelabs repo and checkout a new branch with a name that makes sense</p>
-<pre><code>git clone https://github.com/SolaceDev/solace-dev-codelabs.git
+<p>Start by forking the solace-dev-codelabs repo from https://github.com/SolaceDev/solace-dev-codelabs and clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username</p>
+<pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
 cd solace-dev-codelabs
-git checkout -b add-codelab-foo
+git checkout -b add-codelab-&lt;id&gt;
 </code></pre>
-<p>Create a folder under the <code>markdown</code> directory and add your markdown file and related artifacts (such as images)</p>
+<p>Create a folder under the <code>markdown</code> directory and add your markdown file and related artifacts (such as images) and export your static web content to the <code>codelabs</code> folder.</p>
 <aside class="special"><p>Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
 </aside>
-<p>Export your static web content to the <code>codelabs</code> folder as follows:</p>
-<pre><code>cd /path/to/solace-dev-codelabs
-
-# If creating a new codelab
+<pre><code># If creating a new codelab
 mkdir markdown/&lt;header-metadata-id&gt; 
 # Add your markdown content in the markdown/&lt;header-metadata-id&gt;/&lt;file-name&gt;.md directory
 # Add your images in the markdown/&lt;header-metadata-id&gt;/img directory
@@ -233,15 +230,16 @@ cd markdown/&lt;header-metadata-id&gt;
 # Note the google analytics code used. Keep as is below
 claat export -ga UA-3921398-10 -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
-<p>Add your changes and any newly created files, then commit &amp; push the changes</p>
+<p>Add your changes and any newly created files, then commit &amp; push the changes. From your root directory, execute:</p>
 <pre><code>git add .
 git commit -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
-git push --set-upstream origin add-codelab-foo
+git push origin add-codelab-&lt;id&gt;
 </code></pre>
 <h2 is-upgraded>Create a Pull Request</h2>
-<p>Now that your changes have been pushed to a new branch branch we need to request that they get pulled into the master branch to go live on solace.dev/codelabs.</p>
-<p>Do this by navigating to the github repo at: <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a></p>
+<p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/&lt;Youe_Github_User&gt;/solace-dev-codelabs</code> and create a pull request against master.</p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
+<aside class="special"><p>We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.</p>
+</aside>
 <h2 is-upgraded>Thank You!</h2>
 <p>Thank you for contributing to Solace Codelabs! Please reach out to the Solace DevRel team with any questions.</p>
 

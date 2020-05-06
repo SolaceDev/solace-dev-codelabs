@@ -1,12 +1,12 @@
-author: Marc DiPasquale   
-summary: Create a CodeLab Using Markdown  
-id: codelab-4-codelab  
-tags:   
-categories: codelab,markdown  
-environments: Web    
+author: Marc DiPasquale
+summary: Create a CodeLab Using Markdown
+id: codelab-4-codelab
+tags:
+categories: codelab,markdown
+environments: Web
 status: Published    
-feedback link: https://github.com/SolaceDev/codelab-4-codelab   
-analytics account: UA-3921398-10    
+feedback link: https://github.com/SolaceDev/codelab-4-codelab
+analytics account: UA-3921398-10
 
 # CodeLab to Create a CodeLab
 
