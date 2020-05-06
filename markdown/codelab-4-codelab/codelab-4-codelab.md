@@ -219,7 +219,7 @@ $ claat export codelab.md
 $ claat serve
 ```
 
-* Your browser should have opened (if it doesn't then try going to http://localhost:9090/ in your browser). 
+* Your browser should have opened (if it doesn't then try going to [http://localhost:9090/](http://localhost:9090/) in your browser). 
 * Choose the directory that matches your "id" that you put in the headers. 
 * Viola! You should have your first codelab!
 
@@ -234,7 +234,7 @@ Negative
 
 
 ### Stage your Codelab
-Start by forking the solace-dev-codelabs repo from https://github.com/SolaceDev/solace-dev-codelabs and clone your fork. Note: replace `<Your_Github_User>` with your github username
+Start by forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs) and clone your fork. Note: replace `<Your_Github_User>` with your github username
 
 ``` bash
 git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
