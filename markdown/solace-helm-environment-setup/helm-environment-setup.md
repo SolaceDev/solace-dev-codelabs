@@ -5,7 +5,7 @@ tags:
 categories: 
 environments: Web
 status: Draft
-feedback link: A link where users can go to provide feedback (e.g. the git repo or issue page)
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs
 analytics account: UA-3921398-10
 
 # Helm / Kubernetes Development Environment Setup
@@ -126,13 +126,8 @@ NOTES:
 Deployment is complete when a PubSub+ pod representing an active event broker node's label reports "active=true".
 
 Watch progress by running:
-```
-
-```bash
 kubectl get pods --namespace default --show-labels -w | grep pubsubplus-dev-1587734193-pubsubplus-dev
-```
 
-```
 For troubleshooting, refer to ***TroubleShooting.md***
 
 == Admin credentials and access ==
@@ -145,13 +140,9 @@ For troubleshooting, refer to ***TroubleShooting.md***
     Username       : admin
 
     Admin password : 
-```
 
-```bash
 echo `kubectl get secret --namespace default pubsubplus-dev-1587734193-pubsubplus-dev-secrets -o jsonpath="{.data.username_admin_password}" | base64 --decode`
-```
 
-```
 Use the "semp" service address to access the management API via browser or a REST tool, see Services access below.
 
 == Image used ==
@@ -164,22 +155,14 @@ Using persistent volumes via dynamic provisioning with the "default" StorageClas
 This is a minimum footprint deployment for development purposes. For guaranteed performance, specify a different solace.size value.
 
 Following resources have been requested per PubSub+ pod:
-```
 
-```bash
 echo `kubectl get statefulset --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath="Minimum resources: {.spec.template.spec.containers[0].resources.requests}"`
-```
 
-```
 == Services access ==
 To access services from pods within the k8s cluster, use these addresses:
-``` 
 
-```bash
 echo -e "\nProtocol\tAddress\n"`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath="{range .spec.ports[*]}{.name}\tpubsubplus-dev-1587734193-pubsubplus-dev.default.svc.cluster.local:{.port}\n"`
-```
 
-```
 To access from outside the k8s cluster, perform the following steps.
 
 Obtain the LoadBalancer IP and the service addresses:
@@ -187,19 +170,13 @@ Obtain the LoadBalancer IP and the service addresses:
 NOTE: At initial deployment it may take a few minutes for the LoadBalancer IP to be available.
 
 Watch the status with: 
-```
 
-```bash
 kubectl get svc --namespace default -w pubsubplus-dev-1587734193-pubsubplus-dev
 
 export SERVICE_IP=$(kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"); echo SERVICE_IP=$SERVICE_IP
-```
+ 
+Ensure valid SERVICE_IP is returned:
 
-```
- # Ensure valid SERVICE_IP is returned:
-```
-
-```bash
 echo -e "\nProtocol\tAddress\n"`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath="{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n"`
 ```
 
