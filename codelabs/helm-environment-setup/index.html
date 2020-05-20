@@ -25,7 +25,7 @@
                   id="helm-environment-setup"
                   title="Helm / Kubernetes Development Environment Setup"
                   environment="web"
-                  feedback-link="A link where users can go to provide feedback (e.g. the git repo or issue page)">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs">
     
       <google-codelab-step label="Overview" duration="1">
         <p>Are you interested in trying out Kubernetes on your Windows PC?  This CodeLab will show you how to setup a desktop Kubernetes environment using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code.  Finally now that PubSub+ is available in <a href="https://hub.helm.sh/" target="_blank">Helm Hub</a>, the CodeLab will show you how to install a dev instance of PubSub+ in the environment using Helm.</p>
@@ -120,10 +120,9 @@ NOTES:
 Deployment is complete when a PubSub+ pod representing an active event broker node&#39;s label reports &#34;active=true&#34;.
 
 Watch progress by running:
-</code></pre>
-<pre><code>kubectl get pods --namespace default --show-labels -w | grep pubsubplus-dev-1587734193-pubsubplus-dev
-</code></pre>
-<pre><code>For troubleshooting, refer to ***TroubleShooting.md***
+kubectl get pods --namespace default --show-labels -w | grep pubsubplus-dev-1587734193-pubsubplus-dev
+
+For troubleshooting, refer to ***TroubleShooting.md***
 
 == Admin credentials and access ==
 *********************************************************************
@@ -135,10 +134,10 @@ Watch progress by running:
     Username       : admin
 
     Admin password : 
-</code></pre>
-<pre><code>echo `kubectl get secret --namespace default pubsubplus-dev-1587734193-pubsubplus-dev-secrets -o jsonpath=&#34;{.data.username_admin_password}&#34; | base64 --decode`
-</code></pre>
-<pre><code>Use the &#34;semp&#34; service address to access the management API via browser or a REST tool, see Services access below.
+
+echo `kubectl get secret --namespace default pubsubplus-dev-1587734193-pubsubplus-dev-secrets -o jsonpath=&#34;{.data.username_admin_password}&#34; | base64 --decode`
+
+Use the &#34;semp&#34; service address to access the management API via browser or a REST tool, see Services access below.
 
 == Image used ==
 solace/solace-pubsub-standard:latest
@@ -150,31 +149,29 @@ Using persistent volumes via dynamic provisioning with the &#34;default&#34; Sto
 This is a minimum footprint deployment for development purposes. For guaranteed performance, specify a different solace.size value.
 
 Following resources have been requested per PubSub+ pod:
-</code></pre>
-<pre><code>echo `kubectl get statefulset --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;Minimum resources: {.spec.template.spec.containers[0].resources.requests}&#34;`
-</code></pre>
-<pre><code>== Services access ==
-To access services from pods within the k8s cluster, use these addresses:
-``` 
 
-```bash
+echo `kubectl get statefulset --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;Minimum resources: {.spec.template.spec.containers[0].resources.requests}&#34;`
+
+== Services access ==
+To access services from pods within the k8s cluster, use these addresses:
+
 echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;{range .spec.ports[*]}{.name}\tpubsubplus-dev-1587734193-pubsubplus-dev.default.svc.cluster.local:{.port}\n&#34;`
-</code></pre>
-<pre><code>To access from outside the k8s cluster, perform the following steps.
+
+To access from outside the k8s cluster, perform the following steps.
 
 Obtain the LoadBalancer IP and the service addresses:
 
 NOTE: At initial deployment it may take a few minutes for the LoadBalancer IP to be available.
 
 Watch the status with: 
-</code></pre>
-<pre><code>kubectl get svc --namespace default -w pubsubplus-dev-1587734193-pubsubplus-dev
+
+kubectl get svc --namespace default -w pubsubplus-dev-1587734193-pubsubplus-dev
 
 export SERVICE_IP=$(kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev --template &#34;&#123;&#123; range (index .status.loadBalancer.ingress 0) }}&#123;&#123;.}}&#123;&#123; end }}&#34;); echo SERVICE_IP=$SERVICE_IP
-</code></pre>
-<pre><code> # Ensure valid SERVICE_IP is returned:
-</code></pre>
-<pre><code>echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n&#34;`
+ 
+Ensure valid SERVICE_IP is returned:
+
+echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n&#34;`
 </code></pre>
 
 

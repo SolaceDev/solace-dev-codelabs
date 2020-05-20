@@ -2,9 +2,9 @@ author: Paul Kondrat
 summary: Helm / Kubernetes Development Environment Setup using WSL, Docker Desktop and VSC
 id: helm-environment-setup
 tags: 
-categories: 
+categories: Helm
 environments: Web
-status: Draft
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs
 analytics account: UA-3921398-10
 
