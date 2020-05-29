@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-05-28T20:50:24-04:00",
+  "updated": "2020-05-28T23:12:41-04:00",
   "id": "helm-environment-setup",
   "duration": 28,
   "title": "Helm / Kubernetes Development Environment Setup",

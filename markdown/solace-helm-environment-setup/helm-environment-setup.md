@@ -202,8 +202,4 @@ And login to the PubSub+ Manager using a web-browser [http://localhost:8080](htt
 
 That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub.  All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.
 
-<<<<<<< HEAD
 The next [CodeLab](https://codelabs.solace.dev/codelabs/helm-node-samples) will use the environment that we just setup to run some of the PubSub+ Sample Applications from [https://github.com/SolaceSamples](https://github.com/SolaceSamples).
-=======
-The next CodeLab will use the environment that we just setup to run some of the PubSub+ Sample Applications [https://github.com/SolaceSamples](https://github.com/SolaceSamples).
->>>>>>> 97fb9ee809eb04c3f4973ff24d35f448c36a57fa
