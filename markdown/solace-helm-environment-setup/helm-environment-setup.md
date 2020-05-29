@@ -39,7 +39,10 @@ Then you need to “Enable Kubernetes” and (optional) “Show system container
 ## Step 2:  Setup the Windows Subsystem for Linux (WSL)
 Duration:  0:10:00
 
-If you don’t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS.  I use Ubuntu and downloaded it from the [Windows Store](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6?cid=msft_web_chart&activetab=pivot:overviewtab).  Once that is setup, you can open Visual Studio Code and install some extensions.
+If you don’t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS.  I use Ubuntu and downloaded it from the [Windows Store](https://www.microsoft.com/en-ca/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab
+).  Once that is setup, you can open Visual Studio Code and install some extensions.
+
+Note:  The following steps were done using Ubuntu 18.04 and WSL1.  At the time of writing Ubuntu 20.04 and WSL2 are just about to be released; the instructions in the following steps differ if using Ubuntu 20.04.
 
 ## Step 3:  Install Visual Studio Code Extensions
 Duration:  0:02:00
@@ -199,4 +202,4 @@ And login to the PubSub+ Manager using a web-browser [http://localhost:8080](htt
 
 That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub.  All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.
 
-The next CodeLab will use the environment that we just setup to run some of the PubSub+ Sample Applications [https://github.com/SolaceSamples](https://github.com/SolaceSamples).
+The next [CodeLab](https://codelabs.solace.dev/codelabs/helm-node-samples) will use the environment that we just setup to run some of the PubSub+ Sample Applications from [https://github.com/SolaceSamples](https://github.com/SolaceSamples).

@@ -52,7 +52,8 @@
       </google-codelab-step>
     
       <google-codelab-step label="Step 2:  Setup the Windows Subsystem for Linux (WSL)" duration="10">
-        <p>If you don&#39;t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS.  I use Ubuntu and downloaded it from the <a href="https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6?cid=msft_web_chart&activetab=pivot:overviewtab" target="_blank">Windows Store</a>.  Once that is setup, you can open Visual Studio Code and install some extensions.</p>
+        <p>If you don&#39;t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS.  I use Ubuntu and downloaded it from the <a href="https://www.microsoft.com/en-ca/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab" target="_blank">Windows Store</a>.  Once that is setup, you can open Visual Studio Code and install some extensions.</p>
+<p>Note:  The following steps were done using Ubuntu 18.04 and WSL1.  At the time of writing Ubuntu 20.04 and WSL2 are just about to be released; the instructions in the following steps differ if using Ubuntu 20.04.</p>
 
 
       </google-codelab-step>
@@ -187,7 +188,7 @@ echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubs
 <p class="image-container"><img alt="Manager Login" src="img/7810a5142185c2b4.png"></p>
 <p class="image-container"><img alt="Manager" src="img/ef28cc40b72bbd3e.png"></p>
 <p>That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub.  All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.</p>
-<p>The next CodeLab will use the environment that we just setup to run some of the PubSub+ Sample Applications <a href="https://github.com/SolaceSamples" target="_blank">https://github.com/SolaceSamples</a>.</p>
+<p>The next <a href="https://codelabs.solace.dev/codelabs/helm-node-samples" target="_blank">CodeLab</a> will use the environment that we just setup to run some of the PubSub+ Sample Applications from <a href="https://github.com/SolaceSamples" target="_blank">https://github.com/SolaceSamples</a>.</p>
 
 
       </google-codelab-step>
