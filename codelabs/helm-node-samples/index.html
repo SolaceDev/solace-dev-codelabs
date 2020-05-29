@@ -1,0 +1,100 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>PubSub&#43; Node.js Samples with Helm / Kubernetes</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="helm-node-samples"
+                  title="PubSub&#43; Node.js Samples with Helm / Kubernetes"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>In a previous <a href="https://codelabs.solace.dev/codelabs/helm-environment-setup" target="_blank">CodeLab</a> a desktop Kubernetes development environment was setup using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code.  That Codlab also used the environment to launch a dev instance of PubSub+ uising the <a href="https://hub.helm.sh/charts/solace" target="_blank">PubSub+ Helm Charts</a>.  This CodeLab will use the dev instance installed in the previous CodeLab to run some Node.js sample applications using Kubernetes and Helm.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 1: Clone the Solace Node Sample Chart" duration="5">
+        <p>My colleage Ken Barr created a simple <a href="https://github.com/KenBarr/solace-node-sample" target="_blank">chart</a> that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github.</p>
+<pre><code>git clone git@github.com:KenBarr/solace-node-sample.git
+</code></pre>
+<p class="image-container"><img alt="Solace Node Sample Chart" src="img/14e452bffea0c355.png"></p>
+<p>The deployment.yaml file is where most of the work is done.  In there you will see what looks a lot like a Kubernetes template however, there are some template functions surrounded by double braces scattered throughout.  The Helm template functions can be used insert strings extracted from the values.yaml file, do simple conditional formating etc.  You can find the details of the Helm template lanuage in the <a href="https://helm.sh/docs/chart_template_guide/" target="_blank">Helm docs</a>.  When you install a Helm chart, Helm will look at the templates, process all of the Helm template functions and render a Kubernetes template that is suitable for deployment.</p>
+<p>Looking at the deployment.yaml file the key sequence is as follows:</p>
+<pre><code>command:
+    - sh
+    - &#34;-ec&#34;
+    - |
+        apk update &amp;&amp; apk upgrade &amp;&amp; apk add --no-cache bash git openssh
+        npm install solclientjs
+        git clone https://github.com/SolaceSamples/solace-samples-nodejs
+        cd solace-samples-nodejs
+        npm init -y
+        echo -e &#34;#!/bin/bash\n node solace-samples-nodejs/src/basic-samples/TopicPublisher.js ws://&#123;&#123;.Values.psb.name}}:8008 publisher@default default&#34; &gt; publish.sh
+        chmod +x publish.sh
+        node src/basic-samples/TopicSubscriber.js ws://&#123;&#123;.Values.psb.name}}:8008 subscriber@default default
+</code></pre>
+<p>The other important file is values.yaml; in that file you can see that the base image is the <a href="https://hub.docker.com/_/node/" target="_blank">node image</a>.  So, the commands above are going to run in the node image (the description of which can be obtained from Docker Hub).  From the code snip above, you can see that the template will install the Solace node.js API from NPM, clone the sample applications from github, create a script to publish a message and finally start the subscriber.</p>
+<p>The code for the sample application that is going to run in the container can be found in <a href="https://github.com/SolaceSamples" target="_blank">Solace Samples</a> on GitHub.  The node.js samples are found in the <a href="https://github.com/SolaceSamples/solace-samples-nodejs" target="_blank">solace-samples-nodejs repo</a>.  The container implements the <a href="https://solace.com/samples/solace-samples-nodejs/publish-subscribe/" target="_blank">Publish/Subscribe</a> messaging pattern.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 2:  Install the Chart" duration="5">
+        <p>Before installing the chart, the values.yaml file needs to  be updated.  In the previous step, you can see that the sample applications need the DNS (&#123;&#123;.Values.psb.name}}) name of the broker that the application is going to connect to.  To get the dns name of the broker that was deployed in the previous code lab use the following command:</p>
+<pre><code>kubectl get services
+</code></pre>
+<p class="image-container"><img alt="kubectl get services" src="img/ca1d79e767a54871.png"></p>
+<p>Edit the values.yaml file and replace &#34;MUST_SPECIFY_SERVICE_NAME&#34; with the service name of the PubSub+ broker.</p>
+<p>Now the chart is ready to be deployed.</p>
+<pre><code>helm install solace-node-sample . -f values.yaml
+</code></pre>
+<p class="image-container"><img alt="helm install solace-node-sample" src="img/7b0a31531a401bb0.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 3:  Run the Node.js Sample Applications" duration="0">
+        <p>In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the <a href="https://github.com/SolaceSamples/solace-samples-nodejs" target="_blank">sample applications</a>.  If you haven&#39;t already done so, install the <a href="https://code.visualstudio.com/docs/remote/remote-overview" target="_blank">Remote Development</a> extensions.  Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows.  Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation).  Using the Kubernetes extension, right click on the &#34;solace-node-sample&#34; pod and select &#34;Attach Visual Studio Code&#34;.</p>
+<p class="image-container"><img alt="attach VSC" src="img/65db76ddf7cd65f4.png"></p>
+<p>This will open a new window inside the container using the Remote Container extension.  Split the terminal window and use the Remote Containers extension to display the container logs by right clicking the container and selecting &#34;Show Container Log&#34;.</p>
+<p class="image-container"><img alt="sample subscriber output" src="img/9621399a71edcf8.png"></p>
+<p>You can see that the subscriber application is running and ready to recieve messages.</p>
+<p class="image-container"><img alt="sample publisher output" src="img/5450c2014455f402.png"></p>
+<pre><code>cd /
+/solace-samples-nodejs/publish.sh
+</code></pre>
+<p>To send a message and in the logs, the subscriber outputs that it recieved a message.</p>
+<p>This shows how to use Visual Studio Code, Kubernetes and Helm to remotely run a sample application in a container.  The node.js application connects to the PubSub+ instance that was previously deployed and sends and recives a message using a publish subscribe messaging pattern.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
