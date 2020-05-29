@@ -13,7 +13,7 @@ analytics account: UA-3921398-10
 ## Overview
 Duration: 0:01:00
 
-In a previous [CodeLab](https://codelabs.solace.dev/codelabs/helm-environment-setup) a desktop Kubernetes development environment was setup using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code.  That Codlab also used the environment to launch a dev instance of PubSub+ uising the [PubSub+ Helm Charts](https://hub.helm.sh/charts/solace).  This CodeLab will use the dev instance installed in the previous CodeLab to run some Node.js sample applications using Kubernetes and Helm.
+In a previous [CodeLab](https://codelabs.solace.dev/codelabs/helm-environment-setup) a desktop Kubernetes development environment was setup using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code.  That Codelab also used the environment to launch a dev instance of PubSub+ uising the [PubSub+ Helm Charts](https://hub.helm.sh/charts/solace).  This CodeLab will use the dev instance installed in the previous CodeLab to run some Node.js sample applications using Kubernetes and Helm.
 
 ## Step 1: Clone the Solace Node Sample Chart
 Duration:  0:05:00
@@ -26,7 +26,7 @@ git clone git@github.com:KenBarr/solace-node-sample.git
 
 ![Solace Node Sample Chart](./img/Annotation2020-05-04-192713.png)
 
-The deployment.yaml file is where most of the work is done.  In there you will see what looks a lot like a Kubernetes template however, there are some template functions surrounded by double braces scattered throughout.  The Helm template functions can be used insert strings extracted from the values.yaml file, do simple conditional formating etc.  You can find the details of the Helm template lanuage in the [Helm docs](https://helm.sh/docs/chart_template_guide/).  When you install a Helm chart, Helm will look at the templates, process all of the Helm template functions and render a Kubernetes template that is suitable for deployment.  
+The deployment.yaml file is where most of the work is done.  In there you will see what looks a lot like a Kubernetes template however, there are some template functions surrounded by double braces scattered throughout.  The Helm template functions can be used to insert strings extracted from the values.yaml file, do simple conditional formating etc.  You can find the details of the Helm template lanuage in the [Helm docs](https://helm.sh/docs/chart_template_guide/).  When you install a Helm chart, Helm will look at the templates, process all of the Helm template functions and render a Kubernetes template that is suitable for deployment.  
 
 Looking at the deployment.yaml file the key sequence is as follows:
 
