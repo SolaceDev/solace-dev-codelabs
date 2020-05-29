@@ -184,7 +184,7 @@ echo -e "\nProtocol\tAddress\n"`kubectl get svc --namespace default pubsubplus-d
 ```
 
 ## Step 6:  Get the Admin password and Login to the PubSub+ Manager
-Duration 0:02:00
+Duration:  0:02:00
 
 To retrieve the password for the admin account use the command line from the chart output in the previous step (it's best to copy from the output of your command to get the correct name of the pod or try 'helm ls' followed by 'helm status <deployment name>' to regenerate the output).  
 
