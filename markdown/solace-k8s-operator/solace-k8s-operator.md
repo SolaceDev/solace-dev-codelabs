@@ -1,5 +1,5 @@
 author: Ken Barr
-summary: How to build a Solace PubSubPlus Kubernetes Operator
+summary: How to build a Solace PubSub+ Kubernetes Operator
 id: solace-k8s-operator
 tags: iguide
 categories: Kubernetes
