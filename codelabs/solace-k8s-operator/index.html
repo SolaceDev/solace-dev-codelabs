@@ -41,17 +41,7 @@
 <li>First to build operators you will need <a href="https://golang.org/doc/install" target="_blank">golang</a> with compatible compiler.</li>
 <li><a href="https://sdk.operatorframework.io/docs/install-operator-sdk/" target="_blank">Next install the operator-sdk</a> which can be done as a simple binary download or built locally.</li>
 <li><a href="https://helm.sh/docs/intro/install/" target="_blank">Helm</a> is required to create initial packaging,</li>
-<li>Finally configure the helm values.yaml to suite your target environment.  In this example I am installing a Highly Available cluster in minikube which would be good for development testing including failure and retry conditions:<pre><code>cd ~/&lt;git_workspace&gt;; git clone git@github.com:SolaceProducts/pubsubplus-kubernetes-quickstart.git
-
-cd pubsubplus-kubernetes-quickstart; 
-vi pubsubplus/values.yaml   
-redundancy: true
-size: dev
-usernameAdminPassword: &lt;password&gt;
-
-helm package pubsubplus/  
-</code></pre>
-</li>
+<li>Finally configure the helm values.yaml to suite your target environment.  In this example I am installing a Highly Available cluster in minikube which would be good for development testing including failure and retry conditions: <br><code>cd ~/&lt;git_workspace&gt;; git clone git@github.com:SolaceProducts/pubsubplus-kubernetes-quickstart.git<br>cd pubsubplus-kubernetes-quickstart; <br>vi pubsubplus/values.yaml   <br>redundancy: true<br>size: dev<br>usernameAdminPassword: &lt;password&gt;<br>helm package pubsubplus/  <br></code></li>
 </ul>
 <p>The result of the package command will produce pubsubplus-2.1.2.tgz</p>
 
