@@ -8,7 +8,7 @@ status: Draft
 feedback link: https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart
 analytics account: UA-3921398-10
 
-# How to build a Solace PubSubPlus Kubernetes Operator
+# How to build a Solace PubSub+ Kubernetes Operator
 
 ## Overview
 Duration: 0:05:00
