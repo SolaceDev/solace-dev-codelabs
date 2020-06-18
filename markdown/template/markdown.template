@@ -1,0 +1,50 @@
+author: AUTHOR_NAME
+summary:
+id: CODELAB_NAME
+tags:
+categories:
+environments: Web
+status: Draft
+feedback link:
+analytics account: UA-3921398-10
+
+# Title
+
+## Section 1
+
+Duration: 0:00:00
+
+### Info Boxes
+Plain Text followed by green & yellow info boxes 
+
+Negative
+: This will appear in a yellow info box.
+
+Positive
+: This will appear in a green info box.
+
+### Bullets
+Plain Text followed by bullets
+* Hello
+* CodeLab
+* World
+
+### Numbered List
+1. List
+1. Using
+1. Numbers
+
+### Add an Image
+Add an image!
+![Soly Image Caption](img/soly.gif)
+
+## Section 2
+
+Duration: 0:00:00
+
+### Add a Link
+Add a link!
+[Example of a Link](https://www.google.com)
+
+### Embed an iframe
+![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
