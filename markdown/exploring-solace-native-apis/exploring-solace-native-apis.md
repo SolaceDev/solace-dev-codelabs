@@ -5,10 +5,10 @@ tags: workshop
 categories: Java
 environments: Web
 status: Draft
-feedback link: A link where users can go to provide feedback (e.g. the git repo or issue page)
+feedback link: https://github.com/SolaceSamples
 analytics account: UA-3921398-10
 
-# Exploring Solace Native APIs
+# Exploring Solace Native APIs - The Basics
 
 ## Introduction
 Duration: 0:02:00
@@ -53,10 +53,10 @@ Before you start, make sure:
 ![Everyone's favourite IDE](./img/edlin.png)
 * You have a "broker" set up and ready to go.  A "broker" could be [Solace Cloud](https://console.solace.cloud/) plan, local PubSub+ software running under [Docker](https://products.solace.com/download/PUBSUB_DOCKER_STAND) or a [VM](https://products.solace.com/download/PUBSUB_STAND_OVA), or even a hardware appliance if you're lucky.  Just make sure you have the client credentials, for instance "client_username@messag-vpn" and the password.
 * You have "no" or "basic" authentication configured on the broker you're connecting to.  Of course we can do TLS, but that's waaaaay beyond the scope of this one...
-* You've [downloaded](https://solace.com/downloads/) and installed the native API of your choice
+* You've [downloaded](https://solace.com/downloads/), installed or included in your dependency manager the native API of your choice
 *  You know that [github.com/SolaceSamples](https://github.com/SolaceSamples) exists, and, even better, you've cloned it
 * (Somewhat optional) You can write code.
-* (Even less optional) You've downloaded and installed [sdkperf](https://products.solace.com/download/SDKPERF_JAVA)
+* (A bit more optional) You've downloaded and installed [sdkperf](https://products.solace.com/download/SDKPERF_JAVA)
 
 Positive
 : We have a lot of excellent Tutorial material available to help you get started.  This CodeLab doesn't replace those, it's here to encourage you to use them!
@@ -88,7 +88,7 @@ Positive
 : These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.
 
 ### Getting Started: verifying a connection
-At the start we'll validate we can connect to the broker using sdkperf.  We'll then use PubSub+ Manager to find and validate our connection.
+At the start we'll validate we can connect to the broker using the Try-Me! feature of PubSub+ Manager.  We'll then use PubSub+ Manager to find and validate our connection.
 
 ![](./img/start.png)
 
@@ -103,21 +103,21 @@ We'll then create a session callback and have your code receive messages
 ![](./img/part-b.png)
 
 ### Part C 
-Now it's time to send a message.  We'll reverse the flow so that your application is sending it to SDKPerf
+Now it's time to send a message.  We'll reverse the flow so that your application is sending it to Try-Me!
 
 ![](./img/part-c.png)
 
 
-## Start: connect using SDKPerf
+## Start: connect using Try-Me!
 Duration: 0:05:00
 
-### Connect SDKPerf to your broker
+### Connect Try-Me! to your broker
 
-We will connect SDKPerf to the broker, then validate we have a connection using PubSub+ Manager.
+We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Manager.
 
-### 1 Check SDKPerf is installed
+#### An aside: SDKPerf 
 
-Start your sdkperf and check it's installed correctly.  The best way to do this is ask for help:
+For performance or advanced feature debugging, we have a specialised test harness called SDKPerf.  If you think an API feature doesn't work as expected, try the feature with SDKPerf to check.  SDKPerf's message display is also dynamite, and it gives you the option to listen with the API of your choice.  Grab it from the [download site](https://solace.com/downloads/) and install, then:
 
 Linux:
 
@@ -130,15 +130,15 @@ Windows:
 Positive
 : Replace "sdkperf_java.sh" with "sdkperf" for C or your favourite SDKPerf variant for your API of choice.
 
-### 2 Connect SDKPerf
+### 1 Find Try-Me!
 
-For Docker or VM installed brokers, the connection can be made very easily.  The *default* client username in the *default* message VPN is enabled and the broker is running on port 8080, so simply:
+Firstly, start PubSub+ Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.
 
-	./sdkperf -cip <broker IP and port> -stl codelab/sample/topic
+* Docker: "localhost:8080"
+* VM image: "{ip address}:8080
+* Cloud: o to the Solace Cloud console, select "Messaging Services," click the service and go to the "Manage" tab.
 
-So for my local installation using Java:
-
-	./sdkperf_java.sh -cip 192.168.0.31 -stl codelab/sample/topic
+### 2 Connect Try-Me!
 
 If you are using PubSub+ Cloud, go to the Solace Cloud console, select "Messaging Services," click the service and go to the Connect tab:
 
@@ -148,31 +148,22 @@ Pick "Solace Messaging" and make a note of the username, password, Message VPN a
 
 ![Make a note of the username, password, Message VPN and SMF Host](./img/cloud-connection-details.png)
 
-Then use these details on the sdkperf command line: use the -cu ("client username") and -cp ("client password") options, so it looks something like:
+You'll need these details later.  But to connect Try-Me, just navigate to the Try-Me tab on the left hand menu:
 
-	sdkperf_java.sh -cip <SMF Host> -cu <username>@<message-vpn> -cp <password> -stl codelab/sample/topic
+![](./img/try-me.png)
 
-Once sdkperf starts, you should see something along the lines of:
+Now we need to connect.  The connection details are filled in, which makes things easy, so just go to the **Subscriber** and click the "Connect" button.
 
-	JAVA: /usr/bin/java
-	SOLACE_VM_ARGS: -Xms512m -Xmx1024m
-	Run Info: CPU usage currently disabled.
-	Client naming used:
-		logging ID   = perf_client000001
-		username     = perf_client000001
-		vpn          = 
-		client names = sdk generated.
-	
-	> VM Name: Java HotSpot(TM) 64-Bit Server VM
-	Run Info: Using Java Nanosecond Timer for Timing
-	> Timing Package Clock Speed (Hz): 1000000000
-	> Getting ready to init clients
-	> Adding subscriptions if required
-	> Getting ready to start clients.
-	PUB MR(5s)=    0, SUB MR(5s)=    0, CPU=0
-	PUB MR(5s)=    0, SUB MR(5s)=    0, CPU=0
+Positive
+:  If you're using Docker, you may not connect.  This is because the default docker compose yaml doesn't expose the port Try-Me uses.  Simply stop the containerand edit the .yml file.  Fine the Port Mappings section, and uncomment the line below "#Web transport"
 
-Those last two lines show SDKPerf has connected and is now listening for messages.  We chose the topic "codelab/sample/topic" to listen to.
+	    #Port Mappings:  Ports are mapped straight through from host to
+    #container.  This may result in port collisions on commonly used
+    #ports that will cause failure of the container to start.
+      #Web transport
+      - '80:80'		<----  Uncomment this line.
+
+Then recreate and restart your container.
 
 ## Start: find connection in PubSub+ Manager
 Duration: 0:05:00
@@ -421,9 +412,21 @@ That's it!  All we now have to do is add some logic to actually do something wit
 
 ###3 Validating TopicSubscriber
 
-Run TopicSubscriber, and *publish* a message using sdkperf.
+Run TopicSubscriber, and *publish* a message using Try-Me!
 
-	sdkperf -cip <broker ip> -cu <username>@<message-vpn> -ptl tutorial/topic -mn 1
+#### 1. Connect Try-Me! Publisher
+
+Go to the **Publisher** Try-Me! pane, and hit connect.
+
+#### 2. Send a message
+
+We need to make sure we publish to the right topic.  If you recall, we're subscribing to "tutorial/topic":
+
+	        final Topic topic = JCSMPFactory.onlyInstance().createTopic("tutorial/topic");
+
+So fill out the topic box appropriately and hit Publish:
+
+![](./img/try-me-publish.png)
 
 You should see the message printed in TopicSubsriber.  Make sure you publish to the same topic (-ptl in sdkperf) as you are subscribed to.  SDKPerf in this example is publishing to topic ("-ptl") tutorial/topic as that's the default topic used in the samples.
 
@@ -444,14 +447,14 @@ Next, go to PubSub+ Manager, find TopicSubscriber, and check that you've subscri
 
 We've now completed Part B - sdkperf has sent a message which we've received in TopicSubscriber.
 
-![](./img/part-b.png)
+![](././img/part-b.png)
 
 So, let's move on and see how we can actually send messages.
 
 ## Part C: Sending Messages
 Duration: 0:15:00
 
-![](./img/part-c.png)
+![](././img/part-c.png)
 
 ### Java: Message Producers
 
@@ -459,7 +462,7 @@ Let's start with Java.  Just like receiving messages, where we have a *Message C
 
 	XMLMessageProducer prod = session.getMessageProducer(
 
-As for receiving messages, we can provide some callbacks - what happens if there's a response (for request/reply messages), or some kind of error.  In TopicPUblisher we provide an anonymous class to do this.  You could, of course, implement **JCSMPStreamingPublishEventHandler** and pass your class in.
+As for receiving messages, we can provide some callbacks - what happens if there's a response (for request/reply messages), or some kind of error.  In TopicPublisher we provide an anonymous class to do this.  You could, of course, implement **JCSMPStreamingPublishEventHandler** and pass your class in.
 
 ###1 Creating a message object/buffer to populate
 
@@ -536,14 +539,18 @@ In C, we've already annotated the message with the destination, so we just call 
 
 	solClient_session_sendMsg ( session_p, msg_p );
 
-So, let's do that.  Firstly, let's set up our SDKPerf subscriber so we can see the message being received:
+So, let's do that.  Firstly, let's use Try-Me!  Make sure Try-Me! is connected and subscribed to the right topic.  Try-Me! is a good place to experiment with **Topic Wildcards**, as I've done here:
+
+![](././img/try-me-subs.png)
+
+I said earlier that SDKPerf can be very handy for application debug as its message display functionality is very good.  Let's set up our SDKPerf subscriber so we can see the message being received:
 
 	sdkperf -cip <broker ip> -cu <username>@<message-vpn> -stl tutorial/topic -md
 
 The "-md" stands for "message dump."
 
 Positive
-: I'd encourage you to always attach an sdkperf subsriber with message dump turned on whenever you're debugging an application.  It's tempting to write some code to probe the event broker and find out what's going on, but SDKPerf is the debug tool of choice for our support team and with good reason.  You'll see exactly what is being sent and received.
+: I'd encourage you to always attach an sdkperf subsriber with message dump turned on whenever you're debugging an application if you can't get enough information from Try-Me!
 
 Then we'll just fire up TopicPubisher and see what comes out:
 
@@ -562,14 +569,14 @@ This is what TopicPublisher sent.  Since it's what we were hoping to send, we ca
 
 ###6 Publish/Subscribe
 
-**LEAVE SDKPERF RUNNING** and run TopicSubscriber.  The re-run topic publisher.  What you should see is that same message appearing in both applications.  By the magic of Publish/Subscribe, we've sent a single message to two different applications *without either of the original sender or receiver being aware of it*.
+**LEAVE TRY-ME! RUNNING** and run TopicSubscriber.  The re-run topic publisher.  What you should see is that same message appearing in both applications.  By the magic of Publish/Subscribe, we've sent a single message to two different applications *without either of the original sender or receiver being aware of it*.
 
-![](./img/part-c-2.png)
+![](././img/part-c-2.png)
 
 You could even download and run different TopicSubscribers from different APIs, or different SolaceSamples.  That shows how you can send a message in one language and receive it in different languages.
 
 ## Wrap up, and Things We Didn't Cover
-Duration 0:03:00
+Duration: 0:03:00
 
 So there we go - that's the basics of creating a connection, receiving and sending messages using the Solace Native APIs.
 
