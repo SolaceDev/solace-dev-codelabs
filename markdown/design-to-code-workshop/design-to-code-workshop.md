@@ -52,7 +52,7 @@ Duration: 0:05:00
 ## Design Your EDA
 Duration: 0:05:00
 
-Now that you're familiar with the use case and you've imported the application domain into the Event Portal let's get update our Event-Driven Architecture (EDA). 
+Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal let's get update our Event-Driven Architecture (EDA). 
 
 Open the _NYC Modern Taxi Co_ Application Domain that you previously imported in the Event Portal Designer. You should see a _Taxis_ Application which publishes _TaxiStatusUpdate_ Events. We want to extend this architecture to match the design discussed for in our use case.
 
@@ -70,7 +70,7 @@ Fill in the fields as follows:
 1. Click the _Manage Events_ button, search for "TaxiStatusUpdate" and click _Sub_ next to it. This means that your application will subscribe to these events.
 1. Click the _Save_ Button
 
-You should now see your _RideDropoffProcessor_ added to the graph. 
+✅ You should now see your _RideDropoffProcessor_ added to the graph. 
 
 ![ep_step01](img/ep_step01.webp)
 
@@ -181,12 +181,11 @@ Fill in the fields as follows:
 
 ![ep_createSchema](img/ep_createSchema.webp)
 
-Positive
-: We have now created a new payload schema and the schema has automatically been added to our event. 
+✅ We have now created a new payload schema and the schema has automatically been added to our event. 
 
 ![ep_createEventWithSchema](img/ep_createEventWithSchema.webp)
 
-Go ahead and click _Save_ to complete the creation of our _RideAverageUpdate_ event.
+✅ Go ahead and click _Save_ to complete the creation of our _RideAverageUpdate_ event.
 
 ### Update _RideDropoffProcessor_ to publish _RideAverageUpdate_ Events
 Now that we've created our _RideAverageUpdate_ event and defined it's payload we need to update the _RideDropoffProcessor_ to publish it. 
@@ -196,7 +195,7 @@ To do this follow these steps:
 1. Click _Manage Events_, search for "RideAverageUdpdate" and click "Pub" next to it since the _RideDropoffProcessor_ needs to publish these events. 
 1. Click _Save_ 
 
-The _RideDropoffProcessor_ is now complete and you should see it both consuming and publishing events! 
+✅ The _RideDropoffProcessor_ is now complete and you should see it both consuming and publishing events! 
 
 ![ep_step02](img/ep_step02.webp)
 
@@ -214,7 +213,7 @@ Fill in the form as follows:
 
 ![ep_complete](img/ep_complete.webp)
 
-That's it! Our Use Case design is now reflected by our architecture captured in the Event Portal and we're ready for implementation!
+🚀🚀 That's it! Our Use Case design is now reflected by our architecture captured in the Event Portal and we're ready for implementation! 🚀🚀
 
 
 ## Install the AsyncAPI Generator
@@ -237,6 +236,7 @@ Negative
 ## Develop the RideDropoffProcessor
 Duration: 0:05:00
 
+🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
 On to developing the _RideDropoffProcessor_ microservice. As we mentioned during design we want to implement this app using the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework. For more information on the framework the [reference guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/) is an excellent resource! 
 
 ### Generate the Code Skeleton
@@ -261,7 +261,7 @@ Let's add a few of the template's configuration options to the download AsyncAPI
 * Add `x-scs-function-name: processDropoffRideAverages` under the _subscribe_ operation and the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the _subscribe_ and the _publish_ operation you are saying you want them handled by the same function! 
 * Add `x-scs-destination: taxiUpdateQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
 
-After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
+✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
 ![asyncapi_doc2](img/asyncapi_doc2.webp)
 
 Negative
@@ -286,7 +286,7 @@ Note the different pieces of the command:
 ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
-After running the command you should see output that ends with where you can find your generated files. 
+✅ After running the command you should see output that ends with where you can find your generated files. 
 ```
 Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProcessor.
@@ -311,7 +311,7 @@ As of the writing of this codelab dynamic topics are not yet supported by the Ev
 Positive
 : Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
-After making the update your _application.yml_ file should look like below for the `spring.cloud.stream` section 
+✅ After making the update your _application.yml_ file should look like below for the `spring.cloud.stream` section 
 ```yaml
 spring:
   cloud:
@@ -424,6 +424,7 @@ Positive
 ## Develop the RideDropoffConsumer
 Duration: 0:05:00
 
+🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
 On to developing the _RideDropoffConsumer_ microservice. We are also going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice, but we'll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app! 
 
 ### Generate the Code Skeleton
@@ -431,7 +432,7 @@ In the Solace Event Portal right click on the _RideDropoffConsumer_, Choose _Asy
 
 ![ep_asyncapi2](img/ep_asyncapi2.webp)
 
-Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below. 
+🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below. 
 
 Note the different pieces of the command: 
 * `ag` is the AsyncAPI Generator command
@@ -449,7 +450,7 @@ Note the different pieces of the command:
 ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
-After running the command you should see output that ends with where you can find your generated files. 
+✅ After running the command you should see output that ends with where you can find your generated files. 
 ```
 Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/RideDropoffConsumer.
