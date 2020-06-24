@@ -5,7 +5,7 @@ tags:
 categories: codelab,markdown
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/codelab-4-codelab
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab
 analytics account: UA-3921398-10
 
 # CodeLab to Create a CodeLab
@@ -25,7 +25,7 @@ Here is an example image of another CodeLab that I created:
 
 
 **Resources:** 
-* The markdown for this codelab is located here: [codelab.md](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/codelab-4-codelab/codelab-4-codelab.md)
+* The markdown for this codelab is located here: [codelab.md](https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md)
 * [Google CodeLabs Tools Github](https://github.com/googlecodelabs/tools) - The repo that contains the claat tool we'll be using today
 * [Google Group for CodeLab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
 * [A blog that I used when getting started with Google Codelabs](https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816)
@@ -98,7 +98,13 @@ Please follow these guidelines when creating codelabs that will be hosted at [so
 ## Create your initial CodeLab
 Duration: 0:05:00
 
-Now that we have the environment setup let's go ahead and create a markdown file where we'll create the actual codelab. 
+Now that we have the environment setup, you have two options you can follow to create a codelab:
+
+### Option 1 - Automated 
+Clone the [Solace codelabs repo](https://github.com/SolaceDev/solace-dev-codelabs) and follow the contribution steps in the README
+
+### Option 2 - Manual
+Go ahead and create a markdown file where you'll create the actual codelab. 
 Please have your markdown file name match the `id` in the header metadata that you will set in the next subsection. 
 
 Negative
