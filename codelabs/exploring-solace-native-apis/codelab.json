@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-06-23T21:38:20+01:00",
+  "id": "exploring-solace-native-apis",
+  "duration": 67,
+  "title": "Exploring Solace Native APIs - The Basics",
+  "summary": "An exploration of the basics of getting started with Solace’s Native APIs",
+  "source": "exploring-solace-native-apis.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "java"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceSamples",
+  "ga": "UA-3921398-10",
+  "url": "exploring-solace-native-apis"
+}
