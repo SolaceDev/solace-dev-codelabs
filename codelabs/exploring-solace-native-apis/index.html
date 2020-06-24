@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Exploring Solace Native APIs</title>
+  <title>Exploring Solace Native APIs - The Basics</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
@@ -23,9 +23,9 @@
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
   <google-codelab codelab-gaid="UA-3921398-10"
                   id="exploring-solace-native-apis"
-                  title="Exploring Solace Native APIs"
+                  title="Exploring Solace Native APIs - The Basics"
                   environment="web"
-                  feedback-link="A link where users can go to provide feedback (e.g. the git repo or issue page)">
+                  feedback-link="https://github.com/SolaceSamples">
     
       <google-codelab-step label="Introduction" duration="2">
         <h2 is-upgraded>New to Solace? Using open APIs such as REST, Paho for MQTT or JMS with Solace?  Want to learn the basics of how the Solace native APIs work?</h2>
@@ -63,10 +63,10 @@
 <li>You have your favourite IDE fired up and ready to go <img alt="Everyone’s favourite IDE" src="img/962d7dd94c5769a7.png"></li>
 <li>You have a &#34;broker&#34; set up and ready to go.  A &#34;broker&#34; could be <a href="https://console.solace.cloud/" target="_blank">Solace Cloud</a> plan, local PubSub+ software running under <a href="https://products.solace.com/download/PUBSUB_DOCKER_STAND" target="_blank">Docker</a> or a <a href="https://products.solace.com/download/PUBSUB_STAND_OVA" target="_blank">VM</a>, or even a hardware appliance if you&#39;re lucky.  Just make sure you have the client credentials, for instance &#34;client_username@messag-vpn&#34; and the password.</li>
 <li>You have &#34;no&#34; or &#34;basic&#34; authentication configured on the broker you&#39;re connecting to.  Of course we can do TLS, but that&#39;s waaaaay beyond the scope of this one...</li>
-<li>You&#39;ve <a href="https://solace.com/downloads/" target="_blank">downloaded</a> and installed the native API of your choice</li>
+<li>You&#39;ve <a href="https://solace.com/downloads/" target="_blank">downloaded</a>, installed or included in your dependency manager the native API of your choice</li>
 <li>You know that <a href="https://github.com/SolaceSamples" target="_blank">github.com/SolaceSamples</a> exists, and, even better, you&#39;ve cloned it</li>
 <li>(Somewhat optional) You can write code.</li>
-<li>(Even less optional) You&#39;ve downloaded and installed <a href="https://products.solace.com/download/SDKPERF_JAVA" target="_blank">sdkperf</a></li>
+<li>(A bit more optional) You&#39;ve downloaded and installed <a href="https://products.solace.com/download/SDKPERF_JAVA" target="_blank">sdkperf</a></li>
 </ul>
 <aside class="special"><p>We have a lot of excellent Tutorial material available to help you get started.  This CodeLab doesn&#39;t replace those, it&#39;s here to encourage you to use them!</p>
 </aside>
@@ -96,26 +96,26 @@
 <aside class="special"><p>These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.</p>
 </aside>
 <h2 is-upgraded>Getting Started: verifying a connection</h2>
-<p>At the start we&#39;ll validate we can connect to the broker using sdkperf.  We&#39;ll then use PubSub+ Manager to find and validate our connection.</p>
-<p class="image-container"><img src="img/4dd14d78dd15e113.png"></p>
+<p>At the start we&#39;ll validate we can connect to the broker using the Try-Me! feature of PubSub+ Manager.  We&#39;ll then use PubSub+ Manager to find and validate our connection.</p>
+<p class="image-container"><img src="img/217e09544eeecd70.png"></p>
 <h2 is-upgraded>Part A</h2>
 <p>We&#39;ll then get your code to connect to the broker.  This introduces the <em>session</em> concept.</p>
-<p class="image-container"><img src="img/d09cc9a7a872e632.png"></p>
+<p class="image-container"><img src="img/c8bb77d5ee4ce07c.png"></p>
 <h2 is-upgraded>Part B</h2>
 <p>We&#39;ll then create a session callback and have your code receive messages</p>
-<p class="image-container"><img src="img/96c946c2414c3be8.png"></p>
+<p class="image-container"><img src="img/5de28bc7f3652ab7.png"></p>
 <h2 is-upgraded>Part C</h2>
-<p>Now it&#39;s time to send a message.  We&#39;ll reverse the flow so that your application is sending it to SDKPerf</p>
-<p class="image-container"><img src="img/2fa87ab831b9cd52.png"></p>
+<p>Now it&#39;s time to send a message.  We&#39;ll reverse the flow so that your application is sending it to Try-Me!</p>
+<p class="image-container"><img src="img/a516da99ed1f91d.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Start: connect using SDKPerf" duration="5">
-        <h2 is-upgraded>Connect SDKPerf to your broker</h2>
-<p>We will connect SDKPerf to the broker, then validate we have a connection using PubSub+ Manager.</p>
-<h2 is-upgraded>1 Check SDKPerf is installed</h2>
-<p>Start your sdkperf and check it&#39;s installed correctly.  The best way to do this is ask for help:</p>
+      <google-codelab-step label="Start: connect using Try-Me!" duration="5">
+        <h2 is-upgraded>Connect Try-Me! to your broker</h2>
+<p>We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Manager.</p>
+<h3 is-upgraded>An aside: SDKPerf</h3>
+<p>For performance or advanced feature debugging, we have a specialised test harness called SDKPerf.  If you think an API feature doesn&#39;t work as expected, try the feature with SDKPerf to check.  SDKPerf&#39;s message display is also dynamite, and it gives you the option to listen with the API of your choice.  Grab it from the <a href="https://solace.com/downloads/" target="_blank">download site</a> and install, then:</p>
 <p>Linux:</p>
 <pre><code>./sdkperf_java.sh -h
 </code></pre>
@@ -124,40 +124,32 @@
 </code></pre>
 <aside class="special"><p>Replace &#34;sdkperf_java.sh&#34; with &#34;sdkperf&#34; for C or your favourite SDKPerf variant for your API of choice.</p>
 </aside>
-<h2 is-upgraded>2 Connect SDKPerf</h2>
-<p>For Docker or VM installed brokers, the connection can be made very easily.  The <em>default</em> client username in the <em>default</em> message VPN is enabled and the broker is running on port 8080, so simply:</p>
-<pre><code>./sdkperf -cip &lt;broker IP and port&gt; -stl codelab/sample/topic
-</code></pre>
-<p>So for my local installation using Java:</p>
-<pre><code>./sdkperf_java.sh -cip 192.168.0.31 -stl codelab/sample/topic
-</code></pre>
+<h2 is-upgraded>1 Find Try-Me!</h2>
+<p>Firstly, start PubSub+ Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.</p>
+<ul>
+<li>Docker: &#34;localhost:8080&#34;</li>
+<li>VM image: &#34;{ip address}:8080</li>
+<li>Cloud: o to the Solace Cloud console, select &#34;Messaging Services,&#34; click the service and go to the &#34;Manage&#34; tab.</li>
+</ul>
+<h2 is-upgraded>2 Connect Try-Me!</h2>
 <p>If you are using PubSub+ Cloud, go to the Solace Cloud console, select &#34;Messaging Services,&#34; click the service and go to the Connect tab:</p>
 <p class="image-container"><img src="img/f9fabb9005352623.png"></p>
 <p>Pick &#34;Solace Messaging&#34; and make a note of the username, password, Message VPN and &#34;SMF Host&#34; entries:</p>
 <p class="image-container"><img alt="Make a note of the username, password, Message VPN and SMF Host" src="img/4ad3f14e6afa65da.png"></p>
-<p>Then use these details on the sdkperf command line: use the -cu (&#34;client username&#34;) and -cp (&#34;client password&#34;) options, so it looks something like:</p>
-<pre><code>sdkperf_java.sh -cip &lt;SMF Host&gt; -cu &lt;username&gt;@&lt;message-vpn&gt; -cp &lt;password&gt; -stl codelab/sample/topic
+<p>You&#39;ll need these details later.  But to connect Try-Me, just navigate to the Try-Me tab on the left hand menu:</p>
+<p class="image-container"><img src="img/5265cf3a631ee99.png"></p>
+<p>Now we need to connect.  The connection details are filled in, which makes things easy, so just go to the <strong>Subscriber</strong> and click the &#34;Connect&#34; button.</p>
+<aside class="special"><p>If you&#39;re using Docker, you may not connect.  This is because the default docker compose yaml doesn&#39;t expose the port Try-Me uses.  Simply stop the containerand edit the .yml file.  Fine the Port Mappings section, and uncomment the line below &#34;#Web transport&#34;</p>
+<pre><code>#Port Mappings:  Ports are mapped straight through from host to
 </code></pre>
-<p>Once sdkperf starts, you should see something along the lines of:</p>
-<pre><code>JAVA: /usr/bin/java
-SOLACE_VM_ARGS: -Xms512m -Xmx1024m
-Run Info: CPU usage currently disabled.
-Client naming used:
-	logging ID   = perf_client000001
-	username     = perf_client000001
-	vpn          = 
-	client names = sdk generated.
-
-&gt; VM Name: Java HotSpot(TM) 64-Bit Server VM
-Run Info: Using Java Nanosecond Timer for Timing
-&gt; Timing Package Clock Speed (Hz): 1000000000
-&gt; Getting ready to init clients
-&gt; Adding subscriptions if required
-&gt; Getting ready to start clients.
-PUB MR(5s)=    0, SUB MR(5s)=    0, CPU=0
-PUB MR(5s)=    0, SUB MR(5s)=    0, CPU=0
-</code></pre>
-<p>Those last two lines show SDKPerf has connected and is now listening for messages.  We chose the topic &#34;codelab/sample/topic&#34; to listen to.</p>
+<p>container.  This may result in port collisions on commonly used</p>
+<p>ports that will cause failure of the container to start.</p>
+<p>#Web transport</p>
+<ul>
+<li>‘80:80&#39;		&lt;—-  Uncomment this line.</li>
+</ul>
+</aside>
+<p>Then recreate and restart your container.</p>
 
 
       </google-codelab-step>
@@ -201,7 +193,7 @@ PUB MR(5s)=    0, SUB MR(5s)=    0, CPU=0
     
       <google-codelab-step label="Part A: Get Connected: The Session" duration="0">
         <p>The Solace APIs use the concept of the <strong>session</strong> to abstract the communication to the broker.  It&#39;s the communication channel between the API and the broker, wrapping up details such as the underlying TCP socket.</p>
-<p class="image-container"><img src="img/d09cc9a7a872e632.png"></p>
+<p class="image-container"><img src="img/c8bb77d5ee4ce07c.png"></p>
 <p>Multiple sessions can be created, but we&#39;ll only use one here.</p>
 <h2 is-upgraded>1 Create the session properties</h2>
 <p>To configure the session (for instance, where should it connect to?), we create session properties and fill them out.</p>
@@ -338,9 +330,15 @@ public class Session {
 </code></pre>
 <p>That&#39;s it!  All we now have to do is add some logic to actually do something with the message, like print out it&#39;s contents.  We now have all that&#39;s required for TopicSubscriber to work.  Go ahead and run it.</p>
 <h2 is-upgraded>3 Validating TopicSubscriber</h2>
-<p>Run TopicSubscriber, and <em>publish</em> a message using sdkperf.</p>
-<pre><code>sdkperf -cip &lt;broker ip&gt; -cu &lt;username&gt;@&lt;message-vpn&gt; -ptl tutorial/topic -mn 1
+<p>Run TopicSubscriber, and <em>publish</em> a message using Try-Me!</p>
+<h3 is-upgraded>1. Connect Try-Me! Publisher</h3>
+<p>Go to the <strong>Publisher</strong> Try-Me! pane, and hit connect.</p>
+<h3 is-upgraded>2. Send a message</h3>
+<p>We need to make sure we publish to the right topic.  If you recall, we&#39;re subscribing to &#34;tutorial/topic&#34;:</p>
+<pre><code>        final Topic topic = JCSMPFactory.onlyInstance().createTopic(&#34;tutorial/topic&#34;);
 </code></pre>
+<p>So fill out the topic box appropriately and hit Publish:</p>
+<p class="image-container"><img src="img/24af14c499c81b12.png"></p>
 <p>You should see the message printed in TopicSubsriber.  Make sure you publish to the same topic (-ptl in sdkperf) as you are subscribed to.  SDKPerf in this example is publishing to topic (&#34;-ptl&#34;) tutorial/topic as that&#39;s the default topic used in the samples.</p>
 <p>You should see something like:</p>
 <pre><code>Connected. Awaiting message...
@@ -356,19 +354,19 @@ Exiting.
 </code></pre>
 <p>Next, go to PubSub+ Manager, find TopicSubscriber, and check that you&#39;ve subscribed to tutorial/topic.  We covered most of this in Section 5, so refer back there if you need to, but we didn&#39;t cover it all - have a look around!</p>
 <p>We&#39;ve now completed Part B - sdkperf has sent a message which we&#39;ve received in TopicSubscriber.</p>
-<p class="image-container"><img src="img/96c946c2414c3be8.png"></p>
+<p class="image-container"><img src="img/5de28bc7f3652ab7.png"></p>
 <p>So, let&#39;s move on and see how we can actually send messages.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Part C: Sending Messages" duration="15">
-        <p class="image-container"><img src="img/2fa87ab831b9cd52.png"></p>
+        <p class="image-container"><img src="img/a516da99ed1f91d.png"></p>
 <h2 is-upgraded>Java: Message Producers</h2>
 <p>Let&#39;s start with Java.  Just like receiving messages, where we have a <em>Message Consumer</em>, we need to create a <strong>Message Producer</strong>.  Looking at line 69 of <strong>TopicPublisher.java</strong>, you can see how this object is created:</p>
 <pre><code>XMLMessageProducer prod = session.getMessageProducer(
 </code></pre>
-<p>As for receiving messages, we can provide some callbacks - what happens if there&#39;s a response (for request/reply messages), or some kind of error.  In TopicPUblisher we provide an anonymous class to do this.  You could, of course, implement <strong>JCSMPStreamingPublishEventHandler</strong> and pass your class in.</p>
+<p>As for receiving messages, we can provide some callbacks - what happens if there&#39;s a response (for request/reply messages), or some kind of error.  In TopicPublisher we provide an anonymous class to do this.  You could, of course, implement <strong>JCSMPStreamingPublishEventHandler</strong> and pass your class in.</p>
 <h2 is-upgraded>1 Creating a message object/buffer to populate</h2>
 <p>Before we send a message, we&#39;ll need to create it.  The native APIs provide message objects or buffers to handle this for you.</p>
 <p>TopicPublisher.java, line 82:</p>
@@ -420,11 +418,13 @@ solClient_msg_setDestination ( msg_p, &amp;destination, sizeof ( destination ) )
 <p>In C, we&#39;ve already annotated the message with the destination, so we just call send:</p>
 <pre><code>solClient_session_sendMsg ( session_p, msg_p );
 </code></pre>
-<p>So, let&#39;s do that.  Firstly, let&#39;s set up our SDKPerf subscriber so we can see the message being received:</p>
+<p>So, let&#39;s do that.  Firstly, let&#39;s use Try-Me!  Make sure Try-Me! is connected and subscribed to the right topic.  Try-Me! is a good place to experiment with <strong>Topic Wildcards</strong>, as I&#39;ve done here:</p>
+<p class="image-container"><img src="img/9638dd02c51904a4.png"></p>
+<p>I said earlier that SDKPerf can be very handy for application debug as its message display functionality is very good.  Let&#39;s set up our SDKPerf subscriber so we can see the message being received:</p>
 <pre><code>sdkperf -cip &lt;broker ip&gt; -cu &lt;username&gt;@&lt;message-vpn&gt; -stl tutorial/topic -md
 </code></pre>
 <p>The &#34;-md&#34; stands for &#34;message dump.&#34;</p>
-<aside class="special"><p>I&#39;d encourage you to always attach an sdkperf subsriber with message dump turned on whenever you&#39;re debugging an application.  It&#39;s tempting to write some code to probe the event broker and find out what&#39;s going on, but SDKPerf is the debug tool of choice for our support team and with good reason.  You&#39;ll see exactly what is being sent and received.</p>
+<aside class="special"><p>I&#39;d encourage you to always attach an sdkperf subsriber with message dump turned on whenever you&#39;re debugging an application if you can&#39;t get enough information from Try-Me!</p>
 </aside>
 <p>Then we&#39;ll just fire up TopicPubisher and see what comes out:</p>
 <pre><code>^^^^^^^^^^^^^^^^^^ Start Message ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -440,16 +440,15 @@ Binary Attachment:                      len=15
 </code></pre>
 <p>This is what TopicPublisher sent.  Since it&#39;s what we were hoping to send, we can now attach our own subscribing application.  If only we had one... hold on - TopicSubscriber!</p>
 <h2 is-upgraded>6 Publish/Subscribe</h2>
-<p><strong>LEAVE SDKPERF RUNNING</strong> and run TopicSubscriber.  The re-run topic publisher.  What you should see is that same message appearing in both applications.  By the magic of Publish/Subscribe, we&#39;ve sent a single message to two different applications <em>without either of the original sender or receiver being aware of it</em>.</p>
-<p class="image-container"><img src="img/4571a9688c9a70bd.png"></p>
+<p><strong>LEAVE TRY-ME! RUNNING</strong> and run TopicSubscriber.  The re-run topic publisher.  What you should see is that same message appearing in both applications.  By the magic of Publish/Subscribe, we&#39;ve sent a single message to two different applications <em>without either of the original sender or receiver being aware of it</em>.</p>
+<p class="image-container"><img src="img/df3528f4abbfca9b.png"></p>
 <p>You could even download and run different TopicSubscribers from different APIs, or different SolaceSamples.  That shows how you can send a message in one language and receive it in different languages.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Wrap up, and Things We Didn&#39;t Cover" duration="0">
-        <p>Duration 0:03:00</p>
-<p>So there we go - that&#39;s the basics of creating a connection, receiving and sending messages using the Solace Native APIs.</p>
+      <google-codelab-step label="Wrap up, and Things We Didn&#39;t Cover" duration="3">
+        <p>So there we go - that&#39;s the basics of creating a connection, receiving and sending messages using the Solace Native APIs.</p>
 <h2 is-upgraded>Why use the Native APIs?</h2>
 <p>Why use the Native Solace APIs over, say an open API?</p>
 <ul>
