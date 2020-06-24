@@ -25,7 +25,7 @@
                   id="codelab-4-codelab"
                   title="CodeLab to Create a CodeLab"
                   environment="web"
-                  feedback-link="https://github.com/SolaceDev/codelab-4-codelab">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab">
     
       <google-codelab-step label="CodeLab Overview" duration="2">
         <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now. When creating a Codelab you have two authoring options:</p>
@@ -37,7 +37,7 @@
 <p>Here is an example image of another CodeLab that I created: <img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
 <p><strong>Resources:</strong></p>
 <ul>
-<li>The markdown for this codelab is located here: <a href="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/codelab-4-codelab/codelab-4-codelab.md" target="_blank">codelab.md</a></li>
+<li>The markdown for this codelab is located here: <a href="https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md" target="_blank">codelab.md</a></li>
 <li><a href="https://github.com/googlecodelabs/tools" target="_blank">Google CodeLabs Tools Github</a> - The repo that contains the claat tool we&#39;ll be using today</li>
 <li><a href="https://groups.google.com/forum/#!forum/codelab-authors" target="_blank">Google Group for CodeLab Authors</a> - great forum for asking questions about codelabs and discussing future functionality</li>
 <li><a href="https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816" target="_blank">A blog that I used when getting started with Google Codelabs</a></li>
@@ -97,7 +97,11 @@ $ export PATH=$PATH:$GOROOT/bin
       </google-codelab-step>
     
       <google-codelab-step label="Create your initial CodeLab" duration="5">
-        <p>Now that we have the environment setup let&#39;s go ahead and create a markdown file where we&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
+        <p>Now that we have the environment setup, you have two options you can follow to create a codelab:</p>
+<h2 is-upgraded>Option 1 - Automated</h2>
+<p>Clone the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> and follow the contribution steps in the README</p>
+<h2 is-upgraded>Option 2 - Manual</h2>
+<p>Go ahead and create a markdown file where you&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
 <aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
 </aside>
 <pre><code>$ vim unique-codelab-identifier.md
