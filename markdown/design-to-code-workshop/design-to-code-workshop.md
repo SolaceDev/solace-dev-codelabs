@@ -36,6 +36,9 @@ Now that you're familiar with the use case and you've imported the application d
 
 Open the _NYC Modern Taxi Co_ Application Domain that you previously imported in the Event Portal Designer. You should see a _Taxis_ Application which publishes _TaxiStatusUpdate_ Events. We want to extend this architecture to match the design discussed for in our use case.
 
+![ep_import](img/ep_import.webp)
+
+
 ### Add the RideDropoffProcessor Application
 The first step towards doing this is to add the _RideDropoffProcessor._ To do this right click on the graph and choose _Create Application_. 
 
@@ -48,6 +51,8 @@ Fill in the fields as follows:
 1. Click the _Save_ Button
 
 You should now see your _RideDropoffProcessor_ added to the graph. 
+
+![ep_step01](img/ep_step01.webp)
 
 
 ### Add the RideAverageUpdate Event
@@ -72,7 +77,7 @@ Fill in the fields as follows:
 1. **Description**: Event Payload which contains average meter readings, average passenger counts, and the number of rides in a given window duration.
 1. **Content Type**: JSON
 1. Click _Add/Remove Owners_ and choose yourself 
-1. Under _Content_ paste the JSON schema info from below. This schema was generated from a sample message from [jsonschema.net](https://jsonschema.net) 
+1. Under _Content_ paste the JSON schema in the code block below. This schema was generated from a sample message using [jsonschema.net](https://jsonschema.net) 
 1. Click _Save_ 
 ```
 {
@@ -154,9 +159,27 @@ Fill in the fields as follows:
 }
 ```  
 
-We have now created a new payload schema and the schema has automatically been added to our event. 
+![ep_createSchema](img/ep_createSchema.webp)
+
+Positive
+: We have now created a new payload schema and the schema has automatically been added to our event. 
+
+![ep_createEventWithSchema](img/ep_createEventWithSchema.webp)
 
 Go ahead and click _Save_ to complete the creation of our _RideAverageUpdate_ event.
+
+### Update RideDropoffProcessor to publish RideAverageUpdate Events
+Now that we've created our _RideAverageUpdate_ event and defined it's payload we need to update the _RideDropoffProcessor_ to publish it. 
+
+To do this follow these steps: 
+1. Right click on the _RideDropoffProcessor_ and choose _Edit_. 
+1. Click _Manage Events_, search for "RideAverageUdpdate" and click "Pub" next to it since the _RideDropoffProcessor_ needs to publish these events. 
+1. Click _Save_ 
+
+The _RideDropoffProcessor_ is now complete and you should see it both consuming and publishing events! 
+
+![ep_step02](img/ep_step02.webp)
+
 
 ### Add the RideDropoffConsumer Application
 To complete the architecture for our use case we just need to add the _RideDropoffConsumer_ application. Don't worry, this one will be quick since we've already created all of the needed Events and Payloads :) 
@@ -169,7 +192,10 @@ Fill in the form as follows:
 1. Click _Manage Events_, search for "RideAverageUpdate" and click "Sub" next to it since the _RideDropoffConsumer_ wants to subscribe to these events. 
 1. Click _Save_ 
 
+![ep_complete](img/ep_complete.webp)
+
 That's it! Our Use Case design is now reflected by our architecture captured in the Event Portal and we're ready for implementation!
+
 
 ## Code Generation
 Duration: 0:05:00
