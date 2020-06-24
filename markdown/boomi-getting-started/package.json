@@ -4,7 +4,7 @@
   "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch CODELAB_NAME.md --exec 'claat export CODELAB_NAME.md && lsof -c claat -t | xargs kill && cd CODELAB_NAME && claat serve'"
+    "watch": "nodemon --watch boomi-getting-started.md --exec 'claat export boomi-getting-started.md && lsof -c claat -t | xargs kill && cd boomi-getting-started && claat serve'"
   },
   "repository": {
     "type": "git",
