@@ -13,6 +13,19 @@ analytics account: UA-3921398-10
 ## What You'll Learn
 Duration: 0:05:00
 
+Welcome to this Developer Workshop!
+
+During this workshop we're going to use a real-world use case to explore some new technologies. We'll jump into our use case more in a little bit (hint: 🚕 🚖 🚕 ) but first let's introduce the 3 main technologies you'll be learning during this workshop. 
+
+1. 💥 You'll be using the **Solace PubSub+ Event Portal** to design the Event-Driven Architecture for our use case. While you're likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your achitecture, implement it, and iteratively make enhancements and changes throughout your software development cycle. 
+1. 💥 Second you'll be learning about the **AsyncAPI Initiative** and the **Generators** that make our lives as developers simpler.
+1. 💥 Lastly, you'll use develop event-driven microservices that implement our use case using the **Spring Cloud Stream** framework.
+
+Oh, and of course you'll also be using some Java and Solace PubSub+ Event Brokers but those aren't the ⭐️ of the show today. No worries if you're not an expert in either :)
+
+So let's get started! 
+
+
 ## What You'll Need
 Duration: 0:05:00
 
@@ -229,10 +242,9 @@ On to developing the _RideDropoffProcessor_ microservice. As we mentioned during
 ### Generate the Code Skeleton
 In the Solace Event Portal right click on the _RideDropoffProcessor_, Choose _AsyncAPI_, Choose _YAML_ and click _Download_
 
-![ep_complete](img/ep_complete.webp)
+![asyncapi_doc](img/ep_asyncapi.webp)
 
 Open & check out the downloaded AsyncAPI document. 
-![asyncapi_doc](img/ep_asyncapi.webp)
 
 It should include a lot of the information about the app that we defined via the Event Portal, including: 
 * The **title** and **description** under the **info** section
@@ -290,7 +302,7 @@ A few notes on the project:
 * The generated java classes are in the `org.taxi.nyc` package that we specified. 
 * The `RideAveragePayload` and `TaxiStatusUpdatePayload` POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.
 * `Application.java` contains a `processDropoffRideAverages` method which takes in a `Flux<TaxiStatusUpdatePayload>` and outputs a `Flux<RideAveragePayload>`. Note the use of `Flux` since we specified `reactive=true` when generating the code skeleton.  
-* The `application.yml` file contains the Spring configuration which tells oour app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
+* The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
 ### Subscribe to _dropoff_ events**
@@ -404,19 +416,94 @@ If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command. 
 
 Negative
-: If you get an error that says something like `Web server failed to start. Port 8080 was already in use.` then change the `server.port` value in `application.yml` to an open port.
+: If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
 
 Positive
-: Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer.  
+: Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer. 
 
 ## Develop the RideDropoffConsumer
 Duration: 0:05:00
 
+On to developing the _RideDropoffConsumer_ microservice. We are also going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice, but we'll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app! 
+
 ### Generate the Code Skeleton
+In the Solace Event Portal right click on the _RideDropoffConsumer_, Choose _AsyncAPI_, Choose _YAML_ and click _Download_
+
+![ep_asyncapi2](img/ep_asyncapi2.webp)
+
+Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below. 
+
+Note the different pieces of the command: 
+* `ag` is the AsyncAPI Generator command
+* `-o` is the output directory
+* `-p` allows you to specify [parameters](https://github.com/asyncapi/java-spring-cloud-stream-template#parameters) defined for the template you're using
+* `binder` is the Spring Cloud Stream binder you wish to use, in this case Solace
+* `actuator` includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection
+* `artifactId` & `groupId` configure Maven params of the same names
+* `javaPackage` specifies the Java Package to place the generated classes into
+* `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
+* The yaml file is our AsyncAPI document
+* And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
+
+```bash
+ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+```
+
+After running the command you should see output that ends with where you can find your generated files. 
+```
+Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/RideDropoffConsumer.
+```
 
 ### Import and Explore the Generated Project
+The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below. 
+![projectsetup2](img/projectsetup2.webp)
+
+A few notes on the project: 
+* The generated java classes are in the `org.taxi.nyc` package that we specified. 
+* The `RideAveragePayload` POJO was generated from the schema defined in our AsyncAPI document and includes getters/setters/toString/etc.
+* `Application.java` contains a `taxiNycV1StatsDropoffAvgConsumer` method which is a `Consumer` that takes in a `RideAveragePayload` POJO. Note that since we didn't specify a `x-scs-function-name` this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of `Flux` this time since we did not specify `reactive=true` when running the generator.  
+* The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
+* The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
 ### Fill in the Business Logic
+Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideAverageUpdate_ events as they're received.
+
+Open the _Application.java_ file and modify the `taxiNycV1StatsDropoffAvgConsumer` method to log the events. When you're done it should look something like the code below. 
+
+```java
+@Bean
+public Consumer<RideAveragePayload> taxiNycV1StatsDropoffAvgConsumer() {
+	return rideAverageUpdate -> {
+		logger.info("Received Ride Average Event:" + rideAverageUpdate);
+	};
+}
+```
+
+That's it! The app development is complete. 
+🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀
+
+### Run the app! 
+Now that our app has been developed let's run it! 
+
+If your IDE has support for Spring Boot you can run it as a Spring Boot App. 
+
+Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command. 
+
+Negative
+: If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
+
+
+🤯🤯 **The Microservice is now is now Running, connected to the Solace Event Broker and receiving events!** 🤯🤯
+
 
 ## Takeaways
-Duration: 0:05:00
+Duration: 0:02:00
+
+* ✅ The [Solace Event Portal](solace.com/products/portal) is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. 
+* ✅ [AsyncAPI Generator](https://github.com/asyncapi/generator) templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. 
+* ✅ [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) allows developers to implement highly scalabe, event-driven microservices without having to learn how to use messaging APIs. 
+
+![solly_wave](img/solly_wave.webp)
+
+**Thanks for participating in this codelab!** Let us know what you thought in the [Solace Community Forum](https://solace.community) and if you found any issues along the way we'd appreciate it if you'd raise them by clicking the _Report a mistake_ button at the bottom left of this codelab. 
