@@ -5,14 +5,16 @@ tags:
 categories:
 environments: Web
 status: Draft
-feedback link:
+feedback link: <insert github repo or leave empty>
 analytics account: UA-3921398-10
 
-# Title
+# Title of codelab goes here
 
-## Section 1
+## What you'll learn: Overview
 
-Duration: 0:00:00
+Duration: 0:05:00
+
+Enter a codelab overview here: what & why and github repo link where you can find related code if applicable
 
 ### Info Boxes
 Plain Text followed by green & yellow info boxes 
@@ -38,9 +40,11 @@ Plain Text followed by bullets
 Add an image!
 ![Soly Image Caption](img/soly.gif)
 
-## Section 2
+## What you need: Prerequisite 
 
-Duration: 0:00:00
+Duration: 0:07:00
+
+Enter environment setup & prerequisites here
 
 ### Add a Link
 Add a link!
@@ -48,3 +52,5 @@ Add a link!
 
 ### Embed an iframe
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
+
+## Custom Step 1
