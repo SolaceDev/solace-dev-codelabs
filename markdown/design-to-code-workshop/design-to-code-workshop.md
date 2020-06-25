@@ -11,9 +11,9 @@ analytics account: UA-3921398-10
 # Developer Workshop: Design to Code using Portal + AsyncAPI Code Generation
 
 ## What You'll Learn
-Duration: 0:05:00
+Duration: 0:02:00
 
-Welcome to this Developer Workshop!
+🚀 Welcome to this Developer Workshop! 🚀 
 
 During this workshop we're going to use a real-world use case to explore some new technologies. We'll jump into our use case more in a little bit (hint: 🚕 🚖 🚕 ) but first let's introduce the 3 main technologies you'll be learning during this workshop. 
 
@@ -23,26 +23,62 @@ During this workshop we're going to use a real-world use case to explore some ne
 
 Oh, and of course you'll also be using some Java and Solace PubSub+ Event Brokers but those aren't the ⭐️ of the show today. No worries if you're not an expert in either :)
 
-So let's get started! 
+So let's get started!
+
+Positive
+: There is no code needed to start this workshop, but you can find the solution in this [Github Repo](https://github.com/Mrc0113/design-to-code-workshop)
 
 
 ## What You'll Need
-Duration: 0:05:00
+Duration: 0:08:00
 
-* Event Broker & Connection Info
+🛠 This page covers the setup needed to perform this codelab. 🛠 
 
-* AsyncAPI Generator Requirements
-  * Node.js v12.16+
-  * npm v6.13.7+
-  * Install instructions available [here](https://github.com/asyncapi/generator#requirements)
+### AsyncAPI Generator Requirements
+✅ Install instructions available [here](https://github.com/asyncapi/generator#requirements)
+* Node.js v12.16+ 
+* npm v6.13.7+
 
-### Solace Event Portal 
+We'll install the generator itself later 👍
 
-#### Login or Sign-up
+### Spring Cloud Stream Requirements
+✅ Spring Cloud Stream just requires Java and Maven to use 🚀  
+* Java 1.8+ 
+* Maven 3.3+
+	* On mac you can `brew install maven`
+	* Other install instructions [here](https://maven.apache.org/install.html)
+* Your favorite Java IDE 💥
+
+### PubSub+ Event Broker Connection Info
+✅ The credentials below are for a public event feed that we'll use during this codelab.
+* SMF Host:
+* Message VPN: 
+* Username: 
+* Password: 
+
+
+### Prepare PubSub+ Event Portal
+
+#### Sign-up for Solace Cloud
+✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](bit.ly/try-solace-free). Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail. 
+
+![sc_trial](img/sc_trial.webp)
+
 
 #### Import Application Domain
+✅ Now that you're logged in to your Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
 
-### Terminal Access?
+![ep_select_designer](img/ep_select_designer.webp)
+
+✅ Then import the Application Domain that we'll use today by clicking the `Import` button at the top right of the _Designer_ and importing the [EventPortal_Export_NYCModernTaxiCo.json]( https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json) file. 
+
+You can download the file by cloning the git repo
+```bash
+git clone https://github.com/Mrc0113/design-to-code-workshop.git
+```
+
+![ep_click_import](img/ep_click_import.webp)
+
 
 ## Use Case Overview
 Duration: 0:05:00
@@ -63,7 +99,7 @@ Positive
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
 ## Design Your EDA
-Duration: 0:05:00
+Duration: 0:18:00
 
 Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal let's get update our Event-Driven Architecture (EDA). 
 
@@ -219,7 +255,7 @@ To complete the architecture for our use case we just need to add the _RideDropo
 Right click on the graph and choose _Create Application_. 
 Fill in the form as follows: 
 1. **Name**: RideDropoffConsumer
-1. **Description**: This is a nodejs application that will consume summary events via MQTT for further analysis
+1. **Description**: This is a Spring Cloud Stream microservice that will consume summary events for further analysis
 1. Click _Add/Remove Owners_ and choose yourself
 1. Click _Manage Events_, search for "RideAverageUpdate" and click "Sub" next to it since the _RideDropoffConsumer_ wants to subscribe to these events. 
 1. Click _Save_ 
@@ -247,7 +283,7 @@ Negative
 
 
 ## Develop the RideDropoffProcessor
-Duration: 0:05:00
+Duration: 0:15:00
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
 On to developing the _RideDropoffProcessor_ microservice. As we mentioned during design we want to implement this app using the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework. For more information on the framework the [reference guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/) is an excellent resource! 
@@ -435,7 +471,7 @@ Positive
 : Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer. 
 
 ## Develop the RideDropoffConsumer
-Duration: 0:05:00
+Duration: 0:08:00
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
 On to developing the _RideDropoffConsumer_ microservice. We are also going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice, but we'll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app! 
@@ -512,7 +548,7 @@ Negative
 
 
 ## Takeaways
-Duration: 0:02:00
+Duration: 0:01:00
 
 * ✅ The [Solace Event Portal](solace.com/products/portal) is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. 
 * ✅ [AsyncAPI Generator](https://github.com/asyncapi/generator) templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. 
