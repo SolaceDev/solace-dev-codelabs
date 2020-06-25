@@ -1,0 +1,500 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Developer Workshop: Design to Code using Portal &#43; AsyncAPI Code Generation</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="design-to-code-workshop"
+                  title="Developer Workshop: Design to Code using Portal &#43; AsyncAPI Code Generation"
+                  environment="web"
+                  feedback-link="https://github.com/Mrc0113/design-to-code-workshop">
+    
+      <google-codelab-step label="What You&#39;ll Learn" duration="2">
+        <p>🚀 Welcome to this Developer Workshop! 🚀</p>
+<p>During this workshop we&#39;re going to use a real-world use case to explore some new technologies. We&#39;ll jump into our use case more in a little bit (hint: 🚕 🚖 🚕 ) but first let&#39;s introduce the 3 main technologies you&#39;ll be learning during this workshop.</p>
+<ol type="1">
+<li>💥 You&#39;ll be using the <strong>Solace PubSub+ Event Portal</strong> to design the Event-Driven Architecture for our use case. While you&#39;re likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your achitecture, implement it, and iteratively make enhancements and changes throughout your software development cycle.</li>
+<li>💥 Second you&#39;ll be learning about the <strong>AsyncAPI Initiative</strong> and the <strong>Generators</strong> that make our lives as developers simpler.</li>
+<li>💥 Lastly, you&#39;ll use develop event-driven microservices that implement our use case using the <strong>Spring Cloud Stream</strong> framework.</li>
+</ol>
+<p>Oh, and of course you&#39;ll also be using some Java and Solace PubSub+ Event Brokers but those aren&#39;t the ⭐️ of the show today. No worries if you&#39;re not an expert in either :)</p>
+<p>So let&#39;s get started!</p>
+<aside class="special"><p>There is no code needed to start this workshop, but you can find the solution in this <a href="https://github.com/Mrc0113/design-to-code-workshop" target="_blank">Github Repo</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What You&#39;ll Need" duration="8">
+        <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>AsyncAPI Generator Requirements</h2>
+<p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
+<ul>
+<li>Node.js v12.16+</li>
+<li>npm v6.13.7+</li>
+</ul>
+<p>We&#39;ll install the generator itself later 👍</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+</li>
+<li>Maven 3.3+<br><br><ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>PubSub+ Event Broker Connection Info</h2>
+<p>✅ The credentials below are for a public event feed that we&#39;ll use during this codelab.</p>
+<ul>
+<li>SMF Host:</li>
+<li>Message VPN:</li>
+<li>Username:</li>
+<li>Password:</li>
+</ul>
+<h2 is-upgraded>Prepare PubSub+ Event Portal</h2>
+<h3 is-upgraded>Sign-up for Solace Cloud</h3>
+<p>✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
+<p class="image-container"><img alt="sc_trial" src="img/fa73039f398cef7a.webp"></p>
+<h3 is-upgraded>Import Application Domain</h3>
+<p>✅ Now that you&#39;re logged in to your Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
+<p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
+<p>✅ Then import the Application Domain that we&#39;ll use today by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a> file.</p>
+<p>You can download the file by cloning the git repo</p>
+<pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
+</code></pre>
+<p class="image-container"><img alt="ep_click_import" src="img/f63ff3368081d92c.webp"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Case Overview" duration="5">
+        <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
+<p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
+<ol type="1">
+<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
+<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
+<li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
+</ol>
+<p class="image-container"><img alt="Architecture" src="img/a39a2920b3ae9fee.webp"></p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process.<br></p>
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Design Your EDA" duration="18">
+        <p>Now that you&#39;re familiar with the use case 🚕 🚖 🚕 and you&#39;ve imported the application domain into the Event Portal let&#39;s get update our Event-Driven Architecture (EDA).</p>
+<p>Open the <em>NYC Modern Taxi Co</em> Application Domain that you previously imported in the Event Portal Designer. You should see a <em>Taxis</em> Application which publishes <em>TaxiStatusUpdate</em> Events. We want to extend this architecture to match the design discussed for in our use case.</p>
+<p class="image-container"><img alt="ep_import" src="img/63adfbfaeb5f66aa.webp"></p>
+<h2 is-upgraded>Add the <em>RideDropoffProcessor</em> Application</h2>
+<p>The first step towards doing this is to add the <em>RideDropoffProcessor.</em> To do this right click on the graph and choose <em>Create Application</em>.</p>
+<p>Fill in the fields as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: RideDropoffProcessor</li>
+<li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume the TaxiStatusUpdates with a ride status of &#34;dropoff&#34;, process the events, and output summary events.</li>
+<li>Click <em>Add/Remove Owners</em> and choose yourself</li>
+<li>Click <em>Add/Remove Tags</em> and add &#34;SCSt&#34; as a tag. This tag is short for &#34;Spring Cloud Stream&#34; which is the framework we will use to develop our microservice later.</li>
+<li>Click the <em>Manage Events</em> button, search for &#34;TaxiStatusUpdate&#34; and click <em>Sub</em> next to it. This means that your application will subscribe to these events.</li>
+<li>Click the <em>Save</em> Button</li>
+</ol>
+<p>✅ You should now see your <em>RideDropoffProcessor</em> added to the graph.</p>
+<p class="image-container"><img alt="ep_step01" src="img/64f915d00f4774da.webp"></p>
+<h2 is-upgraded>Add the <em>RideAverageUpdate</em> Event</h2>
+<p>It&#39;s great that the <em>RideDropoffProcessor</em> is now consuming the <em>TaxiStatsUpdate</em> events, but we want it to process those events and publish <em>RideAverageUpdate</em> events. To show this we need to create the <em>RideAverageUpdate</em> event and the schema which defines it&#39;s payload.</p>
+<p>Right click on the graph and choose <em>Create Event</em></p>
+<p>Fill in the fields as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: RideAverageUpdate</li>
+<li><strong>Description</strong>: This event contains the average cost of rides over a specified duration</li>
+<li><strong>Topic</strong>: taxi/nyc/v1/stats/dropoff/avg</li>
+<li>Click <em>Add/Remove Owners</em> and choose yourself</li>
+<li>For <strong>Payload Schema</strong> click <em>Add New</em></li>
+</ol>
+<aside class="special"><p>When designing your own Event-Driven Architecture the defining of your topic space is an important step towards achieving the benefits promised by an EDA. Be sure to take the time to read our <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices</a>.<br></p>
+</aside>
+<p>Since our data is JSON we&#39;ll define a JSON Schema to define our event payload.</p>
+<p>Fill in the fields as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: RideAveragePayload</li>
+<li><strong>Description</strong>: Event Payload which contains average meter readings, average passenger counts, and the number of rides in a given window duration.</li>
+<li><strong>Content Type</strong>: JSON</li>
+<li>Click <em>Add/Remove Owners</em> and choose yourself</li>
+<li>Under <em>Content</em> paste the JSON schema in the code block below. This schema was generated from a sample message using <a href="https://jsonschema.net" target="_blank">jsonschema.net</a></li>
+<li>Click <em>Save</em><pre><code>{
+&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+&#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The root schema&#34;,
+&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+    {
+        &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
+        &#34;avg_meter_reading&#34;: 21.615217,
+        &#34;avg_passenger_count&#34;: 1.5,
+        &#34;window_duration_sec&#34;: 300,
+        &#34;window_ride_count&#34;: 5
+    }
+],
+&#34;required&#34;: [
+    &#34;timestamp&#34;,
+    &#34;avg_meter_reading&#34;,
+    &#34;avg_passenger_count&#34;,
+    &#34;window_duration_sec&#34;,
+    &#34;window_ride_count&#34;
+],
+&#34;additionalProperties&#34;: true,
+&#34;properties&#34;: {
+    &#34;timestamp&#34;: {
+        &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+        &#34;type&#34;: &#34;string&#34;,
+        &#34;title&#34;: &#34;The timestamp schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: &#34;&#34;,
+        &#34;examples&#34;: [
+            &#34;2020-06-04T20:09:59.99832-04:00&#34;
+        ]
+    },
+    &#34;avg_meter_reading&#34;: {
+        &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
+        &#34;type&#34;: &#34;number&#34;,
+        &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0.0,
+        &#34;examples&#34;: [
+            21.615217
+        ]
+    },
+    &#34;avg_passenger_count&#34;: {
+        &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
+        &#34;type&#34;: &#34;number&#34;,
+        &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0.0,
+        &#34;examples&#34;: [
+            1.5
+        ]
+    },
+    &#34;window_duration_sec&#34;: {
+        &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
+        &#34;type&#34;: &#34;integer&#34;,
+        &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0,
+        &#34;examples&#34;: [
+            300
+        ]
+    },
+    &#34;window_ride_count&#34;: {
+        &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
+        &#34;type&#34;: &#34;integer&#34;,
+        &#34;title&#34;: &#34;The window_ride_count schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0,
+        &#34;examples&#34;: [
+            5
+        ]
+    }
+}
+}
+</code></pre>
+</li>
+</ol>
+<p class="image-container"><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"></p>
+<p>✅ We have now created a new payload schema and the schema has automatically been added to our event.</p>
+<p class="image-container"><img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"></p>
+<p>✅ Go ahead and click <em>Save</em> to complete the creation of our <em>RideAverageUpdate</em> event.</p>
+<h2 is-upgraded>Update <em>RideDropoffProcessor</em> to publish <em>RideAverageUpdate</em> Events</h2>
+<p>Now that we&#39;ve created our <em>RideAverageUpdate</em> event and defined it&#39;s payload we need to update the <em>RideDropoffProcessor</em> to publish it.</p>
+<p>To do this follow these steps:</p>
+<ol type="1">
+<li>Right click on the <em>RideDropoffProcessor</em> and choose <em>Edit</em>.</li>
+<li>Click <em>Manage Events</em>, search for &#34;RideAverageUdpdate&#34; and click &#34;Pub&#34; next to it since the <em>RideDropoffProcessor</em> needs to publish these events.</li>
+<li>Click <em>Save</em></li>
+</ol>
+<p>✅ The <em>RideDropoffProcessor</em> is now complete and you should see it both consuming and publishing events!</p>
+<p class="image-container"><img alt="ep_step02" src="img/63b0553c9566fb40.webp"></p>
+<h2 is-upgraded>Add the <em>RideDropoffConsumer</em> Application</h2>
+<p>To complete the architecture for our use case we just need to add the <em>RideDropoffConsumer</em> application. Don&#39;t worry, this one will be quick since we&#39;ve already created all of the needed Events and Payloads :)</p>
+<p>Right click on the graph and choose <em>Create Application</em>.<br>Fill in the form as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: RideDropoffConsumer</li>
+<li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume summary events for further analysis</li>
+<li>Click <em>Add/Remove Owners</em> and choose yourself</li>
+<li>Click <em>Manage Events</em>, search for &#34;RideAverageUpdate&#34; and click &#34;Sub&#34; next to it since the <em>RideDropoffConsumer</em> wants to subscribe to these events.</li>
+<li>Click <em>Save</em></li>
+</ol>
+<p class="image-container"><img alt="ep_complete" src="img/1eced6392afba3b2.webp"></p>
+<p>🚀🚀 That&#39;s it! Our Use Case design is now reflected by our architecture captured in the Event Portal and we&#39;re ready for implementation! 🚀🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install the AsyncAPI Generator" duration="3">
+        <p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
+<p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
+<pre><code>npm install -g @asyncapi/generator
+</code></pre>
+<aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Develop the RideDropoffProcessor" duration="15">
+        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffProcessor</em> microservice. As we mentioned during design we want to implement this app using the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework. For more information on the framework the <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/" target="_blank">reference guide</a> is an excellent resource!</p>
+<h2 is-upgraded>Generate the Code Skeleton</h2>
+<p>In the Solace Event Portal right click on the <em>RideDropoffProcessor</em>, Choose <em>AsyncAPI</em>, Choose <em>YAML</em> and click <em>Download</em></p>
+<p class="image-container"><img alt="asyncapi_doc" src="img/d9786b4242719fc4.webp"></p>
+<p>Open &amp; check out the downloaded AsyncAPI document.</p>
+<p>It should include a lot of the information about the app that we defined via the Event Portal, including:</p>
+<ul>
+<li>The <strong>title</strong> and <strong>description</strong> under the <strong>info</strong> section</li>
+<li>Our <strong>events</strong>, referred to as <strong>messsages</strong> in the AsyncAPI document</li>
+<li>The <strong>schemas</strong> that define the payloads of our events</li>
+<li>The <strong>channels</strong> on which the events are exchanged</li>
+</ul>
+<p class="image-container"><img alt="asyncapi_doc" src="img/91c7206a428640cc.webp"></p>
+<aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
+</aside>
+<p>Let&#39;s add a few of the template&#39;s configuration options to the download AsyncAPI document.</p>
+<ul>
+<li>Add <code>x-scs-function-name: processDropoffRideAverages</code> under the <em>subscribe</em> operation and the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
+<li>Add <code>x-scs-destination: taxiUpdateQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
+</ul>
+<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/220b5237f7a72bd9.webp"></p>
+<aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
+</aside>
+<p>Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
+<p>Note the different pieces of the command:</p>
+<ul>
+<li><code>ag</code> is the AsyncAPI Generator command</li>
+<li><code>-o</code> is the output directory</li>
+<li><code>-p</code> allows you to specify <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#parameters" target="_blank">parameters</a> defined for the template you&#39;re using</li>
+<li><code>binder</code> is the Spring Cloud Stream binder you wish to use, in this case Solace</li>
+<li><code>reactive=true</code> allows you to use a reactive programming style</li>
+<li><code>actuator</code> includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection</li>
+<li><code>artifactId</code> &amp; <code>groupId</code> configure Maven params of the same names</li>
+<li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
+<li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
+<li>The yaml file is our AsyncAPI document</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
+</li>
+</ul>
+<p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProcessor.
+</code></pre>
+<p>💥Boom💥 We&#39;ve generated our code skeleton!</p>
+<h2 is-upgraded>Import and Explore the Generated Project</h2>
+<p>The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.<br><img alt="projectsetup" src="img/5e451095d7bcb517.webp"></p>
+<p>A few notes on the project:</p>
+<ul>
+<li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
+<li>The <code>RideAveragePayload</code> and <code>TaxiStatusUpdatePayload</code> POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
+<li><code>Application.java</code> contains a <code>processDropoffRideAverages</code> method which takes in a <code>Flux&lt;TaxiStatusUpdatePayload&gt;</code> and outputs a <code>Flux&lt;RideAveragePayload&gt;</code>. Note the use of <code>Flux</code> since we specified <code>reactive=true</code> when generating the code skeleton.<br></li>
+<li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
+<li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
+</ul>
+<h2 is-upgraded>Subscribe to <em>dropoff</em> events**</h2>
+<p>As of the writing of this codelab dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>TaxiStatusUpdate</em> events to a dynamic topic structure of <code>taxi/nyc/v1/${ride_status}/${passenger_count}/${ride_id}/${longitude}/${latitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxi/nyc/v1/dropoff/&gt;</code></p>
+<aside class="special"><p>Note that the <code>&gt;</code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/&gt;</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+</aside>
+<p>✅ After making the update your <em>application.yml</em> file should look like below for the <code>spring.cloud.stream</code> section</p>
+<pre><code>spring:
+  cloud:
+    stream:
+      function:
+        definition: processDropoffRideAverages
+      bindings:
+        processDropoffRideAverages-out-0:
+          destination: taxi/nyc/v1/stats/dropoff/avg
+        processDropoffRideAverages-in-0:
+          destination: taxiUpdateQueue
+      solace:
+        bindings:
+          processDropoffRideAverages-in-0:
+            consumer:
+              queueAdditionalSubscriptions: &#39;taxi/nyc/v1/dropoff/&gt;&#39;
+</code></pre>
+<h2 is-upgraded>Fill in the Business Logic</h2>
+<p>Navigate to and open the <code>Application.java</code> file. We&#39;re going to edit the <em>processDropoffRideAverages</em> method to add our business logic. Remember that our Use Case defines that our <em>RideDropoffProcessor</em> should listen to the stream of <code>dropoff</code> events, capture events for a specified time window (we&#39;ll hard code 20 seconds to make it easy), calculate the averages, and publish a <em>RideAverageUpdate</em> event for each window.</p>
+<p>Go ahead and code up this business logic yourself or feel free to add your business logic by looking at the code snippet available below.</p>
+<pre><code>package org.taxi.nyc;
+
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Date;
+import java.util.function.Function;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@SpringBootApplication
+public class Application {
+
+	public static final String ISO_8601_24H_FULL_FORMAT = &#34;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&#34;;
+	final SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class);
+	}
+
+	@Bean
+	public Function&lt;Flux&lt;TaxiStatusUpdatePayload&gt;, Flux&lt;RideAveragePayload&gt;&gt; processDropoffRideAverages() {
+		return flux -&gt; flux.log().window(Duration.ofSeconds(20)).flatMap(this::calculateAverage);
+	}
+
+	private Mono&lt;RideAveragePayload&gt; calculateAverage(Flux&lt;TaxiStatusUpdatePayload&gt; flux) {
+		// Aggregate the events in those windows
+		return flux
+			.reduce(new Accumulator(0, 0, 0),
+					(a, taxiUpdate) -&gt; new Accumulator(a.getRideCount() + 1,
+							a.getTotalMeter() + taxiUpdate.getMeterReading(),
+							a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
+			// Calculate the window average in RideAveragePayload objects&#39;
+			.map(accumulator -&gt; new RideAveragePayload((accumulator.getTotalMeter() / accumulator.getRideCount()),
+					20, ((double) accumulator.getTotalPassengers() / accumulator.getRideCount()),
+					accumulator.getRideCount(), sdf.format(new Date())))
+			.log();
+	}
+
+	//Using Lombok to generate getters, setters, constructors, etc. 
+	@Data
+	@AllArgsConstructor
+	static class Accumulator {
+
+		private int rideCount;
+		private double totalMeter;
+		private int totalPassengers;
+	}
+
+}
+</code></pre>
+<p><strong>Add Lombok Support (Optional)</strong><br>Since we&#39;re using <a href="https://projectlombok.org/" target="_blank">Project Lombok</a> to keep our code a bit shorter you&#39;ll need to update your <code>pom.xml</code> file to include this dependency. Go ahead and add the <code>dependenices</code> in your pom. If you haven&#39;t used Lombok in the past you might also need to install support for it in your IDE. Choose the <em>Install</em> option on the project lombok webpage to select your IDE and install.</p>
+<pre><code>    &lt;dependency&gt;
+      	&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+       	&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;/dependency&gt; 
+</code></pre>
+<aside class="warning"><p>If you prefer not to use Lombok go ahead and use the tools available in your IDE to generate a getter and setter for each parameter in the <code>Accumulator</code> class. You&#39;ll also need to add a Constructor that looks like <code>public Accumulator(int rideCount, double totalMeter, int totalPassengers)</code></p>
+</aside>
+<h3 is-upgraded>Run the app!</h3>
+<p>Now that our app has been developed let&#39;s run it!</p>
+<p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
+<p>Or run it from the terminal by navigating to the directory with the pom and running the <code>mvn clean spring-boot:run</code> command.</p>
+<aside class="warning"><p>If you get an error that says something like <code>Web server failed to start. Port XXXX was already in use.</code> then change the <code>server.port</code> value in <code>application.yml</code> to an open port.</p>
+</aside>
+<aside class="special"><p>Notice that by using Spring Cloud Stream the developer doesn&#39;t need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Develop the RideDropoffConsumer" duration="8">
+        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffConsumer</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
+<h2 is-upgraded>Generate the Code Skeleton</h2>
+<p>In the Solace Event Portal right click on the <em>RideDropoffConsumer</em>, Choose <em>AsyncAPI</em>, Choose <em>YAML</em> and click <em>Download</em></p>
+<p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
+<p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
+<p>Note the different pieces of the command:</p>
+<ul>
+<li><code>ag</code> is the AsyncAPI Generator command</li>
+<li><code>-o</code> is the output directory</li>
+<li><code>-p</code> allows you to specify <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#parameters" target="_blank">parameters</a> defined for the template you&#39;re using</li>
+<li><code>binder</code> is the Spring Cloud Stream binder you wish to use, in this case Solace</li>
+<li><code>actuator</code> includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection</li>
+<li><code>artifactId</code> &amp; <code>groupId</code> configure Maven params of the same names</li>
+<li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
+<li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
+<li>The yaml file is our AsyncAPI document</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
+</li>
+</ul>
+<p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/RideDropoffConsumer.
+</code></pre>
+<h2 is-upgraded>Import and Explore the Generated Project</h2>
+<p>The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.<br><img alt="projectsetup2" src="img/fd108df265654a36.webp"></p>
+<p>A few notes on the project:</p>
+<ul>
+<li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
+<li>The <code>RideAveragePayload</code> POJO was generated from the schema defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
+<li><code>Application.java</code> contains a <code>taxiNycV1StatsDropoffAvgConsumer</code> method which is a <code>Consumer</code> that takes in a <code>RideAveragePayload</code> POJO. Note that since we didn&#39;t specify a <code>x-scs-function-name</code> this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of <code>Flux</code> this time since we did not specify <code>reactive=true</code> when running the generator.<br></li>
+<li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
+<li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
+</ul>
+<h2 is-upgraded>Fill in the Business Logic</h2>
+<p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideAverageUpdate</em> events as they&#39;re received.</p>
+<p>Open the <em>Application.java</em> file and modify the <code>taxiNycV1StatsDropoffAvgConsumer</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
+<pre><code>@Bean
+public Consumer&lt;RideAveragePayload&gt; taxiNycV1StatsDropoffAvgConsumer() {
+	return rideAverageUpdate -&gt; {
+		logger.info(&#34;Received Ride Average Event:&#34; + rideAverageUpdate);
+	};
+}
+</code></pre>
+<p>That&#39;s it! The app development is complete.<br>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
+<h2 is-upgraded>Run the app!</h2>
+<p>Now that our app has been developed let&#39;s run it!</p>
+<p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
+<p>Or run it from the terminal by navigating to the directory with the pom and running the <code>mvn clean spring-boot:run</code> command.</p>
+<aside class="warning"><p>If you get an error that says something like <code>Web server failed to start. Port XXXX was already in use.</code> then change the <code>server.port</code> value in <code>application.yml</code> to an open port.</p>
+</aside>
+<p>🤯🤯 <strong>The Microservice is now is now Running, connected to the Solace Event Broker and receiving events!</strong> 🤯🤯</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="1">
+        <ul>
+<li>✅ The <a href="solace.com/products/portal" target="_blank">Solace Event Portal</a> is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.</li>
+<li>✅ <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a> templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.</li>
+<li>✅ <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> allows developers to implement highly scalabe, event-driven microservices without having to learn how to use messaging APIs.</li>
+</ul>
+<p class="image-container"><img alt="solly_wave" src="img/9bd2cbed014d29b6.webp"></p>
+<p><strong>Thanks for participating in this codelab!</strong> Let us know what you thought in the <a href="https://solace.community" target="_blank">Solace Community Forum</a> and if you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the <em>Report a mistake</em> button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
