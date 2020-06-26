@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-06-25T18:13:30-04:00",
+  "updated": "2020-06-26T14:28:10-04:00",
   "id": "design-to-code-workshop",
   "duration": 60,
   "title": "Developer Workshop: Design to Code using Portal + AsyncAPI Code Generation",
@@ -20,6 +20,7 @@
     "asyncapi",
     "java",
     "portal",
+    "solace",
     "spring",
     "web"
   ],

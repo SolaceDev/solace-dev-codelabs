@@ -1,7 +1,7 @@
 author: Marc DiPasquale
 id: design-to-code-workshop
 summary: This codelab walks you through how to design an EDA using the Solace PubSub+ Event Portal, export the AsyncAPI documents, generate code using the AsyncAPI generator and see your events flow across your apps!
-tags: AsyncAPI, Spring, Java, Portal
+tags: Solace, AsyncAPI, Spring, Java, Portal
 categories: workshop
 environments: Web
 status: Published
@@ -29,6 +29,24 @@ Positive
 : There is no code needed to start this workshop, but you can find the solution in this [Github Repo](https://github.com/Mrc0113/design-to-code-workshop)
 
 
+## Use Case Overview
+Duration: 0:05:00
+
+You are a member of the engineering team at the _NYC Modern Taxi Co_, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies' IT systems is of utmost importance. Your team has done it's research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it's time to start to continually improve and provide a world class customer experience.  
+
+In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you'll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things: 
+
+1. 🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its' components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.  
+1. 🚕 Next up we're going to create the _RideDropoffProcessor_ microservice which will subscribe to the stream of _dropoff_ taxi updates from the fleet, capture events for a specified time window (we'll use 20 seconds to make it easy), calculate the averages, and publish a new _RideAverageUpdate_ event for each window.  
+1. 🚖 Lastly we'll create a _RideDropoffConsumer_ that receives the stream of _RideAverageUpdate_ events and captures them for display and further processing. 
+
+
+![Architecture](img/arch.webp)
+
+Positive
+: The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define [here](https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0). Solace is streaming this data over Solace PubSub+ for you to analyze and process. 
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+
 ## What You'll Need
 Duration: 0:08:00
 
@@ -51,11 +69,12 @@ We'll install the generator itself later 👍
 
 ### PubSub+ Event Broker Connection Info
 ✅ The credentials below are for a public event feed that we'll use during this codelab.
-* SMF Host:
-* Message VPN: 
-* Username: 
-* Password: 
+* SMF Host: `tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555`
+* Message VPN: `cto-demo-virginia-azure`
+* Username: `public-taxi-user`
+* Password: `iliketaxis`
 
+✅ Note that this client-username has permissions to subscribe to `taxi/>` and `test/taxi/>` and permissinos to publish to `test/taxi/>`
 
 ### Prepare PubSub+ Event Portal
 
@@ -66,40 +85,30 @@ We'll install the generator itself later 👍
 
 
 #### Import Application Domain
-✅ Now that you're logged in to your Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
+✅ Download the Application Domain export file: [EventPortal_Export_NYCModernTaxiCo.json]( https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json)
 
-![ep_select_designer](img/ep_select_designer.webp)
-
-✅ Then import the Application Domain that we'll use today by clicking the `Import` button at the top right of the _Designer_ and importing the [EventPortal_Export_NYCModernTaxiCo.json]( https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json) file. 
-
-You can download the file by cloning the git repo
+You can download the file via curl or by cloning the git repo
+```bash 
+curl -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+``` 
+OR
 ```bash
 git clone https://github.com/Mrc0113/design-to-code-workshop.git
 ```
 
+✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
+
+![ep_select_designer](img/ep_select_designer.webp)
+
+✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the  file. 
+
 ![ep_click_import](img/ep_click_import.webp)
 
 
-## Use Case Overview
-Duration: 0:05:00
-
-You are a member of the engineering team at the _NYC Modern Taxi Co_, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies' IT systems is of utmost importance. Your team has done it's research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it's time to start to continually improve and provide a world class customer experience.  
-
-In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you'll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things: 
-
-1. 🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its' components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.  
-1. 🚕 Next up we're going to create the _RideDropoffProcessor_ microservice which will subscribe to the stream of _dropoff_ taxi updates from the fleet, capture events for a specified time window (we'll use 20 seconds to make it easy), calculate the averages, and publish a new _RideAverageUpdate_ event for each window.  
-1. 🚖 Lastly we'll create a _RideDropoffConsumer_ that receives the stream of _RideAverageUpdate_ events and captures them for display and further processing. 
-
-
-![Architecture](img/arch.webp)
-
-Positive
-: The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define [here](https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0). Solace is streaming this data over Solace PubSub+ for you to analyze and process. 
-<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+🚀 Setup complete! Let's get going! 🚀
 
 ## Design Your EDA
-Duration: 0:18:00
+Duration: 0:16:00
 
 Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal let's get update our Event-Driven Architecture (EDA). 
 
@@ -248,22 +257,7 @@ To do this follow these steps:
 
 ![ep_step02](img/ep_step02.webp)
 
-
-### Add the _RideDropoffConsumer_ Application
-To complete the architecture for our use case we just need to add the _RideDropoffConsumer_ application. Don't worry, this one will be quick since we've already created all of the needed Events and Payloads :) 
-
-Right click on the graph and choose _Create Application_. 
-Fill in the form as follows: 
-1. **Name**: RideDropoffConsumer
-1. **Description**: This is a Spring Cloud Stream microservice that will consume summary events for further analysis
-1. Click _Add/Remove Owners_ and choose yourself
-1. Click _Manage Events_, search for "RideAverageUpdate" and click "Sub" next to it since the _RideDropoffConsumer_ wants to subscribe to these events. 
-1. Click _Save_ 
-
-![ep_complete](img/ep_complete.webp)
-
-🚀🚀 That's it! Our Use Case design is now reflected by our architecture captured in the Event Portal and we're ready for implementation! 🚀🚀
-
+🚕 Let's go ahead and develop the first app! 🚕
 
 ## Install the AsyncAPI Generator
 Duration: 0:03:00
@@ -307,8 +301,8 @@ Positive
 : The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like. 
 
 Let's add a few of the template's configuration options to the download AsyncAPI document. 
-* Add `x-scs-function-name: processDropoffRideAverages` under the _subscribe_ operation and the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the _subscribe_ and the _publish_ operation you are saying you want them handled by the same function! 
-* Add `x-scs-destination: taxiUpdateQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
+* Add `x-scs-function-name: processDropoffRideAverages` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the _subscribe_ and the _publish_ operation you are saying you want them handled by the same function! 
+* Add `x-scs-destination: test/taxi/RideDropoffProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
 ![asyncapi_doc2](img/asyncapi_doc2.webp)
@@ -354,13 +348,16 @@ A few notes on the project:
 * The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
-### Subscribe to _dropoff_ events**
+### Subscribe to _dropoff_ events
 As of the writing of this codelab dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their _TaxiStatusUpdate_ events to a dynamic topic structure of `taxi/nyc/v1/${ride_status}/${passenger_count}/${ride_id}/${longitude}/${latitude}` we need to update the `application.yml` file to subscribe to only `dropoff` events. To do this change the `queueAdditionalSubscriptions` parameter value to `taxi/nyc/v1/dropoff/>`
 
 Positive
 : Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
-✅ After making the update your _application.yml_ file should look like below for the `spring.cloud.stream` section 
+### Publish to a personalized topic for uniqueness
+Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processDropoffRideAverages-out-0.destination` to be `test/taxi/<YOUR_UNIQUE_NAME>/nyc/v1/stats/dropoff/avg`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
+
+✅ After making the update your _application.yml_ file should look like below for the `spring.cloud.stream` section.   
 ```yaml
 spring:
   cloud:
@@ -369,9 +366,9 @@ spring:
         definition: processDropoffRideAverages
       bindings:
         processDropoffRideAverages-out-0:
-          destination: taxi/nyc/v1/stats/dropoff/avg
+          destination: test/taxi/yourname/nyc/v1/stats/dropoff/avg
         processDropoffRideAverages-in-0:
-          destination: taxiUpdateQueue
+          destination: test/taxi/RideDropoffProcessorQueue
       solace:
         bindings:
           processDropoffRideAverages-in-0:
@@ -470,6 +467,25 @@ Negative
 Positive
 : Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer. 
 
+## Extend Your EDA Design
+Duration: 0:02:00
+
+To complete the architecture for our use case we just need to add the _RideDropoffConsumer_ application. Don't worry, this one will be quick since we've already created all of the needed Events and Payloads earlier :) 
+
+Log into Solace Cloud and navigate to the _NYC Modern Taxi Co_ Application Domain within the Event Portal Designer. 
+
+Right click on the graph and choose _Create Application_. 
+Fill in the form as follows: 
+1. **Name**: RideDropoffConsumer
+1. **Description**: This is a Spring Cloud Stream microservice that will consume summary events for further analysis
+1. Click _Add/Remove Owners_ and choose yourself
+1. Click _Manage Events_, search for "RideAverageUpdate" and click "Sub" next to it since the _RideDropoffConsumer_ wants to subscribe to these events. 
+1. Click _Save_ 
+
+![ep_complete](img/ep_complete.webp)
+
+🚀🚀 That's it! Our full Use Case design is now reflected by our architecture captured in the Event Portal and we're ready for implementation! 🚀🚀
+
 ## Develop the RideDropoffConsumer
 Duration: 0:08:00
 
@@ -515,6 +531,22 @@ A few notes on the project:
 * `Application.java` contains a `taxiNycV1StatsDropoffAvgConsumer` method which is a `Consumer` that takes in a `RideAveragePayload` POJO. Note that since we didn't specify a `x-scs-function-name` this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of `Flux` this time since we did not specify `reactive=true` when running the generator.  
 * The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
+
+### Subscribe to our unique topic
+Open the _application.yml_ file and update the `spring.cloud.stream.bindings.taxiNycV1StatsDropoffAvgConsumer-in-0.destination` to match the destination we used in our _RideDropoffProcessor_ that used `<YOUR_UNIQUE_NAME>`
+
+After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
+
+```yaml
+spring:
+  cloud:
+    stream:
+      function:
+        definition: taxiNycV1StatsDropoffAvgConsumer
+      bindings:
+        taxiNycV1StatsDropoffAvgConsumer-in-0:
+          destination: test/taxi/yourname/nyc/v1/stats/dropoff/avg
+```
 
 ### Fill in the Business Logic
 Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideAverageUpdate_ events as they're received.
