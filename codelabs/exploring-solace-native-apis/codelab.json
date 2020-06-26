@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-06-23T21:38:20+01:00",
+  "updated": "2020-06-25T09:51:10-04:00",
   "id": "exploring-solace-native-apis",
   "duration": 67,
   "title": "Exploring Solace Native APIs - The Basics",
@@ -11,10 +11,12 @@
   "source": "exploring-solace-native-apis.md",
   "theme": "",
   "status": [
-    "draft"
+    "published"
   ],
   "category": [
-    "java"
+    "solace",
+    "java",
+    "c"
   ],
   "tags": [
     "web",
