@@ -1,8 +1,8 @@
 author: Marc DiPasquale
 id: design-to-code-workshop
 summary: This codelab walks you through how to design an EDA using the Solace PubSub+ Event Portal, export the AsyncAPI documents, generate code using the AsyncAPI generator and see your events flow across your apps!
-tags: Solace, AsyncAPI, Spring, Java, Portal
-categories: workshop
+categories: Solace, AsyncAPI, Spring, Java, Portal
+tags: workshop
 environments: Web
 status: Published
 feedback link: https://github.com/Mrc0113/design-to-code-workshop

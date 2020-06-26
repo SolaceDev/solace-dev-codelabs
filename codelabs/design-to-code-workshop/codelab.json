@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-06-26T14:28:10-04:00",
+  "updated": "2020-06-26T15:03:00-04:00",
   "id": "design-to-code-workshop",
   "duration": 60,
   "title": "Developer Workshop: Design to Code using Portal + AsyncAPI Code Generation",
@@ -14,15 +14,15 @@
     "published"
   ],
   "category": [
-    "workshop"
+    "solace",
+    "asyncapi",
+    "spring",
+    "java",
+    "portal"
   ],
   "tags": [
-    "asyncapi",
-    "java",
-    "portal",
-    "solace",
-    "spring",
-    "web"
+    "web",
+    "workshop"
   ],
   "feedback": "https://github.com/Mrc0113/design-to-code-workshop",
   "ga": "UA-3921398-10",
