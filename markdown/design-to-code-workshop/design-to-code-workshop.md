@@ -19,7 +19,7 @@ During this workshop we're going to use a real-world use case to explore some ne
 
 1. 💥 You'll be using the **Solace PubSub+ Event Portal** to design the Event-Driven Architecture for our use case. While you're likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your achitecture, implement it, and iteratively make enhancements and changes throughout your software development cycle. 
 1. 💥 Second you'll be learning about the **AsyncAPI Initiative** and the **Generators** that make our lives as developers simpler.
-1. 💥 Lastly, you'll use develop event-driven microservices that implement our use case using the **Spring Cloud Stream** framework.
+1. 💥 Lastly, you'll develop event-driven microservices that implement our use case using the **Spring Cloud Stream** framework.
 
 Oh, and of course you'll also be using some Java and Solace PubSub+ Event Brokers but those aren't the ⭐️ of the show today. No worries if you're not an expert in either :)
 
@@ -326,7 +326,7 @@ Note the different pieces of the command:
 * And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 
@@ -512,7 +512,7 @@ Note the different pieces of the command:
 * And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 

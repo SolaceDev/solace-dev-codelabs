@@ -33,7 +33,7 @@
 <ol type="1">
 <li>💥 You&#39;ll be using the <strong>Solace PubSub+ Event Portal</strong> to design the Event-Driven Architecture for our use case. While you&#39;re likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your achitecture, implement it, and iteratively make enhancements and changes throughout your software development cycle.</li>
 <li>💥 Second you&#39;ll be learning about the <strong>AsyncAPI Initiative</strong> and the <strong>Generators</strong> that make our lives as developers simpler.</li>
-<li>💥 Lastly, you&#39;ll use develop event-driven microservices that implement our use case using the <strong>Spring Cloud Stream</strong> framework.</li>
+<li>💥 Lastly, you&#39;ll develop event-driven microservices that implement our use case using the <strong>Spring Cloud Stream</strong> framework.</li>
 </ol>
 <p>Oh, and of course you&#39;ll also be using some Java and Solace PubSub+ Event Brokers but those aren&#39;t the ⭐️ of the show today. No worries if you&#39;re not an expert in either :)</p>
 <p>So let&#39;s get started!</p>
@@ -295,7 +295,7 @@
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 </li>
 </ul>
@@ -451,7 +451,7 @@ public class Application {
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 </li>
 </ul>
