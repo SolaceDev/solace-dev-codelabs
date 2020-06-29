@@ -1,0 +1,30 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-06-29T12:02:29-04:00",
+  "id": "design-to-code-workshop",
+  "duration": 60,
+  "title": "Developer Workshop: Design to Code using Portal + AsyncAPI Code Generation",
+  "summary": "This codelab walks you through how to design an EDA using the Solace PubSub+ Event Portal, export the AsyncAPI documents, generate code using the AsyncAPI generator and see your events flow across your apps!",
+  "source": "design-to-code-workshop.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "asyncapi",
+    "spring",
+    "java",
+    "portal"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/Mrc0113/design-to-code-workshop",
+  "ga": "UA-3921398-10",
+  "url": "design-to-code-workshop"
+}
