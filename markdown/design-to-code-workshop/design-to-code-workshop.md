@@ -54,15 +54,15 @@ Duration: 0:08:00
 
 ### AsyncAPI Generator Requirements
 ✅ Install instructions available [here](https://github.com/asyncapi/generator#requirements)
-* Node.js v12.16+ 
-* npm v6.13.7+
+* Node.js v12.16+ (Check version using `node -v`)
+* npm v6.13.7+  (Check version using `npm -version`)
 
 We'll install the generator itself later 👍
 
 ### Spring Cloud Stream Requirements
 ✅ Spring Cloud Stream just requires Java and Maven to use 🚀  
-* Java 1.8+ 
-* Maven 3.3+
+* Java 1.8+ (Check version using `java -version`)
+* Maven 3.3+ (Check version using `mvn -version`)
 	* On mac you can `brew install maven`
 	* Other install instructions [here](https://maven.apache.org/install.html)
 * Your favorite Java IDE 💥
@@ -89,7 +89,7 @@ We'll install the generator itself later 👍
 
 You can download the file via curl or by cloning the git repo
 ```bash 
-curl -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
 ``` 
 OR
 ```bash

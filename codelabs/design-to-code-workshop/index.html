@@ -64,15 +64,15 @@
 <h2 is-upgraded>AsyncAPI Generator Requirements</h2>
 <p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
 <ul>
-<li>Node.js v12.16+</li>
-<li>npm v6.13.7+</li>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+  (Check version using <code>npm -version</code>)</li>
 </ul>
 <p>We&#39;ll install the generator itself later 👍</p>
 <h2 is-upgraded>Spring Cloud Stream Requirements</h2>
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
-<li>Java 1.8+</li>
-<li>Maven 3.3+<br><br><ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
 </ul>
@@ -95,7 +95,7 @@
 <h3 is-upgraded>Import Application Domain</h3>
 <p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
 <p>You can download the file via curl or by cloning the git repo</p>
-<pre><code>curl -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+<pre><code>curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
 </code></pre>
 <p>OR</p>
 <pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
