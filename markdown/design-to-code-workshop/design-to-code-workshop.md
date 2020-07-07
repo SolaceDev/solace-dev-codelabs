@@ -8,7 +8,7 @@ status: Published
 feedback link: https://github.com/Mrc0113/design-to-code-workshop
 analytics account: UA-3921398-10
 
-# Developer Workshop: Design to Code using Portal + AsyncAPI Code Generation
+# Design to Code using Event Portal + AsyncAPI Code Generation
 
 ## What You'll Learn
 Duration: 0:02:00

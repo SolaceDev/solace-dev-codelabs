@@ -8,7 +8,7 @@ status: published
 feedback link: github.com/SolaceTraining/solace-workshop-scs
 analytics account: UA-3921398-10
 
-# Developer Workshop: Spring Cloud Streams with Solace PubSub+
+# Spring Cloud Streams with Solace PubSub+
 
 ## CodeLab Overview
 Duration: 0:05:00
