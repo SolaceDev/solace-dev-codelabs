@@ -8,7 +8,7 @@ status: published
 feedback link: github.com/SolaceTraining/solace-workshop-scs
 analytics account: UA-3921398-10
 
-# Developer Workshop: Using Spring Cloud Stream with Solace PubSub+ in PCF
+# Using Spring Cloud Stream with Solace PubSub+ in PCF
 
 ## CodeLab Overview
 Duration: 0:10:00

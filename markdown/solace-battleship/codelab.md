@@ -8,7 +8,7 @@ status: Published
 feedback link: http://github.com/solacetraining/solace-battleship/issues
 analytics account: UA-3921398-10
 
-# Developer Workshop: Building Battleship with TypeScript, Java and Solace PubSub+
+#Building Battleship with TypeScript, Java and Solace PubSub+
 
 ## Welcome!
 

@@ -6,7 +6,7 @@
   "updated": "2019-10-17T15:25:37-04:00",
   "id": "solace-workshop-scs",
   "duration": 110,
-  "title": "Developer Workshop: Spring Cloud Streams with Solace PubSub+",
+  "title": "Spring Cloud Streams with Solace PubSub+",
   "summary": "Using Spring Cloud Streams w/ Solace PubSub+",
   "source": "solace-workshop-scs.md",
   "theme": "",
