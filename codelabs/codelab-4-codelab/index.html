@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>CodeLab to Create a CodeLab</title>
+  <title>Codelab to Create a Codelab</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
@@ -23,23 +23,19 @@
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
   <google-codelab codelab-gaid="UA-3921398-10"
                   id="codelab-4-codelab"
-                  title="CodeLab to Create a CodeLab"
+                  title="Codelab to Create a Codelab"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab">
     
-      <google-codelab-step label="CodeLab Overview" duration="2">
-        <p>Are you trying to create easy to use, visually appealing content for the tech community? This CodeLab will show you how to quickly create your own Google CodeLab just like the one you&#39;re using right now. When creating a Codelab you have two authoring options:</p>
-<ol type="1">
-<li>Using a Google Doc</li>
-<li>Using a markdown file</li>
-</ol>
-<p>In this codelab we are going to use the second option and author our codelab using a markdown file. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial.</p>
-<p>Here is an example image of another CodeLab that I created: <img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
+      <google-codelab-step label="Codelab Overview" duration="2">
+        <p>Are you trying to create easy to use, visually appealing content for the tech community? This Codelab will show you how to quickly create your own Google Codelab just like the one you&#39;re using right now.</p>
+<p>We&#39;ll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial.</p>
+<p>Here is an example image of another Codelab that I created: <img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
 <p><strong>Resources:</strong></p>
 <ul>
 <li>The markdown for this codelab is located here: <a href="https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md" target="_blank">codelab.md</a></li>
-<li><a href="https://github.com/googlecodelabs/tools" target="_blank">Google CodeLabs Tools Github</a> - The repo that contains the claat tool we&#39;ll be using today</li>
-<li><a href="https://groups.google.com/forum/#!forum/codelab-authors" target="_blank">Google Group for CodeLab Authors</a> - great forum for asking questions about codelabs and discussing future functionality</li>
+<li><a href="https://github.com/googlecodelabs/tools" target="_blank">Google Codelabs Tools Github</a> - The repo that contains the claat tool we&#39;ll be using today</li>
+<li><a href="https://groups.google.com/forum/#!forum/codelab-authors" target="_blank">Google Group for Codelab Authors</a> - great forum for asking questions about codelabs and discussing future functionality</li>
 <li><a href="https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816" target="_blank">A blog that I used when getting started with Google Codelabs</a></li>
 </ul>
 
@@ -47,10 +43,14 @@
       </google-codelab-step>
     
       <google-codelab-step label="Environment Setup" duration="4">
-        <p>In order to create a CodeLab you need <em>Go</em> and <em>claat</em> (the codelabs command line tool) installed.</p>
+        <p>In order to create a Codelab you need</p>
+<ul>
+<li>Go<br></li>
+<li>claat (the codelabs command line tool) installed.</li>
+</ul>
+<h2 is-upgraded>Download from source</h2>
 <p>Install <a href="https://golang.org/dl/" target="_blank">Go</a> and <a href="https://github.com/googlecodelabs/tools/tree/master/claat" target="_blank">claat</a> if you don&#39;t have it. You can follow the documentation on Go&#39;s website and the Google Codelabs github repo.</p>
-<p>Follow the instructions below to setup on MacOS</p>
-<h2 is-upgraded>MacOS setup</h2>
+<h2 is-upgraded>Download from cli: MacOS/Linux setup</h2>
 <h3 is-upgraded>Install Go</h3>
 <pre><code>$ brew install go
 </code></pre>
@@ -76,31 +76,50 @@ $ export PATH=$PATH:$GOROOT/bin
       </google-codelab-step>
     
       <google-codelab-step label="Solace Guidelines" duration="5">
-        <p>Please follow these guidelines when creating codelabs that will be hosted at <a href="https://solace.dev/codelabs" target="_blank">solace.dev/codelabs</a></p>
-<h2 is-upgraded>Content Guidance</h2>
-<ul>
-<li>Each codelab should be focused on one topic or a very small group of related topics.</li>
-<li>Use sections to separate steps for ease of navigation</li>
-<li>Include an &#34;Overview&#34; or &#34;What You&#39;ll Learn Section&#34; at the beginning of a codelab</li>
-<li>Include an &#34;Environment Setup&#34; or &#34;What You&#39;ll Need Section&#34; section that sets up the environment, if necessary.</li>
-<li>Try to make the codelab fun and engaging using images and/or gifs</li>
-<li>Provide code used in a separate public git repo</li>
-</ul>
+        <h2 is-upgraded>Content Guidance</h2>
+<p>✅ Each codelab should be focused on one topic or a very small group of related topics.<br> ✅ Use sections to separate steps for ease of navigation<br> ✅ Include an &#34;Overview&#34; or &#34;What You&#39;ll Learn Section&#34; at the beginning of a codelab<br> ✅ Include an &#34;Environment Setup&#34; or &#34;What You&#39;ll Need Section&#34; section that sets up the environment, if necessary.<br> ✅ Try to make the codelab fun and engaging using images and/or gifs<br> ✅ Provide code used in a separate public git repo</p>
 <h2 is-upgraded>Where to create your codelab</h2>
-<ul>
-<li>Create your codelab in the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> for version tracking</li>
-<li>All other code can be kept in a separate repo</li>
-<li>And example codelab markdown structure can be found on the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/solace-battleship" target="_blank">Battleship markdown</a> and the <a href="https://github.com/solacetraining/solace-battleship" target="_blank">Battleship source code</a></li>
-</ul>
+<p>📌 Create your codelab in the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> for version tracking<br> 📌 All other code can be kept in a separate repo<br> 📌 Example codelab markdown structure can be found on the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/solace-battleship" target="_blank">Battleship markdown</a> and the <a href="https://github.com/solacetraining/solace-battleship" target="_blank">Battleship source code</a></p>
+<h2 is-upgraded>Content Reviewer</h2>
+<p>Upon authoring of your codelab, we request you have two reviewers:</p>
+<p>1️⃣ Technical reviewer who is knowledgeable with the content<br> 2️⃣ A member of the Developer Relations team to confirm the structure of your codelab and merge it into the main github repo</p>
+<p>✨ Now that we have the environment setup, you have two options you can follow to create your first codelab codelab: Script or Manual</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Create your initial CodeLab" duration="5">
-        <p>Now that we have the environment setup, you have two options you can follow to create a codelab:</p>
-<h2 is-upgraded>Option 1 - Automated</h2>
-<p>Clone the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> and follow the contribution steps in the README</p>
-<h2 is-upgraded>Option 2 - Manual</h2>
+      <google-codelab-step label="Prepare your repo" duration="2">
+        <p>Start by forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a> and clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username</p>
+<pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
+cd solace-dev-codelabs
+git checkout -b add-codelab-&lt;name_of_codelab&gt;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create your initial Codelab - Automated" duration="5">
+        <h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>NodeJS</li>
+</ul>
+<h2 is-upgraded>Steps</h2>
+<ol type="1">
+<li>After cloning the repository as per the earlier step, from the root directory, run the init script as follows <code>./init.sh &lt;name-of-codelab&gt;</code><br></li>
+<li>Navigate to the <code>/markdown/&lt;name-of-codelab&gt;</code> directory<br></li>
+<li>Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal <code>npm install; npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file<br></li>
+<li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice<br></li>
+<li>When ready, run <code>export.sh</code><br></li>
+</ol>
+<aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
+</aside>
+<p>🚀  Go ahead to the last step and add your codelabs on the main repo</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create your initial Codelab - Manual" duration="8">
+        <p>Create a folder under the <code>markdown</code> directory with your codelab as the dir name. This is where your markdown file and related artifacts (such as images) will reside.</p>
 <p>Go ahead and create a markdown file where you&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
 <aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
 </aside>
@@ -170,7 +189,7 @@ You created info boxes!
 ### Bullets
 Plain Text followed by bullets
 * Hello
-* CodeLab
+* Codelab
 * World
 
 You created bullets!
@@ -196,12 +215,8 @@ Add an image!
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg &#34;Try Me Publisher&#34;)
 </code></pre>
 <p>More Markdown Parser examples can be found <a href="https://github.com/googlecodelabs/tools/tree/master/claat/parser/md" target="_blank">here</a>.</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Export &amp; Serve Locally" duration="2">
-        <p>Now that you have an initial codelab defined in your markdown file let&#39;s go ahead and generate the static site content. We can export &amp; serve the content locally using the <code>claat</code> command that we installed earlier.</p>
+<h2 is-upgraded>Export &amp; Serve Locally</h2>
+<p>Now that you have an initial codelab defined in your markdown file let&#39;s go ahead and generate the static site content. We can export &amp; serve the content locally using the <code>claat</code> command that we installed earlier.</p>
 <pre><code>$ claat export codelab.md
 $ claat serve
 </code></pre>
@@ -210,21 +225,13 @@ $ claat serve
 <li>Choose the directory that matches your &#34;id&#34; that you put in the headers.</li>
 <li>Viola! You should have your first codelab!</li>
 </ul>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Add your CodeLab to solace.dev/codelabs" duration="1">
-        <p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
+<p>Repeat the export and serve locally everyt ime you make a new change in the markdown file</p>
+<aside class="special"><p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.<br></p>
+</aside>
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
 </aside>
-<h2 is-upgraded>Stage your Codelab</h2>
-<p>Start by forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a> and clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username</p>
-<pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
-cd solace-dev-codelabs
-git checkout -b add-codelab-&lt;id&gt;
-</code></pre>
-<p>Create a folder under the <code>markdown</code> directory and add your markdown file and related artifacts (such as images) and export your static web content to the <code>codelabs</code> folder.</p>
+<h2 is-upgraded>Export for production</h2>
+<p>When you&#39;re done, export your static web content to the <code>codelabs</code> folder.</p>
 <aside class="special"><p>Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
 </aside>
 <pre><code># If creating a new codelab
@@ -237,7 +244,13 @@ cd markdown/&lt;header-metadata-id&gt;
 # Note the google analytics code used. Keep as is below
 claat export -ga UA-3921398-10 -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
-<p>Add your changes and any newly created files, then commit &amp; push the changes. From your root directory, execute:</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Add your Codelab to solace.dev/codelabs" duration="5">
+        <h2 is-upgraded>Stage your Codelab</h2>
+<p>Add your changes and any newly created files, then commit &amp; push the changes. From your <strong>root</strong> directory, execute:</p>
 <pre><code>git add .
 git commit -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
 git push origin add-codelab-&lt;id&gt;
