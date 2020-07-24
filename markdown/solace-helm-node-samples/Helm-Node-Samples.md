@@ -2,7 +2,7 @@ author: Paul Kondrat
 summary: PubSub+ Node.js Samples using Helm / Kubernetes with a Desktop Windows Dev Environment 
 id: helm-node-samples
 tags: 
-categories: Helm
+categories: Helm,, Kubernetes
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs
