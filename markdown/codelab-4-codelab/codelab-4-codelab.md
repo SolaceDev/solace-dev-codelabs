@@ -21,7 +21,7 @@ Here is an example image of another Codelab that I created:
 ![image_caption](img/codelabexample.png)
 
 
-**Resources:** 
+### Resources 
 * The markdown for this codelab is located here: [codelab.md](https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md)
 * [Google Codelabs Tools Github](https://github.com/googlecodelabs/tools) - The repo that contains the claat tool we'll be using today
 * [Google Group for Codelab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
@@ -98,7 +98,7 @@ Upon authoring of your codelab, we request you have two reviewers:
 1️⃣ Technical reviewer who is knowledgeable with the content   
 2️⃣ A member of the Developer Relations team to confirm the structure of your codelab and merge it into the main github repo
 
-✨ Now that we have the environment setup, you have two options you can follow to create your first codelab codelab: Script or Manual
+✨ Now that we have the environment setup, you have two options you can follow to create your first codelab: Automated or Manual
 
 ## Prepare your repo
 Duration: 0:02:00
@@ -111,7 +111,7 @@ cd solace-dev-codelabs
 git checkout -b add-codelab-<name_of_codelab>
 ```
 
-## Create your initial Codelab - Automated
+## Option A: Create your initial Codelab - Automated
 Duration: 0:05:00
 
 ### Prerequisites
@@ -121,7 +121,8 @@ Duration: 0:05:00
 
 1. After cloning the repository as per the earlier step, from the root directory, run the init script as follows `./init.sh <name-of-codelab>`     
 1. Navigate to the `/markdown/<name-of-codelab>` directory  
-1. Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal `npm install; npm run watch`. Note: This will open a tab in your browser and serve your markdown file    
+1. Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal `npm install`   
+1. Compile and start the claat server by running `npm run watch`. Note: This will open a tab in your browser and serve your markdown file    
 1. Edit your `<name-of-codelab>.md` file in your text editor of choice    
 1. When ready, run `export.sh`  
 
@@ -130,7 +131,7 @@ Positive
 
 🚀  Go ahead to the last step and add your codelabs on the main repo
 
-## Create your initial Codelab - Manual
+## Option B: Create your initial Codelab - Manual
 Duration: 0:08:00
 
 Create a folder under the `markdown` directory with your codelab as the dir name. This is where your markdown file and related artifacts (such as images) will reside.  
@@ -302,6 +303,7 @@ Duration: 0:05:00
 
 Add your changes and any newly created files, then commit & push the changes. From your **root** directory, execute:
 ``` bash
+cd solace-dev-codelabs
 git add .
 git commit -m 'Added or Updated <header-metadata-id> codelab'
 git push origin add-codelab-<id>
