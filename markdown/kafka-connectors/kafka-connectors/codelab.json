@@ -1,0 +1,29 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-07-29T08:45:08+08:00",
+  "id": "kafka-connectors",
+  "duration": 5,
+  "title": "Getting Started with the Solace PubSub+ Connectors for Kafka",
+  "summary": "Learn how to install the Solace PubSub+ Kafka source and sink Connectors for Kafka",
+  "source": "kafka-connectors.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "kafka",
+    "api",
+    "pub/sub"
+  ],
+  "tags": [
+    "howto",
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://solace.community/categories/pubsub%2B-tutorials",
+  "ga": "UA-3921398-10",
+  "url": "kafka-connectors"
+}
