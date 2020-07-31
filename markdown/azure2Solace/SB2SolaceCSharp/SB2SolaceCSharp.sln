@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SB2SolaceCSharp", "SB2SolaceCSharp.csproj", "{BD95E009-9D2A-4498-A243-EDEDE3AB4B13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD95E009-9D2A-4498-A243-EDEDE3AB4B13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD95E009-9D2A-4498-A243-EDEDE3AB4B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD95E009-9D2A-4498-A243-EDEDE3AB4B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD95E009-9D2A-4498-A243-EDEDE3AB4B13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6010B4A-A805-45E7-83B4-645439C26774}
+	EndGlobalSection
+EndGlobal
