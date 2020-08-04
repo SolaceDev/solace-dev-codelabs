@@ -24,13 +24,20 @@ You will find the Azure function code [here](https://github.com/solacese/azure2S
 To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click [here](https://docs.solace.com/Configuring-and-Managing/HTTP-Header-Authentication-Azure-Event-Hub.htm).
 
 ## High Level Architecture of this codelab's goal
+Duration: 0:04:00
+
 ![High Level Architecture](img/high-level-arch.png)
 
 ## Prerequisites
+Duration: 0:01:00
+
+
 * Access to Solace PubSub+ Event Broker
 * Access to Azure Cloud environment
 
 ## Configure the Solace PubSub+ Event broker to receives messages on a queue 
+Duration: 00:05:00
+
 In this example we will create two queues in Solace PubSub+, one of it will receive messages from Azure function over HTTP and another over C#.
 Log on to Solace Console
 1.	Create a queue that will receive data from Azure function using REST 
@@ -59,6 +66,8 @@ solace(configure/message-vpn/my-azure-queue )# exit
 
 
 ##  Azure Function Setup - For C#/.Net using Solace C# APIs
+Duration: 0:15:00
+
 Azure allows you to use multiple programming languages and APIs. However, for this codelab, I will walk you through usage of  C# using Solace C#API  and REST .
 
 
@@ -271,6 +280,9 @@ namespace SB2SolaceCSharp
       ![ ](img/csharp-msg-rcvd.png)
 
 ##  For C#/.Net using REST APIs
+Duration: 0:15:00
+
+
 1. Please follow steps 1-3 above to create a new Azure functions project.
 1. Open the **local.settings.json** file and add the following properties as shown in the code below:
 
@@ -364,6 +376,7 @@ namespace SB2SolaceRest
 1. Repeat step 8-12 above.
 1. Refresh your Solace broker's WebUI to confirm you have received messages from ServiceBus.
       ![ ](img/rest-msg-rcvd.png)
+
 ## Takeaways
 
 Duration: 0:07:00
@@ -371,7 +384,8 @@ Duration: 0:07:00
 ✅ You have learned how to create an Azure function that helps you stream data from ServiceBus to Solace PubSub+ Event broker.    
 ✅ You can use similar approach to integrate with Azure, Blob Storage, Event Hub, IoT Hub, Cosmos Db etc.   
 ✅ Event though this codelab uses C#, you can use other programming languages supported by Azure functions.
-✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation [here](https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm).
+
+✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation [here](https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm).		
 
 ![Soly Image Caption](img/soly.gif)
 
