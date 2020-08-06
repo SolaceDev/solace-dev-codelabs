@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-08-04T14:50:56-07:00",
+  "updated": "2020-08-06T11:46:59-07:00",
   "id": "azure2Solace",
   "duration": 47,
   "title": "Stream data from Azure Service Bus to Solace PubSub+ Event broker Using Azure Function",

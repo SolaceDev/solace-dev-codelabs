@@ -13,7 +13,7 @@ analytics account: UA-3921398-10
 
 ## What you'll learn: Overview
 
-Often there is a requirement where architects and developer use messaging services like Azure Service Bus or Event Hub to move realtime data between apps running locally. However organizations need this realtime information flow across various regions, cloud and/or data centers. To accomplish that one needs an Event Mesh that provides hybrid cloud connectivity. 
+Often there is a requirement where architects and developer use messaging services like Azure Service Bus or Event Hub to move realtime data between apps running locally. However organizations need this realtime information to flow across various regions, cloud and/or data centers. To accomplish that one needs an Event Mesh that provides hybrid cloud connectivity. 
 
 Solace is an industry leader and its PubSub+ event brokers makes such an Event Mesh a reality.
 
@@ -96,6 +96,7 @@ Azure allows you to use multiple programming languages and APIs. However, for th
 //Update the Solace VPN Name string below "solace-vpnname": "sumeet"
 //Update the Solace Topic string below "solace-topic": "azure/2/solace"
 ```
+
 1. Using NuGet package manager, search and install Solace library.
    ![ ](img/add-solace-library.png)
 
@@ -176,12 +177,6 @@ namespace SB2SolaceCSharp
             ContextProperties contextProps = new ContextProperties();
             SessionProperties sessionProps = new SessionProperties();
     
-            /******** Delete This ***********/
-            sHost = "54.219.47.90";
-            sUserName = "default";
-            sPassword = "default";
-            sVPNName = "default";
-            /********************************/
             sessionProps.Host = sHost;
             sessionProps.UserName = sUserName;
             sessionProps.Password = sPassword;
@@ -254,17 +249,11 @@ namespace SB2SolaceCSharp
 1. Now Build your project.
 1. Publish your Azure function as follows:
    ![ ](img/publish1.png)
-
    ![ ](img/publish2.png)
-
    ![ ](img/publish3.png)
-
    ![ ](img/publish4.png)
-
    ![ ](img/publish5.png)
-
    ![ ](img/publish6.png)
-
    ![ ](img/published.png)
 
 1. Now that your function is published, logon to your Azure portal and start the function app.
@@ -283,7 +272,22 @@ namespace SB2SolaceCSharp
 Duration: 0:15:00
 
 
-1. Please follow steps 1-3 above to create a new Azure functions project.
+1. Create a new Azure function project in Visual Studio 
+    ![ ](img/create-new-vs-project.png)
+    Select **Azure Functions** from the list and click **Next**
+
+1. Configure your new project
+    ![ ](img/configure-project-rest.png)
+
+1. Create a new Azure Function application
+    ![ ](img/create-azure-func-app.png)
+   In the above screen you will do the following:
+     * Select **Azure Service Bus Trigger** from the list
+     * Specifiy **Storage Account**
+     * Specify **Connection String Setting Name**. This is the name that we will use in the Azure function code later.
+     * Specify Service Bus **Queue Name**. This is the queue that we will stream data from to Solace Event broker.
+     * Click **Next** to finish create a project.
+
 1. Open the **local.settings.json** file and add the following properties as shown in the code below:
 
 ```
@@ -300,7 +304,9 @@ Duration: 0:15:00
 }
 ```
 
-1. Repeat step 5 above.
+1. Using NuGet package manager, search and install Solace library.
+   ![ ](img/add-solace-library.png)
+
 1. Rename function1.cs to **funcSB2SolaceREST.cs** and Copy the below code in **funcSB2SolaceREST.cs**
 
 ```
@@ -373,7 +379,14 @@ namespace SB2SolaceRest
     }
 }
 ```
-1. Repeat step 8-12 above.
+1. As described in previous section, Build your project and Publish your Azure function.
+
+1. Now that your function is published, logon to your Azure portal and start the function app.
+
+1. Look at the Solace queue via Solace broker's WebUI that will be receiving messages from servicebus and confirm there are no messages sitting in the queue.
+
+1. Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). 
+
 1. Refresh your Solace broker's WebUI to confirm you have received messages from ServiceBus.
       ![ ](img/rest-msg-rcvd.png)
 

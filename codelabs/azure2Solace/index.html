@@ -28,7 +28,7 @@
                   feedback-link="https://github.com/solacese/azure2Solace">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
-        <p>Often there is a requirement where architects and developer use messaging services like Azure Service Bus or Event Hub to move realtime data between apps running locally. However organizations need this realtime information flow across various regions, cloud and/or data centers. To accomplish that one needs an Event Mesh that provides hybrid cloud connectivity.</p>
+        <p>Often there is a requirement where architects and developer use messaging services like Azure Service Bus or Event Hub to move realtime data between apps running locally. However organizations need this realtime information to flow across various regions, cloud and/or data centers. To accomplish that one needs an Event Mesh that provides hybrid cloud connectivity.</p>
 <p>Solace is an industry leader and its PubSub+ event brokers makes such an Event Mesh a reality.</p>
 <p>This codelab specifically talks about how you can easily stream data from Azure messaging service &#34;ServiceBus&#34; to Solace using Azure function.</p>
 <p>You will find the Azure function code <a href="https://github.com/solacese/azure2Solace" target="_blank">here</a>.</p>
@@ -164,12 +164,6 @@ public class SolacePublisher
         ContextFactory.Instance.Init(cfp);
         ContextProperties contextProps = new ContextProperties();
         SessionProperties sessionProps = new SessionProperties();
-        /******** Delete This ***********/
-        sHost = &#34;54.219.47.90&#34;;
-        sUserName = &#34;default&#34;;
-        sPassword = &#34;default&#34;;
-        sVPNName = &#34;default&#34;;
-        /********************************/
         sessionProps.Host = sHost;
         sessionProps.UserName = sUserName;
         sessionProps.Password = sPassword;
@@ -227,15 +221,7 @@ public static class Function1
 </code></pre>
 </li>
 <li>Now Build your project.</li>
-<li>Publish your Azure function as follows: <img alt=" " src="img/f7f8a10ca463a1e0.png"></li>
-</ol>
-<p class="image-container"><img alt=" " src="img/df9cf913eb98b333.png"></p>
-<p class="image-container"><img alt=" " src="img/74a6b15ae2ef7da4.png"></p>
-<p class="image-container"><img alt=" " src="img/3c1d1f5fb60b12a.png"></p>
-<p class="image-container"><img alt=" " src="img/67f8320e667591f4.png"></p>
-<p class="image-container"><img alt=" " src="img/8f71854c71df4b63.png"></p>
-<p class="image-container"><img alt=" " src="img/b311185231477329.png"></p>
-<ol type="1">
+<li>Publish your Azure function as follows: <img alt=" " src="img/f7f8a10ca463a1e0.png"><img alt=" " src="img/df9cf913eb98b333.png"><img alt=" " src="img/74a6b15ae2ef7da4.png"><img alt=" " src="img/3c1d1f5fb60b12a.png"><img alt=" " src="img/67f8320e667591f4.png"><img alt=" " src="img/8f71854c71df4b63.png"><img alt=" " src="img/b311185231477329.png"></li>
 <li>Now that your function is published, logon to your Azure portal and start the function app.   <img alt=" " src="img/83cc2e30a42c90bd.png"></li>
 <li>Lets look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus.   <img alt=" " src="img/25d8ef984094f47a.png"></li>
 <li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). Below is a screen grab of console output from my test application.   <img alt=" " src="img/440a5c9ede3505f9.png"></li>
@@ -247,7 +233,16 @@ public static class Function1
     
       <google-codelab-step label="For C#/.Net using REST APIs" duration="15">
         <ol type="1">
-<li>Please follow steps 1-3 above to create a new Azure functions project.</li>
+<li>Create a new Azure function project in Visual Studio <img alt=" " src="img/a7026d963c310020.png"> Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
+<li>Configure your new project <img alt=" " src="img/89cc9d1eb380bb01.png"></li>
+<li>Create a new Azure Function application <img alt=" " src="img/87278c1c6551ad67.png"> In the above screen you will do the following:<ul>
+<li>Select <strong>Azure Service Bus Trigger</strong> from the list</li>
+<li>Specifiy <strong>Storage Account</strong></li>
+<li>Specify <strong>Connection String Setting Name</strong>. This is the name that we will use in the Azure function code later.</li>
+<li>Specify Service Bus <strong>Queue Name</strong>. This is the queue that we will stream data from to Solace Event broker.</li>
+<li>Click <strong>Next</strong> to finish create a project.</li>
+</ul>
+</li>
 <li>Open the <strong>local.settings.json</strong> file and add the following properties as shown in the code below:<pre><code>	//Update all the below property values to point to your environment
 &#34;SBConnection&#34;: &#34;Endpoint=sb://sumeet.servicebus.windows.net/;SharedAccessKeyName=sendListen;SharedAccessKey=xxxxxxxxxxxxxxxxxxxxxxxx;&#34;,
 &#34;solace-host&#34;: &#34;sumeet-solace.mymaas.net&#34;,
@@ -261,7 +256,7 @@ public static class Function1
 }
 </code></pre>
 </li>
-<li>Repeat step 5 above.</li>
+<li>Using NuGet package manager, search and install Solace library. <img alt=" " src="img/27e8e2de10cce313.png"></li>
 <li>Rename function1.cs to <strong>funcSB2SolaceREST.cs</strong> and Copy the below code in <strong>funcSB2SolaceREST.cs</strong><pre><code>using System;
 using System.Net.Http;
 using System.Reflection;
@@ -328,7 +323,10 @@ public static class funcSB2SolaceREST
 }
 </code></pre>
 </li>
-<li>Repeat step 8-12 above.</li>
+<li>As described in previous section, Build your project and Publish your Azure function.</li>
+<li>Now that your function is published, logon to your Azure portal and start the function app.</li>
+<li>Look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus and confirm there are no messages sitting in the queue.</li>
+<li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function).</li>
 <li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.   <img alt=" " src="img/e556bc06a515a435.png"></li>
 </ol>
 
