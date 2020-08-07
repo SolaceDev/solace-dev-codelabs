@@ -1,0 +1,25 @@
+{
+  "name": "codelab-bootstrap",
+  "version": "1.0.0",
+  "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch boomi-salesforce-codelab.md --exec 'claat export boomi-salesforce-codelab.md && lsof -c claat -t | xargs kill && cd boomi-salesforce-codelab && claat serve'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrew-j-roberts/codelab-bootstrap.git"
+  },
+  "keywords": [
+    "codelab"
+  ],
+  "author": "Andrew Roberts",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrew-j-roberts/codelab-bootstrap/issues"
+  },
+  "homepage": "https://github.com/andrew-j-roberts/codelab-bootstrap#readme",
+  "dependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

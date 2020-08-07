@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-08-07T16:20:53-04:00",
+  "id": "boomi-salesforce-codelab",
+  "duration": 109,
+  "title": "Event enabling Salesforce and AzureDB using Boomi and Solace",
+  "summary": "",
+  "source": "boomi-salesforce-codelab.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "boomi",
+    "salesforce"
+  ],
+  "tags": [
+    "web"
+  ],
+  "ga": "UA-3921398-10",
+  "url": "boomi-salesforce-codelab"
+}
