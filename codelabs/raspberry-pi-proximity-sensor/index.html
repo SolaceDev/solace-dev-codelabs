@@ -29,12 +29,11 @@
     
       <google-codelab-step label="Welcome!" duration="5">
         <p>In this codelab, you will learn about a Raspberry PI and how to set it up so that you can start building IoT applications on it.</p>
-
 <h2 is-upgraded>What is a Raspberry PI?</h2>
 <p><em>&#34;The Raspberry Pi is a series of small single-board computers developed in the United Kingdom by the Raspberry Pi Foundation to promote teaching of basic computer science in schools and in developing countries. The original model became far more popular than anticipated, selling outside its target market for uses such as robotics. It does not include peripherals (such as keyboards and mice) or cases. However, some accessories have been included in several official and unofficial bundles.&#34;</em> - <a href="https://en.wikipedia.org/wiki/Raspberry_Pi" target="_blank">Wikipedia</a></p>
-<p class="image-container"><img alt="Rasberry-PI-4B" src="img\78500fbc33bc1c99.jpg"></p>
+<p class="image-container"><img alt="Rasberry-PI-4B" src="img/78500fbc33bc1c99.jpg"></p>
 <p>What makes a RaspberryPI exciting for IoT is that it has a series of GPIO pins that can be connected to a variety of inexpensive sensors available on the market that can be used for things such as motors, temperature sensors, or proximity sensors thereby democratizing and making IoT projects accessible to the masses. Any of the GPIO pins can be accessed through software to control what is connected to it.</p>
-<p class="image-container"><img alt="Pins" src="img\f23d1fce778e863e.png"></p>
+<p class="image-container"><img alt="Pins" src="img/f23d1fce778e863e.png"></p>
 <p>This codelab will run you through the process of setting up your raspberry-pi, connecting it to a proximity sensor, and publishing proximity events onto a Solace Cloud PubSub+ Broker.</p>
 
 
@@ -42,7 +41,6 @@
     
       <google-codelab-step label="Materials required" duration="5">
         <p>To assemble this kit, you will need the following materials. Links to appropriate websites are provided below but search your favorite online shop for better prices/deals:</p>
-
 <h2 is-upgraded>Raspberry PI and accessories</h2>
 <p>You can buy various starter kits for the raspberry pi which includes the base Raspberry PI as well as all required accesories such as display cables, but at the bear minimum you require the following ():</p>
 <ul>
@@ -91,9 +89,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="Connecting the HC-SR404 Proxmity Sensor" duration="0">
-        <p class="image-container"><img alt="HC-SR404" src="img\3d7f453ad11d7149.png"></p>
+        <p class="image-container"><img alt="HC-SR404" src="img/3d7f453ad11d7149.png"></p>
 <p>The HC-SR404 sensor uses sonar to determine the distance to an object with the following steps:</p>
-<p class="image-container"><img alt="HC-SR404: How it works?" src="img\e1fae41ef03eff90.png"></p>
+<p class="image-container"><img alt="HC-SR404: How it works?" src="img/e1fae41ef03eff90.png"></p>
 <ol type="1">
 <li>A high frequency sound is emitted from the Trigger Pin</li>
 <li>Once it comes in contact with the object, it is reflected back to the echo pin</li>
@@ -106,12 +104,12 @@ Distance to the object from the sensor = 1/2 * Distance that the sound travelled
 </code></pre>
 <p>Now that you understand how sonar sensors work, lets wire it up to your raspberry pi.</p>
 <p>Use the following diagram as a reference to connect your raspberry pi to the sensor:</p>
-<p class="image-container"><img alt="Assembly" src="img\facc0aeabdf8af6e.png"></p>
+<p class="image-container"><img alt="Assembly" src="img/facc0aeabdf8af6e.png"></p>
 <p>Note the diagram above is for a Raspberry PI 2 but use the following diagram to translate the Pins to the Raspberry PI that you have purchased:</p>
-<p class="image-container"><img alt="PI3 Pinout" src="img\1cd05ac978d209ae.png"></p>
-<p class="image-container"><img alt="PI4 Pinout" src="img\2e956e26f2e47b03.png"></p>
+<p class="image-container"><img alt="PI3 Pinout" src="img/1cd05ac978d209ae.png"></p>
+<p class="image-container"><img alt="PI4 Pinout" src="img/2e956e26f2e47b03.png"></p>
 <p>You will notice that the Breadboard has columns marked from a-f and rows marked from 1-30.</p>
-<p class="image-container"><img alt="Breadboard" src="img\2f113031755a89ae.jpg"></p>
+<p class="image-container"><img alt="Breadboard" src="img/2f113031755a89ae.jpg"></p>
 <p>Follow the instructions below to connect the components:</p>
 <ol type="1">
 <li>Connect a wire from the 5V Pin on the Raspberry PI to b6 on the breadboard</li>
@@ -126,12 +124,12 @@ Distance to the object from the sensor = 1/2 * Distance that the sound travelled
 
 
       </google-codelab-step>
-        <google-codelab-step label="Reading sensor events from the Raspberry PI" duration="15">
+    
+      <google-codelab-step label="Reading sensor events from the Raspberry PI" duration="15">
         <p>Ok now that you have the proximity sensor hooked up to your Raspberry PI, the next step is to create a simple application to read from the sensor.</p>
-
 <p>While there are a variety of libraries and languages that are available for you to interact with your GPIO pins and the connected sensors, we will be using the <a href="http://johnny-five.io/" target="_blank">Johnny-Five</a> JavaScript Framework.</p>
 <p>Johnny-Five is a JavaScript based Robotics and IoT Platform that works across multiple processor architectures such as Arduino, Raspberry PI, and SparkFun.</p>
-<p>Co-incidentally it is also the name of a robot in a campy 80&#39;s movie called <a href="https://en.wikipedia.org/wiki/Short_Circuit_(1986_film)" target="_blank">Short Circuit</a> which I wholly recommend against watching :)!</p>
+<p>Co-incidentally it is also the name of a robot in a campy 80&#39;s movie called <a href="https://en.wikipedia.org/wiki/Short_Circuit_(1986_film" target="_blank">Short Circuit</a>&gt;) which I wholly recommend against watching :)!</p>
 <h2 is-upgraded>Setting up the code</h2>
 <p>Clone the following repo by running the following command from your Raspberry PI terminal:</p>
 <p><code>git clone https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt.git</code></p>
@@ -202,9 +200,8 @@ run();
     
       <google-codelab-step label="Publishing your sensor events on Solace PubSub&#43;" duration="15">
         <p>Now you&#39;ve succesfully extracted distance measurements from the sensor, but wouldn&#39;t it be great if you could expose the event outside your Raspberry PI in realtime. For example you could build a low cost security system that streams out events over the internet so that it could be picked up by a dashboard and a mobile app when someone comes near your PC.</p>
-
 <p>To accomplish this, we will now introduce an event broker into the application stack, at a high level it will work as follows:</p>
-<p class="image-container"><img alt="SensorToSolace" src="img\b82c29cd37686a8f.png"></p>
+<p class="image-container"><img alt="SensorToSolace" src="img/b82c29cd37686a8f.png"></p>
 <p>Before we start implementing this, lets do a brief primer on the MQTT protocol</p>
 <h2 is-upgraded>MQTT</h2>
 <p><em>&#34;MQTT stands for MQ Telemetry Transport. It is a publish/subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimise network bandwidth and device resource requirements whilst also attempting to ensure reliability and some degree of assurance of delivery. These principles also turn out to make the protocol ideal of the emerging &#34;machine-to-machine&#34; (M2M) or &#34;Internet of Things&#34; world of connected devices, and for mobile applications where bandwidth and battery power are at a premium.&#34;</em> - <a href="http://www.mqtt.org" target="_blank">MQTT.ORG</a></p>
@@ -220,24 +217,23 @@ SENSOR100/DISTANCE/MEASUREMENT
 </code></pre>
 <h2 is-upgraded>Introducing Solace PubSub+</h2>
 <p>To parttake in the MQTT protocol, you will need an MQTT broker. Thats where Solace PubSub+ comes into play. Apart from supporting MQTT protocol, it also supports a whole host of other protocols natively so you could publish an MQTT message from your sensor and subscribe to it via JMS. The publisher of the event doesn&#39;t care who the subscribers are or what protocol they are subscribing with, Solace PubSub+ takes care of this for you.</p>
-<p class="image-container"><img alt="Protocol Wheel" src="img\c728c0f6039a73b8.png"></p>
+<p class="image-container"><img alt="Protocol Wheel" src="img/c728c0f6039a73b8.png"></p>
 <h2 is-upgraded>Sign up for a Solace PubSub+ Cloud account for FREE!</h2>
 <p>The quickest way to get started with Solace PubSub+ is to sign up for Solace PubSub+ Cloud</p>
 <p><strong>(1) Sign up for a free Solace Cloud account</strong></p>
 <p>Navigate to <a href="https://console.solace.cloud/login/new-account" target="_blank">this link</a> and fill out the required information. No credit card required! If you already have an account, skip right to #2.</p>
 <p><strong>(2) Create a messaging service</strong></p>
 <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
-<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img\500ee282af1b6d9f.png"></p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img/500ee282af1b6d9f.png"></p>
 <p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
-<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img\a7ea4d393008a8c3.png"></p>
+<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img/a7ea4d393008a8c3.png"></p>
 <p>Fill out all the details for your messaging service, and then click &#34;Create&#34; at the bottom of the page.</p>
-<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img\b2fd05043df1c5cd.png"></p>
+<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img/b2fd05043df1c5cd.png"></p>
 <p>Your service should be ready to use in a couple seconds!!!</p>
 <p><strong>(3) Take note of the MQTT connection details</strong></p>
-<p>If your messaging service was created successfully, you&#39;ll be routed to the summary page of your new messaging service. From the service summary page, click on the &#34;Connect&#34; tab so we can take note of the connection details we&#39;ll need later.</p>
-<p class="image-container"><img alt="Connect Tab Preview" title="Connect Tab Preview" src="img\b07b3ac707bcca6a.png"></p>
+<p>If your messaging service was created successfully, you&#39;ll be routed to the summary page of your new messaging service. From the service summary page, click on the &#34;Connect&#34; tab so we can take note of the connection details we&#39;ll need later. <img alt="Connect Tab Preview" title="Connect Tab Preview" src="img/b07b3ac707bcca6a.png"></p>
 <p>After you click the &#34;Connect&#34; tab, click the &#34;MQTT&#34; box, and then take note of the &#34;Connection Details&#34; section. We&#39;ll be using the &#34;Secured MQTT Host&#34; URL for this excercise, the Username and Password</p>
-<p class="image-container"><img alt="MQTT Connection Details" src="img\779497d4afa6902.png"></p>
+<p class="image-container"><img alt="MQTT Connection Details" src="img/779497d4afa6902.png"></p>
 <h2 is-upgraded>Bringing it all together</h2>
 <p>Run the following command from the <code>raspberry-pi-ultrasonic-sensor-mqtt</code> directory</p>
 <pre><code>git checkout sensor-with-pubsub-plus
@@ -343,9 +339,9 @@ Enabling range of proxmity dection to be [10,60]cms
 </code></pre>
 <h2 is-upgraded>Seeing the MQTT Message</h2>
 <p>As you noticed in the code above, we simplified event handling of the proximity events and sending MQTT messages using convenience functions exposed via <code>src/proximity-sensor.js</code> and <code>src/mqtt-client.js</code>. You may be wondering how to subscribe to these events from your microservice hosted in the cloud - you can use a variety of APIs/Protocols to do this which you can find from the Connect tab in your Solace Cloud Console. (Note you can filter by both Protocol and Language using the ‘View by&#39; dropdown on the top right)</p>
-<p class="image-container"><img alt="Solace Cloud Connect" src="img\d3b7deea5aa0b0d4.png"></p>
+<p class="image-container"><img alt="Solace Cloud Connect" src="img/d3b7deea5aa0b0d4.png"></p>
 <p>In addition, you can navigate to the ‘Try Me&#39; tab and specify the topic subscription (ex.<code>SENSOR1/DISTANCE/MEASUREMENT</code>) to see the events in realtime as below:</p>
-<p class="image-container"><img alt="Try Me" src="img\a56bb23d9680a127.png"></p>
+<p class="image-container"><img alt="Try Me" src="img/a56bb23d9680a127.png"></p>
 <h2 is-upgraded>Summary</h2>
 <p>You succesfully ‘liberated&#39; the sensor events to be streamed over the internet. You can now build microservices off these events by connecting into the Solace PubSub+ broker.</p>
 <p>Be sure to commit the changes made to the branch by running <code>git commit -m &#34;sensor-with-pubsub-plus&#34;</code></p>
