@@ -1,7 +1,7 @@
 author: Jesse Menning
 summary:
 id: boomi-salesforce-codelab
-tags:
+tags: workshop
 categories: boomi, salesforce, azure
 environments: Web
 status: Draft

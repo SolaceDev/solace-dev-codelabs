@@ -1,11 +1,11 @@
 author: Jesse Menning
 summary:
 id: boomi-v2-getting-started
-tags:
-categories:
+tags: workshop
+categories: Boomi
 environments: Web
 status: Draft
-feedback link: <insert github repo or leave empty>
+feedback link:
 analytics account: UA-3921398-10
 # Getting started with Boomi and Solace (Version 2 Connector)
 
@@ -13,7 +13,7 @@ analytics account: UA-3921398-10
 Duration: 0:02:00
 
 Positive
-: Note that this tutorial is for the Solace PubSub+ version 2 connector. If you don't have it, please visit the [Solace Community](https://solace.community/) and ask.
+: Note that this tutorial is for the Solace PubSub+ version 2 connector. If you don't have it, please visit the [Solace Community](https://solace.community/) and ask.  
 
 ![Boomi Logo](img/boomi-logo.png "Boomi Logo")!
 
@@ -190,13 +190,13 @@ Let's assume that you want to collect real-time events from taxis in NYC and str
 Your free trial of Solace comes with the Event Portal, which helps you visualize the structure of event-driven architectures.
 Your free trial also includes a sample architecture called Acme Rideshare, that we'll use for this lab.
 
-Start it up by going to the "Designer" icon in the left hand column 
+Start it up by going to the "Designer" icon in the left hand column     
 ![Menu](img/event_portal_menu.png "menu")
 
-Then double click on the Acme Rideshare domain
+Then double click on the Acme Rideshare domain      
 ![ridesharedomain](img/ride_share_domain.png "ride share domain")
 
-There's a lot going on, but we'll just focus on the Passenger App sending a RideRequested Event to the Driver Management Application. 
+There's a lot going on, but we'll just focus on the Passenger App sending a RideRequested Event to the Driver Management Application.       
 ![rideshare_events](img/rideshare_events.png "rideshare_events")
 
 For our purposes: 
@@ -204,7 +204,7 @@ For our purposes:
 * **Ride Requested** will be an event containing a JSON representation of an ride request
 * **Driver Management** will be the world's simplest Boomi flow, which will pick up the ride request and write it to the process log
 
-Double click on the RideRequested event to get more details about the event
+Double click on the RideRequested event to get more details about the event     
 ![event_details](img/event_details.png "event_details")
 Two things to note here:
 * The topic is meta information about the event that lets Boomi flows quickly know if they are interested or not. 
@@ -403,9 +403,6 @@ Duration: 0:07:00
 ✅ Sign up for a Solace PubSub+ Cloud account and configure a messaging service broker with a queue    
 ✅ Sign up for a Boomi AtomSphere account and setup a Solace Pubsub+ Connector for a listen configuration and bind to a message queue   
 ✅ Send events to the same topic the queue is subscribed to    
-
-![Soly wave](img/soly.gif "soly")
-
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)!
 

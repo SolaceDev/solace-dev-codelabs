@@ -21,14 +21,14 @@
 </head>
 <body>
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid=""
+  <google-codelab codelab-gaid="UA-3921398-10"
                   id="boomi-v2-getting-started"
                   title="Getting started with Boomi and Solace (Version 2 Connector)"
                   environment="web"
                   feedback-link="">
     
       <google-codelab-step label="What you&#39;ll learn" duration="2">
-        <aside class="special"><p>Note that this tutorial is for the Solace PubSub+ version 2 connector. If you don&#39;t have it, please visit the <a href="https://solace.community/" target="_blank">Solace Community</a> and ask.</p>
+        <aside class="special"><p>Note that this tutorial is for the Solace PubSub+ version 2 connector. If you don&#39;t have it, please visit the <a href="https://solace.community/" target="_blank">Solace Community</a> and ask.<br></p>
 </aside>
 <p><img alt="Boomi Logo" title="Boomi Logo" src="img/83503962eaa9b47e.png">!</p>
 <p>In this tutorial, you will learn how to configure and use the Solace Boomi connector. This is done in 4 easy steps</p>
@@ -151,16 +151,16 @@
       <google-codelab-step label="Check out your Event-Driven Architecture" duration="2">
         <p>Let&#39;s assume that you want to collect real-time events from taxis in NYC and stream them over a Solace Broker into your Boomi architecture and applications. These events could represent anything from ride status analytics to payment methods.</p>
 <p>Your free trial of Solace comes with the Event Portal, which helps you visualize the structure of event-driven architectures. Your free trial also includes a sample architecture called Acme Rideshare, that we&#39;ll use for this lab.</p>
-<p>Start it up by going to the &#34;Designer&#34; icon in the left hand column <img alt="Menu" title="menu" src="img/86911c63e47d79ff.png"></p>
-<p>Then double click on the Acme Rideshare domain <img alt="ridesharedomain" title="ride share domain" src="img/55a8786943e4979f.png"></p>
-<p>There&#39;s a lot going on, but we&#39;ll just focus on the Passenger App sending a RideRequested Event to the Driver Management Application. <img alt="rideshare_events" title="rideshare_events" src="img/a6045ceb46335260.png"></p>
+<p>Start it up by going to the &#34;Designer&#34; icon in the left hand column<br><img alt="Menu" title="menu" src="img/86911c63e47d79ff.png"></p>
+<p>Then double click on the Acme Rideshare domain<br><img alt="ridesharedomain" title="ride share domain" src="img/55a8786943e4979f.png"></p>
+<p>There&#39;s a lot going on, but we&#39;ll just focus on the Passenger App sending a RideRequested Event to the Driver Management Application.<br><img alt="rideshare_events" title="rideshare_events" src="img/a6045ceb46335260.png"></p>
 <p>For our purposes:</p>
 <ul>
 <li><strong>Passenger App</strong> will just be a mock event publisher</li>
 <li><strong>Ride Requested</strong> will be an event containing a JSON representation of an ride request</li>
 <li><strong>Driver Management</strong> will be the world&#39;s simplest Boomi flow, which will pick up the ride request and write it to the process log</li>
 </ul>
-<p>Double click on the RideRequested event to get more details about the event <img alt="event_details" title="event_details" src="img/1f107b19e17dddf.png"> Two things to note here:</p>
+<p>Double click on the RideRequested event to get more details about the event<br><img alt="event_details" title="event_details" src="img/1f107b19e17dddf.png"> Two things to note here:</p>
 <ul>
 <li>The topic is meta information about the event that lets Boomi flows quickly know if they are interested or not.</li>
 <li>The schema describes the data format, similar to a profile within Boomi</li>
@@ -269,7 +269,6 @@
     
       <google-codelab-step label="Takeaways" duration="7">
         <p>✅ Sign up for a Solace PubSub+ Cloud account and configure a messaging service broker with a queue<br> ✅ Sign up for a Boomi AtomSphere account and setup a Solace Pubsub+ Connector for a listen configuration and bind to a message queue<br> ✅ Send events to the same topic the queue is subscribed to</p>
-<p class="image-container"><img alt="Soly wave" title="soly" src="img/f3045cf027293e9e.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>!</p>
 
 
