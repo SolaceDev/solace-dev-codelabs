@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-08-11T14:39:09-04:00",
+  "id": "boomi-salesforce-codelab",
+  "duration": 103,
+  "title": "Event enabling Salesforce and AzureDB using Boomi and Solace",
+  "summary": "",
+  "source": "boomi-salesforce-codelab.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "boomi",
+    "salesforce",
+    "azure"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/jmenning-solace/nycmoderntaxi",
+  "ga": "UA-3921398-10",
+  "url": "boomi-salesforce-codelab"
+}
