@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 author: Jesse Menning
 summary:
 id: boomi-salesforce-codelab
 tags:
-categories:
+categories: boomi, salesforce, azure
 environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi
