@@ -62,13 +62,15 @@ Positive
 Duration: 0:15:00
 
 ### ⚙️ Import Event Portal Application Domain
-Download the Event Portal Application Domain export file: [NYC-Modern-Taxi-Co-Back-Office.json](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Back-Office.json)
-
+Download the Event Portal Application Domain export files: 
+[Back Office](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Back-Office.json)
+[Analytics](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Analytics.json)
+[Operations](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Ops.json)
 Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
 
 ![event](img/ep_select_designer.webp)
 
-Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file. 
+Then import the downloaded Application Domain files by clicking the `Import` button at the top right of the _Designer_ and importing the file. 
 
 ![ep_click_import](img/ep_click_import.webp)
 
@@ -96,7 +98,7 @@ Positive
 : If you want to learn more about the architecture for this CodeLab, check out the [Solace Architecture blog](https://solace.com/blog/category/architects/).
 
 Two notes:
--	With event-driven design, each component is decoupled from one another. That makes development and testing each component in isolation easier. You’ll take that approach here: one at a time, we’ll get Solace, Salesforce, Boomi and Cosmos working in “Hello World” fashion. Then you will link them all together using the Pubsub+ Event Broker to complete the solution.
+-	With event-driven design, each component is decoupled from one another. That makes development and testing each component in isolation easier. You’ll take that approach here: one at a time, we’ll get Solace, Salesforce, Boomi and Azure SQL working in “Hello World” fashion. Then you will link them all together using the PubSub+ Event Broker to complete the solution.
 -	Designing the architecture in Solace Event Portal means that the schemas, topics and events are in one place, versioned and governed. It also means that the Solace PubSub+ Connector for Boomi can import them, saving you from manually re-entering information into Boomi.
 
 ## Salesforce Event Architecture
