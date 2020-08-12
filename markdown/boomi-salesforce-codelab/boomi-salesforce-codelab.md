@@ -140,7 +140,8 @@ Follow the steps in the [Getting Started with Boomi and Solace codelab](https://
 
 Negative
 : At this point, Solace is not part of the Boomi Process Library. Reach out to us at the [Solace Community](https://solace.community/) and we will get the code to you. 
-## ⚙️ Connect the process to listen for Solace events
+
+### ⚙️ Connect the process to listen for Solace events
 1.	Go to the [Boomi Integrate UI](https://platform.boomi.com/AtomSphere.html#build)
 1. Open the Hello World – Listen for Solace Event process you just added to your workspace. 
 ![image013](img/image013.png) 

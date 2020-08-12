@@ -123,21 +123,25 @@
 </ol>
 <h2 is-upgraded>⚙️ Boomi configuration</h2>
 <aside class="warning"><p>At this point, Solace is not part of the Boomi Process Library. Reach out to us at the <a href="https://solace.community/" target="_blank">Solace Community</a> and we will get the code to you.</p>
-<p>⚙️ Connect the process to listen for Solace events</p>
 </aside>
-<p>Go to the <a href="https://platform.boomi.com/AtomSphere.html#build" target="_blank">Boomi Integrate UI</a></p>
-<p>Open the Hello World – Listen for Solace Event process you just added to your workspace.<br><img alt="image013" src="img/a1fa7506c3eb90cb.png"></p>
-<p>Click on the start shape, then click on the pencil icon next to the Solace Event Portal and PubSub+ Connection field<br><img alt="image014" src="img/55132fb4875e4dde.png"></p>
-<p>Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section.<br><img alt="image015" src="img/db6f54dc09655cc9.png"></p>
-<p>Click on Test Connection. Select an atom, then click Next. You should get a message indicating that the test connection was successful. Then save and close the Connection.<br><img alt="image016" src="img/db1814abeb708f74.png"></p>
-<p>Next, modify the Connector Operation by clicking on the pencil icon.<br><img alt="image017" src="img/f1dbc33bc166beab.png"></p>
-<p>Click on the Import button<br><img alt="image018" src="img/15c3d140766ed373.png"></p>
-<p>Pick an atom, and use the Event Portal connection that you just modified.<br><img alt="image019" src="img/4c8045af4b0bb22d.png"></p>
-<p>Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK.<br><img alt="image020" src="img/c4f2dc1225685954.png"><br>Boomi grabs the schema from the Event Portal and creates a response profile (you&#39;ll use this for mapping in a later section). It also brings the topic subscription format from Event Portal.<br><img alt="image021" src="img/572fb19e9c07a051.png"></p>
-<p>Change the destination to <code>NYCTAXI.BACKOFFICE.BOOMI.UPDATEDRIVERDB</code> This will be the Solace queue that the process binds to. Solace will create it automatically when you deploy the process for the first time.</p>
-<p>Replace the topic string structure with <code>taxinyc/backoffice/driver/upserted/v1/salesforce/&gt;</code><br>The <code>&gt;</code> character at the end is a wildcard that means that your process will get all DriverUpserted events, regardless of the upsert source or the account status.</p>
-<p>Make sure that the check box next to Create Queue and TS is checked.</p>
-<p>Save and Close the Connector operation and start shape.</p>
+<h2 is-upgraded>⚙️ Connect the process to listen for Solace events</h2>
+<ol type="1">
+<li>Go to the <a href="https://platform.boomi.com/AtomSphere.html#build" target="_blank">Boomi Integrate UI</a></li>
+<li>Open the Hello World – Listen for Solace Event process you just added to your workspace. <img alt="image013" src="img/a1fa7506c3eb90cb.png"></li>
+<li>Click on the start shape, then click on the pencil icon next to the Solace Event Portal and PubSub+ Connection field <img alt="image014" src="img/55132fb4875e4dde.png"></li>
+<li>Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section. <img alt="image015" src="img/db6f54dc09655cc9.png"></li>
+<li>Click on Test Connection. Select an atom, then click Next. You should get a message indicating that the test connection was successful. Then save and close the Connection. <img alt="image016" src="img/db1814abeb708f74.png"></li>
+<li>Next, modify the Connector Operation by clicking on the pencil icon. <img alt="image017" src="img/f1dbc33bc166beab.png"></li>
+<li>Click on the Import button <img alt="image018" src="img/15c3d140766ed373.png"></li>
+<li>Pick an atom, and use the Event Portal connection that you just modified. <img alt="image019" src="img/4c8045af4b0bb22d.png"></li>
+<li>Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK. <img alt="image020" src="img/c4f2dc1225685954.png"> Boomi grabs the schema from the Event Portal and creates a response profile (you&#39;ll use this for mapping in a later section). It also brings the topic subscription format from Event Portal. <img alt="image021" src="img/572fb19e9c07a051.png"></li>
+</ol>
+<ul>
+<li>Change the destination to <code>NYCTAXI.BACKOFFICE.BOOMI.UPDATEDRIVERDB</code> This will be the Solace queue that the process binds to. Solace will create it automatically when you deploy the process for the first time.</li>
+<li>Replace the topic string structure with <code>taxinyc/backoffice/driver/upserted/v1/salesforce/&gt;</code> The <code>&gt;</code> character at the end is a wildcard that means that your process will get all DriverUpserted events, regardless of the upsert source or the account status.</li>
+<li>Make sure that the check box next to Create Queue and TS is checked.</li>
+<li>Save and Close the Connector operation and start shape.</li>
+</ul>
 <aside class="warning"><p>Due to Boomi SDK limitations, the current version of the connect does not allow you to modify an existing topic string. If you do want to make a change, re-import the event from Event Portal.</p>
 </aside>
 <h2 is-upgraded>⚙️ Package and deploy</h2>
