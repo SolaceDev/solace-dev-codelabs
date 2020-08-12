@@ -63,14 +63,18 @@ Duration: 0:15:00
 
 ### ⚙️ Import Event Portal Application Domain
 Download the Event Portal Application Domain export files: 
+
 [Back Office](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Back-Office.json)
+
 [Analytics](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Analytics.json)
+
 [Operations](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Ops.json)
+
 Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
 
 ![event](img/ep_select_designer.webp)
 
-Then import the downloaded Application Domain files by clicking the `Import` button at the top right of the _Designer_ and importing the file. 
+Then import the downloaded Application Domain files by clicking the `Import` button at the top right of the _Designer_ and importing the files. 
 
 ![ep_click_import](img/ep_click_import.webp)
 
@@ -82,11 +86,16 @@ Then import the downloaded Application Domain files by clicking the `Import` but
 
 Here's the basic flow of events through the system
 
-👉 After being convinced by cash, coffee or other means, a driver agrees to use the app 
-👉 The account representative changes the driver’s account from inactive to active 
-👉 Salesforce sends an event to Boomi 
-👉 A Boomi process transforms the event payload, removing unnecessary fields and publishes the event to the Solace event broker. 
-👉 Solace simultaneously distributes copies of the driver’s information across the company: 
+👉 After being convinced by cash, coffee or other means, a driver agrees to use the app
+
+👉 The account representative changes the driver’s account from inactive to active
+
+👉 Salesforce sends an event to Boomi
+
+👉 A Boomi process transforms the event payload, removing unnecessary fields and publishes the event to the Solace event broker.
+
+👉 Solace simultaneously distributes copies of the driver’s information across the company:
+
 
 - `Update Driver Database` Boomi process receives the event, and inserts or updates the driver information in an Azure Cosmos database 
 - If the `active` field on the account is set to `activated`, the `Background Check` Boomi process runs a background check on the driver. This takes 3 minutes. When finished, the `Update Driver Database` process updates the database with the results. (You already got a lot on our plate, so that’ll be an optional exercise at the end) 
