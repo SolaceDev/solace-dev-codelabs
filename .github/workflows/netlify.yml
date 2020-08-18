@@ -1,8 +1,15 @@
-- name: Checkout repo
-  uses: actions/checkout@v2
-  with:
-    token: ${{secrets.TOKEN}}
-- name: Checkout PR
-  uses: dawidd6/action-checkout-pr@v1
-  with:
-    pr: 99
+name: Netllify Preview Builder
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  checkout:
+    runs-on: ubunto-latest
+    steps:
+      - name: Checkout Codelabs site repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{secrets.TOKEN}}
+          repository: SolaceDev/solace-dev-codelabs-site
+    
