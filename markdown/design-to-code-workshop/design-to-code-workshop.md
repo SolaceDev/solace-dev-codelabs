@@ -269,7 +269,7 @@ In order to use the AsyncAPI Generator we first need to install the CLI.
 If you have the prequisites installed as defined earlier in the "What You'll Need" section you should be able to pop open your terminal and use the command below to install the CLI. 
 
 ```bash
-npm install -g @asyncapi/generator
+npm install -g @asyncapi/generator@0.53.1
 ```
 
 Negative
