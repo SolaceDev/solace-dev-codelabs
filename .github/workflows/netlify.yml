@@ -5,7 +5,7 @@ on:
 
 jobs:
   checkout:
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Codelabs site repo
         uses: actions/checkout@v2
