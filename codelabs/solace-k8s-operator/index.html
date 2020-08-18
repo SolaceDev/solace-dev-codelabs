@@ -38,137 +38,111 @@
     
       <google-codelab-step label="Environment Setup" duration="15">
         <ul>
+<li>Prerequisite is functional access to Kubernetes 1.16+.</li>
 <li>First to build operators you will need <a href="https://golang.org/doc/install" target="_blank">golang</a> with compatible compiler.</li>
-<li><a href="https://sdk.operatorframework.io/docs/install-operator-sdk/" target="_blank">Next install the operator-sdk</a> which can be done as a simple binary download or built locally.</li>
-<li><a href="https://helm.sh/docs/intro/install/" target="_blank">Helm</a> is required to create initial packaging,</li>
-<li>Finally configure the helm values.yaml to suite your target environment.  In this example I am installing a Highly Available cluster in minikube which would be good for development testing including failure and retry conditions: <br><code>cd ~/&lt;git_workspace&gt;; git clone git@github.com:SolaceProducts/pubsubplus-kubernetes-quickstart.git<br>cd pubsubplus-kubernetes-quickstart; <br>vi pubsubplus/values.yaml   <br>redundancy: true<br>size: dev<br>usernameAdminPassword: &lt;password&gt;<br>helm package pubsubplus/  <br></code></li>
+<li><a href="https://sdk.operatorframework.io/docs/installation/install-operator-sdk/" target="_blank">Next install the operator-sdk</a> Minimum version is 1.0.0.</li>
+<li><a href="https://helm.sh/docs/intro/install/" target="_blank">Next install Helm</a> which is required to create initial packaging.</li>
+<li>Finally add Solace charts to your helm repo:</li>
 </ul>
-<p>The result of the package command will produce pubsubplus-2.1.2.tgz</p>
+<pre><code>$ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
+</code></pre>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Create an Operator" duration="20">
-        <p>Now that you have a helm package configured the way you want, use this to create the operator with the following workflow:</p>
+        <p>Now that you have the Solace defined helm chart, use this to create the operator with the following workflow:</p>
 <ul>
 <li>Create a new operator project using the SDK Command Line Interface (CLI)</li>
-<li>Add existing Helm chart for use by the operator&#39;s reconciling logic</li>
-<li>Use the SDK CLI to build and generate the operator deployment manifests<h2 is-upgraded>Create a new operator project and add existing Helm chart</h2>
-<pre><code>cd ~/&lt;go_workspace&gt;/src;
-operator-sdk new pubsubplus-operator --type=helm --helm-chart=&lt;absolute_path&gt;/&lt;git_workspace&gt;/pubsubplus-kubernetes-quickstart/pubsubplus-2.1.2.tgz
-</code></pre>
-The output of the &#34;new&#34; command shows what files are being created:<pre><code>INFO[0000] Creating new Helm operator &#39;pubsubplus-operator&#39;.
-INFO[0000] Created helm-charts/pubsubplus
-INFO[0000] Generating RBAC rules
-WARN[0000] The RBAC rules generated in deploy/role.yaml are based on the chart&#39;s default manifest. Some rules may be missing for resources that are only enabled with custom values, and some existing rules may be overly broad. Double check the rules generated in deploy/role.yaml to ensure they meet the operator&#39;s permission requirements.
-INFO[0000] Created build/Dockerfile
-INFO[0000] Created watches.yaml
-INFO[0000] Created deploy/service_account.yaml
-INFO[0000] Created deploy/role.yaml
-INFO[0000] Created deploy/role_binding.yaml
-INFO[0000] Created deploy/operator.yaml
-INFO[0000] Created deploy/crds/charts.helm.k8s.io_v1alpha1_pubsubplus_cr.yaml
-INFO[0000] Generated CustomResourceDefinition manifests.
-INFO[0000] Project creation complete.
-</code></pre>
-At this point the pubsubplus <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions" target="_blank">custom resource definition, crd</a> has been created.  This definition can be loaded into the target cluster.<pre><code>kubectl apply -f deploy/crds/charts.helm.k8s.io_pubsubplus_crd.yaml
-</code></pre>
-Validate the crd loads into Kubernetes<pre><code>kubectl get crd
-NAME                            CREATED AT
-pubsubplus.charts.helm.k8s.io   2020-04-28T20:21:30Z
-</code></pre>
-<h2 is-upgraded>Use the SDK CLI to build and generate the operator deployment manifests</h2>
-The build command creates a container image with the operator/<a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/" target="_blank">custom resource, cr</a>. In this example I tagged the container suitable to push into my personal dockerhub account: kenbarr.<pre><code>operator-sdk build kenbarr/pubsubplus-operator:v0.0.2
-</code></pre>
-The output of the &#34;build&#34; shows new container image being built and pushed into local docker.<pre><code>INFO[0000] Building OCI image kenbarr/pubsubplus-operator:v0.0.2
-Sending build context to Docker daemon  76.29kB
-Step 1/3 : FROM quay.io/operator-framework/helm-operator:v0.15.1
----&gt; 450a3ca2d02d
-Step 2/3 : COPY watches.yaml ${HOME}/watches.yaml
----&gt; Using cache
----&gt; 9d7dfeb65ddd
-Step 3/3 : COPY helm-charts/ ${HOME}/helm-charts/
----&gt; 435ddaefa627
-Successfully built 435ddaefa627
-Successfully tagged kenbarr/pubsubplus-operator:v0.0.2
-INFO[0000] Operator build complete.
-</code></pre>
-</li>
+<li>Correct for permissions and passwords</li>
+<li>Use the SDK CLI to build and generate the operator deployment manifests</li>
 </ul>
-<p>The new image can be seen loaded locally</p>
-<pre><code>docker images
+<h2 is-upgraded>Create a new operator project and add existing Helm chart</h2>
+<pre><code>$ cd ~/&#34;&lt;go_workspace&gt;&#34;/src;
+$ mkdir pubsubplus-ha-operator
+$ cd pubsubplus-ha-operator
+$ operator-sdk init --plugins=helm.sdk.operatorframework.io/v1 --domain=solace.com --helm-chart=solacecharts/pubsubplus-ha
+</code></pre>
+<p>You will recieve this warning and need to take action:</p>
+<pre><code>WARN[0000] &#34;The RBAC rules generated in config/rbac/role.yaml are based on the chart&#39;s default manifest. Some rules may be missing for resources that are only enabled with custom values, and some existing rules may be overly broad. Double check the rules generated in config/rbac/role.yaml to ensure they meet the operator&#39;s permission requirements.&#34;
+</code></pre>
+<p>Ensure roles are correct to modify pod lables.  Ensure these line exist in config/rbac/role.yaml</p>
+<pre><code>rules:
+- apiGroups: [&#34;&#34;]
+  resources: [&#34;pods&#34;]
+  verbs: [&#34;patch&#34;]
+</code></pre>
+<h2 is-upgraded>Build the operator and deploy</h2>
+<p>Install the CRD</p>
+<pre><code>$ make install
 
-REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
-kenbarr/pubsubplus-operator                v0.0.2              435ddaefa627        14 minutes ago      174MB
+/&#34;&lt;go_workspace&gt;&#34;/src/pubsubplus-ha-operator/bin/kustomize build config/crd | kubectl apply -f -
+customresourcedefinition.apiextensions.k8s.io/pubsubplushas.charts.solace.com created
 </code></pre>
-<p>(Optional) Push newly built operator into container repo, here I am using personal dockerhub</p>
-<pre><code>docker push  kenbarr/pubsubplus-operator:v0.0.2
+<p>Define docker repo and imager name:</p>
+<pre><code>$ export IMG=&#34;&lt;docker_repo&gt;&#34;/pubsubplus-ha-operator:v0.0.1
 </code></pre>
-<pre><code>857870fbcbfe: Pushed                                                   6e6a6b67e101: Layer already exists                                                                                      b496b494f6f9: Layer already exists                             9fd48ecc1227: Layer already exists                                                                                      0141daa77f22: Layer already exists                             27cd2023d60a: Layer already exists                                                                                      4b52dfd1f9d9: Layer already exists                     v0.0.2: digest: sha256:199c815d49f59e3e8cad16133fc799a88cda61a3c051470334811430d116b044 size: 1779
+<p>Build the operator container and push to docker repo:</p>
+<pre><code>$ make docker-build docker-push IMG=$IMG
+</code></pre>
+<p>Deploy the operator container:</p>
+<pre><code>$ make deploy IMG=$IMG
+
+cd config/manager &amp;&amp; /&lt;go_workspace&gt;/src/pubsubplus-ha-operator/bin/kustomize edit set image controller=&lt;docker_repo&gt;/pubsubplus-ha-operator:v0.0.1
+/&lt;go_workspace&gt;/src/pubsubplus-ha-operator/bin/kustomize build config/default | kubectl apply -f -
+namespace/pubsubplus-ha-operator-system created
+customresourcedefinition.apiextensions.k8s.io/pubsubplushas.charts.solace.com unchanged
+role.rbac.authorization.k8s.io/pubsubplus-ha-operator-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/pubsubplus-ha-operator-manager-role created
+clusterrole.rbac.authorization.k8s.io/pubsubplus-ha-operator-proxy-role created
+clusterrole.rbac.authorization.k8s.io/pubsubplus-ha-operator-metrics-reader created
+rolebinding.rbac.authorization.k8s.io/pubsubplus-ha-operator-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/pubsubplus-ha-operator-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/pubsubplus-ha-operator-proxy-rolebinding created
+service/pubsubplus-ha-operator-controller-manager-metrics-service created
+deployment.apps/pubsubplus-ha-operator-controller-manager created
+</code></pre>
+<p>Validate the controller is running</p>
+<pre><code>$ kubectl get deployment --namespace pubsubplus-ha-operator-system
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+pubsubplus-ha-operator-controller-manager   1/1     1            1           2m50s
+</code></pre>
+<p>Validate the crd loads into Kubernetes</p>
+<pre><code>$ kubectl get crd
+NAME                              CREATED AT
+pubsubplushas.charts.solace.com   2020-08-17T22:53:03Z
 </code></pre>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Test the operator" duration="20">
-        <p>The next steps are to deploy and test the new operator</p>
+        <p>The next steps create a Solace HA cluster using the newly deployed operator:</p>
 <ul>
-<li>Modify the operator deployment to use the newly created image</li>
-<li>Deploy the operator</li>
+<li>Modify the sample configuaration to include Solace admin password</li>
 <li>Create a new Solace cluster with the operator</li>
 </ul>
-<p>Edit the opertor.yaml file to point at the newly created operator container image.</p>
-<pre><code>vi deploy/operator.yaml
-      containers:
-        - name: pubsubplus-operator
-          # Replace this with the built image name
-          image: kenbarr/pubsubplus-operator:v0.0.1 
-</code></pre>
-<p>Ensure roles are correct to create custom service account.  Ensure these lines exist in deploy/role.yaml</p>
-<pre><code>- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - rolebindings
-  - roles
-  verbs:
-  - &#39;*&#39;
-- apiGroups:
-  - &#34;&#34;
-  resources:
-  - serviceaccounts
-  verbs:
-  - &#39;*&#39;
-</code></pre>
-<p>Deploy the operator with specific service account and role binding.</p>
-<pre><code>kubectl apply -f deploy/service_account.yaml
-kubectl apply -f deploy/role.yaml
-kubectl apply -f deploy/role_binding.yaml
-kubectl apply -f deploy/operator.yaml
-</code></pre>
-<p>You can verify the operator container is deployed and running.</p>
-<pre><code>$ kubectl get deployment
-NAME                 DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-pubsubplus-operator       1         1         1            1           1m
-
-kubectl get pods
-NAME                                  READY   STATUS    RESTARTS   AGE
-pubsubplus-operator-5889cf85c-446kb   1/1     Running   0          3m36s
+<p>Edit the opertor.yaml file to set admin password</p>
+<pre><code>$ vi config/samples/charts_v1alpha1_pubsubplusha.yaml
+  solace:
+    redundancy: true
+    size: prod100
+    usernameAdminPassword: &#34;&lt;new admin password&gt;&#34;
 </code></pre>
 <p>Finally run the operator to start the Solace cluster</p>
-<pre><code>kubectl apply -f deploy/crds/charts.helm.k8s.io_v1alpha1_pubsubplus_cr.yaml
+<pre><code>$ kubectl apply -f config/samples/charts_v1alpha1_pubsubplusha.yaml
 </code></pre>
 <p>Validate the Solace brokers are live and ready.</p>
-<pre><code>kubectl get pods
-NAME                                  READY   STATUS    RESTARTS   AGE
-example-pubsubplus-pubsubplus-0       1/1     Running   0          96s
-example-pubsubplus-pubsubplus-1       1/1     Running   0          96s
-example-pubsubplus-pubsubplus-2       1/1     Running   0          95s
-pubsubplus-operator-5889cf85c-446kb   1/1     Running   0          3m36s
+<pre><code>$ kubectl get pods
+NAME                                     READY   STATUS    RESTARTS   AGE
+pubsubplusha-sample-pubsubplus-ha-0       1/1     Running   0          96s
+pubsubplusha-sample-pubsubplus-ha-1       1/1     Running   0          96s
+pubsubplusha-sample-pubsubplus-ha-2       1/1     Running   0          95s
 </code></pre>
 <p>Go on the primary broker with node ordinal 0 and validate &#34;Redundancy Status&#34; = &#34;Up&#34;.  This means that all the brokers are syncronized and ready to recieve messages.</p>
-<pre><code>kubectl exec -it example-pubsubplus-pubsubplus-0 cli
-</code></pre>
-<pre><code>example-pubsubplus-pubsubplus-0&gt; show redundancy
+<pre><code>kubectl exec -it pubsubplusha-sample-pubsubplus-ha-0 cli
+
+pubsubplusha-sample-pubsubplus-ha-0&gt; show redundancy
 
 Configuration Status     : Enabled
 Redundancy Status        : Up
@@ -177,19 +151,19 @@ Switchover Mechanism     : Hostlist
 Auto Revert              : No
 Redundancy Mode          : Active/Standby
 Active-Standby Role      : Primary
-Mate Router Name         : examplepubsubpluspubsubplus1
+Mate Router Name         : pubsubplushasamplepubsubplusha1
 ADB Link To Mate         : Up
 ADB Hello To Mate        : Up
 </code></pre>
-<p>Finally get the name of the loadbalancing Service that fronts the Solace cluster.  This will be the name used be applications connect to Solace.</p>
+<p>Get the name of the loadbalancing Service that fronts the Solace cluster.  This will be the name used be applications connect to Solace.</p>
 <pre><code>kubectl get services
 NAME                                      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                                                                                                                                   AGE
-example-pubsubplus-pubsubplus             LoadBalancer   10.97.76.97     &lt;pending&gt;     2222:31348/TCP,8080:31717/TCP,1943:32170/TCP,55555:32597/TCP,55003:30106/TCP,55443:32318/TCP,8008:31054/TCP,1443:32713/TCP,5672:32610/TCP,1883:30046/TCP,9000:31317/TCP   5m4s
+pubsubplusha-sample-pubsubplus-ha        LoadBalancer   10.97.76.97     &lt;pending&gt;     2222:31348/TCP,8080:31717/TCP,1943:32170/TCP,55555:32597/TCP,55003:30106/TCP,55443:32318/TCP,8008:31054/TCP,1443:32713/TCP,5672:32610/TCP,1883:30046/TCP,9000:31317/TCP   5m4s
 </code></pre>
 <p>Using the test application found <a href="https://github.com/KenBarr/solace-node-sample" target="_blank">here</a> to test, we see successful send and receipt of messages.</p>
 <pre><code>[21:13:32]
 *** Subscriber to topic &#34;tutorial/topic&#34; is ready to connect ***
-[21:13:32] Connecting to Solace message router using url: ws://example-pubsubplus-pubsubplus:8008
+[21:13:32] Connecting to Solace message router using url: ws://pubsubplusha-sample-pubsubplus-ha:8008
 [21:13:32] Client username: subscriber
 [21:13:32] Solace message router VPN name: default
 [21:13:32] Press Ctrl-C to exit
@@ -211,12 +185,9 @@ Binary Attachment:                      len=14
     
       <google-codelab-step label="Delete the operator" duration="2">
         <p>Finally, to clean up and remove Solace HA cluster, the operator and the CRD.</p>
-<pre><code>kubectl delete -f deploy/crds/charts.helm.k8s.io_v1alpha1_pubsubplus_cr.yaml
-kubectl delete -f deploy/operator.yaml
-kubectl delete -f deploy/role_binding.yaml
-kubectl delete -f deploy/role.yaml
-kubectl delete -f deploy/service_account.yaml
-kubectl delete -f deploy/crds/charts.helm.k8s.io_pubsubplus_crd.yaml
+<pre><code>kubectl delete -f config/samples/charts_v1alpha1_pubsubplusha.yaml
+make undeploy
+
 </code></pre>
 <p>Note: this will not automatically delete the persistent volumes.</p>
 <pre><code>kubectl get pvc
@@ -232,6 +203,7 @@ kubectl delete -R pvc &lt;no-longer-needed-pvc&gt;
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
