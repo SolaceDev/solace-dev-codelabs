@@ -1,15 +1,26 @@
-name: Netllify Preview Builder
+name: Netlify Preview Builder
 on:
-  pull_request:
-    branches: [master]
+  pull_request: 
+    branches: [ master ]
 
 jobs:
-  checkout:
+  Build_Preview:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codelabs site repo
+      - name: Checkout site repo
         uses: actions/checkout@v2
         with:
-          token: ${{secrets.TOKEN}}
           repository: SolaceDev/solace-dev-codelabs-site
-    
+          submodules: recursive
+      - name: Checkout PR
+        run: cd site/solace-dev-codelabs && git checkout ${{ github.event.pull_request.head.sha }}
+      - name: build site
+        run: cd site && npm i && ls && npm run dist
+      - name: Netlify Deploy
+        uses: nwtgck/actions-netlify@v1.1.7
+        with:
+          publish-dir: './site/dist'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
