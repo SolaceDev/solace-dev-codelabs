@@ -1,0 +1,21 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-08-24T22:51:36+08:00",
+  "id": "aaron-demo-new-blah",
+  "duration": 19,
+  "title": "BIG HELLOadkjfkf of codelab goes here",
+  "summary": "",
+  "source": "aaron-demo-new-blah.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "url": "aaron-demo-new-blah"
+}
