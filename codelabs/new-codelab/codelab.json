@@ -1,0 +1,21 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-08-23T21:12:16-04:00",
+  "id": "new-codelab",
+  "duration": 19,
+  "title": "Title of codelab goes here",
+  "summary": "",
+  "source": "new-codelab.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "url": "new-codelab"
+}
