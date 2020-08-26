@@ -1,0 +1,143 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Using OpenTelemetry to find your event in a haystack</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="opentelemetry-intro"
+                  title="Using OpenTelemetry to find your event in a haystack"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <aside class="special"><p>If you&#39;d like to learn more about OpenTelemetry architecture, you can find it .</p>
+</aside>
+<p>No one likes an angry user.  That goes double if the user is a taxi driver. The language can be...intense.</p>
+<p>As NYC Modern Taxi Company modernizes its operations through event-based integration, things will go wrong.  What&#39;s important is that issues are resolved quickly and as painlessly as possible for the end user, so the taxis keep moving.  To help with that, NYC Modern Taxi is adding OpenTelemetry distributed tracing to all of their microservices.  The goal is to trace events at they move through Solace and potentially dozens of microservices.</p>
+<p><img alt="opening_graphic" src="img\6d1c5f5d8450a6f4.png"><br>The great thing about OpenTelemetry is that it supports a wide range of different programming languages.  This codelab uses Python, but it could have been JavaScript, Java, Python, Go or many others.</p>
+<p>In this CodeLab you&#39;ll learn about:</p>
+<p>✅ How OpenTelemetry works (the basics, if you&#39;d like more detail there is a blog post here.</p>
+<p>✅ How to get the Solace PubSub+ Python API, and set up a basic environment.</p>
+<p>✅ How to include OpenTelemetry tracing in your processes</p>
+<p>✅ How to visualize your event-driven applications with Jaeger</p>
+<aside class="special"><p>If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="7">
+        <ol type="1">
+<li>A general understanding of <a href="https://docs.solace.com/#Messagin" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
+<li>A free trial account of Solace PubSub+ Cloud.   Don&#39;t have one? : <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a></li>
+<li><a href="https://www.jaegertracing.io/download/" target="_blank">Download Jaeger</a> for free in the OS of your choosing</li>
+<li><a href="https://www.python.org/downloads/" target="_blank">Download Python</a> for free in the OS of your choosing</li>
+</ol>
+<aside class="warning"><p>It&#39;s important to note that this codelab uses a pre-release version of the Solace PubSub+ connector. It has the latest features, but may also have some bugs. Please reach out to our <a href="https://solace.community/" target="_blank">Solace Community</a> if you happen to find one.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Case Overview 🚕" duration="0">
+        <p>At Solace, we&#39;ve been following the story of NYC Modern Taxi, a taxi company struggling to stay relevant by creating a new ride sharing app. To be clear, it&#39;s a fake company. But its problems are all too real.</p>
+<p>At midnight, NYC Modern Taxi went live with the app, and in the morning drivers started complaining about not being able to login.  The issue appeared to be with events moving from Salesforce (where potential drivers are recruited) into an operations database used by the mobile application.  But given the number of hops the event took along the way, the location of the issue wasn&#39;t exactly clear.</p>
+<p>Distributed tracing saved the day. In contrast to traditional tracing with line after line of text, distributed tracing shows you a searchable, graphical picture of when, where and how one event flowed through your enterprise. It let NYC Modern Taxi watch the Tommy&#39;s account update zig to the cloud,  zag into an on-premises data center, fan out into 40 thanks to a pub-sub architecture, slow down in a bottle neck and then...watch a programming error stop it completely.</p>
+<p>INSERT THE USE CASE DIAGRAM HERE.  GET IT FROM PORTAL</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup a Solace PubSub&#43; Broker" duration="5">
+        <p>Access to a Solace messaging service, Solace PubSub+, can be achieved in either one of the three flavours</p>
+<ol type="1">
+<li>Hardware Appliance</li>
+<li>Software broker image (Docker, Virtual image)</li>
+<li>Solace Cloud service instance</li>
+</ol>
+<p>This tutorial will walk you through setting up a Solace Cloud service instance, which also gives you access to the Event Portal. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event  Broker: Software</a> documentation</p>
+<h2 is-upgraded>Sign up for free Solace Cloud account</h2>
+<p>Navigate to the <a href="https://console.solace.cloud/login/new-account" target="_blank">Create a New Account</a> page and fill out the required information. No credit card required!</p>
+<h2 is-upgraded>Create a messaging service</h2>
+<p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img\500ee282af1b6d9f.png"></p>
+<p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
+<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img\a7ea4d393008a8c3.png"></p>
+<p>Fill out all the details for your messaging service, and then click &#34;Create&#34; at the bottom of the page.</p>
+<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img\b2fd05043df1c5cd.png"></p>
+<p>Your service should be ready to use in a couple seconds! 🌪</p>
+<p>Click on the previously created service and navigating to the <strong>Connect</strong> tab.<br>Expand the &#34;Solace Messaging&#34; menu to get the connection details<br><img alt="connection-service" title="connection-service" src="img\4dbbde26342e8779.png"></p>
+<p>Use a text editor to save the the connection parameters with the <strong>Host</strong>, <strong>Message VPN Name</strong>, <strong>Client Username</strong> and <strong>Password</strong>. You&#39;ll need them later.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Set up Jaeger All-In-One" duration="0">
+        <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Set up Python environment" duration="0">
+        <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create the message publisher (&#34;Salesforce&#34;)" duration="0">
+        <aside class="special"><p>If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+</aside>
+<p><code>hostName =  &#34;tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555&#34;<br>vpnName = &#34;cto-demo-virginia-azure&#34;<br>solaceUserName =  &#34;solace-cloud-client&#34;<br>solacePassword = &#34;&lt;Your Password Here&gt;&#34;</code></p>
+<aside class="special"><p>This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events.  If that&#39;s your passion, there&#39;s a great CodeLab about it.  Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API.  If you want to now more about that, check out this CodeLab.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create the message consumer" duration="0">
+        <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Check out the results in Jaeger" duration="0">
+        <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <p>✅ &lt; FIILL IN TAKEAWAY 1&gt;<br><br>✅ &lt; FIILL IN TAKEAWAY 2&gt;<br><br>✅ &lt; FIILL IN TAKEAWAY 3&gt;</p>
+<p class="image-container"><img alt="solly_wave" src="img\9bd2cbed014d29b6.webp"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
