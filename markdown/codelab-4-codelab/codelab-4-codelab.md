@@ -15,7 +15,7 @@ Duration: 0:02:00
 
 Are you trying to create easy to use, visually appealing content for the tech community? This Codelab will show you how to quickly create your own Google Codelab just like the one you're using right now. 
 
-We'll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial. 
+We'll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our [github repo](https://github.com/SolaceDev/solace-dev-codelabs) with any code that might be used for a tutorial. 
 
 Here is an example image of another Codelab that I created:
 ![image_caption](img/codelabexample.png)
@@ -103,13 +103,19 @@ Upon authoring of your codelab, we request you have two reviewers:
 ## Prepare your repo
 Duration: 0:02:00
 
-Start by forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs) and clone your fork. Note: replace `<Your_Github_User>` with your github username
+Start by
+1. Forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)   
+![image_caption](img/fork.png)
+
+2. Clone your fork. Note: replace `<Your_Github_User>` with your github username
 
 ``` bash
 git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-<name_of_codelab>
 ```
+
+Then follow one of the two options in the next two steps: Automated or Manual
 
 ## Option A: Create your initial Codelab - Automated
 Duration: 0:05:00
@@ -129,7 +135,7 @@ Duration: 0:05:00
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
 
-🚀  Go ahead to the last step and add your codelabs on the main repo
+🚀  Go ahead to the **Step 7** and add your codelabs on the main repo
 
 ## Option B: Create your initial Codelab - Manual
 Duration: 0:08:00

@@ -46,16 +46,16 @@ cp -r markdown/template/* markdown/$CODELAB_NAME/
 mv markdown/$CODELAB_NAME/markdown.template $codelab_markdown_filename
 
 # replace placeholder codelab id in markdown template file with name provided by command line argument 
-sed -i '' \
+sed -i \
   -e "s/CODELAB_NAME.*/$CODELAB_NAME/g" \
   $codelab_markdown_filename
 
 # replace placeholder authorname with git username=
-sed -i '' \
+sed -i \
   -e "s/AUTHOR_NAME.*/$AUTHOR_NAME/g" \
   $codelab_markdown_filename
 
 # replace placeholder codelab name in the watch command with name provided in command line argument
-sed -i '' \
+sed -i \
   -e "s/CODELAB_NAME/$CODELAB_NAME/g" \
   $codelab_package_json_filename
