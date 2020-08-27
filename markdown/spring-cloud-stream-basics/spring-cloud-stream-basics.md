@@ -188,6 +188,7 @@ Run your app by right clicking on your project, choosing "Run As" and "Spring Bo
 
 ## Test your Microservice
 Duration: 0:03:00
+
 ✅ In order to test your function open Solace Cloud and navigate to your "Messaging Services" 
 Choose your service and click on "Manage Service" at the top right of the screen. 
 
