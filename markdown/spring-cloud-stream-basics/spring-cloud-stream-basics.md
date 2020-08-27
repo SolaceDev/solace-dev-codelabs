@@ -1,8 +1,8 @@
 author: Marc DiPasquale
 summary: This codelab walks a developer through the basics of Spring Cloud Stream
 id: spring-cloud-stream-basics
-tags: Spring,Java
-categories: workshop
+categories: Spring,Java
+tags: workshop
 environments: Web
 status: Published
 feedback link: https://github.com/Mrc0113/cloud-stream-basics
@@ -180,7 +180,8 @@ public Function<String, String> uppercase(){
 }
 ```
 
-🚀 That's it! No Messaging code and we have an app that can retrieve a message, process it and publish a message! Let's test it out. 
+🚀 That's it! No Messaging code and we have an app that can retrieve a message, process it and publish a message! 
+🚀 Let's test it out. 
 
 Run your app by right clicking on your project, choosing "Run As" and "Spring Boot App" if using Spring Tool Suite. From the command line you can also run by entering `mvn clean spring-boot:run`
 ![Run App](img/runApp.webp)
