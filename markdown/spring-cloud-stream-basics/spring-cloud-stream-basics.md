@@ -13,7 +13,7 @@ analytics account: UA-3921398-10
 ## What You'll Learn
 Duration: 0:02:00
 
-This codelab will help you get started with Spring Cloud Stream. We'll quickly cover some basic fundamentals before jumping in to actual creating some Spring Cloud Stream microservices to see the framework in action. 
+This codelab will help you get started with Spring Cloud Stream. We'll quickly cover some basic fundamentals before jumping in to actually creating some Spring Cloud Stream microservices to see the framework in action. 
 
 You'll learn: 
 * Spring Cloud Stream Basics
