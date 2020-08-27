@@ -25,8 +25,9 @@ codelab_markdown_filename="markdown/$CODELAB_NAME/$CODELAB_NAME.md"
 codelab_package_json_filename="markdown/$CODELAB_NAME/package.json"
 markdown_template="markdown/template/markdown.template"
 package_json_template="markdown/template/package.json"
+#in MacOS sed creates a backup file if zero length extension is not specefied e.g. ''
+backup_md="$codelab_markdown_filename-e"
 
-# Note: we might not need this if its already included in the makrdown/template dir
 # validate that markdown template and package.json exist
 if [ ! -f "$markdown_template" ] || [ ! -f "$package_json_template" ]; then
   msg "ERROR!"
@@ -34,7 +35,6 @@ if [ ! -f "$markdown_template" ] || [ ! -f "$package_json_template" ]; then
   echo "  - $markdown_template"
   echo "  - $package_json_template"
   echo ""
-  echo "Why'd you go and delete one of these files :("
   exit 0
 fi
 
@@ -59,3 +59,9 @@ sed -i \
 sed -i \
   -e "s/CODELAB_NAME/$CODELAB_NAME/g" \
   $codelab_package_json_filename
+
+if [ -f "$backup_md" ]; then
+  rm $backup_md
+fi
+
+echo "Markdown file created! Find it at $PWD/markdown/$CODELAB_NAME"
