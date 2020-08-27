@@ -1,24 +1,24 @@
-# name: Update Codelabs Site
-# on:
-#   push: 
-#     branches: [ master ]
+name: Update Codelabs Site
+on:
+  push: 
+    branches: [ master ]
 
-# jobs:
-#   Build_Preview:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout site repo
-#         uses: actions/checkout@v2
-#         with:
-#           repository: SolaceDev/solace-dev-codelabs-site
-#           submodules: recursive
-#       - name: Commit the files
-#       - run: |
-#           git config user.name github-actions
-#           git config user.email github-actions@github.com
-#           git add .
-#           git commit -m "Update submodule"
-#       - name: Push changes
-#         uses: ad-m/github-push-action@master
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  Build_Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v2
+        with:
+          repository: SolaceDev/solace-dev-codelabs-site
+          submodules: recursive
+      - name: Commit the files
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Update submodule"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
