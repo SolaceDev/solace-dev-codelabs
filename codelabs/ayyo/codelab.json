@@ -1,0 +1,21 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-08-27T11:33:58-04:00",
+  "id": "ayyo",
+  "duration": 19,
+  "title": "Title of codelab goes here",
+  "summary": "",
+  "source": "ayyo.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "url": "ayyo"
+}
