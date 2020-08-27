@@ -14,6 +14,7 @@ jobs:
           submodules: recursive
       - name: Commit the files
         run: |
+          git submodule update --remote
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
