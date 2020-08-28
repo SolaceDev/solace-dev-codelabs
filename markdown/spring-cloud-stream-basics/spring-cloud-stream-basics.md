@@ -13,6 +13,8 @@ analytics account: UA-3921398-10
 ## What You'll Learn
 Duration: 0:02:00
 
+![](img/spring-cloud-logo.png)
+
 This codelab will help you get started with Spring Cloud Stream. We'll quickly cover some basic fundamentals before jumping in to actually creating some Spring Cloud Stream microservices to see the framework in action. 
 
 You'll learn: 
@@ -56,9 +58,9 @@ Click on 'Messaging Services' and all the messaging services associated with you
 
 ![Solace Cloud Landing Page](img/landing-page-signup.webp "Solace Cloud Landing Page")
 
-Fill out all the details for your messaging service, and then click "Create" at the bottom of the page.
+Fill out all the details for your messaging service, and then click "Create" at the bottom of the page. Note: make sure you choose the "Developer" option for the Service Type
 
-![Create Solace Cloud Messaging Service](img/create-service.webp "Solace Cloud Messaging Service")
+![Create Solace Cloud Messaging Service](img/create-service.png "Solace Cloud Messaging Service")
 
 Your service should be ready to use in a few minutes
 
@@ -139,6 +141,9 @@ Duration: 0:10:00
 
 ✅ You should see a new project named "springone" in your IDE!
 
+Negative
+: Note: You might need to add imports, this is done by clicking `ctrl + shift + 0` and then choose java.util.function.Function
+
 If you look at the `pom.xml` file you'll see a few important things: 
 * This is a Spring Boot project which has a parent of `spring-boot-starter-parent`
 * The java version you chose is included
@@ -189,13 +194,12 @@ Run your app by right clicking on your project, choosing "Run As" and "Spring Bo
 ## Test your Microservice
 Duration: 0:03:00
 
-✅ In order to test your function open Solace Cloud and navigate to your "Messaging Services" 
-Choose your service and click on "Manage Service" at the top right of the screen. 
+✅ In order to test your function open Solace Cloud, select the messaging service and navigate to the Try Me! tab
 
-![Manage Service](img/manageService.webp)
+![tryme](img/tryme.png "tryme")
 
-✅ Then choose the "Try Me!" option from the Menu on the left. This page will allow you to send and receive messages to see if your function is working as expected.
-![Try Me](img/tryMe.webp)
+
+This page will allow you to send and receive messages to see if your function is working as expected.
 
 To test your function perform the following steps:
 1. Click the `Connect` button for the "Subscriber"
