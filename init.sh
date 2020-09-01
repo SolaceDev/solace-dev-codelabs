@@ -7,6 +7,14 @@
 # * Configure a nodemon watch command to rebuild your codelab on save
 # - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 
+command_exists() {
+    # check if command exists and fail otherwise
+    command -v "$1" >/dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+        echo "Note: $1 Does not exist. Please install it first"
+    fi
+}
+
 cd `dirname $0`
 
 # validate that a codelab name was included as an argument
@@ -65,3 +73,6 @@ if [ -f "$backup_md" ]; then
 fi
 
 echo "Markdown file created! Find it at $PWD/markdown/$CODELAB_NAME"
+
+command_exists claat
+command_exists go
