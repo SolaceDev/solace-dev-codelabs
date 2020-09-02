@@ -244,10 +244,10 @@ spring.cloud.stream.function.bindings.uppercasereverse-out-0=output
 Positive
 : Note that Spring Cloud Stream performs [Content Type Negotiation](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management). 
 
-✅ We now have our function all wired up so go ahead and stop the app and restart it.
-✅ Navigate back to the "Try Me" menu in Solace Cloud (Refer to the steps in the "Test your Microservice" section if needed) 
-✅ Add a subscription for "output" since that is what we called our output binding name. And publish a message to the "input" topic since that's what we called our input binding.
-✅ If you published "Hello world!" you should see that the subscriber received a message containing "!DLROW OLLEH" and your application printed the following to the terminal as it processed the message through the pipeline. 
+✅ We now have our function all wired up so go ahead and stop the app and restart it.     
+✅ Navigate back to the "Try Me" menu in Solace Cloud (Refer to the steps in the "Test your Microservice" section if needed)     
+✅ Add a subscription for "output" since that is what we called our output binding name. And publish a message to the "input" topic since that's what we called our input binding.     
+✅ If you published "Hello world!" you should see that the subscriber received a message containing "!DLROW OLLEH" and your application printed the following to the terminal as it processed the message through the pipeline.  
 ```
 Uppercasing: Hello world!
 Reversing: HELLO WORLD!
@@ -258,9 +258,9 @@ Reversing: HELLO WORLD!
 ## Takeaways + Next Steps
 Duration: 0:02:00
 
-✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!
-✅ Learn how to generate Cloud Stream apps using AsyncAPI [here](https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0).
-✅ Learn how to publish to dynamic topics using Spring Cloud Stream by a sample [here](https://github.com/SolaceSamples/solace-samples-spring/blob/master/cloud-stream-dynamic-destination-processor/src/main/java/com/solace/samples/spring/scs/DynamicDestinationProcessor.java).
+✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!   
+✅ Learn how to generate Cloud Stream apps using AsyncAPI [here](https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0).  
+✅ Learn how to publish to dynamic topics using Spring Cloud Stream by a sample [here](https://github.com/SolaceSamples/solace-samples-spring/blob/master/cloud-stream-dynamic-destination-processor/src/main/java/com/solace/samples/spring/scs/DynamicDestinationProcessor.java).    
 
 ![solly_wave](img/solly_wave.webp)
 
