@@ -157,7 +157,8 @@ spring.cloud.stream.binders.solace.environment.solace.java.host=tcp://localhost:
 spring.cloud.stream.binders.solace.environment.solace.java.msgVpn=default
 spring.cloud.stream.binders.solace.environment.solace.java.clientUsername=default
 spring.cloud.stream.binders.solace.environment.solace.java.clientPassword=default
-spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=3
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=0
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetriesPerHost=0
 ```
 
 ### Write the Java Function
