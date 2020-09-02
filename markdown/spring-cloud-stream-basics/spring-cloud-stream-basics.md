@@ -141,9 +141,6 @@ Duration: 0:10:00
 
 ✅ You should see a new project named "springone" in your IDE!
 
-Negative
-: Note: You might need to add imports, this is done by clicking `ctrl + shift + 0` and then choose java.util.function.Function
-
 If you look at the `pom.xml` file you'll see a few important things: 
 * This is a Spring Boot project which has a parent of `spring-boot-starter-parent`
 * The java version you chose is included
@@ -184,6 +181,9 @@ public Function<String, String> uppercase(){
    };
 }
 ```
+
+Negative
+: Note: You might need to add imports, this is done by clicking `ctrl + shift + 0` and then choose java.util.function.Function
 
 🚀 That's it! No Messaging code and we have an app that can retrieve a message, process it and publish a message! 
 🚀 Let's test it out. 
