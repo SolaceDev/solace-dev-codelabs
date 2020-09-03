@@ -1,4 +1,7 @@
 ![Codelabs Site up to date](https://github.com/SolaceDev/solace-dev-codelabs/workflows/Update%20Codelabs%20Site/badge.svg)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e66602c6-9a94-4095-a7c4-4e37ff2cdd41/deploy-status)](https://app.netlify.com/sites/focused-beaver-3cc79d/deploys)
+
 # Solace Codelabs
 The purpose of these codelabs is to create easily consumable, step-by-step tutorials that walk a developer to achieve a goal.  
 

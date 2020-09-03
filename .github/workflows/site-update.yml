@@ -1,4 +1,4 @@
-name: Update Codelabs Site
+name: Update Codelabs Site Repo
 on:
   push: 
     branches: [ master ]
