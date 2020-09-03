@@ -1,3 +1,4 @@
+![Codelabs Site up to date](https://github.com/SolaceDev/solace-dev-codelabs/workflows/Update%20Codelabs%20Site/badge.svg)
 # Solace Codelabs
 The purpose of these codelabs is to create easily consumable, step-by-step tutorials that walk a developer to achieve a goal.  
 
