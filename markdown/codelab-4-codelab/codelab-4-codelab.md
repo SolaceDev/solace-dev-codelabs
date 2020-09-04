@@ -27,6 +27,13 @@ Here is an example image of another Codelab that I created:
 * [Google Group for Codelab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
 * [A blog that I used when getting started with Google Codelabs](https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816)
 
+### Video 
+
+You can also watch a video on how you can contribute to authoring a codelab by visiting this [YouTube link](https://www.youtube.com/watch?v=2B8ev-hSbcM) or watching the video below
+
+![https://www.youtube.com/watch?v=2B8ev-hSbcM](Video)
+
+
 ## Environment Setup
 Duration: 0:04:00
 
