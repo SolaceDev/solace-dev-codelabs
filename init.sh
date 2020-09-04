@@ -11,7 +11,7 @@ command_exists() {
     # check if command exists and fail otherwise
     command -v "$1" >/dev/null 2>&1
     if [[ $? -ne 0 ]]; then
-        echo "Note: $1 Does not exist. Please install it first"
+        echo "Note: $1 Does not exist. Please install it first!"
     fi
 }
 
@@ -35,6 +35,7 @@ markdown_template="markdown/template/markdown.template"
 package_json_template="markdown/template/package.json"
 #in MacOS sed creates a backup file if zero length extension is not specefied e.g. ''
 backup_md="$codelab_markdown_filename-e"
+backup_package_json="markdown/$CODELAB_NAME/package.json-e"
 
 # validate that markdown template and package.json exist
 if [ ! -f "$markdown_template" ] || [ ! -f "$package_json_template" ]; then
@@ -70,6 +71,10 @@ sed -i \
 
 if [ -f "$backup_md" ]; then
   rm $backup_md
+fi
+
+if [ -f "$backup_package_json" ]; then
+  rm $backup_package_json
 fi
 
 echo "Markdown file created! Find it at $PWD/markdown/$CODELAB_NAME"
