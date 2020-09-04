@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-09-04T10:47:18-04:00",
+  "id": "demo-codelab",
+  "duration": 19,
+  "title": "A demo codelab for fun!",
+  "summary": "",
+  "source": "demo-codelab.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "ga": "UA-3921398-10",
+  "url": "demo-codelab"
+}
