@@ -2,7 +2,7 @@ author: Jesse Menning
 summary:
 id: boomi-salesforce-codelab
 tags: workshop
-categories: boomi, salesforce, azure
+categories: boomi, salesforce, azure, taxi
 environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi
@@ -64,11 +64,11 @@ Duration: 0:15:00
 ### ⚙️ Import Event Portal Application Domain
 Download the Event Portal Application Domain export files: 
 
-[Back Office](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Back-Office.json)
+[Back Office](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/event_portal/NYC-Modern-Taxi-Co-Back-Office.json)
 
-[Analytics](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Analytics.json)
+[Analytics](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/event_portal/NYC-Modern-Taxi-Co-Analytics.json)
 
-[Operations](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/NYC-Modern-Taxi-Co-Ops.json)
+[Operations](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/event_portal/NYC-Modern-Taxi-Co-Ops.json)
 
 Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
 
@@ -296,7 +296,7 @@ And your callback URL is: `https://platform.boomi.com/account/trainingjessemenni
 1. In the popup, enter the following values and click on submit: 
 ![image046](img/image046.png) 
  
-1. Download the [Account Change trigger definition](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/AccountChangeTrigger.txt) Cut and paste the code into the main code area and save. 
+1. Download the [Account Change trigger definition](https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/boomi-salesforce-codelab/AccountChangeTrigger.txt) Cut and paste the code into the main code area and save. 
 
 ### ⚙️ Test it out using Salesforce Workbench
 

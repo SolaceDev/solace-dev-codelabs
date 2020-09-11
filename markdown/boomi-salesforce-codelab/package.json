@@ -13,12 +13,6 @@
   "keywords": [
     "codelab"
   ],
-  "author": "Andrew Roberts",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andrew-j-roberts/codelab-bootstrap/issues"
-  },
-  "homepage": "https://github.com/andrew-j-roberts/codelab-bootstrap#readme",
   "dependencies": {
     "nodemon": "^2.0.3"
   }

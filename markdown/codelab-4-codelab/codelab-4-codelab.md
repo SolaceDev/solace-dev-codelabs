@@ -15,7 +15,7 @@ Duration: 0:02:00
 
 Are you trying to create easy to use, visually appealing content for the tech community? This Codelab will show you how to quickly create your own Google Codelab just like the one you're using right now. 
 
-We'll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial. 
+We'll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our [github repo](https://github.com/SolaceDev/solace-dev-codelabs) with any code that might be used for a tutorial. 
 
 Here is an example image of another Codelab that I created:
 ![image_caption](img/codelabexample.png)
@@ -26,6 +26,13 @@ Here is an example image of another Codelab that I created:
 * [Google Codelabs Tools Github](https://github.com/googlecodelabs/tools) - The repo that contains the claat tool we'll be using today
 * [Google Group for Codelab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
 * [A blog that I used when getting started with Google Codelabs](https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816)
+
+### Video 
+
+You can also watch a video on how you can contribute to authoring a codelab by visiting this [YouTube link](https://www.youtube.com/watch?v=2B8ev-hSbcM) or watching the video below
+
+![https://www.youtube.com/watch?v=2B8ev-hSbcM](Video)
+
 
 ## Environment Setup
 Duration: 0:04:00
@@ -103,13 +110,19 @@ Upon authoring of your codelab, we request you have two reviewers:
 ## Prepare your repo
 Duration: 0:02:00
 
-Start by forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs) and clone your fork. Note: replace `<Your_Github_User>` with your github username
+Start by
+1. Forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)   
+![image_caption](img/fork.png)
+
+2. Clone your fork. Note: replace `<Your_Github_User>` with your github username
 
 ``` bash
 git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-<name_of_codelab>
 ```
+
+Then follow one of the two options in the next two steps: Automated or Manual
 
 ## Option A: Create your initial Codelab - Automated
 Duration: 0:05:00
@@ -129,7 +142,7 @@ Duration: 0:05:00
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
 
-🚀  Go ahead to the last step and add your codelabs on the main repo
+🚀  Go ahead to the **Step 7** and add your codelabs on the main repo
 
 ## Option B: Create your initial Codelab - Manual
 Duration: 0:08:00
