@@ -25,6 +25,10 @@ In this tutorial, you will learn how to configure and use the Solace Boomi conne
 Positive
 : Note that this tutorial is meant to be platform and programming language agnostic. Meaning that regardless what operating system you are running (Mac, Linux, Windows), programming languages or messaging APIs you choose to use, the setup will be the same.
 
+
+Positive
+: You can also [import the finished solution into your account](https://platform.boomi.com/AtomSphere.html#build;processLibrary=2b3ebc49-7bb3-4052-93ea-987c784a3e68) from the Boomi Process Library.
+
 ### Prerequisite 
 This tutorial assumes:
 * Users on MacOS/Linux have knowledge using Docker
