@@ -96,10 +96,9 @@
 <p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
 <p>You can download the file via curl or by cloning the git repo</p>
 <pre><code>curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
-``` 
-OR
-```bash
-git clone https://github.com/Mrc0113/design-to-code-workshop.git
+</code></pre>
+<p>OR</p>
+<pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
 </code></pre>
 <p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
@@ -150,8 +149,111 @@ git clone https://github.com/Mrc0113/design-to-code-workshop.git
 <li><strong>Content Type</strong>: JSON</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>Under <em>Content</em> paste the JSON schema in the code block below. This schema was generated from a sample message using <a href="https://jsonschema.net" target="_blank">jsonschema.net</a></li>
-<li>Click <em>Save<br></em><code>{<br>&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,<br>&#34;$id&#34;: &#34;http://example.com/example.json&#34;,<br>&#34;type&#34;: &#34;object&#34;,<br>&#34;title&#34;: &#34;The root schema&#34;,<br>&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,<br>&#34;default&#34;: {},<br>&#34;examples&#34;: [<br>    {<br>        &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,<br>        &#34;avg_meter_reading&#34;: 21.615217,<br>        &#34;avg_passenger_count&#34;: 1.5,<br>        &#34;window_duration_sec&#34;: 300,<br>        &#34;window_ride_count&#34;: 5<br>    }<br>],<br>&#34;required&#34;: [<br>    &#34;timestamp&#34;,<br>    &#34;avg_meter_reading&#34;,<br>    &#34;avg_passenger_count&#34;,<br>    &#34;window_duration_sec&#34;,<br>    &#34;window_ride_count&#34;<br>],<br>&#34;additionalProperties&#34;: true,<br>&#34;properties&#34;: {<br>    &#34;timestamp&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/timestamp&#34;,<br>        &#34;type&#34;: &#34;string&#34;,<br>        &#34;title&#34;: &#34;The timestamp schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: &#34;&#34;,<br>        &#34;examples&#34;: [<br>            &#34;2020-06-04T20:09:59.99832-04:00&#34;<br>        ]<br>    },<br>    &#34;avg_meter_reading&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            21.615217<br>        ]<br>    },<br>    &#34;avg_passenger_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            1.5<br>        ]<br>    },<br>    &#34;window_duration_sec&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_duration_sec schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            300<br>        ]<br>    },<br>    &#34;window_ride_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_ride_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            5<br>        ]<br>    }<br>}<br>}</code><br><br><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"> ✅ We have now created a new payload schema and the schema has automatically been added to our event. <img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"> ✅ Go ahead and click <em>Save</em> to complete the creation of our <em>RideAverageUpdate</em> event. ### Update <em>RideDropoffProcessor</em> to publish <em>RideAverageUpdate</em> Events Now that we&#39;ve created our <em>RideAverageUpdate</em> event and defined it&#39;s payload we need to update the <em>RideDropoffProcessor</em> to publish it. To do this follow these steps: 1. Right click on the <em>RideDropoffProcessor</em> and choose <em>Edit</em>. 1. Click <em>Manage</em>, search for &#34;RideAverageUdpdate&#34; and click &#34;Pub&#34; next to it since the <em>RideDropoffProcessor</em> needs to publish these events. 1. Click <em>Save</em> ✅ The <em>RideDropoffProcessor</em> is now complete and you should see it both consuming and publishing events! <img alt="ep_step02" src="img/63b0553c9566fb40.webp"> 🚕 Let&#39;s go ahead and develop the first app! 🚕 ## Install the AsyncAPI Generator Duration: 0:03:00 Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a> In order to use the AsyncAPI Generator we first need to install the CLI. If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI. <code>bash<br>npm install -g @asyncapi/generator@0.53.1<br></code></li>
+<li>Click <em>Save</em></li>
 </ol>
+<pre><code>{
+    &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+    &#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+    &#34;type&#34;: &#34;object&#34;,
+    &#34;title&#34;: &#34;The root schema&#34;,
+    &#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+    &#34;default&#34;: {},
+    &#34;examples&#34;: [
+        {
+            &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
+            &#34;avg_meter_reading&#34;: 21.615217,
+            &#34;avg_passenger_count&#34;: 1.5,
+            &#34;window_duration_sec&#34;: 300,
+            &#34;window_ride_count&#34;: 5
+        }
+    ],
+    &#34;required&#34;: [
+        &#34;timestamp&#34;,
+        &#34;avg_meter_reading&#34;,
+        &#34;avg_passenger_count&#34;,
+        &#34;window_duration_sec&#34;,
+        &#34;window_ride_count&#34;
+    ],
+    &#34;additionalProperties&#34;: true,
+    &#34;properties&#34;: {
+        &#34;timestamp&#34;: {
+            &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+            &#34;type&#34;: &#34;string&#34;,
+            &#34;title&#34;: &#34;The timestamp schema&#34;,
+            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+            &#34;default&#34;: &#34;&#34;,
+            &#34;examples&#34;: [
+                &#34;2020-06-04T20:09:59.99832-04:00&#34;
+            ]
+        },
+        &#34;avg_meter_reading&#34;: {
+            &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
+            &#34;type&#34;: &#34;number&#34;,
+            &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
+            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+            &#34;default&#34;: 0.0,
+            &#34;examples&#34;: [
+                21.615217
+            ]
+        },
+        &#34;avg_passenger_count&#34;: {
+            &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
+            &#34;type&#34;: &#34;number&#34;,
+            &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
+            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+            &#34;default&#34;: 0.0,
+            &#34;examples&#34;: [
+                1.5
+            ]
+        },
+        &#34;window_duration_sec&#34;: {
+            &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
+            &#34;type&#34;: &#34;integer&#34;,
+            &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
+            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+            &#34;default&#34;: 0,
+            &#34;examples&#34;: [
+                300
+            ]
+        },
+        &#34;window_ride_count&#34;: {
+            &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
+            &#34;type&#34;: &#34;integer&#34;,
+            &#34;title&#34;: &#34;The window_ride_count schema&#34;,
+            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+            &#34;default&#34;: 0,
+            &#34;examples&#34;: [
+                5
+            ]
+        }
+    }
+}       
+</code></pre>
+<p class="image-container"><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"></p>
+<p>✅ We have now created a new payload schema and the schema has automatically been added to our event.</p>
+<p class="image-container"><img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"></p>
+<p>✅ Go ahead and click <em>Save</em> to complete the creation of our <em>RideAverageUpdate</em> event.</p>
+<h2 is-upgraded>Update <em>RideDropoffProcessor</em> to publish <em>RideAverageUpdate</em> Events</h2>
+<p>Now that we&#39;ve created our <em>RideAverageUpdate</em> event and defined it&#39;s payload we need to update the <em>RideDropoffProcessor</em> to publish it.</p>
+<p>To do this follow these steps:</p>
+<ol type="1">
+<li>Right click on the <em>RideDropoffProcessor</em> and choose <em>Edit</em>.</li>
+<li>Click <em>Manage</em>, search for &#34;RideAverageUdpdate&#34; and click &#34;Pub&#34; next to it since the <em>RideDropoffProcessor</em> needs to publish these events.</li>
+<li>Click <em>Save</em></li>
+</ol>
+<p>✅ The <em>RideDropoffProcessor</em> is now complete and you should see it both consuming and publishing events!</p>
+<p class="image-container"><img alt="ep_step02" src="img/63b0553c9566fb40.webp"></p>
+<p>🚕 Let&#39;s go ahead and develop the first app! 🚕</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install the AsyncAPI Generator" duration="3">
+        <p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
+<p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
+<pre><code>npm install -g @asyncapi/generator@0.53.1
+</code></pre>
 <aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
 </aside>
 
