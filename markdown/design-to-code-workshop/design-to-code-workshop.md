@@ -88,9 +88,9 @@ We'll install the generator itself later 👍
 ✅ Download the Application Domain export file: [EventPortal_Export_NYCModernTaxiCo.json]( https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json)
 
 You can download the file via curl or by cloning the git repo
-```bash 
+```bash
 curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
-``` 
+```
 OR
 ```bash
 git clone https://github.com/Mrc0113/design-to-code-workshop.git
@@ -158,8 +158,9 @@ Fill in the fields as follows:
 1. **Content Type**: JSON
 1. Click _Add/Remove Owners_ and choose yourself 
 1. Under _Content_ paste the JSON schema in the code block below. This schema was generated from a sample message using [jsonschema.net](https://jsonschema.net) 
-1. Click _Save_ 
-```
+1. Click _Save_
+
+```   
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
@@ -236,8 +237,8 @@ Fill in the fields as follows:
             ]
         }
     }
-}
-```  
+}       
+```
 
 ![ep_createSchema](img/ep_createSchema.webp)
 
