@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-09-21T10:21:19-04:00",
+  "id": "da-codelab",
+  "duration": 19,
+  "title": "DA-CALL",
+  "summary": "",
+  "source": "da-codelab.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://solace.community/",
+  "ga": "UA-3921398-10",
+  "url": "da-codelab"
+}
