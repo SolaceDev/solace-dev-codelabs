@@ -21,11 +21,11 @@
 </head>
 <body>
   <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid=""
+  <google-codelab codelab-gaid="UA-3921398-10"
                   id="opentelemetry-intro"
                   title="Using OpenTelemetry to find your event in a haystack"
                   environment="web"
-                  feedback-link="">
+                  feedback-link="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
         <aside class="special"><p>If you&#39;d like to learn more about OpenTelemetry architecture, but don&#39;t care about hands-on stuff, you can find it in the <a href="https://solace.com/blog/category/architects/" target="_blank">Solace architecture blogs</a>.</p>
@@ -34,7 +34,7 @@
 <p>As NYC Modern Taxi Company modernizes its operations through event-based integration, things will go wrong.  What&#39;s important is that issues are resolved quickly and as painlessly as possible for the end user, so the taxis keep moving.  To help with that, NYC Modern Taxi is adding OpenTelemetry distributed tracing to all of their microservices.  The goal is to trace events at they move through Solace and potentially dozens of microservices.</p>
 <p>Instead of plowing through logs, trying to understand what happened, NYC Modern Taxi can instead search through graphs like these that show how the event moved across microservices:<br><img alt="flame-graph" src="img\408a406967e1d087.png"></p>
 <p>In this CodeLab you&#39;ll learn about:</p>
-<p>✅ How OpenTelemetry works (the basics, if you&#39;d like more detail there is a blog post here.</p>
+<p>✅ How OpenTelemetry works (the basics, if you&#39;d like more detail here is a <img alt="solid intro blog post." src="img\32525abeb91a4f67.png">)</p>
 <p>✅ How to get the Solace PubSub+ Python API, and set up a basic environment.</p>
 <p>✅ How to include OpenTelemetry tracing in your processes</p>
 <p>✅ How to visualize your event-driven applications with Jaeger</p>
@@ -51,7 +51,7 @@
 <li><a href="https://www.python.org/downloads/" target="_blank">Download Python</a> for free in the OS of your choosing</li>
 <li><a href="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro" target="_blank">Download the sample code</a>   Or use git commands to grab it from <a href="https://github.com/jmenning-solace/nycmoderntaxi.git" target="_blank">GitHub</a>.</li>
 </ol>
-<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. Please reach out to our <a href="https://solace.community/" target="_blank">Solace Community</a> if you happen to find one.</p>
+<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  <a href="https://solace.community/discussion/336/python-whos-in-for-a-real-treat" target="_blank">Read more about the Python API.</a>.</p>
 </aside>
 
 
@@ -103,7 +103,7 @@
 <li>Open a command terminal.</li>
 <li>Run <code>jaeger-all-in-one</code></li>
 <li>Using a web browser, navigate to <code>http://localhost:16686/</code></li>
-<li>You should be greeted by a picture of a...chipmunk?</li>
+<li>You should be greeted by a picture of a...chipmunk? Gopher?  Not really sure.</li>
 </ol>
 <aside class="warning"><p>You&#39;ll need to keep the terminal window running Jaeger open.  If you close it, you&#39;ll lose the traces you&#39;ve collected.</p>
 </aside>
@@ -125,16 +125,14 @@
       </google-codelab-step>
     
       <google-codelab-step label="Create the &#34;Salesforce&#34; message publisher" duration="10">
-        <aside class="special"><p>This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events.  If that&#39;s your passion, Solace has a great <a href="https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/" target="_blank">CodeLab about event-enabling Salesforce with Boomi and Solace</a>.  Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API.  If you want to now more about those capabilities, there will be a CodeLab soon.</p>
+        <aside class="special"><p>This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events.  If that&#39;s your passion, Solace has a great <a href="https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/" target="_blank">CodeLab about event-enabling Salesforce with Boomi and Solace</a>.  Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API.  If you want to know more about those capabilities, there will be a CodeLab soon.</p>
 </aside>
 <ol type="1">
 <li>If you haven&#39;t already, unzip the CodeLabs code into a convenient directory</li>
 <li>Open a terminal window</li>
-<li>Install the OpenTelemetry APIs with pip:<pre><code>pip install opentelemetry-api
-pip install opentelemetry-sdk
+<li>Install the OpenTelemetry APIs with pip:<pre><code>pip install -r requirements.txt
 </code></pre>
 </li>
-<li>🚨Get the lastest Solace Python API 🚨🚨🚨🚨</li>
 <li>Launch IDLE, and open <code>solace_telemetry_publisher_Salesforce.py</code></li>
 <li>Update the connection parameters to match your Solace event broker:<pre><code>hostName =  &#34;&lt;SMF Host copied from Solace Cloud&gt;&#34;
 vpnName = &#34;&lt;Message VPN copied from Solace Cloud&gt;&#34;

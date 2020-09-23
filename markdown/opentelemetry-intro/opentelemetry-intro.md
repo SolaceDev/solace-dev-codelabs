@@ -2,10 +2,10 @@ author: Jesse Menning
 summary:
 id: opentelemetry-intro
 tags:
-categories: opentelemetry, nyctaxi
+categories: opentelemetry, taxi
 environments: Web
 status: Draft
-feedback link: <insert github repo or leave empty>
+feedback link: https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro
 analytics account: UA-3921398-10
 
 # Using OpenTelemetry to find your event in a haystack
@@ -28,7 +28,7 @@ Instead of plowing through logs, trying to understand what happened, NYC Modern 
 
 In this CodeLab you’ll learn about: 
 
-✅ How OpenTelemetry works (the basics, if you'd like more detail there is a blog post here.
+✅ How OpenTelemetry works (the basics, if you'd like more detail here is a ![solid intro blog post.](https://blog.newrelic.com/product-news/what-is-opentelemetry/)) 
 
 ✅ How to get the Solace PubSub+ Python API, and set up a basic environment. 
 
@@ -54,7 +54,7 @@ Duration: 0:07:00
  
 
 Negative
-: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. Please reach out to our [Solace Community](https://solace.community/) if you happen to find one. 
+: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  [Read more about the Python API.](https://solace.community/discussion/336/python-whos-in-for-a-real-treat). 
 
 
 ## Use Case Overview 🚕
@@ -125,7 +125,7 @@ Negative
 1. Open a command terminal.
 1. Run `jaeger-all-in-one`
 1. Using a web browser, navigate to `http://localhost:16686/`
-1. You should be greeted by a picture of a...chipmunk?
+1. You should be greeted by a picture of a...chipmunk? Gopher?  Not really sure.
 
 Negative
 : You'll need to keep the terminal window running Jaeger open.  If you close it, you'll lose the traces you've collected.
@@ -150,15 +150,14 @@ Once it's complete, you should have a program called IDLE (Integrated Developmen
 Duration: 0:10:00
 
 Positive
-: This CodeLab focuses on OpenTelemetry, so it won't actually implement the Salesforce events.  If that's your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/).  Likewise, this CodeLab doesn't get into the nitty gritty of the Python API.  If you want to now more about those capabilities, there will be a CodeLab soon.
+: This CodeLab focuses on OpenTelemetry, so it won't actually implement the Salesforce events.  If that's your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/).  Likewise, this CodeLab doesn't get into the nitty gritty of the Python API.  If you want to know more about those capabilities, there will be a CodeLab soon.
 
 1. If you haven't already, unzip the CodeLabs code into a convenient directory
 1. Open a terminal window 
 1. Install the OpenTelemetry APIs with pip:
 
-		pip install opentelemetry-api
-		pip install opentelemetry-sdk
-1. 🚨Get the lastest Solace Python API 🚨🚨🚨🚨
+		pip install -r requirements.txt
+		
 1. Launch IDLE, and open `solace_telemetry_publisher_Salesforce.py`
 1. Update the connection parameters to match your Solace event broker:
 
