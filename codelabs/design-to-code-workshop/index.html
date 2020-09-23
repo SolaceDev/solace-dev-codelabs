@@ -82,8 +82,8 @@
 <h2 is-upgraded>PubSub+ Event Broker Connection Info</h2>
 <p>✅ The credentials below are for a public event feed that we&#39;ll use during this codelab.</p>
 <ul>
-<li>SMF Host: <code>tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555</code></li>
-<li>Message VPN: <code>cto-demo-virginia-azure</code></li>
+<li>SMF Host: <code>tcp://mr-m9980gjfswx.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>springone</code></li>
 <li>Username: <code>public-taxi-user</code></li>
 <li>Password: <code>iliketaxis</code></li>
 </ul>
@@ -119,9 +119,10 @@
 <ol type="1">
 <li><strong>Name</strong>: RideDropoffProcessor</li>
 <li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume the TaxiStatusUpdates with a ride status of &#34;dropoff&#34;, process the events, and output summary events.</li>
+<li>Leave <em>Application Class</em> as &#34;Unspecified&#34;</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>Click <em>Add/Remove Tags</em> and add &#34;SCSt&#34; as a tag. This tag is short for &#34;Spring Cloud Stream&#34; which is the framework we will use to develop our microservice later.</li>
-<li>Click the <em>Manage Events</em> button, search for &#34;TaxiStatusUpdate&#34; and click <em>Sub</em> next to it. This means that your application will subscribe to these events.</li>
+<li>Click the <em>Manage</em> button, search for &#34;TaxiStatusUpdate&#34; and click <em>Sub</em> next to it. This means that your application will subscribe to these events.</li>
 <li>Click the <em>Save</em> Button</li>
 </ol>
 <p>✅ You should now see your <em>RideDropoffProcessor</em> added to the graph.</p>
@@ -133,6 +134,7 @@
 <ol type="1">
 <li><strong>Name</strong>: RideAverageUpdate</li>
 <li><strong>Description</strong>: This event contains the average cost of rides over a specified duration</li>
+<li><strong>Topic Scheme</strong>: Solace (AMQP, REST, SMF)</li>
 <li><strong>Topic</strong>: taxi/nyc/v1/stats/dropoff/avg</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>For <strong>Payload Schema</strong> click <em>Add New</em></li>
@@ -236,7 +238,7 @@
 <p>To do this follow these steps:</p>
 <ol type="1">
 <li>Right click on the <em>RideDropoffProcessor</em> and choose <em>Edit</em>.</li>
-<li>Click <em>Manage Events</em>, search for &#34;RideAverageUdpdate&#34; and click &#34;Pub&#34; next to it since the <em>RideDropoffProcessor</em> needs to publish these events.</li>
+<li>Click <em>Manage</em>, search for &#34;RideAverageUdpdate&#34; and click &#34;Pub&#34; next to it since the <em>RideDropoffProcessor</em> needs to publish these events.</li>
 <li>Click <em>Save</em></li>
 </ol>
 <p>✅ The <em>RideDropoffProcessor</em> is now complete and you should see it both consuming and publishing events!</p>
@@ -261,7 +263,7 @@
       <google-codelab-step label="Develop the RideDropoffProcessor" duration="15">
         <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffProcessor</em> microservice. As we mentioned during design we want to implement this app using the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework. For more information on the framework the <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/" target="_blank">reference guide</a> is an excellent resource!</p>
 <h2 is-upgraded>Generate the Code Skeleton</h2>
-<p>In the Solace Event Portal right click on the <em>RideDropoffProcessor</em>, Choose <em>AsyncAPI</em>, Choose <em>YAML</em> and click <em>Download</em></p>
+<p>In the Solace Event Portal right click on the <em>RideDropoffProcessor</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="asyncapi_doc" src="img/d9786b4242719fc4.webp"></p>
 <p>Open &amp; check out the downloaded AsyncAPI document.</p>
 <p>It should include a lot of the information about the app that we defined via the Event Portal, including:</p>
@@ -295,7 +297,7 @@
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-m9980gjfswx.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=springone ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 </li>
 </ul>
@@ -425,7 +427,7 @@ public class Application {
 <li><strong>Name</strong>: RideDropoffConsumer</li>
 <li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume summary events for further analysis</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
-<li>Click <em>Manage Events</em>, search for &#34;RideAverageUpdate&#34; and click &#34;Sub&#34; next to it since the <em>RideDropoffConsumer</em> wants to subscribe to these events.</li>
+<li>Click <em>Manage</em>, search for &#34;RideAverageUpdate&#34; and click &#34;Sub&#34; next to it since the <em>RideDropoffConsumer</em> wants to subscribe to these events.</li>
 <li>Click <em>Save</em></li>
 </ol>
 <p class="image-container"><img alt="ep_complete" src="img/1eced6392afba3b2.webp"></p>
@@ -437,7 +439,7 @@ public class Application {
       <google-codelab-step label="Develop the RideDropoffConsumer" duration="8">
         <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffConsumer</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
 <h2 is-upgraded>Generate the Code Skeleton</h2>
-<p>In the Solace Event Portal right click on the <em>RideDropoffConsumer</em>, Choose <em>AsyncAPI</em>, Choose <em>YAML</em> and click <em>Download</em></p>
+<p>In the Solace Event Portal right click on the <em>RideDropoffConsumer</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
 <p>Note the different pieces of the command:</p>
@@ -451,7 +453,7 @@ public class Application {
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p actuator=true -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-m9980gjfswx.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=springone ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 </li>
 </ul>

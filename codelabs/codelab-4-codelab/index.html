@@ -29,8 +29,8 @@
     
       <google-codelab-step label="Codelab Overview" duration="2">
         <p>Are you trying to create easy to use, visually appealing content for the tech community? This Codelab will show you how to quickly create your own Google Codelab just like the one you&#39;re using right now.</p>
-<p>We&#39;ll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our github repo with any code that might be used for a tutorial.</p>
-<p>Here is an example image of another Codelab that I created: <img alt="image_caption" src="img/e2500cc24e07c73f.png"></p>
+<p>We&#39;ll be authoring the codelabs using markdown format. This gives us the flexibility of using our markdown file for other things and also storing it in our <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">github repo</a> with any code that might be used for a tutorial.</p>
+<p>Here is an example image of another Codelab that I created: <img alt="image_caption" src="img/d96cf1504c39f67f.png"></p>
 <h2 is-upgraded>Resources</h2>
 <ul>
 <li>The markdown for this codelab is located here: <a href="https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md" target="_blank">codelab.md</a></li>
@@ -38,6 +38,9 @@
 <li><a href="https://groups.google.com/forum/#!forum/codelab-authors" target="_blank">Google Group for Codelab Authors</a> - great forum for asking questions about codelabs and discussing future functionality</li>
 <li><a href="https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816" target="_blank">A blog that I used when getting started with Google Codelabs</a></li>
 </ul>
+<h2 is-upgraded>Video</h2>
+<p>You can also watch a video on how you can contribute to authoring a codelab by visiting this <a href="https://www.youtube.com/watch?v=2B8ev-hSbcM" target="_blank">YouTube link</a> or watching the video below</p>
+<iframe class="youtube-video" src="https://www.youtube.com/embed/2B8ev-hSbcM?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
       </google-codelab-step>
@@ -89,11 +92,16 @@ $ export PATH=$PATH:$GOROOT/bin
       </google-codelab-step>
     
       <google-codelab-step label="Prepare your repo" duration="2">
-        <p>Start by forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a> and clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username</p>
+        <p>Start by</p>
+<ol type="1">
+<li>Forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a><br><img alt="image_caption" src="img/3e59622c038312bb.png"></li>
+<li>Clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username</li>
+</ol>
 <pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </code></pre>
+<p>Then follow one of the two options in the next two steps: Automated or Manual</p>
 
 
       </google-codelab-step>
@@ -114,7 +122,7 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </ol>
 <aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
 </aside>
-<p>🚀  Go ahead to the last step and add your codelabs on the main repo</p>
+<p>🚀  Go ahead to the <strong>Step 7</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>

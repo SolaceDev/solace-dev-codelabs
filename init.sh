@@ -7,6 +7,14 @@
 # * Configure a nodemon watch command to rebuild your codelab on save
 # - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + - + -
 
+command_exists() {
+    # check if command exists and fail otherwise
+    command -v "$1" >/dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+        echo "Note: $1 Does not exist. Please install it first!"
+    fi
+}
+
 cd `dirname $0`
 
 # validate that a codelab name was included as an argument
@@ -25,8 +33,10 @@ codelab_markdown_filename="markdown/$CODELAB_NAME/$CODELAB_NAME.md"
 codelab_package_json_filename="markdown/$CODELAB_NAME/package.json"
 markdown_template="markdown/template/markdown.template"
 package_json_template="markdown/template/package.json"
+#in MacOS sed creates a backup file if zero length extension is not specefied e.g. ''
+backup_md="$codelab_markdown_filename-e"
+backup_package_json="markdown/$CODELAB_NAME/package.json-e"
 
-# Note: we might not need this if its already included in the makrdown/template dir
 # validate that markdown template and package.json exist
 if [ ! -f "$markdown_template" ] || [ ! -f "$package_json_template" ]; then
   msg "ERROR!"
@@ -34,7 +44,6 @@ if [ ! -f "$markdown_template" ] || [ ! -f "$package_json_template" ]; then
   echo "  - $markdown_template"
   echo "  - $package_json_template"
   echo ""
-  echo "Why'd you go and delete one of these files :("
   exit 0
 fi
 
@@ -46,16 +55,29 @@ cp -r markdown/template/* markdown/$CODELAB_NAME/
 mv markdown/$CODELAB_NAME/markdown.template $codelab_markdown_filename
 
 # replace placeholder codelab id in markdown template file with name provided by command line argument 
-sed -i '' \
+sed -i \
   -e "s/CODELAB_NAME.*/$CODELAB_NAME/g" \
   $codelab_markdown_filename
 
 # replace placeholder authorname with git username=
-sed -i '' \
+sed -i \
   -e "s/AUTHOR_NAME.*/$AUTHOR_NAME/g" \
   $codelab_markdown_filename
 
 # replace placeholder codelab name in the watch command with name provided in command line argument
-sed -i '' \
+sed -i \
   -e "s/CODELAB_NAME/$CODELAB_NAME/g" \
   $codelab_package_json_filename
+
+if [ -f "$backup_md" ]; then
+  rm $backup_md
+fi
+
+if [ -f "$backup_package_json" ]; then
+  rm $backup_package_json
+fi
+
+echo "Markdown file created! Find it at $PWD/markdown/$CODELAB_NAME"
+
+command_exists claat
+command_exists go
