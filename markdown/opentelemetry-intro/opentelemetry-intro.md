@@ -16,7 +16,7 @@ Duration: 0:05:00
 
 
 Positive
-: If you'd like to learn more about OpenTelemetry architecture, but don't care about hands-on stuff, you can find it in the [Solace architecture blogs](https://solace.com/blog/category/architects/).
+: If you'd like to learn more about OpenTelemetry architecture, but don't care about hands-on stuff, you can find it in my blog post [What is distributed tracing and how does OpenTelemetry work for event-driven integration?](https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/)
 
 No business likes an angry user.  That goes double if the user is a taxi driver. The language can be...intense.
 
