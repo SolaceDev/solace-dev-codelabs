@@ -28,7 +28,7 @@ Instead of plowing through logs, trying to understand what happened, NYC Modern 
 
 In this CodeLab you’ll learn about: 
 
-✅ How OpenTelemetry works (the basics, if you'd like more detail here is a ![solid intro blog post.](https://blog.newrelic.com/product-news/what-is-opentelemetry/)) 
+✅ How OpenTelemetry works (the basics, if you'd like more detail here is a [solid intro blog post.](https://blog.newrelic.com/product-news/what-is-opentelemetry/)) 
 
 ✅ How to get the Solace PubSub+ Python API, and set up a basic environment. 
 
@@ -136,15 +136,19 @@ Negative
 
 Duration: 0:12:00
 
-Python is a great language for prototyping applications.  It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the Solace PubSub+ Python API.  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.  
+Python is a great language for prototyping applications.  It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the [Solace PubSub+ Python API](https://solace.community/discussion/336/python-whos-in-for-a-real-treat).  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.  
 
 ### Steps to install
 1. Open the Python installer that you downloaded in the prerequisites.
-1. You'll be guided through the install process. Be sure to include Python in your PATH variable.
+1. You'll be guided through the install process. 
 
-Once it's complete, you should have a program called IDLE (Integrated Development and Learning Environment).
-![IDLE](img/idle.png "IDLE")
-  That's what you'll use to modify and run the Python scripts.
+Positive
+: Be sure to include Python in your PATH variable as per the download instructions
+
+Once it's complete, you should have a program called IDLE (Integrated Development and Learning Environment).	
+![IDLE](img/idle.png "IDLE")	
+
+That's what you'll use to modify and run the Python scripts.
 ## Create the "Salesforce" message publisher
 
 Duration: 0:10:00
@@ -153,19 +157,28 @@ Positive
 : This CodeLab focuses on OpenTelemetry, so it won't actually implement the Salesforce events.  If that's your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/).  Likewise, this CodeLab doesn't get into the nitty gritty of the Python API.  If you want to know more about those capabilities, there will be a CodeLab soon.
 
 1. If you haven't already, unzip the CodeLabs code into a convenient directory
-1. Open a terminal window 
-1. Install the OpenTelemetry APIs with pip:
+1. Open a terminal window and navigate to the downloaded github repo
+1. Configure a virtual Python environment
+
+		python -m pip install --user virtualenv
+		python -m venv venv
+		## Activate the virtual environment on MacOS
+		source venv/bin/activate
+		## Activate the virtual environment on Windows
+		source venv/Scripts/activate
+
+1. Install the required OpenTelemetry dependencies with pip
 
 		pip install -r requirements.txt
 		
-1. Launch IDLE, and open `solace_telemetry_publisher_Salesforce.py`
-1. Update the connection parameters to match your Solace event broker:
+1. Install the Solace API after 
+		
+		pip install <path_to_downloaded_API_wheel>
 
-		hostName =  "<SMF Host copied from Solace Cloud>"
-		vpnName = "<Message VPN copied from Solace Cloud>"
-		solaceUserName =  "solace-cloud-client"
-		solacePassword = "<Password copied from Solace Cloud>"
-1. Click on  Run > Run Module ![idle_run](img/idle_run.png "idle_run")
+1. Execute the `solace_telemetry_publisher_Salesforce.py` by passing the correct environment variables 
+
+		SOL_HOST=<host_name> SOL_VPN=<vpn_name> SOL_USERNAME=<username> SOL_PASSWORD=<password> python solace_telemetry_publisher_Salesforce.py
+
 1. If it's successful, you'll get a message like:
 
 		2020-08-26 08:33:41,885 [INFO] pysolace.messaging.core: solace_session.py:470  ESTABLISH SESSION ON HOST tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555
@@ -240,24 +253,25 @@ Duration: 0:10:00
 
 Now that "Salesforce" is publishing an event to Solace, you need to get the "REST" consumer and the "database" consumers up and running. It's basically the same procedure as before.
 
-1. In IDLE, open `solace_telemetry_consumer_Database.py`
-1. Update the connection parameters to match your Solace event broker:
+1. In a new terminal, navigate to the directory where the code resides
+1. Activate your virtual environment by executing `source venv/bin/activate` in MacOs or `source venv/Scripts/activate` on Windows
+1. Execute the `solace_telemetry_publisher_Salesforce.py` by passing the correct environment variables 
 
-		hostName =  "<SMF Host copied from Solace Cloud>"
-		vpnName = "<Message VPN copied from Solace Cloud>"
-		solaceUserName =  "solace-cloud-client"
-		solacePassword = "<Password copied from Solace Cloud>"
-1. Click on  Run > Run Module ![idle_run](img/idle_run.png "idle_run")
+		SOL_HOST=<host_name> SOL_VPN=<vpn_name> SOL_USERNAME=<username> SOL_PASSWORD=<password> python solace_telemetry_consumer_Database.py
+
 1. You should see something like:
 
 		2020-08-26 08:32:20,449 [INFO] pysolace.messaging.core: [solace_session.py:470]  ESTABLISH SESSION ON HOST [tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555]
 		Execute Direct Consume - String
 		Subscribed to: opentelemetry/helloworld
 
-1. The consumer listens for incoming message for 120 seconds, and then stops.  At that point you'll see a message that says:
+1. The database consumer listens for incoming message until it receives a keyboard interrupt.  At that point you'll see a message that says:
 		Process finished with exit code 0
 		
 🔁 Repeat this process with `solace_telemetry_consumer_REST.py`, so you have two consumers running at the same time.
+
+Negative
+: Don't forget to activate your Python virtual env in the new terminal you open!
 
 ✔️ You've created the entire solution!
 ![check5](img/check5.png)
@@ -290,8 +304,8 @@ Duration: 0:10:00
 
 Now all the pieces are in place. To see the end-to-end solution:
 
-1. Run the two consumers using IDLE using two separate instances
-1. Within two minutes, run the publisher using IDLE using yet another instance
+1. Run the two consumers in two separate terminal instances
+1. Run the publisher in another terminal instance
 1. As soon as you run the publisher, you should see a log entries in each of the consumers showing that the events were received.  The logs should look like:
 
 		CALLBACK: Message Received on Topic: opentelemetry/helloworld.
