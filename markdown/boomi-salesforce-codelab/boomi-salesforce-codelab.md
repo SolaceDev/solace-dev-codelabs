@@ -2,7 +2,7 @@ author: Jesse Menning
 summary:
 id: boomi-salesforce-codelab
 tags: workshop
-categories: boomi, salesforce, azure
+categories: boomi, salesforce, azure, taxi
 environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi

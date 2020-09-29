@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-08-26T11:12:01-04:00",
+  "updated": "2020-09-04T17:43:34-04:00",
   "id": "boomi-salesforce-codelab",
   "duration": 103,
   "title": "Event enabling Salesforce and AzureDB using Boomi and Solace",
@@ -16,7 +16,8 @@
   "category": [
     "boomi",
     "salesforce",
-    "azure"
+    "azure",
+    "taxi"
   ],
   "tags": [
     "web",
