@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-09-23T13:17:28-04:00",
+  "updated": "2020-09-29T15:48:45-04:00",
   "id": "opentelemetry-intro",
   "duration": 69,
   "title": "Using OpenTelemetry to find your event in a haystack",
