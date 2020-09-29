@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2020-09-23T13:17:28-04:00",
+  "id": "opentelemetry-intro",
+  "duration": 69,
+  "title": "Using OpenTelemetry to find your event in a haystack",
+  "summary": "",
+  "source": "opentelemetry-intro.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "opentelemetry",
+    "taxi"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro",
+  "ga": "UA-3921398-10",
+  "url": "opentelemetry-intro"
+}

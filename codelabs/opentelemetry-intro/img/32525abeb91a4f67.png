@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="New Relic Blog">
+          <meta property="og:image" content="//blog.newrelic.com/wp-content/uploads/iStock-487251391-1.jpg" />
+    <meta name="twitter:image" content="//blog.newrelic.com/wp-content/uploads/iStock-487251391-1.jpg" />
+    <meta name="twitter:title" content="New Relic: What Is The OpenTelemetry Specification And How Does It Work?" />
+  <meta property="fb:admins" content="1360179707">
+  <meta class="swiftype" name="type" data-type="enum" content="blog" />
+  <title>What Is The OpenTelemetry Specification And How Does It Work?</title>
+  <link rel="profile" href="http://gmpg.org/xfn/11">
+  <link rel="pingback" href="https://blog.newrelic.com/xmlrpc.php">
+  <meta name="post-slug" content="what-is-opentelemetry">
+<meta name="post-title" content="OpenTelemetry: Future-Proofing Your Instrumentation">
+<meta name="post-type" content="post">
+<meta name="post-date" content="2020-06-22 09:35:41">
+<meta name="post-author" content="John Watson and Lavanya Chockalingam">
+<meta name="post-category" content="New Relic News and Products">
+<meta name="author" content="John Watson and Lavanya Chockalingam">
+<meta name="classification" content="New Relic News and Products">
+<meta name="subject" content="New Relic News and Products">
+<meta name="copyright" content="Copyright New Relic blog - All rights Reserved.">
+<meta name="publisher" content="New Relic blog">
+<meta name="rating" content="General">
+<meta name="revisit-after" content="3">
+<meta name="template" content="New Relic">
+
+  
+<script src="https://cdn.optimizely.com/js/10427733604.js"></script>
+
+<!-- Social Warfare v3.6.1 https://warfareplugins.com --><style>@font-face {font-family: "sw-icon-font";src:url("https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/fonts/sw-icon-font.eot?ver=3.6.1");src:url("https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/fonts/sw-icon-font.eot?ver=3.6.1#iefix") format("embedded-opentype"),url("https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/fonts/sw-icon-font.woff?ver=3.6.1") format("woff"),
+	url("https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/fonts/sw-icon-font.ttf?ver=3.6.1") format("truetype"),url("https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/fonts/sw-icon-font.svg?ver=3.6.1#1445203416") format("svg");font-weight: normal;font-style: normal;}</style>
+<!-- Social Warfare v3.6.1 https://warfareplugins.com -->
+
+
+<!-- This site is optimized with the Yoast SEO plugin v11.5 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Learn about the OpenTelemetry specification—what&#039;s it&#039;s for, how its architectural components work, and what this means for New Relic users."/>
+<link rel="canonical" href="https://blog.newrelic.com/product-news/what-is-opentelemetry/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="What Is The OpenTelemetry Specification And How Does It Work?" />
+<meta property="og:description" content="Learn about the OpenTelemetry specification—what&#039;s it&#039;s for, how its architectural components work, and what this means for New Relic users." />
+<meta property="og:url" content="https://blog.newrelic.com/product-news/what-is-opentelemetry/" />
+<meta property="og:site_name" content="New Relic Blog" />
+<meta property="article:tag" content="observability" />
+<meta property="article:tag" content="open instrumentation" />
+<meta property="article:tag" content="OpenTelemetry" />
+<meta property="article:tag" content="telemetry" />
+<meta property="article:section" content="New Relic News and Products" />
+<meta property="article:published_time" content="2020-06-22T16:35:41-07:00" />
+<meta property="article:modified_time" content="2020-07-14T19:39:55-07:00" />
+<meta property="og:updated_time" content="2020-07-14T19:39:55-07:00" />
+<meta property="og:image" content="https://blog.newrelic.com/wp-content/uploads/opentelemetry_architecture.jpeg" />
+<meta property="og:image:secure_url" content="https://blog.newrelic.com/wp-content/uploads/opentelemetry_architecture.jpeg" />
+<meta property="og:image:width" content="1724" />
+<meta property="og:image:height" content="1506" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="Learn about the OpenTelemetry specification—what&#039;s it&#039;s for, how its architectural components work, and what this means for New Relic users." />
+<meta name="twitter:title" content="What Is The OpenTelemetry Specification And How Does It Work?" />
+<meta name="twitter:image" content="http://blog.newrelic.com/wp-content/uploads/opentelemetry_architecture.jpeg" />
+<script type='application/ld+json' class='yoast-schema-graph yoast-schema-graph--main'>{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://blog.newrelic.com/#organization","name":"New Relic","url":"https://blog.newrelic.com/","sameAs":[]},{"@type":"WebSite","@id":"https://blog.newrelic.com/#website","url":"https://blog.newrelic.com/","name":"New Relic Blog","publisher":{"@id":"https://blog.newrelic.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://blog.newrelic.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#primaryimage","url":"http://blog.newrelic.com/wp-content/uploads/opentelemetry_architecture-1024x895.jpeg"},{"@type":"WebPage","@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#webpage","url":"https://blog.newrelic.com/product-news/what-is-opentelemetry/","inLanguage":"en-US","name":"What Is The OpenTelemetry Specification And How Does It Work?","isPartOf":{"@id":"https://blog.newrelic.com/#website"},"primaryImageOfPage":{"@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#primaryimage"},"datePublished":"2020-06-22T16:35:41-07:00","dateModified":"2020-07-14T19:39:55-07:00","description":"Learn about the OpenTelemetry specification\u2014what's it's for, how its architectural components work, and what this means for New Relic users."},{"@type":"Article","@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#article","isPartOf":{"@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#webpage"},"author":{"@id":"https://blog.newrelic.com/author/johnwatsonandlavanyachockalingam/#author"},"headline":"OpenTelemetry: Future-Proofing Your Instrumentation","datePublished":"2020-06-22T16:35:41-07:00","dateModified":"2020-07-14T19:39:55-07:00","commentCount":0,"mainEntityOfPage":{"@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#webpage"},"publisher":{"@id":"https://blog.newrelic.com/#organization"},"image":{"@id":"https://blog.newrelic.com/product-news/what-is-opentelemetry/#primaryimage"},"keywords":"observability,open instrumentation,OpenTelemetry,telemetry","articleSection":"New Relic News and Products"},{"@type":["Person"],"@id":"https://blog.newrelic.com/author/johnwatsonandlavanyachockalingam/#author","name":"John Watson and Lavanya Chockalingam","image":{"@type":"ImageObject","@id":"https://blog.newrelic.com/#authorlogo","url":"https://secure.gravatar.com/avatar/758676fbcbca43876fcb65d183129f73?s=96&d=mm&r=g","caption":"John Watson and Lavanya Chockalingam"},"description":"John Watson is a Lead Engineer at New Relic. He is currently focused on supporting OpenTelemetry and is one of the maintainers of the OpenTelemetry Java implementation.\r\n\r\nLavanya Chockalingam is a Senior Product Marketing manager at New Relic for APM products. Lavanya started her career as an engineer and then moved on to sales and product marketing roles. Lavanya has worked both in hardware and software industries and is passionate about technology and how it can be leveraged to solve real world problems.","sameAs":[]}]}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//platform.twitter.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//netdna.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="New Relic Blog &raquo; Feed" href="https://blog.newrelic.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="New Relic Blog &raquo; Comments Feed" href="https://blog.newrelic.com/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blog.newrelic.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.4.2"}};
+			/*! This file is auto-generated */
+			!function(e,a,t){var r,n,o,i,p=a.createElement("canvas"),s=p.getContext&&p.getContext("2d");function c(e,t){var a=String.fromCharCode;s.clearRect(0,0,p.width,p.height),s.fillText(a.apply(this,e),0,0);var r=p.toDataURL();return s.clearRect(0,0,p.width,p.height),s.fillText(a.apply(this,t),0,0),r===p.toDataURL()}function l(e){if(!s||!s.fillText)return!1;switch(s.textBaseline="top",s.font="600 32px Arial",e){case"flag":return!c([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])&&(!c([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!c([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]));case"emoji":return!c([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340])}return!1}function d(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(i=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},o=0;o<i.length;o++)t.supports[i[o]]=l(i[o]),t.supports.everything=t.supports.everything&&t.supports[i[o]],"flag"!==i[o]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[i[o]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(r=t.source||{}).concatemoji?d(r.concatemoji):r.wpemoji&&r.twemoji&&(d(r.twemoji),d(r.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='social-warfare-block-css-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/js/post-editor/dist/blocks.style.build.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-includes/css/dist/block-library/style.min.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='easy_author_image-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/easy-author-image/css/easy-author-image.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='jsj_code_highlight-monokai_sublime_theme-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/jsj-code-highlight/styles/monokai_sublime.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='jsj_code_highlight_client_style-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/jsj-code-highlight/css/client-style.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='jsj_code_highlight-source_code_pro_font_style-css'  href='//fonts.googleapis.com/css?family=Source+Code+Pro%3A400%2C700&#038;ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='swiftype-facets-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/swiftype-search/Search/../assets/facets.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='social_warfare-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/css/style.min.css?ver=3.6.1' type='text/css' media='all' />
+<link rel='stylesheet' id='opensans-css'  href='//fonts.googleapis.com/css2?family=Open+Sans%3Awght%40300%3B400%3B600&#038;display=swap&#038;ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css'  href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css?ver=5.4.2' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrap-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/css/styleguide.css?ver=6b25ace1e9ea49d05e103564f27d8f82' type='text/css' media='all' />
+<link rel='stylesheet' id='style-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/style.css?ver=67029e46277c713aa42e75bb6720ec14' type='text/css' media='all' />
+<link rel='stylesheet' id='tablepress-default-css'  href='https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/tablepress-combined.min.css?ver=15' type='text/css' media='all' />
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/js/utm-cookie.js?ver=1.0'></script>
+<link rel='https://api.w.org/' href='https://blog.newrelic.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://blog.newrelic.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://blog.newrelic.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='shortlink' href='https://blog.newrelic.com/?p=51560' />
+<link rel="alternate" type="application/json+oembed" href="https://blog.newrelic.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blog.newrelic.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F&#038;format=xml" />
+		<meta name="abstract" content="Software Analytics, Application Performance Mangement">
+		<meta name="author" content="pwpadmin">
+		<meta name="classification" content="Featured Post, Modern Software, Nerd Life, New Relic News, New Relic Products, Tech Topics">
+		<meta name="copyright" content="Copyright New Relic blog - All rights Reserved.">
+		<meta name="distribution" content="Global">
+		<meta name="language" content="en-US">
+		<meta name="publisher" content="New Relic blog">
+		<meta name="rating" content="General">
+		<meta name="resource-type" content="Document">
+		<meta name="revisit-after" content="3">
+		<meta name="subject" content="Featured Post, Modern Software, Nerd Life, New Relic News, New Relic Products, Tech Topics">
+		<meta name="template" content="New Relic">
+		<meta name="example" content="custom">
+<meta name="google-site-verification" content="zfED8Wlhb0YwGF6GKCrnolK9m3wXLGuKXkwMb6Hc97k" />
+<!-- Stream WordPress user activity plugin v3.3.0 -->
+<link rel="shortcut icon" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/site.webmanifest">
+<link rel="mask-icon" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" sizes="196x196" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/android-chrome-192x192.png">
+<link rel="shortcut icon" sizes="256x256" href="https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/img/favicons/android-chrome-256x256.png">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-TileImage" content="https://blog.newrelic.com/wp-content/themes/newrelic_dt/img/favicons/mstile-150x150.png">
+<meta name="msapplication-config" content="https://blog.newrelic.com/wp-content/themes/newrelic_dt/img/favicons/browserconfig.xml">
+<!-- wp thread comment 1.4.9.4.002 -->
+</head>
+
+<body class="post-template-default single single-post postid-51560 single-format-standard page-0 page-what-is-opentelemetry jsj_code_highlight jsj_code_highlight-monokai_sublime jsj_code_highlight-source_code_pro jsj_code_highlight-include_additional_styles jsj_code_highlight-no-add_line_numbers jsj_code_highlight-no-tab_replacement group-blog">
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PX5HSW"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PX5HSW');</script>
+  <!-- End Google Tag Manager -->
+
+  <div class="visible-xs" id="pagetop"></div>
+  
+<nav class="site" id="nav_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="nav-outer">
+                    
+                    <span class="link-open nav-head logo">
+                        <a href="https://newrelic.com/"><img alt="New Relic logo" src="https://newrelic.com/assets/newrelic/brand/logo-newrelic.svg" /></a>
+                    </span>
+                    <div id="nav_header_main">
+                        <div class="nav_main" id="productclick">
+                            <span class="title">
+                                Products
+                                <span class="visible-xs visible-sm arrow">
+                                    <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Hamburger-Expanded" transform="translate(-295.000000, -111.000000)" fill="#4A4A4A"><g id="Group-5" transform="translate(17.000000, 111.000000)"><g id="Group-4" transform="translate(283.555556, 10.000000) rotate(-180.000000) translate(-283.555556, -10.000000) translate(278.000000, 0.000000)"><g id="Group" transform="translate(5.555556, 5.833333) rotate(-45.000000) translate(-5.555556, -5.833333) translate(-1.111111, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.555556, 14.166667) rotate(-315.000000) translate(-5.555556, -14.166667) translate(-1.111111, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="nav_main" id="pricing">
+                            <a href="https://newrelic.com/pricing"><span class="title" style="color:#666;">Pricing</span></a>
+                        </div>
+                        <div class="nav_main" id="solutionclick">
+                            <span class="title">
+                                Solutions
+                                <span class="visible-xs visible-sm arrow">
+                                    <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Hamburger-Expanded" transform="translate(-295.000000, -111.000000)" fill="#4A4A4A"><g id="Group-5" transform="translate(17.000000, 111.000000)"><g id="Group-4" transform="translate(283.555556, 10.000000) rotate(-180.000000) translate(-283.555556, -10.000000) translate(278.000000, 0.000000)"><g id="Group" transform="translate(5.555556, 5.833333) rotate(-45.000000) translate(-5.555556, -5.833333) translate(-1.111111, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.555556, 14.166667) rotate(-315.000000) translate(-5.555556, -14.166667) translate(-1.111111, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="nav_main" id="supportclick">
+                            <span class="title">
+                                Help Center
+                                <span class="visible-xs visible-sm arrow">
+                                    <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Hamburger-Expanded" transform="translate(-295.000000, -111.000000)" fill="#4A4A4A"><g id="Group-5" transform="translate(17.000000, 111.000000)"><g id="Group-4" transform="translate(283.555556, 10.000000) rotate(-180.000000) translate(-283.555556, -10.000000) translate(278.000000, 0.000000)"><g id="Group" transform="translate(5.555556, 5.833333) rotate(-45.000000) translate(-5.555556, -5.833333) translate(-1.111111, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.555556, 14.166667) rotate(-315.000000) translate(-5.555556, -14.166667) translate(-1.111111, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="nav_main" id="aboutclick">
+                            <span class="title">
+                                About
+                                <span class="visible-xs visible-sm arrow">
+                                    <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Hamburger-Expanded" transform="translate(-295.000000, -111.000000)" fill="#4A4A4A"><g id="Group-5" transform="translate(17.000000, 111.000000)"><g id="Group-4" transform="translate(283.555556, 10.000000) rotate(-180.000000) translate(-283.555556, -10.000000) translate(278.000000, 0.000000)"><g id="Group" transform="translate(5.555556, 5.833333) rotate(-45.000000) translate(-5.555556, -5.833333) translate(-1.111111, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.555556, 14.166667) rotate(-315.000000) translate(-5.555556, -14.166667) translate(-1.111111, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.3333333" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="visible-xs visible-sm searchclick">
+                            <p><a href="/search">
+                                <svg width="25px" height="25px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><desc>Search icon</desc><defs></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="search" stroke="#0AB0BF"><path d="M16.2475768,0.550537634 C7.57771011,0.550537634 0.550647742,7.57870108 0.550647742,16.2474667 C0.550647742,24.9151312 7.57771011,31.9432946 16.2475768,31.9432946 C24.9163424,31.9432946 31.9434047,24.9151312 31.9434047,16.2474667 C31.9434047,7.57870108 24.9163424,0.550537634 16.2475768,0.550537634 Z" id="Stroke-1"></path><path d="M18.8505187,13.6046658 C18.8505187,16.4773712 16.5217445,18.8072465 13.6479381,18.8072465 C10.7752327,18.8072465 8.44645849,16.4773712 8.44645849,13.6046658 C8.44645849,10.7319604 10.7752327,8.40318624 13.6479381,8.40318624 C16.5217445,8.40318624 18.8505187,10.7319604 18.8505187,13.6046658 Z" id="Stroke-3" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.3263002,17.2824774 L23.5473755,23.5035527" id="Stroke-5" stroke-linecap="round" stroke-linejoin="round"></path></g></g></svg>
+                                Search the blog
+                            </a></p>
+                        </div>
+                        <div class="col-xs-12 site_cta visible-xs visible-sm text-center" id="mobile_app_cta">
+                            <p class="h3">Monitor New Relic from your phone or tablet</p> 
+                            <p><a href="https://newrelic.com/mobility">Learn more</a> or download using the links below.</p>
+                            <div class="col-sm-6 col-xs-12">
+                                <p>New Relic app for iOS or Android</p>
+                                <p>
+                                    <a href="https://itunes.apple.com/us/app/new-relic/id594038638?ls=1&mt=8"><img src="https://newrelic.com/assets/pages/mobility/appstore.svg" alt="Download on the App Store" height="40"></a>
+                                    &nbsp;&nbsp;
+                                    <a href="https://play.google.com/store/apps/details?id=com.newrelic.rpm"><img src="https://newrelic.com/assets/pages/mobility/googleplay.svg" alt="Android App on Google play" height="40"></a>
+                                </p>
+                            </div>
+                            <hr class="hairline visible-xs"/>
+                            <div class="col-sm-6 col-xs-12">
+                                <p>New Relic Insights app for iOS or Android</p>
+                                <p>
+                                    <a href="https://itunes.apple.com/us/app/new-relic-insights/id891431652?mt=8"><img src="https://newrelic.com/assets/pages/mobility/appstore.svg" alt="Download on the App Store" height="40"></a>
+                                    &nbsp;&nbsp;
+                                    <a href="https://play.google.com/store/apps/details?id=com.newrelic.insights"><img src="https://newrelic.com/assets/pages/mobility/googleplay.svg" alt="Android App on Google play" height="40"></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mobile-pos">
+                        <div class="nav-head" id="nav-mobile-toggle">
+                            <a href="#">
+                            <span class="dot one"></span>
+                            <span class="dot two"></span>
+                            <span class="dot three"></span>
+                            </a>
+                        </div>
+                        <div id="nav_login">
+                            <a href="https://rpm.newrelic.com/" class="btn btn-default login">
+                                <span class="text">Log In</span>
+                            </a>
+                        </div>
+                        <div id="nav_signup">
+                            <a href="https://newrelic.com/signup" class="btn btn-primary signup<%= @button_add_class %>" cta-type="Header Offer">
+                                Sign Up
+                            </a>
+                        </div>
+                            <div id="search-start" class="hidden-sm hidden-xs">
+                                <a href="/search"><svg width="33px" height="33px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><desc>Search icon</desc><defs></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="search" stroke="#9B9B9B"><path d="M16.2475768,0.550537634 C7.57771011,0.550537634 0.550647742,7.57870108 0.550647742,16.2474667 C0.550647742,24.9151312 7.57771011,31.9432946 16.2475768,31.9432946 C24.9163424,31.9432946 31.9434047,24.9151312 31.9434047,16.2474667 C31.9434047,7.57870108 24.9163424,0.550537634 16.2475768,0.550537634 Z" id="Stroke-1"></path><path d="M18.8505187,13.6046658 C18.8505187,16.4773712 16.5217445,18.8072465 13.6479381,18.8072465 C10.7752327,18.8072465 8.44645849,16.4773712 8.44645849,13.6046658 C8.44645849,10.7319604 10.7752327,8.40318624 13.6479381,8.40318624 C16.5217445,8.40318624 18.8505187,10.7319604 18.8505187,13.6046658 Z" id="Stroke-3" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.3263002,17.2824774 L23.5473755,23.5035527" id="Stroke-5" stroke-linecap="round" stroke-linejoin="round"></path></g></g></svg></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="site_sub" id="productclick_slide">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 visible-xs visible-sm goback">
+                <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="arrow"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Why-New-Relic-Nav" transform="translate(-17.000000, -50.000000)"><g id="Group-6"><rect id="Rectangle-2" fill="#F6F6F6" x="0" y="0" width="320" height="80"></rect><g id="Group-4" transform="translate(17.000000, 50.000000)" fill="#4A4A4A"><g id="Group" transform="translate(5.500000, 5.833333) rotate(-45.000000) translate(-5.500000, -5.833333) translate(-1.100000, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.500000, 14.166667) rotate(-315.000000) translate(-5.500000, -14.166667) translate(-1.100000, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                <span>Products</span>
+            </div>
+            <div class="col-xs-12 portion SL_hide">
+                <p class="title">New Relic One</p>
+                <ul>
+                    <li><a href="https://newrelic.com/platform">Platform Overview</a></li>
+                    <li><a href="https://newrelic.com/platform/telemetry-data-platform">Telemetry Data Platform</a></li>
+                    <li><a href="https://newrelic.com/platform/full-stack-observability">Full-Stack Observability</a></li>
+                    <li><a href="https://newrelic.com/platform/applied-intelligence">Applied Intelligence</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="site_sub" id="solutionclick_slide">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 visible-xs visible-sm goback">
+                <span>Solutions</span>
+                <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="arrow"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Why-New-Relic-Nav" transform="translate(-17.000000, -50.000000)"><g id="Group-6"><rect id="Rectangle-2" fill="#F6F6F6" x="0" y="0" width="320" height="80"></rect><g id="Group-4" transform="translate(17.000000, 50.000000)" fill="#4A4A4A"><g id="Group" transform="translate(5.500000, 5.833333) rotate(-45.000000) translate(-5.500000, -5.833333) translate(-1.100000, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.500000, 14.166667) rotate(-315.000000) translate(-5.500000, -14.166667) translate(-1.100000, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+            </div>
+            <div class="col-xs-12 col-md-4 portion">
+                <p class="title">By Topic</p>
+                <ul>
+                    <li><a href="https://newrelic.com/devops">DevOps</a></li>
+                    <li><a href="https://newrelic.com/solutions/cloud-adoption">Cloud Adoption</a></li>
+                    <li><a href="https://newrelic.com/solutions/cloud-native">Cloud Native</a></li>
+                    <li><a href="https://newrelic.com/solutions/topic/digital-customer-experience">Digital Customer Experience</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-4 portion">
+                <p class="title">By Industry</p>
+                <ul>
+                    <li><a href="https://newrelic.com/solutions/industry/retail-and-ecommerce-monitoring">E-commerce and Retail</a></li>
+                    <li><a href="https://newrelic.com/solutions/industry/digital-media-monitoring">Media</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-4 portion SL_hide">
+                <p class="title">By Technology</p>
+                <ul>
+                    <li><a href="https://newrelic.com/partners/aws-monitoring">Amazon Web Services</a></li>
+                    <li><a href="https://newrelic.com/partner/pivotal">Pivotal Cloud Foundry</a></li>
+                    <li><a href="https://newrelic.com/partner/azure">Microsoft Azure</a></li>
+                    <li><a href="https://newrelic.com/partners/gcp">Google Cloud Platform</a></li>
+                    <li><a href="https://newrelic.com/platform/kubernetes">Kubernetes</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="site_sub" id="supportclick_slide">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 visible-xs visible-sm goback">
+                <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="arrow"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Why-New-Relic-Nav" transform="translate(-17.000000, -50.000000)"><g id="Group-6"><rect id="Rectangle-2" fill="#F6F6F6" x="0" y="0" width="320" height="80"></rect><g id="Group-4" transform="translate(17.000000, 50.000000)" fill="#4A4A4A"><g id="Group" transform="translate(5.500000, 5.833333) rotate(-45.000000) translate(-5.500000, -5.833333) translate(-1.100000, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.500000, 14.166667) rotate(-315.000000) translate(-5.500000, -14.166667) translate(-1.100000, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                <span>Help Center</span>
+            </div>
+            <div class="col-xs-12 col-md-4 portion">
+                <p class="title">Learn</p>
+                <ul>
+                    <li><a href="https://docs.newrelic.com/" target="_blank">Docs</a></li>
+                    <li><a href="https://developer.newrelic.com/" target="_blank">Build on New Relic</a></li>
+                    <li><a href="https://opensource.newrelic.com/" target="_blank">Explore Open Source Projects</a></li>
+                    <li><a href="https://learn.newrelic.com/" target="_blank">Training</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-4 portion">
+                <p class="title">Get Help</p>
+                <ul>
+                    <li><a href="https://discuss.newrelic.com/" target="_blank">Community Forum</a></li>
+                    <li><a href="https://support.newrelic.com/" target="_blank">Global Technical Support</a></li>
+                    <li><a href="https://newrelic.com/expertservices" target="_blank">Expert Services</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="site_sub" id="aboutclick_slide">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 visible-xs visible-sm goback">
+                <svg width="11px" height="20px" viewBox="0 0 11 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="arrow"><g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Why-New-Relic-Nav" transform="translate(-17.000000, -50.000000)"><g id="Group-6"><rect id="Rectangle-2" fill="#F6F6F6" x="0" y="0" width="320" height="80"></rect><g id="Group-4" transform="translate(17.000000, 50.000000)" fill="#4A4A4A"><g id="Group" transform="translate(5.500000, 5.833333) rotate(-45.000000) translate(-5.500000, -5.833333) translate(-1.100000, 5.000000)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g><g id="Group-Copy-2" transform="translate(5.500000, 14.166667) rotate(-315.000000) translate(-5.500000, -14.166667) translate(-1.100000, 13.333333)"><rect id="Rectangle" x="0" y="0" width="13.2" height="1.66666667" rx="0.833333333"></rect></g></g></g></g></g></svg>
+                <span>About</span>
+            </div>
+            <div class="col-xs-12 col-md-3 portion">
+                <a href="https://newrelic.com/customers" class="hover"><span class="title">Our Customers</span><span>Over 15,000 customers love <nobr>New Relic,</nobr> from Fortune 500 enterprises to small businesses around the globe.</span></a>
+            </div>
+            <div class="col-xs-12 col-md-3 portion">
+                <a href="https://blog.newrelic.com/" class="hover"><span class="title">Our Blog</span><span>The latest news, tips, and insights from the world of <nobr>New Relic</nobr> and digital intelligence.</span></a>
+            </div>
+            <div class="col-xs-12 col-md-6 portion">
+                <p class="title">Our Company</p>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <ul>
+                            <li><a href="https://newrelic.com/about">About New Relic</a></li>
+                            <li><a href="https://newrelic.com/about/leadership">Leadership</a></li>
+                            <li><a href="https://newrelic.com/community/events">Meetups and Events</a></li>
+                            <li><a href="https://newrelic.com/resources">Resources</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <ul>
+                            <li><a href="https://ir.newrelic.com/" target="_blank">Investor Relations</a></li>
+                            <li><a href="https://newrelic.com/about/newsroom">Newsroom</a></li>
+                            <li><a href="https://newrelic.com/solutions/partners">Partner Program</a></li>
+                            <li><a href="https://newrelic.com/about/contact-us">Contact New Relic</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<nav class="nav-subnav nav-subhead nr-default-light">
+  <div class="nav-subnav-inner">
+    <p class="clicker">
+        <span class="pos">
+            New Relic Blog
+            <span class="arrow visible-xs visible-sm">
+                <svg width="9px" height="6px" viewBox="0 0 9 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                    <polygon id="path-1" points="9.5 9.18333333 6.96666667 6.65 5.7 7.91666667 8.86666667 11.0833333 9.5 11.7166667 13.3 7.91666667 12.0333333 6.65"></polygon>
+                </defs>
+                <g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Cloud-Adoption" transform="translate(-208.000000, -58.000000)">
+                        <g id="Group-4">
+                            <g id="Group-3" transform="translate(203.000000, 52.000000)">
+                                <g id="Icon/arrow-down">
+                                    <mask id="mask-2" fill="white">
+                                        <use xlink:href="#path-1"></use>
+                                    </mask>
+                                    <use id="arrow-down" fill="#000000" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                    <g id="Tint-/-UI-/-Gray-/-700" mask="url(#mask-2)" fill="#464E4E" fill-rule="evenodd">
+                                        <rect id="Color-/-UI-/-Gray-/-700" x="0" y="0" width="19" height="19"></rect>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+                </svg>
+            </span>
+        </span>
+    </p>
+    <ul>
+        <li class=""><a href="https://blog.newrelic.com/">Blog Home</a></li><li class=""><a href="https://blog.newrelic.com/category/product-news/">News and Products</a></li><li class=""><a href="https://blog.newrelic.com/category/engineering/">Software Engineering</a></li><li class=""><a href="https://blog.newrelic.com/category/technology/">Technology Industry</a></li><li class=""><a href="https://blog.newrelic.com/category/culture/">Culture</a></li>    </ul>
+  </div>
+</nav>
+
+  <div id="site-wrap" class="clearfix hfeed site">
+    
+
+    <div id="content" class="site-content">
+
+      <!-- Promo insert -->
+      <a href="https://newrelic.com/gartner-magic-quadrant" id="promo_banner" target="_blank" rel="noopener" title="Click to learn more">
+        <span>
+          8 times <span class="long">in a row, New Relic named a</span> Gartner APM Magic Quadrant leader<span class="long">. Take a closer look</span> <i class="fa fa-angle-right"></i>
+        </span>
+      </a>
+      <!-- /insert -->
+
+          <div id="promoted-post" style="background-image: url(https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/iStock-487251391-1.jpg);">
+      <div class="container">
+        <h1 class="h1">OpenTelemetry: Future-Proofing Your Instrumentation</h1>
+        <div class="post-meta">
+  <img class="avatar avatar-42 photo" width="64" height="64" src="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/lavanya-john-300x300.jpg"/>  By <a href="https://blog.newrelic.com/author/johnwatsonandlavanyachockalingam/" title="Posts by John Watson and Lavanya Chockalingam" rel="author">John Watson and Lavanya Chockalingam</a>  <span>&bull;</span> Jun. 22nd, 2020 
+  <span>&bull;</span> <a href="https://blog.newrelic.com/category/product-news/" rel="category tag">New Relic News and Products</a>      <p class="post-tags">
+     <i class="fa fa-tags"></i><a href="https://blog.newrelic.com/tag/observability/" rel="tag">observability</a>, <a href="https://blog.newrelic.com/tag/open-instrumentation/" rel="tag">open instrumentation</a>, <a href="https://blog.newrelic.com/tag/opentelemetry/" rel="tag">OpenTelemetry</a>, <a href="https://blog.newrelic.com/tag/telemetry/" rel="tag">telemetry</a>    </p>
+  </div>      </div>
+    </div>
+          <div class="container main-wrap">
+                <div class="row">
+          <section id="primary" class="content-area">
+            <main id="main" class="site-main" role="main">
+              <div class="col-md-9 col-lg-8 main-content-wrapper">
+	<div class="col-md-12 post clearfix">
+		<div class="row">
+			<div class="col-sm-12 col-lg-12 clearfix">
+				<article id="post-51560" class="post-51560 post type-post status-publish format-standard hentry category-product-news tag-observability tag-open-instrumentation tag-opentelemetry tag-telemetry">
+										<div class="post-body">
+												<div class="swp_social_panel swp_horizontal_panel swp_flat_fresh  swp_default_full_color swp_individual_full_color swp_other_full_color scale-100  scale-" data-min-width="1100" data-float-color="#ffffff" data-float="none" data-float-mobile="none" data-transition="slide" ><div class="nc_tweetContainer swp_share_button swp_twitter" data-network="twitter"><a class="nc_tweet swp_share_link" rel="nofollow noreferrer noopener" target="_blank" href="https://twitter.com/intent/tweet?text=OpenTelemetry%3A+Future-Proofing+Your+Instrumentation&url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F" data-link="https://twitter.com/intent/tweet?text=OpenTelemetry%3A+Future-Proofing+Your+Instrumentation&url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F"><span class="swp_count swp_hide"><span class="iconFiller"><span class="spaceManWilly"><i class="sw swp_twitter_icon"></i><span class="swp_share">Tweet</span></span></span></span></a></div><div class="nc_tweetContainer swp_share_button swp_facebook" data-network="facebook"><a class="nc_tweet swp_share_link" rel="nofollow noreferrer noopener" target="_blank" href="https://www.facebook.com/share.php?u=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F" data-link="https://www.facebook.com/share.php?u=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F"><span class="swp_count swp_hide"><span class="iconFiller"><span class="spaceManWilly"><i class="sw swp_facebook_icon"></i><span class="swp_share">Share</span></span></span></span></a></div><div class="nc_tweetContainer swp_share_button swp_linkedin" data-network="linkedin"><a class="nc_tweet swp_share_link" rel="nofollow noreferrer noopener" target="_blank" href="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F" data-link="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fblog.newrelic.com%2Fproduct-news%2Fwhat-is-opentelemetry%2F"><span class="swp_count swp_hide"><span class="iconFiller"><span class="spaceManWilly"><i class="sw swp_linkedin_icon"></i><span class="swp_share">Share</span></span></span></span></a></div></div><p>As a developer, you care about the performance of your applications, and you know just how challenging it can be to find the right instrumentation to capture telemetry data. One option is to use a proprietary agent, but what if you don&#8217;t want to be locked into that agent’s vendor?</p>
+<p>You could use one of the open standards like <a href="http://opencensus.io" target="_blank" rel="noopener noreferrer">OpenCensus</a> or <a href="https://opentracing.io/" target="_blank" rel="noopener noreferrer">OpenTracing</a>, but it can be tricky to decide which option is right for your application and workflows. Any option you choose must be able to scale and adapt to your needs as your applications change over time. But it’s also become increasingly important that the instrumentation you choose adheres to standards that can be shared across vendors and projects.</p>
+<p>Vendor-neutral open standards matter. And <a href="https://opentelemetry.io/" target="_blank" rel="noopener noreferrer">OpenTelemetr</a><a href="https://opentelemetry.io/">y</a>, a <a href="https://www.cncf.io/" target="_blank" rel="noopener noreferrer">Cloud Native Computing Foundation (CNCF)</a> project, has created an open specification you can use to standardize how you collect and send telemetry data to backend platforms.</p>
+<p>In this post, we’ll explain more about the OpenTelemetry project—how it works, the benefits it offers, and how to get started.</p>
+<h2>What is OpenTelemetry?</h2>
+<p>At its inception, OpenTelemetry formed by merging the OpenTracing and OpenCensus projects. OpenTelemetry offers a single set of APIs and libraries that standardize how you collect and transfer telemetry data. OpenTelemetry provides a secure, vendor-neutral <a href="https://github.com/open-telemetry/opentelemetry-specification">specification</a> for instrumentation so that you can send data to distinct backends of your choice, such as New Relic.</p>
+<p>The following components make up the OpenTelemetry project:</p>
+<ul>
+<li>Specifications to drive consistency across all projects</li>
+<li>APIs that contain interfaces and implementations based on the specifications</li>
+<li>SDKs (reference implementations of the APIs) created specifically for languages like Java, Python, Go, Erlang, and more</li>
+<li>Exporters that enable you to send data to a backend of your choice</li>
+<li>Collectors that offer a vendor-agnostic implementation for processing and exporting</li>
+</ul>
+<p>(We’ll dive more into these components in the architecture section below.)</p>
+<h3>Key terms</h3>
+<p>If you’re new to OpenTelemetry, these are the key terms you need to know:</p>
+<ul>
+<li><strong>Traces:</strong> A record of activity for a request through a distributed system. A trace is a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph" target="_blank" rel="noopener noreferrer">directed acyclic graph</a> of spans.</li>
+<li><strong>Spans:</strong> Named, timed operations representing a single operation within a trace. Spans can be nested to form a trace tree. Each trace contains a root span, which typically describes the end-to-end latency and, optionally, one or more sub-spans for its sub-operations.</li>
+<li><strong>Metrics:</strong> A raw measurement about a service, captured at runtime. OpenTelemetry defines three metric instruments: counter, measure, and observer. An observer supports an asynchronous API collecting metric data on demand, once per collection interval.</li>
+<li><strong>Context:</strong> A span contains a <strong>span context</strong>, which is a set of globally unique identifiers that represent the unique request that each span is a part of, representing the data required for moving trace information across service boundaries. OpenTelemetry also supports <strong>correlation context</strong> which can carry any user defined properties. Correlation context is not required and components may choose not to carry or store this information.</li>
+<li><strong>Context propagation:</strong> The means by which context is bundled and transferred between services, typically via HTTP headers. Context propagation is a key part of the OpenTelemetry system, and has some interesting use cases beyond tracing, for example when doing A/B testing. OpenTelemetry supports multiple protocols for context propagation and to avoid issues, it’s important that you use a single method throughout your application. For example, if you use the <a href="https://www.w3.org/TR/trace-context/" target="_blank" rel="noopener noreferrer">W3C specification</a> in one service, you need to use it everywhere in your system.</li>
+</ul>
+<h2>Benefits of OpenTelemetry</h2>
+<p>By combining OpenTracing and OpenCensus into a single open standard, OpenTelemetry provides the following benefits:</p>
+<ul>
+<li><strong>Simplified choice.</strong> You don’t need to decide between one standard or the other. Are you currently using OpenTracing or OpenCensus? Don’t worry, OpenTelemetry offers backward compatibility for both projects.</li>
+<li><strong>Cross-platform.</strong> OpenTelemetry supports a variety of languages and backends. It represents a vendor-neutral path to capturing and transmitting telemetry to backends without altering existing instrumentation. This is an important project that satisfies developers looking for this kind of freedom.</li>
+<li><strong>Streamlined observability. </strong>As OpenTelemetry puts it, “Effective observability requires high-quality telemetry.” Expect to see more vendors move toward OpenTelemetry, as it’s far easier to accommodate and test against a single standard.</li>
+</ul>
+<p>In short, instead of being bogged down in the nitty-gritty of decision making, you can focus your efforts on building amazing, reliable, solutions-based software. And that’s what it’s all about.</p>
+<div align="center"><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/154rrpyjwv" name="wistia_embed" width="550" height="309" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe><script src="//fast.wistia.net/assets/external/E-v1.js" async="154rrpyjwv"><span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">﻿</span></script></div>
+<h2>Using OpenTelemetry</h2>
+<p>The OpenTelemetry APIs and SDKs come with plenty of quick-start guides and <a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener noreferrer">documentation</a>, so you can learn how to ingest data immediately. The <a href="https://github.com/open-telemetry/opentelemetry-java/blob/master/QUICKSTART.md" target="_blank" rel="noopener noreferrer">quick-start guide for Java</a>, for example, outlines how to acquire a tracer, create spans, add attributes, and propagate context across the various spans.</p>
+<p>You will also find examples of common use cases to help get you started. These provide practical working code that demonstrates how to instrument HTTP/gRPC servers and clients, database connectors, and more.</p>
+<p>After you have instrumented your application with OpenTelemetry trace APIs, you can send the trace data to an observability platform like New Relic or any other backend using one of the pre-built <a href="https://opentelemetry.io/registry/" target="_blank" rel="noopener noreferrer">exporters in the OpenTelemetry registry</a>.</p>
+<p>Specifications for metrics and logs are still in the development phase, but once launched, they’ll play an important role in achieving OpenTelemetry’s main goal: to ensure libraries and frameworks have all built-in telemetry data types, which allows developers to ingest telemetry data without having to instrument it.</p>
+<h2>OpenTelemetry architecture components</h2>
+<p>Since OpenTelemetry is intended to be a cross-language framework for vendors and observability backends, it’s extremely flexible and extensible, yet it’s also quite complex. The architecture of a default implementation of OpenTelemetry breaks down into three components:</p>
+<ol>
+<li>The OpenTelemetry API</li>
+<li>The OpenTelemetry SDK, consisting of:
+<ul>
+<li>The Tracer pipeline</li>
+<li>The Meter pipeline</li>
+<li>A shared Context layer</li>
+</ul>
+</li>
+<li>The Collector</li>
+</ol>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture.jpeg"><img class="alignnone wp-image-51564 " src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-1024x895.jpeg" alt="" width="493" height="431" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-1024x895.jpeg 1024w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-300x262.jpeg 300w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-768x671.jpeg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-1536x1342.jpeg 1536w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-80x70.jpeg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture-298x260.jpeg 298w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_architecture.jpeg 1724w" sizes="(max-width: 493px) 100vw, 493px" /></a></p>
+<p>Let’s take a look at each architecture component.</p>
+<h3>The OpenTelemetry API</h3>
+<p>Application developers use the Open Telemetry API to instrument their code, and library authors use it to write instrumentation directly into their libraries. The API does not address operational concerns or how data is sent to vendor backends.</p>
+<p>We can break the  API into four parts:</p>
+<ol>
+<li>A Tracer API</li>
+<li>A Metrics API</li>
+<li>A Context API</li>
+<li>A set of semantic conventions</li>
+</ol>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api.jpeg"><img class="alignnone wp-image-51565 " src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-1024x227.jpeg" alt="" width="451" height="100" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-1024x227.jpeg 1024w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-300x66.jpeg 300w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-768x170.jpeg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-1536x340.jpeg 1536w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-80x18.jpeg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api-298x66.jpeg 298w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_api.jpeg 1806w" sizes="(max-width: 451px) 100vw, 451px" /></a></p>
+<h4>The Tracer API</h4>
+<p>The Tracer API supports the generation of spans, which are named, timed operations representing a contiguous segment of work in a trace. Spans can be assigned a <code>traceId</code> and, optionally, be annotated with time-stamped events. A Tracer tags spans with a name and a version. When looking at your data, the name and version associated with a Tracer allow you to track the instrumentation library that generated the spans.</p>
+<h4>The Metric API</h4>
+<p>The <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md" target="_blank" rel="noopener noreferrer">Metric API</a> provides access to various types of Metric instruments, such as <em>Counters</em> and  <em>Observers</em>. Counters allow you to count things. Observers allow you to measure values at discrete points in time; for example, you’d use Observers to &#8220;observe&#8221; values that aren&#8217;t taking place in the context of a <code>Span</code>, such as current CPU load or the total number of bytes free on a disk. See the specification for a <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md#the-instruments" target="_blank" rel="noopener noreferrer">list of instruments</a> that cover the full range of possible metric use cases.</p>
+<h4>The Context API</h4>
+<p>The <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/context.md" target="_blank" rel="noopener noreferrer">Context API</a> adds context information—like <a href="https://www.w3.org/TR/trace-context/" target="_blank" rel="noopener noreferrer">W3C Trace Context</a>, <a href="https://github.com/openzipkin/b3-propagation" target="_blank" rel="noopener noreferrer">Zipkin B3 headers</a>, or <a href="https://docs.newrelic.com/docs/understand-dependencies/distributed-tracing/get-started/introduction-distributed-tracing" target="_blank" rel="noopener noreferrer">New Relic distributed tracing</a> headers—to spans and traces that use the same &#8220;context.&#8221; In addition, this API allows you to track how spans propagate within a system. The context is updated as a trace propagates from one process to the next. Metric instruments always have access to the current context.</p>
+<h4>Semantic conventions</h4>
+<p>Finally, the OpenTelemetry API contains a set of <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#semantic-conventions.md" target="_blank" rel="noopener noreferrer">semantic conventions</a> that includes guidelines and rules for naming spans, attributes, and for associating errors with spans (among other things). By encoding this in the API specification, the OpenTelemetry project ensures that all instrumentation, regardless of author or language, contains the same semantic information. This capability is enormously valuable to vendors looking to provide a consistent APM experience for all users.</p>
+<div align="center"><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/sylxrsbow4" name="wistia_embed" width="550" height="309" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe><script src="//fast.wistia.net/assets/external/E-v1.js" async="sylxrsbow4"><span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">﻿</span></script></div>
+<h3>The OpenTelemetry SDK</h3>
+<p>Next, the OpenTelemetry SDK is an <em>implementation</em> of the OpenTelemetry API. The SDK consists of roughly three parts, analogous to the APIs we just covered—a Tracer, a Meter, and a shared Context layer that ties it all together.</p>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk.jpg"><img class="alignnone wp-image-51566 " src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-1024x740.jpg" alt="" width="493" height="356" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-1024x740.jpg 1024w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-300x217.jpg 300w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-768x555.jpg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-1536x1111.jpg 1536w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-2048x1481.jpg 2048w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-80x58.jpg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_sdk-298x215.jpg 298w" sizes="(max-width: 493px) 100vw, 493px" /></a></p>
+<p>Ideally, the SDK should fulfill 99% of standard use cases, but you can customize the SDK if needed. In the Tracer pipeline implementation, for example, you can customize anything aside from how the core implementation interacts with the shared Context layer. For example, within the implementation of the Tracer pipeline, you can customize the sampling algorithm that it uses.</p>
+<h4>The Tracer pipeline</h4>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer.jpg"><img class="wp-image-51567 alignnone" src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-733x1024.jpg" alt="" width="195" height="273" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-733x1024.jpg 733w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-215x300.jpg 215w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-768x1073.jpg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-80x112.jpg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer-298x416.jpg 298w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_tracer.jpg 800w" sizes="(max-width: 195px) 100vw, 195px" /></a></p>
+<p>When <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/sdk.md" target="_blank" rel="noopener noreferrer">configuring the SDK</a>, you associate one or more <code>SpanProcessors</code> with the implementation of the Tracer pipeline. A <code>SpanProcessor</code> watches the lifecycle of spans, and delivers spans to a <code>SpanExporter</code> when appropriate. Built into the SDK is a simple SpanProcessor that forwards finished spans directly to the exporter one at a time.</p>
+<p>The SDK also contains a batching implementation that forwards finished spans in batches on a configurable interval. However, since the <code>SpanProcessor</code> implementation accepts plug-ins, you can implement your own and assign it custom behavior. For example, if your telemetry backend supports viewing &#8220;in progress&#8221; spans, you could create a <code>SpanProcessor</code> implementation that sends spans for export at every change to the span state.</p>
+<p>At the end of the Tracer pipeline is the <code>SpanExporter</code>. An exporter&#8217;s job is simple: convert the spans from their OpenTelemetry representations to whatever the telemetry backend requires and send them to that backend. Providing a custom <code>SpanExporter</code> is the easiest way for a telemetry vendor to participate in the OpenTelemetry ecosystem.</p>
+<h4>The Meter pipeline</h4>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter.jpeg"><img class="alignnone wp-image-51568 " src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-1024x739.jpeg" alt="" width="337" height="243" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-1024x739.jpeg 1024w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-300x216.jpeg 300w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-768x554.jpeg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-80x58.jpeg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter-298x215.jpeg 298w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_meter.jpeg 1286w" sizes="(max-width: 337px) 100vw, 337px" /></a></p>
+<p>The Meter pipeline is considerably more complex than the Tracer pipeline, as metrics are more complex than spans.  The following description is based on the Java implementation of the SDK and may vary across languages.</p>
+<p>The Meter pipeline creates and maintains metrics instrumentation of various types, including Counters and Observers. Each instance of an instrument will need to be aggregated in some way. By default, Counters are aggregated by summing the values, and Observers are aggregated by taking the last value recorded. All of the instrument types have a default aggregation defined for them.</p>
+<p>(As of this writing, the ability to configure custom aggregations for metrics instrumentation is still in the proposal stage.)</p>
+<p>Implementations of the Meter Pipeline currently vary across languages, but in all cases, metric aggregations are delivered to the <code>MetricExporter</code>. Again, as in the case of spans, vendors can provide their own exporter to convert the aggregated data generated by the metric aggregators to the types that are needed for the telemetry backend.</p>
+<p>OpenTelemetry supports two styles of exporter: &#8220;push&#8221;-based exporters, where the exporter sends data to the backend on a timed interval, and &#8220;pull&#8221;-based exporters, where the backend will query for the data when it wants it. New Relic is an example of a push-based backend, and <a href="https://prometheus.io/" target="_blank" rel="noopener noreferrer">Prometheus</a> is a pull-based backend.</p>
+<h4>The shared Context layer</h4>
+<p>The shared Context layer sits between the Tracer and Meter pipelines and enables all non-observer metric recordings to take place in the context of an executing span. You can customize the Context with <em>propagators</em>, which propagate the span context both in and out of the system. As stated earlier, all OpenTelemetry SDK implementations provide an implementation of the W3C Trace Context specification, but you can optionally include Zipkin B3 propagation, or others.</p>
+<h3>The Collector</h3>
+<p><a href="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector.jpeg"><img class="wp-image-51569 alignnone" src="http://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-1024x570.jpeg" alt="" width="482" height="269" srcset="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-1024x570.jpeg 1024w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-300x167.jpeg 300w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-768x427.jpeg 768w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-1536x855.jpeg 1536w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-80x45.jpeg 80w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-298x166.jpeg 298w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector-70x40.jpeg 70w, https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/opentelemetry_collector.jpeg 1890w" sizes="(max-width: 482px) 100vw, 482px" /></a></p>
+<p>The OpenTelemetry Collector is a stand-alone service that can ingest metrics and spans from various sources, including <a href="https://zipkin.io/" target="_blank" rel="noopener noreferrer">Zipkin</a>, <a href="https://www.jaegertracing.io/" target="_blank" rel="noopener noreferrer">Jaeger</a>, and OpenCensus. The collector can do <a href="https://docs.newrelic.com/docs/understand-dependencies/distributed-tracing/get-started/how-new-relic-distributed-tracing-works#tail-based" target="_blank" rel="noopener noreferrer">tail-based sampling</a> of spans, and enables exporting spans and metrics to a large number of vendor and open-source telemetry systems, including New Relic.</p>
+<p>For more information about OpenTelemetry’s architecture, check out the <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/master/README.md" target="_blank" rel="noopener noreferrer">full specification</a>.</p>
+<h2>Start exploring OpenTelemetry today</h2>
+<p>Currently, <a href="https://blog.newrelic.com/product-news/opentelemetry-beta-support-new-relic-one/" target="_blank" rel="noopener noreferrer">OpenTelemetry is in beta phase</a>. Right now is the ideal time to begin exploring what this project can do for you.</p>
+<p>Check out this <a href="https://github.com/newrelic/opentelemetry-exporter-java" target="_blank" rel="noopener noreferrer">basic Java example</a> that outlines how you can instrument your code to send metrics and traces to a backend like New Relic.</p>
+<p><strong><em>To find out more about other open source projects New Relic is involved in, visit </em></strong><a href="http://opensource.newrelic.com" target="_blank" rel="noopener noreferrer"><strong><em>New Relic Open Source</em></strong></a><strong><em>.</em></strong></p>
+<div class="swp-content-locator"></div>											</div>
+					<div class="tags">
+						<i class="fa fa-tags"></i><a href="https://blog.newrelic.com/tag/observability/" rel="tag">observability</a>, <a href="https://blog.newrelic.com/tag/open-instrumentation/" rel="tag">open instrumentation</a>, <a href="https://blog.newrelic.com/tag/opentelemetry/" rel="tag">OpenTelemetry</a>, <a href="https://blog.newrelic.com/tag/telemetry/" rel="tag">telemetry</a>					</div>
+
+					
+<div class="author-box">
+	<div class="author-meta">
+		<img class="avatar avatar-100 photo" width="64" height="64" src="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/lavanya-john-300x300.jpg"/>		<p>John Watson is a Lead Engineer at New Relic. He is currently focused on supporting OpenTelemetry and is one of the maintainers of the OpenTelemetry Java implementation.
+
+Lavanya Chockalingam is a Senior Product Marketing manager at New Relic for APM products. Lavanya started her career as an engineer and then moved on to sales and product marketing roles. Lavanya has worked both in hardware and software industries and is passionate about technology and how it can be leveraged to solve real world problems. View posts by <a href="https://blog.newrelic.com/author/johnwatsonandlavanyachockalingam/" title="Posts by John Watson and Lavanya Chockalingam" rel="author">John Watson and Lavanya Chockalingam</a>.</p>
+		<div class="author-links">
+											</div>	</div></div>					<div class="legal-disendorsement">
+  <p>The views expressed on this blog are those of the author and do not necessarily reflect the views of New Relic. Any solutions offered by the author are environment-specific and not part of the commercial solutions or support offered by New Relic. Please join us exclusively at the Explorer’s Hub (discuss.newrelic.com) for questions and support related to this blog post. This blog may contain links to content on third-party sites. By providing such links, New Relic does not adopt, guarantee, approve or endorse the information, views or products available on such sites.</p>
+</div>					<p class="write-for-us">Interested in writing for New Relic Blog? <a href="mailto:blog@newrelic.com?subject=Guest post submission request&body=Please provide a description of what you'd like to write about for New Relic's blog:">Send us a pitch</a>!</p>																											<div id="related-posts">
+							<h3>Related Posts</h3>
+																										<!-- Don't display the promoted post in the regular loop if on the homepage -->
+<article id="post-51527" class="post-51527 post type-post status-publish format-standard hentry category-product-news tag-new-relic-one tag-open-instrumentation tag-open-source">
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://blog.newrelic.com/product-news/announcing-new-relic-open-source/" rel="bookmark">Announcing New Relic Open Source: A Website for Open Source Projects</a></h2>
+	</header>
+	<!-- .entry-header -->
+	<div class="post-meta">
+  <img class="avatar avatar-42 photo" width="64" height="64" src="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/joel_worrall-300x300.jpg"/>  By <a href="https://blog.newrelic.com/author/joelworrall/" title="Posts by Joel Worrall" rel="author">Joel Worrall</a>  <span>&bull;</span> Jun. 17th, 2020 
+  <span>&bull;</span> <a href="https://blog.newrelic.com/category/product-news/" rel="category tag">New Relic News and Products</a>      <p class="post-tags">
+     <i class="fa fa-tags"></i><a href="https://blog.newrelic.com/tag/new-relic-one/" rel="tag">New Relic One</a>, <a href="https://blog.newrelic.com/tag/open-instrumentation/" rel="tag">open instrumentation</a>, <a href="https://blog.newrelic.com/tag/open-source/" rel="tag">open source</a>    </p>
+  </div>        
+</article>
+<!-- #post-## -->																																			<!-- Don't display the promoted post in the regular loop if on the homepage -->
+<article id="post-50337" class="post-50337 post type-post status-publish format-standard hentry category-product-news tag-opentelemetry">
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://blog.newrelic.com/product-news/opentelemetry-beta-support-new-relic-one/" rel="bookmark">Announcing OpenTelemetry Beta support in New Relic One</a></h2>
+	</header>
+	<!-- .entry-header -->
+	<div class="post-meta">
+  <img class="avatar avatar-42 photo" width="64" height="64" src="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/tyler_yahn-1-300x300.jpg"/>  By <a href="https://blog.newrelic.com/author/tyleryahn/" title="Posts by Tyler Yahn" rel="author">Tyler Yahn</a>  <span>&bull;</span> Mar. 30th, 2020 
+  <span>&bull;</span> <a href="https://blog.newrelic.com/category/product-news/" rel="category tag">New Relic News and Products</a>      <p class="post-tags">
+     <i class="fa fa-tags"></i><a href="https://blog.newrelic.com/tag/opentelemetry/" rel="tag">OpenTelemetry</a>    </p>
+  </div>        
+</article>
+<!-- #post-## -->																																			<!-- Don't display the promoted post in the regular loop if on the homepage -->
+<article id="post-48228" class="post-48228 post type-post status-publish format-standard hentry category-product-news tag-new-relic-metrics tag-new-relic-traces tag-open-instrumentation tag-open-telemetry tag-opencensus">
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://blog.newrelic.com/product-news/open-instrumentation/" rel="bookmark">New Relic Open Instrumentation: APIs for New Relic One, the First Observability Platform</a></h2>
+	</header>
+	<!-- .entry-header -->
+	<div class="post-meta">
+  <img class="avatar avatar-42 photo" width="64" height="64" src="https://newrelic-wpengine.netdna-ssl.com/wp-content/uploads/ranna_unthank-300x300.jpg"/>  By <a href="https://blog.newrelic.com/author/rannaunthank/" title="Posts by Ranna Unthank" rel="author">Ranna Unthank</a>  <span>&bull;</span> Sep. 19th, 2019 
+  <span>&bull;</span> <a href="https://blog.newrelic.com/category/product-news/" rel="category tag">New Relic News and Products</a>      <p class="post-tags">
+     <i class="fa fa-tags"></i><a href="https://blog.newrelic.com/tag/new-relic-metrics/" rel="tag">New Relic Metrics</a>, <a href="https://blog.newrelic.com/tag/new-relic-traces/" rel="tag">New Relic Traces</a>, <a href="https://blog.newrelic.com/tag/open-instrumentation/" rel="tag">open instrumentation</a>, <a href="https://blog.newrelic.com/tag/open-telemetry/" rel="tag">open telemetry</a>, <a href="https://blog.newrelic.com/tag/opencensus/" rel="tag">opencensus</a>    </p>
+  </div>        
+</article>
+<!-- #post-## -->																							</div>
+									</article>
+			</div>
+		</div>
+	</div>
+
+</div>
+</div>
+</main> <!-- #main -->
+</section><!-- #primary -->
+
+
+</div>
+</div><!-- /.main-wrap -->
+<footer id="footer-top">
+    <div class="section">
+        <div class="container">
+            <div class="footer-columns">
+                <div class="column">
+                    <h4>Company</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://newrelic.com/about/culture">Careers and Culture</a></li>
+                        <li><a href="https://newrelic.com/solutions/partners">Partner Program</a></li>
+                        <li><a href="https://ir.newrelic.com/">Investor Relations</a></li>
+                        <li><a href="https://newrelic.org">NewRelic.org</a></li>
+                        <li><a href="https://newrelic.com/procurement/suppliers">Suppliers Portal</a></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h4>Connect</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://newrelic.com/about/contact-us">Contact Us</a></li>
+                        <li><a href="https://newrelic.com/request-demo">Request Demo</a></li>
+                        <li><a href="https://newrelic.com/community/events">Events</a></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h4>international</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://www.newrelic.co.jp">newrelic.co.jp (Japanese)</a></li>
+                        <li><a href="https://www.newrelic.fr/">newrelic.fr (French)</a></li>
+                        <li><a href="https://www.newrelic.de/">newrelic.de (German)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="social-icons">
+               <ul class="list-unstyled">
+                    <li><a href="http://www.facebook.com/NewRelic" title="New Relic on Facebook" target="_blank">
+                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1376 128q119 0 203.5 84.5t84.5 203.5v960q0 119-84.5 203.5t-203.5 84.5h-188v-595h199l30-232h-229v-148q0-56 23.5-84t91.5-28l122-1v-207q-63-9-178-9-136 0-217.5 80t-81.5 226v171h-200v232h200v595h-532q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960z"></path></svg>
+                    </a></li>
+                    <li><a href="http://www.twitter.com/NewRelic" title="New Relic on Twitter" target="_blank">
+                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1408 610q-56 25-121 34 68-40 93-117-65 38-134 51-61-66-153-66-87 0-148.5 61.5t-61.5 148.5q0 29 5 48-129-7-242-65t-192-155q-29 50-29 106 0 114 91 175-47-1-100-26v2q0 75 50 133.5t123 72.5q-29 8-51 8-13 0-39-4 21 63 74.5 104t121.5 42q-116 90-261 90-26 0-50-3 148 94 322 94 112 0 210-35.5t168-95 120.5-137 75-162 24.5-168.5q0-18-1-27 63-45 105-109zm256-194v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z"></path></svg>
+                    </a></li>
+                    <li><a href="https://www.linkedin.com/company/new-relic-inc-" title="New Relic on LinkedIn" target="_blank">
+                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M365 1414h231v-694h-231v694zm246-908q-1-52-36-86t-93-34-94.5 34-36.5 86q0 51 35.5 85.5t92.5 34.5h1q59 0 95-34.5t36-85.5zm585 908h231v-398q0-154-73-233t-193-79q-136 0-209 117h2v-101h-231q3 66 0 694h231v-388q0-38 7-56 15-35 45-59.5t74-24.5q116 0 116 157v371zm468-998v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z"></path></svg>
+                    </a></li>
+                    <li><a href="https://www.youtube.com/user/NewRelicInc/featured" title="New Relic on You Tube" target="_blank">
+                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1047 1303v-157q0-50-29-50-17 0-33 16v224q16 16 33 16 29 0 29-49zm184-122h66v-34q0-51-33-51t-33 51v34zm-571-266v70h-80v423h-74v-423h-78v-70h232zm201 126v367h-67v-40q-39 45-76 45-33 0-42-28-6-17-6-54v-290h66v270q0 24 1 26 1 15 15 15 20 0 42-31v-280h67zm252 111v146q0 52-7 73-12 42-53 42-35 0-68-41v36h-67v-493h67v161q32-40 68-40 41 0 53 42 7 21 7 74zm251 129v9q0 29-2 43-3 22-15 40-27 40-80 40-52 0-81-38-21-27-21-86v-129q0-59 20-86 29-38 80-38t78 38q21 29 21 86v76h-133v65q0 51 34 51 24 0 30-26 0-1 .5-7t.5-16.5v-21.5h68zm-451-824v156q0 51-32 51t-32-51v-156q0-52 32-52t32 52zm533 713q0-177-19-260-10-44-43-73.5t-76-34.5q-136-15-412-15-275 0-411 15-44 5-76.5 34.5t-42.5 73.5q-20 87-20 260 0 176 20 260 10 43 42.5 73t75.5 35q137 15 412 15t412-15q43-5 75.5-35t42.5-73q20-84 20-260zm-755-651l90-296h-75l-51 195-53-195h-78q7 23 23 69l24 69q35 103 46 158v201h74v-201zm289 81v-130q0-58-21-87-29-38-78-38-51 0-78 38-21 29-21 87v130q0 58 21 87 27 38 78 38 49 0 78-38 21-27 21-87zm181 120h67v-370h-67v283q-22 31-42 31-15 0-16-16-1-2-1-26v-272h-67v293q0 37 6 55 11 27 43 27 36 0 77-45v40zm503-304v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z"></path></svg>
+                    </a></li>
+                    <li><a href="https://www.instagram.com/newrelic/" title="New Relic on Instagram" target="_blank">
+                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm138 0q0 164-115 279t-279 115-279-115-115-279 115-279 279-115 279 115 115 279zm108-410q0 38-27 65t-65 27-65-27-27-65 27-65 65-27 65 27 27 65zm-502-220q-7 0-76.5-.5t-105.5 0-96.5 3-103 10-71.5 18.5q-50 20-88 58t-58 88q-11 29-18.5 71.5t-10 103-3 96.5 0 105.5.5 76.5-.5 76.5 0 105.5 3 96.5 10 103 18.5 71.5q20 50 58 88t88 58q29 11 71.5 18.5t103 10 96.5 3 105.5 0 76.5-.5 76.5.5 105.5 0 96.5-3 103-10 71.5-18.5q50-20 88-58t58-88q11-29 18.5-71.5t10-103 3-96.5 0-105.5-.5-76.5.5-76.5 0-105.5-3-96.5-10-103-18.5-71.5q-20-50-58-88t-88-58q-29-11-71.5-18.5t-103-10-96.5-3-105.5 0-76.5.5zm768 630q0 229-5 317-10 208-124 322t-322 124q-88 5-317 5t-317-5q-208-10-322-124t-124-322q-5-88-5-317t5-317q10-208 124-322t322-124q88-5 317-5t317 5q208 10 322 124t124 322q5 88 5 317z"></path></svg>
+                    </a></li>
+                </ul>
+            </div>
+            <div class="links">
+                <span><a href="https://newrelic.com/termsandconditions/terms">Terms of Service</a></span>
+                <span><a href="https://newrelic.com/termsandconditions/dmca">DMCA Policy</a></span>
+                <span><a href="https://newrelic.com/termsandconditions/privacy">Privacy Policy</a></span>
+                <span><a href="https://newrelic.com/termsandconditions/cookie-policy">Cookie Policy</a></span>
+                <span><a href="https://newrelic.com/termsandconditions/uk-slavery-act">UK Slavery Act of 2015</a></span>
+            </div>
+            <p class="copy"><span>&copy;2008-20 New Relic, Inc. All rights reserved</span></p>
+        </div>
+    </div>
+</footer>
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+var jsjCodeHighlightOptions = {"settings":{"add_line_numbers":0,"tab_replacement":0,"tab_number_ratio":4},"name_space":"jsj_code_highlight"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/jsj-code-highlight/js/jsj-code-highlight.js?ver=5.4.2'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var socialWarfare = {"addons":[],"post_id":"51560","floatBeforeContent":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/plugins/social-warfare/assets/js/script.min.js?ver=3.6.1'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/js/script.js?ver=1.1'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/js/jScrollPane.min.js?ver=1.0'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/js/jquery.mousewheel.min.js?ver=1.0'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-content/themes/newrelic_dt/js/base.js?ver=1.0'></script>
+<script type='text/javascript' src='//platform.twitter.com/widgets.js?ver=1.0'></script>
+<script type='text/javascript' src='https://newrelic-wpengine.netdna-ssl.com/wp-includes/js/wp-embed.min.js?ver=5.4.2'></script>
+<script type="text/javascript"> var swp_nonce = "57ed0c2345";var swpFloatBeforeContent = false;var swpClickTracking = false;</script>
+</body>
+</html>
