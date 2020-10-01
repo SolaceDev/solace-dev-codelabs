@@ -487,3 +487,6 @@ Duration: 0:01:00
 
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
+
+✅ For more information on the Solace Connector check out the [PubSub+ Connector Hub](https://solace.com/connectors/dell-boomi-ipaas/) page    
+
