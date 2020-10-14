@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-10-13T17:06:49-04:00",
+  "updated": "2020-10-14T10:45:18-04:00",
   "id": "ep-discovery-kafka",
   "duration": 31,
   "title": "Guided Walk Through of PubSub+ Event Portal Discovery with Kafka",
@@ -15,7 +15,8 @@
   ],
   "category": [
     "kafka",
-    "portal"
+    "portal",
+    "taxi"
   ],
   "tags": [
     "event-portal",

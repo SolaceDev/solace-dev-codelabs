@@ -2,7 +2,7 @@ author: Dishant Langayan
 summary: A guided walk through of PubSub+ Event Portal Discovery with Kafka
 id: ep-discovery-kafka
 tags: kafka,guide,event-portal
-categories: Kafka, Portal
+categories: Kafka, Portal, taxi
 environments: Web
 status: Draft
 feedback link: https://solace.community/
@@ -113,11 +113,40 @@ If you want run a live scan on a Kafka cluster, you will need to download and in
 
 The most easiest way install the agent is using Docker. Option 2 will require JDK/JRE 11; OpenJDK 11 is bundled with the agent installation package.
 
+If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the following commands into a terminal window. The Discovery Agent may take a few minutes to initialize.
+
+```
+echo 'cMopz4m+GV60hBb8DysZna8uMP4tM84P' | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
+	docker pull solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
+	docker run \
+	--env SPRING_APPLICATION_NAME=maas-event-discovery-agent-offline \
+	--env EVENT_DISCOVERY_OFFLINE=true \
+	--env MAAS_VMR_ENABLED=false \
+	--env MAAS_HEARTBEATS_ENABLED=false \
+	--env MAAS_RESTPROXY_GATEWAY=false \
+	--name discovery_agent -p 8120:8120 \
+	-d solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
+```
+
+To launch the Discovery Agent go to: [http://localhost:8120](http://localhost:8120).
+
 ### Option 2: Pre-Scanned Discovery File
 
 If you don't want to install the agent and run a live scan, you can still follow along in this CodeLab using the following pre-scanned JSON file.
 
-**Download:** [NYC Modern Taxi Co. Analytics Discovery File](NYC_Modern_Taxi_Co_Analytics.json)
+**Download:** [NYC Modern Taxi Co. Analytics Discovery File](https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json)
+
+Or run the curl/git clone command below to download the file:
+
+```
+curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
+```
+
+OR
+
+```
+git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
+```
 
 ### Some General Requirements
 
@@ -180,6 +209,8 @@ Now on to the fun part where we will upload the scan to Event Portal and visuali
 
 ## Review Scan In Staging
 Duration: 0:010:00
+
+
 
 ### Uploading Your Scan File
 

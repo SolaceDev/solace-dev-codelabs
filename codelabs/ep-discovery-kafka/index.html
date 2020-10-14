@@ -99,9 +99,28 @@
 <li>Install the Agent via a Binary Executable</li>
 </ol>
 <p>The most easiest way install the agent is using Docker. Option 2 will require JDK/JRE 11; OpenJDK 11 is bundled with the agent installation package.</p>
+<p>If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the following commands into a terminal window. The Discovery Agent may take a few minutes to initialize.</p>
+<pre><code>echo &#39;cMopz4m+GV60hBb8DysZna8uMP4tM84P&#39; | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
+	docker pull solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
+	docker run \
+	--env SPRING_APPLICATION_NAME=maas-event-discovery-agent-offline \
+	--env EVENT_DISCOVERY_OFFLINE=true \
+	--env MAAS_VMR_ENABLED=false \
+	--env MAAS_HEARTBEATS_ENABLED=false \
+	--env MAAS_RESTPROXY_GATEWAY=false \
+	--name discovery_agent -p 8120:8120 \
+	-d solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
+</code></pre>
+<p>To launch the Discovery Agent go to: <a href="http://localhost:8120" target="_blank">http://localhost:8120</a>.</p>
 <h2 is-upgraded>Option 2: Pre-Scanned Discovery File</h2>
 <p>If you don&#39;t want to install the agent and run a live scan, you can still follow along in this CodeLab using the following pre-scanned JSON file.</p>
-<p><strong>Download: </strong><a href="NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
+<p><strong>Download: </strong><a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
+<p>Or run the curl/git clone command below to download the file:</p>
+<pre><code>curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
+</code></pre>
+<p>OR</p>
+<pre><code>git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
+</code></pre>
 <h2 is-upgraded>Some General Requirements</h2>
 <p>Regardless of the option you chose above, you should also:</p>
 <ol type="1">
