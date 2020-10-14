@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
   <google-codelab codelab-gaid="UA-3921398-10"
                   id="ep-discovery-kafka"
                   title="Guided Walk Through of PubSub&#43; Event Portal Discovery with Kafka"
@@ -36,7 +36,7 @@
 <li>Upload the scan to PubSub+ Event Portal to visualize the results</li>
 <li>And finally take action on your Kafka consumer groups and topics by linking them to applications, organizing them in a domain, sharing and collaborating on the data with your teams</li>
 </ul>
-<p>We expect with this knowledge you will be able to scan your own Kafka clusters to discover &amp; visualize new event streams or consumer groups you may not be aware off.</p>
+<p>We expect with this knowledge you will be able to scan your own Kafka clusters to discover new event streams or consumer groups you may not be aware off.</p>
 <p>To make this walk through engaging and meaningful, we will make use of a real-world use, which we will jump into a bit, and ask you to transport yourself to be an employee of a new company. We also cover some foundational concepts so we all aligned on the same page.</p>
 <p>So let&#39;s get started!</p>
 
@@ -61,7 +61,7 @@
     
       <google-codelab-step label="Foundation Concepts" duration="3">
         <p>Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal.</p>
-<aside class="special"><p>We are assuming you are familiar with Kafka, its foundation concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
+<aside class="special"><p>We are assuming you are familiar with Kafka, its foundation concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
 </aside>
 <h2 is-upgraded>Consumer Groups</h2>
 <p>Event Portal supports the concept of Kafka&#39;s consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal&#39;s runtime discovery to associate a discovered consumer group to an existing application.</p>
@@ -85,27 +85,22 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="5">
+      <google-codelab-step label="What you need: Prerequisites" duration="2">
         <p>You have a choice to pick either of the following options:</p>
 <ol type="1">
-<li>Scan our NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or</li>
+<li>Scan our NYC Taxi Kafka cluster or</li>
 <li>Download one of our pre-scanned Discovery file</li>
 </ol>
 <p>You will find some prerequisites for both options below.</p>
-<h2 is-upgraded>Option 1: Live Scan Requirements</h2>
-<p>If you want run a live scan on a Kafka cluster, you will need to download and install the Offline Discovery Agent. As with everything in life, you have two options again:</p>
-<ol type="1">
-<li>Install the Agent as a Docker Container</li>
-<li>Install the Agent via a Binary Executable</li>
-</ol>
-<p>The most easiest way install the agent is using Docker. Option 2 will require JDK/JRE 11; OpenJDK 11 is bundled with the agent installation package.</p>
-<h2 is-upgraded>Option 2: Pre-Scanned Discovery File</h2>
-<p>If you don&#39;t want to install the agent and run a live scan, you can still follow along in this CodeLab using the following pre-scanned JSON file.</p>
-<p><strong>Download: </strong><a href="NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
+<h2 is-upgraded>Option 1: Requirements</h2>
+<p>If you choose to Option 1 then this Prerequisites section will help you get setup. If you choose Option 2, then you can</p>
+<p>TODO: explain the support Kafka versions, and other things required to run the agent</p>
+<h2 is-upgraded>Option 2: Requirements</h2>
+<p>Provide the Pre-canned scan file here if users are to skip scanning a kafka cluster.</p>
 <h2 is-upgraded>Some General Requirements</h2>
-<p>Regardless of the option you chose above, you should also:</p>
+<p>To follow along with this CodeLab, you must have:</p>
 <ol type="1">
-<li>Sign into your <a href="http://console.solace.cloud/" target="_blank">Solace PubSub+ Cloud account</a>. If you don&#39;t have an account yet, go ahead and <a href="https://console.solace.cloud/login/new-account" target="_blank">create a trial account</a>.</li>
+<li>Signed into your Solace PubSub+ Cloud account. If you don&#39;t have an account yet, go ahead and <a href="https://console.solace.cloud/login/new-account" target="_blank">create a trial account</a>.</li>
 <li>Ensure that you have the correct user role and permission in Event Portal. At minimum you will need the &#34;Event Portal Editor&#34; permission. For instructions, refer to <a href="https://docs.solace.com/Solace-Cloud/cloud-user-management.htm#Editing" target="_blank">Managing Accounts, Roles, and Permissions</a>.</li>
 </ol>
 <p>If you are scanning your own Kafka clusters, then the following event brokers versions are currently supported:</p>
@@ -118,63 +113,20 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Scan a Kafka Cluster (Optional)" duration="2">
-        <p>Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser.</p>
-<h2 is-upgraded>Step 1: Go to the Discovery Agent</h2>
-<p>Go to <a href="http://localhost:8120" target="_blank">http://localhost:8120</a></p>
-<p>Select <strong>Confluent</strong> as broker type.</p>
-<p class="image-container"><img alt="Run time broker type" src="img/c64c9bd77637986b.png"></p>
-<h2 is-upgraded>Step 2: Configure Connection Details</h2>
-<p>Under the <em>Target Cluster Authentication</em>, copy and paste the following:</p>
-<ul>
-<li><strong>Discovery Name: </strong><code>Kafka Discovery CodeLab</code></li>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com:9092</code></li>
-<li><strong>Auth: </strong><code>No Auth</code></li>
-</ul>
-<p>Select Add Connector and then copy and paste the Host and Port:</p>
-<ul>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
-<li><strong>Port: </strong><code>8083</code></li>
-<li><strong>Authentication: </strong><code>No Auth</code></li>
-</ul>
-<p class="image-container"><img alt="Add Connectors" src="img/f4e18e0db2001c32.png"></p>
-<p>Under Schema Registry Authentication, copy and paste the Host and Port:</p>
-<ul>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
-<li><strong>Port: </strong><code>8081</code></li>
-<li><strong>Authentication: </strong><code>No Auth</code></li>
-</ul>
-<p>And finally for the <em>Event Scan Details</em>, select <code>Scan for all topics</code> and click <strong>Start Scan</strong>.</p>
-<p class="image-container"><img alt="Event Scan Details" src="img/a40e6cf90667a1ba.png"></p>
-<h2 is-upgraded>Step 3: Download the Scan File</h2>
-<p>Now download the scan file to your desktop. The scan file will be in JSON format.</p>
-<p class="image-container"><img alt="Download Scan File" src="img/a40e6cf90667a1ba.png"></p>
-<p>Now on to the fun part where we will upload the scan to Event Portal and visualize the result.</p>
-
+      <google-codelab-step label="Scan a Kafka Cluster" duration="5">
+        
 
       </google-codelab-step>
     
-      <google-codelab-step label="Review Scan In Staging" duration="10">
-        <h2 is-upgraded>Uploading Your Scan File</h2>
-<p>Open your PubSub+ Cloud Console account and navigate to the Event Portal Discovery. Here you can upload your scan file you download in the last step or use our <a href="NYC_Modern_Taxi_Co_Analytics.json" target="_blank">pre-scanned file</a> instead. For the purpose of this CodeLab we will be using the pre-scanned file below.</p>
-<p class="image-container"><img alt="Upload Scan File" src="img/39a7ff325a689753.png"></p>
-<h2 is-upgraded>Assign to Workspace</h2>
-<p>One of the first things we want to do is to organize our work in a Workspace. Click on your scan file from the table and select <strong>Assign to Workspace</strong></p>
-<h2 is-upgraded>Staging View</h2>
-<p>TODO: Explain various thing we see on this Staging View.</p>
-<p class="image-container"><img alt="Staging View" src="img/9fcff6d4ee1d6fe5.png"></p>
-<h2 is-upgraded>Creating an App Domain</h2>
-<p>TODO: Create an app domain</p>
-<p class="image-container"><img alt="Create App Domain" src="img/71022626eed524ee.png"></p>
-<p class="image-container"><img alt="Rename Domain" src="img/d76545c648693a95.png"></p>
-<h2 is-upgraded>Assigning Consumer Groups, Topics, Schemas to the App Domain</h2>
-<p>TODO: Describe why assign to domain</p>
-<p class="image-container"><img alt="Consumers Groups to App Domain" src="img/18c2cd987fc64aee.png"></p>
-<p class="image-container"><img alt="Consumers Groups to App Domain" src="img/c3320d77037f60a7.png"></p>
-<p class="image-container"><img alt="Consumers Groups to App Domain" src="img/6dc0a7623babad0b.png"></p>
-<h2 is-upgraded>Mapping Consumer Groups &amp; Topics to Applications</h2>
-<p class="image-container"><img alt="Map Fraud Application" src="img/41b6b4f36f1354aa.png"></p>
-<p class="image-container"><img alt="Map Fraud Application" src="img/a029bfbeb124537c.png"></p>
+      <google-codelab-step label="Uploading a Scan to Event Portal (#upload-scan)" duration="1">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Visualizing Your Scan" duration="15">
+        <h2 is-upgraded>Creating an App Domain</h2>
+<h2 is-upgraded>Linking Consumer Groups to Application</h2>
+<h2 is-upgraded>Linking Topic to Publishers</h2>
 <h2 is-upgraded>Making Links Across App Domains</h2>
 <h2 is-upgraded>Commit to Event Portal</h2>
 
