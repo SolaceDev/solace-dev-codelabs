@@ -99,8 +99,10 @@
 <li>Install the Agent via a Binary Executable</li>
 </ol>
 <p>The most easiest way install the agent is using Docker. Option 2 will require JDK/JRE 11; OpenJDK 11 is bundled with the agent installation package.</p>
-<p>If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the following commands into a terminal window. The Discovery Agent may take a few minutes to initialize.</p>
-<pre><code>echo &#39;cMopz4m+GV60hBb8DysZna8uMP4tM84P&#39; | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
+<p>If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the below command into a terminal window. The Discovery Agent may take a few minutes to initialize.</p>
+<aside class="warning"><p>NOTE: If you are on Windows OS follow the instructions from the documentation <a href="https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install" target="_blank">here</a>. Or if you would like to install the Discovery Agent via a binary executable then refer to the instructions <a href="https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install2" target="_blank">here</a>.</p>
+</aside>
+<pre><code language="language-bash" class="language-bash">echo &#39;cMopz4m+GV60hBb8DysZna8uMP4tM84P&#39; | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
 	docker pull solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
 	docker run \
 	--env SPRING_APPLICATION_NAME=maas-event-discovery-agent-offline \
@@ -116,10 +118,10 @@
 <p>If you don&#39;t want to install the agent and run a live scan, you can still follow along in this CodeLab using the following pre-scanned JSON file.</p>
 <p><strong>Download: </strong><a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
 <p>Or run the curl/git clone command below to download the file:</p>
-<pre><code>curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
 </code></pre>
 <p>OR</p>
-<pre><code>git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
+<pre><code language="language-bash" class="language-bash">git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
 </code></pre>
 <h2 is-upgraded>Some General Requirements</h2>
 <p>Regardless of the option you chose above, you should also:</p>
@@ -139,6 +141,8 @@
     
       <google-codelab-step label="Scan a Kafka Cluster (Optional)" duration="2">
         <p>Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser.</p>
+<aside class="warning"><p>NOTE: If you going to use the pre-scanned Discovery file instead then you can skip this section.</p>
+</aside>
 <h2 is-upgraded>Step 1: Go to the Discovery Agent</h2>
 <p>Go to <a href="http://localhost:8120" target="_blank">http://localhost:8120</a></p>
 <p>Select <strong>Confluent</strong> as broker type.</p>
@@ -175,23 +179,32 @@
     
       <google-codelab-step label="Review Scan In Staging" duration="10">
         <h2 is-upgraded>Uploading Your Scan File</h2>
-<p>Open your PubSub+ Cloud Console account and navigate to the Event Portal Discovery. Here you can upload your scan file you download in the last step or use our <a href="NYC_Modern_Taxi_Co_Analytics.json" target="_blank">pre-scanned file</a> instead. For the purpose of this CodeLab we will be using the pre-scanned file below.</p>
+<p>Open your PubSub+ Cloud Console account and navigate to the Event Portal Discovery. Here you can upload your scan file you download in the last step or use our <a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">pre-scanned file</a> instead. For the purpose of walk through we will be using the pre-scanned file below.</p>
 <p class="image-container"><img alt="Upload Scan File" src="img/39a7ff325a689753.png"></p>
 <h2 is-upgraded>Assign to Workspace</h2>
-<p>One of the first things we want to do is to organize our work in a Workspace. Click on your scan file from the table and select <strong>Assign to Workspace</strong></p>
+<p>One of the first things we want to do is to organize our work in a Workspace. Click on your scan file from the table and select <strong>Assign to Workspace</strong>.</p>
+<p class="image-container"><img alt="Assign to Workspace" src="img/ceff54983d4b382a.png"></p>
+<p>Lets create a new Workspace called <code>NYC Modern Tax Co</code>.</p>
 <h2 is-upgraded>Staging View</h2>
-<p>TODO: Explain various thing we see on this Staging View.</p>
+<p>Once your workspace is created you&#39;ll see the Staging view. What you essentially have here is all the objects the Discovery agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.</p>
 <p class="image-container"><img alt="Staging View" src="img/9fcff6d4ee1d6fe5.png"></p>
+<p>This is where you will map what you have discovered to Applications and Events in the Event Portal, and make associations with your domain.</p>
 <h2 is-upgraded>Creating an App Domain</h2>
-<p>TODO: Create an app domain</p>
+<p>First we need to associate the Consumer Groups, Connectors, Topics, and Schema that were discovered from our NYC Taxi Analytics cluster to a Domain.</p>
 <p class="image-container"><img alt="Create App Domain" src="img/71022626eed524ee.png"></p>
+<p>Double click on the domain that was created to rename it. We will call this Domain: <code>NYC Modern Taxi Co - Analytics</code></p>
 <p class="image-container"><img alt="Rename Domain" src="img/d76545c648693a95.png"></p>
 <h2 is-upgraded>Assigning Consumer Groups, Topics, Schemas to the App Domain</h2>
-<p>TODO: Describe why assign to domain</p>
+<p>Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, and Schema to the domain we created.</p>
+<aside class="special"><p>In reality you may have tons of Consumers or Topics, so to ensure we are making the right associations with a domain, we can use the search capability to filter our Analytics objects only.</p>
+</aside>
+<p>Filter and select Consumer Groups:</p>
 <p class="image-container"><img alt="Consumers Groups to App Domain" src="img/18c2cd987fc64aee.png"></p>
+<p>Repeat the same for Connectors, Topics, and Schemas:</p>
 <p class="image-container"><img alt="Consumers Groups to App Domain" src="img/c3320d77037f60a7.png"></p>
 <p class="image-container"><img alt="Consumers Groups to App Domain" src="img/6dc0a7623babad0b.png"></p>
 <h2 is-upgraded>Mapping Consumer Groups &amp; Topics to Applications</h2>
+<p>With the objects associated to a Domain, the Event Portal will automatically map those Consumer Groups, Connectors, and Topics to a Applications and Events. Click on the Domain name at the top navigation bar to see a graph view of what has been mapped.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/41b6b4f36f1354aa.png"></p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/a029bfbeb124537c.png"></p>
 <h2 is-upgraded>Making Links Across App Domains</h2>
