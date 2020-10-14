@@ -177,7 +177,7 @@ Negative
 
 Go to [http://localhost:8120](http://localhost:8120)
 
-Select **Confluent** as broker type.
+Here you'll see a list of Event Brokers the Discovery Agent supports. We are going to select **Confluent** as broker type, as that is the Kafka distribution our NYC Taxi service is using. 
 
 ![Run time broker type](img/broker_type.png)
 
@@ -207,9 +207,11 @@ And finally for the *Event Scan Details*, select `Scan for all topics` and click
 
 ![Event Scan Details](img/select_all_topics_start_scan.png)
 
+The agent is now discovering the Topics that are being produced and consumed, what is the Scheme Registry and how does that relate to the different Kafka Topics, what are the consumer groups, and what are the connectors consuming or producing.
+
 ### Step 3: Download the Scan File
 
-Now download the scan file to your desktop. The scan file will be in JSON format.
+Once the scan completes download the scan file to your desktop. The scan file will be in JSON format.
 
 ![Download Scan File](img/select_all_topics_start_scan.png)
 
@@ -232,7 +234,7 @@ One of the first things we want to do is to organize our work in a Workspace. Cl
 
 ![Assign to Workspace](img/assign_to_workspace.png)
 
-Lets create a new Workspace called `NYC Modern Tax Co`.
+Lets create a new Workspace called `NYC Modern Tax Co` and select **Run Synchronization Audit**.
 
 ### Staging View
 
@@ -246,6 +248,8 @@ This is where you will map what you have discovered to Applications and Events i
 
 First we need to associate the Consumer Groups, Connectors, Topics, and Schema that were discovered from our NYC Taxi Analytics cluster to a Domain. 
 
+To do this click on the **"+ Create"** button and select ***Create Application Domain**.
+
 ![Create App Domain](img/create_app_domain.png)
 
 Double click on the domain that was created to rename it. We will call this Domain: `NYC Modern Taxi Co - Analytics`
@@ -257,7 +261,7 @@ Double click on the domain that was created to rename it. We will call this Doma
 Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, and Schema to the domain we created.
 
 Positive
-: In reality you may have tons of Consumers or Topics, so to ensure we are making the right associations with a domain, we can use the search capability to filter our Analytics objects only.
+: In reality you may have thousands of Consumers or Topics, so to ensure we are making the right associations with a domain, you can use the search capability on the table to filter our Analytics objects only.
 
 Filter and select Consumer Groups:
 
@@ -271,17 +275,37 @@ Repeat the same for Connectors, Topics, and Schemas:
 
 ### Mapping Consumer Groups & Topics to Applications
 
-With the objects associated to a Domain, the Event Portal will automatically map those Consumer Groups, Connectors, and Topics to a Applications and Events. Click on the Domain name at the top navigation bar to see a graph view of what has been mapped.
+With the objects associated to a Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events. 
 
+You will notice that some consumer groups like the `taxinyc_analytics_frauddetection_group` and topic like `taxinyc.analytics.fraud.alerted.v1` where not mapped to an application. This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the `taxinyc_analytics_frauddetection_group` maps to the say the `Fraud Detection Applicaiton`. 
+
+Click on the **"+ Create"** button at the top right corner of page and select **Create Application**. Call this application: `Fraud Detection Application`. Then drag and drop the consumer group `taxinyc_analytics_frauddetection_group` to the newly created application.
 
 ![Map Fraud Application](img/link_to_fraud_app.png)
 
+Similarly map the `taxinyc_analytics_passengersurgedetection_group` to a new application called `Passenger Surge Detection`, and the `taxinyc_analytics_driverincentivecalc_group` to a new application called `Driver Incentive Calc`.
+
+Now we have one Topic renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
 
 ![Map Fraud Application](img/link_fraud_alert_event.png)
+
+But what about the Topic `taxinyc.analytics.kpi.exceeded.v1` that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the Passenger Surge Detection & Drive Incentive Calc application. So go ahead and make those association.
+
+Positive
+: Once we commit the discovered object and their association to application and event to the Event Portal you will be able to make this graph more nice and organized. The important part is you as the expert making those linkages between applications for now.
+
 
 ### Making Links Across App Domains
 
 ### Commit to Event Portal
+
+Alright, so now that we have associated and maps all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate on.
+
+You also want to make sure that all association are resolved, i.e. there are no alert yellow circle icons on any of the objects as these won't be imported or committed to the Event Portal.
+
+To commit click on the **Commit To Event Portal** button.
+
+![Commit to Event Portal](img/commit_to_portal.png)
 
 ## Designer and Catalog 
 Duration: 0:05:00
