@@ -1,0 +1,284 @@
+{
+  "data": {
+    "jobId": "6fdqvjij6x",
+    "status": "completed",
+    "discoveryAgentVersion": "0.0.1",
+    "name": "NYC Modern Taxi Co - Analytics: Monday, Aug 17 2020",
+    "pluginType": "CONFLUENT",
+    "pluginInputs": {
+      "brokerIdentity": {
+        "brokerType": "CONFLUENT",
+        "host": "confluent.mymaas.net:9092",
+        "connector": {
+          "hostname": "confluent.mymaas.net",
+          "port": 18083
+        },
+        "schemaRegistry": {
+          "hostname": "confluent.mymaas.net",
+          "port": 8081
+        }
+      },
+      "brokerAuthentication": {
+        "brokerType": "CONFLUENT",
+        "authenticationType": "NOAUTH",
+        "transportType": "PLAINTEXT",
+        "consumerUsername": null,
+        "consumerPassword": null,
+        "adminUsername": null,
+        "adminPassword": null,
+        "trustStoreLocation": null,
+        "trustStorePassword": null,
+        "keyStoreLocation": null,
+        "keyStorePassword": null,
+        "keyPassword": null,
+        "principal": null,
+        "keyTabLocation": null,
+        "krb5ConfigurationLocation": null,
+        "connector": null,
+        "schemaRegistry": null
+      },
+      "discoveryOperation": {
+        "operationType": "eventDiscovery",
+        "messageQueueLength": 100000,
+        "durationInSecs": 0,
+        "subscriptionSet": [],
+        "name": "Confluent discovery",
+        "discoveryContextId": null
+      }
+    },
+    "brokerType": "kafka",
+    "warnings": [],
+    "configuration": {},
+    "events": {
+      "version": "0.0.1",
+      "topics": [
+        "taxinyc.analytics.kpi.exceeded.v1",
+        "taxinyc.ops.passenger.upserted.v1",
+        "taxinyc.ops.driver.upserted.v1",
+        "taxinyc.ops.payment.charged.v1",
+        "taxinyc.ops.ride.called.v1",
+        "taxinyc.ops.ride.updated.v1",
+        "taxinyc.analytics.fraud.alerted.v1"
+      ],
+      "connectors": [
+        {
+          "name": "SolaceSinkConnectorOPS",
+          "connectorClass": "io.confluent.connect.jms.SolaceSinkConnector",
+          "maxThreads": 1,
+          "connectorType": "SINK"
+        },
+        {
+          "name": "SolaceSourceConnectorOPS",
+          "connectorClass": "io.confluent.connect.solace.SolaceSourceConnector",
+          "maxThreads": 1,
+          "connectorType": "SOURCE"
+        },
+        {
+          "name": "ElasticsearchSink-Connector",
+          "connectorClass": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+          "maxThreads": 1,
+          "connectorType": "SINK"
+        },
+        {
+          "name": "GCoudStorage-Connector->ML",
+          "connectorClass": "io.confluent.connect.gcs.GcsSinkConnector",
+          "maxThreads": 2,
+          "connectorType": "SINK"
+        }
+      ],
+      "consumerGroups": [
+        {
+          "groupId": "taxinyc_analytics_frauddetection_group",
+          "simple": true
+        },
+        {
+          "groupId": "taxinyc_analytics_passengersurgedetection_group",
+          "simple": true
+        },
+        {
+          "groupId": "taxinyc_analytics_driverincentivecalc_group",
+          "simple": true
+        }
+      ],
+      "schemas": [
+        {
+          "schemaId": "com.nycmoderntaxi.avro.PassengerUpserted_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.PassengerUpserted_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"PassengerUpserted\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"passenger_upsert_id\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"int\",\"logicalType\":\"date\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"passenger\",\"type\":{\"name\":\"passenger\",\"type\":\"record\",\"fields\":[{\"name\":\"passenger_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"}]}}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.PaymentCharged_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.PaymentCharged_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"PaymentCharged\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"payment_charged_id\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"int\",\"logicalType\":\"date\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"payment_status\",\"type\":\"string\"},{\"name\":\"invoice_system_id\",\"type\":\"string\"},{\"name\":\"amount_charged\",\"type\":\"float\"},{\"name\":\"ride_id\",\"type\":\"int\"},{\"name\":\"entity_type\",\"type\":\"string\"},{\"name\":\"driver\",\"type\":{\"name\":\"driver\",\"type\":\"record\",\"fields\":[{\"name\":\"driver_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"},{\"name\":\"car_class\",\"type\":\"string\"}]}},{\"name\":\"passenger\",\"type\":{\"name\":\"passenger\",\"type\":\"record\",\"fields\":[{\"name\":\"passenger_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"}]}}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.RideCalled_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.RideCalled_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"RideCalled\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"ridecalled_id\",\"type\":\"string\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"dropoff_latitude\",\"type\":\"float\"},{\"name\":\"dropoff_longitude\",\"type\":\"float\"},{\"name\":\"pickup_latitude\",\"type\":\"float\"},{\"name\":\"pickup_longitude\",\"type\":\"float\"},{\"name\":\"timestamp\",\"type\":\"int\",\"logicalType\":\"date\"},{\"name\":\"passenger_count\",\"type\":\"int\"},{\"name\":\"car_class\",\"type\":\"string\"},{\"name\":\"passenger\",\"type\":{\"name\":\"passenger\",\"type\":\"record\",\"fields\":[{\"name\":\"passenger_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"}]}}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.RideUpdated_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.RideUpdated_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"RideUpdated\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"ride_id\",\"type\":\"string\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"point_idx\",\"type\":\"int\"},{\"name\":\"latitude\",\"type\":\"float\"},{\"name\":\"longitude\",\"type\":\"float\"},{\"name\":\"heading\",\"type\":\"int\"},{\"name\":\"speed\",\"type\":\"int\"},{\"name\":\"timestamp\",\"type\":\"string\"},{\"name\":\"meter_reading\",\"type\":\"float\"},{\"name\":\"meter_increment\",\"type\":\"float\"},{\"name\":\"ride_status\",\"type\":\"string\"},{\"name\":\"passenger_count\",\"type\":\"int\"},{\"name\":\"driver\",\"type\":{\"name\":\"driver\",\"type\":\"record\",\"fields\":[{\"name\":\"driver_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"},{\"name\":\"car_class\",\"type\":\"string\"}]}},{\"name\":\"passenger\",\"type\":{\"name\":\"passenger\",\"type\":\"record\",\"fields\":[{\"name\":\"passenger_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"}]}}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.DriverUpserted_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.DriverUpserted_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"DriverUpserted\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"source\",\"type\":\"string\"},{\"name\":\"driver\",\"type\":{\"name\":\"driver\",\"type\":\"record\",\"fields\":[{\"name\":\"driver_id\",\"type\":\"string\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"},{\"name\":\"car_class\",\"type\":\"string\"}]}},{\"name\":\"salesforce_id\",\"type\":\"string\"},{\"name\":\"account_status\",\"type\":\"string\"},{\"name\":\"background_status\",\"type\":\"string\"},{\"name\":\"driver_billing\",\"type\":{\"name\":\"driver_billing\",\"type\":\"record\",\"fields\":[{\"name\":\"account_type\",\"type\":\"string\"},{\"name\":\"billing_street_address\",\"type\":\"string\"},{\"name\":\"billing_city\",\"type\":\"string\"},{\"name\":\"billing_state\",\"type\":\"string\"},{\"name\":\"billing_zip\",\"type\":\"string\"}]}}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.KpiExceededThreshold_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.KpiExceededThreshold_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"KpiExceededThreshold\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"kpi_exceeded_id\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"int\",\"logicalType\":\"date\"},{\"name\":\"exceeded_alert_number\",\"type\":\"int\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"kpi_type\",\"type\":\"string\"},{\"name\":\"kpi_metric\",\"type\":\"string\"},{\"name\":\"kpi_value\",\"type\":\"string\"},{\"name\":\"kpi_threshold_level\",\"type\":\"string\"}]}"
+        },
+        {
+          "schemaId": "com.nycmoderntaxi.avro.FraudDetected_AVRO.1",
+          "name": "com.nycmoderntaxi.avro.FraudDetected_AVRO",
+          "version": 1,
+          "contentType": "JSON",
+          "schemaType": "AVRO",
+          "schemaReg": true,
+          "content": "{\"name\":\"FraudDetected\",\"type\":\"record\",\"namespace\":\"com.nycmoderntaxi.avro\",\"fields\":[{\"name\":\"fraud_detected_id\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"int\",\"logicalType\":\"date\"},{\"name\":\"information_source\",\"type\":\"string\"},{\"name\":\"fraud_type\",\"type\":\"string\"},{\"name\":\"fraud_threshold_level\",\"type\":\"string\"},{\"name\":\"ride_id\",\"type\":\"int\"},{\"name\":\"entity_type\",\"type\":\"string\"},{\"name\":\"driver\",\"type\":{\"name\":\"driver\",\"type\":\"record\",\"fields\":[{\"name\":\"driver_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"},{\"name\":\"car_class\",\"type\":\"string\"}]}},{\"name\":\"passenger\",\"type\":{\"name\":\"passenger\",\"type\":\"record\",\"fields\":[{\"name\":\"passenger_id\",\"type\":\"int\"},{\"name\":\"first_name\",\"type\":\"string\"},{\"name\":\"last_name\",\"type\":\"string\"},{\"name\":\"rating\",\"type\":\"int\"}]}}]}"
+        }
+      ],
+      "connectorToTopicAssociations": [
+        {
+          "topic": "taxinyc.analytics.kpi.exceeded.v1",
+          "connector": "SolaceSinkConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.ops.ride.updated.v1",
+          "connector": "SolaceSourceConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.ops.ride.called.v1",
+          "connector": "SolaceSourceConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.ops.payment.charged.v1",
+          "connector": "SolaceSourceConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.ops.driver.upserted.v1",
+          "connector": "SolaceSourceConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.ops.passenger.upserted.v1",
+          "connector": "SolaceSourceConnectorOPS"
+        },
+        {
+          "topic": "taxinyc.analytics.kpi.exceeded.v1",
+          "connector": "ElasticsearchSink-Connector"
+        },
+        {
+          "topic": "taxinyc.ops.payment.charged.v1",
+          "connector": "GCoudStorage-Connector->ML"
+        },
+        {
+          "topic": "taxinyc.ops.ride.called.v1",
+          "connector": "GCoudStorage-Connector->ML"
+        },
+        {
+          "topic": "taxinyc.ops.ride.updated.v1",
+          "connector": "GCoudStorage-Connector->ML"
+        }
+      ],
+      "consumerGroupToTopicAssociations": [
+        {
+          "consumerGroup": "taxinyc_analytics_frauddetection_group",
+          "topic": "taxinyc.ops.payment.charged.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_frauddetection_group",
+          "topic": "taxinyc.ops.ride.updated.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_passengersurgedetection_group",
+          "topic": "taxinyc.ops.driver.upserted.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_passengersurgedetection_group",
+          "topic": "taxinyc.ops.passenger.upserted.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_passengersurgedetection_group",
+          "topic": "taxinyc.ops.payment.charged.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_passengersurgedetection_group",
+          "topic": "taxinyc.ops.ride.called.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_passengersurgedetection_group",
+          "topic": "taxinyc.ops.ride.updated.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_driverincentivecalc_group",
+          "topic": "taxinyc.ops.driver.upserted.v1"
+        },
+        {
+          "consumerGroup": "taxinyc_analytics_driverincentivecalc_group",
+          "topic": "taxinyc.ops.ride.updated.v1"
+        }
+      ],
+      "topicToSchemaAssociations": [
+        {
+          "topic": "taxinyc.analytics.kpi.exceeded.v1",
+          "schemaId": "com.nycmoderntaxi.avro.KpiExceededThreshold_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.ops.passenger.upserted.v1",
+          "schemaId": "com.nycmoderntaxi.avro.PassengerUpserted_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.ops.driver.upserted.v1",
+          "schemaId": "com.nycmoderntaxi.avro.DriverUpserted_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.ops.payment.charged.v1",
+          "schemaId": "com.nycmoderntaxi.avro.PaymentCharged_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.ops.ride.called.v1",
+          "schemaId": "com.nycmoderntaxi.avro.RideCalled_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.ops.ride.updated.v1",
+          "schemaId": "com.nycmoderntaxi.avro.RideUpdated_AVRO.1"
+        },
+        {
+          "topic": "taxinyc.analytics.fraud.alerted.v1",
+          "schemaId": "com.nycmoderntaxi.avro.FraudDetected_AVRO.1"
+        }
+      ]
+    },
+    "discoverySchemaVersion": "0.0.1",
+    "discoveryContextId": null,
+    "discoveryStartTime": 1594143773761,
+    "discoveryEndTime": 1594143783417
+  }
+}
