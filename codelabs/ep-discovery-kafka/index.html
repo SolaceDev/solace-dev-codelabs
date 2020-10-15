@@ -27,7 +27,7 @@
                   environment="web"
                   feedback-link="https://solace.community/">
     
-      <google-codelab-step label="Introduction" duration="2">
+      <google-codelab-step label="Introduction" duration="1">
         <p>Are you looking to discover, visual, catalog, share, and reuse your Kafka event streams, but don&#39;t know how and or where to begin. Or does your organization look something like the picture below and you are struggling to understand what is the data that is really going through your Kafka clusters?</p>
 <p class="image-container"><img alt="Kafka Organization" src="img/e82830df4060894f.png"></p>
 <p>Well you have come to the right place, and in this guided walk through, we will show you how to:</p>
@@ -59,25 +59,39 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Foundation Concepts" duration="3">
+      <google-codelab-step label="Foundational Concepts" duration="5">
         <p>Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal.</p>
-<aside class="special"><p>We are assuming you are familiar with Kafka, its foundation concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
+<aside class="special"><p>We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
 </aside>
 <h2 is-upgraded>Consumer Groups</h2>
 <p>Event Portal supports the concept of Kafka&#39;s consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal&#39;s runtime discovery to associate a discovered consumer group to an existing application.</p>
 <p>Kafka consumers that belong to the same consumer group share a group ID. The consumers in a group divide the topic partitions, as fairly as possible, so that each consumer consumes only a single partition from the group.</p>
-<p class="image-container"><img alt="Kafka Consumer Groups" src="img/57274f114ece6c03.png"></p>
+<p>A few examples of Consumers Groups from our NYC Taxi Analytics use case would be:</p>
+<ul>
+<li>Passenger Surge Detection</li>
+<li>Fraud Detection</li>
+<li>Driver Incentive Calculation</li>
+</ul>
 <h2 is-upgraded>Topics</h2>
 <p>Topics are an important part of the Event Portal. Think of a topic as a concept of the publish-subscribe (pub/sub) architectural pattern. They are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.</p>
 <p>A Solace topic and an Apache Kafka topic might seem fundamentally the same but there are quite a few <a href="https://solace.com/blog/solace-topics-vs-kafka-topics/" target="_blank">differences between them</a>. Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.</p>
+<p>Here are some examples from our use case:</p>
+<ul>
+<li>taxinyc.analytics.fraud.alerted.v1</li>
+<li>taxinyc.ops.payment.charged.v1</li>
+<li>taxinyc.ops.ride.called.v1</li>
+</ul>
 <h2 is-upgraded>Schemas</h2>
-<p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema. In our Kafka cluster, our events are all in ARVRO Schema format.</p>
+<p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema.</p>
+<p>In our use case all events are in ARVRO Schema format.</p>
+<p class="image-container"><img alt="Schema Example" src="img/73e8cbbb5773302a.png"></p>
 <h2 is-upgraded>Application Domain &amp; Workspace</h2>
 <p>An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group application into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where we invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.</p>
 <p>In the Event Portal you will associate all objects like Consumer Groups, Topics, Schemea, etc, to one or more Application Domains.</p>
-<p>You can further group multiple domains into a <em>Workspace</em>. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.</p>
+<p>You can further group multiple domains into a <em>Workspace</em>, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.</p>
+<p class="image-container"><img alt="Workspace Example" src="img/f5272455c6174221.png"></p>
 <h2 is-upgraded>Applications</h2>
-<p>An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal. In fact you could have a 1..* consumer group association with an Application.</p>
+<p>An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.</p>
 <h2 is-upgraded>Connector</h2>
 <p>A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.</p>
 <p>With the foundational concepts out of the way, lets go through some prerequisites for running a Discovery scan.</p>
@@ -86,9 +100,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="What you need: Prerequisites" duration="5">
-        <p>You have a choice to pick either of the following options:</p>
+        <p>In this walk through you have a choice to pick either of the following options:</p>
 <ol type="1">
-<li>Scan our NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or</li>
+<li>Scan our demo NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or</li>
 <li>Download one of our pre-scanned Discovery file</li>
 </ol>
 <p>You will find some prerequisites for both options below.</p>
@@ -139,7 +153,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Scan a Kafka Cluster (Optional)" duration="2">
+      <google-codelab-step label="Scan a Kafka Cluster (Optional)" duration="3">
         <p>Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser.</p>
 <aside class="warning"><p>NOTE: If you going to use the pre-scanned Discovery file instead then you can skip this section.</p>
 </aside>
@@ -169,7 +183,7 @@
 </ul>
 <p>And finally for the <em>Event Scan Details</em>, select <code>Scan for all topics</code> and click <strong>Start Scan</strong>.</p>
 <p class="image-container"><img alt="Event Scan Details" src="img/a40e6cf90667a1ba.png"></p>
-<p>The agent is now discovering the Topics that are being produced and consumed, what is the Scheme Registry and how does that relate to the different Kafka Topics, what are the consumer groups, and what are the connectors consuming or producing.</p>
+<p>The agent is now discovering the Topics that are being produced and consumed, inspecting the Scheme Registry, discovering consumer groups, and looking at various connectors that consuming or producing data with the cluster.</p>
 <h2 is-upgraded>Step 3: Download the Scan File</h2>
 <p>Once the scan completes download the scan file to your desktop. The scan file will be in JSON format.</p>
 <p class="image-container"><img alt="Download Scan File" src="img/a40e6cf90667a1ba.png"></p>
@@ -179,7 +193,16 @@
       </google-codelab-step>
     
       <google-codelab-step label="Review Scan In Staging" duration="10">
-        <h2 is-upgraded>Uploading Your Scan File</h2>
+        <p>This is where all the exciting stuff will happen with your Discovery scans. A few things you can do here:</p>
+<ul>
+<li>Review the discovered data</li>
+<li>Create applications and associate consumers groups to applications</li>
+<li>Link events published to the applications publishing them</li>
+<li>Resolve any discrepancies</li>
+<li>And finally import the staged data into Designer and Catalog.</li>
+</ul>
+<p>So lets start by uploading the scan file first.</p>
+<h2 is-upgraded>Uploading Your Scan File</h2>
 <p>Open your PubSub+ Cloud Console account and navigate to the Event Portal Discovery. Here you can upload your scan file you download in the last step or use our <a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">pre-scanned file</a> instead. For the purpose of walk through we will be using the pre-scanned file below.</p>
 <p class="image-container"><img alt="Upload Scan File" src="img/39a7ff325a689753.png"></p>
 <h2 is-upgraded>Assign to Workspace</h2>
@@ -187,7 +210,7 @@
 <p class="image-container"><img alt="Assign to Workspace" src="img/ceff54983d4b382a.png"></p>
 <p>Lets create a new Workspace called <code>NYC Modern Tax Co</code> and select <strong>Run Synchronization Audit</strong>.</p>
 <h2 is-upgraded>Staging View</h2>
-<p>Once your workspace is created you&#39;ll see the Staging view. What you essentially have here is all the objects the Discovery agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.</p>
+<p>Once your workspace is created you&#39;ll see the Staging view. What you essentially have here is all the objects the Discovery Agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.</p>
 <p class="image-container"><img alt="Staging View" src="img/9fcff6d4ee1d6fe5.png"></p>
 <p>This is where you will map what you have discovered to Applications and Events in the Event Portal, and make associations with your domain.</p>
 <h2 is-upgraded>Creating an App Domain</h2>
@@ -207,21 +230,21 @@
 <p class="image-container"><img alt="Consumers Groups to App Domain" src="img/6dc0a7623babad0b.png"></p>
 <h2 is-upgraded>Mapping Consumer Groups &amp; Topics to Applications</h2>
 <p>With the objects associated to a Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events.</p>
-<p>You will notice that some consumer groups like the <code>taxinyc_analytics_frauddetection_group</code> and topic like <code>taxinyc.analytics.fraud.alerted.v1</code> where not mapped to an application. This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Applicaiton</code>.</p>
+<p>You will notice that some consumer groups like the <code>taxinyc_analytics_frauddetection_group</code> and topic like <code>taxinyc.analytics.fraud.alerted.v1</code> where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.</p>
+<p>This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Applicaiton</code>.</p>
 <p>Click on the <strong>&#34;+ Create&#34;</strong> button at the top right corner of page and select <strong>Create Application</strong>. Call this application: <code>Fraud Detection Application</code>. Then drag and drop the consumer group <code>taxinyc_analytics_frauddetection_group</code> to the newly created application.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/41b6b4f36f1354aa.png"></p>
 <p>Similarly map the <code>taxinyc_analytics_passengersurgedetection_group</code> to a new application called <code>Passenger Surge Detection</code>, and the <code>taxinyc_analytics_driverincentivecalc_group</code> to a new application called <code>Driver Incentive Calc</code>.</p>
 <p>Now we have one Topic renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team know this Topic is produced by the <code>Fraud Detection App</code>. So we can drag the topic to that app now.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/a029bfbeb124537c.png"></p>
 <p>But what about the Topic <code>taxinyc.analytics.kpi.exceeded.v1</code> that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the Passenger Surge Detection &amp; Drive Incentive Calc application. So go ahead and make those association.</p>
-<aside class="special"><p>Once we commit the discovered object and their association to application and event to the Event Portal you will be able to make this graph more nice and organized. The important part is you as the expert making those linkages between applications for now.</p>
-</aside>
-<h2 is-upgraded>Making Links Across App Domains</h2>
 <h2 is-upgraded>Commit to Event Portal</h2>
-<p>Alright, so now that we have associated and maps all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate on.</p>
-<p>You also want to make sure that all association are resolved, i.e. there are no alert yellow circle icons on any of the objects as these won&#39;t be imported or committed to the Event Portal.</p>
+<p>Alright, so now that we have associated and mapped all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate, design, and govern the NYC Taxi Analytics architecture.</p>
+<aside class="warning"><p>You also want to make sure that all association are resolved, i.e. there are no alert orange circle icons on any of the objects on the Graph View as these won&#39;t be imported or committed to the Event Portal.</p>
+</aside>
 <p>To commit click on the <strong>Commit To Event Portal</strong> button.</p>
 <p class="image-container"><img alt="Commit to Event Portal" src="img/7bddccd9a6ae45fc.png"></p>
+<p>And your done!! ...well almost. All the applications, events and linkages you made are now in sync with our Kafka cluster and have been cataloged, available for others in our teams to search and discover. For this we are next going to explore two other important features of the Event Portal, i.e. the Designer and Catalog.</p>
 
 
       </google-codelab-step>

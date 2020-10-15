@@ -12,7 +12,7 @@ analytics account: UA-3921398-10
 
 ## Introduction
 
-Duration: 0:02:00
+Duration: 0:01:00
 
 Are you looking to discover, visual, catalog, share, and reuse your Kafka event streams, but don't know how and or where to begin. Or does your organization look something like the picture below and you are struggling to understand what is the data that is really going through your Kafka clusters?
 
@@ -49,14 +49,14 @@ Positive
 : The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define [here](https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0). Solace is streaming this data over Solace PubSub+ for you to analyze and process. 
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
-## Foundation Concepts
+## Foundational Concepts
 
-Duration: 0:03:00
+Duration: 0:05:00
 
 Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal. 
 
 Positive
-: We are assuming you are familiar with Kafka, its foundation concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
+: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
 
 ### Consumer Groups
 
@@ -64,7 +64,12 @@ Event Portal supports the concept of Kafka's consumer groups. A consumer group i
 
 Kafka consumers that belong to the same consumer group share a group ID. The consumers in a group divide the topic partitions, as fairly as possible, so that each consumer consumes only a single partition from the group.
 
-![Kafka Consumer Groups](img/consumer_groups.png)
+A few examples of Consumers Groups from our NYC Taxi Analytics use case would be:
+
+* Passenger Surge Detection
+* Fraud Detection
+* Driver Incentive Calculation
+
 
 ### Topics
 
@@ -72,9 +77,21 @@ Topics are an important part of the Event Portal. Think of a topic as a concept 
 
 A Solace topic and an Apache Kafka topic might seem fundamentally the same but there are quite a few [differences between them](https://solace.com/blog/solace-topics-vs-kafka-topics/). Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.
 
+Here are some examples from our use case:
+
+* taxinyc.analytics.fraud.alerted.v1
+* taxinyc.ops.payment.charged.v1
+* taxinyc.ops.ride.called.v1
+
+
 ### Schemas
 
-In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event's payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema. In our Kafka cluster, our events are all in ARVRO Schema format.
+In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event's payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema. 
+
+In our use case all events are in ARVRO Schema format.
+
+![Schema Example](img/schema_example.png)
+
 
 ### Application Domain & Workspace
 
@@ -82,15 +99,18 @@ An application domain represents a namespace where applications, events, and sch
 
 In the Event Portal you will associate all objects like Consumer Groups, Topics, Schemea, etc, to one or more Application Domains. 
 
-You can further group multiple domains into a *Workspace*. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.
+You can further group multiple domains into a *Workspace*, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.
+
+![Workspace Example](img/workspace_example.png)
 
 ### Applications
 
-An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal. In fact you could have a 1..* consumer group association with an Application.
+An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.
 
 ### Connector
 
 A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.
+
 
 
 With the foundational concepts out of the way, lets go through some prerequisites for running a Discovery scan.
@@ -99,8 +119,8 @@ With the foundational concepts out of the way, lets go through some prerequisite
 
 Duration: 0:05:00
 
-You have a choice to pick either of the following options:
-1. Scan our NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or
+In this walk through you have a choice to pick either of the following options:
+1. Scan our demo NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or
 2. Download one of our pre-scanned Discovery file
 
 You will find some prerequisites for both options below. 
@@ -166,7 +186,7 @@ If you are scanning your own Kafka clusters, then the following event brokers ve
 * Amazon MSK version 2.2
 
 ## Scan a Kafka Cluster (Optional)
-Duration: 0:02:00
+Duration: 0:03:00
 
 Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser. 
 
@@ -207,7 +227,7 @@ And finally for the *Event Scan Details*, select `Scan for all topics` and click
 
 ![Event Scan Details](img/select_all_topics_start_scan.png)
 
-The agent is now discovering the Topics that are being produced and consumed, what is the Scheme Registry and how does that relate to the different Kafka Topics, what are the consumer groups, and what are the connectors consuming or producing.
+The agent is now discovering the Topics that are being produced and consumed, inspecting the Scheme Registry, discovering consumer groups, and looking at various connectors that consuming or producing data with the cluster.
 
 ### Step 3: Download the Scan File
 
@@ -220,7 +240,14 @@ Now on to the fun part where we will upload the scan to Event Portal and visuali
 ## Review Scan In Staging
 Duration: 0:010:00
 
+This is where all the exciting stuff will happen with your Discovery scans. A few things you can do here:
+* Review the discovered data
+* Create applications and associate consumers groups to applications
+* Link events published to the applications publishing them
+* Resolve any discrepancies
+* And finally import the staged data into Designer and Catalog.
 
+So lets start by uploading the scan file first.
 
 ### Uploading Your Scan File
 
@@ -238,7 +265,7 @@ Lets create a new Workspace called `NYC Modern Tax Co` and select **Run Synchron
 
 ### Staging View
 
-Once your workspace is created you'll see the Staging view. What you essentially have here is all the objects the Discovery agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.
+Once your workspace is created you'll see the Staging view. What you essentially have here is all the objects the Discovery Agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.
 
 ![Staging View](img/staging_view.png)
 
@@ -277,7 +304,9 @@ Repeat the same for Connectors, Topics, and Schemas:
 
 With the objects associated to a Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events. 
 
-You will notice that some consumer groups like the `taxinyc_analytics_frauddetection_group` and topic like `taxinyc.analytics.fraud.alerted.v1` where not mapped to an application. This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the `taxinyc_analytics_frauddetection_group` maps to the say the `Fraud Detection Applicaiton`. 
+You will notice that some consumer groups like the `taxinyc_analytics_frauddetection_group` and topic like `taxinyc.analytics.fraud.alerted.v1` where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.
+
+This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the `taxinyc_analytics_frauddetection_group` maps to the say the `Fraud Detection Applicaiton`. 
 
 Click on the **"+ Create"** button at the top right corner of page and select **Create Application**. Call this application: `Fraud Detection Application`. Then drag and drop the consumer group `taxinyc_analytics_frauddetection_group` to the newly created application.
 
@@ -291,24 +320,23 @@ Now we have one Topic renaming that needs to be mapped. You being an expert in N
 
 But what about the Topic `taxinyc.analytics.kpi.exceeded.v1` that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the Passenger Surge Detection & Drive Incentive Calc application. So go ahead and make those association.
 
-Positive
-: Once we commit the discovered object and their association to application and event to the Event Portal you will be able to make this graph more nice and organized. The important part is you as the expert making those linkages between applications for now.
-
-
-### Making Links Across App Domains
-
 ### Commit to Event Portal
 
-Alright, so now that we have associated and maps all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate on.
+Alright, so now that we have associated and mapped all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate, design, and govern the NYC Taxi Analytics architecture. 
 
-You also want to make sure that all association are resolved, i.e. there are no alert yellow circle icons on any of the objects as these won't be imported or committed to the Event Portal.
+Negative
+: You also want to make sure that all association are resolved, i.e. there are no alert orange circle icons on any of the objects on the Graph View as these won't be imported or committed to the Event Portal.
 
 To commit click on the **Commit To Event Portal** button.
 
 ![Commit to Event Portal](img/commit_to_portal.png)
 
+And your done!! ...well almost. All the applications, events and linkages you made are now in sync with our Kafka cluster and have been cataloged, available for others in our teams to search and discover. For this we are next going to explore two other important features of the Event Portal, i.e. the Designer and Catalog.
+
 ## Designer and Catalog 
 Duration: 0:05:00
+
+
 
 ## Next Steps
 Duration: 0:01:00
