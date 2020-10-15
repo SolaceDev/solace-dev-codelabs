@@ -250,14 +250,47 @@
       </google-codelab-step>
     
       <google-codelab-step label="Designer and Catalog" duration="5">
-        
+        <p>Now that our Consumers Groups, Topics, and other objects have been committed to the Event Portal, they can be viewed and searched from the Designer and Catalog.</p>
+<p>In short the Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and applications for our NYC Taxi service as the use case evolves. It provides a graphical representation of application domains, applications, schemas, and events. You can use Designer to visualize the interaction of events between applications and to provision your architecture into the Event Portal.</p>
+<p>Whereas, the Catalog acts as a storefront for all the applications, events, and schemas you&#39;ve created in the Event Portal. Objects discovered &amp; committed from our scan earlier, or created in Designer are automatically available in Catalog. Using Catalog&#39;s searchable interface, you can access all the existing events, schemas, and applications.</p>
+<p>We will first take Designer for a test drive, so go ahead on open the Designer in Event Portal:</p>
+<p class="image-container"><img alt="Designer Homepage" src="img/6d5ec2443b4eb2bd.png"></p>
+<p>You&#39;ll notice the <code>NYC Modern Taxi Co - Analytics</code> domain we created in Discovery. Double click on that domain name or select the domain to see a quick summary and click on <strong>View Domain Details</strong>.</p>
+<p>This is where you might want to spend some time to redraw you graph, maybe putting all custom apps one side and connectors on another, and have an understandable architecture diagram. Here is what ours looks like:</p>
+<p class="image-container"><img alt="Designer Graph View" src="img/8bf87fe5500f54ad.png"></p>
+<p>As we did this, we were able to realized something that wasn&#39;t really right. From reorganizing the graph we noticed that there is an event <code>taxinyc.analytics.fraud.alerted.v1</code> that is produced by the <code>Fraud Detection Application</code> but not really consumed by anyone. We look at this as a opportunity as that event has some value, and can be used for a new business use case, maybe to have a new insight or customer experience. Ideally you could create a new application in the Designer, associate this event to be consumed by it, generate an AsyncAPI spec from the Event Portal, run it through code generators or code it up, connect it to Kafka, and re-scan where the Discovery would say our design is in sync with Kafka runtime.</p>
+<p>But we don&#39;t live in an ideal world and say we didn&#39;t follow the above process, developed a quick Kafka application that consumed that event, and maybe we forgot to update it in the Designer. So lets say that happened. What would our Discovery Scan show if we re-ran the Discovery Agent? Well lets find out.</p>
+<p>We already have a pre-scanned file for you to use here, which you can download <a href="https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json" target="_blank">from here</a> directly or use curl/git clone as shown below.</p>
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json -o NYC_Modern_Taxi_Co_Analytics-Audit.json
+</code></pre>
+<p>OR</p>
+<pre><code language="language-bash" class="language-bash">git clone  https://gist.github.com/e597aeb4d4c48796320b923745796568.git
+</code></pre>
+<p>Once downloaded go back to Discovery and upload this new discovery file.</p>
+<p class="image-container"><img alt="Discovery Audit" src="img/f08ecfbdc8dafcf4.png"></p>
+<p>Like before we are going to assign the scan to a Workspace. Use the same Workspace you created last time and select <strong>Run Synchronization Audit</strong>. The Event Portal will now run an audit with your existing domain and check for any discrepancies. We noticed that there is a new Consumer Group <code>taxinyc_analytics_fraudapp_group</code> that wasn&#39;t there before.</p>
+<p class="image-container"><img alt="New Consumer Group" src="img/6d1c590d3464ca82.png"></p>
+<p>Assign this new group to the <code>NYC Modern Taxi Co - Analytics</code> domain first. Then click on the domain from the tab menu. You may have to zoom out a little to see the Consumer Group that was discovered, which is now consuming the <code>taxinyc.analytics.fraud.alerted.v1</code> event.</p>
+<p class="image-container"><img alt="New Consumer Group" src="img/6d1c590d3464ca82.png"></p>
+<p>We can right-click on this Consumer Group and <strong>Convert To Application</strong>, and finally <strong>Commit to Event Portal</strong>.</p>
+<p>If you head back to the Designer, the new application is now part of the architecture diagram and our Kafka runtime is now synchronized with our design!</p>
+<p class="image-container"><img alt="Designer New Fraud App" src="img/4ee8c4c9a804829f.png"></p>
+
 
       </google-codelab-step>
     
       <google-codelab-step label="Next Steps" duration="1">
-        <p>Summarize and key takeaways</p>
-<p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
-<p>Next steps -&gt; scan your own clusters</p>
+        <p>Hopefully your enjoyed the walk through of how to run discovery scans on a Kafka cluster, visualize them into an architecture diagram, and catalog all your Kafka event streams and applications for others in your organization to find and collaborate on.</p>
+<h2 is-upgraded>Key Takeaways</h2>
+<p class="image-container"><img alt="Benefits of Event Portal" src="img/97554c8b9048ef9e.png"></p>
+<h2 is-upgraded>Next Steps</h2>
+<ul>
+<li>Scan your own Kafka clusters</li>
+<li>Import the scans in your Event Portal</li>
+<li>Show &amp; share your discoveries with your teams</li>
+<li>And lets us know if you found something cool and share it us on our <a href="https://solace.community" target="_blank">Developer Community</a></li>
+</ul>
+<p class="image-container"><img alt="Solly Wave" src="img/9bd2cbed014d29b6.webp"></p>
 
 
       </google-codelab-step>

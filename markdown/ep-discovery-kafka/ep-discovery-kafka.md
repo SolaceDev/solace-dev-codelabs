@@ -336,15 +336,70 @@ And your done!! ...well almost. All the applications, events and linkages you ma
 ## Designer and Catalog 
 Duration: 0:05:00
 
+Now that our Consumers Groups, Topics, and other objects have been committed to the Event Portal, they can be viewed and searched from the Designer and Catalog.
 
+In short the Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and applications for our NYC Taxi service as the use case evolves. It provides a graphical representation of application domains, applications, schemas, and events. You can use Designer to visualize the interaction of events between applications and to provision your architecture into the Event Portal.
+
+Whereas, the Catalog acts as a storefront for all the applications, events, and schemas you've created in the Event Portal. Objects discovered & committed from our scan earlier, or created in Designer are automatically available in Catalog. Using Catalog's searchable interface, you can access all the existing events, schemas, and applications.
+
+We will first take Designer for a test drive, so go ahead on open the Designer in Event Portal:
+
+![Designer Homepage](img/designer_home.png)
+
+You'll notice the `NYC Modern Taxi Co - Analytics` domain we created in Discovery. Double click on that domain name or select the domain to see a quick summary and click on **View Domain Details**.
+
+This is where you might want to spend some time to redraw you graph, maybe putting all custom apps one side and connectors on another, and have an understandable architecture diagram. Here is what ours looks like:
+
+![Designer Graph View](img/designer_graph_view.png)
+
+As we did this, we were able to realized something that wasn't really right. From reorganizing the graph we noticed that there is an event `taxinyc.analytics.fraud.alerted.v1` that is produced by the `Fraud Detection Application` but not really consumed by anyone. We look at this as a opportunity as that event has some value, and can be used for a new business use case, maybe to have a new insight or customer experience. Ideally you could create a new application in the Designer, associate this event to be consumed by it, generate an AsyncAPI spec from the Event Portal, run it through code generators or code it up, connect it to Kafka, and re-scan where the Discovery would say our design is in sync with Kafka runtime. 
+
+But we don't live in an ideal world and say we didn't follow the above process, developed a quick Kafka application that consumed that event, and maybe we forgot to update it in the Designer. So lets say that happened. What would our Discovery Scan show if we re-ran the Discovery Agent? Well lets find out.
+
+We already have a pre-scanned file for you to use here, which you can download [from here](https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json) directly or use curl/git clone as shown below.
+
+``` bash
+curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json -o NYC_Modern_Taxi_Co_Analytics-Audit.json
+```
+
+OR
+
+``` bash
+git clone  https://gist.github.com/e597aeb4d4c48796320b923745796568.git
+```
+
+Once downloaded go back to Discovery and upload this new discovery file.
+
+![Discovery Audit](img/discovery_audit.png)
+
+Like before we are going to assign the scan to a Workspace. Use the same Workspace you created last time and select **Run Synchronization Audit**. The Event Portal will now run an audit with your existing domain and check for any discrepancies. We noticed that there is a new Consumer Group `taxinyc_analytics_fraudapp_group` that wasn't there before. 
+
+![New Consumer Group](img/new_consumer_group.png)
+
+Assign this new group to the `NYC Modern Taxi Co - Analytics` domain first. Then click on the domain from the tab menu. You may have to zoom out a little to see the Consumer Group that was discovered, which is now consuming the `taxinyc.analytics.fraud.alerted.v1` event. 
+
+![New Consumer Group](img/new_consumer_group.png)
+
+We can right-click on this Consumer Group and **Convert To Application**, and finally **Commit to Event Portal**.
+
+If you head back to the Designer, the new application is now part of the architecture diagram and our Kafka runtime is now synchronized with our design!
+
+![Designer New Fraud App](img/designer_new_fraud_app.png)
 
 ## Next Steps
 Duration: 0:01:00
 
-Summarize and key takeaways
+Hopefully your enjoyed the walk through of how to run discovery scans on a Kafka cluster, visualize them into an architecture diagram, and catalog all your Kafka event streams and applications for others in your organization to find and collaborate on.
 
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3>   
+### Key Takeaways
 
-Next steps -> scan your own clusters
+![Benefits of Event Portal](img/benefits_of_event_portal.png)  
+
+### Next Steps
+
+* Scan your own Kafka clusters
+* Import the scans in your Event Portal
+* Show & share your discoveries with your teams
+* And lets us know if you found something cool and share it us on our [Developer Community](https://solace.community)
+
+![Solly Wave](img/solly_wave.webp)
