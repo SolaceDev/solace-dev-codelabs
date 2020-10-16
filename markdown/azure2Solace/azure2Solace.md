@@ -398,7 +398,10 @@ Duration: 0:07:00
 ✅ You can use similar approach to integrate with Azure, Blob Storage, Event Hub, IoT Hub, Cosmos Db etc.   
 ✅ Event though this codelab uses C#, you can use other programming languages supported by Azure functions.
 
-✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation [here](https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm).		
+✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation [here](https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm).	
+
+✅ For more information on Azure functions connectors check out the [PubSub+ Connector Hub](https://solace.com/connectors/?fwp_connectors_search=azure) page    
+
 
 ![Soly Image Caption](img/soly.gif)
 

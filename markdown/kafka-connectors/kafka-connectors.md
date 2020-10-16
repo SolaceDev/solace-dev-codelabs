@@ -264,5 +264,7 @@ At this point, try running the Source connector.  Hopefully you have access to s
 
 Much more detailed documentation on configuration and usage can be found on the Solace PubSub+ Connectors GitHub pages.  Please refer there for more information.
 
+✅ For more information on the Kafka Source, Sink and Consumer connectors check out the [PubSub+ Connector Hub](https://solace.com/connectors/?fwp_connectors_search=kafka) page    
+
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
