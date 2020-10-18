@@ -82,8 +82,8 @@
 <h2 is-upgraded>PubSub+ Event Broker Connection Info</h2>
 <p>✅ The credentials below are for a public event feed that we&#39;ll use during this codelab.</p>
 <ul>
-<li>SMF Host: <code>tcp://mr-m9980gjfswx.messaging.solace.cloud:55555</code></li>
-<li>Message VPN: <code>springone</code></li>
+<li>SMF Host: <code>tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>cto-demo-virginia-azure</code></li>
 <li>Username: <code>public-taxi-user</code></li>
 <li>Password: <code>iliketaxis</code></li>
 </ul>
@@ -299,7 +299,7 @@
 <li>The yaml file is our AsyncAPI document</li>
 <li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
-<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-m9980gjfswx.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=springone ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
@@ -455,7 +455,7 @@ public class Application {
 <li>The yaml file is our AsyncAPI document</li>
 <li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
-<pre><code>ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-m9980gjfswx.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=springone ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+<pre><code>ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
