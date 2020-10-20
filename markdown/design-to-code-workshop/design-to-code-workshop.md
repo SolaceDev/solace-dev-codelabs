@@ -17,7 +17,7 @@ Duration: 0:02:00
 
 During this workshop we're going to use a real-world use case to explore some new technologies. We'll jump into our use case more in a little bit (hint: 🚕 🚖 🚕 ) but first let's introduce the 3 main technologies you'll be learning during this workshop. 
 
-1. 💥 You'll be using the **Solace PubSub+ Event Portal** to design the Event-Driven Architecture for our use case. While you're likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your achitecture, implement it, and iteratively make enhancements and changes throughout your software development cycle. 
+1. 💥 You'll be using the **Solace PubSub+ Event Portal** to design the Event-Driven Architecture for our use case. While you're likely not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to designing your architecture, implement it, and iteratively make enhancements and changes throughout your software development cycle. 
 1. 💥 Second you'll be learning about the **AsyncAPI Initiative** and the **Generators** that make our lives as developers simpler.
 1. 💥 Lastly, you'll develop event-driven microservices that implement our use case using the **Spring Cloud Stream** framework.
 
@@ -41,7 +41,7 @@ In order to react in a real-time manner the team has decided that we want to pro
 1. 🚖 Lastly we'll create a _RideDropoffConsumer_ that receives the stream of _RideAverageUpdate_ events and captures them for display and further processing. 
 
 
-![Architecture](img/arch.webp)
+![Architecture](img/arch.png)
 
 Positive
 : The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define [here](https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0). Solace is streaming this data over Solace PubSub+ for you to analyze and process. 
@@ -68,13 +68,13 @@ We'll install the generator itself later 👍
 * Your favorite Java IDE 💥
 
 ### PubSub+ Event Broker Connection Info
-✅ The credentials below are for a public event feed that we'll use during this codelab.
-* SMF Host: `tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555`
-* Message VPN: `cto-demo-virginia-azure`
+✅ The credentials below are for a public event feed found on the [Solace feed Marketplace](http://solace.dev/marketplace) that we'll use during this codelab.
+* SMF Host: `tcp://taxi.messaging.solace.cloud:55555`
+* Message VPN: `nyc-modern-taxi`
 * Username: `public-taxi-user`
 * Password: `iliketaxis`
 
-✅ Note that this client-username has permissions to subscribe to `taxi/>` and `test/taxi/>` and permissinos to publish to `test/taxi/>`
+✅ Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissions to publish to `test/taxinyc/>`
 
 ### Prepare PubSub+ Event Portal
 
@@ -102,7 +102,7 @@ git clone https://github.com/Mrc0113/design-to-code-workshop.git
 
 ✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the  file. 
 
-![ep_click_import](img/ep_click_import.webp)
+![ep_click_import](img/ep_click_import.png)
 
 
 🚀 Setup complete! Let's get going! 🚀
@@ -110,7 +110,7 @@ git clone https://github.com/Mrc0113/design-to-code-workshop.git
 ## Design Your EDA
 Duration: 0:16:00
 
-Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal let's get update our Event-Driven Architecture (EDA). 
+Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal, let's update our Event-Driven Architecture (EDA). 
 
 Open the _NYC Modern Taxi Co_ Application Domain that you previously imported in the Event Portal Designer. You should see a _Taxis_ Application which publishes _TaxiStatusUpdate_ Events. We want to extend this architecture to match the design discussed for in our use case.
 
@@ -143,7 +143,7 @@ Fill in the fields as follows:
 1. **Name**: RideAverageUpdate
 1. **Description**: This event contains the average cost of rides over a specified duration
 1. **Topic Scheme**: Solace (AMQP, REST, SMF)
-1. **Topic**: taxi/nyc/v1/stats/dropoff/avg
+1. **Topic**: taxinyc/ops/monitoring/updated/v1/dropoff/avg
 1. Click _Add/Remove Owners_ and choose yourself 
 1. For **Payload Schema** click _Add New_ 
 
@@ -162,82 +162,327 @@ Fill in the fields as follows:
 
 ```   
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-        {
-            "timestamp": "2020-06-04T20:09:59.99832-04:00",
-            "avg_meter_reading": 21.615217,
-            "avg_passenger_count": 1.5,
-            "window_duration_sec": 300,
-            "window_ride_count": 5
-        }
-    ],
-    "required": [
-        "timestamp",
-        "avg_meter_reading",
-        "avg_passenger_count",
-        "window_duration_sec",
-        "window_ride_count"
-    ],
-    "additionalProperties": true,
-    "properties": {
-        "timestamp": {
-            "$id": "#/properties/timestamp",
-            "type": "string",
-            "title": "The timestamp schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "2020-06-04T20:09:59.99832-04:00"
-            ]
-        },
-        "avg_meter_reading": {
-            "$id": "#/properties/avg_meter_reading",
-            "type": "number",
-            "title": "The avg_meter_reading schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
-            "examples": [
-                21.615217
-            ]
-        },
-        "avg_passenger_count": {
-            "$id": "#/properties/avg_passenger_count",
-            "type": "number",
-            "title": "The avg_passenger_count schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
-            "examples": [
-                1.5
-            ]
-        },
-        "window_duration_sec": {
-            "$id": "#/properties/window_duration_sec",
-            "type": "integer",
-            "title": "The window_duration_sec schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                300
-            ]
-        },
-        "window_ride_count": {
-            "$id": "#/properties/window_ride_count",
-            "type": "integer",
-            "title": "The window_ride_count schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                5
-            ]
-        }
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "ride_id": "545496c5-a334-4344-9662-efde68c0b98a",
+      "information_source": "RideDispatcher",
+      "point_idx": 107,
+      "latitude": 40.75473,
+      "longitude": -73.98385,
+      "heading": 111,
+      "speed": 8,
+      "timestamp": "2020-06-03T16:51:47.292-04:00",
+      "meter_reading": 2.4375222,
+      "meter_increment": 0.02278058,
+      "ride_status": "enroute",
+      "passenger_count": 1,
+      "driver": {
+        "driver_id": 1234132,
+        "first_name": "Frank",
+        "last_name": "Smith",
+        "rating": 4.75,
+        "car_class": "SUV"
+      },
+      "passenger": {
+        "passenger_id": 2345243,
+        "first_name": "Tamimi",
+        "last_name": "Menning",
+        "rating": 2.23
+      }
     }
-}       
+  ],
+  "properties": {
+    "ride_id": {
+      "$id": "#/properties/ride_id",
+      "type": "string",
+      "title": "The ride identifier",
+      "description": "A UUID identifying the ride.",
+      "default": "",
+      "examples": [
+        "545496c5-a334-4344-9662-efde68c0b98a"
+      ]
+    },
+    "information_source": {
+      "$id": "#/properties/information_source",
+      "type": "string",
+      "title": "The information_source schema",
+      "description": "The app that sent this event.",
+      "default": "",
+      "examples": [
+        "RideDispatcher"
+      ]
+    },
+    "point_idx": {
+      "$id": "#/properties/point_idx",
+      "type": "integer",
+      "title": "The point_idx schema",
+      "description": "The update number for the ride. This increments for each RideUpdate for a given ride.",
+      "default": 0,
+      "examples": [
+        107
+      ]
+    },
+    "latitude": {
+      "$id": "#/properties/latitude",
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "title": "The latitude schema",
+      "description": "Current latitude of the vehicle.",
+      "default": 0,
+      "examples": [
+        -40.75473
+      ]
+    },
+    "longitude": {
+      "$id": "#/properties/longitude",
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "title": "The longitude schema",
+      "description": "Current longitude of the vehicle.",
+      "default": 0,
+      "examples": [
+        -123.98385
+      ]
+    },
+    "heading": {
+      "$id": "#/properties/heading",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 359,
+      "title": "The heading schema",
+      "description": "0-359 degrees approximate heading of the vehicle.",
+      "default": 0,
+      "examples": [
+        111
+      ]
+    },
+    "speed": {
+      "$id": "#/properties/speed",
+      "type": "integer",
+      "minimum": 0,
+      "title": "The speed schema",
+      "description": "Speed of the taxi in unknown units.",
+      "default": 0,
+      "examples": [
+        20
+      ]
+    },
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The timestamp schema",
+      "description": "The time the RideUpdate is being sent.",
+      "default": "",
+      "examples": [
+        "2020-06-03T16:51:47.292-04:00"
+      ]
+    },
+    "meter_reading": {
+      "$id": "#/properties/meter_reading",
+      "type": "number",
+      "minimum": 0,
+      "title": "The meter_reading schema",
+      "description": "The current value of the taxi's meter, in dollars $.  Float value will always be shown with 2 decimal places (cents).",
+      "default": 0,
+      "examples": [
+        2.42
+      ]
+    },
+    "meter_increment": {
+      "$id": "#/properties/meter_increment",
+      "type": "number",
+      "title": "The meter_increment schema",
+      "description": "The meter increment rate.",
+      "default": 0,
+      "examples": [
+        0.02278058
+      ]
+    },
+    "ride_status": {
+      "$id": "#/properties/ride_status",
+      "type": "string",
+      "enum": [
+        "accepted",
+        "pickup",
+        "enroute",
+        "dropoff"
+      ],
+      "title": "The ride_status schema",
+      "description": "The current status of the ride.",
+      "default": "",
+      "examples": [
+        "enroute"
+      ]
+    },
+    "passenger_count": {
+      "$id": "#/properties/passenger_count",
+      "type": "integer",
+      "minimum": 0,
+      "title": "The passenger_count schema",
+      "description": "The number of passengers in the car during this ride.",
+      "default": 0,
+      "examples": [
+        1
+      ]
+    },
+    "driver": {
+      "$id": "#/properties/driver",
+      "type": "object",
+      "title": "The driver schema",
+      "description": "Information about the driver.",
+      "default": {},
+      "examples": [
+        {
+          "driver_id": 1234132,
+          "first_name": "Frank",
+          "last_name": "Smith",
+          "rating": 4.73,
+          "car_class": "SUV"
+        }
+      ],
+      "required": [
+        "driver_id",
+        "first_name",
+        "last_name",
+        "rating",
+        "car_class"
+      ],
+      "properties": {
+        "driver_id": {
+          "$id": "#/properties/driver/properties/driver_id",
+          "type": "integer",
+          "title": "The driver_id schema",
+          "description": "A unique ID for the driver.",
+          "default": 0,
+          "examples": [
+            1234132
+          ]
+        },
+        "first_name": {
+          "$id": "#/properties/driver/properties/first_name",
+          "type": "string",
+          "title": "The first_name schema",
+          "description": "The Driver's first name.",
+          "default": "",
+          "examples": [
+            "Frank"
+          ]
+        },
+        "last_name": {
+          "$id": "#/properties/driver/properties/last_name",
+          "type": "string",
+          "title": "The last_name schema",
+          "description": "The Driver's Last Name.",
+          "default": "",
+          "examples": [
+            "Smith"
+          ]
+        },
+        "rating": {
+          "$id": "#/properties/driver/properties/rating",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "title": "The rating schema",
+          "description": "The driver's current 5-star rating, showing 2 decimal places of accuracy.",
+          "default": 0,
+          "examples": [
+            4.32
+          ]
+        },
+        "car_class": {
+          "$id": "#/properties/driver/properties/car_class",
+          "type": "string",
+          "title": "The car_class schema",
+          "description": "The class of the vehicle.",
+          "default": "",
+          "examples": [
+            "SUV",
+            "Minivan",
+            "Sedan",
+            "Coupe"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "passenger": {
+      "$id": "#/properties/passenger",
+      "type": "object",
+      "title": "The passenger schema",
+      "description": "Information about the Passenger.",
+      "default": {},
+      "examples": [
+        {
+          "passenger_id": 2345243,
+          "first_name": "Tamimi",
+          "last_name": "Menning",
+          "rating": 2.25
+        }
+      ],
+      "required": [
+        "passenger_id",
+        "first_name",
+        "last_name",
+        "rating"
+      ],
+      "properties": {
+        "passenger_id": {
+          "$id": "#/properties/passenger/properties/passenger_id",
+          "type": "integer",
+          "title": "The passenger_id schema",
+          "description": "A unique ID for the passenger.",
+          "default": 0,
+          "examples": [
+            2345243
+          ]
+        },
+        "first_name": {
+          "$id": "#/properties/passenger/properties/first_name",
+          "type": "string",
+          "title": "The first_name schema",
+          "description": "The passenger's first name.",
+          "default": "",
+          "examples": [
+            "Jesse"
+          ]
+        },
+        "last_name": {
+          "$id": "#/properties/passenger/properties/last_name",
+          "type": "string",
+          "title": "The last_name schema",
+          "description": "The passenger's last name.",
+          "default": "",
+          "examples": [
+            "Menning"
+          ]
+        },
+        "rating": {
+          "$id": "#/properties/passenger/properties/rating",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "title": "The rating schema",
+          "description": "The passenger's current 5-star rating, showing 2 decimal places of accuracy.",
+          "default": 0,
+          "examples": [
+            2.25
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}     
 ```
 
 ![ep_createSchema](img/ep_createSchema.webp)
@@ -252,8 +497,8 @@ Fill in the fields as follows:
 Now that we've created our _RideAverageUpdate_ event and defined it's payload we need to update the _RideDropoffProcessor_ to publish it. 
 
 To do this follow these steps: 
-1. Right click on the _RideDropoffProcessor_ and choose _Edit_. 
-1. Click _Manage_, search for "RideAverageUdpdate" and click "Pub" next to it since the _RideDropoffProcessor_ needs to publish these events. 
+1. Right click on the _RideDropoffProcessor_ and choose _Manage Events_
+1. Search for "RideAverageUpdate" and click "Pub" next to it since the _RideDropoffProcessor_ needs to publish these events.
 1. Click _Save_ 
 
 ✅ The _RideDropoffProcessor_ is now complete and you should see it both consuming and publishing events! 
@@ -294,21 +539,21 @@ Open & check out the downloaded AsyncAPI document.
 
 It should include a lot of the information about the app that we defined via the Event Portal, including: 
 * The **title** and **description** under the **info** section
-* Our **events**, referred to as **messsages** in the AsyncAPI document
+* Our **events**, referred to as **message** in the AsyncAPI document
 * The **schemas** that define the payloads of our events
 * The **channels** on which the events are exchanged
 
-![asyncapi_doc](img/asyncapi_doc.webp)
+![asyncapi_doc](img/asyncapi_doc.png)
 
 Positive
 : The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like. 
 
 Let's add a few of the template's configuration options to the download AsyncAPI document. 
 * Add `x-scs-function-name: processDropoffRideAverages` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the _subscribe_ and the _publish_ operation you are saying you want them handled by the same function! 
-* Add `x-scs-destination: test/taxi/RideDropoffProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
+* Add `x-scs-destination: test/taxinyc/RideDropoffProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
-![asyncapi_doc2](img/asyncapi_doc2.webp)
+![asyncapi_doc2](img/asyncapi_doc2.png)
 
 Negative
 : Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal. 
@@ -329,7 +574,7 @@ Note the different pieces of the command:
 * And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 
@@ -341,7 +586,8 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProc
 💥Boom💥 We've generated our code skeleton! 
 
 ### Import and Explore the Generated Project
-The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below. 
+The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.     
+
 ![projectsetup](img/projectsetup.webp)
 
 A few notes on the project: 
@@ -352,13 +598,13 @@ A few notes on the project:
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
 ### Subscribe to _dropoff_ events
-As of the writing of this codelab dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their _TaxiStatusUpdate_ events to a dynamic topic structure of `taxi/nyc/v1/${ride_status}/${passenger_count}/${ride_id}/${longitude}/${latitude}` we need to update the `application.yml` file to subscribe to only `dropoff` events. To do this change the `queueAdditionalSubscriptions` parameter value to `taxi/nyc/v1/dropoff/>`
+As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their _TaxiStatusUpdate_ events to a dynamic topic structure of `taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}` we need to update the `application.yml` file to subscribe to only `dropoff` events. To do this change the `queueAdditionalSubscriptions` parameter value to `taxinyc/ops/ride/updated/v1/dropoff/>`
 
 Positive
 : Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
 ### Publish to a personalized topic for uniqueness
-Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processDropoffRideAverages-out-0.destination` to be `test/taxi/<YOUR_UNIQUE_NAME>/nyc/v1/stats/dropoff/avg`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
+Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processDropoffRideAverages-out-0.destination` to be `test/taxinyc/<YOUR_UNIQUE_NAME>/ops/ride/updated/v1/stats/dropoff/avg`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
 
 ✅ After making the update your _application.yml_ file should look like below for the `spring.cloud.stream` section.   
 ```yaml
@@ -369,14 +615,14 @@ spring:
         definition: processDropoffRideAverages
       bindings:
         processDropoffRideAverages-out-0:
-          destination: test/taxi/yourname/nyc/v1/stats/dropoff/avg
+          destination: test/taxinyc/yourname/ops/ride/updated/v1/stats/dropoff/avg
         processDropoffRideAverages-in-0:
-          destination: test/taxi/RideDropoffProcessorQueue
+          destination: test/taxinyc/RideDropoffProcessorQueue
       solace:
         bindings:
           processDropoffRideAverages-in-0:
             consumer:
-              queueAdditionalSubscriptions: 'taxi/nyc/v1/dropoff/>'
+              queueAdditionalSubscriptions: 'taxinyc/ops/ride/updated/v1/dropoff/>'
 ```
 
 ### Fill in the Business Logic
@@ -515,7 +761,7 @@ Note the different pieces of the command:
 * And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=mr-d8f4yze27kt.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=cto-demo-virginia-azure ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 
@@ -525,18 +771,18 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffCons
 ```
 
 ### Import and Explore the Generated Project
-The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below. 
+The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.     
 ![projectsetup2](img/projectsetup2.webp)
 
 A few notes on the project: 
 * The generated java classes are in the `org.taxi.nyc` package that we specified. 
 * The `RideAveragePayload` POJO was generated from the schema defined in our AsyncAPI document and includes getters/setters/toString/etc.
-* `Application.java` contains a `taxiNycV1StatsDropoffAvgConsumer` method which is a `Consumer` that takes in a `RideAveragePayload` POJO. Note that since we didn't specify a `x-scs-function-name` this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of `Flux` this time since we did not specify `reactive=true` when running the generator.  
+* `Application.java` contains a `taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer` method which is a `Consumer` that takes in a `RideAveragePayload` POJO. Note that since we didn't specify a `x-scs-function-name` this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of `Flux` this time since we did not specify `reactive=true` when running the generator.  
 * The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
-### Subscribe to our unique topic
-Open the _application.yml_ file and update the `spring.cloud.stream.bindings.taxiNycV1StatsDropoffAvgConsumer-in-0.destination` to match the destination we used in our _RideDropoffProcessor_ that used `<YOUR_UNIQUE_NAME>`
+### Subscribe to your unique topic
+Open the _application.yml_ file and update the `spring.cloud.stream.bindings.taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer-in-0.destination` to match the destination we used in our _RideDropoffProcessor_ that used `<YOUR_UNIQUE_NAME>`
 
 After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
 
@@ -545,20 +791,20 @@ spring:
   cloud:
     stream:
       function:
-        definition: taxiNycV1StatsDropoffAvgConsumer
+        definition: taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer
       bindings:
-        taxiNycV1StatsDropoffAvgConsumer-in-0:
-          destination: test/taxi/yourname/nyc/v1/stats/dropoff/avg
+        taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer-in-0:
+          destination: test/taxinyc/yourname/ops/ride/updated/v1/stats/dropoff/avg
 ```
 
 ### Fill in the Business Logic
 Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideAverageUpdate_ events as they're received.
 
-Open the _Application.java_ file and modify the `taxiNycV1StatsDropoffAvgConsumer` method to log the events. When you're done it should look something like the code below. 
+Open the _Application.java_ file and modify the `taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer` method to log the events. When you're done it should look something like the code below. 
 
 ```java
 @Bean
-public Consumer<RideAveragePayload> taxiNycV1StatsDropoffAvgConsumer() {
+public Consumer<RideAveragePayload> taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer() {
 	return rideAverageUpdate -> {
 		logger.info("Received Ride Average Event:" + rideAverageUpdate);
 	};
@@ -587,7 +833,7 @@ Duration: 0:01:00
 
 * ✅ The [Solace Event Portal](solace.com/products/portal) is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. 
 * ✅ [AsyncAPI Generator](https://github.com/asyncapi/generator) templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. 
-* ✅ [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) allows developers to implement highly scalabe, event-driven microservices without having to learn how to use messaging APIs. 
+* ✅ [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) allows developers to implement highly scalable, event-driven microservices without having to learn how to use messaging APIs. 
 
 ![solly_wave](img/solly_wave.webp)
 
