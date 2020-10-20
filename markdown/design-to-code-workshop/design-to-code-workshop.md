@@ -74,7 +74,7 @@ We'll install the generator itself later 👍
 * Username: `public-taxi-user`
 * Password: `iliketaxis`
 
-✅ Note that this client-username has permissions to subscribe to `taxi/>` and `test/taxi/>` and permissinos to publish to `test/taxi/>`
+✅ Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissinos to publish to `test/taxinyc/>`
 
 ### Prepare PubSub+ Event Portal
 
