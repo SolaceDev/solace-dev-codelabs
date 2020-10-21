@@ -51,7 +51,7 @@
 <li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
 <li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
 </ol>
-<p class="image-container"><img alt="Architecture" src="img/a39a2920b3ae9fee.webp"></p>
+<p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
 <aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 </aside>
@@ -116,7 +116,7 @@
 <p>If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the below command into a terminal window. The Discovery Agent may take a few minutes to initialize.</p>
 <aside class="warning"><p>NOTE: If you are on Windows OS follow the instructions from the documentation <a href="https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install" target="_blank">here</a>. Or if you would like to install the Discovery Agent via a binary executable then refer to the instructions <a href="https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install2" target="_blank">here</a>.</p>
 </aside>
-<pre><code language="language-bash" class="language-bash">echo &#39;cMopz4m+GV60hBb8DysZna8uMP4tM84P&#39; | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
+<pre><code>echo &#39;cMopz4m+GV60hBb8DysZna8uMP4tM84P&#39; | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
 	docker pull solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
 	docker run \
 	--env SPRING_APPLICATION_NAME=maas-event-discovery-agent-offline \
@@ -130,12 +130,12 @@
 <p>To launch the Discovery Agent go to: <a href="http://localhost:8120" target="_blank">http://localhost:8120</a>.</p>
 <h2 is-upgraded>Option 2: Pre-Scanned Discovery File</h2>
 <p>If you don&#39;t want to install the agent and run a live scan, you can still follow along in this CodeLab using the following pre-scanned JSON file.</p>
-<p><strong>Download: </strong><a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
+<p><strong>Download:</strong><a href="https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json" target="_blank">NYC Modern Taxi Co. Analytics Discovery File</a></p>
 <p>Or run the curl/git clone command below to download the file:</p>
-<pre><code language="language-bash" class="language-bash">curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
+<pre><code>curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
 </code></pre>
 <p>OR</p>
-<pre><code language="language-bash" class="language-bash">git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
+<pre><code>git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
 </code></pre>
 <h2 is-upgraded>Some General Requirements</h2>
 <p>Regardless of the option you chose above, you should also:</p>
@@ -164,22 +164,22 @@
 <h2 is-upgraded>Step 2: Configure Connection Details</h2>
 <p>Under the <em>Target Cluster Authentication</em>, copy and paste the following:</p>
 <ul>
-<li><strong>Discovery Name: </strong><code>Kafka Discovery CodeLab</code></li>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com:9092</code></li>
-<li><strong>Auth: </strong><code>No Auth</code></li>
+<li><strong>Discovery Name:</strong><code>Kafka Discovery CodeLab</code></li>
+<li><strong>Host:</strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com:9092</code></li>
+<li><strong>Auth:</strong><code>No Auth</code></li>
 </ul>
 <p>Select Add Connector and then copy and paste the Host and Port:</p>
 <ul>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
-<li><strong>Port: </strong><code>8083</code></li>
-<li><strong>Authentication: </strong><code>No Auth</code></li>
+<li><strong>Host:</strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
+<li><strong>Port:</strong><code>8083</code></li>
+<li><strong>Authentication:</strong><code>No Auth</code></li>
 </ul>
 <p class="image-container"><img alt="Add Connectors" src="img/f4e18e0db2001c32.png"></p>
 <p>Under Schema Registry Authentication, copy and paste the Host and Port:</p>
 <ul>
-<li><strong>Host: </strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
-<li><strong>Port: </strong><code>8081</code></li>
-<li><strong>Authentication: </strong><code>No Auth</code></li>
+<li><strong>Host:</strong><code>vmobuajpyc47tci0.eastus.cloudapp.azure.com</code></li>
+<li><strong>Port:</strong><code>8081</code></li>
+<li><strong>Authentication:</strong><code>No Auth</code></li>
 </ul>
 <p>And finally for the <em>Event Scan Details</em>, select <code>Scan for all topics</code> and click <strong>Start Scan</strong>.</p>
 <p class="image-container"><img alt="Event Scan Details" src="img/a40e6cf90667a1ba.png"></p>
@@ -261,10 +261,10 @@
 <p>As we did this, we were able to realized something that wasn&#39;t really right. From reorganizing the graph we noticed that there is an event <code>taxinyc.analytics.fraud.alerted.v1</code> that is produced by the <code>Fraud Detection Application</code> but not really consumed by anyone. We look at this as a opportunity as that event has some value, and can be used for a new business use case, maybe to have a new insight or customer experience. Ideally you could create a new application in the Designer, associate this event to be consumed by it, generate an AsyncAPI spec from the Event Portal, run it through code generators or code it up, connect it to Kafka, and re-scan where the Discovery would say our design is in sync with Kafka runtime.</p>
 <p>But we don&#39;t live in an ideal world and say we didn&#39;t follow the above process, developed a quick Kafka application that consumed that event, and maybe we forgot to update it in the Designer. So lets say that happened. What would our Discovery Scan show if we re-ran the Discovery Agent? Well lets find out.</p>
 <p>We already have a pre-scanned file for you to use here, which you can download <a href="https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json" target="_blank">from here</a> directly or use curl/git clone as shown below.</p>
-<pre><code language="language-bash" class="language-bash">curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json -o NYC_Modern_Taxi_Co_Analytics-Audit.json
+<pre><code>curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json -o NYC_Modern_Taxi_Co_Analytics-Audit.json
 </code></pre>
 <p>OR</p>
-<pre><code language="language-bash" class="language-bash">git clone  https://gist.github.com/e597aeb4d4c48796320b923745796568.git
+<pre><code>git clone  https://gist.github.com/e597aeb4d4c48796320b923745796568.git
 </code></pre>
 <p>Once downloaded go back to Discovery and upload this new discovery file.</p>
 <p class="image-container"><img alt="Discovery Audit" src="img/f08ecfbdc8dafcf4.png"></p>
@@ -301,7 +301,6 @@
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
-  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
