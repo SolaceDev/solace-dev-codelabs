@@ -83,11 +83,11 @@
 </ul>
 <h2 is-upgraded>Schemas</h2>
 <p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema.</p>
-<p>In our use case all events are in ARVRO Schema format.</p>
+<p>In our use case all events are in AVRO Schema format.</p>
 <p class="image-container"><img alt="Schema Example" src="img/73e8cbbb5773302a.png"></p>
 <h2 is-upgraded>Application Domain &amp; Workspace</h2>
 <p>An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group application into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where we invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.</p>
-<p>In the Event Portal you will associate all objects like Consumer Groups, Topics, Schemea, etc, to one or more Application Domains.</p>
+<p>In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains.</p>
 <p>You can further group multiple domains into a <em>Workspace</em>, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.</p>
 <p class="image-container"><img alt="Workspace Example" src="img/f5272455c6174221.png"></p>
 <h2 is-upgraded>Applications</h2>
@@ -231,7 +231,7 @@
 <h2 is-upgraded>Mapping Consumer Groups &amp; Topics to Applications</h2>
 <p>With the objects associated to a Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events.</p>
 <p>You will notice that some consumer groups like the <code>taxinyc_analytics_frauddetection_group</code> and topic like <code>taxinyc.analytics.fraud.alerted.v1</code> where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.</p>
-<p>This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Applicaiton</code>.</p>
+<p>This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Application</code>.</p>
 <p>Click on the <strong>&#34;+ Create&#34;</strong> button at the top right corner of page and select <strong>Create Application</strong>. Call this application: <code>Fraud Detection Application</code>. Then drag and drop the consumer group <code>taxinyc_analytics_frauddetection_group</code> to the newly created application.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/41b6b4f36f1354aa.png"></p>
 <p>Similarly map the <code>taxinyc_analytics_passengersurgedetection_group</code> to a new application called <code>Passenger Surge Detection</code>, and the <code>taxinyc_analytics_driverincentivecalc_group</code> to a new application called <code>Driver Incentive Calc</code>.</p>
