@@ -162,326 +162,81 @@ Fill in the fields as follows:
 
 ```   
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
-  "type": "object",
-  "title": "The root schema",
-  "description": "The root schema comprises the entire JSON document.",
-  "default": {},
-  "examples": [
-    {
-      "ride_id": "545496c5-a334-4344-9662-efde68c0b98a",
-      "information_source": "RideDispatcher",
-      "point_idx": 107,
-      "latitude": 40.75473,
-      "longitude": -73.98385,
-      "heading": 111,
-      "speed": 8,
-      "timestamp": "2020-06-03T16:51:47.292-04:00",
-      "meter_reading": 2.4375222,
-      "meter_increment": 0.02278058,
-      "ride_status": "enroute",
-      "passenger_count": 1,
-      "driver": {
-        "driver_id": 1234132,
-        "first_name": "Frank",
-        "last_name": "Smith",
-        "rating": 4.75,
-        "car_class": "SUV"
-      },
-      "passenger": {
-        "passenger_id": 2345243,
-        "first_name": "Tamimi",
-        "last_name": "Menning",
-        "rating": 2.23
-      }
-    }
-  ],
-  "properties": {
-    "ride_id": {
-      "$id": "#/properties/ride_id",
-      "type": "string",
-      "title": "The ride identifier",
-      "description": "A UUID identifying the ride.",
-      "default": "",
-      "examples": [
-        "545496c5-a334-4344-9662-efde68c0b98a"
-      ]
-    },
-    "information_source": {
-      "$id": "#/properties/information_source",
-      "type": "string",
-      "title": "The information_source schema",
-      "description": "The app that sent this event.",
-      "default": "",
-      "examples": [
-        "RideDispatcher"
-      ]
-    },
-    "point_idx": {
-      "$id": "#/properties/point_idx",
-      "type": "integer",
-      "title": "The point_idx schema",
-      "description": "The update number for the ride. This increments for each RideUpdate for a given ride.",
-      "default": 0,
-      "examples": [
-        107
-      ]
-    },
-    "latitude": {
-      "$id": "#/properties/latitude",
-      "type": "number",
-      "minimum": -90,
-      "maximum": 90,
-      "title": "The latitude schema",
-      "description": "Current latitude of the vehicle.",
-      "default": 0,
-      "examples": [
-        -40.75473
-      ]
-    },
-    "longitude": {
-      "$id": "#/properties/longitude",
-      "type": "number",
-      "minimum": -180,
-      "maximum": 180,
-      "title": "The longitude schema",
-      "description": "Current longitude of the vehicle.",
-      "default": 0,
-      "examples": [
-        -123.98385
-      ]
-    },
-    "heading": {
-      "$id": "#/properties/heading",
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 359,
-      "title": "The heading schema",
-      "description": "0-359 degrees approximate heading of the vehicle.",
-      "default": 0,
-      "examples": [
-        111
-      ]
-    },
-    "speed": {
-      "$id": "#/properties/speed",
-      "type": "integer",
-      "minimum": 0,
-      "title": "The speed schema",
-      "description": "Speed of the taxi in unknown units.",
-      "default": 0,
-      "examples": [
-        20
-      ]
-    },
-    "timestamp": {
-      "$id": "#/properties/timestamp",
-      "type": "string",
-      "title": "The timestamp schema",
-      "description": "The time the RideUpdate is being sent.",
-      "default": "",
-      "examples": [
-        "2020-06-03T16:51:47.292-04:00"
-      ]
-    },
-    "meter_reading": {
-      "$id": "#/properties/meter_reading",
-      "type": "number",
-      "minimum": 0,
-      "title": "The meter_reading schema",
-      "description": "The current value of the taxi's meter, in dollars $.  Float value will always be shown with 2 decimal places (cents).",
-      "default": 0,
-      "examples": [
-        2.42
-      ]
-    },
-    "meter_increment": {
-      "$id": "#/properties/meter_increment",
-      "type": "number",
-      "title": "The meter_increment schema",
-      "description": "The meter increment rate.",
-      "default": 0,
-      "examples": [
-        0.02278058
-      ]
-    },
-    "ride_status": {
-      "$id": "#/properties/ride_status",
-      "type": "string",
-      "enum": [
-        "accepted",
-        "pickup",
-        "enroute",
-        "dropoff"
-      ],
-      "title": "The ride_status schema",
-      "description": "The current status of the ride.",
-      "default": "",
-      "examples": [
-        "enroute"
-      ]
-    },
-    "passenger_count": {
-      "$id": "#/properties/passenger_count",
-      "type": "integer",
-      "minimum": 0,
-      "title": "The passenger_count schema",
-      "description": "The number of passengers in the car during this ride.",
-      "default": 0,
-      "examples": [
-        1
-      ]
-    },
-    "driver": {
-      "$id": "#/properties/driver",
-      "type": "object",
-      "title": "The driver schema",
-      "description": "Information about the driver.",
-      "default": {},
-      "examples": [
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
         {
-          "driver_id": 1234132,
-          "first_name": "Frank",
-          "last_name": "Smith",
-          "rating": 4.73,
-          "car_class": "SUV"
+            "timestamp": "2020-06-04T20:09:59.99832-04:00",
+            "avg_meter_reading": 21.615217,
+            "avg_passenger_count": 1.5,
+            "window_duration_sec": 300,
+            "window_ride_count": 5
         }
-      ],
-      "required": [
-        "driver_id",
-        "first_name",
-        "last_name",
-        "rating",
-        "car_class"
-      ],
-      "properties": {
-        "driver_id": {
-          "$id": "#/properties/driver/properties/driver_id",
-          "type": "integer",
-          "title": "The driver_id schema",
-          "description": "A unique ID for the driver.",
-          "default": 0,
-          "examples": [
-            1234132
-          ]
+    ],
+    "required": [
+        "timestamp",
+        "avg_meter_reading",
+        "avg_passenger_count",
+        "window_duration_sec",
+        "window_ride_count"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "timestamp": {
+            "$id": "#/properties/timestamp",
+            "type": "string",
+            "title": "The timestamp schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "2020-06-04T20:09:59.99832-04:00"
+            ]
         },
-        "first_name": {
-          "$id": "#/properties/driver/properties/first_name",
-          "type": "string",
-          "title": "The first_name schema",
-          "description": "The Driver's first name.",
-          "default": "",
-          "examples": [
-            "Frank"
-          ]
+        "avg_meter_reading": {
+            "$id": "#/properties/avg_meter_reading",
+            "type": "number",
+            "title": "The avg_meter_reading schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0.0,
+            "examples": [
+                21.615217
+            ]
         },
-        "last_name": {
-          "$id": "#/properties/driver/properties/last_name",
-          "type": "string",
-          "title": "The last_name schema",
-          "description": "The Driver's Last Name.",
-          "default": "",
-          "examples": [
-            "Smith"
-          ]
+        "avg_passenger_count": {
+            "$id": "#/properties/avg_passenger_count",
+            "type": "number",
+            "title": "The avg_passenger_count schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0.0,
+            "examples": [
+                1.5
+            ]
         },
-        "rating": {
-          "$id": "#/properties/driver/properties/rating",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 5,
-          "title": "The rating schema",
-          "description": "The driver's current 5-star rating, showing 2 decimal places of accuracy.",
-          "default": 0,
-          "examples": [
-            4.32
-          ]
+        "window_duration_sec": {
+            "$id": "#/properties/window_duration_sec",
+            "type": "integer",
+            "title": "The window_duration_sec schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                300
+            ]
         },
-        "car_class": {
-          "$id": "#/properties/driver/properties/car_class",
-          "type": "string",
-          "title": "The car_class schema",
-          "description": "The class of the vehicle.",
-          "default": "",
-          "examples": [
-            "SUV",
-            "Minivan",
-            "Sedan",
-            "Coupe"
-          ]
+        "window_ride_count": {
+            "$id": "#/properties/window_ride_count",
+            "type": "integer",
+            "title": "The window_ride_count schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                5
+            ]
         }
-      },
-      "additionalProperties": true
-    },
-    "passenger": {
-      "$id": "#/properties/passenger",
-      "type": "object",
-      "title": "The passenger schema",
-      "description": "Information about the Passenger.",
-      "default": {},
-      "examples": [
-        {
-          "passenger_id": 2345243,
-          "first_name": "Tamimi",
-          "last_name": "Menning",
-          "rating": 2.25
-        }
-      ],
-      "required": [
-        "passenger_id",
-        "first_name",
-        "last_name",
-        "rating"
-      ],
-      "properties": {
-        "passenger_id": {
-          "$id": "#/properties/passenger/properties/passenger_id",
-          "type": "integer",
-          "title": "The passenger_id schema",
-          "description": "A unique ID for the passenger.",
-          "default": 0,
-          "examples": [
-            2345243
-          ]
-        },
-        "first_name": {
-          "$id": "#/properties/passenger/properties/first_name",
-          "type": "string",
-          "title": "The first_name schema",
-          "description": "The passenger's first name.",
-          "default": "",
-          "examples": [
-            "Jesse"
-          ]
-        },
-        "last_name": {
-          "$id": "#/properties/passenger/properties/last_name",
-          "type": "string",
-          "title": "The last_name schema",
-          "description": "The passenger's last name.",
-          "default": "",
-          "examples": [
-            "Menning"
-          ]
-        },
-        "rating": {
-          "$id": "#/properties/passenger/properties/rating",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 5,
-          "title": "The rating schema",
-          "description": "The passenger's current 5-star rating, showing 2 decimal places of accuracy.",
-          "default": 0,
-          "examples": [
-            2.25
-          ]
-        }
-      },
-      "additionalProperties": true
     }
-  },
-  "additionalProperties": true
 }     
 ```
 
