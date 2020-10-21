@@ -102,7 +102,7 @@ Duration: 0:05:00
 
 Upon authoring of your codelab, we request you have two reviewers:   
 
-1️⃣ Technical reviewer who is knowledgeable with the content   
+1️⃣ Technical reviewer who is knowledgeable with the content. **Make sure they are tagged on github as a reviewer**    
 2️⃣ A member of the Developer Relations team to confirm the structure of your codelab and merge it into the main github repo
 
 ✨ Now that we have the environment setup, you have two options you can follow to create your first codelab: Automated or Manual
