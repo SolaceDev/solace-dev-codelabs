@@ -185,8 +185,11 @@ If you are scanning your own Kafka clusters, then the following event brokers ve
 * Confluent versions 5.3, 5.4, 5.5
 * Amazon MSK version 2.2
 
-## Scan a Kafka Cluster (Optional) (NOT Available Now)
+## Scan a Kafka Cluster (Optional)
 Duration: 0:03:00
+
+Negative
+: The Kafka Cluster referenced in this section is not currently available for scanning. The steps below show you how you would scan a Kafka cluster, but for now just skip this section and use the pre-scanned discovery file available in Step 4	
 
 Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser. 
 
