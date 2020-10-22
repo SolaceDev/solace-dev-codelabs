@@ -120,7 +120,7 @@ With the foundational concepts out of the way, lets go through some prerequisite
 Duration: 0:05:00
 
 In this walk through you have a choice to pick either of the following options:
-1. Scan our demo NYC Taxi Kafka cluster (which we recommend as it will help you setup to scan your own clusters) or
+1. Scan our demo NYC Taxi Kafka cluster		
 2. Download one of our pre-scanned Discovery file
 
 You will find some prerequisites for both options below. 
@@ -141,7 +141,7 @@ Or if you would like to install the Discovery Agent via a binary executable then
 
 
 ``` bash
-echo 'cMopz4m+GV60hBb8DysZna8uMP4tM84P' | docker login --username discovery-preview --password cMopz4m+GV60hBb8DysZna8uMP4tM84P solaceclouddev.azurecr.io
+echo 'cMopz4m+GV60hBb8DysZna8uMP4tM84P' | docker login --username discovery-preview --password-stdin solaceclouddev.azurecr.io
 	docker pull solaceclouddev.azurecr.io/maas-event-discovery-agent:latest
 	docker run \
 	--env SPRING_APPLICATION_NAME=maas-event-discovery-agent-offline \
@@ -165,12 +165,6 @@ Or run the curl/git clone command below to download the file:
 
 ``` bash
 curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/dd050e4ea2e3a7d8b14fa4fdca03785a/raw/NYC_Modern_Taxi_Co_Analytics.json -o NYC_Modern_Taxi_Co_Analytics.json
-```
-
-OR
-
-``` bash
-git clone  https://gist.github.com/dd050e4ea2e3a7d8b14fa4fdca03785a.git
 ```
 
 ### Some General Requirements
@@ -240,8 +234,8 @@ Once the scan completes download the scan file to your desktop. The scan file wi
 
 Now on to the fun part where we will upload the scan to Event Portal and visualize the result. 
 
-## Review Scan In Staging
-Duration: 0:010:00
+## Upload the scanned file
+Duration: 0:020:00
 
 This is where all the exciting stuff will happen with your Discovery scans. A few things you can do here:
 * Review the discovered data
@@ -264,64 +258,109 @@ One of the first things we want to do is to organize our work in a Workspace. Cl
 
 ![Assign to Workspace](img/assign_to_workspace.png)
 
-Lets create a new Workspace called `NYC Modern Tax Co` and select **Run Synchronization Audit**.
+Lets create a new Workspace called `NYC Modern Tax Co` and select **Run Synchronization Audit**.	
 
-### Staging View
+![Assign to Workspace](img/workspace_assign.png)
 
-Once your workspace is created you'll see the Staging view. What you essentially have here is all the objects the Discovery Agent found in the Kafka cluster it scanned. There are a few Consumer Groups that were discovered, a few Kafka Connectors, some Topics and Schemas.
+
+Once your workspace is created you'll see the **Staging view**. What you essentially have here is all the objects the Discovery Agent found in the Kafka cluster it scanned which includes
+- Discovered Consumer Groups	
+- Kafka Connectors	
+- Topics 	
+- Schemas.	
 
 ![Staging View](img/staging_view.png)
 
-This is where you will map what you have discovered to Applications and Events in the Event Portal, and make associations with your domain.
+Positive
+: This is where you will map what you have discovered to Applications and Events in the Event Portal to make associations with your application domain.
 
-### Creating an App Domain
+## Assign Kafka Objects to Solace Application Domain
+Duration: 0:05:00
 
-First we need to associate the Consumer Groups, Connectors, Topics, and Schema that were discovered from our NYC Taxi Analytics cluster to a Domain. 
+Now that you have uploaded your scan file and staged your events, let's go ahead and create an application domain to map topics, events and consumer groups
+
+### Creating an Application Domain
+
+First we need to associate the Consumer Groups, Connectors, Topics, and Schema that were discovered from our NYC Taxi Analytics cluster to an Application Domain. 
 
 To do this click on the **"+ Create"** button and select ***Create Application Domain**.
 
-![Create App Domain](img/create_app_domain.png)
+![Create Application Domain](img/create_app_domain.png)
 
 Double click on the domain that was created to rename it. We will call this Domain: `NYC Modern Taxi Co - Analytics`
 
 ![Rename Domain](img/rename_domain.png)
 
-### Assigning Consumer Groups, Topics, Schemas to the App Domain
+### Assigning Consumer Groups, Topics, Schemas to the Application Domain
 
-Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, and Schema to the domain we created.
+Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, and Schema to the application domain we created.
+
+Notice at the bottom of your discovery view, you can see a list of all **Objects** in the workspace		
+![Workspace Objects](img/workspace_objects.png)
 
 Positive
 : In reality you may have thousands of Consumers or Topics, so to ensure we are making the right associations with a domain, you can use the search capability on the table to filter our Analytics objects only.
 
+Assign the following objects to your newly created application domain:
+- Consumer Groups	
+- Connectors	
+- Topics	
+- Schemas
+
+This is done by 
+1. Clicking on the respected tab
+1. Checking the objects you want to assign
+1. Click on the application Domain
+
 Filter and select Consumer Groups:
 
-![Consumers Groups to App Domain](img/assign_consumers_to_domain.png)
+![Consumers Groups to Application Domain](img/assign_consumers_to_domain.png)
+![Set App Domain](img/set_appdomain.png)
 
-Repeat the same for Connectors, Topics, and Schemas:
+Repeat for Connectors, Topics and Schemas
 
-![Consumers Groups to App Domain](img/assign_topics_to_domain.png)
+![Consumers Groups to Application Domain](img/assign_connectors_to_domain.png)	
+![Consumers Groups to Application Domain](img/assign_topics_to_domain.png)	
+![Consumers Groups to Application Domain](img/assign_schema_to_domain.png)	
 
-![Consumers Groups to App Domain](img/assign_schema_to_domain.png)
+## Map Consumer Groups & Topics to Applications
+Duration: 0:05:00
 
-### Mapping Consumer Groups & Topics to Applications
+With the objects associated to an Application Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. 	
+![Menu Tab](img/menu_tab.png)	
 
-With the objects associated to a Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events. 
+The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events. 
 
-You will notice that some consumer groups like the `taxinyc_analytics_frauddetection_group` and topic like `taxinyc.analytics.fraud.alerted.v1` where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.
+You will notice that some consumer groups like the `taxinyc_analytics_frauddetection_group` and topic like `taxinyc.analytics.fraud.alerted.v1` where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.	
 
-This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the `taxinyc_analytics_frauddetection_group` maps to the say the `Fraud Detection Application`. 
+![Unmapped](img/unmnapped.png)	
+
+This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the `taxinyc_analytics_frauddetection_group` maps to the say the `Fraud Detection Application`. 	
+
+### Application Mapping
 
 Click on the **"+ Create"** button at the top right corner of page and select **Create Application**. Call this application: `Fraud Detection Application`. Then drag and drop the consumer group `taxinyc_analytics_frauddetection_group` to the newly created application.
 
-![Map Fraud Application](img/link_to_fraud_app.png)
+![Map Fraud Application](img/drag_drop.gif)
 
 Similarly map the `taxinyc_analytics_passengersurgedetection_group` to a new application called `Passenger Surge Detection`, and the `taxinyc_analytics_driverincentivecalc_group` to a new application called `Driver Incentive Calc`.
 
-Now we have one Topic renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
+![Map Fraud Application](img/drag_drop2.gif)
 
-![Map Fraud Application](img/link_fraud_alert_event.png)
+### Topic Mapping
 
-But what about the Topic `taxinyc.analytics.kpi.exceeded.v1` that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the Passenger Surge Detection & Drive Incentive Calc application. So go ahead and make those association.
+#### taxinyc.analytics.fraud.alerted.v1
+
+Now we have one Topic, `taxinyc.analytics.fraud.alerted.v1`, renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
+
+![Map Fraud Application](img/drag_drop3.gif)
+
+#### taxinyc.analytics.kpi.exceeded.v1
+
+What about the `taxinyc.analytics.kpi.exceeded.v1` topic that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the **Passenger Surge Detection** & **Drive Incentive Calc** application. So go ahead and make those association.
+
+![Map Fraud Application](img/drag_drop4.gif)
+
 
 ### Commit to Event Portal
 
@@ -336,14 +375,16 @@ To commit click on the **Commit To Event Portal** button.
 
 And your done!! ...well almost. All the applications, events and linkages you made are now in sync with our Kafka cluster and have been cataloged, available for others in our teams to search and discover. For this we are next going to explore two other important features of the Event Portal, i.e. the Designer and Catalog.
 
+![Map Fraud Application](img/commit.gif)
+
 ## Designer and Catalog 
 Duration: 0:05:00
 
 Now that our Consumers Groups, Topics, and other objects have been committed to the Event Portal, they can be viewed and searched from the Designer and Catalog.
 
-In short the Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and applications for our NYC Taxi service as the use case evolves. It provides a graphical representation of application domains, applications, schemas, and events. You can use Designer to visualize the interaction of events between applications and to provision your architecture into the Event Portal.
+In short the **Designer** is a tool to design and view all aspects of your event-driven architectures. It is through the Designer that you can create new events and applications for our NYC Taxi service as the use case evolves. It provides a graphical representation of application domains, applications, schemas, and events. You can use Designer to visualize the interaction of events between applications and to provision your architecture into the Event Portal.
 
-Whereas, the Catalog acts as a storefront for all the applications, events, and schemas you've created in the Event Portal. Objects discovered & committed from our scan earlier, or created in Designer are automatically available in Catalog. Using Catalog's searchable interface, you can access all the existing events, schemas, and applications.
+Whereas, the **Catalog** acts as a storefront for all the applications, events, and schemas you've created in the Event Portal. Objects discovered & committed from our scan earlier, or created in Designer are automatically available in Catalog. Using Catalog's searchable interface, you can access all the existing events, schemas, and applications.
 
 We will first take Designer for a test drive, so go ahead on open the Designer in Event Portal:
 
@@ -363,12 +404,6 @@ We already have a pre-scanned file for you to use here, which you can download [
 
 ``` bash
 curl -k -XGET https://gist.githubusercontent.com/dishantlangayan/e597aeb4d4c48796320b923745796568/raw/NYC_Modern_Taxi_Co_Analytics-Audit.json -o NYC_Modern_Taxi_Co_Analytics-Audit.json
-```
-
-OR
-
-``` bash
-git clone  https://gist.github.com/e597aeb4d4c48796320b923745796568.git
 ```
 
 Once downloaded go back to Discovery and upload this new discovery file.
