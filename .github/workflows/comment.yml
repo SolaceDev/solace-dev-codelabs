@@ -11,6 +11,6 @@ jobs:
       - uses: actions/checkout@master
       - uses: harupy/comment-on-pr@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MARC_TOKEN }}
         with:
           filename: comment-content.md
