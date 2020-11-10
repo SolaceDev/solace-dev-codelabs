@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-11-10T11:50:27-07:00",
+  "id": "introduction-to-event-portal",
+  "duration": 19,
+  "title": "Introduction to Solace PubSub+ Event Portal",
+  "summary": "",
+  "source": "introduction-to-event-portal.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://solace.community/",
+  "ga": "UA-3921398-10",
+  "url": "introduction-to-event-portal"
+}
