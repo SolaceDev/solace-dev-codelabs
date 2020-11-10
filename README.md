@@ -20,6 +20,8 @@ This repository is included as a submodule in the main [site repo](https://githu
 1. Checkout a local branch for your new codelab `git checkout -b add-codelab-<name_of_codelab>`
 
 ### Option 1 - Script
+1. [Setup your environment](https://codelabs.solace.dev/codelabs/codelab-4-codelab/index.html?#1)
+1. [Read the solace guidelines](https://codelabs.solace.dev/codelabs/codelab-4-codelab/index.html?#2)
 1. From the root directory, run `./init.sh <name-of-codelab>` script
 1. Navigate to `/markdown/name-of-codelab`
 1. Run the following from terminal `npm install; npm run watch`
