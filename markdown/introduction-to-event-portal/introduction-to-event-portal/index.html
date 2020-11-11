@@ -178,7 +178,7 @@
 <li>🚕 Next up we&#39;re going to document some of the designed applications and events so that they can be understood and reused by others.</li>
 <li>🚕 We will run a &#34;discovery&#34; scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented</li>
 <li>🚕 Learn, Understand and Reuse some of our events in a new use case</li>
-<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayement</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
+<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayment</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
 <aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
@@ -190,10 +190,401 @@
     
       <google-codelab-step label="Design an Event Driven Architecture" duration="10">
         <p>By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.</p>
-<h2 is-upgraded>Design new Back Office EDA</h2>
-<h3 is-upgraded>Design Payment Processor Application</h3>
-<h3 is-upgraded>Design KPIThreshold Exceeded Event</h3>
-<h3 is-upgraded>Design SendToExecutiveDashboard</h3>
+<p>Now that you&#39;re familiar with the use case 🚕 🚖 🚕 and you&#39;ve imported the application domain into the Event Portal, let&#39;s update our Event-Driven Architecture (EDA).</p>
+<p>Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commerical account, send to our Invoicing System.</p>
+<h2 is-upgraded>Step 1: Determine What Can Trigger Payment</h2>
+<p>So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?</p>
+<ol type="1">
+<li>Navigate to the <em>Catalog</em> component of the Event Portal</li>
+<li>Click on the <em>Schemas</em> tab and search for &#34;completed&#34;</li>
+<li>In the Search Results  click on the matched fields in order to understand the matching text context.</li>
+<li>We now know that the RideUpdated Schema has a field called _ride<em>status</em> that can have a value of <em>completed</em>. So how do we get acccess to that data? Click on the <em>RideUpdated</em> schema and we will find out!</li>
+<li>We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the _ride<em>status</em> attribute which is pretty sweet! So we can filter on completed as a client.</li>
+<li>Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.<br></li>
+</ol>
+<h2 is-upgraded>Step 2: Design the <em>PaymentCharged</em> Schema</h2>
+<p>Next we should decide what we want the data to look like once we have processed a payment.</p>
+<ol type="1">
+<li>First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage &#34;Event-Carried State Transfer&#34;.</li>
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating!</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema</em>  <ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Content Type: JSON</li>
+<li>Shared: YES</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Description: NONE</li>
+<li>Versions: Leave unchecked</li>
+<li>Content:  <pre><code>{
+&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+&#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The root schema&#34;,
+&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+&#34;payment_charged_id&#34;: &#34;23232323&#34;,
+&#34;timestamp&#34;: &#34;2020-06-03T16:51:47.29612-04:00&#34;,
+&#34;information_source&#34;: &#34;ProcessPayment&#34;,
+&#34;payment_status&#34;: &#34;accepted&#34;,
+&#34;invoice_system_id&#34;: &#34;PSG-32923&#34;,
+&#34;amount_charged&#34;: 12.32,
+&#34;ride_id&#34;: 2345234,
+&#34;entity_type&#34;: &#34;Driver&#34;,
+&#34;driver&#34;: {
+&#34;driver_id&#34;: 1234132,
+&#34;first_name&#34;: &#34;Frank&#34;,
+&#34;last_name&#34;: &#34;Smith&#34;,
+&#34;rating&#34;: 4,
+&#34;car_class&#34;: &#34;SUV&#34;
+},
+&#34;passenger&#34;: {
+&#34;passenger_id&#34;: 2345243,
+&#34;first_name&#34;: &#34;Jesse&#34;,
+&#34;last_name&#34;: &#34;Menning&#34;,
+&#34;rating&#34;: 2
+}
+}
+],
+&#34;required&#34;: [
+&#34;payment_charged_id&#34;,
+&#34;timestamp&#34;,
+&#34;information_source&#34;,
+&#34;payment_status&#34;,
+&#34;invoice_system_id&#34;,
+&#34;amount_charged&#34;,
+&#34;ride_id&#34;,
+&#34;entity_type&#34;,
+&#34;driver&#34;,
+&#34;passenger&#34;
+],
+&#34;properties&#34;: {
+&#34;payment_charged_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_charged_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_charged_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;23232323&#34;
+]
+},
+&#34;timestamp&#34;: {
+&#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The timestamp schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;2020-06-03T16:51:47.29612-04:00&#34;
+]
+},
+&#34;information_source&#34;: {
+&#34;$id&#34;: &#34;#/properties/information_source&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The information_source schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;ProcessPayment&#34;
+]
+},
+&#34;payment_status&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_status&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_status schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;accepted&#34;
+]
+},
+&#34;invoice_system_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/invoice_system_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The invoice_system_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;PSG-32923&#34;
+]
+},
+&#34;amount_charged&#34;: {
+&#34;$id&#34;: &#34;#/properties/amount_charged&#34;,
+&#34;type&#34;: &#34;number&#34;,
+&#34;title&#34;: &#34;The amount_charged schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+12.32
+]
+},
+&#34;ride_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/ride_id&#34;,
+&#34;type&#34;: &#34;integer&#34;,
+&#34;title&#34;: &#34;The ride_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+2345234
+]
+},
+&#34;entity_type&#34;: {
+&#34;$id&#34;: &#34;#/properties/entity_type&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The entity_type schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;Driver&#34;
+]
+},
+&#34;driver&#34;: {
+&#34;$id&#34;: &#34;#/properties/driver&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The driver schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;driver_id&#34;: 1234132,
+  &#34;first_name&#34;: &#34;Frank&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;rating&#34;: 4,
+  &#34;car_class&#34;: &#34;SUV&#34;
+}
+],
+&#34;required&#34;: [
+&#34;driver_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;,
+&#34;car_class&#34;
+],
+&#34;properties&#34;: {
+&#34;driver_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/driver_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The driver_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    1234132
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Frank&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Smith&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    4
+  ]
+},
+&#34;car_class&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/car_class&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The car_class schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;SUV&#34;
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+},
+&#34;passenger&#34;: {
+&#34;$id&#34;: &#34;#/properties/passenger&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The passenger schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;passenger_id&#34;: 2345243,
+  &#34;first_name&#34;: &#34;Jesse&#34;,
+  &#34;last_name&#34;: &#34;Menning&#34;,
+  &#34;rating&#34;: 2
+}
+],
+&#34;required&#34;: [
+&#34;passenger_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;
+],
+&#34;properties&#34;: {
+&#34;passenger_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/passenger_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The passenger_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2345243
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Jesse&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Menning&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+}
+},
+&#34;additionalProperties&#34;: true
+}
+</code></pre>
+</li>
+<li>Optional: Add Revision Comment: &#34;Initial Creation of Schema&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+<h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
+<h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
+<h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Documentation Best Practices" duration="5">
+        <p>✅  Know your Audience The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
+<ul>
+<li>Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
+<li>Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
+</ul>
+<p>✅  Capture Business Point of View and Moment</p>
+<ul>
+<li>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</li>
+</ul>
+<p>✅  Technical Requirements</p>
+<ul>
+<li>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</li>
+</ul>
+<p>✅  Link to other References</p>
+<ul>
+<li>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</li>
+</ul>
+<p>✅  Provide Examples</p>
+<ul>
+<li>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</li>
+</ul>
+<p>✅  Terms of Use</p>
+<ul>
+<li>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</li>
+</ul>
+<p>✅  Tags</p>
+<ul>
+<li>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
+        <h2 is-upgraded>Update Documentation of KPIThreshold Exceeded Event</h2>
+<h2 is-upgraded>Update Documentation of Payment Processor Application</h2>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Discover Existing EDA Assets" duration="36">
+        <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
+<ol type="1">
+<li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
+<li>Solace PubSub+ Event Broker – Coming Soon!</li>
+</ol>
+<p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
+<h2 is-upgraded>Automated Discovery and Data Importation from Kafka</h2>
+<p>Once you have decided on the application domains that are required for your enterprise, it is time to start the data importation process.</p>
+<p>If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.</p>
+<p><a href="https://codelabs.solace.dev/codelabs/ep-discovery-kafka/index.html?index=..%2F..index#3" target="_blank">Event Portal Discovery with Kafka Code Lab</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Learn, Understand, Reuse" duration="10">
+        <p>A critical aspect of the Event Portal is the capability to capture the EDA design and documentation in a central place to enable cross organizational learnings. These learnings come in multiple forms from creating new ideas, to enabling and training members of the team on the architecture to performing change impact analysis and more. The purpose of this section is to outline some of these scenarios and for you to think about ways to incorporate them into your organization.</p>
+<h2 is-upgraded>Ideate</h2>
+<p>To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description. This helps when you are aware of the problem and are looking for ideas of how to solve them with events. For example, let&#39;s say you&#39;re a Taxi company and are getting complaints about drivers speeding and you want to in real-time analyze the problem. You know the data has an attribute called &#34;speed&#34;, but what event streams have that data? You can simply search for speed in the schemas section of the catalog, review the matches, decide which schema is of interest and navigate to which events actually capture the moment you want to analyze. But what if you don&#39;t have a specific problem and are simply wanting to think about the art of the possible? This is where browsing the event catalog can be key. Maybe you want to improve an area of your business and simply want to see what events are available in that area. Filter by that application domain and view the events like a menu of business capabilities that when combined could fundamentally transform that business area.</p>
+<p>Once a new idea has been formulated, you can jump to the Design phase and start down the path of defining the new business capability in detail. Of course, in that phase you should consider making this new capability event-driven so that your colleges can ideate and solve more problems. The more events you have, the more ideation that can occur.</p>
+<h2 is-upgraded>Organizational Enablement</h2>
+<p>Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be?</p>
+<p>Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
+<p>So next time you are faced with the questions presented above, your answer should be an emphatic YES for your event-driven architecture.</p>
+<h2 is-upgraded>Change Impact Analysis</h2>
+<p>Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implement" duration="16">
+        <h2 is-upgraded>AsyncAPI Code Generators</h2>
+<h2 is-upgraded>Custom Code Generators</h2>
+<h2 is-upgraded>Integration Platforms</h2>
+<h3 is-upgraded>Dell Boomi Connector</h3>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="5">
+        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab. roc</p>
+<h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
+<h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
+<h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
 
 
       </google-codelab-step>
