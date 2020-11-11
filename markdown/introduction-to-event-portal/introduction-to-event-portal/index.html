@@ -27,70 +27,224 @@
                   environment="web"
                   feedback-link="https://solace.community/">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Enter a codelab overview here: what &amp; why and github repo link where you can find related code if applicable</p>
-<h2 is-upgraded>Info Boxes</h2>
-<p>Plain Text followed by green &amp; yellow info boxes</p>
-<aside class="warning"><p>This will appear in a yellow info box.</p>
-</aside>
-<aside class="special"><p>This will appear in a green info box.</p>
-</aside>
-<h2 is-upgraded>Bullets</h2>
-<p>Plain Text followed by bullets</p>
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p>Most organizations are adopting an event-driven architecture (EDA) to compete in a world where customer satisfaction requires real-time outcomes.</p>
+<p>In this code lab we&#39;ll build and expand your toolbox by learning how an Event Portal, paired with industry standard specifications and frameworks, enable a smooth journey to bring your EDA from initial architecture and design to code running in production while also setting your team up for success as the business needs, architecture and applications themselves are enhanced over time.</p>
+<p>Throughout this workshop we will get hands on and talk about:</p>
+<p>PubSub+ Event Portal</p>
 <ul>
-<li>Hello</li>
-<li>CodeLab</li>
-<li>World</li>
+<li>Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.</li>
+<li>Document Applications, Events and Schemas along with best practices for documentation</li>
+<li>Use Discovery capability to see what you already have in runtime and audit for changes</li>
+<li>Use the Event Catalog and Designer to Learn, Understand and Ideate</li>
 </ul>
-<h2 is-upgraded>Numbered List</h2>
+<p>AsyncAPI</p>
+<ul>
+<li>AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.</li>
+<li>Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="8">
+        <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>AsyncAPI Generator Requirements</h2>
+<p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
+<ul>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+  (Check version using <code>npm -version</code>)</li>
+</ul>
+<p>We&#39;ll install the generator itself later 👍</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>PubSub+ Event Broker Connection Info</h2>
+<p>✅ The credentials below are for a public event feed found on the <a href="http://solace.dev/marketplace" target="_blank">Solace feed Marketplace</a> that we&#39;ll use during this codelab.</p>
+<ul>
+<li>SMF Host: <code>tcp://taxi.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>nyc-modern-taxi</code></li>
+<li>Username: <code>public-taxi-user</code></li>
+<li>Password: <code>iliketaxis</code></li>
+</ul>
+<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/></code> and <code>test/taxinyc/></code> and permissions to publish to <code>test/taxinyc/></code></p>
+<h2 is-upgraded>Prepare PubSub+ Event Portal</h2>
+<h3 is-upgraded>Sign-up for Solace Cloud</h3>
+<p>✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
+<p class="image-container"><img alt="sc_trial" src="img/fa73039f398cef7a.webp"></p>
+<h3 is-upgraded>Import Existing Designed EDA</h3>
+<p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
+<p>You can download the file via curl or by cloning the git repo</p>
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+</code></pre>
+<p>OR</p>
+<pre><code language="language-bash" class="language-bash">git clone https://github.com/Mrc0113/design-to-code-workshop.git
+</code></pre>
+<p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
+<p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
+<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the  file.</p>
+<p class="image-container"><img alt="ep_click_import" src="img/292b8f20a9c16c60.png"></p>
+<p>🚀 Setup complete! Let&#39;s get going! 🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Foundational Concepts" duration="8">
+        <p>Before we dive deeper, let ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal.</p>
+<h2 is-upgraded>Application Domain &amp; Workspace</h2>
+<p>An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group application into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where we invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.</p>
+<p>In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains.</p>
+<p>You can further group multiple domains into a <em>Workspace</em>, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.</p>
+<p class="image-container"><img alt="Workspace Example" src="img/f5272455c6174221.png"></p>
+<h2 is-upgraded>Events/Topics</h2>
+<p>Events are an important part of the Event Portal. Think of a event as a concept of the publish-subscribe (pub/sub) architectural pattern. Topics are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.</p>
+<p>A Solace topic and an Apache Kafka topic might seem fundamentally the same but there are quite a few <a href="https://solace.com/blog/solace-topics-vs-kafka-topics/" target="_blank">differences between them</a>. Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.</p>
+<p>Here are some examples from our use case:</p>
+<ul>
+<li>taxinyc.analytics.fraud.alerted.v1</li>
+<li>taxinyc.ops.payment.charged.v1</li>
+<li>taxinyc.ops.ride.called.v1</li>
+</ul>
+<h2 is-upgraded>Schemas</h2>
+<p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema.</p>
+<p>In our use case all events are in AVRO Schema format.</p>
+<p class="image-container"><img alt="Schema Example" src="img/73e8cbbb5773302a.png"></p>
+<h2 is-upgraded>Applications</h2>
+<p>An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.</p>
+<h2 is-upgraded>Kafka Specific Objects and Terminology</h2>
+<h3 is-upgraded>Consumer Groups</h3>
+<p>Event Portal supports the concept of Kafka&#39;s consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal&#39;s runtime discovery to associate a discovered consumer group to an existing application.</p>
+<p>Kafka consumers that belong to the same consumer group share a group ID. The consumers in a group divide the topic partitions, as fairly as possible, so that each consumer consumes only a single partition from the group.</p>
+<p>A few examples of Consumers Groups from our NYC Taxi Analytics use case would be:</p>
+<ul>
+<li>Passenger Surge Detection</li>
+<li>Fraud Detection</li>
+<li>Driver Incentive Calculation</li>
+</ul>
+<h3 is-upgraded>Connector</h3>
+<p>A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Best Practices" duration="8">
+        <h2 is-upgraded>Decomposing the Enterprise</h2>
+<p>Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this include:</p>
 <ol type="1">
-<li>List</li>
-<li>Using</li>
-<li>Numbers</li>
+<li>Event sharing rules – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside of the application domain</li>
+<li>Provide uniform event topic prefixes – ensures that the prefix is unique and that topic best practices are followed</li>
 </ol>
-<h2 is-upgraded>Add an Image or a GIF</h2>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<h2 is-upgraded>Topic Naming Best Practices</h2>
+<p>The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. Regardless of your broker type, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific.</p>
+<h2 is-upgraded>Event Information Exchange Patterns</h2>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
-        <p>Enter environment setup &amp; prerequisites here</p>
-<h2 is-upgraded>Add a Link</h2>
-<p>Add a link! <a href="https://www.google.com" target="_blank">Example of a Link</a></p>
-<h2 is-upgraded>Embed an iframe</h2>
-<iframe class="embedded-iframe" src="https://codepen.io/tzoght/embed/yRNZaP"></iframe>
+      <google-codelab-step label="Use Case Overview" duration="5">
+        <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
+<p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
+<ol type="1">
+<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
+<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
+<li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
+</ol>
+<p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+</aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Design an Event Driven Architecture" duration="0">
-        <h2 is-upgraded>Import Existing Designed EDA</h2>
+      <google-codelab-step label="Design an Event Driven Architecture" duration="10">
+        <p>By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.</p>
 <h2 is-upgraded>Design new Back Office EDA</h2>
-<aside class="warning"><p>Topic Naming Best Practices</p>
-</aside>
-<aside class="warning"><p>Event Information Exchange Patterns</p>
-</aside>
-<aside class="warning"><p>Sharing and Visibility</p>
-</aside>
-<h3 is-upgraded>Design Invoice System</h3>
+<h3 is-upgraded>Design Payment Processor Application</h3>
 <h3 is-upgraded>Design KPIThreshold Exceeded Event</h3>
 <h3 is-upgraded>Design SendToExecutiveDashboard</h3>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 2" duration="0">
-        
+      <google-codelab-step label="Documentation Best Practices" duration="5">
+        <h2 is-upgraded>Know your Audience</h2>
+<p>The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
+<ul>
+<li>Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
+<li>Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
+</ul>
+<h2 is-upgraded>Capture Business Point of View and Moment</h2>
+<p>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</p>
+<h2 is-upgraded>Technical Requirements</h2>
+<p>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</p>
+<h2 is-upgraded>Link to other References</h2>
+<p>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</p>
+<h2 is-upgraded>Provide Examples</h2>
+<p>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</p>
+<h2 is-upgraded>Terms of Use</h2>
+<p>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</p>
+<h2 is-upgraded>Tags</h2>
+<p>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</p>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 3" duration="0">
-        
+      <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
+        <h2 is-upgraded>Update Documentation of KPIThreshold Exceeded Event</h2>
+<h2 is-upgraded>Update Documentation of Payment Processor Application</h2>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways" duration="7">
+      <google-codelab-step label="Discover Existing EDA Assets" duration="36">
+        <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
+<ol type="1">
+<li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
+<li>Solace PubSub+ Event Broker – Coming Soon!</li>
+</ol>
+<p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
+<h2 is-upgraded>Automated Discovery and Data Importation from Kafka</h2>
+<p>Once you have decided on the application domains that are required for your enterprise, it is time to start the data importation process.</p>
+<p>If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.</p>
+<p><a href="https://codelabs.solace.dev/codelabs/ep-discovery-kafka/index.html?index=..%2F..index#3" target="_blank">Event Portal Discovery with Kafka Code Lab</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Learn, Understand, Reuse" duration="10">
+        <p>A critical aspect of the Event Portal is the capability to capture the EDA design and documentation in a central place to enable cross organizational learnings. These learnings come in multiple forms from creating new ideas, to enabling and training members of the team on the architecture to performing change impact analysis and more. The purpose of this section is to outline some of these scenarios and for you to think about ways to incorporate them into your organization.</p>
+<h2 is-upgraded>Ideate</h2>
+<p>To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description. This helps when you are aware of the problem and are looking for ideas of how to solve them with events. For example, let&#39;s say you&#39;re a Taxi company and are getting complaints about drivers speeding and you want to in real-time analyze the problem. You know the data has an attribute called &#34;speed&#34;, but what event streams have that data? You can simply search for speed in the schemas section of the catalog, review the matches, decide which schema is of interest and navigate to which events actually capture the moment you want to analyze. But what if you don&#39;t have a specific problem and are simply wanting to think about the art of the possible? This is where browsing the event catalog can be key. Maybe you want to improve an area of your business and simply want to see what events are available in that area. Filter by that application domain and view the events like a menu of business capabilities that when combined could fundamentally transform that business area.</p>
+<p>Once a new idea has been formulated, you can jump to the Design phase and start down the path of defining the new business capability in detail. Of course, in that phase you should consider making this new capability event-driven so that your colleges can ideate and solve more problems. The more events you have, the more ideation that can occur.</p>
+<h2 is-upgraded>Organizational Enablement</h2>
+<p>Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be?</p>
+<p>Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
+<p>So next time you are faced with the questions presented above, your answer should be an emphatic YES for your event-driven architecture.</p>
+<h2 is-upgraded>Change Impact Analysis</h2>
+<p>Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implement" duration="16">
+        <h2 is-upgraded>AsyncAPI Code Generators</h2>
+<h2 is-upgraded>Custom Code Generators</h2>
+<h2 is-upgraded>Integration Platforms</h2>
+<h3 is-upgraded>Dell Boomi Connector</h3>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="5">
         <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
