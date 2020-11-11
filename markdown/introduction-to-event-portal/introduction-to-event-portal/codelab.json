@@ -3,21 +3,24 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-11-10T13:56:05-07:00",
+  "updated": "2020-11-11T14:16:34-05:00",
   "id": "introduction-to-event-portal",
-  "duration": 120,
+  "duration": 122,
   "title": "Introduction to Solace PubSub+ Event Portal",
-  "summary": "",
+  "summary": "In this tutorial we’ll cover how to design, extend and implement your event-driven APIs using Solace PubSub+ Event Portal",
   "source": "introduction-to-event-portal.md",
   "theme": "",
   "status": [
     "published"
   ],
-  "category": null,
-  "tags": [
-    "web"
+  "category": [
+    "solace"
   ],
-  "feedback": "https://solace.community/",
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://solace.community/categories/pubsub%2B-event-portal",
   "ga": "UA-3921398-10",
   "url": "introduction-to-event-portal"
 }
