@@ -60,7 +60,7 @@
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
 <li>Java 1.8+ (Check version using <code>java -version</code>)</li>
-<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
 </ul>
@@ -75,7 +75,7 @@
 <li>Username: <code>public-taxi-user</code></li>
 <li>Password: <code>iliketaxis</code></li>
 </ul>
-<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/&gt;</code> and <code>test/taxinyc/&gt;</code> and permissions to publish to <code>test/taxinyc/&gt;</code></p>
+<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/></code> and <code>test/taxinyc/></code> and permissions to publish to <code>test/taxinyc/></code></p>
 <h2 is-upgraded>Prepare PubSub+ Event Portal</h2>
 <h3 is-upgraded>Sign-up for Solace Cloud</h3>
 <p>✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
@@ -83,10 +83,10 @@
 <h3 is-upgraded>Import Existing Designed EDA</h3>
 <p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
 <p>You can download the file via curl or by cloning the git repo</p>
-<pre><code>curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
 </code></pre>
 <p>OR</p>
-<pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
+<pre><code language="language-bash" class="language-bash">git clone https://github.com/Mrc0113/design-to-code-workshop.git
 </code></pre>
 <p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
@@ -569,97 +569,6 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Implement" duration="16">
-        <h2 is-upgraded>AsyncAPI Code Generators</h2>
-<h2 is-upgraded>Custom Code Generators</h2>
-<h2 is-upgraded>Integration Platforms</h2>
-<h3 is-upgraded>Dell Boomi Connector</h3>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Takeaways" duration="5">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
-<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab. roc</p>
-<h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
-<h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
-<h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Documentation Best Practices" duration="5">
-        <p>✅  Know your Audience The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
-<ul>
-<li>Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
-<li>Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
-</ul>
-<p>✅  Capture Business Point of View and Moment</p>
-<ul>
-<li>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</li>
-</ul>
-<p>✅  Technical Requirements</p>
-<ul>
-<li>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</li>
-</ul>
-<p>✅  Link to other References</p>
-<ul>
-<li>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</li>
-</ul>
-<p>✅  Provide Examples</p>
-<ul>
-<li>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</li>
-</ul>
-<p>✅  Terms of Use</p>
-<ul>
-<li>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</li>
-</ul>
-<p>✅  Tags</p>
-<ul>
-<li>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</li>
-</ul>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
-        <h2 is-upgraded>Update Documentation of KPIThreshold Exceeded Event</h2>
-<h2 is-upgraded>Update Documentation of Payment Processor Application</h2>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Discover Existing EDA Assets" duration="30">
-        <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
-<ol type="1">
-<li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
-<li>Solace PubSub+ Event Broker – Coming Soon!</li>
-</ol>
-<p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
-<h2 is-upgraded>Automated Discovery and Data Importation from Kafka</h2>
-<p>Once you have decided on the application domains that are required for your enterprise, it is time to start the data importation process.</p>
-<p>If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.</p>
-<p><a href="https://codelabs.solace.dev/codelabs/ep-discovery-kafka/index.html?index=..%2F..index#3" target="_blank">Event Portal Discovery with Kafka Code Lab</a></p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Learn, Understand, Reuse" duration="10">
-        <p>A critical aspect of the Event Portal is the capability to capture the EDA design and documentation in a central place to enable cross organizational learnings. These learnings come in multiple forms from creating new ideas, to enabling and training members of the team on the architecture to performing change impact analysis and more. The purpose of this section is to outline some of these scenarios and for you to think about ways to incorporate them into your organization.</p>
-<h2 is-upgraded>Ideate</h2>
-<p>To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description. This helps when you are aware of the problem and are looking for ideas of how to solve them with events. For example, let&#39;s say you&#39;re a Taxi company and are getting complaints about drivers speeding and you want to in real-time analyze the problem. You know the data has an attribute called &#34;speed&#34;, but what event streams have that data? You can simply search for speed in the schemas section of the catalog, review the matches, decide which schema is of interest and navigate to which events actually capture the moment you want to analyze. But what if you don&#39;t have a specific problem and are simply wanting to think about the art of the possible? This is where browsing the event catalog can be key. Maybe you want to improve an area of your business and simply want to see what events are available in that area. Filter by that application domain and view the events like a menu of business capabilities that when combined could fundamentally transform that business area.</p>
-<p>Once a new idea has been formulated, you can jump to the Design phase and start down the path of defining the new business capability in detail. Of course, in that phase you should consider making this new capability event-driven so that your colleges can ideate and solve more problems. The more events you have, the more ideation that can occur.</p>
-<h2 is-upgraded>Organizational Enablement</h2>
-<p>Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be?</p>
-<p>Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
-<p>So next time you are faced with the questions presented above, your answer should be an emphatic YES for your event-driven architecture.</p>
-<h2 is-upgraded>Change Impact Analysis</h2>
-<p>Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management.</p>
-
-
-      </google-codelab-step>
-    
       <google-codelab-step label="The AsyncAPI Initiative" duration="3">
         <p>The <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI Initiative</a> is an open source project that both the AsyncAPI specification to define your asynchronous APIs and open source tools to enable developers to build and maintain an event-driven architecture.</p>
 <aside class="special"><p>Learn More in the <a href="https://www.asyncapi.com/docs/getting-started" target="_blank">AsyncAPI Docs</a></p>
@@ -670,7 +579,7 @@
 <p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
 <p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
 <p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
-<pre><code>npm install -g @asyncapi/generator@0.53.1
+<pre><code language="language-bash" class="language-bash">npm install -g @asyncapi/generator@0.53.1
 </code></pre>
 <aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
 </aside>
@@ -678,11 +587,11 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Implement (Option 1): Spring/Java" duration="10">
+      <google-codelab-step label="Implement ProcessPayment (Java/Spring)" duration="10">
         <h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice as it is intended to create event-driven microservices. We&#39;ll also keep the business logic to a minimum to show just how quick it is to generate the code skeleton and get an event-driven microservice running!</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
-<p>In the Solace Event Portal right click on the <em>ProcessPayment</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+<p>In the Solace Event Portal right click on the <em>ProcessPayment</em>, Choose <em>AsyncAPI</em>, Choose <strong><em>YAML</em></strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
 <aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
 </aside>
@@ -691,7 +600,7 @@
 <li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
 <li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
 </ul>
-<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
+<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. <img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
 </aside>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
@@ -706,10 +615,10 @@
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
-</code></pre>
-</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
+<pre><code language="language-bash" class="language-bash">ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
@@ -725,13 +634,13 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 <li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
 </ul>
 <h3 is-upgraded>Subscribe to <em>dropoff</em> events</h3>
-<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/&gt;</code></p>
-<aside class="special"><p>Note that the <code>&gt;</code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/&gt;</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/></code></p>
+<aside class="special"><p>Note that the <code>></code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/></code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
 </aside>
 <h3 is-upgraded>Publish to a personalized topic for uniqueness</h3>
-<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
+<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/<YOUR_UNIQUE_NAME>/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
 <p>✅ After updating the <code>spring.cloud.stream</code> portion of your <em>application.yml</em> file should look something like this:</p>
-<pre><code>spring:
+<pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
     stream:
       function:
@@ -750,7 +659,7 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 <h3 is-upgraded>Fill in the Business Logic</h3>
 <p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideUpdated</em> events as they&#39;re received and create a new PaymentCharged event for each.</p>
 <p>Open the <em>Application.java</em> file and modify the <code>processPayment</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
-<pre><code>@Bean
+<pre><code language="language-java" class="language-java">@Bean
 public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 	return rideUpdated -&gt; {
 		logger.info(&#34;Received Ride Updated Event:&#34; + rideUpdated);
@@ -771,20 +680,12 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Implement (Option 2): Python" duration="8">
-        <h2 is-upgraded>Develop the ProcessPayment Python App</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation.</p>
+      <google-codelab-step label="Implement InvoiceSystem (Python)" duration="8">
+        <h2 is-upgraded>Develop the InvoiceSystem Python App</h2>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>InvoiceSystem</em> python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation.</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
-<p>In the Solace Event Portal right click on the <em>ProcessPayment</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+<p>In the Solace Event Portal right click on the <em>InvoiceSystem</em>, Choose <em>AsyncAPI</em>, Choose <strong><em>YAML</em></strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
-<aside class="special"><p>The AsyncAPI Python Paho Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
-</aside>
-<p>Let&#39;s add a few of the template&#39;s configuration options to the downloaded AsyncAPI document.</p>
-<ul>
-<li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
-<li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
-</ul>
-<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
 </aside>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
@@ -799,13 +700,13 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
-</code></pre>
-</li>
+<li>And lastly, the <code>@asyncapi/python-paho-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
+<pre><code language="language-bash" class="language-bash">ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
+</code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
-Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
+Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 </code></pre>
 <h3 is-upgraded>Import and Explore the Generated Project</h3>
 <p>The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.<br><img alt="projectsetup2" src="img/fd108df265654a36.webp"></p>
@@ -813,37 +714,16 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 <ul>
 <li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
 <li>The <code>PaymentCharged</code> and <code>RideUpdated</code> POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
-<li><code>Application.java</code> contains a <code>processPayment</code> method which is a <code>Function</code> that takes in a <code>RideUpdated</code> POJO and returns a <code>PaymentCharged</code> POJO.<br></li>
+<li><code>Application.java</code> contains a <code>InvoiceSystem</code> method which is a <code>Function</code> that takes in a <code>RideUpdated</code> POJO and returns a <code>PaymentCharged</code> POJO.<br></li>
 <li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
 <li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
 </ul>
-<h3 is-upgraded>Subscribe to <em>dropoff</em> events</h3>
-<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/&gt;</code></p>
-<aside class="special"><p>Note that the <code>&gt;</code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/&gt;</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+<h3 is-upgraded>Subscribe to <em>PaymentCharged</em> events</h3>
+<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of <code>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code><br> we need to update our subscription to subscribe to all <em>PaymentCharged</em> events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to <code>taxinyc/backoffice/payment/charged/v1/#</code></p>
+<aside class="special"><p>Note that the <code>#</code> symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/#</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
 </aside>
-<h3 is-upgraded>Publish to a personalized topic for uniqueness</h3>
-<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
-<p>✅ After updating the <code>spring.cloud.stream</code> portion of your <em>application.yml</em> file should look something like this:</p>
-<pre><code>spring:
-  cloud:
-    stream:
-      function:
-        definition: processPayment
-      bindings:
-        processPayment-out-0:
-          destination: test/taxinyc/yourname/ops/payment/charged/v1/accepted
-        processPayment-in-0:
-          destination: test/taxinyc/ProcessPaymentQueue
-      solace:
-        bindings:
-          processPayment-in-0:
-            consumer:
-              queueAdditionalSubscriptions: &#39;taxinyc/ops/ride/updated/v1/dropoff/&gt;&#39;
-</code></pre>
 <h3 is-upgraded>Fill in the Business Logic</h3>
-<p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideAverageUpdate</em> events as they&#39;re received.</p>
-<p>Open the <em>Application.java</em> file and modify the <code>taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
-<pre><code></code></pre>
+<pre><code language="language-python" class="language-python"></code></pre>
 <p>That&#39;s it! The app development is complete.</p>
 <p>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
 <h2 is-upgraded>Run the app!</h2>
@@ -857,15 +737,16 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
       </google-codelab-step>
     
       <google-codelab-step label="Implement: Other Options!" duration="4">
-        <h2 is-upgraded>Custom Code Generators</h2>
-<h2 is-upgraded>Integration Platforms</h2>
+        <h2 is-upgraded>Generate Custom Code</h2>
+<p>Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<h2 is-upgraded>Use an Integration Platforms</h2>
 <h3 is-upgraded>Dell Boomi Connector</h3>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="4">
-        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.<br>✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.<br>✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. ✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
@@ -878,6 +759,7 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
