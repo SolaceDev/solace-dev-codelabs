@@ -330,13 +330,13 @@ Negative
 : Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.
 
 
-## Implement (Option 1): Spring/Java
+## Implement ProcessPayment (Java/Spring)
 Duration: 0:10:00
 
 ### Develop the ProcessPayment Microservice
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _ProcessPayment_ microservice. We are also going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice, but we'll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app! 
+On to developing the _ProcessPayment_ App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java & Spring. We are going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice as it is intended to create event-driven microservices. We'll also keep the business logic to a minimum to show just how quick it is to generate the code skeleton and get an event-driven microservice running! 
 
 #### Generate the Code Skeleton
 In the Solace Event Portal right click on the _ProcessPayment_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
@@ -453,29 +453,19 @@ Negative
 
 🤯🤯 **The Microservice is now is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
 
-## Implement (Option 2): Python
+## Implement InvoiceSystem (Python)
 Duration: 0:08:00
 
-### Develop the ProcessPayment Python App
+### Develop the InvoiceSystem Python App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _ProcessPayment_ python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation.
+On to developing the _InvoiceSystem_ python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation.
 
 #### Generate the Code Skeleton
-In the Solace Event Portal right click on the _ProcessPayment_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
+In the Solace Event Portal right click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![ep_asyncapi2](img/ep_asyncapi2.webp)
-
-Positive
-: The AsyncAPI Python Paho Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like. 
-
-Let's add a few of the template's configuration options to the downloaded AsyncAPI document. 
-* Add `x-scs-function-name: processPayment` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the _subscribe_ and the _publish_ operation you are saying you want them handled by the same function! 
-* Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
-
-✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
-![asyncapi_doc2](img/asyncapi_doc2.png)
-
+  
 Negative
 : Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal. 
 
@@ -491,16 +481,16 @@ Note the different pieces of the command:
 * `javaPackage` specifies the Java Package to place the generated classes into
 * `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
 * The yaml file is our AsyncAPI document
-* And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
+* And lastly, the `@asyncapi/python-paho-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 
 ```
 Done! ✨
-Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
+Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 ```
 
 #### Import and Explore the Generated Project
@@ -510,46 +500,23 @@ The generated project is a Maven project so head over to your IDE and import the
 A few notes on the project: 
 * The generated java classes are in the `org.taxi.nyc` package that we specified. 
 * The `PaymentCharged` and `RideUpdated` POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.
-* `Application.java` contains a `processPayment` method which is a `Function` that takes in a `RideUpdated` POJO and returns a `PaymentCharged` POJO.  
+* `Application.java` contains a `InvoiceSystem` method which is a `Function` that takes in a `RideUpdated` POJO and returns a `PaymentCharged` POJO.  
 * The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
 * The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
 
-#### Subscribe to _dropoff_ events
-As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their _RideUpdate_ events to a dynamic topic structure of `taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}` we need to update the `application.yml` file to subscribe to only `dropoff` events. To do this change the `queueAdditionalSubscriptions` parameter value to `taxinyc/ops/ride/updated/v1/dropoff/>`
+#### Subscribe to _PaymentCharged_ events
+As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}
+` we need to update our subscription to subscribe to all _PaymentCharged_ events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to `taxinyc/backoffice/payment/charged/v1/#`
 
 Positive
-: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
-
-#### Publish to a personalized topic for uniqueness
-Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processPayment-out-0.destination` to be `test/taxinyc/<YOUR_UNIQUE_NAME>/ops/payment/charged/v1/accepted`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
-
-✅ After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
-
-```yaml
-spring:
-  cloud:
-    stream:
-      function:
-        definition: processPayment
-      bindings:
-        processPayment-out-0:
-          destination: test/taxinyc/yourname/ops/payment/charged/v1/accepted
-        processPayment-in-0:
-          destination: test/taxinyc/ProcessPaymentQueue
-      solace:
-        bindings:
-          processPayment-in-0:
-            consumer:
-              queueAdditionalSubscriptions: 'taxinyc/ops/ride/updated/v1/dropoff/>'
-```
+: Note that the `#` symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/#` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard)
 
 
 #### Fill in the Business Logic
-Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideAverageUpdate_ events as they're received.
 
-Open the _Application.java_ file and modify the `taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer` method to log the events. When you're done it should look something like the code below. 
 
 ```python
+
 ```
 
 That's it! The app development is complete. 
@@ -572,9 +539,10 @@ Or run it from the terminal by navigating to the directory with the pom and runn
 ## Implement: Other Options! 
 Duration: 0:04:00
 
-### Custom Code Generators
+### Generate Custom Code
+Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the [AsyncAPI Generator](https://github.com/asyncapi/generator) 
 
-### Integration Platforms
+### Use an Integration Platforms
 
 #### Dell Boomi Connector
 
