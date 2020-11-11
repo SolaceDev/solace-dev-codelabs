@@ -144,7 +144,28 @@
 </ol>
 <h2 is-upgraded>Topic Naming Best Practices</h2>
 <p>The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. Regardless of your broker type, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific.</p>
+<h3 is-upgraded>Parts of the Event Topic</h3>
+<p>The event topic structure has two parts:</p>
+<p>The event topic root contains enough information to describe the type of event that has occurred. Each event topic root is a static field that describes the type of event. The list of event topic roots forms a catalog of events that can be produced and consumed. This catalog could be brought into the PubSub+ Event Portal&#39;s event catalog, listing each event type along with details about the event. Each event topic root describes the event in as much detail as necessary to map it to a single data schema. The event topic properties are optional fields that further describe a particular event. This part of the topic has fields that are dynamically filled when the producer publishes the event. These fields are used to describe the specific or unique attributes of this event instance that would be used for routing and filtering.</p>
+<ul>
+<li>Event Topic Root: The event topic root of an event should have the following form:  <pre><code>Domain/ObjectType/Verb/Version/
+</code></pre>
+</li>
+<li>Event Topic Properties: The event topic properties should have the following form:  <pre><code>Locality/SourceID/ObjectID
+</code></pre>
+</li>
+<li>✅ Complete Event Topic Format: Putting together an event topic root and event topic properties creates an event topic that describes the event with a series of fields from least specific to most specific.  <pre><code>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
+</code></pre>
+</li>
+</ul>
+<p>For more information about topic best practices, review the <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices Guide</a></p>
 <h2 is-upgraded>Event Information Exchange Patterns</h2>
+<p>There are multiple Event Exchange Patterns (EEP) that should be considered when using EDA:</p>
+<ul>
+<li>If using a &#34;Thin Event Notification&#34; pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink&#39;s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible. The pro of this pattern however is that the data is smaller in size and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes.</li>
+<li>If using &#34;Hypermedia-Driven Events&#34; pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client&#39;s access level. The con to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior.</li>
+<li>If using &#34;Event-Carried State Transfer&#34; pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes. The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance. The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client&#39;s usage of the data.</li>
+</ul>
 
 
       </google-codelab-step>
@@ -153,9 +174,11 @@
         <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
 <p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
 <ol type="1">
-<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
-<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
-<li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
+<li>🚖 Create and capture this design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
+<li>🚕 Next up we&#39;re going to document some of the designed applications and events so that they can be understood and reused by others.</li>
+<li>🚕 We will run a &#34;discovery&#34; scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented</li>
+<li>🚕 Learn, Understand and Reuse some of our events in a new use case</li>
+<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayement</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
 <aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
@@ -176,24 +199,35 @@
       </google-codelab-step>
     
       <google-codelab-step label="Documentation Best Practices" duration="5">
-        <h2 is-upgraded>Know your Audience</h2>
-<p>The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
+        <p>✅  Know your Audience The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
 <ul>
 <li>Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
 <li>Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
 </ul>
-<h2 is-upgraded>Capture Business Point of View and Moment</h2>
-<p>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</p>
-<h2 is-upgraded>Technical Requirements</h2>
-<p>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</p>
-<h2 is-upgraded>Link to other References</h2>
-<p>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</p>
-<h2 is-upgraded>Provide Examples</h2>
-<p>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</p>
-<h2 is-upgraded>Terms of Use</h2>
-<p>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</p>
-<h2 is-upgraded>Tags</h2>
-<p>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</p>
+<p>✅  Capture Business Point of View and Moment</p>
+<ul>
+<li>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</li>
+</ul>
+<p>✅  Technical Requirements</p>
+<ul>
+<li>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</li>
+</ul>
+<p>✅  Link to other References</p>
+<ul>
+<li>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</li>
+</ul>
+<p>✅  Provide Examples</p>
+<ul>
+<li>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</li>
+</ul>
+<p>✅  Terms of Use</p>
+<ul>
+<li>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</li>
+</ul>
+<p>✅  Tags</p>
+<ul>
+<li>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</li>
+</ul>
 
 
       </google-codelab-step>
