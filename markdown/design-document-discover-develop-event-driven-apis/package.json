@@ -4,7 +4,7 @@
   "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch introduction-to-event-portal.md --exec 'claat export introduction-to-event-portal.md && lsof -c claat -t | xargs kill && cd introduction-to-event-portal && claat serve'"
+    "watch": "nodemon --watch design-document-discover-develop-event-driven-apis.md --exec 'claat export design-document-discover-develop-event-driven-apis.md && lsof -c claat -t | xargs kill && cd design-document-discover-develop-event-driven-apis && claat serve'"
   },
   "repository": {
     "type": "git",

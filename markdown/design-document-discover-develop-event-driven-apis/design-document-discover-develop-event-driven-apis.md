@@ -30,7 +30,8 @@ AsyncAPI
 * AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.
 * Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices
 
-
+Positive
+: Artifacts created or used throughout this codelab can be found in [this Github repo](https://github.com/Mrc0113/ep-design-workshop)
 
 ## What you need: Prerequisites
 
