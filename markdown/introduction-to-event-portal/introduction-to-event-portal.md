@@ -517,16 +517,71 @@ Next we should decide what we want the data to look like once we have processed 
   "additionalProperties": true
 }
 ```
-    1. Optional: Add Revision Comment: "Initial Creation of Schema"
+    1. Revision Comment: <Optional> "Initial Creation of Schema"
     1. Click _Save_
     
                    
 
 ### Design _PaymentCharged_ Event
+So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What's involved? Well we need to apply our best practices as it comes to the Topic name! 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
+    1. Name: PaymentCharged
+    1. Shared: YES
+    1. Description: NONE
+    1. Topic Scheme: Solace
+    1. Topic
+        1. As you can see the domain aleady has some of the "Event Topic Root"
+        1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
+        1. We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}_
+    1. Value: 
+        1. Keep the Schema radio button selected
+        1. Choose the Schema "PaymentCharged" that we created in the previous step
+    1. Owner: Assign Yourself 
+    1. Tags: NONE
+    1. Revision Comment: <Optional> "Initial Creation of Event"
+    1. Click _Save_
 
 ### Design _ProcessPayment_ Application
+Now for the fun part! We need to design the event-driven interface of the _ProcessPayment_ Application. This is pretty easy as it has one input which triggers a single output. 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+    1. Name: ProcessPayment
+    1. Description: NONE
+    1. Application Class: Unspecified
+    1. Owners: Assign Yourself
+    1. Tags: NONE
+    1. Associated Events: 
+        1. Click the _Manage_ link
+            1. Select the _Sub_ button next to the _RideUpdated_ event 
+            1. Select the _Pub_ button next to the _PaymentCharged_ event
+            1. Click _Save_
+    1. Revision Comment: <Optional> "Initial Creation of Application"
+    1. Click _Save_
+1. You should now see the newly added application on the graph! 
+
+Positive
+: Pro Tip!: If you wanted to develop/implement this application you could right click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
 
 ### Design _InvoiceSystem_ Application
+Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system. 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+    1. Name: InvoiceSystem
+    1. Description: NONE
+    1. Application Class: Unspecified
+    1. Owners: Assign Yourself
+    1. Tags: NONE
+    1. Associated Events: 
+        1. Click the _Manage_ link
+            1. Select the _Sub_ button next to the _PaymentCharged_ event 
+            1. Click _Save_
+    1. Revision Comment: <Optional> "Initial Creation of Application"
+    1. Click _Save_
+1. You should now see the newly added application on the graph! 
 
 ## Documentation Best Practices
 Duration: 0:05:00
@@ -561,11 +616,56 @@ The events which you have are used to enable Realtime collaboration between syst
 Duration: 0:08:00
 Events are only as good as their documentation. After all, it is up to a human to understand what something is and make a determination as to wither it provides value. This is why documentation is critical for success in Event Driven Architecture. Creating and maintaining good documentation that’s easy to read, enjoyable to interact with and sets up the user for success can be challenging. Great documentation requires effort but has significant implications on the reuse of the events within the eco-system. The PubSub+ Event portal enables you to document Events easily while also managing the decoupled relationships so that users can easily understand the context of an event. Before you sit down and write documentation on events, applications and schemas, its good to consider its purpose along with who will be using it. 
 
+### Update Documentation of _PaymentCharged_ Event
+
+### Update Documentation of _ProcessPayment_ Application 
+Lets enhance the documentation of the _ProcessPayment_ Application and put our Documentation Best Practices to work! 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. Double Click on the _ProcessPayment_ Application in the graph
+    1. Click on the _Edit_ button <Top Right>
+        1. Copy and Paste the following into the _Description_ field:
+```
+Description of Business Capability
+
+	Overview: 
+
+		The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger's billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
 
 
-### Update Documentation of KPIThreshold Exceeded Event
 
-### Update Documentation of Payment Processor Application 
+Technical Requirements
+
+Java Version:  OpenJDK 11.0.4
+Spring Cloud Version:  Hoxton.SR8
+Number of Instances: 1
+Cloud: AWS us-east
+Security Level: PCI 
+Event Broker Profile: Solace
+
+
+Source Code Repository
+
+github repo
+
+
+
+Terms of Use
+
+N/A
+```
+        1. Lets make it nicer to read by using bullets, bold, italics etc
+        1. Lets add a hyperlink to the _github repo_ that points to https://github.com
+        1. Lets now also add Tags
+            1. Click _Add/Remove Tags_
+                1. Type _PCI_ in the box and Select (Create a new tag) below. 
+                1. Optionally add other tags. 
+                1. Click Done
+        1. The documentation should look something like: 
+            ![asyncapi_doc2](img/AppDoc.png)
+        1. Click _Save_
+                
+                
 
 ## Discover Existing EDA Assets
 Duration: 0:36:00

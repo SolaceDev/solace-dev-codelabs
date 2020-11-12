@@ -486,14 +486,92 @@
 }
 </code></pre>
 </li>
-<li>Optional: Add Revision Comment: &#34;Initial Creation of Schema&#34;</li>
+<li>Revision Comment:  &#34;Initial Creation of Schema&#34;</li>
 <li>Click <em>Save</em></li>
 </ol>
 </li>
 </ol>
 <h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
+<p>So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What&#39;s involved? Well we need to apply our best practices as it comes to the Topic name!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Event  </em><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Shared: YES</li>
+<li>Description: NONE</li>
+<li>Topic Scheme: Solace</li>
+<li>Topic  <ol type="1">
+<li>As you can see the domain aleady has some of the &#34;Event Topic Root&#34;</li>
+<li>We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event</li>
+<li>We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger<em>id}</em></li>
+</ol>
+</li>
+<li>Value:  <ol type="1">
+<li>Keep the Schema radio button selected</li>
+<li>Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step</li>
+</ol>
+</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Revision Comment:  &#34;Initial Creation of Event&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
 <h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
+<p>Now for the fun part! We need to design the event-driven interface of the <em>ProcessPayment</em> Application. This is pretty easy as it has one input which triggers a single output.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application  </em><ol type="1">
+<li>Name: ProcessPayment</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>RideUpdated</em> event</li>
+<li>Select the <em>Pub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
+<aside class="special"><p>Pro Tip!: If you wanted to develop/implement this application you could right click on the <em>ProcessPayment</em> Application in graph and export an AsyncAPI Document that could be used to generate code!</p>
+</aside>
 <h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
+<p>Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application  </em><ol type="1">
+<li>Name: InvoiceSystem</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
 
 
       </google-codelab-step>
@@ -533,8 +611,48 @@
       </google-codelab-step>
     
       <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
-        <h2 is-upgraded>Update Documentation of KPIThreshold Exceeded Event</h2>
-<h2 is-upgraded>Update Documentation of Payment Processor Application</h2>
+        <h2 is-upgraded>Update Documentation of <em>PaymentCharged</em> Event</h2>
+<h2 is-upgraded>Update Documentation of <em>ProcessPayment</em> Application</h2>
+<p>Lets enhance the documentation of the <em>ProcessPayment</em> Application and put our Documentation Best Practices to work!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>Double Click on the <em>ProcessPayment</em> Application in the graph  <ol type="1">
+<li>Click on the <em>Edit</em> button   <ol type="1">
+<li>Copy and Paste the following into the <em>Description</em> field:  <pre><code>Description of Business Capability
+Overview: 
+The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger&#39;s billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
+Technical Requirements
+Java Version:  OpenJDK 11.0.4
+Spring Cloud Version:  Hoxton.SR8
+Number of Instances: 1
+Cloud: AWS us-east
+Security Level: PCI 
+Event Broker Profile: Solace
+Source Code Repository
+github repo
+Terms of Use
+N/A
+</code></pre>
+</li>
+<li>Lets make it nicer to read by using bullets, bold, italics etc</li>
+<li>Lets add a hyperlink to the <em>github repo</em> that points to https://github.com</li>
+<li>Lets now also add Tags  <ol type="1">
+<li>Click <em>Add/Remove Tags  </em><ol type="1">
+<li>Type <em>PCI</em> in the box and Select (Create a new tag) below.</li>
+<li>Optionally add other tags.</li>
+<li>Click Done</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>The documentation should look something like: <img alt="asyncapi_doc2" src="img/ff9be9a9ff33a275.png"></li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 
 
       </google-codelab-step>
