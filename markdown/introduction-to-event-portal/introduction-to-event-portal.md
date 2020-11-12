@@ -56,6 +56,7 @@ We'll install the generator itself later 👍
 ### PubSub+ Event Broker Connection Info
 ✅ The credentials below are for a public event feed found on the [Solace feed Marketplace](http://solace.dev/marketplace) that we'll use during this codelab.
 * SMF Host: `tcp://taxi.messaging.solace.cloud:55555`
+* MQTT Host: `ssl://taxi.messaging.solace.cloud:8883`
 * Message VPN: `nyc-modern-taxi`
 * Username: `public-taxi-user`
 * Password: `iliketaxis`
@@ -71,15 +72,15 @@ We'll install the generator itself later 👍
 
 
 #### Import Existing Designed EDA
-✅ Download the Application Domain export file: [EventPortal_Export_NYCModernTaxiCo.json]( https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json)
+✅ Download the Application Domain export file: [EventPortalExport_Initial.json]( https://github.com/Mrc0113/ep-design-workshop/blob/main/EventPortalExport_Initial.json)
 
 You can download the file via curl or by cloning the git repo
 ```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/EventPortalExport_Initial.json -o EventPortalExport_Initial.json
 ```
 OR
 ```bash
-git clone https://github.com/Mrc0113/design-to-code-workshop.git
+git clone https://github.com/Mrc0113/ep-design-workshop.git
 ```
 
 ✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking "Designer" in the menu on the left. 
@@ -893,13 +894,13 @@ Once running you should see that for each RideUpdated event that is received a P
 
 🤯🤯 **The Microservice is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
 
-## Implement InvoiceSystem (Python)
+## Implement InvoiceSystem (Python w/ MQTT)
 Duration: 0:08:00
 
 ### Develop the InvoiceSystem Python App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _InvoiceSystem_ python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker and will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation.
+On to developing the _InvoiceSystem_ python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker over MQTT. To do this we will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and 
 
 #### Generate the Code Skeleton
 In the Solace Event Portal right click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
@@ -914,12 +915,6 @@ Negative
 Note the different pieces of the command: 
 * `ag` is the AsyncAPI Generator command
 * `-o` is the output directory
-* `-p` allows you to specify [parameters](https://github.com/asyncapi/java-spring-cloud-stream-template#parameters) defined for the template you're using
-* `binder` is the Spring Cloud Stream binder you wish to use, in this case Solace
-* `actuator` includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection
-* `artifactId` & `groupId` configure Maven params of the same names
-* `javaPackage` specifies the Java Package to place the generated classes into
-* `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
 * The yaml file is our AsyncAPI document
 * And lastly, the `@asyncapi/python-paho-template` is the AsyncAPI generator template that we are using. 
 
@@ -933,31 +928,47 @@ Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 ```
 
-#### Import and Explore the Generated Project
-The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.     
-![projectsetup2](img/projectsetup2.webp)
+#### Explore the Generated Project
+The AsyncAPI Generator generated a python project in the directory specified by the `-o` parameter so head over to your favorite Python IDE and open it up. Once opened you should see something like the image below.     
 
-A few notes on the project: 
-* The generated java classes are in the `org.taxi.nyc` package that we specified. 
-* The `PaymentCharged` and `RideUpdated` POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.
-* `Application.java` contains a `InvoiceSystem` method which is a `Function` that takes in a `RideUpdated` POJO and returns a `PaymentCharged` POJO.  
-* The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to. 
-* The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder. 
+![pythonProjectSetup](img/pythonProjectSetup.webp)
+
+**A few notes on the project:** 
+* The `paymentCharged.py` file contains the `PaymentCharged` class which is based on the schemas defined in our AsyncAPI document and leverages the `Entity` class in the `entity.py` file to provide json serialization methods. 
+* The `messaging.py` class contains messaging logic to publish & subscribe using the paho mqtt library.
+* The `config-template.ini` file is a template for the connection info needed to connect the paho mqtt library to a mqtt compliant broker. Note that if our AsyncAPI document contained a servers section then it would have automatically been filled out for us. The filling in of your servers based on a specific environment is on the PubSub+ Event Portal's roadmap and will be available at some point in the future. 
+* The `main.py` file contains the heart of our app where the configuration is parsed, our consumer is defined, and the app starts up and connects to receive and process events. 
+
+
+#### Add the broker connection info
+Before coding our python app let's go ahead and put our credentials in place. 
+1. Copy the `config-template.ini` file to `config.ini`
+1. Modify the contents to look like below: 
+```
+[DEFAULT]
+host=taxi.messaging.solace.cloud
+password=iliketaxis
+port=8883
+username=public-taxi-user
+```
 
 #### Subscribe to _PaymentCharged_ events
-As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}
-` we need to update our subscription to subscribe to all _PaymentCharged_ events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to `taxinyc/backoffice/payment/charged/v1/#`
+As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}
+` we need to update our subscription to subscribe to all _PaymentCharged_ events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/#` where you substitute `<YOUR_UNIQUE_NAME>` for the name you used when creating the java app. 
 
 Positive
 : Note that the `#` symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/#` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard)
 
 
-#### Fill in the Business Logic
-
-
-```python
-
+#### Make some quick updates for SSL
+By default the app that is created using the Paho MQTT template expects to connect to an unencrypted port to exchange messages, however the broker we are using requires encrypted communications so add the following two lines below the `self.client.on_connect = on_connect` line (should be line 21) in `messaging.py`.
 ```
+self.client.tls_set_context()
+self.client.tls_insecure_set(True)
+```
+
+#### [Temporary Step] Fix some Issues
+Currently there is a bug in the AsyncAPI generator template for python-paho that prevents JSON parsing from working. To get around this go ahead and comment out lines 24 and 25 in main.py. Note that a github issue has been opened on the AsyncAPI generator template to remedy this :) 
 
 That's it! The app development is complete. 
 
@@ -966,15 +977,9 @@ That's it! The app development is complete.
 ### Run the app! 
 Now that our app has been developed let's run it! 
 
-If your IDE has support for Spring Boot you can run it as a Spring Boot App. 
+Run it from your IDE or from the command line by executing `python3 main.py`
 
-Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command. 
-
-
-🤯🤯 **The Python app is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
-
-
-### AsyncAPI Code Generators
+🤯🤯 **The Python app is now Running, connected to the Solace Event Broker and receiving and logging events!** 🤯🤯
 
 ## Implement: Other Options! 
 Duration: 0:04:00
