@@ -1015,7 +1015,7 @@ self.client.tls_set_context()
 self.client.tls_insecure_set(True)
 ```
 
-#### [Temporary Step] Fix some Issues
+#### Temporary Step: Fix some Issues
 Currently there is a bug in the AsyncAPI generator template for python-paho that prevents JSON parsing from working. To get around this go ahead and comment out lines 24 and 25 in main.py. Note that a github issue has been opened on the AsyncAPI generator template to remedy this :) 
 
 That's it! The app development is complete. 
@@ -1038,7 +1038,7 @@ You can create event driven applications in a wide variety of different options 
 ### Generate Custom Code
 Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the [AsyncAPI Generator](https://github.com/asyncapi/generator) 
 
-### Use an Integration Platforms
+### Use an Integration Platform
 
 [Dell Boomi Connector] (https://solace.com/boomi/)
 
