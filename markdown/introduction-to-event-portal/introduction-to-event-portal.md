@@ -119,9 +119,14 @@ A Solace topic and an Apache Kafka topic might seem fundamentally the same but t
 
 Here are some examples from our use case:
 
-* taxinyc.analytics.fraud.alerted.v1
-* taxinyc.ops.payment.charged.v1
-* taxinyc.ops.ride.called.v1
+Kafka Topics: 
+* taxinyc.analytics.fraud.alerted.v1 
+* taxinyc.ops.payment.charged.v1 
+* taxinyc.ops.ride.called.v1 
+
+Solace Topics: 
+* taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}
+* taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}
 
 ### Schemas
 
@@ -1008,19 +1013,25 @@ Run it from your IDE or from the command line by executing `python3 main.py`
 ## Implement: Other Options! 
 Duration: 0:04:00
 
+You can create event driven applications in a wide variety of different options as shown here: 
+![APIs and Protocols] (img/Solace-PubSub-Platform-Diagram-1.png)
+
 ### Generate Custom Code
 Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the [AsyncAPI Generator](https://github.com/asyncapi/generator) 
 
 ### Use an Integration Platforms
 
-#### Dell Boomi Connector
+[Dell Boomi Connector] (https://solace.com/boomi/)
 
 ## Takeaways
 Duration: 0:04:00
 
-✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.
+✅ Event Driven Architecture does not have to be hard if you understand some key fundementals and follow best practices.
+
+✅ The Solace PubSub+ Event Portal is an excellent tool to design, visualize and document your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.
+
 ✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.
-✅ < Fill IN TAKEAWAY 3>   
+
 
 ![Soly Image Caption](img/soly.gif)
 

@@ -108,10 +108,16 @@
 <p>Events are an important part of the Event Portal. Think of a event as a concept of the publish-subscribe (pub/sub) architectural pattern. Topics are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.</p>
 <p>A Solace topic and an Apache Kafka topic might seem fundamentally the same but there are quite a few <a href="https://solace.com/blog/solace-topics-vs-kafka-topics/" target="_blank">differences between them</a>. Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.</p>
 <p>Here are some examples from our use case:</p>
+<p>Kafka Topics:</p>
 <ul>
 <li>taxinyc.analytics.fraud.alerted.v1</li>
 <li>taxinyc.ops.payment.charged.v1</li>
 <li>taxinyc.ops.ride.called.v1</li>
+</ul>
+<p>Solace Topics:</p>
+<ul>
+<li>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</li>
+<li>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</li>
 </ul>
 <h2 is-upgraded>Schemas</h2>
 <p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema.</p>
@@ -911,16 +917,19 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
       </google-codelab-step>
     
       <google-codelab-step label="Implement: Other Options!" duration="4">
-        <h2 is-upgraded>Generate Custom Code</h2>
+        <p>You can create event driven applications in a wide variety of different options as shown here: <img alt="APIs and Protocols" src="img/c728c0f6039a73b8.png"></p>
+<h2 is-upgraded>Generate Custom Code</h2>
 <p>Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
 <h2 is-upgraded>Use an Integration Platforms</h2>
-<h3 is-upgraded>Dell Boomi Connector</h3>
+<p><a href="https://solace.com/boomi/" target="_blank">Dell Boomi Connector</a></p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="4">
-        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. ✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+        <p>✅ Event Driven Architecture does not have to be hard if you understand some key fundementals and follow best practices.</p>
+<p>✅ The Solace PubSub+ Event Portal is an excellent tool to design, visualize and document your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.</p>
+<p>✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
