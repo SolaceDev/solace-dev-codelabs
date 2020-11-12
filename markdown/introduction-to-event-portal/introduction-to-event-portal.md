@@ -304,12 +304,15 @@ Changes happen. The question is what is the effect and who is affected? In the s
 ## The AsyncAPI Initiative 
 Duration: 0:03:00
 
-The [AsyncAPI Initiative](https://www.asyncapi.com/) is an open source project that both the AsyncAPI specification to define your asynchronous APIs and open source tools to enable developers to build and maintain an event-driven architecture.
+The [AsyncAPI Initiative](https://www.asyncapi.com/) is an open source initiative that provides both the AsyncAPI specification to define your asynchronous APIs, and open source tools to enable developers to build and maintain an event-driven architecture.
 
 Positive
 : Learn More in the [AsyncAPI Docs](https://www.asyncapi.com/docs/getting-started)
 
 The AsyncAPI Generator allows you to generate a wide variety of things from an AsyncAPI document depending on what template you choose. The latest list of templates can be found [here](https://github.com/asyncapi/generator#list-of-official-generator-templates)
+
+![asyncapiSpecExample](img/asyncapiSpecExample.webp)
+
 
 ![asyncapiGeneratorTemplates](img/asyncapiGeneratorTemplates.webp)
 
@@ -336,12 +339,12 @@ Duration: 0:10:00
 ### Develop the ProcessPayment Microservice
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _ProcessPayment_ App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java & Spring. We are going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice as it is intended to create event-driven microservices. We'll also keep the business logic to a minimum to show just how quick it is to generate the code skeleton and get an event-driven microservice running! 
+On to developing the _ProcessPayment_ App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java & Spring. We are going to use the [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We'll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running! 
 
 #### Generate the Code Skeleton
-In the Solace Event Portal right click on the _ProcessPayment_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
+In the Solace Event Portal right click on the _ProcessPayment_ application, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
-![ep_asyncapi2](img/ep_asyncapi2.webp)
+![processPaymentAsyncapi](img/processPaymentAsyncapi.webp)
 
 Positive
 : The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like. 
@@ -351,7 +354,20 @@ Let's add a few of the template's configuration options to the downloaded AsyncA
 * Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.  
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. 
-![asyncapi_doc2](img/asyncapi_doc2.png)
+```
+channels:
+  'taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}':
+    publish:
+      x-scs-function-name: processPayment
+      message:
+        $ref: '#/components/messages/PaymentCharged'
+  'taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}':
+    subscribe:
+      x-scs-function-name: processPayment
+      x-scs-destination: test/taxinyc/PaymentProcessorQueue
+      message:
+        $ref: '#/components/messages/RideUpdated'
+```
 
 Negative
 : Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal. 
@@ -410,7 +426,7 @@ spring:
         definition: processPayment
       bindings:
         processPayment-out-0:
-          destination: test/taxinyc/yourname/ops/payment/charged/v1/accepted
+          destination: test/taxinyc/yourname/backoffice/payment/charged/v1/accepted
         processPayment-in-0:
           destination: test/taxinyc/ProcessPaymentQueue
       solace:
@@ -431,7 +447,18 @@ Open the _Application.java_ file and modify the `processPayment` method to log t
 public Function<RideUpdated, PaymentCharged> processPayment() {
 	return rideUpdated -> {
 		logger.info("Received Ride Updated Event:" + rideUpdated);
-		return new PaymentCharged();
+		//TODO Process Payment
+		PaymentCharged pc = new PaymentCharged();
+		pc.setRideId(rideUpdated.getRideId());
+		pc.setAmountCharged(rideUpdated.getMeterReading());
+		pc.setPaymentStatus("accepted");
+		pc.setPaymentChargedId(UUID.randomUUID().toString());
+		pc.setInvoiceSystemId("PSG-" + RandomUtils.nextInt());
+	    pc.setInformationSource("ProcessPayment Microservice");
+		pc.setTimestamp(Instant.now().toString());
+		pc.setEntityType("Driver");
+		logger.info("Created PaymentCharged Event:" + pc);
+		return pc;
 	};
 }
 ```
@@ -450,8 +477,14 @@ Or run it from the terminal by navigating to the directory with the pom and runn
 Negative
 : If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
 
+Once running you should see that for each RideUpdated event that is received a PaymentCharged Event is created which is being published back out onto the broker for downstream apps to consume. The output should look something like the below. 
 
-🤯🤯 **The Microservice is now is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
+```
+2020-11-12 14:25:54.451  INFO 97106 --- [pool-2-thread-1] org.taxi.nyc.Application                 : Received Ride Updated Event:RideUpdated [ rideId: f3ce97cb-e2df-4ed2-bb07-ab6afe9db629 heading: 168 latitude: 40.666628 passengerCount: 2 pointIdx: 1025 informationSource: RideDispatcher speed: 22 driver: Driver [ driverId: 16 rating: 2.37 lastName: Sawyer carClass: Coupe firstName: Miwa ] passenger: Passenger [ passengerId: 13817844 rating: 4.43 lastName: Bateman firstName: Chantal ] meterIncrement: 0.0198049 longitude: -73.85236 timestamp: 2020-11-12T14:25:54.206-05:00 meterReading: 20.3 rideStatus: dropoff ]
+2020-11-12 14:25:54.453  INFO 97106 --- [pool-2-thread-1] org.taxi.nyc.Application                 : Created PaymentCharged Event:PaymentCharged [ rideId: f3ce97cb-e2df-4ed2-bb07-ab6afe9db629 entityType: Driver amountCharged: 20.3 driver: null paymentChargedId: 59d3caed-cad1-438b-9e9a-b37b8660efe7 passenger: null paymentStatus: accepted invoiceSystemId: PSG-616368280 informationSource: ProcessPayment Microservice timestamp: 2020-11-12T19:25:54.452Z ]
+```
+
+🤯🤯 **The Microservice is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
 
 ## Implement InvoiceSystem (Python)
 Duration: 0:08:00
@@ -459,12 +492,12 @@ Duration: 0:08:00
 ### Develop the InvoiceSystem Python App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _InvoiceSystem_ python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation.
+On to developing the _InvoiceSystem_ python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker and will leverage the [Python Paho AsyncAPI Generator Template](https://github.com/asyncapi/python-paho-template) to bootstrap our app creation.
 
 #### Generate the Code Skeleton
 In the Solace Event Portal right click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
-![ep_asyncapi2](img/ep_asyncapi2.webp)
+![invoiceSystemAsyncapi](img/invoiceSystemAsyncapi.webp)
   
 Negative
 : Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal. 
@@ -531,7 +564,7 @@ If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command. 
 
 
-🤯🤯 **The Python app is now is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
+🤯🤯 **The Python app is now Running, connected to the Solace Event Broker and processing events!** 🤯🤯
 
 
 ### AsyncAPI Code Generators
