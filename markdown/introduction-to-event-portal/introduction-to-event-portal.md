@@ -592,6 +592,25 @@ Remember back to our use case... We have designed how we process payment but sti
     1. Click _Save_
 1. You should now see the newly added application on the graph! 
 
+
+### Reuse _PaymentCharged_ Event
+Getting reuse of your events is an important part of proving return on investment (ROI) and also enables other applications and teams to integrate with realtime data. 
+
+In this scenerio we will act as though we are members of the "Ops" team (they are not as cool as us back office kids, but oh well). They have a use case that Payment charged events should go to the _Rider Mobile Application_. Lets make it happen! 
+
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Ops_ Application Domain 
+1. Double Click on the _RIder Mobile Application_ 
+1. On the Upper Right Corner, Click the _Edit_ button
+    1. Associated Events: 
+        1. Click the _Manage_ link
+            1. Select the _Sub_ button next to the _PaymentCharged_ event 
+            1. Click _Save_
+    1. Revision Comment: <Optional> "Updated to Satisify JIRA-01245"
+    1. Click _Save_
+1. You should now see the relationship on the on the graph where we are subscribed to the _PaymentCharged_ event and the dependency on the Back Office App domain! 
+
+
 Positive
 : Change Impact Analysis: Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management. The Event Portal enables you to navigate the relationships you just designed and understand impact.
 
