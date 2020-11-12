@@ -202,27 +202,387 @@ In order to react in a real-time manner the team has decided that we want to pro
 1. 🚕 Next up we're going to document some of the designed applications and events so that they can be understood and reused by others.
 1. 🚕 We will run a "discovery" scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented
 1. 🚕 Learn, Understand and Reuse some of our events in a new use case
-1. 🚖 Lastly we'll implement the _ProcessPayement_ microservice that that receives the stream of _RideUpdated_ events, charges the customer's credit card and generate a _PaymentCharged_ Event. 
+1. 🚖 Lastly we'll implement the _ProcessPayment_ microservice that that receives the stream of _RideUpdated_ events, charges the customer's credit card and generate a _PaymentCharged_ Event. 
 
 
 ![Architecture](img/arch.png)
 
+
 Positive
 : The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define [here](https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0). Solace is streaming this data over Solace PubSub+ for you to analyze and process. 
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+
 
 ## Design an Event Driven Architecture
 Duration: 0:10:00
 
 By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.
 
-### Design new Back Office EDA
+Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal, let's update our Event-Driven Architecture (EDA).
 
-#### Design Payment Processor Application
+Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commerical account, send to our Invoicing System. 
 
-#### Design KPIThreshold Exceeded Event
+### Step 1: Determine What Can Trigger Payment
+So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?
 
-#### Design SendToExecutiveDashboard
+1. Navigate to the _Catalog_ component of the Event Portal 
+1. Click on the _Schemas_ tab and search for "completed"
+1. In the Search Results  click on the matched fields in order to understand the matching text context. 
+1. We now know that the RideUpdated Schema has a field called _ride_status_ that can have a value of _completed_. So how do we get acccess to that data? Click on the _RideUpdated_ schema and we will find out! 
+1. We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called _RideUpdated_. The topic being used leverages the _ride_status_ attribute which is pretty sweet! So we can filter on completed as a client.
+1. Lets navigate to the _RideUpdated_ Event and look at its documentation to ensure its what we would want to trigger our _ProcessPayment_ Application.  
+
+### Step 2: Design the _PaymentCharged_ Schema 
+Next we should decide what we want the data to look like once we have processed a payment. 
+
+1. First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage "Event-Carried State Transfer".
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain and its time to get creating! 
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_
+    1. Name: PaymentCharged
+    1. Content Type: JSON
+    1. Shared: YES
+    1. Owner: Assign Yourself 
+    1. Tags: NONE
+    1. Description: NONE
+    1. Versions: Leave unchecked
+    1. Content: 
+
+```
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "payment_charged_id": "23232323",
+      "timestamp": "2020-06-03T16:51:47.29612-04:00",
+      "information_source": "ProcessPayment",
+      "payment_status": "accepted",
+      "invoice_system_id": "PSG-32923",
+      "amount_charged": 12.32,
+      "ride_id": 2345234,
+      "entity_type": "Driver",
+      "driver": {
+        "driver_id": 1234132,
+        "first_name": "Frank",
+        "last_name": "Smith",
+        "rating": 4,
+        "car_class": "SUV"
+      },
+      "passenger": {
+        "passenger_id": 2345243,
+        "first_name": "Jesse",
+        "last_name": "Menning",
+        "rating": 2
+      }
+    }
+  ],
+  "required": [
+    "payment_charged_id",
+    "timestamp",
+    "information_source",
+    "payment_status",
+    "invoice_system_id",
+    "amount_charged",
+    "ride_id",
+    "entity_type",
+    "driver",
+    "passenger"
+  ],
+  "properties": {
+    "payment_charged_id": {
+      "$id": "#/properties/payment_charged_id",
+      "type": "string",
+      "title": "The payment_charged_id schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "23232323"
+      ]
+    },
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The timestamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "2020-06-03T16:51:47.29612-04:00"
+      ]
+    },
+    "information_source": {
+      "$id": "#/properties/information_source",
+      "type": "string",
+      "title": "The information_source schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "ProcessPayment"
+      ]
+    },
+    "payment_status": {
+      "$id": "#/properties/payment_status",
+      "type": "string",
+      "title": "The payment_status schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "accepted"
+      ]
+    },
+    "invoice_system_id": {
+      "$id": "#/properties/invoice_system_id",
+      "type": "string",
+      "title": "The invoice_system_id schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "PSG-32923"
+      ]
+    },
+    "amount_charged": {
+      "$id": "#/properties/amount_charged",
+      "type": "number",
+      "title": "The amount_charged schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        12.32
+      ]
+    },
+    "ride_id": {
+      "$id": "#/properties/ride_id",
+      "type": "integer",
+      "title": "The ride_id schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        2345234
+      ]
+    },
+    "entity_type": {
+      "$id": "#/properties/entity_type",
+      "type": "string",
+      "title": "The entity_type schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Driver"
+      ]
+    },
+    "driver": {
+      "$id": "#/properties/driver",
+      "type": "object",
+      "title": "The driver schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "driver_id": 1234132,
+          "first_name": "Frank",
+          "last_name": "Smith",
+          "rating": 4,
+          "car_class": "SUV"
+        }
+      ],
+      "required": [
+        "driver_id",
+        "first_name",
+        "last_name",
+        "rating",
+        "car_class"
+      ],
+      "properties": {
+        "driver_id": {
+          "$id": "#/properties/driver/properties/driver_id",
+          "type": "integer",
+          "title": "The driver_id schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1234132
+          ]
+        },
+        "first_name": {
+          "$id": "#/properties/driver/properties/first_name",
+          "type": "string",
+          "title": "The first_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Frank"
+          ]
+        },
+        "last_name": {
+          "$id": "#/properties/driver/properties/last_name",
+          "type": "string",
+          "title": "The last_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Smith"
+          ]
+        },
+        "rating": {
+          "$id": "#/properties/driver/properties/rating",
+          "type": "integer",
+          "title": "The rating schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            4
+          ]
+        },
+        "car_class": {
+          "$id": "#/properties/driver/properties/car_class",
+          "type": "string",
+          "title": "The car_class schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "SUV"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "passenger": {
+      "$id": "#/properties/passenger",
+      "type": "object",
+      "title": "The passenger schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "passenger_id": 2345243,
+          "first_name": "Jesse",
+          "last_name": "Menning",
+          "rating": 2
+        }
+      ],
+      "required": [
+        "passenger_id",
+        "first_name",
+        "last_name",
+        "rating"
+      ],
+      "properties": {
+        "passenger_id": {
+          "$id": "#/properties/passenger/properties/passenger_id",
+          "type": "integer",
+          "title": "The passenger_id schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            2345243
+          ]
+        },
+        "first_name": {
+          "$id": "#/properties/passenger/properties/first_name",
+          "type": "string",
+          "title": "The first_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Jesse"
+          ]
+        },
+        "last_name": {
+          "$id": "#/properties/passenger/properties/last_name",
+          "type": "string",
+          "title": "The last_name schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "Menning"
+          ]
+        },
+        "rating": {
+          "$id": "#/properties/passenger/properties/rating",
+          "type": "integer",
+          "title": "The rating schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            2
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
+```
+    1. Revision Comment: <Optional> "Initial Creation of Schema"
+    1. Click _Save_
+    
+                   
+
+### Design _PaymentCharged_ Event
+So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What's involved? Well we need to apply our best practices as it comes to the Topic name! 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
+    1. Name: PaymentCharged
+    1. Shared: YES
+    1. Description: NONE
+    1. Topic Scheme: Solace
+    1. Topic
+        1. As you can see the domain aleady has some of the "Event Topic Root"
+        1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
+        1. We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}_
+    1. Value: 
+        1. Keep the Schema radio button selected
+        1. Choose the Schema "PaymentCharged" that we created in the previous step
+    1. Owner: Assign Yourself 
+    1. Tags: NONE
+    1. Revision Comment: <Optional> "Initial Creation of Event"
+    1. Click _Save_
+
+### Design _ProcessPayment_ Application
+Now for the fun part! We need to design the event-driven interface of the _ProcessPayment_ Application. This is pretty easy as it has one input which triggers a single output. 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+    1. Name: ProcessPayment
+    1. Description: NONE
+    1. Application Class: Unspecified
+    1. Owners: Assign Yourself
+    1. Tags: NONE
+    1. Associated Events: 
+        1. Click the _Manage_ link
+            1. Select the _Sub_ button next to the _RideUpdated_ event 
+            1. Select the _Pub_ button next to the _PaymentCharged_ event
+            1. Click _Save_
+    1. Revision Comment: <Optional> "Initial Creation of Application"
+    1. Click _Save_
+1. You should now see the newly added application on the graph! 
+
+Positive
+: Pro Tip!: If you wanted to develop/implement this application you could right click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
+
+### Design _InvoiceSystem_ Application
+Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system. 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+    1. Name: InvoiceSystem
+    1. Description: NONE
+    1. Application Class: Unspecified
+    1. Owners: Assign Yourself
+    1. Tags: NONE
+    1. Associated Events: 
+        1. Click the _Manage_ link
+            1. Select the _Sub_ button next to the _PaymentCharged_ event 
+            1. Click _Save_
+    1. Revision Comment: <Optional> "Initial Creation of Application"
+    1. Click _Save_
+1. You should now see the newly added application on the graph! 
 
 ## Documentation Best Practices
 Duration: 0:05:00
@@ -257,14 +617,59 @@ The events which you have are used to enable Realtime collaboration between syst
 Duration: 0:08:00
 Events are only as good as their documentation. After all, it is up to a human to understand what something is and make a determination as to wither it provides value. This is why documentation is critical for success in Event Driven Architecture. Creating and maintaining good documentation that’s easy to read, enjoyable to interact with and sets up the user for success can be challenging. Great documentation requires effort but has significant implications on the reuse of the events within the eco-system. The PubSub+ Event portal enables you to document Events easily while also managing the decoupled relationships so that users can easily understand the context of an event. Before you sit down and write documentation on events, applications and schemas, its good to consider its purpose along with who will be using it. 
 
+### Update Documentation of _PaymentCharged_ Event
+
+### Update Documentation of _ProcessPayment_ Application 
+Lets enhance the documentation of the _ProcessPayment_ Application and put our Documentation Best Practices to work! 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. Double Click on the _ProcessPayment_ Application in the graph
+    1. Click on the _Edit_ button <Top Right>
+        1. Copy and Paste the following into the _Description_ field:
+```
+Description of Business Capability
+
+	Overview: 
+
+		The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger's billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
 
 
-### Update Documentation of KPIThreshold Exceeded Event
 
-### Update Documentation of Payment Processor Application 
+Technical Requirements
+
+Java Version:  OpenJDK 11.0.4
+Spring Cloud Version:  Hoxton.SR8
+Number of Instances: 1
+Cloud: AWS us-east
+Security Level: PCI 
+Event Broker Profile: Solace
+
+
+Source Code Repository
+
+github repo
+
+
+
+Terms of Use
+
+N/A
+```
+        1. Lets make it nicer to read by using bullets, bold, italics etc
+        1. Lets add a hyperlink to the _github repo_ that points to https://github.com
+        1. Lets now also add Tags
+            1. Click _Add/Remove Tags_
+                1. Type _PCI_ in the box and Select (Create a new tag) below. 
+                1. Optionally add other tags. 
+                1. Click Done
+        1. The documentation should look something like: 
+            ![asyncapi_doc2](img/AppDoc.png)
+        1. Click _Save_
+                
+                
 
 ## Discover Existing EDA Assets
-Duration: 0:30:00
+Duration: 0:36:00
 
 Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers: 
 1. Kafka – Confluent Kafka, Amazon MSK, Apache Kafka
@@ -413,6 +818,7 @@ As of the writing of this codelab, dynamic topics are not yet supported by the E
 Positive
 : Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
+
 #### Publish to a personalized topic for uniqueness
 Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processPayment-out-0.destination` to be `test/taxinyc/<YOUR_UNIQUE_NAME>/ops/payment/charged/v1/accepted`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
 
@@ -462,6 +868,7 @@ public Function<RideUpdated, PaymentCharged> processPayment() {
 	};
 }
 ```
+
 
 That's it! The app development is complete. 
 

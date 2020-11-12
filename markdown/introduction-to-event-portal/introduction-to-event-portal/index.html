@@ -60,7 +60,7 @@
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
 <li>Java 1.8+ (Check version using <code>java -version</code>)</li>
-<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
 </ul>
@@ -75,7 +75,7 @@
 <li>Username: <code>public-taxi-user</code></li>
 <li>Password: <code>iliketaxis</code></li>
 </ul>
-<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/&gt;</code> and <code>test/taxinyc/&gt;</code> and permissions to publish to <code>test/taxinyc/&gt;</code></p>
+<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/></code> and <code>test/taxinyc/></code> and permissions to publish to <code>test/taxinyc/></code></p>
 <h2 is-upgraded>Prepare PubSub+ Event Portal</h2>
 <h3 is-upgraded>Sign-up for Solace Cloud</h3>
 <p>✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
@@ -83,10 +83,10 @@
 <h3 is-upgraded>Import Existing Designed EDA</h3>
 <p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
 <p>You can download the file via curl or by cloning the git repo</p>
-<pre><code>curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
 </code></pre>
 <p>OR</p>
-<pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
+<pre><code language="language-bash" class="language-bash">git clone https://github.com/Mrc0113/design-to-code-workshop.git
 </code></pre>
 <p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
@@ -178,7 +178,7 @@
 <li>🚕 Next up we&#39;re going to document some of the designed applications and events so that they can be understood and reused by others.</li>
 <li>🚕 We will run a &#34;discovery&#34; scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented</li>
 <li>🚕 Learn, Understand and Reuse some of our events in a new use case</li>
-<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayement</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
+<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayment</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
 <aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process.<br></p>
@@ -190,10 +190,388 @@
     
       <google-codelab-step label="Design an Event Driven Architecture" duration="10">
         <p>By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.</p>
-<h2 is-upgraded>Design new Back Office EDA</h2>
-<h3 is-upgraded>Design Payment Processor Application</h3>
-<h3 is-upgraded>Design KPIThreshold Exceeded Event</h3>
-<h3 is-upgraded>Design SendToExecutiveDashboard</h3>
+<p>Now that you&#39;re familiar with the use case 🚕 🚖 🚕 and you&#39;ve imported the application domain into the Event Portal, let&#39;s update our Event-Driven Architecture (EDA).</p>
+<p>Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commerical account, send to our Invoicing System.</p>
+<h2 is-upgraded>Step 1: Determine What Can Trigger Payment</h2>
+<p>So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?</p>
+<ol type="1">
+<li>Navigate to the <em>Catalog</em> component of the Event Portal</li>
+<li>Click on the <em>Schemas</em> tab and search for &#34;completed&#34;</li>
+<li>In the Search Results  click on the matched fields in order to understand the matching text context.</li>
+<li>We now know that the RideUpdated Schema has a field called _ride<em>status</em> that can have a value of <em>completed</em>. So how do we get acccess to that data? Click on the <em>RideUpdated</em> schema and we will find out!</li>
+<li>We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the _ride<em>status</em> attribute which is pretty sweet! So we can filter on completed as a client.</li>
+<li>Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.<br></li>
+</ol>
+<h2 is-upgraded>Step 2: Design the <em>PaymentCharged</em> Schema</h2>
+<p>Next we should decide what we want the data to look like once we have processed a payment.</p>
+<ol type="1">
+<li>First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage &#34;Event-Carried State Transfer&#34;.</li>
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating!</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema</em>  <ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Content Type: JSON</li>
+<li>Shared: YES</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Description: NONE</li>
+<li>Versions: Leave unchecked</li>
+<li>Content:  <pre><code>{
+&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+&#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The root schema&#34;,
+&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+&#34;payment_charged_id&#34;: &#34;23232323&#34;,
+&#34;timestamp&#34;: &#34;2020-06-03T16:51:47.29612-04:00&#34;,
+&#34;information_source&#34;: &#34;ProcessPayment&#34;,
+&#34;payment_status&#34;: &#34;accepted&#34;,
+&#34;invoice_system_id&#34;: &#34;PSG-32923&#34;,
+&#34;amount_charged&#34;: 12.32,
+&#34;ride_id&#34;: 2345234,
+&#34;entity_type&#34;: &#34;Driver&#34;,
+&#34;driver&#34;: {
+&#34;driver_id&#34;: 1234132,
+&#34;first_name&#34;: &#34;Frank&#34;,
+&#34;last_name&#34;: &#34;Smith&#34;,
+&#34;rating&#34;: 4,
+&#34;car_class&#34;: &#34;SUV&#34;
+},
+&#34;passenger&#34;: {
+&#34;passenger_id&#34;: 2345243,
+&#34;first_name&#34;: &#34;Jesse&#34;,
+&#34;last_name&#34;: &#34;Menning&#34;,
+&#34;rating&#34;: 2
+}
+}
+],
+&#34;required&#34;: [
+&#34;payment_charged_id&#34;,
+&#34;timestamp&#34;,
+&#34;information_source&#34;,
+&#34;payment_status&#34;,
+&#34;invoice_system_id&#34;,
+&#34;amount_charged&#34;,
+&#34;ride_id&#34;,
+&#34;entity_type&#34;,
+&#34;driver&#34;,
+&#34;passenger&#34;
+],
+&#34;properties&#34;: {
+&#34;payment_charged_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_charged_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_charged_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;23232323&#34;
+]
+},
+&#34;timestamp&#34;: {
+&#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The timestamp schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;2020-06-03T16:51:47.29612-04:00&#34;
+]
+},
+&#34;information_source&#34;: {
+&#34;$id&#34;: &#34;#/properties/information_source&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The information_source schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;ProcessPayment&#34;
+]
+},
+&#34;payment_status&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_status&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_status schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;accepted&#34;
+]
+},
+&#34;invoice_system_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/invoice_system_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The invoice_system_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;PSG-32923&#34;
+]
+},
+&#34;amount_charged&#34;: {
+&#34;$id&#34;: &#34;#/properties/amount_charged&#34;,
+&#34;type&#34;: &#34;number&#34;,
+&#34;title&#34;: &#34;The amount_charged schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+12.32
+]
+},
+&#34;ride_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/ride_id&#34;,
+&#34;type&#34;: &#34;integer&#34;,
+&#34;title&#34;: &#34;The ride_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+2345234
+]
+},
+&#34;entity_type&#34;: {
+&#34;$id&#34;: &#34;#/properties/entity_type&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The entity_type schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;Driver&#34;
+]
+},
+&#34;driver&#34;: {
+&#34;$id&#34;: &#34;#/properties/driver&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The driver schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;driver_id&#34;: 1234132,
+  &#34;first_name&#34;: &#34;Frank&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;rating&#34;: 4,
+  &#34;car_class&#34;: &#34;SUV&#34;
+}
+],
+&#34;required&#34;: [
+&#34;driver_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;,
+&#34;car_class&#34;
+],
+&#34;properties&#34;: {
+&#34;driver_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/driver_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The driver_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    1234132
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Frank&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Smith&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    4
+  ]
+},
+&#34;car_class&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/car_class&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The car_class schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;SUV&#34;
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+},
+&#34;passenger&#34;: {
+&#34;$id&#34;: &#34;#/properties/passenger&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The passenger schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;passenger_id&#34;: 2345243,
+  &#34;first_name&#34;: &#34;Jesse&#34;,
+  &#34;last_name&#34;: &#34;Menning&#34;,
+  &#34;rating&#34;: 2
+}
+],
+&#34;required&#34;: [
+&#34;passenger_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;
+],
+&#34;properties&#34;: {
+&#34;passenger_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/passenger_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The passenger_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2345243
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Jesse&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Menning&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+}
+},
+&#34;additionalProperties&#34;: true
+}
+</code></pre>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Schema&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+<h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
+<p>So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What&#39;s involved? Well we need to apply our best practices as it comes to the Topic name!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Event  </em><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Shared: YES</li>
+<li>Description: NONE</li>
+<li>Topic Scheme: Solace</li>
+<li>Topic  <ol type="1">
+<li>As you can see the domain aleady has some of the &#34;Event Topic Root&#34;</li>
+<li>We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event</li>
+<li>We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger<em>id}</em></li>
+</ol>
+</li>
+<li>Value:  <ol type="1">
+<li>Keep the Schema radio button selected</li>
+<li>Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step</li>
+</ol>
+</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Revision Comment:  &#34;Initial Creation of Event&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+<h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
+<p>Now for the fun part! We need to design the event-driven interface of the <em>ProcessPayment</em> Application. This is pretty easy as it has one input which triggers a single output.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application  </em><ol type="1">
+<li>Name: ProcessPayment</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>RideUpdated</em> event</li>
+<li>Select the <em>Pub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
+<aside class="special"><p>Pro Tip!: If you wanted to develop/implement this application you could right click on the <em>ProcessPayment</em> Application in graph and export an AsyncAPI Document that could be used to generate code!</p>
+</aside>
+<h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
+<p>Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application  </em><ol type="1">
+<li>Name: InvoiceSystem</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
 
 
       </google-codelab-step>
@@ -233,13 +611,53 @@
       </google-codelab-step>
     
       <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
-        <h2 is-upgraded>Update Documentation of KPIThreshold Exceeded Event</h2>
-<h2 is-upgraded>Update Documentation of Payment Processor Application</h2>
+        <h2 is-upgraded>Update Documentation of <em>PaymentCharged</em> Event</h2>
+<h2 is-upgraded>Update Documentation of <em>ProcessPayment</em> Application</h2>
+<p>Lets enhance the documentation of the <em>ProcessPayment</em> Application and put our Documentation Best Practices to work!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>Double Click on the <em>ProcessPayment</em> Application in the graph  <ol type="1">
+<li>Click on the <em>Edit</em> button   <ol type="1">
+<li>Copy and Paste the following into the <em>Description</em> field:  <pre><code>Description of Business Capability
+Overview: 
+The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger&#39;s billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
+Technical Requirements
+Java Version:  OpenJDK 11.0.4
+Spring Cloud Version:  Hoxton.SR8
+Number of Instances: 1
+Cloud: AWS us-east
+Security Level: PCI 
+Event Broker Profile: Solace
+Source Code Repository
+github repo
+Terms of Use
+N/A
+</code></pre>
+</li>
+<li>Lets make it nicer to read by using bullets, bold, italics etc</li>
+<li>Lets add a hyperlink to the <em>github repo</em> that points to https://github.com</li>
+<li>Lets now also add Tags  <ol type="1">
+<li>Click <em>Add/Remove Tags  </em><ol type="1">
+<li>Type <em>PCI</em> in the box and Select (Create a new tag) below.</li>
+<li>Optionally add other tags.</li>
+<li>Click Done</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>The documentation should look something like: <img alt="asyncapi_doc2" src="img/ff9be9a9ff33a275.png"></li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Discover Existing EDA Assets" duration="30">
+      <google-codelab-step label="Discover Existing EDA Assets" duration="36">
         <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
 <ol type="1">
 <li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
@@ -280,7 +698,7 @@
 <p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
 <p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
 <p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
-<pre><code>npm install -g @asyncapi/generator@0.53.1
+<pre><code language="language-bash" class="language-bash">npm install -g @asyncapi/generator@0.53.1
 </code></pre>
 <aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
 </aside>
@@ -290,10 +708,10 @@
     
       <google-codelab-step label="Implement ProcessPayment (Java/Spring)" duration="10">
         <h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We&#39;ll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running!</p>
+(??)<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
-<p>In the Solace Event Portal right click on the <em>ProcessPayment</em> application, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
-<p class="image-container"><img alt="processPaymentAsyncapi" src="img/c00a39b4463f48a7.webp"></p>
+(??)<p>In the Solace Event Portal right click on the <em>ProcessPayment</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+(??)<p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
 <aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
 </aside>
 <p>Let&#39;s add a few of the template&#39;s configuration options to the downloaded AsyncAPI document.</p>
@@ -301,20 +719,7 @@
 <li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
 <li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
 </ul>
-<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.</p>
-<pre><code>channels:
-  &#39;taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}&#39;:
-    publish:
-      x-scs-function-name: processPayment
-      message:
-        $ref: &#39;#/components/messages/PaymentCharged&#39;
-  &#39;taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}&#39;:
-    subscribe:
-      x-scs-function-name: processPayment
-      x-scs-destination: test/taxinyc/PaymentProcessorQueue
-      message:
-        $ref: &#39;#/components/messages/RideUpdated&#39;
-</code></pre>
+(??)<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
 </aside>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
@@ -329,10 +734,10 @@
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
-</code></pre>
-</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
+<pre><code language="language-bash" class="language-bash">ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
@@ -348,13 +753,13 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 <li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
 </ul>
 <h3 is-upgraded>Subscribe to <em>dropoff</em> events</h3>
-<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/&gt;</code></p>
-<aside class="special"><p>Note that the <code>&gt;</code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/&gt;</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/></code></p>
+<aside class="special"><p>Note that the <code>></code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/></code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
 </aside>
 <h3 is-upgraded>Publish to a personalized topic for uniqueness</h3>
-<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
+<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/<YOUR_UNIQUE_NAME>/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
 <p>✅ After updating the <code>spring.cloud.stream</code> portion of your <em>application.yml</em> file should look something like this:</p>
-<pre><code>spring:
+<pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
     stream:
       function:
@@ -373,7 +778,7 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 <h3 is-upgraded>Fill in the Business Logic</h3>
 <p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideUpdated</em> events as they&#39;re received and create a new PaymentCharged event for each.</p>
 <p>Open the <em>Application.java</em> file and modify the <code>processPayment</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
-<pre><code>@Bean
+<pre><code language="language-java" class="language-java">@Bean
 public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 	return rideUpdated -&gt; {
 		logger.info(&#34;Received Ride Updated Event:&#34; + rideUpdated);
@@ -411,10 +816,18 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
     
       <google-codelab-step label="Implement InvoiceSystem (Python)" duration="8">
         <h2 is-upgraded>Develop the InvoiceSystem Python App</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>InvoiceSystem</em> python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker and will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation.</p>
+(??)<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> python app. We are going to be using the Python Paho library to communicate with our event broker and will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation.</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
-<p>In the Solace Event Portal right click on the <em>InvoiceSystem</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
-<p class="image-container"><img alt="invoiceSystemAsyncapi" src="img/13e740ea64dd6620.webp"></p>
+(??)<p>In the Solace Event Portal right click on the <em>ProcessPayment</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+(??)<p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
+(??)<aside class="special"><p>The AsyncAPI Python Paho Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
+(??)</aside>
+(??)<p>Let&#39;s add a few of the template&#39;s configuration options to the downloaded AsyncAPI document.</p>
+(??)<ul>
+(??)<li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
+(??)<li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
+(??)</ul>
+(??)<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
 </aside>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
@@ -429,10 +842,8 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/python-paho-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
+(??)<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
-</li>
-</ul>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
@@ -452,7 +863,9 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 <aside class="special"><p>Note that the <code>#</code> symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/#</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
 </aside>
 <h3 is-upgraded>Fill in the Business Logic</h3>
-<pre><code></code></pre>
+(??)<p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideAverageUpdate</em> events as they&#39;re received.</p>
+(??)<p>Open the <em>Application.java</em> file and modify the <code>taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
+(??)<pre><code></code></pre>
 <p>That&#39;s it! The app development is complete.</p>
 <p>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
 <h2 is-upgraded>Run the app!</h2>
@@ -475,7 +888,7 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="4">
-        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.<br>✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.<br>✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents. ✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents. ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
@@ -488,6 +901,7 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
