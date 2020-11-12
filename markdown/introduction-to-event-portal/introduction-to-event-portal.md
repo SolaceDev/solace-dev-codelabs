@@ -627,6 +627,42 @@ Positive
 : Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question “so how does this actually work” and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality. 
 
 ### Update Documentation of _PaymentCharged_ Event
+Remember how we did not provide any description or tags for the Events and Applications we created before? Well, lets go in and follow our best practices to fix this. 
+Lets enhance the documentation of the _PaymentCharged_ Event 
+1. Click into the _Designer_ component of the Event Portal
+1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
+1. Double Click on the _PaymentCharged_ Event in the graph
+    1. Click on the _Edit_ button <Top Right>
+        1. Copy and Paste the following into the _Description_ field:
+```
+Description of Business Moment
+
+	Overview: 
+
+		The PaymentCharged Event exists in order to notify other systems that we have attempted to charge the passenger. There are also other states such as:
+            accepted - customer credit card on file has been charged
+            declined - customer credit card on file has been declined
+            org - the customer is part of a B2B org and does not provide automated payment
+
+
+Technical Requirements
+
+Format: JSON
+Security Level: PCI 
+
+Terms of Use
+
+N/A
+```
+        1. Lets make it nicer to read by using bullets, bold, italics etc
+        1. Lets now also add Tags
+            1. Click _Add/Remove Tags_
+                1. Type _PCI_ in the box and Select (Create a new tag) below. 
+                1. Optionally add other tags. 
+                1. Click Done
+        1. The documentation should look something like: 
+            ![asyncapi_doc2](img/EventDoc.png)
+        1. Click _Save_
 
 ### Update Documentation of _ProcessPayment_ Application 
 Lets enhance the documentation of the _ProcessPayment_ Application and put our Documentation Best Practices to work! 
@@ -668,7 +704,7 @@ N/A
         1. Lets add a hyperlink to the _github repo_ that points to https://github.com
         1. Lets now also add Tags
             1. Click _Add/Remove Tags_
-                1. Type _PCI_ in the box and Select (Create a new tag) below. 
+                1. Type _PCI_ in the box and Select below. 
                 1. Optionally add other tags. 
                 1. Click Done
         1. The documentation should look something like: 
