@@ -46,13 +46,19 @@ Duration: 0:08:00
 
 We'll install the generator itself later 👍
 
-### Spring Cloud Stream Requirements
+### Java / Spring Cloud Stream Requirements
 ✅ Spring Cloud Stream just requires Java and Maven to use 🚀  
 * Java 1.8+ (Check version using `java -version`)
 * Maven 3.3+ (Check version using `mvn -version`)
 	* On mac you can `brew install maven`
 	* Other install instructions [here](https://maven.apache.org/install.html)
 * Your favorite Java IDE 💥
+
+### Python / Paho Requirements
+✅ There are only a few requirements for the Python steps! 
+* Python version 3.8+ (Check version using `python3 -V`)
+* paho mqtt (Can be installed using `pip3 install paho-mqtt`)
+* Your favorite Python IDE
 
 ### PubSub+ Event Broker Connection Info
 ✅ The credentials below are for a public event feed found on the [Solace feed Marketplace](http://solace.dev/marketplace) that we'll use during this codelab.
