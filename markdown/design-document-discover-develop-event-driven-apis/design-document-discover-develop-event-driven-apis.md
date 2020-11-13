@@ -875,7 +875,6 @@ Note the different pieces of the command:
 * `-o` is the output directory
 * `-p` allows you to specify [parameters](https://github.com/asyncapi/java-spring-cloud-stream-template#parameters) defined for the template you're using
 * `binder` is the Spring Cloud Stream binder you wish to use, in this case Solace
-* `actuator` includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection
 * `artifactId` & `groupId` configure Maven params of the same names
 * `javaPackage` specifies the Java Package to place the generated classes into
 * `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
@@ -1034,6 +1033,7 @@ The AsyncAPI Generator generated a python project in the directory specified by 
 Before coding our python app let's go ahead and put our credentials in place. 
 1. Copy the `config-template.ini` file to `config.ini`
 1. Modify the contents to look like below: 
+
 ```
 [DEFAULT]
 host=taxi.messaging.solace.cloud
@@ -1044,7 +1044,7 @@ username=public-taxi-user
 
 #### Subscribe to _PaymentCharged_ events
 As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}
-` we need to update our subscription to subscribe to all _PaymentCharged_ events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/#` where you substitute `<YOUR_UNIQUE_NAME>` for the name you used when creating the java app. 
+` we need to update our subscription to subscribe to all _PaymentCharged_ events no matter their payment_status, driver_id or passenger_id. To do this change the subscription on line `33` of `main.py` to `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/#` where you substitute `<YOUR_UNIQUE_NAME>` for the name you used when creating the java app. 
 
 Positive
 : Note that the `#` symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/#` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard)
@@ -1058,7 +1058,7 @@ self.client.tls_insecure_set(True)
 ```
 
 #### Temporary Step: Fix some Issues
-Currently there is a bug in the AsyncAPI generator template for python-paho that prevents JSON parsing from working. To get around this go ahead and comment out lines 24 and 25 in main.py. Note that a github issue has been opened on the AsyncAPI generator template to remedy this :) 
+Currently there is a bug in the AsyncAPI generator template for python-paho that prevents JSON parsing from working. To get around this go ahead and comment out lines `23` and `24` in `main.py`. Note that a github issue has been opened on the AsyncAPI generator template to remedy this :) 
 
 That's it! The app development is complete. 
 
