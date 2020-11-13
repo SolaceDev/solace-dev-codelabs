@@ -239,7 +239,7 @@ In order to react in a real-time manner the team has decided that we want to pro
 1. 🚖 Lastly we'll implement the _ProcessPayment_ microservice that that receives the stream of _RideUpdated_ events, charges the customer's credit card and generate a _PaymentCharged_ Event. 
 
 
-![Architecture](img/arch.png)
+![Architecture](img/arch2.jpg)
 
 
 Positive
