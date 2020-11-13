@@ -6,19 +6,14 @@
   "scripts": {
     "watch": "nodemon --watch spring-cloud-stream-basics.md --exec 'claat export spring-cloud-stream-basics.md && lsof -c claat -t | xargs kill && cd spring-cloud-stream-basics && claat serve'"
   },
-  "repository": {
+"repository": {
     "type": "git",
-    "url": "git+https://github.com/andrew-j-roberts/codelab-bootstrap.git"
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
   "keywords": [
     "codelab"
   ],
-  "author": "Andrew Roberts",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andrew-j-roberts/codelab-bootstrap/issues"
-  },
-  "homepage": "https://github.com/andrew-j-roberts/codelab-bootstrap#readme",
   "dependencies": {
     "nodemon": "^2.0.3"
   }

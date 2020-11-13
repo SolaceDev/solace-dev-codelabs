@@ -4,11 +4,11 @@
   "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch CODELAB_NAME.md --exec 'claat export CODELAB_NAME.md && lsof -c claat -t | xargs kill && cd CODELAB_NAME && claat serve'"
+    "watch": "nodemon --watch CODELAB_NAME.md --exec 'claat export -o temp/ CODELAB_NAME.md && lsof -c claat -t | xargs kill && cd temp/CODELAB_NAME && claat serve'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrew-j-roberts/codelab-bootstrap.git"
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/CODELAB_NAME"
   },
   "keywords": [
     "codelab"

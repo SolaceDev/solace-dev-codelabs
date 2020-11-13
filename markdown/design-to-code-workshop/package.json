@@ -6,9 +6,9 @@
   "scripts": {
     "watch": "nodemon --watch design-to-code-workshop.md --exec 'claat export design-to-code-workshop.md && lsof -i :9090 -t | xargs kill && cd design-to-code-workshop && claat serve'"
   },
-  "repository": {
+"repository": {
     "type": "git",
-    "url": "git+https://github.com/andrew-j-roberts/codelab-bootstrap.git"
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
   "keywords": [
     "codelab"
