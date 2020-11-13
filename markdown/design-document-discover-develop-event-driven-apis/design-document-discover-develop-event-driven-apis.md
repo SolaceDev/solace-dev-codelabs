@@ -830,7 +830,7 @@ Negative
 
 
 ## Implement ProcessPayment (Java/Spring)
-Duration: 0:10:00
+Duration: 0:12:00
 
 ### Develop the ProcessPayment Microservice
 
