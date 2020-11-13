@@ -100,11 +100,11 @@ git clone https://github.com/Mrc0113/ep-design-workshop.git
 
 Duration: 0:08:00
 
-Before we dive deeper, let ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal. 
+Before we dive deeper, lets ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal. 
 
 ### Application Domain & Workspace
 
-An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group application into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where we invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.
+An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group applications into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.
 
 In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains. 
 
@@ -145,7 +145,7 @@ An application represents a piece of software that produces and consumes events.
 
 #### Consumer Groups
 
-Event Portal supports the concept of Kafka's consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal's runtime discovery to associate a discovered consumer group to an existing application. 
+Event Portal supports the concept of Kafka's consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In the Event Portal, you can model consumer groups in the Designer. This enables the Event Portal's runtime discovery to associate a discovered consumer group to an existing application. 
 
 Kafka consumers that belong to the same consumer group share a group ID. The consumers in a group divide the topic partitions, as fairly as possible, so that each consumer consumes only a single partition from the group.
 
@@ -165,27 +165,28 @@ Duration: 0:08:00
 ### Decomposing the Enterprise 
 
 Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this include: 
-1. Event sharing rules – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside of the application domain
-1. Provide uniform event topic prefixes – ensures that the prefix is unique and that topic best practices are followed
+1. **Event sharing rules** – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside of the application domain
+1. **Provide uniform event topic prefixes** – ensures that the prefix is unique and that topic best practices are followed
 
 ### Topic Naming Best Practices 
-The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. Regardless of your broker type, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific. 
+The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. **Regardless of your broker type**, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific. 
 
 #### Parts of the Event Topic
 The event topic structure has two parts:
 
-The event topic root contains enough information to describe the type of event that has occurred. Each event topic root is a static field that describes the type of event. The list of event topic roots forms a catalog of events that can be produced and consumed. This catalog could be brought into the PubSub+ Event Portal's event catalog, listing each event type along with details about the event. Each event topic root describes the event in as much detail as necessary to map it to a single data schema.
-The event topic properties are optional fields that further describe a particular event. This part of the topic has fields that are dynamically filled when the producer publishes the event. These fields are used to describe the specific or unique attributes of this event instance that would be used for routing and filtering.
+1. The **Event Topic Root** contains enough information to describe the type of event that has occurred. Each Event Topic Root is a static field that describes the type of event. The list of Event Topic Roots forms a catalog of events that can be produced and consumed. This catalog could be brought into the PubSub+ Event Portal's event catalog, listing each event type along with details about the event. Each Event Topic Root describes the event in as much detail as necessary to map it to a single data schema.  
+1. The **Event Topic Properties** are optional fields that further describe a particular event. This part of the topic has fields that are dynamically filled when the producer publishes the event. These fields are used to describe the specific or unique attributes of this event instance that would be used for routing and filtering.
 
-* Event Topic Root: The event topic root of an event should have the following form:
+* Event Topic Root: The Event Topic Root of an event should have the following form:
         
         Domain/ObjectType/Verb/Version/
 
-* Event Topic Properties: The event topic properties should have the following form:
+* Event Topic Properties: The Event Topic Properties should have the following form:
         
-        Locality/SourceID/ObjectID
+        Locality/SourceID/ObjectID  
 
-* ✅ Complete Event Topic Format: Putting together an event topic root and event topic properties creates an event topic that describes the event with a series of fields from least specific to most specific.
+Positive
+: Complete Event Topic Format: Putting together an Event Topic Root and Event Topic Properties creates an event topic that describes the event with a series of fields from least specific to most specific.
       
         Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
         
@@ -194,9 +195,29 @@ For more information about topic best practices, review the [Topic Architecture 
 ### Event Information Exchange Patterns 
 There are multiple Event Exchange Patterns (EEP) that should be considered when using EDA:
 
-* If using a “Thin Event Notification” pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink’s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible. The pro of this pattern however is that the data is smaller in size and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes. 
-* If using “Hypermedia-Driven Events” pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client’s access level. The con to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior. 
-* If using “Event-Carried State Transfer” pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes. The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance. The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client’s usage of the data. 
+#### Thin Event Notification
+
+* If using a _Thin Event Notification_ pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink’s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible. 
+
+Positive
+: The pro of this pattern however is that the data is smaller in size and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes. 
+
+#### Hypermedia-Driven Events
+
+* If using _Hypermedia-Driven Events_ pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client’s access level. 
+
+Negative
+: The con to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior. 
+
+#### Event-Carried State Transfer
+
+* If using _Event-Carried State Transfer_ pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes. 
+
+Negative
+: The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance. 
+
+Positive
+: The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client’s usage of the data. 
 
 ## Use Case Overview
 Duration: 0:05:00
@@ -223,31 +244,43 @@ Positive
 ## Design an Event Driven Architecture
 Duration: 0:10:00
 
-By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.
+By designing a new event-driven application or extending your event-driven architecture, you're able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.
 
 Now that you're familiar with the use case 🚕 🚖 🚕 and you've imported the application domain into the Event Portal, let's update our Event-Driven Architecture (EDA).
 
-Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commerical account, send to our Invoicing System. 
+Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commercial account, send to our Invoicing System. This is composed of 4 steps
+1. Ideate 
+1. Design the schema
+1. Design the event
+1. Design the applications
 
 ### Step 1: Determine What Can Trigger Payment - Ideate
 So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?
 
 Positive
 : Event-Driven Ideation: To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description. 
-1. Navigate to the _Catalog_ component of the Event Portal 
-1. Click on the _Schemas_ tab and search for "completed"
-1. In the Search Results  click on the matched fields in order to understand the matching text context. 
-1. We now know that the RideUpdated Schema has a field called _ride_status_ that can have a value of _completed_. So how do we get acccess to that data? Click on the _RideUpdated_ schema and we will find out! 
-1. We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called _RideUpdated_. The topic being used leverages the _ride_status_ attribute which is pretty sweet! So we can filter on completed as a client.
+1. Navigate to the _Catalog_ component of the Event Portal    
+![](img/catalog.gif)
+1. Click on the _Schemas_ tab and search for "dropoff"
+![](img/catalog-search.png)
+1. In the Search Results click on the RideUpdated event in order to understand the matching text context. 
+1. We now know that the RideUpdated Schema has a field called **ride_status** that can have a value of _dropoff_. So how do we get access to that data? Click on the _RideUpdated_ schema and we will find out! 
+![](img/ride_status.png)
+1. We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called _RideUpdated_. The topic being used leverages the **ride_status** attribute which is pretty sweet! So we can filter on dropoff as a client.
+![](img/rideStatusEvent.png)
 1. Lets navigate to the _RideUpdated_ Event and look at its documentation to ensure its what we would want to trigger our _ProcessPayment_ Application.  
 
 ### Step 2: Design the _PaymentCharged_ Schema 
 Next we should decide what we want the data to look like once we have processed a payment. 
 
 1. First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage "Event-Carried State Transfer".
-1. Click into the _Designer_ component of the Event Portal
+1. Click into the _Designer_ component of the Event Portal  
+![](img/designer-tab.png)
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain and its time to get creating! 
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_
+![](img/domain-dive.gif)
+
+1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_  
+![](img/create-schema.png)
     1. Name: PaymentCharged
     1. Content Type: JSON
     1. Shared: YES
@@ -532,19 +565,20 @@ Next we should decide what we want the data to look like once we have processed 
     
                    
 
-### Design _PaymentCharged_ Event
+### Step 3: Design _PaymentCharged_ Event
 So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What's involved? Well we need to apply our best practices as it comes to the Topic name! 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
 1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
+![](img/create-event.png)
     1. Name: PaymentCharged
     1. Shared: YES
     1. Description: NONE
     1. Topic Scheme: Solace
     1. Topic
-        1. As you can see the domain aleady has some of the "Event Topic Root"
+        1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/`
         1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
-        1. We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}_
+        1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}`
     1. Value: 
         1. Keep the Schema radio button selected
         1. Choose the Schema "PaymentCharged" that we created in the previous step
@@ -553,7 +587,7 @@ So now that we have constructed the payload format for the PaymentCharged event,
     1. Revision Comment: <Optional> "Initial Creation of Event"
     1. Click _Save_
 
-### Design _ProcessPayment_ Application
+### Step 4a: Design _ProcessPayment_ Application
 Now for the fun part! We need to design the event-driven interface of the _ProcessPayment_ Application. This is pretty easy as it has one input which triggers a single output. 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
@@ -575,7 +609,7 @@ Now for the fun part! We need to design the event-driven interface of the _Proce
 Positive
 : Pro Tip!: If you wanted to develop/implement this application you could right click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
 
-### Design _InvoiceSystem_ Application
+### Step 4b: Design _InvoiceSystem_ Application
 Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system. 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain 
@@ -593,7 +627,7 @@ Remember back to our use case... We have designed how we process payment but sti
     1. Click _Save_
 1. You should now see the newly added application on the graph! 
 
-
+![](img/final-arch.png)
 ### Reuse _PaymentCharged_ Event
 Getting reuse of your events is an important part of proving return on investment (ROI) and also enables other applications and teams to integrate with realtime data. 
 
@@ -611,6 +645,7 @@ In this scenerio we will act as though we are members of the "Ops" team (they ar
     1. Click _Save_
 1. You should now see the relationship on the on the graph where we are subscribed to the _PaymentCharged_ event and the dependency on the Back Office App domain! 
 
+![](img/share-event.png)
 
 Positive
 : Change Impact Analysis: Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management. The Event Portal enables you to navigate the relationships you just designed and understand impact.
@@ -618,28 +653,28 @@ Positive
 ## Documentation Best Practices
 Duration: 0:05:00
 
-✅  Know your Audience 
-The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:
+💡  **Know your Audience**   
+The events which you have are used to enable real-time collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:
 
-* Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers. 
-* Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer. 
+* **Decision Makers** - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers. 
+* **Users** - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer. 
 
-✅  Capture Business Point of View and Moment
+💡  **Capture Business Point of View and Moment**
 * The hardest thing to capture is the “what does this event represent” and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly 
 
-✅  Technical Requirements
+💡  **Technical Requirements**
 * This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.
 
-✅  Link to other References
+💡  **Link to other References**
 * The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what’s available and the state. 
 
-✅  Provide Examples
+💡  **Provide Examples**
 * An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context. 
 
-✅  Terms of Use
+💡  **Terms of Use**
 * This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here. 
 
-✅  Tags
+💡  **Tags**
 * When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema. 
 
 
@@ -753,7 +788,7 @@ Once you have decided on the application domains that are required for your ente
 
 If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date. 
 
-[Event Portal Discovery with Kafka Code Lab] (https://codelabs.solace.dev/codelabs/ep-discovery-kafka/index.html?index=..%2F..index#3)
+[Event Portal Discovery with Kafka Code Lab] (https://codelabs.solace.dev/codelabs/ep-discovery-kafka)
 
 
 ## The AsyncAPI Initiative 
