@@ -1,0 +1,924 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Introduction to Solace PubSub&#43; Event Portal</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="introduction-to-event-portal"
+                  title="Introduction to Solace PubSub&#43; Event Portal"
+                  environment="web"
+                  feedback-link="https://solace.community/categories/pubsub%2B-event-portal">
+    
+      <google-codelab-step label="What you&#39;ll learn" duration="1">
+        <p>Most organizations are adopting an event-driven architecture (EDA) to compete in a world where customer satisfaction requires real-time outcomes.</p>
+<p>In this code lab we&#39;ll build and expand your toolbox by learning how an Event Portal, paired with industry standard specifications and frameworks, enable a smooth journey to bring your EDA from initial architecture and design to code running in production while also setting your team up for success as the business needs, architecture and applications themselves are enhanced over time.</p>
+<p>Throughout this workshop we will get hands on and talk about:</p>
+<p>PubSub+ Event Portal</p>
+<ul>
+<li>Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.</li>
+<li>Document Applications, Events and Schemas along with best practices for documentation</li>
+<li>Use Discovery capability to see what you already have in runtime and audit for changes</li>
+<li>Use the Event Catalog and Designer to Learn, Understand and Ideate</li>
+</ul>
+<p>AsyncAPI</p>
+<ul>
+<li>AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.</li>
+<li>Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="8">
+        <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>AsyncAPI Generator Requirements</h2>
+<p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
+<ul>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+  (Check version using <code>npm -version</code>)</li>
+</ul>
+<p>We&#39;ll install the generator itself later 👍</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>PubSub+ Event Broker Connection Info</h2>
+<p>✅ The credentials below are for a public event feed found on the <a href="http://solace.dev/marketplace" target="_blank">Solace feed Marketplace</a> that we&#39;ll use during this codelab.</p>
+<ul>
+<li>SMF Host: <code>tcp://taxi.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>nyc-modern-taxi</code></li>
+<li>Username: <code>public-taxi-user</code></li>
+<li>Password: <code>iliketaxis</code></li>
+</ul>
+<p>✅ Note that this client-username has permissions to subscribe to <code>taxinyc/&gt;</code> and <code>test/taxinyc/&gt;</code> and permissions to publish to <code>test/taxinyc/&gt;</code></p>
+<h2 is-upgraded>Prepare PubSub+ Event Portal</h2>
+<h3 is-upgraded>Sign-up for Solace Cloud</h3>
+<p>✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
+<p class="image-container"><img alt="sc_trial" src="img/fa73039f398cef7a.webp"></p>
+<h3 is-upgraded>Import Existing Designed EDA</h3>
+<p>✅ Download the Application Domain export file: <a href="https://github.com/Mrc0113/design-to-code-workshop/blob/master/EventPortal_Export_NYCModernTaxiCo.json" target="_blank">EventPortal_Export_NYCModernTaxiCo.json</a></p>
+<p>You can download the file via curl or by cloning the git repo</p>
+<pre><code>curl -k -XGET https://raw.githubusercontent.com/Mrc0113/design-to-code-workshop/master/EventPortal_Export_NYCModernTaxiCo.json -o EventPortal_Export_NYCModernTaxiCo.json
+</code></pre>
+<p>OR</p>
+<pre><code>git clone https://github.com/Mrc0113/design-to-code-workshop.git
+</code></pre>
+<p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
+<p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
+<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the  file.</p>
+<p class="image-container"><img alt="ep_click_import" src="img/292b8f20a9c16c60.png"></p>
+<p>🚀 Setup complete! Let&#39;s get going! 🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Foundational Concepts" duration="8">
+        <p>Before we dive deeper, let ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal.</p>
+<h2 is-upgraded>Application Domain &amp; Workspace</h2>
+<p>An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group application into different domains, for ex. we may have a domain for our rideshare apps and services, one for our back-office apps where we invoicing and background checks are being processed, and maybe another domains for analytics where we group apps that are responsible for analyzing the successful operation of our rideshare services.</p>
+<p>In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains.</p>
+<p>You can further group multiple domains into a <em>Workspace</em>, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.</p>
+<p class="image-container"><img alt="Workspace Example" src="img/f5272455c6174221.png"></p>
+<h2 is-upgraded>Events/Topics</h2>
+<p>Events are an important part of the Event Portal. Think of a event as a concept of the publish-subscribe (pub/sub) architectural pattern. Topics are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.</p>
+<p>A Solace topic and an Apache Kafka topic might seem fundamentally the same but there are quite a few <a href="https://solace.com/blog/solace-topics-vs-kafka-topics/" target="_blank">differences between them</a>. Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.</p>
+<p>Here are some examples from our use case:</p>
+<ul>
+<li>taxinyc.analytics.fraud.alerted.v1</li>
+<li>taxinyc.ops.payment.charged.v1</li>
+<li>taxinyc.ops.ride.called.v1</li>
+</ul>
+<h2 is-upgraded>Schemas</h2>
+<p>In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event&#39;s payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema.</p>
+<p>In our use case all events are in AVRO Schema format.</p>
+<p class="image-container"><img alt="Schema Example" src="img/73e8cbbb5773302a.png"></p>
+<h2 is-upgraded>Applications</h2>
+<p>An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.</p>
+<h2 is-upgraded>Kafka Specific Objects and Terminology</h2>
+<h3 is-upgraded>Consumer Groups</h3>
+<p>Event Portal supports the concept of Kafka&#39;s consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal&#39;s runtime discovery to associate a discovered consumer group to an existing application.</p>
+<p>Kafka consumers that belong to the same consumer group share a group ID. The consumers in a group divide the topic partitions, as fairly as possible, so that each consumer consumes only a single partition from the group.</p>
+<p>A few examples of Consumers Groups from our NYC Taxi Analytics use case would be:</p>
+<ul>
+<li>Passenger Surge Detection</li>
+<li>Fraud Detection</li>
+<li>Driver Incentive Calculation</li>
+</ul>
+<h3 is-upgraded>Connector</h3>
+<p>A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Best Practices" duration="8">
+        <h2 is-upgraded>Decomposing the Enterprise</h2>
+<p>Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this include:</p>
+<ol type="1">
+<li>Event sharing rules – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside of the application domain</li>
+<li>Provide uniform event topic prefixes – ensures that the prefix is unique and that topic best practices are followed</li>
+</ol>
+<h2 is-upgraded>Topic Naming Best Practices</h2>
+<p>The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. Regardless of your broker type, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific.</p>
+<h3 is-upgraded>Parts of the Event Topic</h3>
+<p>The event topic structure has two parts:</p>
+<p>The event topic root contains enough information to describe the type of event that has occurred. Each event topic root is a static field that describes the type of event. The list of event topic roots forms a catalog of events that can be produced and consumed. This catalog could be brought into the PubSub+ Event Portal&#39;s event catalog, listing each event type along with details about the event. Each event topic root describes the event in as much detail as necessary to map it to a single data schema.<br>The event topic properties are optional fields that further describe a particular event. This part of the topic has fields that are dynamically filled when the producer publishes the event. These fields are used to describe the specific or unique attributes of this event instance that would be used for routing and filtering.</p>
+<ul>
+<li>Event Topic Root: The event topic root of an event should have the following form:<pre><code>Domain/ObjectType/Verb/Version/
+</code></pre>
+</li>
+<li>Event Topic Properties: The event topic properties should have the following form:<pre><code>Locality/SourceID/ObjectID
+</code></pre>
+</li>
+<li>✅ Complete Event Topic Format: Putting together an event topic root and event topic properties creates an event topic that describes the event with a series of fields from least specific to most specific.<pre><code>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
+</code></pre>
+</li>
+</ul>
+<p>For more information about topic best practices, review the <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices Guide</a></p>
+<h2 is-upgraded>Event Information Exchange Patterns</h2>
+<p>There are multiple Event Exchange Patterns (EEP) that should be considered when using EDA:</p>
+<ul>
+<li>If using a &#34;Thin Event Notification&#34; pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink&#39;s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible. The pro of this pattern however is that the data is smaller in size and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes.</li>
+<li>If using &#34;Hypermedia-Driven Events&#34; pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client&#39;s access level. The con to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior.</li>
+<li>If using &#34;Event-Carried State Transfer&#34; pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes. The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance. The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client&#39;s usage of the data.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Case Overview" duration="5">
+        <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
+<p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
+<ol type="1">
+<li>🚖 Create and capture this design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
+<li>🚕 Next up we&#39;re going to document some of the designed applications and events so that they can be understood and reused by others.</li>
+<li>🚕 We will run a &#34;discovery&#34; scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented</li>
+<li>🚕 Learn, Understand and Reuse some of our events in a new use case</li>
+<li>🚖 Lastly we&#39;ll implement the <em>ProcessPayment</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
+</ol>
+<p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process.<br></p>
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Design an Event Driven Architecture" duration="10">
+        <p>By designing a new event-driven application or extending your extending event-driven architecture, your able to deliver new real-time business capabilities in a decoupled and reusable fashion. There are however several key elements which should be considered when designing events, schemas and applications including topic best practices, options for exchanging event data and sharing/visibility rules. Considering these things early will put you on the road to success and enable better reusability down the road.</p>
+<p>Now that you&#39;re familiar with the use case 🚕 🚖 🚕 and you&#39;ve imported the application domain into the Event Portal, let&#39;s update our Event-Driven Architecture (EDA).</p>
+<p>Lets say that your tasked with working within the Back Office team (where the cool kids all work) and are asked to architect the way in which we will charge our passengers for their rides and if the passenger is part of a commerical account, send to our Invoicing System.</p>
+<h2 is-upgraded>Step 1: Determine What Can Trigger Payment</h2>
+<p>So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?</p>
+<ol type="1">
+<li>Navigate to the <em>Catalog</em> component of the Event Portal</li>
+<li>Click on the <em>Schemas</em> tab and search for &#34;completed&#34;</li>
+<li>In the Search Results  click on the matched fields in order to understand the matching text context.</li>
+<li>We now know that the RideUpdated Schema has a field called _ride<em>status</em> that can have a value of <em>completed</em>. So how do we get acccess to that data? Click on the <em>RideUpdated</em> schema and we will find out!</li>
+<li>We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the _ride<em>status</em> attribute which is pretty sweet! So we can filter on completed as a client.</li>
+<li>Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.<br></li>
+</ol>
+<h2 is-upgraded>Step 2: Design the <em>PaymentCharged</em> Schema</h2>
+<p>Next we should decide what we want the data to look like once we have processed a payment.</p>
+<ol type="1">
+<li>First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage &#34;Event-Carried State Transfer&#34;.</li>
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating!</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema</em><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Content Type: JSON</li>
+<li>Shared: YES</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Description: NONE</li>
+<li>Versions: Leave unchecked</li>
+<li>Content:<pre><code>{
+&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+&#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The root schema&#34;,
+&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+&#34;payment_charged_id&#34;: &#34;23232323&#34;,
+&#34;timestamp&#34;: &#34;2020-06-03T16:51:47.29612-04:00&#34;,
+&#34;information_source&#34;: &#34;ProcessPayment&#34;,
+&#34;payment_status&#34;: &#34;accepted&#34;,
+&#34;invoice_system_id&#34;: &#34;PSG-32923&#34;,
+&#34;amount_charged&#34;: 12.32,
+&#34;ride_id&#34;: 2345234,
+&#34;entity_type&#34;: &#34;Driver&#34;,
+&#34;driver&#34;: {
+&#34;driver_id&#34;: 1234132,
+&#34;first_name&#34;: &#34;Frank&#34;,
+&#34;last_name&#34;: &#34;Smith&#34;,
+&#34;rating&#34;: 4,
+&#34;car_class&#34;: &#34;SUV&#34;
+},
+&#34;passenger&#34;: {
+&#34;passenger_id&#34;: 2345243,
+&#34;first_name&#34;: &#34;Jesse&#34;,
+&#34;last_name&#34;: &#34;Menning&#34;,
+&#34;rating&#34;: 2
+}
+}
+],
+&#34;required&#34;: [
+&#34;payment_charged_id&#34;,
+&#34;timestamp&#34;,
+&#34;information_source&#34;,
+&#34;payment_status&#34;,
+&#34;invoice_system_id&#34;,
+&#34;amount_charged&#34;,
+&#34;ride_id&#34;,
+&#34;entity_type&#34;,
+&#34;driver&#34;,
+&#34;passenger&#34;
+],
+&#34;properties&#34;: {
+&#34;payment_charged_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_charged_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_charged_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;23232323&#34;
+]
+},
+&#34;timestamp&#34;: {
+&#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The timestamp schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;2020-06-03T16:51:47.29612-04:00&#34;
+]
+},
+&#34;information_source&#34;: {
+&#34;$id&#34;: &#34;#/properties/information_source&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The information_source schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;ProcessPayment&#34;
+]
+},
+&#34;payment_status&#34;: {
+&#34;$id&#34;: &#34;#/properties/payment_status&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_status schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;accepted&#34;
+]
+},
+&#34;invoice_system_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/invoice_system_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The invoice_system_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;PSG-32923&#34;
+]
+},
+&#34;amount_charged&#34;: {
+&#34;$id&#34;: &#34;#/properties/amount_charged&#34;,
+&#34;type&#34;: &#34;number&#34;,
+&#34;title&#34;: &#34;The amount_charged schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+12.32
+]
+},
+&#34;ride_id&#34;: {
+&#34;$id&#34;: &#34;#/properties/ride_id&#34;,
+&#34;type&#34;: &#34;integer&#34;,
+&#34;title&#34;: &#34;The ride_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+2345234
+]
+},
+&#34;entity_type&#34;: {
+&#34;$id&#34;: &#34;#/properties/entity_type&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The entity_type schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;Driver&#34;
+]
+},
+&#34;driver&#34;: {
+&#34;$id&#34;: &#34;#/properties/driver&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The driver schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;driver_id&#34;: 1234132,
+  &#34;first_name&#34;: &#34;Frank&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;rating&#34;: 4,
+  &#34;car_class&#34;: &#34;SUV&#34;
+}
+],
+&#34;required&#34;: [
+&#34;driver_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;,
+&#34;car_class&#34;
+],
+&#34;properties&#34;: {
+&#34;driver_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/driver_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The driver_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    1234132
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Frank&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Smith&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    4
+  ]
+},
+&#34;car_class&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/car_class&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The car_class schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;SUV&#34;
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+},
+&#34;passenger&#34;: {
+&#34;$id&#34;: &#34;#/properties/passenger&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The passenger schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;passenger_id&#34;: 2345243,
+  &#34;first_name&#34;: &#34;Jesse&#34;,
+  &#34;last_name&#34;: &#34;Menning&#34;,
+  &#34;rating&#34;: 2
+}
+],
+&#34;required&#34;: [
+&#34;passenger_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;
+],
+&#34;properties&#34;: {
+&#34;passenger_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/passenger_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The passenger_id schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2345243
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Jesse&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Menning&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
+}
+},
+&#34;additionalProperties&#34;: true
+}
+</code></pre>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Schema&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+<h2 is-upgraded>Design <em>PaymentCharged</em> Event</h2>
+<p>So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What&#39;s involved? Well we need to apply our best practices as it comes to the Topic name!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Event</em><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Shared: YES</li>
+<li>Description: NONE</li>
+<li>Topic Scheme: Solace</li>
+<li>Topic<br><br><ol type="1">
+<li>As you can see the domain aleady has some of the &#34;Event Topic Root&#34;</li>
+<li>We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event</li>
+<li>We will use the topic name of: _taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger<em>id}</em></li>
+</ol>
+</li>
+<li>Value:<br><br><ol type="1">
+<li>Keep the Schema radio button selected</li>
+<li>Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step</li>
+</ol>
+</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Revision Comment:  &#34;Initial Creation of Event&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+<h2 is-upgraded>Design <em>ProcessPayment</em> Application</h2>
+<p>Now for the fun part! We need to design the event-driven interface of the <em>ProcessPayment</em> Application. This is pretty easy as it has one input which triggers a single output.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application</em><ol type="1">
+<li>Name: ProcessPayment</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:<br><br><ol type="1">
+<li>Click the <em>Manage</em> link<br><br><ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>RideUpdated</em> event</li>
+<li>Select the <em>Pub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
+<aside class="special"><p>Pro Tip!: If you wanted to develop/implement this application you could right click on the <em>ProcessPayment</em> Application in graph and export an AsyncAPI Document that could be used to generate code!</p>
+</aside>
+<h2 is-upgraded>Design <em>InvoiceSystem</em> Application</h2>
+<p>Remember back to our use case... We have designed how we process payment but still have to deal with invoicing customers when the payment_status says to invoice. Therefore, our plan is to create an application that integrates with our invoicing system.</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Application</em><ol type="1">
+<li>Name: InvoiceSystem</li>
+<li>Description: NONE</li>
+<li>Application Class: Unspecified</li>
+<li>Owners: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Associated Events:<br><br><ol type="1">
+<li>Click the <em>Manage</em> link<br><br><ol type="1">
+<li>Select the <em>Sub</em> button next to the <em>PaymentCharged</em> event</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Revision Comment:  &#34;Initial Creation of Application&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+<li>You should now see the newly added application on the graph!</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Documentation Best Practices" duration="5">
+        <p>✅  Know your Audience<br>The events which you have are used to enable Realtime collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
+<ul>
+<li>Decision Makers - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
+<li>Users - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
+</ul>
+<p>✅  Capture Business Point of View and Moment</p>
+<ul>
+<li>The hardest thing to capture is the &#34;what does this event represent&#34; and without it, it will be hard for a decision maker to understand if it provides value. Be sure to document the moment in which the event was generated, the attributes of which it is the authoritative source and the intended use of the event. Do not assume the user will read the corresponding payload schema or understand much about the publishing application so focus on documenting the event concisely and thoroughly</li>
+</ul>
+<p>✅  Technical Requirements</p>
+<ul>
+<li>This is the section where you need to provide the developer the information needed to consume the event itself. What are some suggest client APIs that should be used to consume the event? Are there important headers being used? What authentication/authorization schemes are required? All of this type of information should be captured to ensure an easy development process.</li>
+</ul>
+<p>✅  Link to other References</p>
+<ul>
+<li>The Event Portal is just one source of information within the organization. Addition info on the application may be stored in a github repo, so provide a link. A schema may also have a corresponding github or wiki page, so provide a link. An event may have been a part of a larger development task tracked in JIRA, so provide a link. The point is link to all of the places the organization captures information and ideally link from those places into the event portal so that no matter where you start, you can understand what&#39;s available and the state.</li>
+</ul>
+<p>✅  Provide Examples</p>
+<ul>
+<li>An example can be an often-underutilized format of communication. By seeing an example of an event, the user may better understand a concrete business moment rather than the description. In addition, those examples are also all part of our search mechanism so anything within it provides better search context.</li>
+</ul>
+<p>✅  Terms of Use</p>
+<ul>
+<li>This is the legal agreement between the event producer and any/all consumers. Talk to the API teams about their Terms of Use contracts and decide if it should be updated for event-driven API relationships. Also think of others within the same organization and their expectations of use and document them here.</li>
+</ul>
+<p>✅  Tags</p>
+<ul>
+<li>When in doubt, add a tag (within reason). As more and more events, apps and schemas are input into the system, search and tagging becomes more and more important for users to find the capabilities available. Browse the existing tags and see which may apply to your event, application or schema. Add tags if needed so that others can more easily filter and find your event, application or schema.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
+        <h2 is-upgraded>Update Documentation of <em>PaymentCharged</em> Event</h2>
+<h2 is-upgraded>Update Documentation of <em>ProcessPayment</em> Application</h2>
+<p>Lets enhance the documentation of the <em>ProcessPayment</em> Application and put our Documentation Best Practices to work!</p>
+<ol type="1">
+<li>Click into the <em>Designer</em> component of the Event Portal</li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
+<li>Double Click on the <em>ProcessPayment</em> Application in the graph<ol type="1">
+<li>Click on the <em>Edit</em> button <ol type="1">
+<li>Copy and Paste the following into the <em>Description</em> field:<pre><code>Description of Business Capability
+
+	Overview: 
+
+		The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger&#39;s billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
+
+
+
+Technical Requirements
+
+Java Version:  OpenJDK 11.0.4
+Spring Cloud Version:  Hoxton.SR8
+Number of Instances: 1
+Cloud: AWS us-east
+Security Level: PCI 
+Event Broker Profile: Solace
+
+
+Source Code Repository
+
+github repo
+
+
+
+Terms of Use
+
+N/A
+</code></pre>
+</li>
+<li>Lets make it nicer to read by using bullets, bold, italics etc</li>
+<li>Lets add a hyperlink to the <em>github repo</em> that points to https://github.com</li>
+<li>Lets now also add Tags<ol type="1">
+<li>Click <em>Add/Remove Tags</em><ol type="1">
+<li>Type <em>PCI</em> in the box and Select (Create a new tag) below.</li>
+<li>Optionally add other tags.</li>
+<li>Click Done</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>The documentation should look something like:<br><img alt="asyncapi_doc2" src="img/ff9be9a9ff33a275.png"></li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Discover Existing EDA Assets" duration="36">
+        <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
+<ol type="1">
+<li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
+<li>Solace PubSub+ Event Broker – Coming Soon!</li>
+</ol>
+<p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
+<h2 is-upgraded>Automated Discovery and Data Importation from Kafka</h2>
+<p>Once you have decided on the application domains that are required for your enterprise, it is time to start the data importation process.</p>
+<p>If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.</p>
+<p><a href="https://codelabs.solace.dev/codelabs/ep-discovery-kafka/index.html?index=..%2F..index#3" target="_blank">Event Portal Discovery with Kafka Code Lab</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Learn, Understand, Reuse" duration="10">
+        <p>A critical aspect of the Event Portal is the capability to capture the EDA design and documentation in a central place to enable cross organizational learnings. These learnings come in multiple forms from creating new ideas, to enabling and training members of the team on the architecture to performing change impact analysis and more. The purpose of this section is to outline some of these scenarios and for you to think about ways to incorporate them into your organization.</p>
+<h2 is-upgraded>Ideate</h2>
+<p>To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description. This helps when you are aware of the problem and are looking for ideas of how to solve them with events. For example, let&#39;s say you&#39;re a Taxi company and are getting complaints about drivers speeding and you want to in real-time analyze the problem. You know the data has an attribute called &#34;speed&#34;, but what event streams have that data? You can simply search for speed in the schemas section of the catalog, review the matches, decide which schema is of interest and navigate to which events actually capture the moment you want to analyze. But what if you don&#39;t have a specific problem and are simply wanting to think about the art of the possible? This is where browsing the event catalog can be key. Maybe you want to improve an area of your business and simply want to see what events are available in that area. Filter by that application domain and view the events like a menu of business capabilities that when combined could fundamentally transform that business area.</p>
+<p>Once a new idea has been formulated, you can jump to the Design phase and start down the path of defining the new business capability in detail. Of course, in that phase you should consider making this new capability event-driven so that your colleges can ideate and solve more problems. The more events you have, the more ideation that can occur.</p>
+<h2 is-upgraded>Organizational Enablement</h2>
+<p>Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be?</p>
+<p>Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
+<p>So next time you are faced with the questions presented above, your answer should be an emphatic YES for your event-driven architecture.</p>
+<h2 is-upgraded>Change Impact Analysis</h2>
+<p>Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="The AsyncAPI Initiative" duration="3">
+        <p>The <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI Initiative</a> is an open source initiative that provides both the AsyncAPI specification to define your asynchronous APIs, and open source tools to enable developers to build and maintain an event-driven architecture.</p>
+<aside class="special"><p>Learn More in the <a href="https://www.asyncapi.com/docs/getting-started" target="_blank">AsyncAPI Docs</a></p>
+</aside>
+<p>The AsyncAPI Generator allows you to generate a wide variety of things from an AsyncAPI document depending on what template you choose. The latest list of templates can be found <a href="https://github.com/asyncapi/generator#list-of-official-generator-templates" target="_blank">here</a></p>
+<p class="image-container"><img alt="asyncapiSpecExample" src="img/395809f45bd779ee.webp"></p>
+<p class="image-container"><img alt="asyncapiGeneratorTemplates" src="img/9b08938df6714e65.webp"></p>
+<h2 is-upgraded>Install the AsyncAPI Generator</h2>
+<p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
+<p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
+<pre><code>npm install -g @asyncapi/generator@0.53.1
+</code></pre>
+<aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implement ProcessPayment (Java/Spring)" duration="10">
+        <h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We&#39;ll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running!</p>
+<h3 is-upgraded>Generate the Code Skeleton</h3>
+<p>In the Solace Event Portal right click on the <em>ProcessPayment</em> application, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+<p class="image-container"><img alt="processPaymentAsyncapi" src="img/c00a39b4463f48a7.webp"></p>
+<aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
+</aside>
+<p>Let&#39;s add a few of the template&#39;s configuration options to the downloaded AsyncAPI document.</p>
+<ul>
+<li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
+<li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
+</ul>
+<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.</p>
+<pre><code>channels:
+  &#39;taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}&#39;:
+    publish:
+      x-scs-function-name: processPayment
+      message:
+        $ref: &#39;#/components/messages/PaymentCharged&#39;
+  &#39;taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}&#39;:
+    subscribe:
+      x-scs-function-name: processPayment
+      x-scs-destination: test/taxinyc/PaymentProcessorQueue
+      message:
+        $ref: &#39;#/components/messages/RideUpdated&#39;
+</code></pre>
+<aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
+</aside>
+<p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
+<p>Note the different pieces of the command:</p>
+<ul>
+<li><code>ag</code> is the AsyncAPI Generator command</li>
+<li><code>-o</code> is the output directory</li>
+<li><code>-p</code> allows you to specify <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#parameters" target="_blank">parameters</a> defined for the template you&#39;re using</li>
+<li><code>binder</code> is the Spring Cloud Stream binder you wish to use, in this case Solace</li>
+<li><code>actuator</code> includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection</li>
+<li><code>artifactId</code> &amp; <code>groupId</code> configure Maven params of the same names</li>
+<li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
+<li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
+<li>The yaml file is our AsyncAPI document</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
+</li>
+</ul>
+<p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
+</code></pre>
+<h3 is-upgraded>Import and Explore the Generated Project</h3>
+<p>The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.<br><img alt="projectsetup2" src="img/fd108df265654a36.webp"></p>
+<p>A few notes on the project:</p>
+<ul>
+<li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
+<li>The <code>PaymentCharged</code> and <code>RideUpdated</code> POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
+<li><code>Application.java</code> contains a <code>processPayment</code> method which is a <code>Function</code> that takes in a <code>RideUpdated</code> POJO and returns a <code>PaymentCharged</code> POJO.<br></li>
+<li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
+<li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
+</ul>
+<h3 is-upgraded>Subscribe to <em>dropoff</em> events</h3>
+<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their <em>RideUpdate</em> events to a dynamic topic structure of <code>taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}</code> we need to update the <code>application.yml</code> file to subscribe to only <code>dropoff</code> events. To do this change the <code>queueAdditionalSubscriptions</code> parameter value to <code>taxinyc/ops/ride/updated/v1/dropoff/&gt;</code></p>
+<aside class="special"><p>Note that the <code>&gt;</code> symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/&gt;</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+</aside>
+<h3 is-upgraded>Publish to a personalized topic for uniqueness</h3>
+<p>Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your <code>spring.cloud.stream.bindings.processPayment-out-0.destination</code> to be <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/ops/payment/charged/v1/accepted</code>. <strong>Be sure to replace </strong> with your name or some unique field; and remember it for later!</p>
+<p>✅ After updating the <code>spring.cloud.stream</code> portion of your <em>application.yml</em> file should look something like this:</p>
+<pre><code>spring:
+  cloud:
+    stream:
+      function:
+        definition: processPayment
+      bindings:
+        processPayment-out-0:
+          destination: test/taxinyc/yourname/backoffice/payment/charged/v1/accepted
+        processPayment-in-0:
+          destination: test/taxinyc/ProcessPaymentQueue
+      solace:
+        bindings:
+          processPayment-in-0:
+            consumer:
+              queueAdditionalSubscriptions: &#39;taxinyc/ops/ride/updated/v1/dropoff/&gt;&#39;
+</code></pre>
+<h3 is-upgraded>Fill in the Business Logic</h3>
+<p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideUpdated</em> events as they&#39;re received and create a new PaymentCharged event for each.</p>
+<p>Open the <em>Application.java</em> file and modify the <code>processPayment</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
+<pre><code>@Bean
+public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
+	return rideUpdated -&gt; {
+		logger.info(&#34;Received Ride Updated Event:&#34; + rideUpdated);
+		//TODO Process Payment
+		PaymentCharged pc = new PaymentCharged();
+		pc.setRideId(rideUpdated.getRideId());
+		pc.setAmountCharged(rideUpdated.getMeterReading());
+		pc.setPaymentStatus(&#34;accepted&#34;);
+		pc.setPaymentChargedId(UUID.randomUUID().toString());
+		pc.setInvoiceSystemId(&#34;PSG-&#34; + RandomUtils.nextInt());
+	    pc.setInformationSource(&#34;ProcessPayment Microservice&#34;);
+		pc.setTimestamp(Instant.now().toString());
+		pc.setEntityType(&#34;Driver&#34;);
+		logger.info(&#34;Created PaymentCharged Event:&#34; + pc);
+		return pc;
+	};
+}
+</code></pre>
+<p>That&#39;s it! The app development is complete.</p>
+<p>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
+<h2 is-upgraded>Run the app!</h2>
+<p>Now that our app has been developed let&#39;s run it!</p>
+<p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
+<p>Or run it from the terminal by navigating to the directory with the pom and running the <code>mvn clean spring-boot:run</code> command.</p>
+<aside class="warning"><p>If you get an error that says something like <code>Web server failed to start. Port XXXX was already in use.</code> then change the <code>server.port</code> value in <code>application.yml</code> to an open port.</p>
+</aside>
+<p>Once running you should see that for each RideUpdated event that is received a PaymentCharged Event is created which is being published back out onto the broker for downstream apps to consume. The output should look something like the below.</p>
+<pre><code>2020-11-12 14:25:54.451  INFO 97106 --- [pool-2-thread-1] org.taxi.nyc.Application                 : Received Ride Updated Event:RideUpdated [ rideId: f3ce97cb-e2df-4ed2-bb07-ab6afe9db629 heading: 168 latitude: 40.666628 passengerCount: 2 pointIdx: 1025 informationSource: RideDispatcher speed: 22 driver: Driver [ driverId: 16 rating: 2.37 lastName: Sawyer carClass: Coupe firstName: Miwa ] passenger: Passenger [ passengerId: 13817844 rating: 4.43 lastName: Bateman firstName: Chantal ] meterIncrement: 0.0198049 longitude: -73.85236 timestamp: 2020-11-12T14:25:54.206-05:00 meterReading: 20.3 rideStatus: dropoff ]
+2020-11-12 14:25:54.453  INFO 97106 --- [pool-2-thread-1] org.taxi.nyc.Application                 : Created PaymentCharged Event:PaymentCharged [ rideId: f3ce97cb-e2df-4ed2-bb07-ab6afe9db629 entityType: Driver amountCharged: 20.3 driver: null paymentChargedId: 59d3caed-cad1-438b-9e9a-b37b8660efe7 passenger: null paymentStatus: accepted invoiceSystemId: PSG-616368280 informationSource: ProcessPayment Microservice timestamp: 2020-11-12T19:25:54.452Z ]
+</code></pre>
+<p>🤯🤯 <strong>The Microservice is now Running, connected to the Solace Event Broker and processing events!</strong> 🤯🤯</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implement InvoiceSystem (Python)" duration="8">
+        <h2 is-upgraded>Develop the InvoiceSystem Python App</h2>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>InvoiceSystem</em> python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker and will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation.</p>
+<h3 is-upgraded>Generate the Code Skeleton</h3>
+<p>In the Solace Event Portal right click on the <em>InvoiceSystem</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
+<p class="image-container"><img alt="invoiceSystemAsyncapi" src="img/13e740ea64dd6620.webp"></p>
+<aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
+</aside>
+<p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
+<p>Note the different pieces of the command:</p>
+<ul>
+<li><code>ag</code> is the AsyncAPI Generator command</li>
+<li><code>-o</code> is the output directory</li>
+<li><code>-p</code> allows you to specify <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#parameters" target="_blank">parameters</a> defined for the template you&#39;re using</li>
+<li><code>binder</code> is the Spring Cloud Stream binder you wish to use, in this case Solace</li>
+<li><code>actuator</code> includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection</li>
+<li><code>artifactId</code> &amp; <code>groupId</code> configure Maven params of the same names</li>
+<li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
+<li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
+<li>The yaml file is our AsyncAPI document</li>
+<li>And lastly, the <code>@asyncapi/python-paho-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
+</code></pre>
+</li>
+</ul>
+<p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
+</code></pre>
+<h3 is-upgraded>Import and Explore the Generated Project</h3>
+<p>The generated project is a Maven project so head over to your IDE and import the project so we can add our business logic. Once imported you should see something like the image below.<br><img alt="projectsetup2" src="img/fd108df265654a36.webp"></p>
+<p>A few notes on the project:</p>
+<ul>
+<li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
+<li>The <code>PaymentCharged</code> and <code>RideUpdated</code> POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
+<li><code>Application.java</code> contains a <code>InvoiceSystem</code> method which is a <code>Function</code> that takes in a <code>RideUpdated</code> POJO and returns a <code>PaymentCharged</code> POJO.<br></li>
+<li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
+<li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
+</ul>
+<h3 is-upgraded>Subscribe to <em>PaymentCharged</em> events</h3>
+<p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of <code>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code><br> we need to update our subscription to subscribe to all <em>PaymentCharged</em> events no matter their payment_status, driver_id or passenger_id. To do this change the subscription to <code>taxinyc/backoffice/payment/charged/v1/#</code></p>
+<aside class="special"><p>Note that the <code>#</code> symbol, when placed by itself as the last level in a MQTT topic, is a multi-level wildcard which subscribes to all events published to topics that begin with the same prefix. Example: <code>animals/domestic/#</code> matches <code>animals/domestic/cats</code> and <code>animals/domestic/dogs</code>. <a href="https://docs.solace.com/Open-APIs-Protocols/MQTT/MQTT-Topics.htm#Wildcard" target="_blank">More wildcard info, including a single level wildcard, can be found in docs</a></p>
+</aside>
+<h3 is-upgraded>Fill in the Business Logic</h3>
+<pre><code></code></pre>
+<p>That&#39;s it! The app development is complete.</p>
+<p>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
+<h2 is-upgraded>Run the app!</h2>
+<p>Now that our app has been developed let&#39;s run it!</p>
+<p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
+<p>Or run it from the terminal by navigating to the directory with the pom and running the <code>mvn clean spring-boot:run</code> command.</p>
+<p>🤯🤯 <strong>The Python app is now Running, connected to the Solace Event Broker and processing events!</strong> 🤯🤯</p>
+<h2 is-upgraded>AsyncAPI Code Generators</h2>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implement: Other Options!" duration="4">
+        <h2 is-upgraded>Generate Custom Code</h2>
+<p>Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<h2 is-upgraded>Use an Integration Platforms</h2>
+<h3 is-upgraded>Dell Boomi Connector</h3>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="4">
+        <p>✅ The Solace PubSub+ Event Portal is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.<br>✅ AsyncAPI Generator templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.<br>✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
