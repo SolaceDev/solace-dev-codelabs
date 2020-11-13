@@ -6,9 +6,9 @@
   "scripts": {
     "watch": "nodemon --watch boomi-v2-getting-started.md --exec 'claat export boomi-v2-getting-started.md && lsof -c claat -t | xargs kill && cd boomi-v2-getting-started && claat serve'"
   },
-  "repository": {
+"repository": {
     "type": "git",
-    "url": "git+https://github.com/andrew-j-roberts/codelab-bootstrap.git"
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
   "keywords": [
     "codelab"
