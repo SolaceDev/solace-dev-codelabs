@@ -51,7 +51,7 @@
 <li><a href="https://www.python.org/downloads/" target="_blank">Download Python</a> for free in the OS of your choosing</li>
 <li><a href="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro" target="_blank">Download the sample code</a>   Or use git commands to grab it from <a href="https://github.com/jmenning-solace/nycmoderntaxi.git" target="_blank">GitHub</a>.</li>
 </ol>
-<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  <a href="https://solace.community/discussion/336/python-whos-in-for-a-real-treat" target="_blank">Read more about the Python API.</a>.</p>
+<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  <a href="https://solace.community/categories/python-api" target="_blank">Read more about the Python API.</a>.</p>
 </aside>
 
 
@@ -113,7 +113,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Set up Python environment" duration="12">
-        <p>Python is a great language for prototyping applications.  It&#39;s easy to get up and running quickly, and since it doesn&#39;t compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the <a href="https://solace.community/discussion/336/python-whos-in-for-a-real-treat" target="_blank">Solace PubSub+ Python API</a>.  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.</p>
+        <p>Python is a great language for prototyping applications.  It&#39;s easy to get up and running quickly, and since it doesn&#39;t compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the <a href="https://solace.community/categories/python-api" target="_blank">Solace PubSub+ Python API</a>.  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.</p>
 <h2 is-upgraded>Steps to install</h2>
 <ol type="1">
 <li>Open the Python installer that you downloaded in the prerequisites.</li>
@@ -144,10 +144,7 @@ source venv/Scripts/activate
 <li>Install the required OpenTelemetry dependencies with pip<pre><code>pip install -r requirements.txt
 </code></pre>
 </li>
-<li>Install the Solace API after<pre><code>pip install &lt;path_to_downloaded_API_wheel&gt;
-</code></pre>
-</li>
-<li>Execute the <code>solace_telemetry_publisher_Salesforce.py</code> by passing the correct environment variables<pre><code>SOL_HOST=&lt;host_name&gt; SOL_VPN=&lt;vpn_name&gt; SOL_USERNAME=&lt;username&gt; SOL_PASSWORD=&lt;password&gt; python solace_telemetry_publisher_Salesforce.py
+<li>Execute the <code>solace_telemetry_publisher_Salesforce.py</code> by passing the correct environment variables<pre><code>SOLACE_HOST=&lt;host_name&gt; SOLACE_VPN=&lt;vpn_name&gt; SOLACE_USERNAME=&lt;username&gt; SOLACE_PASSWORD=&lt;password&gt; python solace_telemetry_publisher_Salesforce.py
 </code></pre>
 </li>
 <li>If it&#39;s successful, you&#39;ll get a message like:<pre><code>2020-08-26 08:33:41,885 [INFO] pysolace.messaging.core: solace_session.py:470  ESTABLISH SESSION ON HOST tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555
@@ -218,7 +215,7 @@ span_id = parentSpan.get_context().span_id`
 <ol type="1">
 <li>In a new terminal, navigate to the directory where the code resides</li>
 <li>Activate your virtual environment by executing <code>source venv/bin/activate</code> in MacOs or <code>source venv/Scripts/activate</code> on Windows</li>
-<li>Execute the <code>solace_telemetry_publisher_Salesforce.py</code> by passing the correct environment variables<pre><code>SOL_HOST=&lt;host_name&gt; SOL_VPN=&lt;vpn_name&gt; SOL_USERNAME=&lt;username&gt; SOL_PASSWORD=&lt;password&gt; python solace_telemetry_consumer_Database.py
+<li>Execute the <code>solace_telemetry_publisher_Salesforce.py</code> by passing the correct environment variables<pre><code>SOLACE_HOST=&lt;host_name&gt; SOLACE_VPN=&lt;vpn_name&gt; SOLACE_USERNAME=&lt;username&gt; SOLACE_PASSWORD=&lt;password&gt; python solace_telemetry_consumer_Database.py
 </code></pre>
 </li>
 <li>You should see something like:<pre><code>2020-08-26 08:32:20,449 [INFO] pysolace.messaging.core: [solace_session.py:470]  ESTABLISH SESSION ON HOST [tcp://mr-d8f4yze27kt.messaging.solace.cloud:55555]

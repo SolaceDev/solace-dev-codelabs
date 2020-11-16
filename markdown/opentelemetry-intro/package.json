@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch opentelemetry-intro.md --exec 'claat export opentelemetry-intro.md && lsof -c claat -t | xargs kill && cd opentelemetry-intro && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },

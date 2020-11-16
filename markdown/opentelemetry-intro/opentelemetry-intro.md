@@ -54,7 +54,7 @@ Duration: 0:07:00
  
 
 Negative
-: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  [Read more about the Python API.](https://solace.community/discussion/336/python-whos-in-for-a-real-treat). 
+: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  [Read more about the Python API.](https://solace.community/categories/python-api). 
 
 
 ## Use Case Overview 🚕
@@ -136,7 +136,7 @@ Negative
 
 Duration: 0:12:00
 
-Python is a great language for prototyping applications.  It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the [Solace PubSub+ Python API](https://solace.community/discussion/336/python-whos-in-for-a-real-treat).  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.  
+Python is a great language for prototyping applications.  It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the [Solace PubSub+ Python API](https://solace.community/categories/python-api).  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.  
 
 ### Steps to install
 1. Open the Python installer that you downloaded in the prerequisites.
@@ -171,13 +171,9 @@ Positive
 
 		pip install -r requirements.txt
 		
-1. Install the Solace API after 
-		
-		pip install <path_to_downloaded_API_wheel>
-
 1. Execute the `solace_telemetry_publisher_Salesforce.py` by passing the correct environment variables 
 
-		SOL_HOST=<host_name> SOL_VPN=<vpn_name> SOL_USERNAME=<username> SOL_PASSWORD=<password> python solace_telemetry_publisher_Salesforce.py
+		SOLACE_HOST=<host_name> SOLACE_VPN=<vpn_name> SOLACE_USERNAME=<username> SOLACE_PASSWORD=<password> python solace_telemetry_publisher_Salesforce.py
 
 1. If it's successful, you'll get a message like:
 
@@ -257,7 +253,7 @@ Now that "Salesforce" is publishing an event to Solace, you need to get the "RES
 1. Activate your virtual environment by executing `source venv/bin/activate` in MacOs or `source venv/Scripts/activate` on Windows
 1. Execute the `solace_telemetry_publisher_Salesforce.py` by passing the correct environment variables 
 
-		SOL_HOST=<host_name> SOL_VPN=<vpn_name> SOL_USERNAME=<username> SOL_PASSWORD=<password> python solace_telemetry_consumer_Database.py
+		SOLACE_HOST=<host_name> SOLACE_VPN=<vpn_name> SOLACE_USERNAME=<username> SOLACE_PASSWORD=<password> python solace_telemetry_consumer_Database.py
 
 1. You should see something like:
 
