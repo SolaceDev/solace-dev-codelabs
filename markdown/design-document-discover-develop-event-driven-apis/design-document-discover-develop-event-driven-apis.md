@@ -2,7 +2,7 @@ author: Jonathan Schabowsky
 summary: In this tutorial we'll cover how to design, extend and implement your event-driven APIs using Solace PubSub+ Event Portal
 id: design-document-discover-develop-event-driven-apis
 tags: workshop
-categories: Solace, taxi
+categories: Solace, taxi, Portal
 environments: Web
 status: Published
 feedback link: https://solace.community/categories/pubsub%2B-event-portal

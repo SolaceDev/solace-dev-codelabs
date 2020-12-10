@@ -62,7 +62,7 @@
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
 <li>Java 1.8+ (Check version using <code>java -version</code>)</li>
-<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
 </ul>
@@ -216,7 +216,7 @@
 <li>🚖 Lastly we&#39;ll implement the <em>ProcessPayment</em> microservice that that receives the stream of <em>RideUpdated</em> events, charges the customer&#39;s credit card and generate a <em>PaymentCharged</em> Event.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/d2787790c0b40fe1.jpg"></p>
-<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process.<br></p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC as they define <a href="https://codelabs.developers.google.com/codelabs/cloud-dataflow-nyc-taxi-tycoon/?_ga=2.11039092.-1355519641.1572284467/#0" target="_blank">here</a>. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 </aside>
 
@@ -237,13 +237,20 @@
 <p>So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?</p>
 <aside class="special"><p>Event-Driven Ideation: To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all of the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description.</p>
 </aside>
-<p>Navigate to the <em>Catalog</em> component of the Event Portal<br><img src="img/c5ebed8e3b3c36df.gif">Click on the <em>Schemas</em> tab and search for &#34;dropoff&#34;<br><img src="img/f62e87a9eb1f7fa1.png">In the Search Results click on the RideUpdated event in order to understand the matching text context.We now know that the RideUpdated Schema has a field called <strong>ride_status</strong> that can have a value of <em>dropoff</em>. So how do we get access to that data? Click on the <em>RideUpdated</em> schema and we will find out!<br><img src="img/f4d8cb3f04b47e93.png">We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the <strong>ride_status</strong> attribute which is pretty sweet! So we can filter on dropoff as a client.<br><img src="img/4f817f47c1c2e8f6.png">Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.<br></p>
+<ol type="1">
+<li>Navigate to the <em>Catalog</em> component of the Event Portal<br><img src="img/c5ebed8e3b3c36df.gif"></li>
+<li>Click on the <em>Schemas</em> tab and search for &#34;dropoff&#34; <img src="img/f62e87a9eb1f7fa1.png"></li>
+<li>In the Search Results click on the RideUpdated event in order to understand the matching text context.</li>
+<li>We now know that the RideUpdated Schema has a field called <strong>ride_status</strong> that can have a value of <em>dropoff</em>. So how do we get access to that data? Click on the <em>RideUpdated</em> schema and we will find out! <img src="img/f4d8cb3f04b47e93.png"></li>
+<li>We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the <strong>ride_status</strong> attribute which is pretty sweet! So we can filter on dropoff as a client. <img src="img/4f817f47c1c2e8f6.png"></li>
+<li>Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.<br></li>
+</ol>
 <h2 is-upgraded>Step 2: Design the <em>PaymentCharged</em> Schema</h2>
 <p>Next we should decide what we want the data to look like once we have processed a payment.</p>
 <ol type="1">
 <li>First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage &#34;Event-Carried State Transfer&#34;.</li>
 <li>Click into the <em>Designer</em> component of the Event Portal<br><img src="img/94601e7d4aec711b.png"></li>
-<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating!<br><img src="img/7c92481b5a3081f6.gif"></li>
+<li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating! <img src="img/7c92481b5a3081f6.gif"></li>
 <li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema<br></em><img src="img/e19da71bb3ed5858.png"><ol type="1">
 <li>Name: PaymentCharged</li>
 <li>Content Type: JSON</li>
@@ -537,13 +544,13 @@
 <li>Shared: YES</li>
 <li>Description: NONE</li>
 <li>Topic Scheme: Solace</li>
-<li>Topic<br><br><ol type="1">
+<li>Topic  <ol type="1">
 <li>As you can see the domain aleady has some of the &#34;Event Topic Root&#34; <code>taxinyc/backoffice/</code></li>
 <li>We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event</li>
 <li>We will use the topic name of: <code>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code></li>
 </ol>
 </li>
-<li>Value:<br><br><ol type="1">
+<li>Value:  <ol type="1">
 <li>Keep the Schema radio button selected</li>
 <li>Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step</li>
 </ol>
@@ -566,8 +573,8 @@
 <li>Application Class: Unspecified</li>
 <li>Owners: Assign Yourself</li>
 <li>Tags: NONE</li>
-<li>Associated Events:<br><br><ol type="1">
-<li>Click the <em>Manage</em> link<br><br><ol type="1">
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
 <li>Select the <em>Sub</em> button next to the <em>RideUpdated</em> event</li>
 <li>Select the <em>Pub</em> button next to the <em>PaymentCharged</em> event</li>
 <li>Click <em>Save</em></li>
@@ -594,8 +601,8 @@
 <li>Application Class: Unspecified</li>
 <li>Owners: Assign Yourself</li>
 <li>Tags: NONE</li>
-<li>Associated Events:<br><br><ol type="1">
-<li>Click the <em>Manage</em> link<br><br><ol type="1">
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
 <li>Select the <em>Sub</em> button next to the <em>PaymentCharged</em> event</li>
 <li>Click <em>Save</em></li>
 </ol>
@@ -616,9 +623,9 @@
 <li>Click into the <em>Designer</em> component of the Event Portal</li>
 <li>Double Click on the <em>NYC Modern Taxi Co - Ops</em> Application Domain</li>
 <li>Double Click on the <em>RIder Mobile Application</em></li>
-<li>On the Upper Right Corner, Click the <em>Edit</em> button<br><br><ol type="1">
-<li>Associated Events:<br><br><ol type="1">
-<li>Click the <em>Manage</em> link<br><br><ol type="1">
+<li>On the Upper Right Corner, Click the <em>Edit</em> button  <ol type="1">
+<li>Associated Events:  <ol type="1">
+<li>Click the <em>Manage</em> link  <ol type="1">
 <li>Select the <em>Sub</em> button next to the <em>PaymentCharged</em> event</li>
 <li>Click <em>Save</em></li>
 </ol>
@@ -639,7 +646,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Documentation Best Practices" duration="5">
-        <p>💡  <strong>Know your Audience<br></strong><br>The events which you have are used to enable real-time collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
+        <p>💡  <strong>Know your Audience<br></strong> The events which you have are used to enable real-time collaboration between systems and solve a problem for a specific industry and organization. These events are integrated into applications by software developers/engineers but they are not all the same and can be decomposed into:</p>
 <ul>
 <li><strong>Decision Makers</strong> - Some people in the organization are looking and evaluating the events and schemas available in order to decide if it makes sense to have the development team further explore the service. They are evaluating with a problem in mind and are looking to see if the events registered within the Event Portal can be used to solve that problem. In many cases they will not be the ones writing the code that solves the problem but are extremely important as they drive the decision as to if the effort to use it will be undertaken. Examples of these types of decision makers include but are not limited to: CTO, Product Managers, Data Analysts and Data Scientists/Engineers.</li>
 <li><strong>Users</strong> - These are the people who will be directly consuming and developing using the events and schemas defined in the event portal. Typically, the decision to use an event/schemas has been made and they need to understand the event, how it applies to their use case and how to integrate with it. They are critical to enable as they are always short on time and are the last link to getting an event to be reused. In addition, these users are the ones creating the documentation to enable others if they are the author of an event or schema so they are critical to the maintainability of the event-driven ecosystem of documentation. Examples of users include but are not limited to integration engineers, front end developer, backend developer.</li>
@@ -676,29 +683,22 @@
         <aside class="special"><p>Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours?  What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
 </aside>
 <h2 is-upgraded>Update Documentation of <em>PaymentCharged</em> Event</h2>
-<p>Remember how we did not provide any description or tags for the Events and Applications we created before? Well, lets go in and follow our best practices to fix this.<br>Lets enhance the documentation of the <em>PaymentCharged</em> Event</p>
+<p>Remember how we did not provide any description or tags for the Events and Applications we created before? Well, lets go in and follow our best practices to fix this. Lets enhance the documentation of the <em>PaymentCharged</em> Event</p>
 <ol type="1">
 <li>Click into the <em>Designer</em> component of the Event Portal</li>
 <li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
 <li>Double Click on the <em>PaymentCharged</em> Event in the graph<ol type="1">
 <li>Click on the <em>Edit</em> button <ol type="1">
 <li>Copy and Paste the following into the <em>Description</em> field:<pre><code>Description of Business Moment
-
-	Overview: 
-
-		The PaymentCharged Event exists in order to notify other systems that we have attempted to charge the passenger. There are also other states such as:
+Overview: 
+The PaymentCharged Event exists in order to notify other systems that we have attempted to charge the passenger. There are also other states such as:
 accepted - customer credit card on file has been charged
 declined - customer credit card on file has been declined
 org - the customer is part of a B2B org and does not provide automated payment
-
-
 Technical Requirements
-
 Format: JSON
 Security Level: PCI 
-
 Terms of Use
-
 N/A
 </code></pre>
 </li>
@@ -712,7 +712,7 @@ N/A
 </li>
 </ol>
 </li>
-<li>The documentation should look something like:<br><img alt="asyncapi_doc2" src="img/1a923fc61b9d88fe.png"></li>
+<li>The documentation should look something like: <img alt="asyncapi_doc2" src="img/1a923fc61b9d88fe.png"></li>
 <li>Click <em>Save</em></li>
 </ol>
 </li>
@@ -727,31 +727,18 @@ N/A
 <li>Double Click on the <em>ProcessPayment</em> Application in the graph<ol type="1">
 <li>Click on the <em>Edit</em> button <ol type="1">
 <li>Copy and Paste the following into the <em>Description</em> field:<pre><code>Description of Business Capability
-
-	Overview: 
-
-		The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger&#39;s billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
-
-
-
+Overview: 
+The ProcessPayment application solely exists in order to monitor for when Passenger Rides are completed such that final billing can be performed against the passengers credit card. Because this application will need to look up the passenger&#39;s billing information it is important that security be taken into account as it will need to be PCI compliant. Upon successful payment, the application shall emit an event to signify that payment has happened.
 Technical Requirements
-
 Java Version:  OpenJDK 11.0.4
 Spring Cloud Version:  Hoxton.SR8
 Number of Instances: 1
 Cloud: AWS us-east
 Security Level: PCI 
 Event Broker Profile: Solace
-
-
 Source Code Repository
-
 github repo
-
-
-
 Terms of Use
-
 N/A
 </code></pre>
 </li>
@@ -766,7 +753,7 @@ N/A
 </li>
 </ol>
 </li>
-<li>The documentation should look something like:<br><img alt="asyncapi_doc2" src="img/ff9be9a9ff33a275.png"></li>
+<li>The documentation should look something like: <img alt="asyncapi_doc2" src="img/ff9be9a9ff33a275.png"></li>
 <li>Click <em>Save</em></li>
 </ol>
 </li>
@@ -813,7 +800,7 @@ N/A
     
       <google-codelab-step label="Implement ProcessPayment (Java/Spring)" duration="12">
         <h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We&#39;ll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running!</p>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We&#39;ll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running!</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
 <p>In the Solace Event Portal right click on the <em>ProcessPayment</em> application, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="processPaymentAsyncapi" src="img/c00a39b4463f48a7.webp"></p>
@@ -851,10 +838,10 @@ N/A
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
-</code></pre>
-</li>
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
+<pre><code>ag -o ProcessPayment -p binder=solace -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
@@ -933,7 +920,7 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
     
       <google-codelab-step label="Implement InvoiceSystem (Python w/ MQTT)" duration="8">
         <h2 is-upgraded>Develop the InvoiceSystem Python App</h2>
-<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>InvoiceSystem</em> python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker over MQTT. To do this we will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation. Note that <a href="https://mqtt.org/" target="_blank">MQTT</a> is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and</p>
+<p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>InvoiceSystem</em> python app that we previously designed. We are going to be using the Python Paho library to communicate with our event broker over MQTT. To do this we will leverage the <a href="https://github.com/asyncapi/python-paho-template" target="_blank">Python Paho AsyncAPI Generator Template</a> to bootstrap our app creation. Note that <a href="https://mqtt.org/" target="_blank">MQTT</a> is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
 <p>In the Solace Event Portal right click on the <em>InvoiceSystem</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="invoiceSystemAsyncapi" src="img/13e740ea64dd6620.webp"></p>
@@ -945,10 +932,10 @@ public Function&lt;RideUpdated, PaymentCharged&gt; processPayment() {
 <li><code>ag</code> is the AsyncAPI Generator command</li>
 <li><code>-o</code> is the output directory</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/python-paho-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
-</code></pre>
-</li>
+<li>And lastly, the <code>@asyncapi/python-paho-template</code> is the AsyncAPI generator template that we are using.</li>
 </ul>
+<pre><code>ag -o InvoiceSystem ~/Downloads/InvoiceSystem.yaml @asyncapi/python-paho-template
+</code></pre>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
@@ -967,13 +954,7 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 <p>Before coding our python app let&#39;s go ahead and put our credentials in place.</p>
 <ol type="1">
 <li>Copy the <code>config-template.ini</code> file to <code>config.ini</code></li>
-<li>Modify the contents to look like below:<pre><code>[DEFAULT]
-host=taxi.messaging.solace.cloud
-password=iliketaxis
-port=8883
-username=public-taxi-user
-</code></pre>
-</li>
+<li>Modify the contents to look like below: <br><code>[DEFAULT]<br>host=taxi.messaging.solace.cloud<br>password=iliketaxis<br>port=8883<br>username=public-taxi-user<br></code></li>
 </ol>
 <h3 is-upgraded>Subscribe to <em>PaymentCharged</em> events</h3>
 <p>As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our ProcessPayment microservice is publishing the PaymentCharged events to a dynamic topic structure of <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code><br> we need to update our subscription to subscribe to all <em>PaymentCharged</em> events no matter their payment_status, driver_id or passenger_id. To do this change the subscription on line <code>33</code> of <code>main.py</code> to <code>test/taxinyc/&lt;YOUR_UNIQUE_NAME&gt;/backoffice/payment/charged/v1/#</code> where you substitute <code>&lt;YOUR_UNIQUE_NAME&gt;</code> for the name you used when creating the java app.</p>
@@ -997,7 +978,7 @@ self.client.tls_insecure_set(True)
       </google-codelab-step>
     
       <google-codelab-step label="Implement: Other Options!" duration="4">
-        <p>You can create event driven applications in a wide variety of different options as shown here:<br><img alt="APIs and Protocols" src="img/c728c0f6039a73b8.png"></p>
+        <p>You can create event driven applications in a wide variety of different options as shown here: <img alt="APIs and Protocols" src="img/c728c0f6039a73b8.png"></p>
 <h2 is-upgraded>Generate Custom Code</h2>
 <p>Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
 <h2 is-upgraded>Use an Integration Platform</h2>
