@@ -1,0 +1,147 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Bridge data from RabbitMQ to Solace PubSub&#43;</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="solace-rabbit-shovel"
+                  title="Bridge data from RabbitMQ to Solace PubSub&#43;"
+                  environment="web"
+                  feedback-link="http://github.com/solacetraining/solace-battleship/issues">
+    
+      <google-codelab-step label="Welcome!" duration="1">
+        <p>Extending RabbitMQ with an Event Mesh provides you with the ability to dynamically route data to applications hosted in cloud or other locations and consume that data in a variety of different protocols and languages. This codelab will act as a guide to configuring the AMQP connection between RabbitMQ and Solace PubSub+.</p>
+<p>While AMQP 0-9-1 and AMQP 1.0 are similar in name, they are different implementations of the protocol.</p>
+<p>RabbitMQ has a plugin, called a Shovel, to enable the movement of data from a source to a destination, using either AMQP 0-9-1, AMQP 1.0 or a mixture of both. The Shovel will do any necessary translations when moving from one version to another. In this blog, we&#39;ll focus on configuring a Shovel, which will consume from a RabbitMQ queue and publish to a Solace queue.</p>
+<p class="image-container"><img alt="Course Logos" src="img\1cda9f5b58cff49a.png"></p>
+<p>By the end of the course, you will have a Rabbit Shovel moving data from a RabbitMQ queue to a Solace PubSub+ queue.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Environment Setup" duration="15">
+        <h2 is-upgraded>Solace PubSub+ Cloud Messaging Service</h2>
+<p><strong>(1) Sign up for a free Solace Cloud account</strong></p>
+<p>Navigate to <a href="https://console.solace.cloud/login/new-account" target="_blank">this link</a> and fill out the required information. No credit card required! If you already have an account, skip right to #2.</p>
+<p><strong>(2) Create a messaging service</strong></p>
+<p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img\69ef3e88fda1a7ab.png"></p>
+<p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
+<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img\5a22c0f377b314ed.png"></p>
+<p>Fill out all the details for your messaging service. For the Advanced Options, enable the AMQP plaintext port.</p>
+<p class="image-container"><img alt="Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img\33d49d6ff2a0dc37.png"><img alt="Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img\3dc026d4be95e29f.png"></p>
+<p>Click &#34;Create&#34; at the bottom of the page.</p>
+<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img\a7ea4d393008a8c3.png"></p>
+<p>Your service should be ready to use in a couple seconds! When it is running, go to the Advanced Settings page and open the plaintext AMQP port.</p>
+<h2 is-upgraded>RabbitMQ</h2>
+<p>Once we have our Solace messaging service started, we can start a RabbitMQ docker instance:</p>
+<pre><code>docker pull rabbitmq
+docker run -d --hostname rabbit -p 5672:5672 -p 25672:25672 -p 15672:15672 --name rabbit rabbitmq
+</code></pre>
+<p>The following RabbitMQ plugins must be installed and enabled – they all come prepackaged with the latest version of the RabbitMQ docker image. To enable, we can use the RabbitMQ CLI:</p>
+<pre><code>docker exec -it rabbit /bin/bash
+rabbitmq-plugins enable rabbitmq_management
+rabbitmq-plugins enable rabbitmq_amqp1_0
+rabbitmq-plugins enable rabbitmq_shovel
+rabbitmq-plugins enable rabbitmq_shovel_management
+</code></pre>
+<p>To verify the change, we can check the plugins:</p>
+<pre><code>rabbitmq-plugins list
+Configured: E = explicitly enabled; e = implicitly enabled
+ | Status: * = running on rabbit@rabbit
+ |/
+[E*] rabbitmq_amqp1_0                  3.8.8
+[E*] rabbitmq_management               3.8.8
+[e*] rabbitmq_management_agent         3.8.8
+[E*] rabbitmq_shovel                   3.8.8
+[E*] rabbitmq_shovel_management        3.8.8
+</code></pre>
+<p>After a restart of the RabbitMQ broker, we can configure the Shovel with the Management UI by navigating to &#34;localhost:15672&#34; in a browser and using the management credentials to sign in (default is guest/guest).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 1 - Create the Queues" duration="5">
+        <p>Our RabbitMQ Shovel requires a queue on both brokers - in this step we will create a queue on RabbitMQ and on the Solace Messaging Service.</p>
+<h2 is-upgraded>RabbitMQ Queue</h2>
+<p>On the RabbitMQ Management UI, &#34;localhost:15672&#34;, navigate to the Queue tab and create a new queue.</p>
+<p class="image-container"><img alt="Rabbit Add Queue" title="RabbitMQ Management Queue Tab" src="img\f8b0092d786a67fd.png"></p>
+<h2 is-upgraded>Solace Queue</h2>
+<p>From the Solace Messaging Service, navigate to the Management UI using the ‘Manage&#39; tab &gt; Queues button. This will open a new tab in your browser.</p>
+<p class="image-container"><img alt="Solace Manage Queues" title="Solace Messaging Servie Manage Tab" src="img\1102230fa234abff.png"></p>
+<p>Create a new queue by clicking the +Queue button at top right. Provide your queue with a name, and click Create.</p>
+<p class="image-container"><img alt="Solace Create Queue" title="PubSub+ Manager Queues Tab" src="img\565b5ab35219ce7.png"></p>
+<p>On the queue settings page, click Apply.</p>
+<p class="image-container"><img alt="Solace Apply Queue" title="PubSub+ Manager Queues Tab" src="img\e5f58b3b58e8d2df.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 2 - Create the RabbitMQ Shovel" duration="5">
+        <p>In this step, we will use the RabbitMQ Management UI to create our Shovel. This is the component that will bridge data from the RabbitMQ queue to the Solace queue.</p>
+<h2 is-upgraded>Create the Shovel</h2>
+<p>On the RabbitMQ Management UI, &#34;localhost:15672&#34;, navigate to the Admin &gt; Shovel Management page.</p>
+<p class="image-container"><img alt="Rabbit Shovel Page" title="RabbitMQ Management Admin Tab" src="img\280448ecf7517fc1.png"></p>
+<p>The first step for our Shovel is to indicate the version of AMQP at the source and destination. For this example, we will be moving AMQP 0-9-1 messages from RabbitMQ and publishing the messages to Solace with AMQP 1.0.</p>
+<p class="image-container"><img alt="Rabbit AMQP Versions" title="RabbitMQ Management Admin Tab" src="img\f15b72c72d5c366f.png"></p>
+<p>The URI for the local RabbitMQ instance can be left to default &#34;amqp://&#34;. The field beside the URI indicates the RabbitMQ queue name to receive messages from.</p>
+<p>For the Solace connection, we need to specify the host, port, and authentication. You can find these details on the Solace Messaging Service ‘Connect&#39; tab under AMQP protocol.</p>
+<p class="image-container"><img alt="Solace AMQP Connection" title="Solace Messaging Tab" src="img\34814047b9b87032.png"></p>
+<p>On the RabbitMQ Shovel page, enter the URI in the format &#34;amqp://:@:&#34;</p>
+<p class="image-container"><img alt="Shovel Solace Connection" title="RabbitMQ Management Admin Tab" src="img\f1ee7ff63d237331.png"></p>
+<p>Finally, add the Solace queue name in the ‘Address&#39; field for the Shovel, and click ‘Add Shovel&#39;.</p>
+<p class="image-container"><img alt="Shovel Solace Connection" title="RabbitMQ Management Admin Tab" src="img\9528556737f276b9.png"></p>
+<h2 is-upgraded>View the Shovel</h2>
+<p>On the Shovel page, go to Admin &gt; Shovel Status. Your new Shovel should be in the table and the state should say ‘running&#39;.</p>
+<p class="image-container"><img alt="Rabbit Shovel Status" title="RabbitMQ Management Admin Tab" src="img\2456a7580d6e886a.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 3 - Test the RabbitMQ Shovel" duration="2">
+        <p>To test the RabbitMQ Shovel connection to Solace, we can simply publish a message to the RabbitMQ and see that it is received by the Solace queue.</p>
+<h2 is-upgraded>Send a Message</h2>
+<p>On the RabbitMQ Management UI, &#34;localhost:15672&#34;, navigate to the Queues page. Click on the queue that is configured as the source for the Shovel to view the queue-specific page.</p>
+<p>On the queue page, use the ‘Publish message&#39; functionality to send a message to the queue.</p>
+<p class="image-container"><img alt="Rabbit Send Message" title="RabbitMQ Management Queues Tab" src="img\d200ba3ff9f9e88d.png"></p>
+<p>On the Solace Management UI Queue page, the destination queue from the bridge should show a message has been saved in the queue. Click on the queue to view this page.</p>
+<p class="image-container"><img alt="Solace Receive Message" title="PubSub+ Manager Queues Tab" src="img\d0e51a5594ed10d.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="1">
+        <p class="image-container"><img alt="Soly Image Caption" src="img\44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

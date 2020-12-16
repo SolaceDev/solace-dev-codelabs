@@ -1,0 +1,19 @@
+{
+  "name": "codelab-bootstrap",
+  "version": "1.0.0",
+  "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch rabbitmq-shovel-to-solace.md --exec \"claat export -o temp/ rabbitmq-shovel-to-solace.md && openfiles -c claat -t | xargs kill && cd temp/rabbitmq-shovel-to-solace && claat serve\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/rabbitmq-shovel-to-solace"
+  },
+  "keywords": [
+    "codelab"
+  ],
+  "dependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
