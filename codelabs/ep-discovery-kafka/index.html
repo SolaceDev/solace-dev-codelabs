@@ -61,7 +61,7 @@
     
       <google-codelab-step label="Foundational Concepts" duration="5">
         <p>Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal.</p>
-<aside class="special"><p>We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
+<aside class="special"><p>We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won&#39;t go into depth of explaining the Kafka concepts but rather explain how they relate to the Event Portal. If you are completely new to our Event Portal then watch <a href="https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?" target="_blank">this quick 2 mins video</a> to get overview and create your <a href="https://solace.com/products/portal/" target="_blank">free trial account</a>.</p>
 </aside>
 <h2 is-upgraded>Consumer Groups</h2>
 <p>Event Portal supports the concept of Kafka&#39;s consumer groups. A consumer group is used by Kafka to group consumers into a logical subscriber for a topic. In Event Portal, you can model consumer groups in Designer. This enables the Event Portal&#39;s runtime discovery to associate a discovered consumer group to an existing application.</p>
@@ -270,7 +270,7 @@
 <p class="image-container"><img alt="Map Fraud Application" src="img/186add9c4496b9a2.gif"></p>
 <h2 is-upgraded>Topic Mapping</h2>
 <h3 is-upgraded>taxinyc.analytics.fraud.alerted.v1</h3>
-<p>Now we have one Topic, <code>taxinyc.analytics.fraud.alerted.v1</code>, renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the <code>Fraud Detection App</code>. So we can drag the topic to that app now.</p>
+<p>Now we have one Topic, <code>taxinyc.analytics.fraud.alerted.v1</code> remaining that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the <code>Fraud Detection App</code>. So we can drag the topic to that app now.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/cd71afce6d5a989c.gif"></p>
 <h3 is-upgraded>taxinyc.analytics.kpi.exceeded.v1</h3>
 <p>What about the <code>taxinyc.analytics.kpi.exceeded.v1</code> topic that is being consumed by the two Connectors (SolaceSinkConnectorOPS and the ElasticsearchSink-Connector)? After talking with our domain expert we identified that this is an event published by both the <strong>Passenger Surge Detection</strong> &amp; <strong>Drive Incentive Calc</strong> application. So go ahead and make those association.</p>

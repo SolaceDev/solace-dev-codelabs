@@ -56,7 +56,7 @@ Duration: 0:05:00
 Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal. 
 
 Positive
-: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
+: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how they relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
 
 ### Consumer Groups
 
@@ -351,7 +351,7 @@ Similarly map the `taxinyc_analytics_passengersurgedetection_group` to a new app
 
 #### taxinyc.analytics.fraud.alerted.v1
 
-Now we have one Topic, `taxinyc.analytics.fraud.alerted.v1`, renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
+Now we have one Topic, `taxinyc.analytics.fraud.alerted.v1` remaining that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
 
 ![Map Fraud Application](img/drag_drop3.gif)
 

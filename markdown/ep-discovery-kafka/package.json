@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch ep-discovery-kafka.md --exec 'claat export ep-discovery-kafka.md && lsof -c claat -t | xargs kill && cd ep-discovery-kafka && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
