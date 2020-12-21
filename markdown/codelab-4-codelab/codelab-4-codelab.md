@@ -314,7 +314,7 @@ Duration: 0:05:00
 
 ### Stage your Codelab
 
-Add your changes and any newly created files, then commit & push the changes. From your **root** directory, execute:
+Add your changes and any newly created files, then commit & push the changes. From your **codelabs root** directory, execute:
 ``` bash
 cd solace-dev-codelabs
 git add .
