@@ -56,7 +56,7 @@ Duration: 0:05:00
 Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal. 
 
 Positive
-: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how the relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
+: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how they relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
 
 ### Consumer Groups
 
@@ -351,7 +351,7 @@ Similarly map the `taxinyc_analytics_passengersurgedetection_group` to a new app
 
 #### taxinyc.analytics.fraud.alerted.v1
 
-Now we have one Topic, `taxinyc.analytics.fraud.alerted.v1`, renaming that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
+Now we have one Topic, `taxinyc.analytics.fraud.alerted.v1` remaining that needs to be mapped. You being an expert in NYC Taxi Analytics team, you know this Topic is produced by the `Fraud Detection App`. So we can drag the topic to that app now.
 
 ![Map Fraud Application](img/drag_drop3.gif)
 
@@ -396,7 +396,7 @@ This is where you might want to spend some time to redraw you graph, maybe putti
 
 ![Designer Graph View](img/designer_graph_view.png)
 
-As we did this, we were able to realized something that wasn't really right. From reorganizing the graph we noticed that there is an event `taxinyc.analytics.fraud.alerted.v1` that is produced by the `Fraud Detection Application` but not really consumed by anyone. We look at this as a opportunity as that event has some value, and can be used for a new business use case, maybe to have a new insight or customer experience. Ideally you could create a new application in the Designer, associate this event to be consumed by it, generate an AsyncAPI spec from the Event Portal, run it through code generators or code it up, connect it to Kafka, and re-scan where the Discovery would say our design is in sync with Kafka runtime. 
+As we did this, we realized something that wasn't really right. From reorganizing the graph we noticed that there is an event `taxinyc.analytics.fraud.alerted.v1` that is produced by the `Fraud Detection Application` but not really consumed by anyone. We look at this as a opportunity as that event has some value, and can be used for a new business use case, maybe to have a new insight or customer experience. Ideally you could create a new application in the Designer, associate this event to be consumed by it, generate an AsyncAPI spec from the Event Portal, run it through code generators or code it up, connect it to Kafka, and re-scan where the Discovery would say our design is in sync with Kafka runtime. 
 
 But we don't live in an ideal world and say we didn't follow the above process, developed a quick Kafka application that consumed that event, and maybe we forgot to update it in the Designer. So lets say that happened. What would our Discovery Scan show if we re-ran the Discovery Agent? Well lets find out.
 
