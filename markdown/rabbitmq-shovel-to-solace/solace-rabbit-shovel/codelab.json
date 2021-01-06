@@ -1,0 +1,33 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-12-16T09:55:58-05:00",
+  "id": "solace-rabbit-shovel",
+  "duration": 29,
+  "title": "Bridge data from RabbitMQ to Solace PubSub+",
+  "summary": "Bridge data from RabbitMQ to Solace PubSub+ with the RabbitMQ Shovel plugin",
+  "source": "rabbitmq-shovel-to-solace.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "java",
+    "spring",
+    "javascript",
+    "aurelia",
+    "typescript"
+  ],
+  "tags": [
+    "amqp",
+    "rabbit",
+    "web",
+    "workshop"
+  ],
+  "feedback": "http://github.com/solacetraining/solace-battleship/issues",
+  "ga": "UA-3921398-10",
+  "url": "solace-rabbit-shovel"
+}
