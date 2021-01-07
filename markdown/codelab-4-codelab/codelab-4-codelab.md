@@ -38,13 +38,16 @@ You can also watch a video on how you can contribute to authoring a codelab by v
 Duration: 0:04:00
 
 In order to create a Codelab you need   
-- Go  
-- claat (the codelabs command line tool) installed.
+- [Go](https://golang.org/dl/)  
+- [claat](https://github.com/googlecodelabs/tools/tree/master/claat) (the codelabs command line tool) installed.
+- [Nodejs](https://nodejs.org/en/download/)
 
-### Download from source
-Install [Go](https://golang.org/dl/) and [claat](https://github.com/googlecodelabs/tools/tree/master/claat) if you don't have it. You can follow the documentation on Go's website and the Google Codelabs github repo. 
+You have two options to download the dependencies:
 
-### Download from cli: MacOS/Linux setup
+### Option A: Download from source
+- Install Go, claat, and NodeJs from the links above if you don't have them already installed. You can follow the documentation on Go's website and the Google Codelabs github repo. 
+
+### Option B: Download from cli: MacOS/Linux setup
 
 #### Install Go 
 
@@ -114,7 +117,7 @@ Start by
 1. Forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)   
 ![image_caption](img/fork.png)
 
-2. Clone your fork. Note: replace `<Your_Github_User>` with your github username
+2. Clone your fork. Note: replace `<Your_Github_User>` with your github username and `<name_of_codelab>` with the name of your codelabs
 
 ``` bash
 git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
