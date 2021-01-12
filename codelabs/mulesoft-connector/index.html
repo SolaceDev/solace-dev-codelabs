@@ -27,19 +27,21 @@
                   environment="web"
                   feedback-link="https://solace.community/">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="2">
-        <p>In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform</p>
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p class="image-container"><img alt="solace-mule" title="solace-mule" src="img/5d9d0b52191e7950.png"></p>
+<p>In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform</p>
 <p>The MuleSoft Anypoint Platform in an integration platform and acts as a complete solution for API-led connectivity. You can learn more about MuleSoft Anypoint <a href="https://videos.mulesoft.com/watch/bakFGgwqNDJzoJFNydiMiH" target="_blank">here</a>. Alternatively you can checkout the ultimate <a href="https://blogs.mulesoft.com/dev-guides/how-to-tutorials/new-developer-quick-start-guides/" target="_blank">MuleSoft developer quick start guide</a></p>
+<p>So put your seatbelt on and tag along in the following steps!</p>
+<p class="image-container"><img alt="seatbelt" title="seatbelt" src="img/9d9d88f5aa89fa7f.gif"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
+      <google-codelab-step label="What you need: Prerequisites" duration="1">
         <p>To run this codelab all you need</p>
 <ol type="1">
 <li>Access to a Solace broker (Cloud, Hardware, Software Image)</li>
 <li>MuleSoft Anypoint Account &amp; Anypoint Studio</li>
-<li>Solace Mulesoft Connector</li>
 </ol>
 
 
@@ -101,8 +103,9 @@
 </li>
 </ul>
 <p class="image-container"><img alt="pom" title="pom" src="img/48c72bb2c3f133c5.png"></p>
-<aside class="special"><p>Note: If you are new to Anypoint Studio, you can switch from <code>Design</code> to <code>Source</code> view for the file <img alt="pom-source" title="pom-source" src="img/3a545d3aeeaed4c0.png"></p>
+<aside class="special"><p>Note: If you are new to Anypoint Studio, you can switch from <code>Design</code> to <code>Source</code> view for the file 👇</p>
 </aside>
+<p class="image-container"><img alt="pom-source" title="pom-source" src="img/3a545d3aeeaed4c0.png"></p>
 <ul>
 <li>Save the file. Note that when you save the file, the IDE immediately executes a <code>mvn install</code> which installs the solace connector <img alt="connector-install" title="connector-install" src="img/5f13be11a57345f8.png"></li>
 </ul>
@@ -112,20 +115,21 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Basic Publisher Flow" duration="0">
+      <google-codelab-step label="Basic Publisher Flow" duration="5">
         <p>Now that the connector is installed, go ahead and navigate to <code>src/main/mule</code> and double click on the xml file. When you do so, you will see an empty Message Flow canvas <img alt="mainxml" title="mainxml" src="img/77e1d07b01cd9f34.png"></p>
-<p>Observe in the Main Palette on the right hand side the Solace Connector with all the different operations that you can use <img alt="solace-palatte" title="solace-palatte" src="img/2cdd5ce284e4685e.png"></p>
+<p>Observe in the Main Palette on the right hand side the Solace Connector with all the different operations that you can use <img alt="solace-palatte" title="solace-palatte" src="img/b31b747c94626335.png"></p>
 <p>Let&#39;s go ahead and create a basic flow that publishes events on a predefined topic to the previously created solace broker and subscribes on the same topic.</p>
 <ul>
 <li>Drag the publish Palette from the Solace directory into the Message Flow canvas</li>
 </ul>
-<p class="image-container"><img alt="drag-publish" title="drag-publish" src="img/df0e537b3ab1b5f7.png"></p>
+<p class="image-container"><img alt="drag-publish" title="drag-publish" src="img/3766e497f6e99caf.png"></p>
 <ul>
-<li>Double click on the Publish object and navigate to the Basic Settings. Click on the green <code>Add</code> icon to add a new connection configuration <img alt="connector-configure" title="connector-configure" src="img/c36b78530ccb8bee.png"></li>
+<li>Double click on the Publish object and navigate to the Basic Settings. Click on the green <code>Add</code> icon to add a new connection configuration</li>
 <li>Fill in the connection information to configure the Publisher object <img alt="connector-configure2" title="connector-configure2" src="img/5c8e63eabc509bf4.png"></li>
 </ul>
-<aside class="special"><p>You can find the host configuration from the <code>Connect</code> tab in your Solace Cloud Account <img alt="connect-tab" title="connect-tab" src="img/cf0b03fe01b4ee1f.png"></p>
+<aside class="special"><p>You can find the host configuration from the <code>Connect</code> tab in your Solace Cloud Account</p>
 </aside>
+<p class="image-container"><img alt="connect-tab" title="connect-tab" src="img/cf0b03fe01b4ee1f.png"></p>
 <ul>
 <li>Once done, you can test the connection <img alt="connection-success" title="connection-success" src="img/370890ba30176cd9.png"></li>
 </ul>
@@ -133,7 +137,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Put it all together" duration="10">
+      <google-codelab-step label="Put it all together" duration="9">
         <p>Now that you have a publisher object configured, let&#39;s test it out! In this step, we will configure a scheduler that will publish messages every second on a predefined topic</p>
 <aside class="special"><p>Note: You can use <strong>any</strong> trigger like a post REST request</p>
 </aside>
@@ -165,8 +169,8 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+      <google-codelab-step label="Takeaways" duration="2">
+        <p>✅ We were able to show how to create a new Solace Cloud Account<br> ✅ Install Anypoint Studio ✅ Install the Solace Connector ✅ Configure a publish object ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration</p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 

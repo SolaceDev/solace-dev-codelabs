@@ -12,21 +12,27 @@ analytics account: UA-3921398-10
 
 ## What you'll learn: Overview
 
-Duration: 0:02:00
+Duration: 0:01:00
+
+![solace-mule](img/solace-mule.png "solace-mule")
+
 
 In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform
 
 The MuleSoft Anypoint Platform in an integration platform and acts as a complete solution for API-led connectivity. You can learn more about MuleSoft Anypoint [here](https://videos.mulesoft.com/watch/bakFGgwqNDJzoJFNydiMiH). Alternatively you can checkout the ultimate [MuleSoft developer quick start guide](https://blogs.mulesoft.com/dev-guides/how-to-tutorials/new-developer-quick-start-guides/)
 
+So put your seatbelt on and tag along in the following steps!     
+
+![seatbelt](img/seatbelt.gif "seatbelt")
+
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+Duration: 0:01:00
 
 To run this codelab all you need
 
 1. Access to a Solace broker (Cloud, Hardware, Software Image)
 1. MuleSoft Anypoint Account & Anypoint Studio
-1. Solace Mulesoft Connector
 
 ## Setup a Solace PubSub+ cloud Broker 
 Duration: 0:05:00
@@ -104,7 +110,8 @@ Duration: 0:02:00
 ![pom](img/pom.png "pom")
 
 Positive
-: Note: If you are new to Anypoint Studio, you can switch from `Design` to `Source` view for the file
+: Note: If you are new to Anypoint Studio, you can switch from `Design` to `Source` view for the file 👇
+
 ![pom-source](img/pom-source.png "pom-source")
 
 
@@ -116,6 +123,7 @@ Positive
 : The connector is installed and ready to use 💥
 
 ## Basic Publisher Flow
+Duration: 0:05:00
 
 Now that the connector is installed, go ahead and navigate to `src/main/mule` and double click on the xml file. When you do so, you will see an empty Message Flow canvas
 ![mainxml](img/mainxml.png "mainxml")
@@ -130,20 +138,20 @@ Let's go ahead and create a basic flow that publishes events on a predefined top
 ![drag-publish](img/drag-publish.png "drag-publish")
 
 - Double click on the Publish object and navigate to the Basic Settings. Click on the green `Add` icon to add a new connection configuration
-![connector-configure](img/connector-configure.png "connector-configure")
 
 - Fill in the connection information to configure the Publisher object
 ![connector-configure2](img/connector-configure2.png "connector-configure2")
 
 Positive
-: You can find the host configuration from the `Connect` tab in your Solace Cloud Account
+: You can find the host configuration from the `Connect` tab in your Solace Cloud Account 
+
 ![connect-tab](img/connect-tab.png "connect-tab")
 
 - Once done, you can test the connection
 ![connection-success](img/connection-success.png "connection-success")
 
 ## Put it all together
-Duration: 0:10:00
+Duration: 0:9:00
 
 Now that you have a publisher object configured, let's test it out! In this step, we will configure a scheduler that will publish messages every second on a predefined topic
 
@@ -191,10 +199,12 @@ And that's it! You can check out more information on [solace-iot-team/solace-mul
 
 ## Takeaways
 
-Duration: 0:07:00
+Duration: 0:02:00
 
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3>   
+✅ We were able to show how to create a new Solace Cloud Account    
+✅ Install Anypoint Studio
+✅ Install the Solace Connector 
+✅ Configure a publish object 
+✅ Use the Solace Cloud TryMe tab to test out our connection and configuration
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
