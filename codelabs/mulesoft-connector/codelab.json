@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2021-01-12T09:46:28-05:00",
+  "id": "mulesoft-connector",
+  "duration": 38,
+  "title": "Using the MuleSoft Solace Connector to publish events",
+  "summary": "",
+  "source": "mulesoft-connector.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "mulesoft",
+    "web"
+  ],
+  "feedback": "https://solace.community/",
+  "ga": "UA-3921398-10",
+  "url": "mulesoft-connector"
+}
