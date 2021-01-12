@@ -201,10 +201,12 @@ And that's it! You can check out more information on [solace-iot-team/solace-mul
 
 Duration: 0:02:00
 
-✅ We were able to show how to create a new Solace Cloud Account    
-✅ Install Anypoint Studio
-✅ Install the Solace Connector 
-✅ Configure a publish object 
-✅ Use the Solace Cloud TryMe tab to test out our connection and configuration
+✅ We were able to show how to create a new Solace Cloud Account     
+✅ Install Anypoint Studio    
+✅ Install the Solace Connector    
+✅ Configure a publish object     
+✅ Use the Solace Cloud TryMe tab to test out our connection and configuration    
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
+
+![thumbsup](img/thumbsup.gif "thumbsup")
