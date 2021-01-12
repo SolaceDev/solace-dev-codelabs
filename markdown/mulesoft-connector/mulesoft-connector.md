@@ -1,8 +1,8 @@
 author: Tamimi
 summary:
 id: mulesoft-connector
-tags: Mulesoft
-categories:
+tags: 
+categories: Mulesoft
 environments: Web
 status: Published
 feedback link: https://solace.community/
