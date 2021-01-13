@@ -196,6 +196,41 @@ Positive
 
 And that's it! You can check out more information on [solace-iot-team/solace-mule-connector](https://github.com/solace-iot-team/solace-mule-connector) github repo to see other functionalities with the broker
 
+## [Optional] Add a subscriber flow
+Duration: 0:5:00
+
+Now that you have created a publisher flow and tested it out, let's go ahead and create a `TopicListener` object that will connect to the broker and subscribe to the topic we sent. To do so:
+
+- Navigate to the Solace-Connector Palette, drag and drop the `TopicListner` object into the canvas
+
+![topic-listener](img/topic-listener.png "topic-listener")
+
+- Double click on the TopicListner object to configure it. Notice how the Connector Configuration settings is auto populated. Change the Subscription value from `Bean Reference` to `Inline`		
+![topic-listner-config](img/topic-listner-config.png "topic-listner-config")	
+
+- Click on the green add icon to add a subscription. Add `solace/mule/>`
+![topic-listner-add](img/topic-listner-add.png "topic-listner-add")
+
+- Add a logging shape. Search for `Logger` from the pallette menu and drag it to the TopicListner flow	
+![add-logger](img/add-logger.png "add-logger")	
+
+- Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following
+![logger-config](img/logger-config.png "logger-config")	
+
+
+```
+%dw 2.0
+output application/java
+---
+payload
+```
+
+- Your full flow should look like this		
+![full-flow](img/full-flow.png "full-flow")		
+
+- Run it! Observe in the logs every second an output of the message will be logged
+![log](img/log.png "log")		
+
 
 ## Takeaways
 

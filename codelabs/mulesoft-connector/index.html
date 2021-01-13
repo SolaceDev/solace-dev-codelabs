@@ -169,6 +169,29 @@
 
       </google-codelab-step>
     
+      <google-codelab-step label="[Optional] Add a subscriber flow" duration="5">
+        <p>Now that you have created a publisher flow and tested it out, let&#39;s go ahead and create a <code>TopicListener</code> object that will connect to the broker and subscribe to the topic we sent. To do so:</p>
+<ul>
+<li>Navigate to the Solace-Connector Palette, drag and drop the <code>TopicListner</code> object into the canvas</li>
+</ul>
+<p class="image-container"><img alt="topic-listener" title="topic-listener" src="img/ebc0803652ae9e03.png"></p>
+<ul>
+<li>Double click on the TopicListner object to configure it. Notice how the Connector Configuration settings is auto populated. Change the Subscription value from <code>Bean Reference</code> to <code>Inline</code><img alt="topic-listner-config" title="topic-listner-config" src="img/f0225428d6abba2.png"></li>
+<li>Click on the green add icon to add a subscription. Add <code>solace/mule/&gt;</code><img alt="topic-listner-add" title="topic-listner-add" src="img/9820f7af7942b04a.png"></li>
+<li>Add a logging shape. Search for <code>Logger</code> from the pallette menu and drag it to the TopicListner flow	 <img alt="add-logger" title="add-logger" src="img/c227e6fbf255bc64.png"></li>
+<li>Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following <img alt="logger-config" title="logger-config" src="img/b65e81ae41adf467.png"><pre><code>%dw 2.0
+output application/java
+---
+payload
+</code></pre>
+</li>
+<li>Your full flow should look like this		 <img alt="full-flow" title="full-flow" src="img/be329c20ed86e4dd.png"></li>
+<li>Run it! Observe in the logs every second an output of the message will be logged <img alt="log" title="log" src="img/31b3fa372760b8e.png"></li>
+</ul>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Takeaways" duration="2">
         <p>✅ We were able to show how to create a new Solace Cloud Account<br> ✅ Install Anypoint Studio<br> ✅ Install the Solace Connector<br> ✅ Configure a publish object<br> ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration</p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
