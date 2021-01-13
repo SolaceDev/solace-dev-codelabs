@@ -88,7 +88,7 @@ Positive
 : These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.
 
 ### Getting Started: verifying a connection
-At the start we'll validate we can connect to the broker using the Try-Me! feature of PubSub+ Manager.  We'll then use PubSub+ Manager to find and validate our connection.
+At the start we'll validate we can connect to the broker using the Try-Me! feature of PubSub+ Broker Manager.  We'll then use PubSub+ Broker Manager to find and validate our connection.
 
 ![](./img/start.png)
 
@@ -113,7 +113,7 @@ Duration: 0:05:00
 
 ### Connect Try-Me! to your broker
 
-We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Manager.
+We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Broker Manager.
 
 #### An aside: SDKPerf 
 
@@ -132,7 +132,7 @@ Positive
 
 ### 1 Find Try-Me!
 
-Firstly, start PubSub+ Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.
+Firstly, start PubSub+ Broker Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.
 
 * Docker: "localhost:8080"
 * VM image: "{ip address}:8080
@@ -165,16 +165,16 @@ Positive
 
 Then recreate and restart your container.
 
-## Start: find connection in PubSub+ Manager
+## Start: find connection in PubSub+ Broker Manager
 Duration: 0:05:00
 
 #### For local (Docker/VM/Appliance brokers)
 
-Open PubSub+ Manager.  Go to your web browser and type the IP address and port of your broker: for default Docker or VM installations, this is http://{ip address}:8080.  In my installation above, that looks like
+Open PubSub+ Broker Manager.  Go to your web browser and type the IP address and port of your broker: for default Docker or VM installations, this is http://{ip address}:8080.  In my installation above, that looks like
 
 	http://192.168.0.31:8080/
 
-PubSub+ Manager will start.  Click on the message VPN ("default" for vanilla installs), then click Client Connections.  
+PubSub+ Broker Manager will start.  Click on the message VPN ("default" for vanilla installs), then click Client Connections.  
 
 ### For PubSub+ Cloud
 
@@ -182,9 +182,9 @@ Go to the [PubSub+ Cloud console](https://console.solace.cloud/), then pick the 
 
 ![](./img/cloud-manage.png)
 
-Then, under the **PubSub+ Manager Quick Settings** heading, click **Clients**.  This will take you to the PubSub+ Manager Client Connections screen.
+Then, under the **PubSub+ Broker Manager Quick Settings** heading, click **Clients**.  This will take you to the PubSub+ Broker Manager Client Connections screen.
 
-### PubSub+ Manager Connections Screen
+### PubSub+ Broker Manager Connections Screen
 
 In the Client Connections Screen, you should see a list of the client connections for your broker.  Since this is a *native* connection, it will appear in the **Solace Clients** tab: here's what I saw:
 
@@ -194,9 +194,9 @@ It's worth spending a minute or two exploring the client connection screens.  Fo
 
 ![The Client Properties screen has a lot of useful information about the client](./img/connection-details.png)
 
-I would always recommend checking that you have connected to the broker you think you have and to the VPN you think you have.  Checking you can see the connection using PubSub+ Manager is a great way to make sure you're where you think you are.
+I would always recommend checking that you have connected to the broker you think you have and to the VPN you think you have.  Checking you can see the connection using PubSub+ Broker Manager is a great way to make sure you're where you think you are.
 
-Now we've successfully connected a test client (sdkerf), validated that it has connected to the broker and used PubSub+ Manager to interrogate the connection, we can get started with code!
+Now we've successfully connected a test client (sdkerf), validated that it has connected to the broker and used PubSub+ Broker Manager to interrogate the connection, we can get started with code!
 
 ## API Initialisation
 Duration: 0:15:00
@@ -443,7 +443,7 @@ You should see something like:
 	
 	Exiting.
 
-Next, go to PubSub+ Manager, find TopicSubscriber, and check that you've subscribed to tutorial/topic.  We covered most of this in Section 5, so refer back there if you need to, but we didn't cover it all - have a look around!
+Next, go to PubSub+ Broker Manager, find TopicSubscriber, and check that you've subscribed to tutorial/topic.  We covered most of this in Section 5, so refer back there if you need to, but we didn't cover it all - have a look around!
 
 We've now completed Part B - sdkperf has sent a message which we've received in TopicSubscriber.
 
