@@ -44,7 +44,7 @@
 <li>NodeJs</li>
 </ul>
 <h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
-<ul class="checklist">
+<ul>
 <li>Where to go for sample code and documentation</li>
 <li>How to get started</li>
 <li>How to connect to the broker</li>
@@ -60,7 +60,7 @@
       <google-codelab-step label="Prerequisites &amp; Assumptions" duration="7">
         <p>Before you start, make sure:</p>
 <ul>
-<li>You have your favourite IDE fired up and ready to go<br><img alt="Everyone's favourite IDE" src="img/962d7dd94c5769a7.png"></li>
+<li>You have your favourite IDE fired up and ready to go <img alt="Everyone’s favourite IDE" src="img/962d7dd94c5769a7.png"></li>
 <li>You have a &#34;broker&#34; set up and ready to go.  A &#34;broker&#34; could be <a href="https://console.solace.cloud/" target="_blank">Solace Cloud</a> plan, local PubSub+ software running under <a href="https://products.solace.com/download/PUBSUB_DOCKER_STAND" target="_blank">Docker</a> or a <a href="https://products.solace.com/download/PUBSUB_STAND_OVA" target="_blank">VM</a>, or even a hardware appliance if you&#39;re lucky.  Just make sure you have the client credentials, for instance &#34;client_username@messag-vpn&#34; and the password.</li>
 <li>You have &#34;no&#34; or &#34;basic&#34; authentication configured on the broker you&#39;re connecting to.  Of course we can do TLS, but that&#39;s waaaaay beyond the scope of this one...</li>
 <li>You&#39;ve <a href="https://solace.com/downloads/" target="_blank">downloaded</a>, installed or included in your dependency manager the native API of your choice</li>
@@ -70,7 +70,10 @@
 </ul>
 <aside class="special"><p>We have a lot of excellent Tutorial material available to help you get started.  This CodeLab doesn&#39;t replace those, it&#39;s here to encourage you to use them!</p>
 </aside>
-<p>Nice simple <a href="https://www.solace.dev/" target="_blank">Get Connected Tutorials</a>More detailed <a href="https://docs.solace.com/Developer-Tutorials/Developer-Tutorials.htm" target="_blank">Developer Tutorials</a></p>
+<ul>
+<li>Nice simple <a href="https://www.solace.dev/" target="_blank">Get Connected Tutorials</a></li>
+<li>More detailed <a href="https://docs.solace.com/Developer-Tutorials/Developer-Tutorials.htm" target="_blank">Developer Tutorials</a></li>
+</ul>
 <h3 is-upgraded>Cloning SolaceSamples</h3>
 <p>Create a directory in the location of your choice where you&#39;ll follow along and run the samples.  We then want to clone SolaceSamples in to your directory.  You have 3 choices:</p>
 <ul>
@@ -79,7 +82,7 @@
 <li>use your browser and pick the &#34;download&#34; button.</li>
 </ul>
 <p>As an example, using git clone for the java samples:</p>
-<pre><code>git clone https://github.com/SolaceSamples/solace-samples-java  
+<pre><code>git clone https://github.com/SolaceSamples/solace-samples-java	
 </code></pre>
 <h2 is-upgraded>Free Solace Stuff!</h2>
 <aside class="special"><p>All of the broker images and API software are available on the <a href="https://solace.com/downloads/" target="_blank">Solace Downloads Page</a>.  If you haven&#39;t already, go to it!</p>
@@ -93,7 +96,7 @@
 <aside class="special"><p>These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.</p>
 </aside>
 <h2 is-upgraded>Getting Started: verifying a connection</h2>
-<p>At the start we&#39;ll validate we can connect to the broker using the Try-Me! feature of PubSub+ Manager.  We&#39;ll then use PubSub+ Manager to find and validate our connection.</p>
+<p>At the start we&#39;ll validate we can connect to the broker using the Try-Me! feature of PubSub+ Broker Manager.  We&#39;ll then use PubSub+ Broker Manager to find and validate our connection.</p>
 <p class="image-container"><img src="img/217e09544eeecd70.png"></p>
 <h2 is-upgraded>Part A</h2>
 <p>We&#39;ll then get your code to connect to the broker.  This introduces the <em>session</em> concept.</p>
@@ -110,7 +113,7 @@
     
       <google-codelab-step label="Start: connect using Try-Me!" duration="5">
         <h2 is-upgraded>Connect Try-Me! to your broker</h2>
-<p>We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Manager.</p>
+<p>We will connect Try-Me! to the broker, then validate we have a connection using PubSub+ Broker Manager.</p>
 <h3 is-upgraded>An aside: SDKPerf</h3>
 <p>For performance or advanced feature debugging, we have a specialised test harness called SDKPerf.  If you think an API feature doesn&#39;t work as expected, try the feature with SDKPerf to check.  SDKPerf&#39;s message display is also dynamite, and it gives you the option to listen with the API of your choice.  Grab it from the <a href="https://solace.com/downloads/" target="_blank">download site</a> and install, then:</p>
 <p>Linux:</p>
@@ -122,7 +125,7 @@
 <aside class="special"><p>Replace &#34;sdkperf_java.sh&#34; with &#34;sdkperf&#34; for C or your favourite SDKPerf variant for your API of choice.</p>
 </aside>
 <h2 is-upgraded>1 Find Try-Me!</h2>
-<p>Firstly, start PubSub+ Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.</p>
+<p>Firstly, start PubSub+ Broker Manager.  This should be fairly straight-forward.  You need the IP address of your broker, and the SEMP port.</p>
 <ul>
 <li>Docker: &#34;localhost:8080&#34;</li>
 <li>VM image: &#34;{ip address}:8080</li>
@@ -143,7 +146,7 @@
 <p>ports that will cause failure of the container to start.</p>
 <p>#Web transport</p>
 <ul>
-<li>‘80:80&#39;     &lt;—-  Uncomment this line.</li>
+<li>‘80:80&#39;		&lt;—-  Uncomment this line.</li>
 </ul>
 </aside>
 <p>Then recreate and restart your container.</p>
@@ -151,23 +154,23 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Start: find connection in PubSub&#43; Manager" duration="5">
+      <google-codelab-step label="Start: find connection in PubSub&#43; Broker Manager" duration="5">
         <h3 is-upgraded>For local (Docker/VM/Appliance brokers)</h3>
-<p>Open PubSub+ Manager.  Go to your web browser and type the IP address and port of your broker: for default Docker or VM installations, this is http://{ip address}:8080.  In my installation above, that looks like</p>
+<p>Open PubSub+ Broker Manager.  Go to your web browser and type the IP address and port of your broker: for default Docker or VM installations, this is http://{ip address}:8080.  In my installation above, that looks like</p>
 <pre><code>http://192.168.0.31:8080/
 </code></pre>
-<p>PubSub+ Manager will start.  Click on the message VPN (&#34;default&#34; for vanilla installs), then click Client Connections.</p>
+<p>PubSub+ Broker Manager will start.  Click on the message VPN (&#34;default&#34; for vanilla installs), then click Client Connections.</p>
 <h2 is-upgraded>For PubSub+ Cloud</h2>
 <p>Go to the <a href="https://console.solace.cloud/" target="_blank">PubSub+ Cloud console</a>, then pick the  <strong>Messaging Services</strong> item on the left hand menu, then click on your service, then click on the <strong>Manage</strong> tab.</p>
 <p class="image-container"><img src="img/53b4d15343f6742d.png"></p>
-<p>Then, under the <strong>PubSub+ Manager Quick Settings</strong> heading, click <strong>Clients</strong>.  This will take you to the PubSub+ Manager Client Connections screen.</p>
-<h2 is-upgraded>PubSub+ Manager Connections Screen</h2>
+<p>Then, under the <strong>PubSub+ Broker Manager Quick Settings</strong> heading, click <strong>Clients</strong>.  This will take you to the PubSub+ Broker Manager Client Connections screen.</p>
+<h2 is-upgraded>PubSub+ Broker Manager Connections Screen</h2>
 <p>In the Client Connections Screen, you should see a list of the client connections for your broker.  Since this is a <em>native</em> connection, it will appear in the <strong>Solace Clients</strong> tab: here&#39;s what I saw:</p>
 <p class="image-container"><img src="img/df067de68ee4ea3b.png"></p>
 <p>It&#39;s worth spending a minute or two exploring the client connection screens.  For instance, by clicking on a client, you&#39;ll be able to find out what topics this client is subscribed to, what computer it is running on, the process ID, the version of the API, and lots of other useful information that will help you debug clients.</p>
 <p class="image-container"><img alt="The Client Properties screen has a lot of useful information about the client" src="img/7a2e5ab03dd91efa.png"></p>
-<p>I would always recommend checking that you have connected to the broker you think you have and to the VPN you think you have.  Checking you can see the connection using PubSub+ Manager is a great way to make sure you&#39;re where you think you are.</p>
-<p>Now we&#39;ve successfully connected a test client (sdkerf), validated that it has connected to the broker and used PubSub+ Manager to interrogate the connection, we can get started with code!</p>
+<p>I would always recommend checking that you have connected to the broker you think you have and to the VPN you think you have.  Checking you can see the connection using PubSub+ Broker Manager is a great way to make sure you&#39;re where you think you are.</p>
+<p>Now we&#39;ve successfully connected a test client (sdkerf), validated that it has connected to the broker and used PubSub+ Broker Manager to interrogate the connection, we can get started with code!</p>
 
 
       </google-codelab-step>
@@ -195,13 +198,13 @@
 <h2 is-upgraded>1 Create the session properties</h2>
 <p>To configure the session (for instance, where should it connect to?), we create session properties and fill them out.</p>
 <p>In most samples you&#39;ll see a &#34;TopicSubscriber.&#34;  Open this is the sample language of your choice, and find the section where the session properties are filled out.</p>
-<p>Java:<br>Go to line 57ish, under &#34;TopicSubscriber initializing...&#34;.</p>
+<p>Java: Go to line 57ish, under &#34;TopicSubscriber initializing...&#34;.</p>
 <pre><code>JCSMPProperties properties = new JCSMPProperties();
 properties.setProperty(JCSMPProperties.HOST, &lt;host name or IP address&gt;);
 properties.setProperty(JCSMPProperties.USERNAME, &lt;username&gt;);
 properties.setProperty(JCSMPProperties.VPN_NAME, &lt;message VPN name&gt;);
 </code></pre>
-<p>C uses an array:<br>Go to line 115ish, under &#34;Configure the Session properties.&#34;</p>
+<p>C uses an array: Go to line 115ish, under &#34;Configure the Session properties.&#34;</p>
 <pre><code>const char     *sessionProps[50];
 int             propIndex = 0;
 sessionProps[propIndex++] = SOLCLIENT_SESSION_PROP_HOST;
@@ -255,7 +258,7 @@ public class Session {
         session.connect();
 
         while (true) { }
-      }
+	  }
 }
 </code></pre>
 <p>But it doesn&#39;t do anything!  Quite.  Read on...</p>
@@ -283,12 +286,12 @@ public class Session {
 </code></pre>
 <p>Which we then pass to the session creation call:</p>
 <pre><code>solClient_session_create ( sessionProps,
-    context_p, &amp;session_p, &amp;sessionFuncInfo, sizeof ( sessionFuncInfo ) )   
+	context_p, &amp;session_p, &amp;sessionFuncInfo, sizeof ( sessionFuncInfo ) )	
 </code></pre>
 <p>In Java, we pass the session event callback to createSession:</p>
 <pre><code>session = JCSMPFactory.onlyInstance().createSession(properties,
-        null,
-        SessionEventHandler);
+		null,
+		SessionEventHandler);
 </code></pre>
 <p>This is optional, though, but best practice says please do something with your session events, even if it&#39;s just log them.</p>
 <aside class="special"><p>If you&#39;re the kind of person that asked the teacher for extra work after you&#39;d finished the optional work before the rest of the class had finished the first question, a good exercise is to create code that prints out all session events and run it in various scenarios.</p>
@@ -307,8 +310,8 @@ public class Session {
 </code></pre>
 <p>In C, because we don&#39;t have objects we simply send the subscription request with the topic as a string (TopicSubscriber.c line 143):</p>
 <pre><code>solClient_session_topicSubscribeExt ( session_p,
-        SOLCLIENT_SUBSCRIBE_FLAGS_WAITFORCONFIRM,
-        argv[5] );
+		SOLCLIENT_SUBSCRIBE_FLAGS_WAITFORCONFIRM,
+		argv[5] );
 </code></pre>
 <p>It&#39;s no good having a subscription if we don&#39;t do anything with our messages when they arrive.  How are we going to get messages asynchronously as they arrive?  With a callback, of course.</p>
 <p>In Java, we create an object called a Message Consumer.  TopicSubscriber.java, line 72:</p>
@@ -318,9 +321,9 @@ public class Session {
 </code></pre>
 <p>In C, we create a function and add the function pointer to the session information structure.  TopicSubscriber.c, line 37:</p>
 <pre><code>solClient_rxMsgCallback_returnCode_t sessionMessageReceiveCallback(
-        solClient_opaqueSession_pt opaqueSession_p,
-        solClient_opaqueMsg_pt msg_p,
-        void *user_p ) {
+		solClient_opaqueSession_pt opaqueSession_p,
+		solClient_opaqueMsg_pt msg_p,
+		void *user_p ) {
 </code></pre>
 <p>Then at line 110:</p>
 <pre><code>    sessionFuncInfo.rxMsgInfo.callback_p = sessionMessageReceiveCallback;
@@ -349,7 +352,7 @@ Message Id:                             4
 
 Exiting.
 </code></pre>
-<p>Next, go to PubSub+ Manager, find TopicSubscriber, and check that you&#39;ve subscribed to tutorial/topic.  We covered most of this in Section 5, so refer back there if you need to, but we didn&#39;t cover it all - have a look around!</p>
+<p>Next, go to PubSub+ Broker Manager, find TopicSubscriber, and check that you&#39;ve subscribed to tutorial/topic.  We covered most of this in Section 5, so refer back there if you need to, but we didn&#39;t cover it all - have a look around!</p>
 <p>We&#39;ve now completed Part B - sdkperf has sent a message which we&#39;ve received in TopicSubscriber.</p>
 <p class="image-container"><img src="img/5de28bc7f3652ab7.png"></p>
 <p>So, let&#39;s move on and see how we can actually send messages.</p>
@@ -483,6 +486,7 @@ Binary Attachment:                      len=15
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
