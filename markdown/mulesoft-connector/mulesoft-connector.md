@@ -1,5 +1,5 @@
 author: Tamimi
-summary:
+summary: This Codelab shows you how to use the Solace Connector in MuleSoft Anypoint Platform. 
 id: mulesoft-connector
 tags: 
 categories: Mulesoft
@@ -16,8 +16,7 @@ Duration: 0:01:00
 
 ![solace-mule](img/solace-mule.png "solace-mule")
 
-
-In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform
+In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform to send or receive events. 
 
 The MuleSoft Anypoint Platform in an integration platform and acts as a complete solution for API-led connectivity. You can learn more about MuleSoft Anypoint [here](https://videos.mulesoft.com/watch/bakFGgwqNDJzoJFNydiMiH). Alternatively you can checkout the ultimate [MuleSoft developer quick start guide](https://blogs.mulesoft.com/dev-guides/how-to-tutorials/new-developer-quick-start-guides/)
 
@@ -31,13 +30,13 @@ Duration: 0:01:00
 
 To run this codelab all you need
 
-1. Access to a Solace broker (Cloud, Hardware, Software Image)
+1. Access to a Solace PubSub+ Event Broker (Cloud, Hardware, Software Image)
 1. MuleSoft Anypoint Account & Anypoint Studio
 
-## Setup a Solace PubSub+ cloud Broker 
+## Setup a Solace PubSub+ Cloud Broker 
 Duration: 0:05:00
 
-Access to a Solace messaging service, Solace PubSub+, can be achieved in either one of the three flavours
+Access to a Solace messaging service, Solace PubSub+, can be achieved in anyone of the three flavours
 1. Hardware Appliance
 1. Software broker image (Docker, Virtual image)
 1. Solace Cloud service instance
@@ -88,7 +87,7 @@ Duration: 0:02:00
 - Give your project a name. Note that you can also scaffold a new MuleSoft project from a template using [RAML](https://www.mulesoft.com/resources/api/design-apis-easily-with-RAML)
 ![Anypoint-Studio](img/new_project.png "Anypoint-Studio")
 
-- As per the Solace connector documentation on [solace-iot-team/solace-mule-connector](https://github.com/solace-iot-team/solace-mule-connector) github repo, edit the pom.xml file to add a new dependency adn repository
+- As per the Solace connector documentation on [solace-iot-team/solace-mule-connector](https://github.com/solace-iot-team/solace-mule-connector) github repo, edit the pom.xml file to add a new dependency and repository
 
 ```
 <dependency>
@@ -131,7 +130,7 @@ Now that the connector is installed, go ahead and navigate to `src/main/mule` an
 Observe in the Main Palette on the right hand side the Solace Connector with all the different operations that you can use
 ![solace-palatte](img/solace-palatte.png "solace-palatte")
 
-Let's go ahead and create a basic flow that publishes events on a predefined topic to the previously created solace broker and subscribes on the same topic.
+Let's go ahead and create a basic flow that publishes events to a predefined topic on the previously created solace broker.
 
 - Drag the publish Palette from the Solace directory into the Message Flow canvas 
 
@@ -201,7 +200,7 @@ Duration: 0:5:00
 
 Now that you have created a publisher flow and tested it out, let's go ahead and create a `TopicListener` object that will connect to the broker and subscribe to the topic we sent. To do so:
 
-- Navigate to the Solace-Connector Palette, drag and drop the `TopicListner` object into the canvas
+- Navigate to the Solace-Connector Palette, drag and drop the `TopicListener` object into the canvas
 
 ![topic-listener](img/topic-listener.png "topic-listener")
 
@@ -242,6 +241,6 @@ Duration: 0:02:00
 ✅ Configure a publish object     
 ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration    
 
-Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
+Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the _Report a mistake_ button at the bottom left of this codelab.
 
 ![thumbsup](img/thumbsup.gif "thumbsup")
