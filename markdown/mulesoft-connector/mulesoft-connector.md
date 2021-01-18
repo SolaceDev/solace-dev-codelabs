@@ -241,6 +241,9 @@ Duration: 0:02:00
 ✅ Configure a publish object     
 ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration    
 
+Positive
+: For more examples on how to use the Solace MuleSoft connector checkout the [solace-iot-team/solace-mule-connector-examples](https://github.com/solace-iot-team/solace-mule-connector-examples) github repository.
+
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the _Report a mistake_ button at the bottom left of this codelab.
 
 ![thumbsup](img/thumbsup.gif "thumbsup")
