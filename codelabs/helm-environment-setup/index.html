@@ -178,12 +178,12 @@ echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubs
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 6:  Get the Admin password and Login to the PubSub&#43; Manager" duration="2">
+      <google-codelab-step label="Step 6:  Get the Admin password and Login to the PubSub&#43; Broker Manager" duration="2">
         <p>To retrieve the password for the admin account use the command line from the chart output in the previous step (it&#39;s best to copy from the output of your command to get the correct name of the pod or try ‘helm ls&#39; followed by ‘helm status &#39; to regenerate the output).</p>
 <pre><code>echo `kubectl get secret --namespace default &lt;name of your pod&gt;-pubsubplus-dev-secrets -o jsonpath=&#34;{.data.username_admin_password}&#34; | base64 --decode`
 </code></pre>
 <p class="image-container"><img alt="VSC - Get Admin Password" src="img/a4ff46cb2c173f3b.png"></p>
-<p>And login to the PubSub+ Manager using a web-browser <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.</p>
+<p>And login to the PubSub+ Broker Manager using a web-browser <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.</p>
 <p class="image-container"><img alt="Manager Login" src="img/7810a5142185c2b4.png"></p>
 <p class="image-container"><img alt="Manager" src="img/ef28cc40b72bbd3e.png"></p>
 <p>That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub.  All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.</p>

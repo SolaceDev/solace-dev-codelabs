@@ -183,7 +183,7 @@ Ensure valid SERVICE_IP is returned:
 echo -e "\nProtocol\tAddress\n"`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath="{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n"`
 ```
 
-## Step 6:  Get the Admin password and Login to the PubSub+ Manager
+## Step 6:  Get the Admin password and Login to the PubSub+ Broker Manager
 Duration:  0:02:00
 
 To retrieve the password for the admin account use the command line from the chart output in the previous step (it's best to copy from the output of your command to get the correct name of the pod or try 'helm ls' followed by 'helm status <deployment name>' to regenerate the output).  
@@ -194,7 +194,7 @@ echo `kubectl get secret --namespace default <name of your pod>-pubsubplus-dev-s
 
 ![VSC - Get Admin Password](./img/image013.png)
 
-And login to the PubSub+ Manager using a web-browser [http://localhost:8080](http://localhost:8080).
+And login to the PubSub+ Broker Manager using a web-browser [http://localhost:8080](http://localhost:8080).
 
 ![Manager Login](./img/image015.png)
 
