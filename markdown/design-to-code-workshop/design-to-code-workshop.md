@@ -321,7 +321,6 @@ Note the different pieces of the command:
 * `-p` allows you to specify [parameters](https://github.com/asyncapi/java-spring-cloud-stream-template#parameters) defined for the template you're using
 * `binder` is the Spring Cloud Stream binder you wish to use, in this case Solace
 * `reactive=true` allows you to use a reactive programming style
-* `actuator` includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection
 *  `artifactId` & `groupId` configure Maven params of the same names
 * `javaPackage` specifies the Java Package to place the generated classes into
 * `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
@@ -329,7 +328,7 @@ Note the different pieces of the command:
 * And lastly, the `@asyncapi/java-spring-cloud-stream-template` is the AsyncAPI generator template that we are using. 
 
 ```bash
-ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p actuator=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files. 
