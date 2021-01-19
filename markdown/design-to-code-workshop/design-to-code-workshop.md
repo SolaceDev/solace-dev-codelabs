@@ -507,7 +507,6 @@ Note the different pieces of the command:
 * `-o` is the output directory
 * `-p` allows you to specify [parameters](https://github.com/asyncapi/java-spring-cloud-stream-template#parameters) defined for the template you're using
 * `binder` is the Spring Cloud Stream binder you wish to use, in this case Solace
-* `actuator` includes the Spring Boot Actuator dependency which exposes a web endpoint for monitoring and stat collection
 * `artifactId` & `groupId` configure Maven params of the same names
 * `javaPackage` specifies the Java Package to place the generated classes into
 * `host`, `username`, `password` and `msgVpn` allow you to set binder connection information.
