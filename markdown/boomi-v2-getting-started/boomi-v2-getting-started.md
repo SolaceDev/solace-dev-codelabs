@@ -2,7 +2,7 @@ author: Tamimi
 summary:
 id: boomi-v2-getting-started
 tags: workshop
-categories: Boomi
+categories: Boomi, Portal
 environments: Web
 status: Published
 feedback link: https://solace.community/
@@ -31,7 +31,7 @@ This tutorial assumes:
 * Access to a Solace broker (explained in Step 2)
 * Access to a Boomi environment (explained in Step 3)
 
-## Setup a Solace PubSub+ Broker 
+## Setup a Solace PubSub+ Broker for Messaging
 Duration: 0:05:00
 
 Access to a Solace messaging service, Solace PubSub+, can be achieved in either one of the three flavours
@@ -160,7 +160,7 @@ Positive
 
 #### 🎉 Voila! Now you have your Solace and Boomi environments setup
 
-## Check out your Event-Driven Architecture
+## Design your architecture using Solace PubSub+ Event Portal
 Duration: 0:02:00
 
 Your free trial of Solace PubSub+ Cloud comes with the Event Portal, which helps you visualize the structure of event-driven architectures. The trial also includes a sample architecture called Acme Rideshare, that we'll use for this lab.
@@ -321,7 +321,7 @@ Positive
 Positive
 : Don't forget to Save and close!
 
-## Connect Everything!
+## Send and receive messages!
 Duration: 0:30:00
 
 To connect everything together, we will need to package the newly created process flow and deploy it on the locally running Atom
