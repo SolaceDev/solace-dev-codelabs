@@ -64,7 +64,7 @@ Your service should be ready to use in a couple seconds! 🌪
 Duration: 0:30:00
 
 ### Core concepts
-Boomi builds, deploys and manage all the processes in a concept called **Atoms**, which is a lightweight Java application that is deployed on a host with Internet access. Think of it as your single-tenant, single-node runtime engine. There are two deployment models for Atoms:
+Boomi builds, deploys and manages all the processes in a concept called **Atoms**, which is a lightweight Java application that is deployed on a host with Internet access. Think of it as your single-tenant, single-node runtime engine. There are two deployment models for Atoms:
 
 1. **In-the-cloud deployment** (using Boomi Atom Cloud)
 1. **On-premise deployment** (using local Atom setup)
@@ -141,7 +141,7 @@ At this point, you can confirm that the Atom has been created and linked to your
 
 #### 3. Setup Boomi environment
 
-Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to "attach" the atom to. You can read more about Boomi Environments on the [Environment Management Boomi User Guide](https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html)
+Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to "attach" the atom to. You can read more about Boomi Environments on the [Environment Management Boomi User Guide](https://help.boomi.com/bundle/integration/page/c-atm-Environment_management.html)
 
 Under the Manage menu, navigate to the Atom management and add a new environment
 ![env-menu](img/env-menu.png "env-menu")
@@ -158,7 +158,7 @@ Select your newly created environment and search for your atom to attach it
 Positive
 : Note: a blue icon next to your newly created Atom means that it has an Online Status
 
-#### 🎉 Viola! Now you have your Solace and Boomi environments setup
+#### 🎉 Voila! Now you have your Solace and Boomi environments setup
 
 ## Check out your Event-Driven Architecture
 Duration: 0:02:00
@@ -214,16 +214,18 @@ Positive
 
 ![canvas](img/canvas.png "canvas")
 
-### 2. Search for the Solace shape from 
+### 2. Search for the Solace shape from the list of connectors
 
 ![solace-shape](img/solace-shape.png "solace-shape")
 
 👉 Drag and drop it into the canvas
 
-👉 Alternatively, you can configure the Start shape to be a Solace PubSub+ Connector with the a **Listen** action as seen in the screenshot below
+👉 Configure the Start shape to be a Solace PubSub+ Connector with the a **Listen** action as seen in the screenshot below
 
 ![connector-config](img/connector-config.png "connector-config")
 
+Positive
+: Note: For more information about the solace connector available operations (`Listen`, `Get`, `Send`) check out the [Solace PubSub+ – Partner operation documentation guide](https://help.boomi.com/bundle/connectors/page/int-Solace_PubSub_operation.html). 
 
 ### 3. Configure Connection
 
@@ -272,10 +274,10 @@ Back to the Solace Shape configuration, click on the + icon for the **Operation*
 ![connectoroperation](img/connectoroperation.png "connectoroperation")
 
 Positive
-: Note: The Create Queue and Topic Subscription option means that Boomi will create the queue and subscription for you behind the scenes
+: Note: The `Create Queue and Topic Subscription` option means that the Solace connector will create the queue and subscription for you behind the scenes
 
 
-👉 Click on the Import Button in the Upper Left.  Select your atom and the Solace connection that you just created, then click on Next.
+👉 Click on the Import Button in the Upper Right.  Select your atom and the Solace connection that you just created, then click on Next.
  
 Boomi grabs the events available to you from the Event Portal, and lists them in a drop down box
 ![eventlist](img/eventlist.png "eventlist")
@@ -382,7 +384,7 @@ You will see the process reporting menu with your newly created **NewProcess** p
 You're done! 
 
 Positive
-: Note that any publisher that publishes on topic `acme/rideshare/ride/requested/0.0.1` will be received by Solace PubSub+ Connecter on the Boomi AtomSphere and logged 
+: Note that any publisher that publishes on topic `acme/rideshare/ride/requested/0.0.1` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged 
 
 ## Takeaways
 

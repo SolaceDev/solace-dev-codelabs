@@ -74,7 +74,7 @@
     
       <google-codelab-step label="Setup Boomi AtomSphere" duration="30">
         <h2 is-upgraded>Core concepts</h2>
-<p>Boomi builds, deploys and manage all the processes in a concept called <strong>Atoms</strong>, which is a lightweight Java application that is deployed on a host with Internet access. Think of it as your single-tenant, single-node runtime engine. There are two deployment models for Atoms:</p>
+<p>Boomi builds, deploys and manages all the processes in a concept called <strong>Atoms</strong>, which is a lightweight Java application that is deployed on a host with Internet access. Think of it as your single-tenant, single-node runtime engine. There are two deployment models for Atoms:</p>
 <ol type="1">
 <li><strong>In-the-cloud deployment</strong> (using Boomi Atom Cloud)</li>
 <li><strong>On-premise deployment</strong> (using local Atom setup)</li>
@@ -127,14 +127,14 @@
 <p>At this point, you can confirm that the Atom has been created and linked to your AtomSphere when you navigate to the Atom Management in the Manage tab and you will see your newly created atom under the <strong>Unattached Atoms</strong> section</p>
 <p class="image-container"><img alt="unattached-atom" title="unattached-atom" src="img/ba639bb853a9d9e.png"></p>
 <h3 is-upgraded>3. Setup Boomi environment</h3>
-<p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html" target="_blank">Environment Management Boomi User Guide</a></p>
+<p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management.html" target="_blank">Environment Management Boomi User Guide</a></p>
 <p>Under the Manage menu, navigate to the Atom management and add a new environment <img alt="env-menu" title="env-menu" src="img/c6aa4571508c5c0b.png"></p>
 <p>Give it a name and choose <strong>Test</strong> for the environment classification <img alt="env-setup" title="env-setup" src="img/f5c503b03619544c.png"></p>
 <h3 is-upgraded>4. Attach the Atom to the environment</h3>
 <p>Select your newly created environment and search for your atom to attach it <img alt="env-wiz" title="env-wiz" src="img/b14c06b1f4c9cf93.png"></p>
 <aside class="special"><p>Note: a blue icon next to your newly created Atom means that it has an Online Status</p>
 </aside>
-<h3 is-upgraded>🎉 Viola! Now you have your Solace and Boomi environments setup</h3>
+<h3 is-upgraded>🎉 Voila! Now you have your Solace and Boomi environments setup</h3>
 
 
       </google-codelab-step>
@@ -179,11 +179,13 @@
 <aside class="special"><p>The Boomi canvas is where you drag and drop different Boomi connecters, also known as <strong>Shapes</strong></p>
 </aside>
 <p class="image-container"><img alt="canvas" title="canvas" src="img/f86fc834e02cd3c2.png"></p>
-<h2 is-upgraded>2. Search for the Solace shape from</h2>
+<h2 is-upgraded>2. Search for the Solace shape from the list of connectors</h2>
 <p class="image-container"><img alt="solace-shape" title="solace-shape" src="img/2064aeff6e600d5f.png"></p>
 <p>👉 Drag and drop it into the canvas</p>
-<p>👉 Alternatively, you can configure the Start shape to be a Solace PubSub+ Connector with the a <strong>Listen</strong> action as seen in the screenshot below</p>
+<p>👉 Configure the Start shape to be a Solace PubSub+ Connector with the a <strong>Listen</strong> action as seen in the screenshot below</p>
 <p class="image-container"><img alt="connector-config" title="connector-config" src="img/325fb5ec9b532223.png"></p>
+<aside class="special"><p>Note: For more information about the solace connector available operations (<code>Listen</code>, <code>Get</code>, <code>Send</code>) check out the <a href="https://help.boomi.com/bundle/connectors/page/int-Solace_PubSub_operation.html" target="_blank">Solace PubSub+ – Partner operation documentation guide</a>.</p>
+</aside>
 <h2 is-upgraded>3. Configure Connection</h2>
 <p>👉 In the <strong>Connection</strong> section, click on the + icon to configure the connection parameters</p>
 <p class="image-container"><img alt="connector-connection" title="connector-connection" src="img/9e0167c79baeab2b.png"></p>
@@ -206,9 +208,9 @@
 <p>Back to the Solace Shape configuration, click on the + icon for the <strong>Operation</strong> section to configure the operation parameters as seen in the screenshot below</p>
 <p>👉 Assign the Mode to Persistent Transacted<br> 👉 Select the Create Queue and Topic Subscription option</p>
 <p class="image-container"><img alt="connectoroperation" title="connectoroperation" src="img/a115f854683db764.png"></p>
-<aside class="special"><p>Note: The Create Queue and Topic Subscription option means that Boomi will create the queue and subscription for you behind the scenes</p>
+<aside class="special"><p>Note: The <code>Create Queue and Topic Subscription</code> option means that the Solace connector will create the queue and subscription for you behind the scenes</p>
 </aside>
-<p>👉 Click on the Import Button in the Upper Left.  Select your atom and the Solace connection that you just created, then click on Next.</p>
+<p>👉 Click on the Import Button in the Upper Right.  Select your atom and the Solace connection that you just created, then click on Next.</p>
 <p>Boomi grabs the events available to you from the Event Portal, and lists them in a drop down box <img alt="eventlist" title="eventlist" src="img/a079b3f0c19e2463.png"></p>
 <p>👉 Pick the RideRequested event, click Next, then Finish.</p>
 <p>Now check out our Connector Operation:  The data format from the Event Portal is now a Boomi Profile (click on the pencil to see more) and the topic string is filled in for us. <img alt="operationupdated" title="operationupdated" src="img/70f631ecc4f8611b.png"></p>
@@ -265,7 +267,7 @@
 <p>👉 Click on the view process logs icon</p>
 <p class="image-container"><img alt="logs" title="logs" src="img/fe3b45adbc7fc741.png"><img alt="logs2" title="logs2" src="img/9c8b1ddce355367b.png"><img alt="logs3" title="logs3" src="img/8de84267dc8fc191.png"></p>
 <p>You&#39;re done!</p>
-<aside class="special"><p>Note that any publisher that publishes on topic <code>acme/rideshare/ride/requested/0.0.1</code> will be received by Solace PubSub+ Connecter on the Boomi AtomSphere and logged</p>
+<aside class="special"><p>Note that any publisher that publishes on topic <code>acme/rideshare/ride/requested/0.0.1</code> will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged</p>
 </aside>
 
 
