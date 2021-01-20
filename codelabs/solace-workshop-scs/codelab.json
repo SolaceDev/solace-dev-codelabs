@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2019-10-17T15:25:37-04:00",
+  "updated": "2021-01-20T17:19:29-05:00",
   "id": "solace-workshop-scs",
   "duration": 110,
   "title": "Spring Cloud Streams with Solace PubSub+",
@@ -15,14 +15,14 @@
   ],
   "category": [
     "spring",
-    "solace",
-    "java"
+    "java",
+    "solace"
   ],
   "tags": [
     "web",
     "workshop"
   ],
-  "feedback": "https://github.com/SolaceTraining/solace-workshop-scs/issues",
+  "feedback": "github.com/SolaceTraining/solace-workshop-scs",
   "ga": "UA-3921398-10",
   "url": "solace-workshop-scs"
 }
