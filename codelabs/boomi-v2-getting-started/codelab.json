@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2021-01-20T15:49:46-05:00",
+  "id": "boomi-v2-getting-started",
+  "duration": 86,
+  "title": "Getting started with Boomi and Solace",
+  "summary": "",
+  "source": "boomi-v2-getting-started.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "boomi"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://solace.community/",
+  "ga": "UA-3921398-10",
+  "url": "boomi-v2-getting-started"
+}
