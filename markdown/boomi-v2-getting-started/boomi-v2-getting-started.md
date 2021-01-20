@@ -1,27 +1,24 @@
-author: Jesse Menning
+author: Tamimi
 summary:
 id: boomi-v2-getting-started
 tags: workshop
 categories: Boomi
 environments: Web
-status: Draft
-feedback link:
+status: Published
+feedback link: https://solace.community/
 analytics account: UA-3921398-10
-# Getting started with Boomi and Solace (Version 2 Connector)
+# Getting started with Boomi and Solace
 
 ## What you'll learn 
 Duration: 0:02:00
 
-Positive
-: Note that this tutorial is for the Solace PubSub+ version 2 connector. If you don't have it, please visit the [Solace Community](https://solace.community/) and ask.  
-
-![Boomi Logo](img/boomi-logo.png "Boomi Logo")!
+![PubSub+](img/PubSub.png "PubSub+")
 
 
-In this tutorial, you will learn how to configure and use the Solace Boomi connector. This is done in 4 easy steps
-1. Configure your Solace PubSub+ Event Broker (Hardware, Software, SasS)
+In this tutorial, you will learn how to 
+1. Configure your Solace PubSub+ Broker
 1. Setup your Boomi AtomSphere
-1. Create a (very) basic event-driven architecture in Solace Event Portal
+1. Design a basic event-driven architecture in Solace PubSub+ Event Portal
 1. Configure the Solace connector in the Boomi AtomSphere
 1. Send/Receive messages between Boomi and Solace
 
@@ -30,7 +27,7 @@ Positive
 
 ### Prerequisite 
 This tutorial assumes:
-* Users on MacOS/Linux have knowledge using Docker
+* Users on MacOS/Linux have knowledge using Docker for Boomi Atom configuration
 * Access to a Solace broker (explained in Step 2)
 * Access to a Boomi environment (explained in Step 3)
 
@@ -161,54 +158,37 @@ Select your newly created environment and search for your atom to attach it
 Positive
 : Note: a blue icon next to your newly created Atom means that it has an Online Status
 
-#### 5. Install the Solace Connector
-
-Click on the Settings > Account information for your account name
-![account_setup](img/account_setup.png "account_setup")
-
-In the left hand column, click on Publisher
-![publisher](img/publisher.png "publisher")
-Fill out the required information, making sure to click on the box for "Enable connector SDK development" Click on Save.
-
-Now, click on Developer at the bottom of the left hand column.
-![developer](img/developer.png "developer")
-
-Click on Add Connector Group and name it Solace
-
-Click on Add Connector and use the following properties
-![addconnector](img/addconnector.png "addconnector")
-
-Finally, click on add version, and upload the Connector Descriptor and the Connector Archive file that were provided by Solace
-
 #### 🎉 Viola! Now you have your Solace and Boomi environments setup
 
 ## Check out your Event-Driven Architecture
 Duration: 0:02:00
 
-Let's assume that you want to collect real-time events from taxis in NYC and stream them over a Solace Broker into your Boomi architecture and applications. These events could represent anything from ride status analytics to payment methods. 
+Your free trial of Solace PubSub+ Cloud comes with the Event Portal, which helps you visualize the structure of event-driven architectures. The trial also includes a sample architecture called Acme Rideshare, that we'll use for this lab.
 
-Your free trial of Solace comes with the Event Portal, which helps you visualize the structure of event-driven architectures.
-Your free trial also includes a sample architecture called Acme Rideshare, that we'll use for this lab.
+- Start it up by going to the "Designer" icon in the left hand column     
 
-Start it up by going to the "Designer" icon in the left hand column     
-![Menu](img/event_portal_menu.png "menu")
+![Menu](img/event_portal_menu.png "menu")   
 
-Then double click on the Acme Rideshare domain      
-![ridesharedomain](img/ride_share_domain.png "ride share domain")
+- Then double click on the Acme Rideshare domain      
 
-There's a lot going on, but we'll just focus on the Passenger App sending a RideRequested Event to the Driver Management Application.       
-![rideshare_events](img/rideshare_events.png "rideshare_events")
+![ridesharedomain](img/ride_share_domain.png "ride share domain")   
 
-For our purposes: 
-* **Passenger App** will just be a mock event publisher
-* **Ride Requested** will be an event containing a JSON representation of an ride request
-* **Driver Management** will be the world's simplest Boomi flow, which will pick up the ride request and write it to the process log
+- There's a lot going on, but we'll just focus on the **Passenger** application sending a **RideRequested Event** to the **Driver Management** application.       
+![rideshare_events](img/rideshare_events.png "rideshare_events")    
 
-Double click on the RideRequested event to get more details about the event     
-![event_details](img/event_details.png "event_details")
+For our purposes:       
+
+**Passenger App**: will mock an event publisher      
+**Ride Requested**: is an event with a JSON schema payload representing a ride request       
+**Driver Management**: will be a simple Boomi flow, which will pick up the ride request and write it to the process log. Very simple 🤙    
+
+- Double click on the RideRequested event to get more details about the event      
+
+![event_details](img/event_details.png "event_details")     
+
 Two things to note here:
 * The topic is meta information about the event that lets Boomi flows quickly know if they are interested or not. 
-* The schema describes the data format, similar to a profile within Boomi
+* The schema describes the data format, similar to a [profile](https://help.boomi.com/bundle/integration/page/c-atm-Profile_components.html) within Boomi
 
 Positive
 : The topic and schema information in the Event Portal can be imported into Boomi using the Solace connector
@@ -234,39 +214,44 @@ Positive
 
 ![canvas](img/canvas.png "canvas")
 
-### 2.. Configure Solace Shape
-👉 Hover over the Start shape to configure it 
+### 2. Search for the Solace shape from 
 
-![canvas-start](img/canvas-start.png "canvas-start")
+![solace-shape](img/solace-shape.png "solace-shape")
 
-👉 Configure the Start shape to be a Solace PubSub+ Connector with the a **Listen** action as seen in the screenshot below
+👉 Drag and drop it into the canvas
+
+👉 Alternatively, you can configure the Start shape to be a Solace PubSub+ Connector with the a **Listen** action as seen in the screenshot below
 
 ![connector-config](img/connector-config.png "connector-config")
 
 
-### A. Configure Connection
+### 3. Configure Connection
 
 👉 In the **Connection** section, click on the + icon to configure the connection parameters
 
 ![connector-connection](img/connector-connection.png "connector-connection")
 
-👉 Fill in the connection parameters with the **Host**, **Message VPN Name**, **Client Username** and **Password**. This is obtained by navigating back to the Solace Cloud console, clicking on the previously created service and navigating to the **Connect** tab. Note that you will have to expand the "Solace Messaging" menu to get the connection details
+👉 Fill in the connection parameters with the **Host**, **Message VPN Name**, **Client Username** and **Password**. This is obtained by navigating back to the Solace PubSub+ Cloud Manager console, clicking on the previously created service and navigating to the **Connect** tab. Note that you will have to expand the "Solace Messaging" menu to get the connection details
 ![connection-service](img/connection-service.png "connection-service")
 
-👉 One more piece of information you'll need is an Event Portal token (this lets you suck in the topic string and schema).  In Solace Cloud console, scroll all the way to the bottom of the left column, and click on the account management icon, then select Token Management.
-![cloud_account](img/cloud_account.png "cloud_account")
+👉 One more piece of information you'll need is an Event Portal token (this lets you import in the topic string and schema from the previously designed architecture).  In Solace Cloud console, scroll all the way to the bottom of the left column, and click on the account management icon, then select Token Management.       
+
+![cloud_account](img/cloud_account.png "cloud_account")     
+
+👉 Click on the "Create Token" button in the upper right.
+
+👉 Name the token "Boomi UI access"     
+
+![create-token](img/create-token.png "create-token")   
 
 
-Click on the "Create Token" button in the upper left.
+👉 Scroll all the way to the bottom of the page and enable the Event Portal Read permission.    
 
-Name the token "Boomi UI access"
-
-Scroll all the way to the bottom of the page and enable the Event Portal Read permission.
 ![eventportalperm](img/eventportalperm.png "eventportalperm")
 
-Click on Generate Token
+👉 Click on Generate Token
 
-Copy the generated token (make sure to grab it all), and paste it into the Event Portal API Token field in Boomi.
+👉 Copy the generated token (make sure to grab it all), and paste it into the Event Portal API Token field in Boomi.
 
 👉 Test the connection, by clicking on the **Test Connection** button. Note: Choose your Atom here
 
@@ -278,35 +263,37 @@ Positive
 : Dont forget to "Save and Close" when done!
 
 
-### B. Configure Operation
-Back to the Start Shape configuration, click on the + icon for the **Operation** section to configure the operation parameters as seen in the screenshot below  
+### 4. Configure Operation
+Back to the Solace Shape configuration, click on the + icon for the **Operation** section to configure the operation parameters as seen in the screenshot below  
 
-`Mode`: `Persistent Transacted`     
-`Create Queue and TS`: `Selected`
+👉 Assign the Mode to Persistent Transacted    
+👉 Select the Create Queue and Topic Subscription option
 
 ![connectoroperation](img/connectoroperation.png "connectoroperation")
 
 Positive
-: Create Queue and TS means that Boomi will create the queue and subscription for you behind the scenes
+: Note: The Create Queue and Topic Subscription option means that Boomi will create the queue and subscription for you behind the scenes
 
 
-Click on the Import Button in the Upper Left.  Select your atom and the Solace connection that you just created, then click on Next.
+👉 Click on the Import Button in the Upper Left.  Select your atom and the Solace connection that you just created, then click on Next.
  
 Boomi grabs the events available to you from the Event Portal, and lists them in a drop down box
 ![eventlist](img/eventlist.png "eventlist")
 
-Pick the RideRequested event, click Next, then Finish.
+👉 Pick the RideRequested event, click Next, then Finish.
 
 Now check out our Connector Operation:  The data format from the Event Portal is now a Boomi Profile (click on the pencil to see more) and the topic string is filled in for us.
-![operationupdated](img/operationupdated.png "operationupdated")
-Save and close!
+![operationupdated](img/operationupdated.png "operationupdated")    
 
-Now your Canvas should look like this with the newly added shape
+Positive
+: Don't forget to Save and close!
+
+👉 Now your Canvas should look like this with the newly added shape
 
 ![canvas1](img/canvas1.png "canvas1")
 
 
-### 3. Add a Notify shape
+### 5. Add a Notify shape
 In order to test out the end to end connection and make sure that the events sent from the Solace PubSub+ broker are being received by the Solace Boomi Connector, we want to add a way to log the events received. To do so, lets go ahead and add a Notify shape
 
 👉 Search for and drag the notify shape into the canvas
@@ -321,7 +308,7 @@ Note that `{1}` in the Boomi context means variables. Click on the `+` icon to a
 
 ![notify-vars](img/notify-vars.png "notify-vars")
 
-### 4. Connect the Solace PubSub+ Listener to the Notify Shape
+### 6. Connect the Solace PubSub+ Listener to the Notify Shape
 ![boomi-connect](img/boomi-connect.gif "boomi-connect")
 
 Positive
@@ -329,7 +316,8 @@ Positive
 
 ![stop](img/stop.png "stop")
 
-Save the process flow!
+Positive
+: Don't forget to Save and close!
 
 ## Connect Everything!
 Duration: 0:30:00
