@@ -15,14 +15,14 @@
   ],
   "category": [
     "spring",
-    "solace",
-    "java"
+    "java",
+    "solace"
   ],
   "tags": [
     "web",
     "workshop"
   ],
-  "feedback": "https://github.com/SolaceTraining/solace-workshop-scs/issues",
+  "feedback": "github.com/SolaceTraining/solace-workshop-scs",
   "ga": "UA-3921398-10",
   "url": "solace-workshop-scs"
 }

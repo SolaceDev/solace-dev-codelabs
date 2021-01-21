@@ -13,6 +13,9 @@ analytics account: UA-3921398-10
 ## CodeLab Overview
 Duration: 0:05:00
 
+Negative
+: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+
 Using Java & Spring Cloud Streams (SCS) to create Event-Driven Applications with PubSub+
 * The purpose of this codelab is to introduce java developers to creating event-driven applications with Spring Cloud Streams and PubSub+
 * “Spring Cloud Stream is a framework for building highly scalable event-driven microservices connected with shared messaging systems."
