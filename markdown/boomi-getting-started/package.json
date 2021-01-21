@@ -1,0 +1,19 @@
+{
+  "name": "codelab-bootstrap",
+  "version": "1.0.0",
+  "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch boomi-getting-started.md --exec 'claat export boomi-getting-started.md && lsof -c claat -t | xargs kill && cd boomi-getting-started && claat serve'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
+  },
+  "keywords": [
+    "codelab"
+  ],
+  "dependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
