@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-3921398-10",
+  "updated": "2021-01-21T10:19:22-05:00",
+  "id": "boomi-getting-started",
+  "duration": 86,
+  "title": "Getting started with Boomi and Solace using the V1 connector",
+  "summary": "Getting started with Boomi and Solace",
+  "source": "boomi-getting-started.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "boomi"
+  ],
+  "tags": [
+    "web"
+  ],
+  "ga": "UA-3921398-10",
+  "url": "boomi-getting-started"
+}

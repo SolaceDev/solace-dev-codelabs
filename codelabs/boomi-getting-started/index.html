@@ -1,0 +1,262 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Getting started with Boomi and Solace using the V1 connector</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="boomi-getting-started"
+                  title="Getting started with Boomi and Solace using the V1 connector"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="What you&#39;ll learn" duration="2">
+        <aside class="warning"><p><strong>Note that this CodeLab uses V1 of the Solace Connector. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/boomi-v2-getting-started" target="_blank"><strong>Getting started with Boomi and Solace</strong></a><strong> Codelab to learn how to leverage the latest connector functionality+.</strong></p>
+</aside>
+<p class="image-container"><img alt="Boomi Logo" title="Boomi Logo" src="img/4213b326f2fca64b.png"></p>
+<p>In this tutorial, you will learn how to configure and use the Solace Boomi connector. This is done in 4 easy steps</p>
+<ol type="1">
+<li>Configure your Solace PubSub+ Event Broker (Hardware, Software, SasS)</li>
+<li>Setup your Boomi AtomSphere</li>
+<li>Configure the Solace connector in the Boomi AtomSphere</li>
+<li>Send/Receive messages between Boomi and Solace</li>
+</ol>
+<aside class="special"><p>Note that this tutorial is meant to be platform and programming language agnostic. Meaning that regardless what operating system you are running (Mac, Linux, Windows), programming languages or messaging APIs you choose to use, the setup will be the same.</p>
+</aside>
+<aside class="special"><p>You can also <a href="https://platform.boomi.com/AtomSphere.html#build;processLibrary=2b3ebc49-7bb3-4052-93ea-987c784a3e68" target="_blank">import the finished solution into your account</a> from the Boomi Process Library.</p>
+</aside>
+<h2 is-upgraded>Prerequisite</h2>
+<p>This tutorial assumes:</p>
+<ul>
+<li>Users on MacOS/Linux have knowledge using Docker</li>
+<li>Access to a Solace broker (explained in Step 2)</li>
+<li>Access to a Boomi environment (explained in Step 3)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup a Solace PubSub&#43; Broker" duration="5">
+        <p>Access to a Solace messaging service, Solace PubSub+, can be achieved in either one of the three flavours</p>
+<ol type="1">
+<li>Hardware Appliance</li>
+<li>Software broker image (Docker, Virtual image)</li>
+<li>Solace Cloud service instance</li>
+</ol>
+<p>This tutorial will walk you through setting up a Solace Cloud service instance. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event  Broker: Software</a> documentation</p>
+<h2 is-upgraded>Sign up for free Solace Cloud account</h2>
+<p>Navigate to the <a href="https://console.solace.cloud/login/new-account" target="_blank">Create a New Account</a> page and fill out the required information. No credit card required!</p>
+<h2 is-upgraded>Create a messaging service</h2>
+<p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img/500ee282af1b6d9f.png"></p>
+<p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
+<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img/a7ea4d393008a8c3.png"></p>
+<p>Fill out all the details for your messaging service, and then click &#34;Create&#34; at the bottom of the page.</p>
+<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img/b2fd05043df1c5cd.png"></p>
+<p>Your service should be ready to use in a couple seconds! 🌪</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup Boomi AtomSphere" duration="30">
+        <h2 is-upgraded>Core concepts</h2>
+<p>Boomi builds, deploys and manage all the processes in a concept called <strong>Atoms</strong>, which is a lightweight Java application that is deployed on a host with Internet access. Think of it as your single-tenant, single-node runtime engine. There are two deployment models for Atoms:</p>
+<ol type="1">
+<li><strong>In-the-cloud deployment</strong> (using Boomi Atom Cloud)</li>
+<li><strong>On-premise deployment</strong> (using local Atom setup)</li>
+</ol>
+<aside class="special"><p>The Boomi Atom is a lightweight, dynamic runtime engine. Once your integration processes have been deployed to your Atom, the Atom contains all the components required to execute your processes from end to end, including connectors, transformation rules, decision handling, and processing logic.</p>
+</aside>
+<p class="image-container"><img alt="Atom gif" title="Atom gif" src="img/e895a357cad149dd.gif"></p>
+<h2 is-upgraded>4 Steps to get started with Boomi</h2>
+<h3 is-upgraded>1. Create a Boomi trial account</h3>
+<p>if you dont have an account, navigate to <a href="https://boomi.com/form/trial/" target="_blank">https://boomi.com/form/trial/</a> and sign up for a free account.</p>
+<p>After you sign up for a Boomi platform account and login, you will have access to the Boomi AtomSphere - your one stop shop for all your integrations 🤓</p>
+<p class="image-container"><img alt="AtomSphere" title="AtomSphere" src="img/68bd3fae589cfdea.png"></p>
+<p>You will see the menu at the top</p>
+<p class="image-container"><img alt="menu" title="menu" src="img/f9510a090bddc95e.png"></p>
+<ul>
+<li><strong>Build</strong>: This is where you design and package your process (i.e. architecture)</li>
+<li><strong>Deploy</strong>: This is where you deploy the packaged process in your Atom for execution</li>
+<li><strong>Manage</strong>: This is where you configure your environment and Atoms</li>
+</ul>
+<h3 is-upgraded>2. Configure and deploy your local Atom</h3>
+<p>In this tutorial, we will be setting up a local Atom.</p>
+<aside class="special"><p>You can skip this if you have access to a cloud Atom</p>
+</aside>
+<p>You can either navigate to the links below for more information or follow the steps after</p>
+<ol type="1">
+<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows_beec31b0-477d-430b-a744-cedb3a8d67eb.html" target="_blank">Windows Machine</a>.</li>
+<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Using_Docker_to_install_a_local_Atom_on_Linux_b54f0e8c-c02c-4eea-87f5-7233d1c5e0a5.html" target="_blank">Using Docker</a>.</li>
+</ol>
+<p>👉 Navigate to the <strong>Manage</strong> tab and click on <strong>Atom Management</strong></p>
+<p class="image-container"><img alt="manage" title="manage" src="img/d980c9704ab58742.png"></p>
+<p>👉 Click on <strong>+New</strong> and choose <strong>Atom</strong></p>
+<p class="image-container"><img alt="new-atom" title="new-atom" src="img/598686ef93a04e84.png"></p>
+<p>👉 Choose the operating system of choice in the <strong>Atom Setup</strong> box</p>
+<p class="image-container"><img alt="atom-setup" title="atom-setup" src="img/6a176c3502dcacb2.png"></p>
+<p>📝 <strong>Notes on Docker installation</strong></p>
+<p>The installer is a shell script that you run locally and automatically configure your docker setup</p>
+<ol type="1">
+<li><code>./atomdocker_install64.sh -h</code> for more information on how to run it</li>
+<li>You can generate a token by clicking on <strong>Generate Token</strong> under <strong>Security Options</strong></li>
+<li>Create a <code>/var/boomi</code> directory because the script assumes it already exists and make sure its owned by the current user  <ol type="1">
+<li>Navigate to <code>/var/boomi/</code> after you create it</li>
+<li>Execute the following from terminal <code>chown $USER .</code></li>
+<li>Make sure this directory is shared on docker. This is done by opening the docker preferences and adding it under <strong>File Sharing Resources</strong> tab</li>
+</ol>
+</li>
+</ol>
+<p class="image-container"><img alt="docker-menu" title="docker-menu" src="img/11c554437d6210af.png"><img alt="docker-sharing" title="docker-sharing" src="img/4fd11b172275305.png"></p>
+<p>🏃‍♂️ <strong>Run the atom</strong></p>
+<p>Execute the atom docker installation shell script as follows<br><code>./atomdocker_install64.sh -n &lt;name_of_atom&gt; -k &lt;insert_token&gt;</code></p>
+<p>At this point, you can confirm that the Atom has been created and linked to your AtomSphere when you navigate to the Atom Management in the Manage tab and you will see your newly created atom under the <strong>Unattached Atoms</strong> section</p>
+<p class="image-container"><img alt="unattached-atom" title="unattached-atom" src="img/ba639bb853a9d9e.png"></p>
+<h3 is-upgraded>3. Setup Boomi environment</h3>
+<p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html" target="_blank">Environment Management Boomi User Guide</a></p>
+<p>Under the Manage menu, navigate to the Atom management and add a new environment <img alt="env-menu" title="env-menu" src="img/c6aa4571508c5c0b.png"></p>
+<p>Give it a name and choose <strong>Test</strong> for the environment classification <img alt="env-setup" title="env-setup" src="img/f5c503b03619544c.png"></p>
+<h3 is-upgraded>4. Attach the Atom to the environment</h3>
+<p>Select your newly created environment and search for your atom to attach it <img alt="env-wiz" title="env-wiz" src="img/b14c06b1f4c9cf93.png"></p>
+<aside class="special"><p>Note: a blue icon next to your newly created Atom means that it has an Online Status</p>
+</aside>
+<h3 is-upgraded>🎉 Viola! Now you have your Solace and Boomi environments setup</h3>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure Solace Broker" duration="2">
+        <p>Let&#39;s assume that you want to collect real-time events from Taxi&#39;s in NYC and stream them over a Solace Broker into your Boomi architecture and applications. These events could represent anything from ride status analytics to payment methods.</p>
+<p>We will first need to configure a queue so that the Solace PubSub+ connector on the Boomi AtomSphere can bind to and listen to any incoming messages on a given topic.</p>
+<p>👉 Navigate to the Solace Cloud console Messaging Service tab</p>
+<p class="image-container"><img alt="messaging-service" title="messaging-service" src="img/86a9a27cb9545e63.png"></p>
+<p>👉 Click on the previously created service from step 2 and navigate to the <strong>Manage Service</strong> option</p>
+<p class="image-container"><img alt="solace-service" title="solace-service" src="img/d615561a31739a3b.png"></p>
+<p>👉 Now you are in the PubSub+ management console. Navigate to the <em>Queue</em> section from the left hand side panel and click on the <strong>+ Queue</strong> button to create a new queue. Name the queue <strong>taxi</strong></p>
+<p class="image-container"><img alt="queue" title="queue" src="img/be2f7ab24701a9e6.png"></p>
+<p>👉 After creating the new queue, click on it and navigate to the <strong>Subscriptions</strong> tab. Add a new subscription to the topic <code>taxi/nyc/v1/dropoff/&gt;</code></p>
+<p class="image-container"><img alt="queue-sub" title="queue-sub" src="img/70d9f55df7669509.png"></p>
+<aside class="special"><p>Note: Subscribing to topic <code>taxi/nyc/v1/dropoff/&gt;</code> means that this queue will receive all messages sent on a topic that has <code>taxi/nyc/v1/dropoff/</code> as a prefix. The use of the <code>&gt;</code> wildcard means matching one or more levels. Read more about <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">Solace Wildcards</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup Solace connector in Boomi" duration="10">
+        <p>Now back to the Boomi AtomSphere!</p>
+<h2 is-upgraded>1. Create a new Boomi component</h2>
+<p>👉 Click on the <strong>New</strong> button to create a new component</p>
+<p class="image-container"><img alt="AtomSphere2" title="AtomSphere2" src="img/c487ca4b2f770a79.png"></p>
+<p>👉 Make sure the <strong>Type</strong> is <strong>Process</strong>. Give it a name and folder to be saved in</p>
+<p class="image-container"><img alt="component" title="component" src="img/a455714b299638ec.png"></p>
+<aside class="special"><p>The Boomi canvas is where you drag and drop different Boomi connecters, also known as <strong>Shapes</strong></p>
+</aside>
+<p class="image-container"><img alt="canvas" title="canvas" src="img/f86fc834e02cd3c2.png"></p>
+<h2 is-upgraded>2.. Configure Solace Shape</h2>
+<p>👉 Hover over the Start shape to configure it</p>
+<p class="image-container"><img alt="canvas-start" title="canvas-start" src="img/c002742bf3050bfb.png"></p>
+<p>👉 Configure the Start shape to be a Solace PubSub+ Connector with the a <strong>Listen</strong> action as seen in the screenshot below</p>
+<p class="image-container"><img alt="connector-config" title="connector-config" src="img/6dbbda91a0acd885.png"></p>
+<h2 is-upgraded>A. Configure Connection</h2>
+<p>👉 In the <strong>Connection</strong> section, click on the + icon to configure the connection parameters</p>
+<p class="image-container"><img alt="connector-connection" title="connector-connection" src="img/d84eaa9ab92777ef.png"></p>
+<p>👉 Fill in the connection parameters with the <strong>Host</strong>, <strong>Message VPN Name</strong>, <strong>Client Username</strong> and <strong>Password</strong>. This is obtained by navigating back to the Solace Cloud console, clicking on the previously created service and navigating to the <strong>Connect</strong> tab. Note that you will have to expand the &#34;Solace Messaging&#34; menu to get the connection details</p>
+<p class="image-container"><img alt="connection-service" title="connection-service" src="img/4dbbde26342e8779.png"></p>
+<p>👉 Test the connection, by clicking on the <strong>Test Connection</strong> button. Note: Choose your Atom here</p>
+<p class="image-container"><img alt="testconnection" title="testconnection" src="img/e21b9642d07d87e3.png"></p>
+<p class="image-container"><img alt="success-connection" title="success-connection" src="img/93a56d8f3decbc5e.png"></p>
+<aside class="special"><p>Dont forget to &#34;Save and Close&#34; when done!</p>
+</aside>
+<h2 is-upgraded>B. Configure Operation</h2>
+<p>Back to the Start Shape configuration, click on the + icon for the <strong>Operation</strong> section to configure the operation parameters as seen in the screenshot below</p>
+<p><code>Mode</code>: <code>Persistent Transacted</code><br><code>Destination</code>: <code>taxi</code> &lt;– (thats the name of the queue we previously configured on the Solace Pubsub+ broker!)<br><code>Batch Size</code>: <code>1</code></p>
+<p class="image-container"><img alt="operation-options" title="operation-options" src="img/1cfaffc1833e30db.png"></p>
+<p>Save and close!</p>
+<p>Now your Canvas should look like this with the newly added shape</p>
+<p class="image-container"><img alt="canvas1" title="canvas1" src="img/93f9567818e629aa.png"></p>
+<h2 is-upgraded>3. Add a Notify shape</h2>
+<p>In order to test out the end to end connection and make sure that the events sent from the Solace PubSub+ broker are being received by the Solace Boomi Connector, we want to add a way to log the events received. To do so, lets go ahead and add a Notify shape</p>
+<p>👉 Search for and drag the notify shape into the canvas</p>
+<p class="image-container"><img alt="notify-search" title="notify-search" src="img/12ff13e92e7213ad.png"></p>
+<p>👉 Configure the Notify shape to log the payload received from the message sent</p>
+<p class="image-container"><img alt="notify-config" title="notify-config" src="img/453fb3d88e644529.png"></p>
+<p>Note that <code>{1}</code> in the Boomi context means variables. Click on the <code>+</code> icon to add a new variable and choose the type to be <strong>Current Data</strong></p>
+<p class="image-container"><img alt="notify-vars" title="notify-vars" src="img/99d803c0ce2f5fa.png"></p>
+<h2 is-upgraded>4. Connect the Solace PubSub+ Listener to the Notify Shape</h2>
+<p class="image-container"><img alt="boomi-connect" title="boomi-connect" src="img/2c0f24d7989724d2.gif"></p>
+<aside class="special"><p>It is good practice to add a Stop Shape at the end of your process that provides the ability to terminate the data flow in the a process path</p>
+</aside>
+<p class="image-container"><img alt="stop" title="stop" src="img/f4152b167c50aac9.png"></p>
+<p>Save the process flow!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connect Everything!" duration="30">
+        <p>To connect everything together, we will need to package the newly created process flow and deploy it on the locally running Atom</p>
+<p class="image-container"><img alt="arch" title="arch" src="img/e646315eecfc2211.jpg"></p>
+<h2 is-upgraded>Package and Deploy the Process</h2>
+<p>👉 Click on the <strong>Create Package</strong> button</p>
+<p class="image-container"><img alt="package" title="package" src="img/7596b9ad25c3ee12.png"></p>
+<p>👉 The newly created component will be automatically selected by default</p>
+<p>👉 Click Next to add details. No need to add any more details</p>
+<p>👉 Click create package and you will see this notification</p>
+<p class="image-container"><img alt="package-success" title="package-success" src="img/7b6607e7294b3c46.png"></p>
+<h2 is-upgraded>Deploy the packaged process on the running atom</h2>
+<p>👉 Click on the <strong>Deploy</strong> button and choose the Environment that you created previously</p>
+<p>👉 Click Next until you get to the Review Deploy step</p>
+<p>👉 Click on the Deploy button!</p>
+<p class="image-container"><img alt="deploy-success" title="deploy-success" src="img/5604dceaa3bb4eb.png"></p>
+<h2 is-upgraded>Publish events 💥!</h2>
+<p>👉 Navigate back to your Solace Cloud console, select the messaging service and navigate to the Try Me! tab</p>
+<p class="image-container"><img alt="tryme" title="tryme" src="img/3aeb0cdd196e3610.png"></p>
+<p>👉 In the Publisher section, click on the <strong>Connect</strong> button, change the topic to be <code>taxi/nyc/v1/dropoff/rideX</code> (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want</p>
+<p class="image-container"><img alt="publisher-connect" title="publisher-connect" src="img/47867f9558f91220.png"></p>
+<p>👉 Smash that Publish button.</p>
+<h2 is-upgraded>Check out the logs</h2>
+<p>👉 From the Boomi AtomSphere, navigate to the <strong>Process Reporting</strong> section under the Manage tab</p>
+<p class="image-container"><img alt="process-reporting" title="process-reporting" src="img/7ed2c8104b1e4bde.png"></p>
+<p>You will see the process reporting menu with your newly created <strong>NewProcess</strong> process. Note that you can click on the refresh icon <img alt="reporting-menu" title="reporting-menu" src="img/7d3c13f11fdaf54e.png"></p>
+<p>👉 Click on the view process logs icon</p>
+<p class="image-container"><img alt="logs" title="logs" src="img/fe3b45adbc7fc741.png"><img alt="logs2" title="logs2" src="img/9c8b1ddce355367b.png"><img alt="logs3" title="logs3" src="img/8de84267dc8fc191.png"></p>
+<p>You&#39;re done!</p>
+<aside class="special"><p>Note that any publisher that publishes on topic <code>taxi/nyc/v1/dropoff/&gt;</code> will be received by Solace PubSub+ Connecter on the Boomi AtomSphere and logged</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <p>✅ Sign up for a Solace PubSub+ Cloud account and configure a messaging service broker with a queue<br> ✅ Sign up for a Boomi AtomSphere account and setup a Solace Pubsub+ Connector for a listen configuration and bind to a message queue<br> ✅ Send events to the same topic the queue is subscribed to<br> ✅ Check out more information on the Solace Connector in the <a href="https://solace.com/connectors/dell-boomi-ipaas/" target="_blank">PubSub+ Connector Hub</a> page</p>
+<p class="image-container"><img alt="Soly wave" title="soly" src="img/f3045cf027293e9e.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>!</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
