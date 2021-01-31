@@ -229,7 +229,7 @@ Scroll down to the section on REST and verify the port is configured and enabled
 To view the incoming REST port, perform the following (replace `default` with your Message VPN name, and user credentials as appropriate):
 
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*
+curl -u admin:admin "http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*"
 ```
 
 And the response should look something like:
@@ -259,7 +259,7 @@ And the response should look something like:
 To configure the incoming port and enable it using SEMP, perform the following 2 commands. First, shutdown the port:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -269,7 +269,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
 Then change the port number and re-enable it:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -357,7 +357,7 @@ Select _Gateway_ from the drop-down list, and click "Apply":
 Change to `gateway` with just one command:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -366,7 +366,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
 
 To verify, use the previous GET command:
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*
+curl -u admin:admin "http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*"
 ```
 
 ```
@@ -444,7 +444,7 @@ Negative
  
 For example:
 ```
-curl -u default:default http://localhost:9000/test -v
+curl -u default:default "http://localhost:9000/test" -v
 ```
 
 And you should see a response similar to the following:
@@ -492,7 +492,7 @@ Positive
 In the Subscriber application's subscription text field, try entering `POST/>` as a subscription.  Then, submit a different REST request to see how it appears:
 
 ```
-curl -u default:default -X POST http://localhost:9000/hello/world -d '{"body":"hello world!!","status":"great"}' -v
+curl -u default:default -X POST "http://localhost:9000/hello/world" -d '{"body":"hello world!!","status":"great"}' -v
 ```
 ![alt-text-here](gfx/tryme_mgr5.png)
 
@@ -558,7 +558,7 @@ The remainder of this tutorial will use a Postman API test server to generate a 
 We will use the GET API to receive a response. The response will consist of some JSON, including any parameters that are passed with the URL.  E.g.:
 
 ```
-curl 'http://postman-echo.com:80/get?hello=world&solace=cool'
+curl "http://postman-echo.com:80/get?hello=world&solace=cool"
 ```
 
 Should result in the following response (pretty-printed for visibility):
@@ -635,7 +635,7 @@ You can read more about Wilecard Topic Subscriptions [here](https://docs.solace.
 Create a new queue:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -650,7 +650,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues \
 Add a subscription to it:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q_rest_get/subscriptions \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q_rest_get/subscriptions" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -731,7 +731,7 @@ Click "Apply":
 ### SEMP
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -741,7 +741,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints \
 ```
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/queueBindings \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/queueBindings" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -806,7 +806,7 @@ Refresh the screen, and ensure the REST Consumer reports an Operational State of
 One single SEMP API command will create and configure the REST Consumer:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -823,7 +823,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp
 Make sure that it is reporting a good state, using the Monitor SEMP API:
 
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/monitor/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers
+curl -u admin:admin "http://localhost:8080/SEMP/v2/monitor/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers"
 ```
 
 ```
@@ -910,7 +910,7 @@ Duration: 0:03:00
 Now that the configuration is done, let us test using _almost_ the same cURL command from before, except replacing the `postman-echo.com` host and port with the Solace broker's REST port, and adding client username & password as required:
 
 ```
-curl -u default:default 'http://localhost:9000/get?hello=world&solace=cool'
+curl -u default:default "http://localhost:9000/get?hello=world&solace=cool"
 ```
 And the output should look like:
 ```
@@ -984,7 +984,7 @@ Enter the subscriptions `GET/>` and `#P2P/*/#rest*/>` into the subscription text
 Re-run the same cURL command from the previous section:
 
 ```
-curl -u default:default 'http://localhost:9000/get?hello=world&solace=cool'
+curl -u default:default "http://localhost:9000/get?hello=world&solace=cool"
 ```
 
 Verify cURL still receives a response, but note that you can **also** see the request and reply in the Subscriber window:
@@ -1084,7 +1084,7 @@ User Property Map:                      4 entries
 1. And at the end of the cURL console, you should see the returned payload of "Sample response":
 
 ```
-> curl -u default:default http://localhost:9000/test -v
+> curl -u default:default "http://localhost:9000/test" -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
@@ -1127,7 +1127,7 @@ Positive
 1. Restart the Basic Replier, resubmit the REST GET request, and you should see something that looks the following:
 
 ```
-$ curl -u default:default http://localhost:9000/test -v
+$ curl -u default:default "http://localhost:9000/test" -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
