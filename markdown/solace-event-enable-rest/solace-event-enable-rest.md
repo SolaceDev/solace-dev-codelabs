@@ -48,6 +48,8 @@ Positive
 
 [MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
 
+[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+
 [Event-Enable REST Video Tutorial](https://youtu.be/7eKAdLhlT1s)
 
 
@@ -1182,6 +1184,8 @@ Thanks for making it this far! :-D
 ### Useful Links
 
 [MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+
+[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
 
 [Solace REST Message Encoding](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref393979969)
 
