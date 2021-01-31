@@ -9,7 +9,7 @@ feedback link: https://solace.community/categories/pubsub%2B-tutorials
 analytics account: UA-3921398-10
 
 
-# How to Event-Enable your REST Architecture with Solace PubSub+
+# How to Event-Enable your REST Architecture with Solace PubSub+, Part 1
 
 
 ## Introduction
