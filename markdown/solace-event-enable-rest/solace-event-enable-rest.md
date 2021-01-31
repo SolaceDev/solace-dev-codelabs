@@ -9,7 +9,7 @@ feedback link: https://solace.community/categories/pubsub%2B-tutorials
 analytics account: UA-3921398-10
 
 
-# How to Event-Enable your REST Architecture with Solace PubSub+, Part 1
+# Event-Enable your REST Architecture with Solace PubSub+, Part 1
 
 
 ## Introduction
@@ -44,9 +44,11 @@ Positive
 - How to build a Solace messaging application to consume and respond to incoming REST requests
 
 
+### Useful Links
 
+[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
 
-
+[Event-Enable REST Video Tutorial](https://youtu.be/7eKAdLhlT1s)
 
 
 
@@ -1178,6 +1180,8 @@ Thanks for making it this far! :-D
  - The [Shared Subscriptions feature](https://docs.solace.com/PubSub-Basics/Direct-Messages.htm#Shared) might be useful for application redundancy / load-balancing, if using Direct messaging.
 
 ### Useful Links
+
+[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
 
 [Solace REST Message Encoding](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref393979969)
 
