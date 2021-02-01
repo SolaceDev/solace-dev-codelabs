@@ -5,7 +5,7 @@ tags: iguide,howto
 categories: Kafka,API,pub/sub
 environments: Web
 status: Draft
-feedback link: https://solace.community/categories/pubsub%2B-tutorials
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kafka-connectors/kafka-connectors.md
 analytics account: UA-3921398-10
 
 
@@ -107,8 +107,12 @@ Point your favourite browser to [https://github.com/SolaceProducts](https://gith
 ![asdf](img/github_download.png)
 
 
+### Option 1: Download the Latest Release
 
-### Download and Build
+If you want the latest release you can download a pre-compiled version.
+On the right side of the screen, click the "Releases" and download the latest ZIP or TAR file.  Open the archive, and look in the `lib` directory.  Copy the `pubsubplus-connector-kafka-[source|sink]-x.x.x.jar` file into the Kafka installation location as in the step above.
+
+### Option 2: Download and Build the Latest
 
 You can download either or both, building and installation is the same. For simplicity, we will only do the source connector.  Download the zip, or clone the project:
 ![asdf](img/github_download2.png)
@@ -155,16 +159,6 @@ Look inside the directory `./build/libs/` and there should be a single JAR file 
 - if Confluent platform, create a new directory `kafka-connect-solace` inside `/opt/confluent-5.5.1/share/java/` and copy it there
 
 Repeat the same procedure for the Sink Connector.
-
-
-
-
-### Download the Distribution
-
-If you do not wish to build the Connectors from source, you can download a pre-compiled version.
-On the right side of the screen, click the "Releases" and download the latest ZIP or TAR file.  Open the archive, and look in the `lib` directory.  Copy the `pubsubplus-connector-kafka-[source|sink]-x.x.x.jar` file into the Kafka installation location as in the step above.
-
-
 
 
 
