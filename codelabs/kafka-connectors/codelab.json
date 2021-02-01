@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-10-01T13:33:43-04:00",
+  "updated": "2021-02-01T12:03:01-05:00",
   "id": "kafka-connectors",
   "duration": 5,
   "title": "Getting Started with the Solace PubSub+ Connectors for Kafka",
@@ -23,7 +23,7 @@
     "iguide",
     "web"
   ],
-  "feedback": "https://solace.community/categories/pubsub%2B-tutorials",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kafka-connectors/kafka-connectors.md",
   "ga": "UA-3921398-10",
   "url": "kafka-connectors"
 }

@@ -25,7 +25,7 @@
                   id="kafka-connectors"
                   title="Getting Started with the Solace PubSub&#43; Connectors for Kafka"
                   environment="web"
-                  feedback-link="https://solace.community/categories/pubsub%2B-tutorials">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kafka-connectors/kafka-connectors.md">
     
       <google-codelab-step label="Introduction" duration="0">
         <p>Do you use or want to use Kafka?  Want to learn how to integrate Kafka with Solace PubSub+ event brokers?</p>
@@ -81,9 +81,11 @@
       </google-codelab-step>
     
       <google-codelab-step label="Download the PubSub&#43; Source and Sink Connectors" duration="0">
-        <p>Point your favourite browser to <a href="https://github.com/SolaceProducts" target="_blank">https://github.com/SolaceProducts</a> and search for <code>kafka</code>: <img alt="asdf" src="img/32d17ae510747159.png"></p>
-<h2 is-upgraded>Download and Build</h2>
-<p>You can download either or both, building and installation is the same. For simplicity, we will only do the source connector.  Download the zip, or clone the project: <img alt="asdf" src="img/620c790d1b3ab6a0.png"></p>
+        <p>Point your favourite browser to <a href="https://github.com/SolaceProducts" target="_blank">https://github.com/SolaceProducts</a> and search for <code>kafka</code>:<br><img alt="asdf" src="img/32d17ae510747159.png"></p>
+<h2 is-upgraded>Option 1: Download the Latest Release</h2>
+<p>If you want the latest release you can download a pre-compiled version.<br>On the right side of the screen, click the &#34;Releases&#34; and download the latest ZIP or TAR file.  Open the archive, and look in the <code>lib</code> directory.  Copy the <code>pubsubplus-connector-kafka-[source|sink]-x.x.x.jar</code> file into the Kafka installation location as in the step above.</p>
+<h2 is-upgraded>Option 2: Download and Build the Latest</h2>
+<p>You can download either or both, building and installation is the same. For simplicity, we will only do the source connector.  Download the zip, or clone the project:<br><img alt="asdf" src="img/620c790d1b3ab6a0.png"></p>
 <p>The Connectors use <strong>Gradle</strong> as the Java build tool. There is no need to intall Gradle if you do not have it, everything is self-contained within the Connector distributions.</p>
 <p>Simply run <code>./gradlew assemble</code> on Linux, Mac, or WSL, or <code>.\gradlew.bat assemble</code> on Windows Command Prompt or PowerShell. It might take a little bit of time while the appropriate dependencies are downloaded:</p>
 <pre><code>alee@LAPTOP-OQFKDPM0:/mnt/c/Users/AaronLee/Downloads/pubsubplus-connector-kafka-source-master$ ./gradlew assemble
@@ -120,15 +122,13 @@ PS C:\Users\AaronLee\Downloads\pubsubplus-connector-kafka-sink-master&gt;
 <li>if Confluent platform, create a new directory <code>kafka-connect-solace</code> inside <code>/opt/confluent-5.5.1/share/java/</code> and copy it there</li>
 </ul>
 <p>Repeat the same procedure for the Sink Connector.</p>
-<h2 is-upgraded>Download the Distribution</h2>
-<p>If you do not wish to build the Connectors from source, you can download a pre-compiled version. On the right side of the screen, click the &#34;Releases&#34; and download the latest ZIP or TAR file.  Open the archive, and look in the <code>lib</code> directory.  Copy the <code>pubsubplus-connector-kafka-[source|sink]-x.x.x.jar</code> file into the Kafka installation location as in the step above.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Download Solace PubSub&#43; Java API" duration="0">
-        <p>Point your favourite browser to <a href="https://solace.com/downloads" target="_blank">https://solace.com/downloads</a> and scroll towards the bottom, looking for &#34;Messaging APIs &amp; Protocols&#34;: <img alt="asdf" src="img/dc89e09f13c3205d.png"></p>
-<p>Click on &#34;Java&#34;, and select &#34;Download&#34;: <img alt="asdf" src="img/374e8bfabd96b313.png"></p>
+        <p>Point your favourite browser to <a href="https://solace.com/downloads" target="_blank">https://solace.com/downloads</a> and scroll towards the bottom, looking for &#34;Messaging APIs &amp; Protocols&#34;:<br><img alt="asdf" src="img/dc89e09f13c3205d.png"></p>
+<p>Click on &#34;Java&#34;, and select &#34;Download&#34;:<br><img alt="asdf" src="img/374e8bfabd96b313.png"></p>
 <p>Once the ZIP is downloaded, look inside the <code>lib</code> directory and copy all JARs into the appropriate Kafka location:</p>
 <ul>
 <li>if standard Apache Kafka, copy to <code>/opt/kafka_2.12-2.5.0/libs</code></li>
