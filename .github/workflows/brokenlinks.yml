@@ -12,4 +12,5 @@ jobs:
       with:
         folder-path: 'markdown'
         use-quiet-mode: 'yes'
+        config-file: '.github/workflows/brokenlinks-config.json'
         
