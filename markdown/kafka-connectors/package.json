@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch kafka-connectors.md --exec 'claat export kafka-connectors.md && lsof -c claat -t | xargs kill && cd kafka-connectors && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
