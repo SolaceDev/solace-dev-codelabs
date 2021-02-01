@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-09-02T16:36:34-04:00",
+  "updated": "2021-02-01T14:48:07-05:00",
   "id": "spring-cloud-stream-basics",
   "duration": 40,
   "title": "Spring Cloud Stream Basics",
@@ -21,7 +21,7 @@
     "web",
     "workshop"
   ],
-  "feedback": "https://github.com/Mrc0113/cloud-stream-basics",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/spring-cloud-stream-basics/spring-cloud-stream-basics.md",
   "ga": "UA-3921398-10",
   "url": "spring-cloud-stream-basics"
 }

@@ -5,7 +5,7 @@ tags: patterns,howto
 categories: REST,Solace,Java
 environments: Web
 status: Published
-feedback link: https://solace.community/categories/pubsub%2B-tutorials
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md
 analytics account: UA-3921398-10
 
 

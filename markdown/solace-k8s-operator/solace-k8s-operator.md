@@ -28,7 +28,7 @@ Duration: 0:15:00
 
 * Prerequisite is functional access to Kubernetes 1.16+.
 * First to build operators you will need [golang](https://golang.org/doc/install) with compatible compiler.
-* [Next install the operator-sdk](https://sdk.operatorframework.io/docs/installation/install-operator-sdk/) Minimum version is 1.0.0.
+* [Next install the operator-sdk](https://sdk.operatorframework.io/docs/) Minimum version is 1.0.0.
 * [Next install Helm](https://helm.sh/docs/intro/install/) which is required to create initial packaging.
 * Finally add Solace charts to your helm repo:
 

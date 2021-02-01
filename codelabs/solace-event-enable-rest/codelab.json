@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2020-04-06T09:53:52-04:00",
+  "updated": "2021-02-01T14:44:22-05:00",
   "id": "solace-event-enable-rest",
   "duration": 60,
   "title": "How to Event-Enable your REST Architecture with Solace PubSub+",
@@ -23,7 +23,7 @@
     "patterns",
     "web"
   ],
-  "feedback": "https://solace.community/categories/pubsub%2B-tutorials",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md",
   "ga": "UA-3921398-10",
   "url": "solace-event-enable-rest"
 }

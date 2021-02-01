@@ -5,7 +5,7 @@ categories: Spring,Java
 tags: workshop
 environments: Web
 status: Published
-feedback link: https://github.com/Mrc0113/cloud-stream-basics
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/spring-cloud-stream-basics/spring-cloud-stream-basics.md
 analytics account: UA-3921398-10
 
 # Spring Cloud Stream Basics
