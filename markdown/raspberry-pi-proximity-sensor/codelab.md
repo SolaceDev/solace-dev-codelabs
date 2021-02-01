@@ -49,12 +49,12 @@ You will need to purchase the following additional components which includes the
 
 To make this accesible, this does not require any sort of soldering. A breadboard eassentially is a solderless circuit board with labelled rows and columns allow you to connect wires/resistors/sensors by just plugging them into holes.
 
-- [HC-SR04 Sensor](https://smile.amazon.com/gp/product/B07RGB4W8V/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1)
-- [400 Points Breadboard](https://smile.amazon.com/gp/product/B0819VF8T3/ref=ppx_yo_dt_b_asin_title_o08_s00?ie=UTF8&psc=1)
-- [Female to Male Jumper wires](https://smile.amazon.com/gp/product/B077N7J6C4/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
-- [Male to Male Jumper Wires](https://smile.amazon.com/gp/product/B005TZJ0AM/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
-- [330 Ω Resistor](https://smile.amazon.com/gp/product/B07QH5PFG3/ref=ppx_yo_dt_b_asin_title_o08_s01?ie=UTF8&psc=1)
-- [470 Ω Resistor](https://smile.amazon.com/gp/product/B07QG1V4BH/ref=ppx_yo_dt_b_asin_title_o08_s01?ie=UTF8&psc=1)
+- [HC-SR04 Sensor](https://www.amazon.com/gp/product/B07RGB4W8V/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1&pldnSite=1)
+- [400 Points Breadboard](https://www.amazon.com/gp/product/B0819VF8T3/ref=ppx_yo_dt_b_asin_title_o08_s00?ie=UTF8&psc=1&pldnSite=1)
+- [Female to Male Jumper wires](https://www.amazon.com/gp/product/B077N7J6C4/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1&pldnSite=1)
+- [Male to Male Jumper Wires](https://www.amazon.com/gp/product/B005TZJ0AM/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1&pldnSite=1)
+- [330 Ω Resistor](https://www.amazon.com/gp/product/B07QH5PFG3/ref=ppx_yo_dt_b_asin_title_o08_s01?ie=UTF8&psc=1&pldnSite=1)
+- [470 Ω Resistor](https://www.amazon.com/gp/product/B07QG1V4BH/ref=ppx_yo_dt_b_asin_title_o08_s01?ie=UTF8&psc=1&pldnSite=1)
 
 ## Setting up your Raspberry-Pi
 Duration: 1:00:00
