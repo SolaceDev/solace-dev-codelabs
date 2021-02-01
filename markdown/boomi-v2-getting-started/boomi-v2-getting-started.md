@@ -5,7 +5,7 @@ tags: workshop
 categories: Boomi, Portal
 environments: Web
 status: Published
-feedback link: https://solace.community/
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/boomi-v2-getting-started
 analytics account: UA-3921398-10
 # Getting started with Boomi and Solace
 

@@ -5,7 +5,7 @@ tags: kafka,guide,event-portal
 categories: Kafka, Portal, taxi
 environments: Web
 status: Draft
-feedback link: https://solace.community/
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-discovery-kafka
 analytics account: UA-3921398-10
 
 # Guided Walk Through of PubSub+ Event Portal Discovery with Kafka

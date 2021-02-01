@@ -5,7 +5,7 @@ tags:
 categories: Mulesoft
 environments: Web
 status: Published
-feedback link: https://solace.community/
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/mulesoft-connector
 analytics account: UA-3921398-10
 
 # Using the MuleSoft Solace Connector to publish events
