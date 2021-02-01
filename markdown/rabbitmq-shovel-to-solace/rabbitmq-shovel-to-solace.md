@@ -5,7 +5,7 @@ tags: iguide, amqp, rabbit
 categories: Solace,RabbitMQ,AMQP
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbit-shovel-to-solace
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbitmq-shovel-to-solace
 analytics account: UA-3921398-10
 
 #Bridge data from RabbitMQ to Solace PubSub+

@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2021-02-01T14:59:51-05:00",
+  "updated": "2021-02-01T15:31:34-05:00",
   "id": "solace-rabbit-shovel",
   "duration": 29,
   "title": "Bridge data from RabbitMQ to Solace PubSub+",
@@ -24,7 +24,7 @@
     "rabbit",
     "web"
   ],
-  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbit-shovel-to-solace",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbitmq-shovel-to-solace",
   "ga": "UA-3921398-10",
   "url": "solace-rabbit-shovel"
 }
