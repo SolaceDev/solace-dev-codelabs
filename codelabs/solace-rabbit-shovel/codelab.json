@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2021-02-01T15:31:34-05:00",
+  "updated": "2020-12-16T11:44:59-05:00",
   "id": "solace-rabbit-shovel",
   "duration": 29,
   "title": "Bridge data from RabbitMQ to Solace PubSub+",

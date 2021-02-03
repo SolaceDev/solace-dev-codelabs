@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2021-02-01T14:48:53-05:00",
+  "updated": "2020-08-18T11:43:56-04:00",
   "id": "solace-k8s-operator",
   "duration": 62,
   "title": "How to build a Solace PubSub+ Kubernetes Operator",
