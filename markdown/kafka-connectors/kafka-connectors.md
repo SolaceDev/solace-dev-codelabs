@@ -20,7 +20,7 @@ analytics account: UA-3921398-10
 
 Duration: 0:05:00
 
-Do you use or want to use Kafka?  Want to learn how to integrate Kafka with Solace PubSub+ event brokers?
+EDIT Do you use or want to use Kafka?  Want to learn how to integrate Kafka with Solace PubSub+ event brokers?
 
 Using the Kafka Connect API, the Solace-designed PubSub+ Kafka Connectors allow you to both on-ramp and off-ramp data between Solace and Kafka.
 
