@@ -172,7 +172,7 @@ third
 8
 9
 ```
-    - Notice the messages are somewhat out-of-order.  This is because Kafka only has ordering at the partition level.  In this case, two partitions.
+    - Notice the messages are somewhat out-of-order.  This is because Kafka only has ordering at the partition level.  In this case, within each of the two partitions message order is maintained; but not across the whole Kafka topic.
 
 1. Now that the consumer is caught up, publish more messages and observe they are received by the consumer.
 ```
@@ -361,7 +361,7 @@ The sample Solace PubSub+ Connector properties files assume the Kafka topic to b
 
 Duration: 0:10:00
 
-If you have access to a Solace PubSub+ broker (local Docker container, free Solace Cloud, etc.), then let's connect the Solace Source Connector to it and verify it works.
+If you have access to a Solace PubSub+ broker (local Docker container, free Solace Cloud, etc.), then let's connect the Solace Source Connector to it and verify it works. Otherwise, skip to the next step to use an existing Solace broker.
 
 1. First, the default configuration files both use a Kafka Topic called "test", so create that first:
 ```
@@ -437,15 +437,9 @@ sol.message_processor_class=com.solace.connector.kafka.connect.source.msgprocess
 sol.kafka_message_key=DESTINATION
 ```
 
-1. Restart the Connect framework in standalone mode. Only one instance of the standalone can run, but you can pass in multiple properties files:
+1. Restart the Connect framework in standalone mode:
 ```
 bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
-```
-
-1. If everything is running properly (Solace broker, Kafka broker, etc.) you should see the log entries:
-```
-INFO Connected to host 'orig=tcp://localhost, scheme=tcp://, host=localhost'
-INFO Adding subscription for topic samples/>
 ```
 
 1. Once the Source Connector connects to Solace, you should immediately see lots of taxi ride information arriving in the Kafka Consumer app:
@@ -493,25 +487,118 @@ Positive
 
 
 
+## Connect the Solace Sink Connector
+
+Duration: 0:10:00
+
+Now that we have made the Source connector go from Solace→Kafka, let's configure the basic Sink Connector to publish data from Kafka→Solace.
+
+1. Using the PubSub+ Manager GUI again, connect the Subscriber to your broker.  Add a subscription for `sink/>`. This will echo/display any Solace messages received that match that subscription.
+
+1. Edit the `solace_sink.properties` file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. Let's use the Kafka topic "quickstart-events".
+```
+# Kafka topics to read from
+topics=quickstart-events
+# PubSub+ connection information
+sol.host=tcp://localhost
+sol.username=default
+sol.password=default
+sol.vpn_name=default
+# Solace PubSub+ topics to PUBLISH to
+sol.topics=sink/events
+```
+
+1. If it's still running, stop the Connect instance (Ctrl-C), and restart it using the Sink properties file:
+
+```
+bin/connect-standalone.sh config/connect-standalone.properties config/solace_sink.properties
+```
+
+1. Once it connects, you should see your 10 or so messages you originally wrote to the quickstart topic published into Solace with the topic `sink/events`.
+![asdf](img/sink_topics_solace2.png)
+
+1. Feel free to restart the Kafka publisher app again, and add more messages to the Kafka topic, which will then get published into Solace:
+```
+bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+```
 
 
-## Anatomy of the Kafka Connect Framework
-
-![asdf](img/youtube.png)
-
-Inside the Solace PubSub+ Connectors, they come with a few different Processors. The source code for all of these is included, and can be customized and extended as required:
-
-#### Source
-
-- **SolSampleSimpleMessageProcessor**: very basic, uses `null` for the key, copies the message payload into the Kafka record
-- **SolaceSampleKeyedMessageProcessor**: allows you to specify what attribute to key the Kafka record on (e.g. Destination (aka Solace topic), CorrelationID, etc.)
 
 
-#### Sink
 
-- **SolSimpleRecordProcessor**: very basic, specify which fixed Solace topic or queue to publish to
-- **SolSimpleKeyedRecordProcessor**: allows the ability to specify CorrelationID and other Solace headers
-- **SolDynamicDestinationRecordProcessor**: example of how to construct **dynamic Solace topics** using the record payload. Modify as appropriate for your data.
+
+
+## Custom Sink Connector for Solace Dynamic Topics
+
+Duration: 0:10:00
+
+In the previous section, the very basic **SolSimpleRecordProcessor** Sink Connector simply published on a single Solace topic that was defined in the properties file (e.g. `sink/events`).  But Solace supports a **very dynamic and expressive topic hierarchy**, where each level of the topic can represent a piece of metadata from the message. For example, from the taxi data feed:
+
+```
+TOPIC: taxinyc/ops/ride/updated/v1/enroute/00000190/54846519/040.74084/-073.94572
+LEVLS: app/division/type/verb/version/status/driver_id/pass/id/latitude/longitude 
+
+PAYLOAD:
+{
+    "ride_id": "7a63e37c-b4f2-4085-9b3e-0b24873cea00",
+    "information_source": "RideDispatcher",
+    "point_idx": 442,
+    "latitude": 40.74084,
+    "longitude": -73.94572,
+    "heading": 100,
+    "speed": 4,
+    "timestamp": "2021-03-18T09:55:30.017-04:00",
+    "meter_reading": 9.26,
+    "meter_increment": 0.0209495,
+    "ride_status": "enroute",
+    "passenger_count": 1,
+    "driver": {
+        "driver_id": 190,
+        "first_name": "Allison",
+        "last_name": "Schwager",
+        "rating": 2.75,
+        "car_class": "Sedan"
+    },
+    "passenger": {
+        "passenger_id": 54846519,
+        "first_name": "Joe",
+        "last_name": "Caswell",
+        "rating": 4.75
+    }
+}
+```
+
+To be able to dynamically change which Solace topic the Sink Connector publishes to, check out the source code for the **SolDynamicDestinationRecordProcessor**.  You'll find this under folder `src/main/java/com/solace/connector/kafka/connect/sink/recordprocessor` of the Solace PubSub+ Sink Connector code which you downloaded from GitHub.
+
+Note the `processRecord()` method, which takes a Kafka record as a parameter and returns a Solace Message.  Inside the method, you can see how the (example) code examines the payload of the Kafka record for certain strings and values, and then builds the corresonponding or appropriate Solace topic.  Very cool!
+
+```
+public class SolDynamicDestinationRecordProcessor implements SolRecordProcessorIF {
+  private static final Logger log =
+      LoggerFactory.getLogger(SolDynamicDestinationRecordProcessor.class);
+
+  @Override
+  public BytesXMLMessage processRecord(String skey, SinkRecord record) {
+    BytesXMLMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesXMLMessage.class);
+
+    // Add Record Topic,Partition,Offset to Solace Msg
+    String kafkaTopic = record.topic();
+    msg.setApplicationMessageType("ResendOfKafkaTopic: " + kafkaTopic);
+
+    Object recordValue = record.value();
+    String payload = "";
+    Topic topic;
+    if (recordValue instanceof byte[]) {
+      payload = new String((byte[]) recordValue, StandardCharsets.UTF_8);
+    } else if (recordValue instanceof ByteBuffer) {
+      payload = new String(((ByteBuffer) recordValue).array(),StandardCharsets.UTF_8);
+    }
+    log.debug("================ Payload: " + payload);
+```
+
+You can modify this source code, or duplicate it, rebuild the JAR using Gradle, and copy the Sink JAR back into the Kafka distribution.  Or you can also deploy a new JAR with only the modified Processor classes, so you don't need to copy over the previous Sink JAR.
+
+Not many apps are written to take data _out_ of Kafka... typically, Kafka is seen as a massive ingest engine.  However, if data that's generated in Kafka (e.g. with Streams or KSQL or something) needs to be sent to edge devices or microservices that aren't all connected direclty to Kafka, the Solace Sink is a great way to publish a message with a very specific topic that can find its way through the Solace Event Mesh to your application.
 
 
 
@@ -520,17 +607,19 @@ Inside the Solace PubSub+ Connectors, they come with a few different Processors.
 
 ## Some Tips and Tricks
 
+Duration: 0:01:00
+
 The following are all for the standard Apache Kafka variant.
 
 Create a topic:
 ```
-bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 2 --topic test
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 2 --topic test2
 ```
 Use 2 partitions.
 
 Then use the console publisher to publish 10 messages into the Kafka topic:
 ```
-bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test
+bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test2
 ```
 
 Then start a consumer and see the order of the records returned.  This is why order is not guaranteed for a Kafka topic:
@@ -552,6 +641,8 @@ Due to the custom capabilities in the Solace PubSub+ Connector framework, it is 
 
 
 ## Next Steps
+
+Duration: 0:02:00
 
 Much more detailed documentation on configuration and usage can be found on the Solace PubSub+ Connectors GitHub pages.  Please refer there for more information.
 
