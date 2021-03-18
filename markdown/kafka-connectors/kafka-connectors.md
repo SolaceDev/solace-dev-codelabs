@@ -570,7 +570,7 @@ PAYLOAD:
 
 To be able to dynamically change which Solace topic the Sink Connector publishes to, check out the source code for the **SolDynamicDestinationRecordProcessor**.  You'll find this under folder `src/main/java/com/solace/connector/kafka/connect/sink/recordprocessor` of the Solace PubSub+ Sink Connector code which you downloaded from GitHub.
 
-Note the `processRecord()` method, which takes a Kafka record as a parameter and returns a Solace Message.  Inside the method, you can see how the (example) code examines the payload of the Kafka record for certain strings and values, and then builds the corresonponding or appropriate Solace topic.  Very cool!
+Note the `processRecord()` method, which takes a Kafka record as a parameter and returns a Solace Message.  Inside the method, you can see how the (example) code examines the payload of the Kafka record for certain strings and values, and then builds the corresonponding or appropriate Solace topic. This particular example is looking at bus alerting data (comms and control messages) coming from Kafka, and builds dynamic Solace toipcs.  Very cool!
 
 ```
 public class SolDynamicDestinationRecordProcessor implements SolRecordProcessorIF {
@@ -584,19 +584,31 @@ public class SolDynamicDestinationRecordProcessor implements SolRecordProcessorI
     // Add Record Topic,Partition,Offset to Solace Msg
     String kafkaTopic = record.topic();
     msg.setApplicationMessageType("ResendOfKafkaTopic: " + kafkaTopic);
-
-    Object recordValue = record.value();
+...
     String payload = "";
     Topic topic;
-    if (recordValue instanceof byte[]) {
-      payload = new String((byte[]) recordValue, StandardCharsets.UTF_8);
-    } else if (recordValue instanceof ByteBuffer) {
-      payload = new String(((ByteBuffer) recordValue).array(),StandardCharsets.UTF_8);
+
+    String busId = payload.substring(0, 4);
+    String busMsg = payload.substring(5, payload.length());
+
+    if (busMsg.toLowerCase().contains("stop")) {
+      topic = JCSMPFactory.onlyInstance().createTopic("ctrl/bus/" + busId + "/stop");
+      log.debug("================ Dynamic Topic = " + topic.getName());
+
+    } else if (busMsg.toLowerCase().contains("start")) {
+      topic = JCSMPFactory.onlyInstance().createTopic("ctrl/bus/" + busId + "/start");
+      log.debug("================ Dynamic Topic = " + topic.getName());
+    } else {
+      topic = JCSMPFactory.onlyInstance().createTopic("comms/bus/" + busId);
+      log.debug("================ Dynamic Topic = " + topic.getName());
     }
-    log.debug("================ Payload: " + payload);
+    // Also include topic in dynamicDestination header
+    try {
+      userHeader.putDestination("dynamicDestination", topic);
+
 ```
 
-You can modify this source code, or duplicate it, rebuild the JAR using Gradle, and copy the Sink JAR back into the Kafka distribution.  Or you can also deploy a new JAR with only the modified Processor classes, so you don't need to copy over the previous Sink JAR.
+You can modify this source code to make toipcs for your specific data, or duplicate it, rebuild the JAR using Gradle, and copy the Sink JAR back into the Kafka distribution.  Or you can also deploy a new JAR with only the modified Processor classes, so you don't need to copy over the previous Sink JAR.
 
 Not many apps are written to take data _out_ of Kafka... typically, Kafka is seen as a massive ingest engine.  However, if data that's generated in Kafka (e.g. with Streams or KSQL or something) needs to be sent to edge devices or microservices that aren't all connected direclty to Kafka, the Solace Sink is a great way to publish a message with a very specific topic that can find its way through the Solace Event Mesh to your application.
 
