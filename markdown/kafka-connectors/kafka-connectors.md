@@ -20,7 +20,7 @@ analytics account: UA-3921398-10
 
 Duration: 0:05:00
 
-EDIT Do you use or want to use Kafka?  Want to learn how to integrate Kafka with Solace PubSub+ event brokers?
+Do you use or want to use Kafka?  Want to learn how to integrate Kafka with Solace PubSub+ event brokers?
 
 Using the Kafka Connect API, the Solace-designed PubSub+ Kafka Connectors allow you to both on-ramp and off-ramp data between Solace and Kafka.
 
@@ -60,7 +60,7 @@ Duration: 0:02:00
 
 Duration: 0:02:00
 
-- Access to a Solace event broker (see below)
+- (Optional) Access to a Solace event broker (see below)
 - Network connectivity  (!?)
 - (Optional) JDK for building the Connectors from source
 
@@ -80,18 +80,18 @@ Duration: 0:02:00
 
 ## Ensure Kafka is Installed
 
-Duration: 0:15:00
+Duration: 0:10:00
 
 The Solace PubSub+ Connectors will work with either standard Apache Kafka, or the proprietary Confluent variant.  
 
-### Installing Apache Kafka
+### Option 1: Installing Apache Kafka (66 MB)
 
 [Apache Kafka Quickstat](http://kafka.apache.org/quickstart)
 
 Download and unzip Kafka onto your server or local machine.  This tutorial will assume that it is installed in `~/kafka_2.13-2.7.0/`, the current version of Apache Kafka at the time of this writing.
 
 
-### Installing Confluent Platform
+### Option 2: Installing Confluent Platform (1.7 GB)
 
 Download and unzip Confluent Platform onto your server or local machine. This tutorial will assume that it is installed in `~/confluent-6.1.0/`, the current version of Confluent Platform at the time of this writing.
 
@@ -101,14 +101,89 @@ Download and unzip Confluent Platform onto your server or local machine. This tu
 [Confluent Quickstart](https://docs.confluent.io/current/quickstart/index.html)
 
 
-### Create a Kafka Topic and Test Publishing and Subscribing
 
-Follow the Quickstart guide and verify you can publish and subscribe to Kafka topics.  The sample Solace PubSub+ Connector properties files assume the Kafka topic to be `test`.  From the quickstart guides, the basic steps for this are:
 
-- Start Zookeeper instance
-- Start Kafka server
-- Create new Kafka Topic
-- To verify, start Kafka producer and consumer apps
+
+
+
+
+
+
+
+
+
+## Create a Kafka Topic and Test Publishing and Subscribing
+
+Duration: 0:10:00
+
+Follow the appropriate Quickstart guide (links in previous section) and verify you can publish and subscribe to Kafka topics.  From the quickstart guides, the basic steps for this are (with **examples for standard Kafka** given):
+
+1. Start Zookeeper instance.  E.g.:
+```
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+
+1. Start Kafka server.  E.g.: (in new terminal)
+```
+bin/kafka-server-start.sh config/server.properties
+```
+
+1. Create a new Kafka Topic "quickstart-events".  E.g.: (in new terminal)
+```
+bin/kafka-topics.sh --create --topic quickstart-events --partitions 2 --bootstrap-server localhost:9092
+
+bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092
+Topic: quickstart-events        PartitionCount: 2       ReplicationFactor: 1    Configs: segment.bytes=1073741824
+        Topic: quickstart-events        Partition: 0    Leader: 0       Replicas: 0     Isr: 0
+        Topic: quickstart-events        Partition: 1    Leader: 0       Replicas: 0     Isr: 0
+```
+
+1. Start the publisher application, and send some messages.  E.g.:
+```
+bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+```
+
+1. Publish ten messages: e.g. "first message", "2nd one", "third", 4, 5, 6, ...
+```
+>First message
+>2nd one
+>third
+>4
+>5
+>6
+>7
+>8
+>9
+>10
+```
+
+1. Then, start the consumer application to receive the messages.  E.g.: (in new terminal)
+```
+bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+ 
+2nd one
+4
+5
+6
+7
+10
+First message
+third
+8
+9
+```
+    - Notice the messages are somewhat out-of-order.  This is because Kafka only has ordering at the partition level.  In this case, two partitions.
+
+1. Now that the consumer is caught up, publish more messages and observe they are received by the consumer.
+```
+>11
+>12
+>13
+>
+```
+   - Note the delay between publishing and consuming.  This is due to the consumer periodically polling the broker and pulling messages from it (unlike Solace, where messages are pushed to the consumer).  [https://kafka.apache.org/documentation/#theconsumer](https://kafka.apache.org/documentation/#theconsumer)
+
+
 
 
 
@@ -121,16 +196,13 @@ Follow the Quickstart guide and verify you can publish and subscribe to Kafka to
 
 Duration: 0:10:00
 
-Next, point your favourite browser to [https://github.com/SolaceProducts](https://github.com/SolaceProducts) and search for `kafka`:
+Next, we are ready to fetch all the required components for the Solace PubSub+ Connectors for Kafka.  Point your favourite browser to [https://github.com/SolaceProducts](https://github.com/SolaceProducts) and search for `kafka`:
 ![asdf](img/github_download.png)
 
+Click on the "source" one.
 
-### Option 1: Download the Latest Release (easier)
 
-If you want the latest release you can download a pre-compiled version.
-On the right side of the screen, click the "Releases" and download the latest ZIP or TAR file.  Open the archive, and look in the `lib` directory.  Copy the `pubsubplus-connector-kafka-[source|sink]-x.x.x.jar` file into the Kafka installation location as in the step above.
-
-### Option 2: Download and Build the Latest (better)
+### Option 1: Download and Build the Latest (better)
 
 You can download either or both, building and installation is the same. For simplicity, we will only do the source connector.  Download the zip, or clone the project:
 ![asdf](img/github_download2.png)
@@ -171,12 +243,23 @@ PS C:\Users\AaronLee\Downloads\pubsubplus-connector-kafka-sink-master>
 ```
 
 
-Look inside the directory `./build/libs/` and there should be a single JAR file there. This is the PubSub+ Connector JAR and must be copied inside the Kafka distribution:
+Look inside the directory `./build/libs/` and there should be a single JAR file there. This is the PubSub+ Connector JAR and **must be copied inside the Kafka distribution**:
 
 - if standard Apache Kafka, copy to `~/kafka_2.13-2.7.0/libs`
 - if Confluent platform, create a new directory `kafka-connect-solace` inside `~/confluent-6.1.0/share/java/` and copy it there
 
 Repeat the same procedure for the PubSub+ Sink Connector.
+
+
+### Option 2: Download the Latest Release (easier)
+
+If you want the latest release you can download a pre-compiled version.
+On the right side of the screen, click the "Releases" and download the latest ZIP or TAR file.  Open the archive, and look in the `lib` directory.  Copy the `pubsubplus-connector-kafka-[source|sink]-x.x.x.jar` file into the Kafka installation location as in the step above.
+
+
+
+
+
 
 
 
@@ -185,12 +268,14 @@ Repeat the same procedure for the PubSub+ Sink Connector.
 
 ## Download Solace PubSub+ Java API
 
-Point your favourite browser to [https://solace.com/downloads](https://solace.com/downloads), and be sure to tick the box "Solace APIs" under Categories. and scroll towards the bottom, looking for "Messaging APIs & Protocols":
+Duration: 0:08:00
+
+Next, we need the Solace application APIs so the Connectors know how to connect to Solace.  Point your favourite browser to [https://solace.com/downloads](https://solace.com/downloads), and be sure to tick the box "Solace APIs" under Categories. and scroll towards the bottom, looking for "Messaging APIs & Protocols":
 ![asdf](img/solace_downloads.png)
 
 
 
-Click on "Java", and select "Download":
+Click on "Java / JCSMP", and select "Download":
 ![asdf](img/solace_downloads2.png)
 
 
@@ -204,12 +289,22 @@ Once the ZIP is downloaded, look inside the `lib` directory and copy all JARs (s
 
 
 
+
+
+
+
 ## Configure the PubSub+ Kafka Connectors
 
-Included with the Source and Sink Connectors inside the `etc` directory are example configuration files. Both properties and JSON format are provided, depending on your runtime requirements:
+Duration: 0:07:00
 
-- When running Connect in standalone mode, use the properties file. Copy the properties files into the `config` directory
+![asdf](img/solace_source_sink.png)
+
+Included with the Source and Sink Connectors inside the `etc` directory are example **configuration** files. Both properties and JSON format are provided, depending on your runtime requirements:
+
+- When running Connect in standalone mode, use the properties file. Copy the properties files into the `config` directory of Kafka
 - When running in distributed mode, use the JSON file
+
+For this CodeLab, the examples will use the standalone mode of the standard Apache Kafka.
 
 Open the properties file and note all of the various configuration options exposed.  There are both Solace Java (JCSMP) API properties and Kafka Connect properties available to be configured.  For more information:
 
@@ -225,12 +320,175 @@ At the least, you will need to edit the properties/config files to add the basic
 
 Other useful properties are explained below:
 
+- `kafka.topic`: which Kafka topic to either write to, or read from.  The default is "test" but can be set to anything.
+
 ### Source Connector
 
-- `sol.topics`: one or more (comma separated) lists
+- `sol.topics`: one or more (comma separated) topics the Source connector can subscribe _Directly_ to
+- `sol.queue`: to use Persistent/Guaranteed messaging, the Source connetor binds to a queue instead
+- `sol.message_processor_class`: which Processor to use when receiving a Solace message before writing into Kafka:
+    - **SolSampleSimpleMessageProcessor**: very basic, uses `null` for the key, copies the message payload into the Kafka record
+    - **SolaceSampleKeyedMessageProcessor**: allows you to specify what attribute to key the Kafka record on (e.g. Destination (aka Solace topic), CorrelationID, etc.). See next property.
+- `sol.kafka_message_key`: when writing	records into Kafka, this allows you to specify what Solace message attribute to use as the Kafka key. The limited options can be expanded by customizing the source code.
 
 
 ### Sink Connector
+
+
+- `sol.topics`: one or more (comma separated) topics the Sink connector will publish to with Direct messaging
+- `sol.queue`: to use Persistent/Guaranteed messaging, the Sink connetor publish to a queue
+- `sol.record_processor_class`: which Processor to use when creating a Solace message to publish for each Kafka record:
+    - **SolSimpleRecordProcessor**: very basic, specify which fixed Solace topic or queue to publish to
+    - **SolSimpleKeyedRecordProcessor**: allows the ability to specify CorrelationID and other Solace headers
+    - **SolDynamicDestinationRecordProcessor**: example of how to construct **dynamic Solace topics** using the record payload. Modify as appropriate for your data.
+
+
+- `sol.kafka_message_key`: when writing	records into Kafka, this allows you to specify what Solace message attribute to use as the Kafka key. The limited options can be expanded by customizing the source code.
+The sample Solace PubSub+ Connector properties files assume the Kafka topic to be `test`.
+
+
+
+
+
+
+
+
+
+
+
+
+## Connect the Solace Source Connector (Basic)
+
+Duration: 0:10:00
+
+If you have access to a Solace PubSub+ broker (local Docker container, free Solace Cloud, etc.), then let's connect the Solace Source Connector to it and verify it works.
+
+1. First, the default configuration files both use a Kafka Topic called "test", so create that first:
+```
+bin/kafka-topics.sh --create --topic test --bootstrap-server localhost:9092
+```
+
+1. In a new terminal window, restart the Kafka Consumer app, and tell it to connect to the "test" topic. This way you'll be able to see messages as they arrive:
+```
+bin/kafka-console-consumer.sh --topic test --property print.key=true --from-beginning --bootstrap-server localhost:9092
+```
+
+1. Next, edit the `solace_source.properties` file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. For example:
+```
+# PubSub+ connection information
+sol.host=tcp://localhost
+sol.username=default
+sol.password=default
+sol.vpn_name=default
+# Solace PubSub+ topics to subscribe to
+sol.topics=samples/>
+```
+
+1. Start the Connect framework in standalone mode. Only one instance of the standalone can run, but you can pass in multiple properties files:
+```
+bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
+```
+
+1. If everything is running properly (Solace broker, Kafka broker, etc.) you should see the log entries:
+```
+INFO Connected to host 'orig=tcp://localhost, scheme=tcp://, host=localhost'
+INFO Adding subscription for topic samples/>
+```
+
+1. Now we are ready to publish some test Solace messages. Connect to the Solace PubSub+ Manager (e.g. http://localhost:8080 or via the Solace Cloud console).  Choose the correct Message VPN, and select the **Try Me!** menu selection.  Connect the publisher, change the topic to match the Solace Source Connector topic subscription (e.g. `samples/hello`), and publish.  You should see the message arrive in the Kafka Consumer:
+```
+null    Hello world!
+```
+
+Positive
+: Success!  The reason you see `null` is that the Consumer is displaying the Kafka message key, but we have not configured it in the Source Processor.  We will do that in the next section.
+
+
+
+
+
+
+
+
+
+
+
+## Connect the Solace Source Connector (Better)
+
+Duration: 0:10:00
+
+Next, we will use an existing Solace demo stream of messages: the Solace taxi demo.  You can visualize the datastream here: [Solace Taxi Map Demo](https://sg.solace.com/taxi/).
+
+Stop the Connector instance (`Ctrl-C`), but leave the Kafka Consumer running.  We'll repoint the Source Connector to the taxi demo stream.
+
+
+1. Edit the `solace_source.properties` file again with the following. Note that the Processor is now changing to the "keyed" processor, and we'll use the messages' Destination (aka Topic) as the key:
+```
+# PubSub+ connection information
+sol.host=tcp://taxi.messaging.solace.cloud
+sol.username=public-taxi
+sol.password=iliketaxis
+sol.vpn_name=nyc-modern-taxi
+# Solace PubSub+ topics to subscribe to
+sol.topics=taxinyc/>
+# Which Processor class to use
+sol.message_processor_class=com.solace.connector.kafka.connect.source.msgprocessors.SolaceSampleKeyedMessageProcessor
+# What attribute to use for the Kafka message key?
+sol.kafka_message_key=DESTINATION
+```
+
+1. Restart the Connect framework in standalone mode. Only one instance of the standalone can run, but you can pass in multiple properties files:
+```
+bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
+```
+
+1. If everything is running properly (Solace broker, Kafka broker, etc.) you should see the log entries:
+```
+INFO Connected to host 'orig=tcp://localhost, scheme=tcp://, host=localhost'
+INFO Adding subscription for topic samples/>
+```
+
+1. Once the Source Connector connects to Solace, you should immediately see lots of taxi ride information arriving in the Kafka Consumer app:
+```
+taxinyc/ops/ride/updated/v1/enroute/00000190/54846519/040.74084/-073.94572
+{
+    "ride_id": "7a63e37c-b4f2-4085-9b3e-0b24873cea00",
+    "information_source": "RideDispatcher",
+    "point_idx": 442,
+    "latitude": 40.74084,
+    "longitude": -73.94572,
+    "heading": 100,
+    "speed": 4,
+    "timestamp": "2021-03-18T09:55:30.017-04:00",
+    "meter_reading": 9.26,
+    "meter_increment": 0.0209495,
+    "ride_status": "enroute",
+    "passenger_count": 1,
+    "driver": {
+        "driver_id": 190,
+        "first_name": "Allison",
+        "last_name": "Schwager",
+        "rating": 2.75,
+        "car_class": "Sedan"
+    },
+    "passenger": {
+        "passenger_id": 54846519,
+        "first_name": "Joe",
+        "last_name": "Caswell",
+        "rating": 4.75
+    }
+}
+```
+
+Positive
+: SUCCESS!
+
+
+
+
+
+
+
 
 
 
