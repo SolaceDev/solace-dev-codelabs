@@ -20,15 +20,15 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="helm-environment-setup"
                   title="Windows 10 Helm / Kubernetes Development Environment Setup"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs">
     
       <google-codelab-step label="Overview" duration="1">
-        <p>Are you interested in trying out Kubernetes on your Windows PC?  This CodeLab will show you how to setup a desktop Kubernetes environment using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code.  Finally now that PubSub+ is available in <a href="https://hub.helm.sh/" target="_blank">Helm Hub</a>, the CodeLab will show you how to install a dev instance of PubSub+ in the environment using Helm.</p>
+        <p>Are you interested in trying out Kubernetes on your Windows PC? This CodeLab will show you how to setup a desktop Kubernetes environment using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code. Finally now that PubSub+ is available in <a href="https://hub.helm.sh/" target="_blank">Helm Hub</a>, the CodeLab will show you how to install a dev instance of PubSub+ in the environment using Helm.</p>
 <h2 is-upgraded>Here are the tools we will use:</h2>
 <ul>
 <li><strong>Docker Desktop</strong> - Provides a local Kubernetes Cluster.</li>
@@ -40,37 +40,37 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 1:  Install Docker Desktop" duration="10">
-        <p>In oder to accomplish the goal of using Helm to install a dev instance of PubSub+ access to a Kubernetes cluster is required.  Docker Desktop has an option to provide this and it&#39;s easy to setup.  The following instructions will install Docker Desktop on your Windows PC.</p>
+      <google-codelab-step label="Step 1: Install Docker Desktop" duration="10">
+        <p>In oder to accomplish the goal of using Helm to install a dev instance of PubSub+ access to a Kubernetes cluster is required. Docker Desktop has an option to provide this and it&#39;s easy to setup. The following instructions will install Docker Desktop on your Windows PC.</p>
 <p><a href="https://hub.docker.com/editions/community/docker-ce-desktop-windows/" target="_blank">https://hub.docker.com/editions/community/docker-ce-desktop-windows/</a></p>
 <p class="image-container"><img alt="Configure Docker Desktop" src="img/bafd02ac7e6e67d0.png"></p>
-<p>Once it&#39;s installed, you need to check the &#34;Expose daemon on tcp://localhost:2375 without TLS&#34; box.  This is needed so that the Docker cli running in WSL can talk to the daemon running under Windows.</p>
+<p>Once it&#39;s installed, you need to check the &#34;Expose daemon on tcp://localhost:2375 without TLS&#34; box. This is needed so that the Docker cli running in WSL can talk to the daemon running under Windows.</p>
 <p class="image-container"><img alt="Enable Kubernetes" src="img/1295aefb4d167db.png"></p>
-<p>Then you need to &#34;Enable Kubernetes&#34; and (optional) &#34;Show system containers&#34;.  After this a restart of Docker Desktop is required.  It&#39;s also a good idea to increase the resources; I used 3 CPUs, 5GB of Memory and 4GB of swap.</p>
+<p>Then you need to &#34;Enable Kubernetes&#34; and (optional) &#34;Show system containers&#34;. After this a restart of Docker Desktop is required. It&#39;s also a good idea to increase the resources; I used 3 CPUs, 5GB of Memory and 4GB of swap.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 2:  Setup the Windows Subsystem for Linux (WSL)" duration="10">
-        <p>If you don&#39;t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS.  I use Ubuntu and downloaded it from the <a href="https://www.microsoft.com/en-ca/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab" target="_blank">Windows Store</a>.  Once that is setup, you can open Visual Studio Code and install some extensions.</p>
-<p>Note:  The following steps were done using Ubuntu 18.04 and WSL1.  At the time of writing Ubuntu 20.04 and WSL2 are just about to be released; the instructions in the following steps differ if using Ubuntu 20.04.</p>
+      <google-codelab-step label="Step 2: Setup the Windows Subsystem for Linux (WSL)" duration="10">
+        <p>If you don&#39;t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS. I use Ubuntu and downloaded it from the <a href="https://www.microsoft.com/en-ca/p/ubuntu-1804-lts/9n9tngvndl3q?activetab=pivot:overviewtab" target="_blank">Windows Store</a>. Once that is setup, you can open Visual Studio Code and install some extensions.</p>
+<p>Note: The following steps were done using Ubuntu 18.04 and WSL1. At the time of writing Ubuntu 20.04 and WSL2 are just about to be released; the instructions in the following steps differ if using Ubuntu 20.04.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 3:  Install Visual Studio Code Extensions" duration="2">
+      <google-codelab-step label="Step 3: Install Visual Studio Code Extensions" duration="2">
         <h2 is-upgraded>Install the following extensions in Visual Studio Code:</h2>
 <ul>
 <li><strong>Remote - WSL</strong> – This will allow you to use the Ubuntu terminal in Code (instead of Power Shell)</li>
 <li><strong>Kubernetes</strong> – This extension allows you to install Helm charts directly from Code to different Kubernetes backends (in this case Docker Desktop)</li>
 </ul>
-<p>With Code and the Remote – WSL extension, everything else can be done from the Ubuntu terminal in Code.  The next step is to install the Kubernetes and Docker CLIs in Ubuntu.</p>
+<p>With Code and the Remote – WSL extension, everything else can be done from the Ubuntu terminal in Code. The next step is to install the Kubernetes and Docker CLIs in Ubuntu.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 4:  Configure WSL" duration="5">
-        <p>The CLIs for Docker, Helm and Kubernetes must be installed in WSL in order for the Kubernetes extension to function. To install the Docker CLI, follow the instructions from the Docker web-site:  <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">https://docs.docker.com/engine/install/ubuntu/</a>.  The only package required is the &#34;docker-ce-cli&#34;.  Use the Remote Explorer extension to open a Ubuntu window in VSC and use the terminal to install the Docker cli.</p>
+      <google-codelab-step label="Step 4: Configure WSL" duration="5">
+        <p>The CLIs for Docker, Helm and Kubernetes must be installed in WSL in order for the Kubernetes extension to function. To install the Docker CLI, follow the instructions from the Docker web-site: <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">https://docs.docker.com/engine/install/ubuntu/</a>. The only package required is the &#34;docker-ce-cli&#34;. Use the Remote Explorer extension to open a Ubuntu window in VSC and use the terminal to install the Docker cli.</p>
 <p>Once that is installed, configure the CLI to use the Docker daemon running in Windows:</p>
 <pre><code>$ echo &#34;export DOCKER_HOST=tcp://localhost:2375&#34; &gt;&gt; ~/.bashrc &amp;&amp; source ~/.bashrc
 </code></pre>
@@ -93,12 +93,12 @@ $ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kuberne
 </code></pre>
 <p>If you click on the Kubernetes extension in VSC, you should see the Helm repos.</p>
 <p class="image-container"><img alt="VSC - Helm repos" src="img/efd95f9771737a28.png"></p>
-<p>With that the environment is setup, the Kubernetes extension can see the cluster running in Docker Desktop and the PubSub+ charts in the Helm Hub.  Now we are ready to deploy a chart.</p>
+<p>With that the environment is setup, the Kubernetes extension can see the cluster running in Docker Desktop and the PubSub+ charts in the Helm Hub. Now we are ready to deploy a chart.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 5:  Install the PubSub&#43; Helm Chart" duration="0">
+      <google-codelab-step label="Step 5: Install the PubSub&#43; Helm Chart" duration="0">
         <h2 is-upgraded>There are three charts in the solacecharts repo:</h2>
 <ul>
 <li><strong>pubsubplus</strong> - Deploy a single-node non-HA Solace PubSub+ Event Broker Software onto a Kubernetes Cluster</li>
@@ -107,7 +107,7 @@ $ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kuberne
 </ul>
 <p>I deployed pubsubplus-dev because my desktop doesn&#39;t have a lot of resources.</p>
 <p class="image-container"><img alt="VSC - Helm Install" src="img/eb6e88f8419a6d68.png"></p>
-<p>One click, that&#39;s it.  The output from deploying the chart was as follows:</p>
+<p>One click, that&#39;s it. The output from deploying the chart was as follows:</p>
 <pre><code>NAME: pubsubplus-dev-1587734193
 
 LAST DEPLOYED: Fri Apr 24 09:16:34 2020
@@ -134,7 +134,7 @@ For troubleshooting, refer to ***TroubleShooting.md***
 
     Username       : admin
 
-    Admin password : 
+    Admin password :
 
 echo `kubectl get secret --namespace default pubsubplus-dev-1587734193-pubsubplus-dev-secrets -o jsonpath=&#34;{.data.username_admin_password}&#34; | base64 --decode`
 
@@ -164,12 +164,12 @@ Obtain the LoadBalancer IP and the service addresses:
 
 NOTE: At initial deployment it may take a few minutes for the LoadBalancer IP to be available.
 
-Watch the status with: 
+Watch the status with:
 
 kubectl get svc --namespace default -w pubsubplus-dev-1587734193-pubsubplus-dev
 
 export SERVICE_IP=$(kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev --template &#34;&#123;&#123; range (index .status.loadBalancer.ingress 0) }}&#123;&#123;.}}&#123;&#123; end }}&#34;); echo SERVICE_IP=$SERVICE_IP
- 
+
 Ensure valid SERVICE_IP is returned:
 
 echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubsubplus-dev-1587734193-pubsubplus-dev -o jsonpath=&#34;{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n&#34;`
@@ -178,7 +178,7 @@ echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubs
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 6:  Get the Admin password and Login to the PubSub&#43; Broker Manager" duration="2">
+      <google-codelab-step label="Step 6: Get the Admin password and Login to the PubSub&#43; Broker Manager" duration="2">
         <p>To retrieve the password for the admin account use the command line from the chart output in the previous step (it&#39;s best to copy from the output of your command to get the correct name of the pod or try ‘helm ls&#39; followed by ‘helm status &#39; to regenerate the output).</p>
 <pre><code>echo `kubectl get secret --namespace default &lt;name of your pod&gt;-pubsubplus-dev-secrets -o jsonpath=&#34;{.data.username_admin_password}&#34; | base64 --decode`
 </code></pre>
@@ -186,7 +186,7 @@ echo -e &#34;\nProtocol\tAddress\n&#34;`kubectl get svc --namespace default pubs
 <p>And login to the PubSub+ Broker Manager using a web-browser <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.</p>
 <p class="image-container"><img alt="Manager Login" src="img/7810a5142185c2b4.png"></p>
 <p class="image-container"><img alt="Manager" src="img/ef28cc40b72bbd3e.png"></p>
-<p>That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub.  All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.</p>
+<p>That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on Helm Hub. All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.</p>
 <p>The next <a href="https://codelabs.solace.dev/codelabs/helm-node-samples" target="_blank">CodeLab</a> will use the environment that we just setup to run some of the PubSub+ Sample Applications from <a href="https://github.com/SolaceSamples" target="_blank">https://github.com/SolaceSamples</a>.</p>
 
 

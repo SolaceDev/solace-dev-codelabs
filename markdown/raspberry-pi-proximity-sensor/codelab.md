@@ -2,17 +2,16 @@ author: Thomas Kunnumpurath
 summary: An intro to Raspberry-PI setup
 id: raspberry-pi-proximity-sensor
 tags: iot, raspberry-pi
-categories: iot,raspberry-pi, javascript
+categories: IoT,Raspberry-Pi, Javascript
 environments: Web
 status: Published
 feedback link: https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt/issues
-analytics account: UA-3921398-10
 
 # Introduction to Raspberry-PI
 
 ## Welcome!
-Duration: 0:05:00
 
+Duration: 0:05:00
 
 In this codelab, you will learn about a Raspberry PI and how to set it up so that you can start building IoT applications on it.
 
@@ -29,8 +28,8 @@ What makes a RaspberryPI exciting for IoT is that it has a series of GPIO pins t
 This codelab will run you through the process of setting up your raspberry-pi, connecting it to a proximity sensor, and publishing proximity events onto a Solace Cloud PubSub+ Broker.
 
 ## Materials required
-Duration: 0:05:00
 
+Duration: 0:05:00
 
 To assemble this kit, you will need the following materials. Links to appropriate websites are provided below but search your favorite online shop for better prices/deals:
 
@@ -57,8 +56,8 @@ To make this accesible, this does not require any sort of soldering. A breadboar
 - [470 Ω Resistor](https://www.amazon.com/gp/product/B07QG1V4BH/ref=ppx_yo_dt_b_asin_title_o08_s01?ie=UTF8&psc=1&pldnSite=1)
 
 ## Setting up your Raspberry-Pi
-Duration: 1:00:00
 
+Duration: 1:00:00
 
 Once you have purchased the requisite kit, you will have to setup your raspberry pi with an O/S and connect it to your local WiFi.
 
@@ -142,8 +141,8 @@ Follow the instructions below to connect the components:
 8. Finally, connect the sensor from a6 to a9 on the breadboard (ensure the sensor is facing outwards - away from the raspberry pi)
 
 ## Reading sensor events from the Raspberry PI
-Duration: 0:15:00
 
+Duration: 0:15:00
 
 Ok now that you have the proximity sensor hooked up to your Raspberry PI, the next step is to create a simple application to read from the sensor.
 
@@ -243,8 +242,8 @@ git checkout setting-up-with-johnny-five-solution
 ```
 
 ## Publishing your sensor events on Solace PubSub+
-Duration: 0:15:00
 
+Duration: 0:15:00
 
 Now you've succesfully extracted distance measurements from the sensor, but wouldn't it be great if you could expose the event outside your Raspberry PI in realtime. For example you could build a low cost security system that streams out events over the internet so that it could be picked up by a dashboard and a mobile app when someone comes near your PC.
 
@@ -293,23 +292,22 @@ Navigate to [this link](https://console.solace.cloud/login/new-account) and fill
 
 After you create your Solace Cloud account and sign in to the Solace Cloud Console, you'll be routed to the event mesh page.
 
-![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.png 'Solace Cloud Event Mesh')
+![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.png "Solace Cloud Event Mesh")
 
 Click on 'Messaging Services' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
 
-![Solace Cloud Landing Page](img/landing-page-signup.png 'Solace Cloud Landing Page')
+![Solace Cloud Landing Page](img/landing-page-signup.png "Solace Cloud Landing Page")
 
 Fill out all the details for your messaging service, and then click "Create" at the bottom of the page.
 
-![Create Solace Cloud Messaging Service](img/create-service.png 'Solace Cloud Messaging Service')
+![Create Solace Cloud Messaging Service](img/create-service.png "Solace Cloud Messaging Service")
 
 Your service should be ready to use in a couple seconds!!!
 
 **(3) Take note of the MQTT connection details**
 
 If your messaging service was created successfully, you'll be routed to the summary page of your new messaging service. From the service summary page, click on the "Connect" tab so we can take note of the connection details we'll need later.
-![Connect Tab Preview](img/service-summary-page.png 'Connect Tab Preview')
-
+![Connect Tab Preview](img/service-summary-page.png "Connect Tab Preview")
 
 After you click the "Connect" tab, click the "MQTT" box, and then take note of the "Connection Details" section. We'll be using the "Secured MQTT Host" URL for this excercise, the Username and Password
 

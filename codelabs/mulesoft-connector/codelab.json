@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2021-01-18T09:16:15-05:00",
   "id": "mulesoft-connector",
   "duration": 35,
@@ -10,16 +10,9 @@
   "summary": "This Codelab shows you how to use the Solace Connector in MuleSoft Anypoint Platform.",
   "source": "mulesoft-connector.md",
   "theme": "",
-  "status": [
-    "published"
-  ],
-  "category": [
-    "mulesoft"
-  ],
-  "tags": [
-    "web"
-  ],
+  "status": ["published"],
+  "category": ["mulesoft"],
+  "tags": ["web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/mulesoft-connector",
-  "ga": "UA-3921398-10",
   "url": "mulesoft-connector"
 }

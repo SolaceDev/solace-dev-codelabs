@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="boomi-salesforce-codelab"
                   title="Event enabling Salesforce and AzureDB using Boomi and Solace"
                   environment="web"
@@ -50,7 +50,7 @@
 </ol>
 <p>After you finish the Getting Started with Boomi and Solace codelab, you&#39;ll have the following</p>
 <ul>
-<li>A Solace trial account<br></li>
+<li>A Solace trial account</li>
 <li>A Boomi trial account,</li>
 <li>A local atom up and running.</li>
 <li>An understanding of how to deploy a Boomi process to a Boomi Atom</li>
@@ -209,7 +209,7 @@
 <li>For the Oauth Scopes, move Full Access into the Selected OAuth Scopes.</li>
 <li>Click on the Configure ID Token check box, and make the token valid for 720 minutes <img alt="image037" src="img/93378663649e7cf3.png"></li>
 </ul>
-<p>1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You&#39;ll use the values when you&#39;re configuring Boomi&#39;s Salesforce Platform Event connector. <img alt="image039" src="img/d85beb6cb8ea7d3e.png"></p>
+<p>1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You&#39;ll use the values when you&#39;re configuring Boomi&#39;s Salesforce Platform Event connector.   <img alt="image039" src="img/d85beb6cb8ea7d3e.png"></p>
 <h2 is-upgraded>⚙️ Define Platform Event structure</h2>
 <ol type="1">
 <li>Type &#34;platform&#34; into the quick find box in the left-hand column and click on &#34;Platform Events&#34; <img alt="image040" src="img/cb8e6177f62a706c.png"></li>
@@ -311,13 +311,11 @@
     
       <google-codelab-step label="Connect Boomi to the Azure SQL Database" duration="0">
         <ol type="1">
-<li>If you are using a local atom, need to do some extra steps to add the SQL jar:<ol type="1">
+<li>If you are using a local atom, need to do some extra steps to add the SQL jar:</li>
 <li>Download jar from here: <a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server" target="_blank">https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server</a></li>
 <li>Extract the zip file</li>
 <li>Copy mssql-jdbc-8.2.2.jre8.jar to <code>&lt;Boomi install directory&gt;/userlib/database</code> . If those directories don&#39;t exist, just create them.</li>
 <li>End result should look like this, where the highlighted portion depends on how you installed the Atom <img alt="image073" src="img/4c2b255bae44a99b.png"></li>
-</ol>
-</li>
 <li>OK, back to the fun stuff: In another tab, head back to the Boomi UI</li>
 <li>Open the &#34;Azure SQL Database Connection – taxinyc&#34;</li>
 <li>Open the &#34;Hello World - Select from/Insert into Azure SQL&#34; process</li>

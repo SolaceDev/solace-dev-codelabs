@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="codelab-4-codelab"
                   title="Codelab to Create a Codelab"
                   environment="web"
@@ -48,7 +48,7 @@
       <google-codelab-step label="Environment Setup" duration="4">
         <p>In order to create a Codelab you need</p>
 <ul>
-<li><a href="https://golang.org/dl/" target="_blank">Go</a><br></li>
+<li><a href="https://golang.org/dl/" target="_blank">Go</a></li>
 <li><a href="https://github.com/googlecodelabs/tools/tree/master/claat" target="_blank">claat</a> (the codelabs command line tool) installed.</li>
 <li><a href="https://nodejs.org/en/download/" target="_blank">Nodejs</a></li>
 </ul>
@@ -117,16 +117,16 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </ul>
 <h2 is-upgraded>Steps</h2>
 <ol type="1">
-<li>After cloning the repository as per the earlier step, from the root directory, run the init script as follows <code>./init.sh &lt;name-of-codelab&gt;</code><br></li>
-<li>Navigate to the <code>/markdown/&lt;name-of-codelab&gt;</code> directory<br></li>
-<li>Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal <code>npm install</code><br></li>
-<li>Compile and start the claat server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file<br></li>
-<li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice<br></li>
-<li>When ready, run <code>export.sh</code><br></li>
+<li>After cloning the repository as per the earlier step, from the root directory, run the init script as follows <code>./init.sh &lt;name-of-codelab&gt;</code></li>
+<li>Navigate to the <code>/markdown/&lt;name-of-codelab&gt;</code> directory</li>
+<li>Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal <code>npm install</code></li>
+<li>Compile and start the claat server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file</li>
+<li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
+<li>When ready, run <code>export.sh</code></li>
 </ol>
 <aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
 </aside>
-<p>🚀  Go ahead to the <strong>Step 7</strong> and add your codelabs on the main repo</p>
+<p>🚀 Go ahead to the <strong>Step 7</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>
@@ -148,7 +148,6 @@ categories: Java,Spring
 environments: Web
 status: Published
 feedback link: A link where users can go to provide feedback (e.g. the git repo or issue page)
-analytics account: UA-3921398-10
 </code></pre>
 <p>Metadata consists of key-value pairs of the form &#34;key: value&#34;. Keys cannot contain colons, and separate metadata fields must be separated by blank lines. At present, values must all be on one line. All metadata must come before the title. Any arbitrary keys and values may be used; however, only the following will be understood by the renderer:</p>
 <ul>
@@ -189,7 +188,7 @@ Duration: 0:05:00
 <p>Now that we have 2 sections to our titled codelab let&#39;s go ahead and add some content to each section. Make up your own or copy &amp; paste the example below:</p>
 <p>Copy into section 1 (Below Duration and above Section 2):</p>
 <pre><code>### Info Boxes
-Plain Text followed by green &amp; yellow info boxes 
+Plain Text followed by green &amp; yellow info boxes
 
 Negative
 : This will appear in a yellow info box.
@@ -239,7 +238,7 @@ $ claat serve
 <li>Viola! You should have your first codelab!</li>
 </ul>
 <p>Repeat the export and serve locally everyt ime you make a new change in the markdown file</p>
-<aside class="special"><p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.<br></p>
+<aside class="special"><p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
 </aside>
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
 </aside>
@@ -248,14 +247,14 @@ $ claat serve
 <aside class="special"><p>Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
 </aside>
 <pre><code># If creating a new codelab
-mkdir markdown/&lt;header-metadata-id&gt; 
+mkdir markdown/&lt;header-metadata-id&gt;
 # Add your markdown content in the markdown/&lt;header-metadata-id&gt;/&lt;file-name&gt;.md directory
 # Add your images in the markdown/&lt;header-metadata-id&gt;/img directory
 
 cd markdown/&lt;header-metadata-id&gt;
 # Export into static content
 # Note the google analytics code used. Keep as is below
-claat export -ga UA-3921398-10 -o ../../codelabs/ &lt;header-metadata-id&gt;.md
+claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
 
 

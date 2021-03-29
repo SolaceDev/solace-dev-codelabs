@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="design-to-code-workshop"
                   title="Design to Code using Event Portal &#43; AsyncAPI Code Generation"
                   environment="web"
@@ -47,14 +47,14 @@
         <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
 <p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
 <ol type="1">
-<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
-<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
+<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.</li>
+<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.</li>
 <li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
-<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
-<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.</p>
 </aside>
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
 
       </google-codelab-step>
@@ -65,7 +65,7 @@
 <p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
 <ul>
 <li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
-<li>npm v6.13.7+  (Check version using <code>npm -version</code>)</li>
+<li>npm v6.13.7+ (Check version using <code>npm -version</code>)</li>
 </ul>
 <p>We&#39;ll install the generator itself later 👍</p>
 <h2 is-upgraded>Spring Cloud Stream Requirements</h2>
@@ -102,7 +102,7 @@
 </code></pre>
 <p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
-<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the  file.</p>
+<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the file.</p>
 <p class="image-container"><img alt="ep_click_import" src="img/292b8f20a9c16c60.png"></p>
 <p>🚀 Setup complete! Let&#39;s get going! 🚀</p>
 
@@ -139,7 +139,7 @@
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>For <strong>Payload Schema</strong> click <em>Add New</em></li>
 </ol>
-<aside class="special"><p>When designing your own Event-Driven Architecture the defining of your topic space is an important step towards achieving the benefits promised by an EDA. Be sure to take the time to read our <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices</a>.<br></p>
+<aside class="special"><p>When designing your own Event-Driven Architecture the defining of your topic space is an important step towards achieving the benefits promised by an EDA. Be sure to take the time to read our <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices</a>.</p>
 </aside>
 <p>Since our data is JSON we&#39;ll define a JSON Schema to define our event payload.</p>
 <p>Fill in the fields as follows:</p>
@@ -149,86 +149,8 @@
 <li><strong>Content Type</strong>: JSON</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>Under <em>Content</em> paste the JSON schema in the code block below. This schema was generated from a sample message using <a href="https://jsonschema.net" target="_blank">jsonschema.net</a></li>
-<li>Click <em>Save</em></li>
+<li>Click <em>Save<br></em><code>{<br>&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,<br>&#34;$id&#34;: &#34;http://example.com/example.json&#34;,<br>&#34;type&#34;: &#34;object&#34;,<br>&#34;title&#34;: &#34;The root schema&#34;,<br>&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,<br>&#34;default&#34;: {},<br>&#34;examples&#34;: [<br>    {<br>        &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,<br>        &#34;avg_meter_reading&#34;: 21.615217,<br>        &#34;avg_passenger_count&#34;: 1.5,<br>        &#34;window_duration_sec&#34;: 300,<br>        &#34;window_ride_count&#34;: 5<br>    }<br>],<br>&#34;required&#34;: [<br>    &#34;timestamp&#34;,<br>    &#34;avg_meter_reading&#34;,<br>    &#34;avg_passenger_count&#34;,<br>    &#34;window_duration_sec&#34;,<br>    &#34;window_ride_count&#34;<br>],<br>&#34;additionalProperties&#34;: true,<br>&#34;properties&#34;: {<br>    &#34;timestamp&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/timestamp&#34;,<br>        &#34;type&#34;: &#34;string&#34;,<br>        &#34;title&#34;: &#34;The timestamp schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: &#34;&#34;,<br>        &#34;examples&#34;: [<br>            &#34;2020-06-04T20:09:59.99832-04:00&#34;<br>        ]<br>    },<br>    &#34;avg_meter_reading&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            21.615217<br>        ]<br>    },<br>    &#34;avg_passenger_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            1.5<br>        ]<br>    },<br>    &#34;window_duration_sec&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_duration_sec schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            300<br>        ]<br>    },<br>    &#34;window_ride_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_ride_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            5<br>        ]<br>    }<br>}<br>}<br></code></li>
 </ol>
-<pre><code>{
-    &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
-    &#34;$id&#34;: &#34;http://example.com/example.json&#34;,
-    &#34;type&#34;: &#34;object&#34;,
-    &#34;title&#34;: &#34;The root schema&#34;,
-    &#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
-    &#34;default&#34;: {},
-    &#34;examples&#34;: [
-        {
-            &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
-            &#34;avg_meter_reading&#34;: 21.615217,
-            &#34;avg_passenger_count&#34;: 1.5,
-            &#34;window_duration_sec&#34;: 300,
-            &#34;window_ride_count&#34;: 5
-        }
-    ],
-    &#34;required&#34;: [
-        &#34;timestamp&#34;,
-        &#34;avg_meter_reading&#34;,
-        &#34;avg_passenger_count&#34;,
-        &#34;window_duration_sec&#34;,
-        &#34;window_ride_count&#34;
-    ],
-    &#34;additionalProperties&#34;: true,
-    &#34;properties&#34;: {
-        &#34;timestamp&#34;: {
-            &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
-            &#34;type&#34;: &#34;string&#34;,
-            &#34;title&#34;: &#34;The timestamp schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: &#34;&#34;,
-            &#34;examples&#34;: [
-                &#34;2020-06-04T20:09:59.99832-04:00&#34;
-            ]
-        },
-        &#34;avg_meter_reading&#34;: {
-            &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
-            &#34;type&#34;: &#34;number&#34;,
-            &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0.0,
-            &#34;examples&#34;: [
-                21.615217
-            ]
-        },
-        &#34;avg_passenger_count&#34;: {
-            &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
-            &#34;type&#34;: &#34;number&#34;,
-            &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0.0,
-            &#34;examples&#34;: [
-                1.5
-            ]
-        },
-        &#34;window_duration_sec&#34;: {
-            &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
-            &#34;type&#34;: &#34;integer&#34;,
-            &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0,
-            &#34;examples&#34;: [
-                300
-            ]
-        },
-        &#34;window_ride_count&#34;: {
-            &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
-            &#34;type&#34;: &#34;integer&#34;,
-            &#34;title&#34;: &#34;The window_ride_count schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0,
-            &#34;examples&#34;: [
-                5
-            ]
-        }
-    }
-}     
-</code></pre>
 <p class="image-container"><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"></p>
 <p>✅ We have now created a new payload schema and the schema has automatically been added to our event.</p>
 <p class="image-container"><img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"></p>
@@ -279,7 +201,7 @@
 <p>Let&#39;s add a few of the template&#39;s configuration options to the download AsyncAPI document.</p>
 <ul>
 <li>Add <code>x-scs-function-name: processDropoffRideAverages</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
-<li>Add <code>x-scs-destination: test/taxinyc/RideDropoffProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.<br></li>
+<li>Add <code>x-scs-destination: test/taxinyc/RideDropoffProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.</li>
 </ul>
 <p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. <img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
@@ -312,7 +234,7 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProc
 <ul>
 <li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
 <li>The <code>RideAveragePayload</code> and <code>TaxiStatusUpdatePayload</code> POJOs were generated from the schemas defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
-<li><code>Application.java</code> contains a <code>processDropoffRideAverages</code> method which takes in a <code>Flux&lt;TaxiStatusUpdatePayload&gt;</code> and outputs a <code>Flux&lt;RideAveragePayload&gt;</code>. Note the use of <code>Flux</code> since we specified <code>reactive=true</code> when generating the code skeleton.<br></li>
+<li><code>Application.java</code> contains a <code>processDropoffRideAverages</code> method which takes in a <code>Flux&lt;TaxiStatusUpdatePayload&gt;</code> and outputs a <code>Flux&lt;RideAveragePayload&gt;</code>. Note the use of <code>Flux</code> since we specified <code>reactive=true</code> when generating the code skeleton.</li>
 <li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
 <li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
 </ul>
@@ -337,7 +259,7 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProc
         bindings:
           processDropoffRideAverages-in-0:
             consumer:
-              queueAdditionalSubscriptions: &#39;taxinyc/ops/ride/updated/v1/dropoff/&gt;&#39;
+              queueAdditionalSubscriptions: &#34;taxinyc/ops/ride/updated/v1/dropoff/&gt;&#34;
 </code></pre>
 <h2 is-upgraded>Fill in the Business Logic</h2>
 <p>Navigate to and open the <code>Application.java</code> file. We&#39;re going to edit the <em>processDropoffRideAverages</em> method to add our business logic. Remember that our Use Case defines that our <em>RideDropoffProcessor</em> should listen to the stream of <code>dropoff</code> events, capture events for a specified time window (we&#39;ll hard code 20 seconds to make it easy), calculate the averages, and publish a <em>RideAverageUpdate</em> event for each window.</p>
@@ -403,7 +325,7 @@ public class Application {
 <pre><code>    &lt;dependency&gt;
       	&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
        	&lt;artifactId&gt;lombok&lt;/artifactId&gt;
-    &lt;/dependency&gt; 
+    &lt;/dependency&gt;
 </code></pre>
 <aside class="warning"><p>If you prefer not to use Lombok go ahead and use the tools available in your IDE to generate a getter and setter for each parameter in the <code>Accumulator</code> class. You&#39;ll also need to add a Constructor that looks like <code>public Accumulator(int rideCount, double totalMeter, int totalPassengers)</code></p>
 </aside>
@@ -466,7 +388,7 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffCons
 <ul>
 <li>The generated java classes are in the <code>org.taxi.nyc</code> package that we specified.</li>
 <li>The <code>RideAveragePayload</code> POJO was generated from the schema defined in our AsyncAPI document and includes getters/setters/toString/etc.</li>
-<li><code>Application.java</code> contains a <code>taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer</code> method which is a <code>Consumer</code> that takes in a <code>RideAveragePayload</code> POJO. Note that since we didn&#39;t specify a <code>x-scs-function-name</code> this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of <code>Flux</code> this time since we did not specify <code>reactive=true</code> when running the generator.<br></li>
+<li><code>Application.java</code> contains a <code>taxinycOpsMonitoringUpdatedV1StatsDropoffAvgConsumer</code> method which is a <code>Consumer</code> that takes in a <code>RideAveragePayload</code> POJO. Note that since we didn&#39;t specify a <code>x-scs-function-name</code> this time the generator created the method name by looking at the channel name and operation (subscribe in this case). Also note the absense of <code>Flux</code> this time since we did not specify <code>reactive=true</code> when running the generator.</li>
 <li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
 <li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>solace-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt. Binder.</li>
 </ul>

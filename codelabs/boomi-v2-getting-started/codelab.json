@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2021-01-20T16:26:17-05:00",
   "id": "boomi-v2-getting-started",
   "duration": 86,
@@ -10,18 +10,9 @@
   "summary": "",
   "source": "boomi-v2-getting-started.md",
   "theme": "",
-  "status": [
-    "published"
-  ],
-  "category": [
-    "boomi",
-    "portal"
-  ],
-  "tags": [
-    "web",
-    "workshop"
-  ],
+  "status": ["published"],
+  "category": ["boomi", "event portal"],
+  "tags": ["web", "workshop"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/boomi-v2-getting-started",
-  "ga": "UA-3921398-10",
   "url": "boomi-v2-getting-started"
 }

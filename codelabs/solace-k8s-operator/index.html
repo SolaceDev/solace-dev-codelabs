@@ -20,18 +20,18 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="solace-k8s-operator"
                   title="How to build a Solace PubSub&#43; Kubernetes Operator"
                   environment="web"
                   feedback-link="https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart">
     
       <google-codelab-step label="Overview" duration="5">
-        <p>The kubernetes <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/operator" target="_blank">Operator Pattern</a> is exactly what it sounds like.  It is code or automation that acts like the set of runbooks a human operator of an application would use to deploy, monitor, troubleshoot, upgrade and decommission an application.  The operator can do these functions because it has a deep understanding of the application it is operating on and knowns if the application is functioning correctly.</p>
-<p>When Solace first introduced a Kubernetes solution back in the days of Kubernetes 1.5 and 1.6, Operator concepts where very much in flux.  For this reason, we based our Solution on Helm to do initial deployments and rolling upgrades and config-maps as the glue that binds together the highly available cluster of brokers together. But today Kubernetes Operators are far more prevalent and stable.  They make extending Kubernetes behaviour to manage stateful applications like event brokers and databases possible via custom resource and custom resource definitions. So for organizations that manage their deployments through custom resources and operators a Solace operator would be useful, here is why.</p>
-<p>All Kubernetes deployments are a collection of resources. Services, Persistent Volumes, Secrets, Pods, are example of basic resources that are composed together to make up a deployment.  With a Solace custom resources as defined in an operator, then a Solace highly available cluster could also be used as another resource to compose a deployment.  Its life cycle tied to the deployment and maintained within the deployment.  It would be possible for example to upgrade brokers and applications in one operation.</p>
-<p>The easiest first step toward a Solace Operator is to wrap the existing Helm charts and Kubernetes templates into an operator based with the Operator SDK.  So, lets see how to do that.</p>
+        <p>The kubernetes <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/operator" target="_blank">Operator Pattern</a> is exactly what it sounds like. It is code or automation that acts like the set of runbooks a human operator of an application would use to deploy, monitor, troubleshoot, upgrade and decommission an application. The operator can do these functions because it has a deep understanding of the application it is operating on and knowns if the application is functioning correctly.</p>
+<p>When Solace first introduced a Kubernetes solution back in the days of Kubernetes 1.5 and 1.6, Operator concepts where very much in flux. For this reason, we based our Solution on Helm to do initial deployments and rolling upgrades and config-maps as the glue that binds together the highly available cluster of brokers together. But today Kubernetes Operators are far more prevalent and stable. They make extending Kubernetes behaviour to manage stateful applications like event brokers and databases possible via custom resource and custom resource definitions. So for organizations that manage their deployments through custom resources and operators a Solace operator would be useful, here is why.</p>
+<p>All Kubernetes deployments are a collection of resources. Services, Persistent Volumes, Secrets, Pods, are example of basic resources that are composed together to make up a deployment. With a Solace custom resources as defined in an operator, then a Solace highly available cluster could also be used as another resource to compose a deployment. Its life cycle tied to the deployment and maintained within the deployment. It would be possible for example to upgrade brokers and applications in one operation.</p>
+<p>The easiest first step toward a Solace Operator is to wrap the existing Helm charts and Kubernetes templates into an operator based with the Operator SDK. So, lets see how to do that.</p>
 
 
       </google-codelab-step>
@@ -66,7 +66,7 @@ $ operator-sdk init --plugins=helm.sdk.operatorframework.io/v1 --domain=solace.c
 <p>You will recieve this warning and need to take action:</p>
 <pre><code>WARN[0000] &#34;The RBAC rules generated in config/rbac/role.yaml are based on the chart&#39;s default manifest. Some rules may be missing for resources that are only enabled with custom values, and some existing rules may be overly broad. Double check the rules generated in config/rbac/role.yaml to ensure they meet the operator&#39;s permission requirements.&#34;
 </code></pre>
-<p>Ensure roles are correct to modify pod lables.  Ensure these line exist in config/rbac/role.yaml</p>
+<p>Ensure roles are correct to modify pod lables. Ensure these line exist in config/rbac/role.yaml</p>
 <pre><code>rules:
 - apiGroups: [&#34;&#34;]
   resources: [&#34;pods&#34;]
@@ -139,7 +139,7 @@ pubsubplusha-sample-pubsubplus-ha-0       1/1     Running   0          96s
 pubsubplusha-sample-pubsubplus-ha-1       1/1     Running   0          96s
 pubsubplusha-sample-pubsubplus-ha-2       1/1     Running   0          95s
 </code></pre>
-<p>Go on the primary broker with node ordinal 0 and validate &#34;Redundancy Status&#34; = &#34;Up&#34;.  This means that all the brokers are syncronized and ready to recieve messages.</p>
+<p>Go on the primary broker with node ordinal 0 and validate &#34;Redundancy Status&#34; = &#34;Up&#34;. This means that all the brokers are syncronized and ready to recieve messages.</p>
 <pre><code>kubectl exec -it pubsubplusha-sample-pubsubplus-ha-0 cli
 
 pubsubplusha-sample-pubsubplus-ha-0&gt; show redundancy
@@ -155,7 +155,7 @@ Mate Router Name         : pubsubplushasamplepubsubplusha1
 ADB Link To Mate         : Up
 ADB Hello To Mate        : Up
 </code></pre>
-<p>Get the name of the loadbalancing Service that fronts the Solace cluster.  This will be the name used be applications connect to Solace.</p>
+<p>Get the name of the loadbalancing Service that fronts the Solace cluster. This will be the name used be applications connect to Solace.</p>
 <pre><code>kubectl get services
 NAME                                      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                                                                                                                                   AGE
 pubsubplusha-sample-pubsubplus-ha        LoadBalancer   10.97.76.97     &lt;pending&gt;     2222:31348/TCP,8080:31717/TCP,1943:32170/TCP,55555:32597/TCP,55003:30106/TCP,55443:32318/TCP,8008:31054/TCP,1443:32713/TCP,5672:32610/TCP,1883:30046/TCP,9000:31317/TCP   5m4s

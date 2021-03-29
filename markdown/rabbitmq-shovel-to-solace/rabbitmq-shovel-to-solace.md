@@ -2,11 +2,10 @@ author: Leah Robert
 summary: Bridge data from RabbitMQ to Solace PubSub+ with the RabbitMQ Shovel plugin
 id: solace-rabbit-shovel
 tags: iguide, amqp, rabbit
-categories: Solace,RabbitMQ,AMQP
+categories: RabbitMQ,AMQP
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbitmq-shovel-to-solace
-analytics account: UA-3921398-10
 
 #Bridge data from RabbitMQ to Solace PubSub+
 
@@ -16,10 +15,10 @@ Duration: 0:01:00
 
 Extending RabbitMQ with an Event Mesh provides you with the ability to dynamically route data to applications hosted in cloud or other locations and consume that data in a variety of different protocols and languages. This codelab will act as a guide to configuring the AMQP connection between RabbitMQ and Solace PubSub+.
 
-While AMQP 0-9-1 and AMQP 1.0 are similar in name, they are different implementations of the protocol. 
+While AMQP 0-9-1 and AMQP 1.0 are similar in name, they are different implementations of the protocol.
 
 RabbitMQ has a plugin, called a Shovel, to enable the movement of data from a source to a destination, using either AMQP 0-9-1, AMQP 1.0 or a mixture of both. The Shovel will do any necessary translations when moving from one version to another.
- 
+
 ![Course Logos](img/rabbit_to_solace.png)
 
 By the end of the codelab, you will have a Rabbit Shovel moving data from a RabbitMQ queue to a Solace PubSub+ queue.
@@ -35,7 +34,6 @@ Duration: 0:15:00
 **(1) Sign up for a free Solace Cloud account**
 
 Navigate to [this link](https://console.solace.cloud/login/new-account) and fill out the required information. No credit card required! If you already have an account, skip right to #2.
-
 
 **(2) Create a messaging service**
 
@@ -57,12 +55,14 @@ Click "Start Service" at the bottom of the page. Your service should be ready to
 ### RabbitMQ
 
 Once we have our Solace messaging service started, we can start a RabbitMQ docker instance:
+
 ```
 docker pull rabbitmq
 docker run -d --hostname rabbit -p 5672:5672 -p 25672:25672 -p 15672:15672 --name rabbit rabbitmq
 ```
 
 The following RabbitMQ plugins must be installed and enabled – they all come prepackaged with the latest version of the RabbitMQ docker image. To enable, we can use the RabbitMQ CLI:
+
 ```
 docker exec -it rabbit /bin/bash
 rabbitmq-plugins enable rabbitmq_management
@@ -72,6 +72,7 @@ rabbitmq-plugins enable rabbitmq_shovel_management
 ```
 
 To verify the change, we can check the plugins:
+
 ```
 rabbitmq-plugins list
 Configured: E = explicitly enabled; e = implicitly enabled
@@ -84,7 +85,7 @@ Configured: E = explicitly enabled; e = implicitly enabled
 [E*] rabbitmq_shovel_management        3.8.8
 ```
 
-After a restart of the RabbitMQ broker, we can configure the Shovel with the Management UI by navigating to “localhost:15672” in a browser and using the management credentials to sign in (default is guest/guest).  
+After a restart of the RabbitMQ broker, we can configure the Shovel with the Management UI by navigating to “localhost:15672” in a browser and using the management credentials to sign in (default is guest/guest).
 
 ---
 
@@ -106,7 +107,7 @@ From the Solace Messaging Service, navigate to the Management UI using the 'Mana
 
 ![Solace Manage Queues](img/solace_manage_queues.png "Solace Messaging Servie Manage Tab")
 
-Create a new queue by clicking the +Queue button at top right. Provide your queue with a name, and click Create. 
+Create a new queue by clicking the +Queue button at top right. Provide your queue with a name, and click Create.
 
 ![Solace Create Queue](img/solace_create_queue.png "PubSub+ Manager Queues Tab")
 

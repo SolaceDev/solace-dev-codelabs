@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="ep-discovery-kafka"
                   title="Guided Walk Through of PubSub&#43; Event Portal Discovery with Kafka"
                   environment="web"
@@ -47,14 +47,14 @@
         <p>You are a member of the engineering team at the <em>NYC Modern Taxi Co</em>, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies&#39; IT systems is of utmost importance. Your team has done it&#39;s research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it&#39;s time to start to continually improve and provide a world class customer experience.</p>
 <p>In order to react in a real-time manner the team has decided that we want to process the updates as they stream in from the fleet of taxis instead of putting them directly into a datastore and then having to retrieve them to do processing later. To prototype this work, you&#39;ll see a high level design in the diagram below. Since we already have the taxi fleet streaming their updates into our PubSub+ Event Mesh we need to do three things:</p>
 <ol type="1">
-<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.<br></li>
-<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.<br></li>
+<li>🚖 Capture this high level design in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its&#39; components: Applications, Events and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.</li>
+<li>🚕 Next up we&#39;re going to create the <em>RideDropoffProcessor</em> microservice which will subscribe to the stream of <em>dropoff</em> taxi updates from the fleet, capture events for a specified time window (we&#39;ll use 20 seconds to make it easy), calculate the averages, and publish a new <em>RideAverageUpdate</em> event for each window.</li>
 <li>🚖 Lastly we&#39;ll create a <em>RideDropoffConsumer</em> that receives the stream of <em>RideAverageUpdate</em> events and captures them for display and further processing.</li>
 </ol>
 <p class="image-container"><img alt="Architecture" src="img/5b822f32924a6528.png"></p>
-<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process. </p>
-<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — <a href="https://data.cityofnewyork.us/" target="_blank">https://data.cityofnewyork.us/</a> — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+<aside class="special"><p>The dataset you will be using in this lab originally comes from the NYC Taxi &amp; Limousine Commission&#39;s open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.</p>
 </aside>
+<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided &#34;AS IS&#34; without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
 
       </google-codelab-step>
@@ -102,7 +102,7 @@
       <google-codelab-step label="What you need: Prerequisites" duration="5">
         <p>In this walk through you have a choice to pick either of the following options:</p>
 <ol type="1">
-<li>Scan our demo NYC Taxi Kafka cluster		</li>
+<li>Scan our demo NYC Taxi Kafka cluster</li>
 <li>Download one of our pre-scanned Discovery file</li>
 </ol>
 <p>You will find some prerequisites for both options below.</p>
@@ -151,7 +151,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Scan a Kafka Cluster (Optional)" duration="3">
-        <aside class="warning"><p>The Kafka Cluster referenced in this section is not currently available for scanning. The steps below show you how you would scan a Kafka cluster, but for now just skip this section and use the pre-scanned discovery file available in Step 4	</p>
+        <aside class="warning"><p>The Kafka Cluster referenced in this section is not currently available for scanning. The steps below show you how you would scan a Kafka cluster, but for now just skip this section and use the pre-scanned discovery file available in Step 4</p>
 </aside>
 <p>Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser.</p>
 <aside class="warning"><p>NOTE: If you going to use the pre-scanned Discovery file instead then you can skip this section.</p>
@@ -207,14 +207,14 @@
 <h2 is-upgraded>Assign to Workspace</h2>
 <p>One of the first things we want to do is to organize our work in a Workspace. Click on your scan file from the table and select <strong>Assign to Workspace</strong>.</p>
 <p class="image-container"><img alt="Assign to Workspace" src="img/ceff54983d4b382a.png"></p>
-<p>Lets create a new Workspace called <code>NYC Modern Tax Co</code> and select <strong>Run Synchronization Audit</strong>.	</p>
+<p>Lets create a new Workspace called <code>NYC Modern Tax Co</code> and select <strong>Run Synchronization Audit</strong>.</p>
 <p class="image-container"><img alt="Assign to Workspace" src="img/3254e211b16c977f.png"></p>
 <p>Once your workspace is created you&#39;ll see the <strong>Staging view</strong>. What you essentially have here is all the objects the Discovery Agent found in the Kafka cluster it scanned which includes</p>
 <ul>
-<li>Discovered Consumer Groups	</li>
-<li>Kafka Connectors	</li>
-<li>Topics 	</li>
-<li>Schemas.	</li>
+<li>Discovered Consumer Groups</li>
+<li>Kafka Connectors</li>
+<li>Topics</li>
+<li>Schemas.</li>
 </ul>
 <p class="image-container"><img alt="Staging View" src="img/9fcff6d4ee1d6fe5.png"></p>
 <aside class="special"><p>This is where you will map what you have discovered to Applications and Events in the Event Portal to make associations with your application domain.</p>
@@ -227,20 +227,20 @@
         <p>Now that you have uploaded your scan file and staged your events, let&#39;s go ahead and create an application domain to map topics, events and consumer groups</p>
 <h2 is-upgraded>Creating an Application Domain</h2>
 <p>First we need to associate the Consumer Groups, Connectors, Topics, and Schema that were discovered from our NYC Taxi Analytics cluster to an Application Domain.</p>
-<p>To do this click on the <strong>&#34;+ Create&#34;</strong> button and select *<strong>Create Application Domain</strong>.</p>
+<p>To do this click on the <strong>&#34;+ Create&#34;</strong> button and select <strong>*Create Application Domain</strong>.</p>
 <p class="image-container"><img alt="Create Application Domain" src="img/71022626eed524ee.png"></p>
 <p>Double click on the domain that was created to rename it. We will call this Domain: <code>NYC Modern Taxi Co - Analytics</code></p>
 <p class="image-container"><img alt="Rename Domain" src="img/d76545c648693a95.png"></p>
 <h2 is-upgraded>Assigning Consumer Groups, Topics, Schemas to the Application Domain</h2>
 <p>Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, and Schema to the application domain we created.</p>
-<p>Notice at the bottom of your discovery view, you can see a list of all <strong>Objects</strong> in the workspace		 <img alt="Workspace Objects" src="img/776f91b636c95c49.png"></p>
+<p>Notice at the bottom of your discovery view, you can see a list of all <strong>Objects</strong> in the workspace <img alt="Workspace Objects" src="img/776f91b636c95c49.png"></p>
 <aside class="special"><p>In reality you may have thousands of Consumers or Topics, so to ensure we are making the right associations with a domain, you can use the search capability on the table to filter our Analytics objects only.</p>
 </aside>
 <p>Assign the following objects to your newly created application domain:</p>
 <ul>
-<li>Consumer Groups	</li>
-<li>Connectors	</li>
-<li>Topics	</li>
+<li>Consumer Groups</li>
+<li>Connectors</li>
+<li>Topics</li>
 <li>Schemas</li>
 </ul>
 <p>This is done by</p>
@@ -258,11 +258,11 @@
       </google-codelab-step>
     
       <google-codelab-step label="Map Consumer Groups &amp; Topics to Applications" duration="5">
-        <p>With the objects associated to an Application Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. 	 <img alt="Menu Tab" src="img/a47b3141720082b7.png"></p>
+        <p>With the objects associated to an Application Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped. <img alt="Menu Tab" src="img/a47b3141720082b7.png"></p>
 <p>The Event Portal will automatically attempt to reverse engineer to map those Consumer Groups, Connectors, and Topics to an Applications and Events.</p>
-<p>You will notice that some consumer groups like the <code>taxinyc_analytics_frauddetection_group</code> and topic like <code>taxinyc.analytics.fraud.alerted.v1</code> where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.	</p>
+<p>You will notice that some consumer groups like the <code>taxinyc_analytics_frauddetection_group</code> and topic like <code>taxinyc.analytics.fraud.alerted.v1</code> where not mapped to an application. These discrepancies are identified by the little orange circle icon on the object itself and need to resolved before we can commit our work to the Event Portal.</p>
 <p class="image-container"><img alt="Unmapped" src="img/fb19ecbebcfcf64a.png"></p>
-<p>This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Application</code>. 	</p>
+<p>This is where your domain expertise will come in handy and considering you are part of the NYC Taxi Analytics team you know that the <code>taxinyc_analytics_frauddetection_group</code> maps to the say the <code>Fraud Detection Application</code>.</p>
 <h2 is-upgraded>Application Mapping</h2>
 <p>Click on the <strong>&#34;+ Create&#34;</strong> button at the top right corner of page and select <strong>Create Application</strong>. Call this application: <code>Fraud Detection Application</code>. Then drag and drop the consumer group <code>taxinyc_analytics_frauddetection_group</code> to the newly created application.</p>
 <p class="image-container"><img alt="Map Fraud Application" src="img/86028f5c0cd42415.gif"></p>
