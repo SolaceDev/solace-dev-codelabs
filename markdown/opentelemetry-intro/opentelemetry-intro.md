@@ -46,7 +46,7 @@ Duration: 0:07:00
 1. [Download the sample code](https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro) Or use git commands to grab it from [GitHub](https://github.com/jmenning-solace/nycmoderntaxi.git).
 
 Negative
-: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. [Read more about the Python API.](https://solace.community/categories/python-api).
+: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. [Read more about the Python API.](https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga).
 
 ## Use Case Overview 🚕
 
@@ -132,7 +132,7 @@ Negative
 
 Duration: 0:12:00
 
-Python is a great language for prototyping applications. It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload. This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the [Solace PubSub+ Python API](https://solace.community/categories/python-api). And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.
+Python is a great language for prototyping applications. It's easy to get up and running quickly, and since it doesn't compile you just change a line and reload. This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the [Solace PubSub+ Python API](https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga). And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.
 
 ### Steps to install
 
