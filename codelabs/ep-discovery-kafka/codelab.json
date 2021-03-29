@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2020-12-16T17:29:13-05:00",
   "id": "ep-discovery-kafka",
   "duration": 53,
@@ -10,21 +10,9 @@
   "summary": "A guided walk through of PubSub+ Event Portal Discovery with Kafka",
   "source": "ep-discovery-kafka.md",
   "theme": "",
-  "status": [
-    "draft"
-  ],
-  "category": [
-    "kafka",
-    "portal",
-    "taxi"
-  ],
-  "tags": [
-    "event-portal",
-    "guide",
-    "kafka",
-    "web"
-  ],
+  "status": ["draft"],
+  "category": ["kafka", "portal", "taxi"],
+  "tags": ["event-portal", "guide", "kafka", "web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-discovery-kafka",
-  "ga": "UA-3921398-10",
   "url": "ep-discovery-kafka"
 }

@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="solace-workshop-scs"
                   title="Spring Cloud Streams with Solace PubSub&#43;"
                   environment="web"
@@ -37,9 +37,9 @@
 <li>It is based on Spring Boot, Spring Cloud, Spring Integration and Spring Messaging</li>
 </ul>
 <p class="image-container"><img alt="story_section1" src="img/74c5ab5aa7a9cf08.png"></p>
-<aside class="special"><p><strong>Developer Resources</strong><br>Spring Cloud Stream Project Home: <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">https://spring.io/projects/spring-cloud-stream</a><br>The Spring Cloud Stream Reference Guide can be found <a href="https://cloud.spring.io/spring-cloud-stream/spring-cloud-stream.html#spring-cloud-stream-overview-introducing" target="_blank">here</a>.</p>
+<aside class="special"><p><strong>Developer Resources</strong> Spring Cloud Stream Project Home: <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">https://spring.io/projects/spring-cloud-stream</a> The Spring Cloud Stream Reference Guide can be found <a href="https://cloud.spring.io/spring-cloud-stream/spring-cloud-stream.html#spring-cloud-stream-overview-introducing" target="_blank">here</a>.</p>
 </aside>
-<aside class="warning"><p>The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events.  While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud.  When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.</p>
+<aside class="warning"><p>The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events. While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud. When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.</p>
 </aside>
 
 
@@ -55,19 +55,23 @@
 <li>Maven 3.5.3 or higher (ensure it&#39;s on your PATH) <a href="https://maven.apache.org/install.html" target="_blank">Install steps here</a></li>
 <li>Use the latest JDK 1.8 (ensure your PATH &amp; JAVA_HOME are updated as needed)</li>
 <li>If using STS/Eclipse ensure your JDK 1.8 is thei default &#34;Installed JRE&#34; by choosing &#34;Windows&#34; -&gt; &#34;Preferences&#34; -&gt; &#34;Java&#34; -&gt; &#34;Installed JREs&#34;</li>
-<li>If the correct JDK does not already have a checkmark next to it then click the &#34;Add&#34; button, choose &#34;Standard VM&#34;, click &#34;Next&#34;, navigate to your JDK -&gt; Click &#34;Finish&#34;. Then click the checkbox next to the added JRE and click &#34;Apply and close&#34;<br></li>
+<li>If the correct JDK does not already have a checkmark next to it then click the &#34;Add&#34; button, choose &#34;Standard VM&#34;, click &#34;Next&#34;, navigate to your JDK -&gt; Click &#34;Finish&#34;. Then click the checkbox next to the added JRE and click &#34;Apply and close&#34;</li>
 </ul>
 <h3 is-upgraded>Code Access</h3>
 <ul>
 <li>Clone the github repo</li>
-<li>Use https<pre><code>$ git clone -b master https://github.com/SolaceTraining/solace-workshop-scs.git
+<li>Use https</li>
+</ul>
+<pre><code>$ git clone -b master https://github.com/SolaceTraining/solace-workshop-scs.git
 </code></pre>
-</li>
-<li>OR Use SSH<pre><code>$ git clone -b master git@github.com:SolaceTraining/solace-workshop-scs.git
+<ul>
+<li>OR Use SSH</li>
+</ul>
+<pre><code>$ git clone -b master git@github.com:SolaceTraining/solace-workshop-scs.git
 </code></pre>
-</li>
+<ul>
 <li>OR Navigate to <a href="https://github.com/SolaceTraining/solace-workshop-scs" target="_blank">https://github.com/SolaceTraining/solace-workshop-scs</a>, click &#34;Clone or download&#34; -&gt; &#34;Download ZIP&#34; &amp; unzip in your desired directory</li>
-<li>Import the projects into STS<br>In STS, use the File -&gt; Import -&gt; Maven -&gt; Existing Maven Projects -&gt; Click Next -&gt; Click Browse and Navigate to the git repo you cloned in the previous step -&gt; Select all the pom files and click Finish.</li>
+<li>Import the projects into STS In STS, use the File -&gt; Import -&gt; Maven -&gt; Existing Maven Projects -&gt; Click Next -&gt; Click Browse and Navigate to the git repo you cloned in the previous step -&gt; Select all the pom files and click Finish.</li>
 </ul>
 <p>After importing everything you should see the following projects in STS:</p>
 <ul>
@@ -82,16 +86,16 @@
 <li>09-scs-processor-positive</li>
 <li>10-spring-boot-mqttwebapp</li>
 </ul>
-<aside class="warning"><p>Note:  There may be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.</p>
+<aside class="warning"><p>Note: There may be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.</p>
 </aside>
 <ul>
 <li>The workshop uses a common data model which contains the Tweet object which is processed by the SCS services. You will need to prepare the shared artifact for use across the projects.</li>
-<li>Throughout this workshop we have two options when building &amp; running our Spring Boot microservices:<br><br><ul>
-<li>1) via the <em>Spring Tool Suite IDE</em> or</li>
-<li>2) via <em>maven</em> (mvn) on the command line.</li>
+<li>Throughout this workshop we have two options when building &amp; running our Spring Boot microservices:<ul>
+<li>1. via the <em>Spring Tool Suite IDE</em> or</li>
+<li>2. via <em>maven</em> (mvn) on the command line.</li>
 </ul>
 </li>
-<li>If you prefer option 1 then in the <em>01-scs-workshop-common</em> project, run a Maven build and install it to the local repository.<br><img alt="Using STS to install your artifact via Maven" src="img/c4071d5e3291a313.png"></li>
+<li>If you prefer option 1 then in the <em>01-scs-workshop-common</em> project, run a Maven build and install it to the local repository. <img alt="Using STS to install your artifact via Maven" src="img/c4071d5e3291a313.png"></li>
 <li>If you prefer option 2 then navigate to the 01-scs-workshop-common directory and perform a maven install of the project.<pre><code>$ cd ~/git/solace-workshop-scs/01-scs-workshop-common/
 $ mvn clean install
 </code></pre>
@@ -99,7 +103,7 @@ $ mvn clean install
 </ul>
 <h2 is-upgraded>Create and/or Verify access to a Solace PubSub+ Service</h2>
 <h3 is-upgraded>PubSub+ Service in Solace Cloud</h3>
-<p>If you want to stand up your Solace PubSub+ Service in Solace Cloud go ahead and login or signup at the <a href="https://console.solace.cloud/login/new-account" target="_blank">Cloud Signup Page</a>.  Note that a free tier is available and will work for this workshop.</p>
+<p>If you want to stand up your Solace PubSub+ Service in Solace Cloud go ahead and login or signup at the <a href="https://console.solace.cloud/login/new-account" target="_blank">Cloud Signup Page</a>. Note that a free tier is available and will work for this workshop.</p>
 <ul>
 <li><strong>Capture the Solace Messaging connect info to be used by the Spring Cloud Streams binder throughout this workshop</strong></li>
 <li>Login to Solace Cloud -&gt; Choose your messaging service -&gt; Click the <em>Connect</em> tab</li>
@@ -108,7 +112,7 @@ $ mvn clean install
 </ul>
 <p class="image-container"><img alt="solace_credentails" src="img/4c961abf81637566.png"></p>
 <h3 is-upgraded>Local Solace PubSub+ Instance</h3>
-<p>When developing your application, you may want to test using a local instance of the Solace PubSub+ Event Broker.  Refer to the Solace <a href="https://solace.com/software/getting-started/" target="_blank">Docker Getting Started Guide</a> to get you up and running quickly with a broker instance running in Docker.  You may skip this step if you decide to use a broker running elsewhere, such as in Solace Cloud.</p>
+<p>When developing your application, you may want to test using a local instance of the Solace PubSub+ Event Broker. Refer to the Solace <a href="https://solace.com/software/getting-started/" target="_blank">Docker Getting Started Guide</a> to get you up and running quickly with a broker instance running in Docker. You may skip this step if you decide to use a broker running elsewhere, such as in Solace Cloud.</p>
 <ul>
 <li><strong>Capture the Solace Messaging connect info to be used by the Spring Cloud Streams binder throughout this workshop</strong></li>
 <li>If you just deployed a docker container using the instructions linked above then the values will be as follows:</li>
@@ -135,12 +139,12 @@ find . -name ScSProcessorFeaturesDynamic.java -exec sed -i &#39;&#39; &#39;s/ATT
       <google-codelab-step label="Create Your First Source &amp; Sink" duration="30">
         <p class="image-container"><img alt="story_section3" src="img/552516a043e3db5a.png"></p>
 <h2 is-upgraded>Application Architecture</h2>
-<p>At the end of this section we will have created the apps below!<br>The Source will send out tweets that will be received by the marketing Sink.</p>
+<p>At the end of this section we will have created the apps below! The Source will send out tweets that will be received by the marketing Sink.</p>
 <p class="image-container"><img alt="1 Application Architecture" src="img/79fc0869581996c7.png"></p>
-<aside class="warning"><p>SCS Provides 3 Binding Interfaces:<br>1: Sink - &#34;Identifies the contract for the message consumer by providing the destination from which the message is consumed.&#34;<br>2: Source - &#34;Identifies the contract for the message producer by providing the destination to which the produced message is sent.&#34;<br>3: Processor - &#34;Encapsulates both the sink and the source contracts by exposing two destinations that allow consumption and production of messages.&#34;</p>
+<aside class="warning"><p>SCS Provides 3 Binding Interfaces: 1: Sink - &#34;Identifies the contract for the message consumer by providing the destination from which the message is consumed.&#34; 2: Source - &#34;Identifies the contract for the message producer by providing the destination to which the produced message is sent.&#34; 3: Processor - &#34;Encapsulates both the sink and the source contracts by exposing two destinations that allow consumption and production of messages.&#34;</p>
 </aside>
 <h2 is-upgraded>Creating a Source</h2>
-<p>Before our company can do anything with the tweets we have to start to receive an incoming stream of them.  Let&#39;s get started! Please navigate to the &#34;02-scs-source-tweets&#34; project in your IDE.</p>
+<p>Before our company can do anything with the tweets we have to start to receive an incoming stream of them. Let&#39;s get started! Please navigate to the &#34;02-scs-source-tweets&#34; project in your IDE.</p>
 <h3 is-upgraded>Learn the Project Structure</h3>
 <p>Before we take a look at the code, let&#39;s take a quick look at the structure of a Spring Cloud Streams project.</p>
 <ul>
@@ -161,15 +165,15 @@ find . -name ScSProcessorFeaturesDynamic.java -exec sed -i &#39;&#39; &#39;s/ATT
 </aside>
 <p class="image-container"><img alt="SCS Sample Implementation" src="img/191b59cec4b3474b.png"></p>
 <ul>
-<li>One last thing to look at and then we&#39;ll run your first source! Go ahead and open your application.yml file. This file holds the bindings that tells the SCS binder how to connect your input/output channels to the specified middleware at runtime.<br></li>
+<li>One last thing to look at and then we&#39;ll run your first source! Go ahead and open your application.yml file. This file holds the bindings that tells the SCS binder how to connect your input/output channels to the specified middleware at runtime.</li>
 </ul>
 <p class="image-container"><img alt="SCS Application Config File" src="img/1ec3375dc0672892.png"></p>
-<aside class="special"><p>SCS apps are not restricted to only using one binder at a time. This allows a SCS app the flexibility of receiving events from one binder/location/environment/etc, performing business logic and then sending new events to another binder/location/environment/etc.<br>Also note that because bindings are dynamically configured at run-time you don&#39;t have to touch the code to switch out your binder of choice, environment info, etc.</p>
+<aside class="special"><p>SCS apps are not restricted to only using one binder at a time. This allows a SCS app the flexibility of receiving events from one binder/location/environment/etc, performing business logic and then sending new events to another binder/location/environment/etc. Also note that because bindings are dynamically configured at run-time you don&#39;t have to touch the code to switch out your binder of choice, environment info, etc.</p>
 </aside>
 <h3 is-upgraded>Run our 02-scs-source-tweets app</h3>
 <ul>
 <li>First open the <em>application.yml</em> file and update the host, msgVpn, clientUsername &amp; clientPassword to match your PubSub+ environment. When obtaining the connect info note that the SCS solace binder uses the Solace Java API with the SMF protocol. (Keep this connection info handy as you&#39;ll need it several more times throughout this lab!)</li>
-<li>If using STS, start the app by right clicking on the project and choosing &#34;Run As&#34; -&gt; &#34;Spring Boot App&#34;<br><img alt="Run_Spring_Boot_App1" src="img/58d6187f0eb3b87.png"></li>
+<li>If using STS, start the app by right clicking on the project and choosing &#34;Run As&#34; -&gt; &#34;Spring Boot App&#34; <img alt="Run_Spring_Boot_App1" src="img/58d6187f0eb3b87.png"></li>
 <li>If not using STS, open a cli and navigate to the project&#39;s directory and then run<pre><code>$ mvn clean install
 $ mvn spring-boot:run
 </code></pre>
@@ -177,20 +181,20 @@ $ mvn spring-boot:run
 <li>Whichever way you started the app you should see the app start, connect and begin to send tweets by looking at the console.</li>
 </ul>
 <p class="image-container"><img alt="story_section3_g2" src="img/39fe5ed1c324f817.png"></p>
-<p>To do this we will create a sink app.  Recall that a sink app binds to an INPUT channel.</p>
+<p>To do this we will create a sink app. Recall that a sink app binds to an INPUT channel.</p>
 <h2 is-upgraded>Creating a Sink</h2>
 <ul>
 <li>Open the &#34;03-scs-sink-analytics&#34; project</li>
 <li>Take a look at the code in the <em>ScsSinkAnalytics.java</em> class; you&#39;ll notice we have a very simple class with only a few methods. As we saw earlier, the <em>@StreamListener</em> attribute identifies which channel our <em>sink</em> method will receive events from. Also notice that the sink method is expecting a POJO tweet parameter of type <em>Tweet</em></li>
 <li>Now update the <em>application.yml</em> file for the &#34;03-scs-sink-analytics&#34; project with the same info that you used when creating the source app.</li>
 <li>While updating this file also replace the <code>ATTENDEE</code> group with your unique name</li>
-<li>Time to test it out!  Run the &#34;03-scs-sink-analytics&#34; app the same way you started &#34;02-scs-source-tweets&#34;</li>
+<li>Time to test it out! Run the &#34;03-scs-sink-analytics&#34; app the same way you started &#34;02-scs-source-tweets&#34;</li>
 <li>Now that your sink is started you should see it logging the tweets as they come in!</li>
 </ul>
 <aside class="warning"><p>Note that Spring Cloud Streams <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_provided_messageconverters" target="_blank">provides message converters</a> which enable the conversion of a payload to/from a specified format/shape (such as a Tweet POJO in our case) based on the argumentType in the method signature and the contentType specified on the message. The default content type is application/json.</p>
 </aside>
 <ul>
-<li>Developer - Woohoo! We&#39;ve created our first SCS source and sink applications and the marketing department is now getting the stream of tweets as they requested! Time to give our boss the good news.<br><img alt="story_section3_g3" src="img/6d6527085f2915ed.png"></li>
+<li>Developer - Woohoo! We&#39;ve created our first SCS source and sink applications and the marketing department is now getting the stream of tweets as they requested! Time to give our boss the good news. <img alt="story_section3_g3" src="img/6d6527085f2915ed.png"></li>
 </ul>
 <aside class="special"><p>You now have a source application sending events to a sink application via an external eventing system, but notice that you didn&#39;t need to use any messaging APIs! SCS provides this abstraction and makes it possible for developers to concentrate on their business logic rather than learning proprietary messaging APIs!</p>
 </aside>
@@ -210,10 +214,10 @@ $ mvn spring-boot:run
 <li>Open the <em>ScsSinkTweetBoard.java</em> class</li>
 <li>Add the <em>@EnableBinding(Sink.class)</em> annotation to label the app as a Sink</li>
 <li>Add a &#34;sink&#34; method that takes in a &#34;Tweet&#34; POJO from the INPUT channel and logs that it was received.</li>
-<li>Update the application.yml file, verify that there is indeed a destination configured for the input channel, replace <code>ATTENDEE</code> with your unique name (e.g: TWEETS.Q.BOARD.Marc).  Note that by not specifying a group we are using the &#34;Publish-Subscribe&#34; messaging model.</li>
+<li>Update the application.yml file, verify that there is indeed a destination configured for the input channel, replace <code>ATTENDEE</code> with your unique name (e.g: TWEETS.Q.BOARD.Marc). Note that by not specifying a group we are using the &#34;Publish-Subscribe&#34; messaging model.</li>
 <li>Update the host, msgVpn, clientUsername, clientPassword in the application.yml file.</li>
 </ul>
-<aside class="warning"><p>Spring Cloud Streams supports multiple messaging models. We are going to use two different ones in this workshop<br>1: Publish-Subscribe allows for an application to process all events sent to the defined subscription. It also allows new applications to be added to the topology without disruption of the existing flow.<br><br>2: Consumer Groups allow for a set of applications to participate in a &#34;group&#34; to consume messages. This option is commonly used to allow the ability for an application to scale horizontally (creating multiple instances of the same application) while only processing each event once.</p>
+<aside class="warning"><p>Spring Cloud Streams supports multiple messaging models. We are going to use two different ones in this workshop 1: Publish-Subscribe allows for an application to process all events sent to the defined subscription. It also allows new applications to be added to the topology without disruption of the existing flow.<br> 2: Consumer Groups allow for a set of applications to participate in a &#34;group&#34; to consume messages. This option is commonly used to allow the ability for an application to scale horizontally (creating multiple instances of the same application) while only processing each event once.</p>
 </aside>
 <h2 is-upgraded>Run the Tweet Board</h2>
 <p>At this point we have created our &#34;04-scs-sink-tweetboard&#34; application and it&#39;s ready for action!</p>
@@ -226,7 +230,7 @@ $ mvn spring-boot:run
 <li>At this point you should see the app starting up. If all goes correctly you should see a log entry that says the application started in X seconds.</li>
 </ul>
 <p class="image-container"><img alt="story_section5_g2" src="img/160e2425fd4167e6.png"></p>
-<aside class="special"><p>Notice that the publisher (Source) application did not need to be modified in order for another consumer (Sink) application to receive the stream of tweets. There are two takeaways here:<br>1: The publish-subscribe paradigm allows for the publisher to send data once and not care whether 0,1,2 or 100 applications are subscribed on the other end. It just send the data and moves on.<br>2: Developing event driven applications allows for decoupling of your sending and receiving applications. This powerful concept allowed our company to add new functionality without touching our already operational applications.</p>
+<aside class="special"><p>Notice that the publisher (Source) application did not need to be modified in order for another consumer (Sink) application to receive the stream of tweets. There are two takeaways here: 1: The publish-subscribe paradigm allows for the publisher to send data once and not care whether 0,1,2 or 100 applications are subscribed on the other end. It just send the data and moves on. 2: Developing event driven applications allows for decoupling of your sending and receiving applications. This powerful concept allowed our company to add new functionality without touching our already operational applications.</p>
 </aside>
 
 
@@ -251,12 +255,12 @@ $ mvn spring-boot:run
 </aside>
 <ul>
 <li>Note that in the application.yml file the bindings that are listed include input, outputFeature, and outputNoFeature as defined in our custom bindings interface.</li>
-<li>Update the <code>ATTENDEE</code> to be your unique name each time it occurs in the application.yml file.<br></li>
+<li>Update the <code>ATTENDEE</code> to be your unique name each time it occurs in the application.yml file.</li>
 <li>Update the host, msgVpn, clientUsername, clientPassword in the application.yml file so we can connect to the PubSub+ service</li>
 <li>Run the app in the same manner that you&#39;ve been running the others.</li>
 </ul>
 <h3 is-upgraded>Processor using Dynamic Destinations</h3>
-<aside class="warning"><p>At this point you might be thinking &#34;Okay these custom binding interfaces are great, but what if I don&#39;t know how many or what to call my output channels at design time?&#34; Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation!  Dynamic destinations allow you to use business logic to define your destinations at runtime.</p>
+<aside class="warning"><p>At this point you might be thinking &#34;Okay these custom binding interfaces are great, but what if I don&#39;t know how many or what to call my output channels at design time?&#34; Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation! Dynamic destinations allow you to use business logic to define your destinations at runtime.</p>
 </aside>
 <ul>
 <li>Since this microservice will duplicate the work that &#34;05-scs-processor-feature&#34; one is already doing let&#39;s go ahead and stop the previous microservice we deployed.</li>
@@ -296,7 +300,7 @@ $ mvn spring-boot:run
 </ul>
 <aside class="warning"><p>spring-boot-devtools is handy for development and adds features such as automatic restart and remote debugging. Click <a href="https://www.baeldung.com/spring-boot-devtools" target="_blank">here</a> for a high level overview of some of the functionality it provides.</p>
 </aside>
-<aside class="special"><p>Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don&#39;t underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don&#39;t mix upper and lower case! A good topic hierarchy might be defined as &#34;&lt;country&gt;/&lt;state&gt;/&lt;locality&gt;&#34; which would allow you to subscribe to all events in a given country &#34;canada/&gt;&#34; or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they&#39;re in &#34;*/*/sanjose&#34;<br></p>
+<aside class="special"><p>Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don&#39;t underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don&#39;t mix upper and lower case! A good topic hierarchy might be defined as &#34;&lt;country&gt;/&lt;state&gt;/&lt;locality&gt;&#34; which would allow you to subscribe to all events in a given country &#34;canada/&gt;&#34; or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they&#39;re in &#34;*/*/sanjose&#34;</p>
 </aside>
 
 
@@ -314,38 +318,35 @@ $ mvn spring-boot:run
 <li>Navigate to your &#34;08-scs-processor-yelling&#34; project</li>
 <li>Open your pom.xml file and note that it was not necessary to include Spring Cloud Function as a dependency. It&#39;s included as a dependency of the &#34;spring-cloud-steam&#34; artifact.</li>
 </ul>
-<aside class="warning"><p>Spring Cloud Functions supports 3 types that conveniently map to our 3 SCS binding interfaces.<br>java.util.function.Function maps to a SCS Processor<br>java.util.function.Supplier maps to a SCS Source<br>java.util.function.Consumer maps to a SCS Sink</p>
+<aside class="warning"><p>Spring Cloud Functions supports 3 types that conveniently map to our 3 SCS binding interfaces. java.util.function.Function maps to a SCS Processor java.util.function.Supplier maps to a SCS Source java.util.function.Consumer maps to a SCS Sink</p>
 </aside>
 <ul>
 <li>Open the <em>ScsProcessorYelling.java</em> class.</li>
-<li>Add the <code>@EnableBinding(Processor.class)</code> annotation to the <em>ScsProcessorYelling</em> class to label it as a processor.<br></li>
-<li>Since we are creating a SCS Processor using Spring Cloud Function we will want to create a <code>java.util.function.Function</code> bean; to do this add a <code>changeCase</code> function that takes in a <code>Flux&lt;Tweet&gt;</code> and outputs a <code>Flux&lt;Tweet&gt;</code>. Code the function so that it changes the text in incoming flux tweets  tweet to all lowercase. An example implementation would look like this:</li>
-<li><pre><code>@Bean
-public Function&lt;Flux&lt;Tweet&gt;, Flux&lt;Tweet&gt;&gt; changeCase() {
-    return flux -&gt; flux
-            .doOnNext(t -&gt;logger.info(&#34;====Tweet BEFORE mapping: &#34; + t.toString()))
-            .map(t -&gt; { t.setText(t.getText().toLowerCase());
-                return t;
-                })
-            .doOnNext(t -&gt;logger.info(&#34;++++Tweet AFTER mapping: &#34; + t.toString()))
-            ;
-
-}
-</code></pre>
-</li>
-<li>After creating the function we now need to tell SCS add the <code>spring.cloud.stream.function.definition</code> argument to the <code>SpringApplication.run</code> command in the <code>main</code> method as seen below. This specifies which functional bean to bind to the external destination(s) exposed by the bindings.</li>
-<li><pre><code>SpringApplication.run(ScsprocessoryellingApplication.class, &#34;--spring.cloud.stream.function.definition=changeCase&#34;);
+<li>Add the <code>@EnableBinding(Processor.class)</code> annotation to the <em>ScsProcessorYelling</em> class to label it as a processor.</li>
+<li>Since we are creating a SCS Processor using Spring Cloud Function we will want to create a <code>java.util.function.Function</code> bean; to do this add a <code>changeCase</code> function that takes in a <code>Flux&lt;Tweet&gt;</code> and outputs a <code>Flux&lt;Tweet&gt;</code>. Code the function so that it changes the text in incoming flux tweets tweet to all lowercase. An example implementation would look like this:</li>
+<li>&#34;`java @Bean public Function, Flux&gt; changeCase() {<pre><code>return flux -&gt; flux
+		.doOnNext(t -&gt;logger.info(&#34;====Tweet BEFORE mapping: &#34; + t.toString()))
+		.map(t -&gt; { t.setText(t.getText().toLowerCase());
+			return t;
+			})
+		.doOnNext(t -&gt;logger.info(&#34;++++Tweet AFTER mapping: &#34; + t.toString()))
+		;
 </code></pre>
 </li>
 </ul>
+<p>}   &#34;`</p>
+<pre><code>* After creating the function we now need to tell SCS add the `spring.cloud.stream.function.definition` argument to the `SpringApplication.run` command in the `main` method as seen below. This specifies which functional bean to bind to the external destination(s) exposed by the bindings.
+- ``` java
+SpringApplication.run(ScsprocessoryellingApplication.class, &#34;--spring.cloud.stream.function.definition=changeCase&#34;);
+</code></pre>
 <p>At this point we&#39;ve created our reactive function, registered it as a bean, and told spring cloud stream what function to bind to the available bindings! So let&#39;s run it and see if it works...</p>
 <h3 is-upgraded>Running the Processor</h3>
 <ul>
 <li>Open the application.yml file and change <code>ATTENDEE</code> to your unique name</li>
-<li>Now that we&#39;ve seen how to create a SCS app using Spring Cloud Functions go ahead and run it.<br></li>
+<li>Now that we&#39;ve seen how to create a SCS app using Spring Cloud Functions go ahead and run it.</li>
 <li>After it&#39;s running you should start to see the BEFORE and AFTER log entries scrolling across the console where the AFTER log entries do not contain any uppercase letters in the text field.</li>
 </ul>
-<aside class="special"><p>From the Spring docs, Spring Cloud Functions allows you to &#34;Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task.&#34;  Read more here: <a href="https://spring.io/projects/spring-cloud-function" target="_blank">https://spring.io/projects/spring-cloud-function</a></p>
+<aside class="special"><p>From the Spring docs, Spring Cloud Functions allows you to &#34;Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task.&#34; Read more here: <a href="https://spring.io/projects/spring-cloud-function" target="_blank">https://spring.io/projects/spring-cloud-function</a></p>
 </aside>
 
 
@@ -353,7 +354,7 @@ public Function&lt;Flux&lt;Tweet&gt;, Flux&lt;Tweet&gt;&gt; changeCase() {
     
       <google-codelab-step label="Multiple Processor Chaining" duration="10">
         <p class="image-container"><img alt="story_section8" src="img/55800129a03e799a.png"></p>
-<aside class="warning"><p>Obviously this company has some morality issues :)<br>In the real world you should definitely not modify people&#39;s speech or create fake news!<br></p>
+<aside class="warning"><p>Obviously this company has some morality issues :) In the real world you should definitely not modify people&#39;s speech or create fake news!</p>
 </aside>
 <h2 is-upgraded>Application Architecture</h2>
 <p>A processor will be added to our architecture in order to convert negative words to positive ones.</p>
@@ -394,7 +395,7 @@ public Function&lt;Flux&lt;Tweet&gt;, Flux&lt;Tweet&gt;&gt; changeCase() {
 <li>Navigate to your service &amp; choose the <em>Connect</em> tab</li>
 <li>View by <em>Protocol</em> and Click <em>MQTT</em></li>
 <li>The <em>Connection Details</em> section displays the information that you&#39;ll need to connect.</li>
-<li>You&#39;ll need the <em>username</em>, <em>password</em>, and <em>WebSocket MQTT Host</em> in the next step.<br><img alt="MQTT_Connect_Info" src="img/3f24c89d477c6992.png"></li>
+<li>You&#39;ll need the <em>username</em>, <em>password</em>, and <em>WebSocket MQTT Host</em> in the next step. <img alt="MQTT_Connect_Info" src="img/3f24c89d477c6992.png"></li>
 <li>If using PubSub+ Software or Hardware navigate to the PubSub+ Manager</li>
 <li>To connect using HTTP, enter: <code>http://&lt;pubsubplus-address&gt;:8080</code> (port 80 for an appliance).</li>
 <li>To connect using HTTPS, enter: <code>https://&lt;pubsubplus-address&gt;:943</code> (port 443 for an appliance).</li>
@@ -405,12 +406,12 @@ public Function&lt;Flux&lt;Tweet&gt;, Flux&lt;Tweet&gt;&gt; changeCase() {
 <h2 is-upgraded>Create the Web App</h2>
 <h3 is-upgraded>IF PARTICIPATING IN AN INSTRUCTOR LED WORKSHOP THE INSTRUCTOR WILL PERFORM THIS SECTION. YOU ARE WELCOME TO RUN LOCALLY IF YOU WOULD LIKE</h3>
 <ul>
-<li>Since we&#39;re Spring experts let&#39;s go ahead and whip up a quick Spring Boot app that uses JavaScript and the open source MQTT Paho library to connect to PubSub+ and receive the stream of tweets.<br></li>
+<li>Since we&#39;re Spring experts let&#39;s go ahead and whip up a quick Spring Boot app that uses JavaScript and the open source MQTT Paho library to connect to PubSub+ and receive the stream of tweets.</li>
 <li>Open the &#34;10-spring-boot-mqttwebapp&#34; project</li>
 <li>Check out the <em>pom.xml</em> file and notice that there is nothing spring-cloud-streams related; only spring boot!</li>
 <li>Then open up the <em>mqttListener.html</em> to see how simple it was to connect &amp; receive events using MQTT Paho.</li>
 <li>In <em>mqttListener.html</em> update the host/port/username/credentials to connect to PubSub+ (Search for &#34;UPDATE&#34; to find where the updates need to be made) using the information found in the previous subsection.</li>
-<li>Lastly look at the <em>MqttWebApp.java</em> class.  You&#39;ll see that we just have a simple RestController that is smart enough to make the files in src/main/resources/static available for HTTP access.</li>
+<li>Lastly look at the <em>MqttWebApp.java</em> class. You&#39;ll see that we just have a simple RestController that is smart enough to make the files in src/main/resources/static available for HTTP access.</li>
 <li>Now that we&#39;ve taken a look at how the app works go ahead and run it.</li>
 <li>Once started navigate to <code>http://&lt;hostname/mqttListener.html</code> to see the incoming tweets! You can lookup your route in the apps manager or by using the command below:</li>
 </ul>

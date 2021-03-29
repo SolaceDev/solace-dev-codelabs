@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="mulesoft-connector"
                   title="Using the MuleSoft Solace Connector to publish events"
                   environment="web"
@@ -55,7 +55,7 @@
 <li>Solace Cloud service instance</li>
 </ol>
 <p>If you already have a Solace PubSub+ Cloud account, you can skip this step</p>
-<p>This tutorial will walk you through setting up a Solace Cloud service instance. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event  Broker: Software</a> documentation</p>
+<p>This tutorial will walk you through setting up a Solace Cloud service instance. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event Broker: Software</a> documentation</p>
 <h2 is-upgraded>Sign up for free Solace Cloud account</h2>
 <p>Navigate to the <a href="https://console.solace.cloud/login/new-account" target="_blank">Create a New Account</a> page and fill out the required information. No credit card required!</p>
 <h2 is-upgraded>Create a messaging service</h2>
@@ -178,14 +178,14 @@
 <ul>
 <li>Double click on the TopicListner object to configure it. Notice how the Connector Configuration settings is auto populated. Change the Subscription value from <code>Bean Reference</code> to <code>Inline</code><img alt="topic-listner-config" title="topic-listner-config" src="img/f0225428d6abba2.png"></li>
 <li>Click on the green add icon to add a subscription. Add <code>solace/mule/&gt;</code><img alt="topic-listner-add" title="topic-listner-add" src="img/9820f7af7942b04a.png"></li>
-<li>Add a logging shape. Search for <code>Logger</code> from the pallette menu and drag it to the TopicListner flow	 <img alt="add-logger" title="add-logger" src="img/c227e6fbf255bc64.png"></li>
+<li>Add a logging shape. Search for <code>Logger</code> from the pallette menu and drag it to the TopicListner flow <img alt="add-logger" title="add-logger" src="img/c227e6fbf255bc64.png"></li>
 <li>Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following <img alt="logger-config" title="logger-config" src="img/b65e81ae41adf467.png"><pre><code>%dw 2.0
 output application/java
 ---
 payload
 </code></pre>
 </li>
-<li>Your full flow should look like this		 <img alt="full-flow" title="full-flow" src="img/be329c20ed86e4dd.png"></li>
+<li>Your full flow should look like this <img alt="full-flow" title="full-flow" src="img/be329c20ed86e4dd.png"></li>
 <li>Run it! Observe in the logs every second an output of the message will be logged <img alt="log" title="log" src="img/31b3fa372760b8e.png"></li>
 </ul>
 

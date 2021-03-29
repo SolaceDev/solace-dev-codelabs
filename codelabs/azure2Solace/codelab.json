@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2020-10-01T13:31:34-04:00",
   "id": "azure2Solace",
   "duration": 47,
@@ -10,18 +10,9 @@
   "summary": "Use Azure function to stream data from Azure messaging services to Solace PubSub+",
   "source": "azure2Solace.md",
   "theme": "",
-  "status": [
-    "published"
-  ],
-  "category": [
-    "azure",
-    "c#"
-  ],
-  "tags": [
-    "iguide",
-    "web"
-  ],
+  "status": ["published"],
+  "category": ["azure", "c#"],
+  "tags": ["iguide", "web"],
   "feedback": "https://github.com/solacese/azure2Solace",
-  "ga": "UA-3921398-10",
   "url": "azure2Solace"
 }

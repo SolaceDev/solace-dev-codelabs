@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="azure2Solace"
                   title="Stream data from Azure Service Bus to Solace PubSub&#43; Event broker Using Azure Function"
                   environment="web"
@@ -57,16 +57,16 @@
 <ol type="1">
 <li>Create a queue that will receive data from Azure function using REST<pre><code>solace&gt; enable
 solace# configure
-solace# (configure)# message-spool message-vpn &lt;VPN Name&gt; 
+solace# (configure)# message-spool message-vpn &lt;VPN Name&gt;
 solace(configure/message-spool/message-vpn)# create queue azure-rest-queue
-solace(configure/message-vpn/my-azure-queue )# permission all consume 
+solace(configure/message-vpn/my-azure-queue )# permission all consume
 solace(configure/message-vpn/my-azure-queue )# subscription topic azure/2/solace-rest
 solace(configure/message-vpn/my-azure-queue )# no shutdown
 solace(configure/message-vpn/my-azure-queue )# exit
 </code></pre>
 </li>
 <li>Create a queue that will receive data from Azure function using C#<pre><code>solace(configure/message-spool/message-vpn)# create queue azure-c#-queue
-solace(configure/message-vpn/my-azure-queue )# permission all consume 
+solace(configure/message-vpn/my-azure-queue )# permission all consume
 solace(configure/message-vpn/my-azure-queue )# subscription topic azure/2/solace
 solace(configure/message-vpn/my-azure-queue )# no shutdown
 solace(configure/message-vpn/my-azure-queue )# end
@@ -78,7 +78,7 @@ solace(configure/message-vpn/my-azure-queue )# end
       </google-codelab-step>
     
       <google-codelab-step label="Azure Function Setup - For C#/.Net using Solace C# APIs" duration="15">
-        <p>Azure allows you to use multiple programming languages and APIs. However, for this codelab, I will walk you through usage of  C# using Solace C#API  and REST .</p>
+        <p>Azure allows you to use multiple programming languages and APIs. However, for this codelab, I will walk you through usage of C# using Solace C#API and REST .</p>
 <ol type="1">
 <li>Create a new Azure function project in Visual Studio <img alt=" " src="img/a7026d963c310020.png"> Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
 <li>Configure your new project <img alt=" " src="img/287630390af48b5e.png"></li>
@@ -222,10 +222,10 @@ public static class Function1
 </li>
 <li>Now Build your project.</li>
 <li>Publish your Azure function as follows: <img alt=" " src="img/f7f8a10ca463a1e0.png"><img alt=" " src="img/df9cf913eb98b333.png"><img alt=" " src="img/74a6b15ae2ef7da4.png"><img alt=" " src="img/3c1d1f5fb60b12a.png"><img alt=" " src="img/67f8320e667591f4.png"><img alt=" " src="img/8f71854c71df4b63.png"><img alt=" " src="img/b311185231477329.png"></li>
-<li>Now that your function is published, logon to your Azure portal and start the function app.   <img alt=" " src="img/83cc2e30a42c90bd.png"></li>
-<li>Lets look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus.   <img alt=" " src="img/25d8ef984094f47a.png"></li>
-<li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). Below is a screen grab of console output from my test application.   <img alt=" " src="img/440a5c9ede3505f9.png"></li>
-<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.   <img alt=" " src="img/d76d5177e70fce64.png"></li>
+<li>Now that your function is published, logon to your Azure portal and start the function app. <img alt=" " src="img/83cc2e30a42c90bd.png"></li>
+<li>Lets look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus. <img alt=" " src="img/25d8ef984094f47a.png"></li>
+<li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). Below is a screen grab of console output from my test application. <img alt=" " src="img/440a5c9ede3505f9.png"></li>
+<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus. <img alt=" " src="img/d76d5177e70fce64.png"></li>
 </ol>
 
 
@@ -327,7 +327,7 @@ public static class funcSB2SolaceREST
 <li>Now that your function is published, logon to your Azure portal and start the function app.</li>
 <li>Look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus and confirm there are no messages sitting in the queue.</li>
 <li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function).</li>
-<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.   <img alt=" " src="img/e556bc06a515a435.png"></li>
+<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus. <img alt=" " src="img/e556bc06a515a435.png"></li>
 </ol>
 
 
@@ -335,7 +335,7 @@ public static class funcSB2SolaceREST
     
       <google-codelab-step label="Takeaways" duration="7">
         <p>✅ You have learned how to create an Azure function that helps you stream data from ServiceBus to Solace PubSub+ Event broker.<br> ✅ You can use similar approach to integrate with Azure, Blob Storage, Event Hub, IoT Hub, Cosmos Db etc.<br> ✅ Event though this codelab uses C#, you can use other programming languages supported by Azure functions.</p>
-<p>✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation <a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm" target="_blank">here</a>.	</p>
+<p>✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation <a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm" target="_blank">here</a>.</p>
 <p>✅ For more information on Azure functions connectors check out the <a href="https://solace.com/connectors/?fwp_connectors_search=azure" target="_blank">PubSub+ Connector Hub</a> page</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/f3045cf027293e9e.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>

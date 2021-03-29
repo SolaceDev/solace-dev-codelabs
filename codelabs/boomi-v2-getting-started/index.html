@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="boomi-v2-getting-started"
                   title="Getting started with Boomi and Solace"
                   environment="web"
@@ -57,7 +57,7 @@
 <li>Software broker image (Docker, Virtual image)</li>
 <li>Solace Cloud service instance</li>
 </ol>
-<p>This tutorial will walk you through setting up a Solace Cloud service instance, which also gives you access to the Event Portal. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event  Broker: Software</a> documentation</p>
+<p>This tutorial will walk you through setting up a Solace Cloud service instance, which also gives you access to the Event Portal. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event Broker: Software</a> documentation</p>
 <h2 is-upgraded>Sign up for free Solace Cloud account</h2>
 <p>Navigate to the <a href="https://console.solace.cloud/login/new-account" target="_blank">Create a New Account</a> page and fill out the required information. No credit card required!</p>
 <h2 is-upgraded>Create a messaging service</h2>
@@ -142,20 +142,20 @@
       <google-codelab-step label="Design your architecture using Solace PubSub&#43; Event Portal" duration="2">
         <p>Your free trial of Solace PubSub+ Cloud comes with the Event Portal, which helps you visualize the structure of event-driven architectures. The trial also includes a sample architecture called Acme Rideshare, that we&#39;ll use for this lab.</p>
 <ul>
-<li>Start it up by going to the &#34;Designer&#34; icon in the left hand column<br></li>
+<li>Start it up by going to the &#34;Designer&#34; icon in the left hand column</li>
 </ul>
 <p class="image-container"><img alt="Menu" title="menu" src="img/70787b0639f1f28d.png"></p>
 <ul>
-<li>Then double click on the Acme Rideshare domain<br></li>
+<li>Then double click on the Acme Rideshare domain</li>
 </ul>
 <p class="image-container"><img alt="ridesharedomain" title="ride share domain" src="img/55a8786943e4979f.png"></p>
 <ul>
-<li>There&#39;s a lot going on, but we&#39;ll just focus on the <strong>Passenger</strong> application sending a <strong>RideRequested Event</strong> to the <strong>Driver Management</strong> application.<br><img alt="rideshare_events" title="rideshare_events" src="img/a6045ceb46335260.png"><br></li>
+<li>There&#39;s a lot going on, but we&#39;ll just focus on the <strong>Passenger</strong> application sending a <strong>RideRequested Event</strong> to the <strong>Driver Management</strong> application.<br><img alt="rideshare_events" title="rideshare_events" src="img/a6045ceb46335260.png"></li>
 </ul>
 <p>For our purposes:</p>
 <p><strong>Passenger App</strong>: will mock an event publisher<br><strong>Ride Requested</strong>: is an event with a JSON schema payload representing a ride request<br><strong>Driver Management</strong>: will be a simple Boomi flow, which will pick up the ride request and write it to the process log. Very simple 🤙</p>
 <ul>
-<li>Double click on the RideRequested event to get more details about the event<br></li>
+<li>Double click on the RideRequested event to get more details about the event</li>
 </ul>
 <p class="image-container"><img alt="event_details" title="event_details" src="img/1f107b19e17dddf.png"></p>
 <p>Two things to note here:</p>
@@ -190,7 +190,7 @@
 <p>👉 In the <strong>Connection</strong> section, click on the + icon to configure the connection parameters</p>
 <p class="image-container"><img alt="connector-connection" title="connector-connection" src="img/9e0167c79baeab2b.png"></p>
 <p>👉 Fill in the connection parameters with the <strong>Host</strong>, <strong>Message VPN Name</strong>, <strong>Client Username</strong> and <strong>Password</strong>. This is obtained by navigating back to the Solace PubSub+ Cloud Manager console, clicking on the previously created service and navigating to the <strong>Connect</strong> tab. Note that you will have to expand the &#34;Solace Messaging&#34; menu to get the connection details <img alt="connection-service" title="connection-service" src="img/4dbbde26342e8779.png"></p>
-<p>👉 One more piece of information you&#39;ll need is an Event Portal token (this lets you import in the topic string and schema from the previously designed architecture).  In Solace Cloud console, scroll all the way to the bottom of the left column, and click on the account management icon, then select Token Management.</p>
+<p>👉 One more piece of information you&#39;ll need is an Event Portal token (this lets you import in the topic string and schema from the previously designed architecture). In Solace Cloud console, scroll all the way to the bottom of the left column, and click on the account management icon, then select Token Management.</p>
 <p class="image-container"><img alt="cloud_account" title="cloud_account" src="img/3c10603d6fd7031f.png"></p>
 <p>👉 Click on the &#34;Create Token&#34; button in the upper right.</p>
 <p>👉 Name the token &#34;Boomi UI access&#34;</p>
@@ -210,10 +210,10 @@
 <p class="image-container"><img alt="connectoroperation" title="connectoroperation" src="img/a115f854683db764.png"></p>
 <aside class="special"><p>Note: The <code>Create Queue and Topic Subscription</code> option means that the Solace connector will create the queue and subscription for you behind the scenes</p>
 </aside>
-<p>👉 Click on the Import Button in the Upper Right.  Select your atom and the Solace connection that you just created, then click on Next.</p>
+<p>👉 Click on the Import Button in the Upper Right. Select your atom and the Solace connection that you just created, then click on Next.</p>
 <p>Boomi grabs the events available to you from the Event Portal, and lists them in a drop down box <img alt="eventlist" title="eventlist" src="img/a079b3f0c19e2463.png"></p>
 <p>👉 Pick the RideRequested event, click Next, then Finish.</p>
-<p>Now check out our Connector Operation:  The data format from the Event Portal is now a Boomi Profile (click on the pencil to see more) and the topic string is filled in for us. <img alt="operationupdated" title="operationupdated" src="img/70f631ecc4f8611b.png"></p>
+<p>Now check out our Connector Operation: The data format from the Event Portal is now a Boomi Profile (click on the pencil to see more) and the topic string is filled in for us. <img alt="operationupdated" title="operationupdated" src="img/70f631ecc4f8611b.png"></p>
 <aside class="special"><p>Don&#39;t forget to Save and close!</p>
 </aside>
 <p>👉 Now your Canvas should look like this with the newly added shape</p>
@@ -252,7 +252,7 @@
 <p>👉 Click Next until you get to the Review Deploy step</p>
 <p>👉 Click on the Deploy button!</p>
 <p class="image-container"><img alt="deploy-success" title="deploy-success" src="img/5604dceaa3bb4eb.png"></p>
-<aside class="special"><p>Typically this is when you would have to manually create queues and subscriptions.  But behind the scenes, the Solace connector autocreates those for you, so no work there.</p>
+<aside class="special"><p>Typically this is when you would have to manually create queues and subscriptions. But behind the scenes, the Solace connector autocreates those for you, so no work there.</p>
 </aside>
 <h2 is-upgraded>Publish events 💥!</h2>
 <p>👉 Navigate back to your Solace Cloud console, select the messaging service and navigate to the Try Me! tab</p>

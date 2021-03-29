@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2019-10-15T16:10:48-04:00",
   "id": "solace-workshop-scs-pcf",
   "duration": 175,
@@ -10,20 +10,9 @@
   "summary": "Using Spring Cloud Stream w/ Solace PubSub+ in PCF",
   "source": "solace-workshop-scs-pcf.md",
   "theme": "",
-  "status": [
-    "published"
-  ],
-  "category": [
-    "spring",
-    "java",
-    "pcf",
-    "solace"
-  ],
-  "tags": [
-    "web",
-    "workshop"
-  ],
+  "status": ["published"],
+  "category": ["spring", "java", "pcf", "solace"],
+  "tags": ["web", "workshop"],
   "feedback": "github.com/SolaceTraining/solace-workshop-scs",
-  "ga": "UA-3921398-10",
   "url": "solace-workshop-scs-pcf"
 }

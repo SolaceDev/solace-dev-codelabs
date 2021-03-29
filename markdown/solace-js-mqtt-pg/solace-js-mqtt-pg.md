@@ -6,7 +6,6 @@ categories: JavaScript,MQTT,PostgreSQL
 environments: Web
 status: Published
 feedback link: https://github.com/solacese/solace-js-mqtt-postgres-blog
-analytics account: UA-3921398-10
 
 # Tech Stack Tutorial: Wiring Together Solace PubSub+, JavaScript, MQTT, and PostgreSQL
 
