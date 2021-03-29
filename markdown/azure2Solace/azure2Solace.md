@@ -6,7 +6,6 @@ categories: Azure, C#
 environments: Web
 status: published
 feedback link: https://github.com/solacese/azure2Solace
-analytics account:
 
 # Stream data from Azure Service Bus to Solace PubSub+ Event broker Using Azure Function
 

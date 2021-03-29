@@ -13,5 +13,6 @@
   "status": ["draft"],
   "category": ["boomi"],
   "tags": ["web"],
+  "feedback": "https://solace.community/",
   "url": "boomi-getting-started"
 }

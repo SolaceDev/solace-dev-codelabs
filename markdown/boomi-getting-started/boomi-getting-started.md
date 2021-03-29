@@ -5,7 +5,7 @@ tags:
 categories: Boomi
 environments: Web
 status: Draft
-feedback link:
+feedback link: https://solace.community/
 
 # Getting started with Boomi and Solace using the V1 connector
 
