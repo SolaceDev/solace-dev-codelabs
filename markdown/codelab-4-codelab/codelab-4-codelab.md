@@ -2,7 +2,7 @@ author: Marc DiPasquale
 summary: Create a Codelab Using Markdown
 id: codelab-4-codelab
 tags:
-categories: Codelabs
+categories: Solace, Codelabs
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab

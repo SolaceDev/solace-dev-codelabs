@@ -11,7 +11,7 @@
   "source": "codelab-4-codelab.md",
   "theme": "",
   "status": ["published"],
-  "category": ["codelabs"],
+  "category": ["solace", "codelabs"],
   "tags": ["web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab",
   "url": "codelab-4-codelab"
