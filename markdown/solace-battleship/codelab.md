@@ -2,7 +2,7 @@ author: Thomas Kunnumpurath, Andrew Roberts
 summary: Build Battleship, a popular board game, and learn advanced messaging techniques
 id: solace-battleship
 tags: workshop,udemy,microservices,
-categories: Solace,Java,Spring,Javascript,Aurelia,TypeScript
+categories: Java,Spring,Javascript
 environments: Web
 status: Published
 feedback link: http://github.com/solacetraining/solace-battleship/issues

@@ -11,7 +11,7 @@
   "source": "design-document-discover-develop-event-driven-apis.md",
   "theme": "",
   "status": ["published"],
-  "category": ["solace", "taxi", "portal"],
+  "category": ["taxi", "event portal"],
   "tags": ["web", "workshop"],
   "feedback": "https://solace.community/categories/pubsub%2B-event-portal",
   "url": "design-document-discover-develop-event-driven-apis"

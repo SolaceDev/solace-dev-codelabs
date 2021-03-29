@@ -2,7 +2,7 @@ author: Jesse Menning
 summary:
 id: opentelemetry-intro
 tags:
-categories: opentelemetry, taxi
+categories: Opentelemetry, Taxi
 environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro

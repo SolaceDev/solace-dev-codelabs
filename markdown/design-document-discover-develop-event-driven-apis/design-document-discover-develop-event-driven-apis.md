@@ -2,7 +2,7 @@ author: Jonathan Schabowsky
 summary: In this tutorial we'll cover how to design, extend and implement your event-driven APIs using Solace PubSub+ Event Portal
 id: design-document-discover-develop-event-driven-apis
 tags: workshop
-categories: Solace, taxi, Portal
+categories: Taxi, Event Portal
 environments: Web
 status: Published
 feedback link: https://solace.community/categories/pubsub%2B-event-portal
@@ -205,13 +205,12 @@ The event topic structure has two parts:
         Domain/ObjectType/Verb/Version/
 
 - Event Topic Properties: The Event Topic Properties should have the following form:
-        Locality/SourceID/ObjectID
+  Locality/SourceID/ObjectID
 
 Positive
 : Complete Event Topic Format: Putting together an Event Topic Root and Event Topic Properties creates an event topic that describes the event with a series of fields from least specific to most specific.
 
         Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
-
 
 For more information about topic best practices, review the [Topic Architecture Best Practices Guide] (https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm)
 
@@ -584,8 +583,6 @@ Next we should decide what we want the data to look like once we have processed 
     1. Revision Comment: <Optional> "Initial Creation of Schema"
     1. Click _Save_
 
-
-
 ### Step 3: Design _PaymentCharged_ Event
 
 So now that we have constructed the payload format for the PaymentCharged event, it is time to design the event itself. What's involved? Well we need to apply our best practices as it comes to the Topic name!
@@ -798,8 +795,6 @@ N/A
         1. The documentation should look something like:
             ![asyncapi_doc2](img/AppDoc.png)
         1. Click _Save_
-
-
 
 ## Discover Existing EDA Assets
 

@@ -1,7 +1,7 @@
 author: Marc DiPasquale
 summary: Using Spring Cloud Stream w/ Solace PubSub+ in PCF
 id: solace-workshop-scs-pcf
-categories: Spring,Java,PCF,Solace
+categories: Spring,Java
 tags: workshop
 environments: Web
 status: published

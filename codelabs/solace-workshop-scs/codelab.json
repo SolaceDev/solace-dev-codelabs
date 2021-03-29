@@ -11,7 +11,7 @@
   "source": "solace-workshop-scs.md",
   "theme": "",
   "status": ["published"],
-  "category": ["spring", "java", "solace"],
+  "category": ["spring", "java"],
   "tags": ["web", "workshop"],
   "feedback": "github.com/SolaceTraining/solace-workshop-scs",
   "url": "solace-workshop-scs"

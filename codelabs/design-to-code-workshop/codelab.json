@@ -11,7 +11,7 @@
   "source": "design-to-code-workshop.md",
   "theme": "",
   "status": ["published"],
-  "category": ["solace", "asyncapi", "spring", "java", "portal", "taxi"],
+  "category": ["asyncapi", "spring", "java", "event portal", "taxi"],
   "tags": ["web", "workshop"],
   "feedback": "https://github.com/Mrc0113/design-to-code-workshop",
   "url": "design-to-code-workshop"

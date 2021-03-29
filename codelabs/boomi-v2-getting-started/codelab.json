@@ -11,7 +11,7 @@
   "source": "boomi-v2-getting-started.md",
   "theme": "",
   "status": ["published"],
-  "category": ["boomi", "portal"],
+  "category": ["boomi", "event portal"],
   "tags": ["web", "workshop"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/boomi-v2-getting-started",
   "url": "boomi-v2-getting-started"

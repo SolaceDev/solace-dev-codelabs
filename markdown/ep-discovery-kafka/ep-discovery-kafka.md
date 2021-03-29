@@ -2,7 +2,7 @@ author: Dishant Langayan
 summary: A guided walk through of PubSub+ Event Portal Discovery with Kafka
 id: ep-discovery-kafka
 tags: kafka,guide,event-portal
-categories: Kafka, Portal, taxi
+categories: Kafka, Event Portal, Taxi
 environments: Web
 status: Draft
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-discovery-kafka

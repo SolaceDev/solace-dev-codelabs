@@ -2,7 +2,7 @@ author: Tom Fairbairn
 summary: An exploration of the basics of getting started with Solace's Native APIs
 id: exploring-solace-native-apis
 tags: workshop
-categories: Solace, Java, C
+categories: Java, C
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceSamples

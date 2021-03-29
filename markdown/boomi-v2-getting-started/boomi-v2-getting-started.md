@@ -2,7 +2,7 @@ author: Tamimi
 summary:
 id: boomi-v2-getting-started
 tags: workshop
-categories: Boomi, Portal
+categories: Boomi, Event Portal
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/boomi-v2-getting-started

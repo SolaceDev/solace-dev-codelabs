@@ -2,7 +2,7 @@ author: Marc DiPasquale
 summary: Create a Codelab Using Markdown
 id: codelab-4-codelab
 tags:
-categories: codelab,markdown
+categories: Codelabs
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab
@@ -329,7 +329,7 @@ mkdir markdown/<header-metadata-id>
 cd markdown/<header-metadata-id>
 # Export into static content
 # Note the google analytics code used. Keep as is below
-claat export -o../../codelabs/ <header-metadata-id>.md
+claat export -o ../../codelabs/ <header-metadata-id>.md
 ```
 
 ## Add your Codelab to solace.dev/codelabs

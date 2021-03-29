@@ -11,7 +11,7 @@
   "source": "exploring-solace-native-apis.md",
   "theme": "",
   "status": ["published"],
-  "category": ["solace", "java", "c"],
+  "category": ["java", "c"],
   "tags": ["web", "workshop"],
   "feedback": "https://github.com/SolaceSamples",
   "url": "exploring-solace-native-apis"

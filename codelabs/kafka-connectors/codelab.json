@@ -11,7 +11,7 @@
   "source": "kafka-connectors.md",
   "theme": "",
   "status": ["draft"],
-  "category": ["kafka", "api", "pub/sub"],
+  "category": ["kafka"],
   "tags": ["howto", "iguide", "web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kafka-connectors/kafka-connectors.md",
   "url": "kafka-connectors"

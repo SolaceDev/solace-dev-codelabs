@@ -2,7 +2,7 @@ author: Jesse Menning
 summary:
 id: boomi-salesforce-codelab
 tags: workshop
-categories: boomi, salesforce, azure, taxi
+categories: Boomi, Salesforce, Azure, Taxi
 environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi
@@ -272,8 +272,8 @@ Duration: 0:30:00
 - Click on the Configure ID Token check box, and make the token valid for 720 minutes
   ![image037](img/image037.png)
 
-1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You’ll use the values when you’re configuring Boomi’s Salesforce Platform Event connector.
-![image039](img/image039.png)
+  1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You’ll use the values when you’re configuring Boomi’s Salesforce Platform Event connector.
+  ![image039](img/image039.png)
 
 ### ⚙️ Define Platform Event structure
 

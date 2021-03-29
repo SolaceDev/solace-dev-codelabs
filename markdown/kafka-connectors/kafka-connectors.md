@@ -2,7 +2,7 @@ author: Aaron Lee
 summary: Learn how to install the Solace PubSub+ Kafka source and sink Connectors for Kafka
 id: kafka-connectors
 tags: iguide,howto
-categories: Kafka,API,pub/sub
+categories: Kafka
 environments: Web
 status: Draft
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kafka-connectors/kafka-connectors.md

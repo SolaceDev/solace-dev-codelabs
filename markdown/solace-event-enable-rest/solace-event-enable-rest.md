@@ -2,7 +2,7 @@ author: Aaron Lee
 summary: Learn how to configure a Solace PubSub+ broker to accept any incoming REST requests, and convert them into event-driven pub/sub messages
 id: solace-event-enable-rest
 tags: patterns,howto
-categories: REST,Solace,Java
+categories: REST,Java
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md

@@ -11,7 +11,7 @@
   "source": "solace-event-enable-rest.md",
   "theme": "",
   "status": ["published"],
-  "category": ["rest", "solace", "java"],
+  "category": ["rest", "java"],
   "tags": ["howto", "patterns", "web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md",
   "url": "solace-event-enable-rest"

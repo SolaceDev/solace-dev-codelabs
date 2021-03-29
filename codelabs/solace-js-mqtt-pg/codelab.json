@@ -11,7 +11,7 @@
   "source": "solace-js-mqtt-pg.md",
   "theme": "",
   "status": ["published"],
-  "category": ["javascript", "mqtt", "postgresql"],
+  "category": ["javascript", "mqtt"],
   "tags": ["iguide", "web"],
   "feedback": "https://github.com/solacese/solace-js-mqtt-postgres-blog",
   "url": "solace-js-mqtt-pg"

@@ -2,7 +2,7 @@ author: Marc DiPasquale
 summary: Using Spring Cloud Streams w/ Solace PubSub+
 id: solace-workshop-scs
 tags: workshop
-categories: Spring,Java,Solace
+categories: Spring,Java
 environments: Web
 status: published
 feedback link: github.com/SolaceTraining/solace-workshop-scs
