@@ -174,7 +174,7 @@ Fill in the fields as follows:
 1. Under _Content_ paste the JSON schema in the code block below. This schema was generated from a sample message using [jsonschema.net](https://jsonschema.net)
 1. Click _Save_
 
-```
+``` 
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
