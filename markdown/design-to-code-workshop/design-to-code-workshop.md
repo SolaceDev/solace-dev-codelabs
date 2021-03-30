@@ -479,7 +479,7 @@ public class Application {
 }
 ```
 
-**Add Lombok Support (Optional)**
+**Add Lombok Support**
 Since we're using [Project Lombok](https://projectlombok.org/) to keep our code a bit shorter you'll need to update your `pom.xml` file to include this dependency. Go ahead and add the `dependenices` in your pom. If you haven't used Lombok in the past you might also need to install support for it in your IDE. Choose the _Install_ option on the project lombok webpage to select your IDE and install.
 
 ```
