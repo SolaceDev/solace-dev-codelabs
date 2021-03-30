@@ -156,7 +156,7 @@ Fill in the fields as follows:
 1. **Name**: RideAverageUpdate
 1. **Description**: This event contains the average cost of rides over a specified duration
 1. **Topic Scheme**: Solace (AMQP, REST, SMF)
-1. **Topic**: taxinyc/ops/monitoring/updated/v1/dropoff/avg
+1. **Topic**: taxinyc/ops/monitoring/updated/v1/stats/dropoff/avg
 1. Click _Add/Remove Owners_ and choose yourself
 1. For **Payload Schema** click _Add New_
 
@@ -415,6 +415,7 @@ Go ahead and code up this business logic yourself or feel free to add your busin
 ```java
 package org.taxi.nyc;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
@@ -447,31 +448,38 @@ public class Application {
 	private Mono<RideAveragePayload> calculateAverage(Flux<TaxiStatusUpdatePayload> flux) {
 		// Aggregate the events in those windows
 		return flux
-			.reduce(new Accumulator(0, 0, 0),
-					(a, taxiUpdate) -> new Accumulator(a.getRideCount() + 1,
-							a.getTotalMeter() + taxiUpdate.getMeterReading(),
-							a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
-			// Calculate the window average in RideAveragePayload objects'
-			.map(accumulator -> new RideAveragePayload((accumulator.getTotalMeter() / accumulator.getRideCount()),
-					20, ((double) accumulator.getTotalPassengers() / accumulator.getRideCount()),
-					accumulator.getRideCount(), sdf.format(new Date())))
-			.log();
+				.reduce(new Accumulator(0, BigDecimal.ZERO, 0),
+						(a, taxiUpdate) -> new Accumulator(a.getRideCount() + 1,
+								a.getTotalMeter().add(taxiUpdate.getMeterReading()),
+								a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
+				// Calculate the window average in RideAveragePayload objects
+				.map(accumulator -> {
+					if (accumulator.getRideCount() == 0) { 
+						// Window was empty, return empty RideAveragePayload
+						return new RideAveragePayload(BigDecimal.ZERO, 20, BigDecimal.ZERO, 0, sdf.format(new Date()));
+					} else { 
+						// Calculate averages based on window
+						return new RideAveragePayload(
+								(accumulator.getTotalMeter().divide(new BigDecimal(accumulator.getRideCount()))), 20,
+								(new BigDecimal(accumulator.getTotalPassengers() / accumulator.getRideCount())),
+								accumulator.getRideCount(), sdf.format(new Date()));
+					}
+				}).log();
 	}
 
-	//Using Lombok to generate getters, setters, constructors, etc. 
+	// Using Lombok to generate getters, setters, constructors, etc.
 	@Data
 	@AllArgsConstructor
 	static class Accumulator {
-
 		private int rideCount;
-		private double totalMeter;
+		private BigDecimal totalMeter;
 		private int totalPassengers;
 	}
 
 }
 ```
 
-**Add Lombok Support (Optional)**
+**Add Lombok Support**
 Since we're using [Project Lombok](https://projectlombok.org/) to keep our code a bit shorter you'll need to update your `pom.xml` file to include this dependency. Go ahead and add the `dependenices` in your pom. If you haven't used Lombok in the past you might also need to install support for it in your IDE. Choose the _Install_ option on the project lombok webpage to select your IDE and install.
 
 ```

@@ -72,7 +72,7 @@
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
 <li>Java 1.8+ (Check version using <code>java -version</code>)</li>
-<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
 </ul>
@@ -135,7 +135,7 @@
 <li><strong>Name</strong>: RideAverageUpdate</li>
 <li><strong>Description</strong>: This event contains the average cost of rides over a specified duration</li>
 <li><strong>Topic Scheme</strong>: Solace (AMQP, REST, SMF)</li>
-<li><strong>Topic</strong>: taxinyc/ops/monitoring/updated/v1/dropoff/avg</li>
+<li><strong>Topic</strong>: taxinyc/ops/monitoring/updated/v1/stats/dropoff/avg</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>For <strong>Payload Schema</strong> click <em>Add New</em></li>
 </ol>
@@ -149,86 +149,86 @@
 <li><strong>Content Type</strong>: JSON</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>Under <em>Content</em> paste the JSON schema in the code block below. This schema was generated from a sample message using <a href="https://jsonschema.net" target="_blank">jsonschema.net</a></li>
-<li>Click <em>Save</em></li>
-</ol>
-<pre><code>{
-    &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
-    &#34;$id&#34;: &#34;http://example.com/example.json&#34;,
-    &#34;type&#34;: &#34;object&#34;,
-    &#34;title&#34;: &#34;The root schema&#34;,
-    &#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
-    &#34;default&#34;: {},
-    &#34;examples&#34;: [
-        {
-            &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
-            &#34;avg_meter_reading&#34;: 21.615217,
-            &#34;avg_passenger_count&#34;: 1.5,
-            &#34;window_duration_sec&#34;: 300,
-            &#34;window_ride_count&#34;: 5
-        }
-    ],
-    &#34;required&#34;: [
-        &#34;timestamp&#34;,
-        &#34;avg_meter_reading&#34;,
-        &#34;avg_passenger_count&#34;,
-        &#34;window_duration_sec&#34;,
-        &#34;window_ride_count&#34;
-    ],
-    &#34;additionalProperties&#34;: true,
-    &#34;properties&#34;: {
-        &#34;timestamp&#34;: {
-            &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
-            &#34;type&#34;: &#34;string&#34;,
-            &#34;title&#34;: &#34;The timestamp schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: &#34;&#34;,
-            &#34;examples&#34;: [
-                &#34;2020-06-04T20:09:59.99832-04:00&#34;
-            ]
-        },
-        &#34;avg_meter_reading&#34;: {
-            &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
-            &#34;type&#34;: &#34;number&#34;,
-            &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0.0,
-            &#34;examples&#34;: [
-                21.615217
-            ]
-        },
-        &#34;avg_passenger_count&#34;: {
-            &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
-            &#34;type&#34;: &#34;number&#34;,
-            &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0.0,
-            &#34;examples&#34;: [
-                1.5
-            ]
-        },
-        &#34;window_duration_sec&#34;: {
-            &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
-            &#34;type&#34;: &#34;integer&#34;,
-            &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0,
-            &#34;examples&#34;: [
-                300
-            ]
-        },
-        &#34;window_ride_count&#34;: {
-            &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
-            &#34;type&#34;: &#34;integer&#34;,
-            &#34;title&#34;: &#34;The window_ride_count schema&#34;,
-            &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-            &#34;default&#34;: 0,
-            &#34;examples&#34;: [
-                5
-            ]
-        }
+<li>Click <em>Save</em><pre><code>{
+&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+&#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The root schema&#34;,
+&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+    {
+        &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
+        &#34;avg_meter_reading&#34;: 21.615217,
+        &#34;avg_passenger_count&#34;: 1.5,
+        &#34;window_duration_sec&#34;: 300,
+        &#34;window_ride_count&#34;: 5
+    }
+],
+&#34;required&#34;: [
+    &#34;timestamp&#34;,
+    &#34;avg_meter_reading&#34;,
+    &#34;avg_passenger_count&#34;,
+    &#34;window_duration_sec&#34;,
+    &#34;window_ride_count&#34;
+],
+&#34;additionalProperties&#34;: true,
+&#34;properties&#34;: {
+    &#34;timestamp&#34;: {
+        &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+        &#34;type&#34;: &#34;string&#34;,
+        &#34;title&#34;: &#34;The timestamp schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: &#34;&#34;,
+        &#34;examples&#34;: [
+            &#34;2020-06-04T20:09:59.99832-04:00&#34;
+        ]
+    },
+    &#34;avg_meter_reading&#34;: {
+        &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
+        &#34;type&#34;: &#34;number&#34;,
+        &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0.0,
+        &#34;examples&#34;: [
+            21.615217
+        ]
+    },
+    &#34;avg_passenger_count&#34;: {
+        &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
+        &#34;type&#34;: &#34;number&#34;,
+        &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0.0,
+        &#34;examples&#34;: [
+            1.5
+        ]
+    },
+    &#34;window_duration_sec&#34;: {
+        &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
+        &#34;type&#34;: &#34;integer&#34;,
+        &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0,
+        &#34;examples&#34;: [
+            300
+        ]
+    },
+    &#34;window_ride_count&#34;: {
+        &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
+        &#34;type&#34;: &#34;integer&#34;,
+        &#34;title&#34;: &#34;The window_ride_count schema&#34;,
+        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+        &#34;default&#34;: 0,
+        &#34;examples&#34;: [
+            5
+        ]
     }
 }
+}
 </code></pre>
+</li>
+</ol>
 <p class="image-container"><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"></p>
 <p>✅ We have now created a new payload schema and the schema has automatically been added to our event.</p>
 <p class="image-container"><img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"></p>
@@ -261,7 +261,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Develop the RideDropoffProcessor" duration="15">
-        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>RideDropoffProcessor</em> microservice. As we mentioned during design we want to implement this app using the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework. For more information on the framework the <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/" target="_blank">reference guide</a> is an excellent resource!</p>
+        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffProcessor</em> microservice. As we mentioned during design we want to implement this app using the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework. For more information on the framework the <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/" target="_blank">reference guide</a> is an excellent resource!</p>
 <h2 is-upgraded>Generate the Code Skeleton</h2>
 <p>In the Solace Event Portal right click on the <em>RideDropoffProcessor</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="asyncapi_doc" src="img/d9786b4242719fc4.webp"></p>
@@ -281,7 +281,7 @@
 <li>Add <code>x-scs-function-name: processDropoffRideAverages</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the <em>subscribe</em> and the <em>publish</em> operation you are saying you want them handled by the same function!</li>
 <li>Add <code>x-scs-destination: test/taxinyc/RideDropoffProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the Asyncapi document to the queue.</li>
 </ul>
-<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below. <img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
+<p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.<br><img alt="asyncapi_doc2" src="img/44c8c6329b5a1e02.png"></p>
 <aside class="warning"><p>Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the <code>info.x-view</code> parameter to <code>provider</code>. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.</p>
 </aside>
 <p>Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
@@ -296,10 +296,10 @@
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
-</ul>
-<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffProcessor -p binder=solace -p reactive=true -p artifactId=RideDropoffProcessor -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffProcessor.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
+</li>
+</ul>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProcessor.
@@ -344,6 +344,7 @@ Check out your shiny new generated files at /private/tmp/codelab/RideDropoffProc
 <p>Go ahead and code up this business logic yourself or feel free to add your business logic by looking at the code snippet available below.</p>
 <pre><code>package org.taxi.nyc;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
@@ -376,30 +377,37 @@ public class Application {
 	private Mono&lt;RideAveragePayload&gt; calculateAverage(Flux&lt;TaxiStatusUpdatePayload&gt; flux) {
 		// Aggregate the events in those windows
 		return flux
-			.reduce(new Accumulator(0, 0, 0),
-					(a, taxiUpdate) -&gt; new Accumulator(a.getRideCount() + 1,
-							a.getTotalMeter() + taxiUpdate.getMeterReading(),
-							a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
-			// Calculate the window average in RideAveragePayload objects&#39;
-			.map(accumulator -&gt; new RideAveragePayload((accumulator.getTotalMeter() / accumulator.getRideCount()),
-					20, ((double) accumulator.getTotalPassengers() / accumulator.getRideCount()),
-					accumulator.getRideCount(), sdf.format(new Date())))
-			.log();
+				.reduce(new Accumulator(0, BigDecimal.ZERO, 0),
+						(a, taxiUpdate) -&gt; new Accumulator(a.getRideCount() + 1,
+								a.getTotalMeter().add(taxiUpdate.getMeterReading()),
+								a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
+				// Calculate the window average in RideAveragePayload objects
+				.map(accumulator -&gt; {
+					if (accumulator.getRideCount() == 0) { 
+						// Window was empty, return empty RideAveragePayload
+						return new RideAveragePayload(BigDecimal.ZERO, 20, BigDecimal.ZERO, 0, sdf.format(new Date()));
+					} else { 
+						// Calculate averages based on window
+						return new RideAveragePayload(
+								(accumulator.getTotalMeter().divide(new BigDecimal(accumulator.getRideCount()))), 20,
+								(new BigDecimal(accumulator.getTotalPassengers() / accumulator.getRideCount())),
+								accumulator.getRideCount(), sdf.format(new Date()));
+					}
+				}).log();
 	}
 
-	//Using Lombok to generate getters, setters, constructors, etc. 
+	// Using Lombok to generate getters, setters, constructors, etc.
 	@Data
 	@AllArgsConstructor
 	static class Accumulator {
-
 		private int rideCount;
-		private double totalMeter;
+		private BigDecimal totalMeter;
 		private int totalPassengers;
 	}
 
 }
 </code></pre>
-<p><strong>Add Lombok Support (Optional)</strong> Since we&#39;re using <a href="https://projectlombok.org/" target="_blank">Project Lombok</a> to keep our code a bit shorter you&#39;ll need to update your <code>pom.xml</code> file to include this dependency. Go ahead and add the <code>dependenices</code> in your pom. If you haven&#39;t used Lombok in the past you might also need to install support for it in your IDE. Choose the <em>Install</em> option on the project lombok webpage to select your IDE and install.</p>
+<p><strong>Add Lombok Support</strong><br>Since we&#39;re using <a href="https://projectlombok.org/" target="_blank">Project Lombok</a> to keep our code a bit shorter you&#39;ll need to update your <code>pom.xml</code> file to include this dependency. Go ahead and add the <code>dependenices</code> in your pom. If you haven&#39;t used Lombok in the past you might also need to install support for it in your IDE. Choose the <em>Install</em> option on the project lombok webpage to select your IDE and install.</p>
 <pre><code>    &lt;dependency&gt;
       	&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
        	&lt;artifactId&gt;lombok&lt;/artifactId&gt;
@@ -422,7 +430,7 @@ public class Application {
       <google-codelab-step label="Extend Your EDA Design" duration="2">
         <p>To complete the architecture for our use case we just need to add the <em>RideDropoffConsumer</em> application. Don&#39;t worry, this one will be quick since we&#39;ve already created all of the needed Events and Payloads earlier :)</p>
 <p>Log into Solace Cloud and navigate to the <em>NYC Modern Taxi Co</em> Application Domain within the Event Portal Designer.</p>
-<p>Right click on the graph and choose <em>Create Application</em>. Fill in the form as follows:</p>
+<p>Right click on the graph and choose <em>Create Application</em>.<br>Fill in the form as follows:</p>
 <ol type="1">
 <li><strong>Name</strong>: RideDropoffConsumer</li>
 <li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume summary events for further analysis</li>
@@ -437,7 +445,7 @@ public class Application {
       </google-codelab-step>
     
       <google-codelab-step label="Develop the RideDropoffConsumer" duration="8">
-        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>RideDropoffConsumer</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
+        <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕<br>On to developing the <em>RideDropoffConsumer</em> microservice. We are also going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice, but we&#39;ll keep the business logic to a minimum this time to show just how quick it is to generate the code skeleton, slap some logic in and run the app!</p>
 <h2 is-upgraded>Generate the Code Skeleton</h2>
 <p>In the Solace Event Portal right click on the <em>RideDropoffConsumer</em>, Choose <em>AsyncAPI</em>, Choose <strong>YAML</strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="ep_asyncapi2" src="img/663b32eb91da0c1c.webp"></p>
@@ -452,10 +460,10 @@ public class Application {
 <li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
 <li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information.</li>
 <li>The yaml file is our AsyncAPI document</li>
-<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.</li>
-</ul>
-<pre><code>ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
+<li>And lastly, the <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI generator template that we are using.<pre><code>ag -o RideDropoffConsumer -p binder=solace -p artifactId=RideDropoffConsumer -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ~/Downloads/RideDropoffConsumer.yaml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
+</li>
+</ul>
 <p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
 <pre><code>Done! ✨
 Check out your shiny new generated files at /private/tmp/codelab/RideDropoffConsumer.
@@ -492,7 +500,7 @@ public Consumer&lt;RideAveragePayload&gt; taxinycOpsMonitoringUpdatedV1StatsDrop
 	};
 }
 </code></pre>
-<p>That&#39;s it! The app development is complete. 🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
+<p>That&#39;s it! The app development is complete.<br>🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀</p>
 <h2 is-upgraded>Run the app!</h2>
 <p>Now that our app has been developed let&#39;s run it!</p>
 <p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
