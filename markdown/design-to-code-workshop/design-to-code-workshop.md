@@ -452,7 +452,7 @@ public class Application {
 						(a, taxiUpdate) -> new Accumulator(a.getRideCount() + 1,
 								a.getTotalMeter().add(taxiUpdate.getMeterReading()),
 								a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
-				// Calculate the window average in RideAveragePayload objects'
+				// Calculate the window average in RideAveragePayload objects
 				.map(accumulator -> {
 					if (accumulator.getRideCount() == 0) { 
 						// Window was empty, return empty RideAveragePayload
