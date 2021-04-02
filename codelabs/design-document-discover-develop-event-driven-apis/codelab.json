@@ -3,16 +3,25 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-12-10T12:09:32-05:00",
+  "updated": "2021-04-02T10:56:47-04:00",
   "id": "design-document-discover-develop-event-driven-apis",
   "duration": 120,
   "title": "Be Real-Time: Design, Document, Discover and Develop Event-Driven APIs",
   "summary": "In this tutorial we’ll cover how to design, extend and implement your event-driven APIs using Solace PubSub+ Event Portal",
   "source": "design-document-discover-develop-event-driven-apis.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["solace", "taxi", "event portal"],
-  "tags": ["web", "workshop"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "taxi",
+    "event portal"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
   "feedback": "https://solace.community/categories/pubsub%2B-event-portal",
   "url": "design-document-discover-develop-event-driven-apis"
 }

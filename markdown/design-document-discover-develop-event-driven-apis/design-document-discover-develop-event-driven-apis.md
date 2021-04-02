@@ -935,7 +935,7 @@ Positive
 
 #### Publish to a personalized topic for uniqueness
 
-Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processPayment-out-0.destination` to be `test/taxinyc/<YOUR_UNIQUE_NAME>/ops/payment/charged/v1/accepted`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
+Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic. Change your `spring.cloud.stream.bindings.processPayment-out-0.destination` to be `test/taxinyc/<YOUR_UNIQUE_NAME>/backoffice/payment/charged/v1/accepted`. **Be sure to replace <YOUR_UNIQUE_NAME> with your name or some unique field; and remember it for later!**
 
 ✅ After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
 
