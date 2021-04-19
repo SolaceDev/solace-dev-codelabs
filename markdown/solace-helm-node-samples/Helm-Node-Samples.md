@@ -13,13 +13,15 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs
 
 Duration: 0:01:00
 
-In a previous [CodeLab](https://codelabs.solace.dev/codelabs/helm-environment-setup) a desktop Kubernetes development environment was setup using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code. That Codelab also used the environment to launch a dev instance of PubSub+ uising the [PubSub+ Helm Charts](https://hub.helm.sh/charts/solace). This CodeLab will use the dev instance installed in the previous CodeLab to run some Node.js sample applications using Kubernetes and Helm.
+In a previous [CodeLab](https://codelabs.solace.dev/codelabs/helm-environment-setup) a desktop Kubernetes development environment was setup using Docker Desktop, Windows Subsystem for Linux, Helm and Visual Studio Code. That Codelab also used the environment to launch a dev instance of PubSub+ uising the [PubSub+ Helm Charts](https://artifacthub.io/packages/search?page=1&ts_query_web=solace). This CodeLab will use the dev instance installed in the previous CodeLab to run some Node.js sample applications using Kubernetes and Helm.
 
 ## Step 1: Clone the Solace Node Sample Chart
 
 Duration: 0:05:00
 
-My colleage Ken Barr created a simple [chart](https://github.com/KenBarr/solace-node-sample) that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github.
+My colleage Ken Barr created a simple [chart](https://github.com/KenBarr/solace-node-sample) that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github.  To get started, clone the solace-node-sample repo from github.  From your work directory execute the following command.
+
+Note: If this is the first time using github from your WSL Ubuntu environment, you will need to setup your ssh keys to be able to authenticate with github.
 
 ```bash
 git clone git@github.com:KenBarr/solace-node-sample.git
@@ -45,8 +47,12 @@ command:
     chmod +x publish.sh
     node src/basic-samples/TopicSubscriber.js ws://{{.Values.psb.name}}:8008 subscriber@default default
 ```
-
-The other important file is values.yaml; in that file you can see that the base image is the [node image](https://hub.docker.com/_/node/). So, the commands above are going to run in the node image (the description of which can be obtained from Docker Hub). From the code snip above, you can see that the template will install the Solace node.js API from NPM, clone the sample applications from github, create a script to publish a message and finally start the subscriber.
+The fragment above does the following:
+- Installs a few packages (bash, git and openssh)
+- Installs the solace javascript api from npm (the base container image is the offical node.js so, it comes with npm already installed)
+- Clones the Solace node.js samples
+- Writes out a shell script to publish a message
+- Starts the subscriber
 
 The code for the sample application that is going to run in the container can be found in [Solace Samples](https://github.com/SolaceSamples) on GitHub. The node.js samples are found in the [solace-samples-nodejs repo](https://github.com/SolaceSamples/solace-samples-nodejs). The container implements the [Publish/Subscribe](https://solace.com/samples/solace-samples-nodejs/publish-subscribe/) messaging pattern.
 
@@ -63,9 +69,9 @@ kubectl get services
 
 ![kubectl get services](./img/Annotation2020-05-04-192712.png)
 
-Edit the values.yaml file and replace "MUST_SPECIFY_SERVICE_NAME" with the service name of the PubSub+ broker.
+Edit the values.yaml file and replace "MUST_SPECIFY_SERVICE_NAME" with the service name of the PubSub+ broker (in this case pubsubplus-dev-1587734193-pubsubplus-dev).
 
-Now the chart is ready to be deployed.
+Now the chart is ready to be deployed.  Change directory into the sikace-node-samples and install the chart.
 
 ```bash
 helm install solace-node-sample . -f values.yaml
@@ -75,23 +81,25 @@ helm install solace-node-sample . -f values.yaml
 
 ## Step 3: Run the Node.js Sample Applications
 
-In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the [sample applications](https://github.com/SolaceSamples/solace-samples-nodejs). If you haven't already done so, install the [Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) extensions. Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows. Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation). Using the Kubernetes extension, right click on the "solace-node-sample" pod and select "Attach Visual Studio Code".
+In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the [sample applications](https://github.com/SolaceSamples/solace-samples-nodejs). If you haven't already done so, install the [Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) extensions. Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows. Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation). Using the Kubernetes extension, right click on the "solace-node-sample" pod and select "Attach Visual Studio Code".  This will open a new window inside the container using the Remote Container extension. Notice the in the bottom left corner of the new window it says "solace-node-sample".
 
-![attach VSC](./img/Annotation2020-05-04-192715.png)
+![attach VSC](./img/Attach-VSC.png)
 
-This will open a new window inside the container using the Remote Container extension. Split the terminal window and use the Remote Containers extension to display the container logs by right clicking the container and selecting "Show Container Log".
+  Split the terminal window and use the Remote Containers extension (click the remote containers icon on the left) to display the container logs by right clicking the container and selecting "Show Container Log".
 
-![sample subscriber output](./img/Annotation2020-05-04-192716.png)
+![sample subscriber output](./img/VSC-Container-Log.png)
 
 You can see that the subscriber application is running and ready to recieve messages.
 
-![sample publisher output](./img/Annotation2020-05-04-192717.png)
+![sample subscriber output](./img/VSC-Container-Log2.png)
+
+Execute the publish.sh script to publish a message and see that the messages was recieved by the subscriber app in the logs (the subscriber was started by the helm chart).
 
 ```bash
 cd /
 /solace-samples-nodejs/publish.sh
 ```
 
-To send a message and in the logs, the subscriber outputs that it recieved a message.
+![sample publisher output](./img/VSC-Publish-Message.png)
 
-This shows how to use Visual Studio Code, Kubernetes and Helm to remotely run a sample application in a container. The node.js application connects to the PubSub+ instance that was previously deployed and sends and recives a message using a publish subscribe messaging pattern.
+In this codelab we have used the remote developement capabilities of Visual Studio Code along with Helm and Kubernetes (supplied by Docker Desktop) to deploy some Solace sample applications.  The sample applicatoins were used to send and recieve messages using a publish / subscribe messaging pattern.  The Solace PubSub+ broker instance was deployed using the same environment in the [previous codelab](https://codelabs.solace.dev/codelabs/helm-environment-setup/index.html?index=..%2F..index). 
