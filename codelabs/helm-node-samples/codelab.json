@@ -3,16 +3,24 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-07-23T22:50:51-04:00",
+  "updated": "2021-04-18T20:54:53-04:00",
   "id": "helm-node-samples",
   "duration": 11,
   "title": "PubSub+ Node.js Samples with Helm / Kubernetes",
   "summary": "PubSub+ Node.js Samples using Helm / Kubernetes with a Desktop Windows Dev Environment",
   "source": "Helm-Node-Samples.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["helm", "", "kubernetes"],
-  "tags": ["web"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "helm",
+    "",
+    "kubernetes"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs",
   "url": "helm-node-samples"
 }

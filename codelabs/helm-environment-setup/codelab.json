@@ -3,16 +3,23 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-18T09:19:51-05:00",
+  "updated": "2021-04-18T21:02:02-04:00",
   "id": "helm-environment-setup",
   "duration": 30,
   "title": "Windows 10 Helm / Kubernetes Development Environment Setup",
   "summary": "Windows 10 Helm / Kubernetes Development Environment Setup using WSL, Docker Desktop and VSC",
   "source": "helm-environment-setup.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["helm", "kubernetes"],
-  "tags": ["web"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "helm",
+    "kubernetes"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs",
   "url": "helm-environment-setup"
 }
