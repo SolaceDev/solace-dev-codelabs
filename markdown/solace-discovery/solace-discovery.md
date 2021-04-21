@@ -1,10 +1,10 @@
-author: aaron-613
-summary:
+author: Aaron Lee
+summary: Follow along to do a Solace Discovery Scan of Topic Hierarchy and Existing Applications
 id: solace-discovery
 tags:
-categories:
+categories: Solace
 environments: Web
-status: Published
+status: Draft
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-discovery
 analytics account: UA-3921398-10
 
