@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-04-21T20:23:57+08:00",
+  "id": "solace-discovery",
+  "duration": 19,
+  "title": "Discover your Solace Event Streams with Event Portal",
+  "summary": "",
+  "source": "solace-discovery.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-discovery",
+  "ga": "UA-3921398-10",
+  "url": "solace-discovery"
+}
