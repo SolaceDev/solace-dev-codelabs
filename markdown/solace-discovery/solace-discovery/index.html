@@ -27,19 +27,59 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-discovery">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Enter a codelab overview here: what &amp; why and github repo link where you can find related code if applicable</p>
-<p>This placeholder CodeLab for accompanying the live coding stream here: <a href="https://www.youtube.com/watch?v=gXNI7kwFjjo" target="_blank">https://www.youtube.com/watch?v=gXNI7kwFjjo</a></p>
+      <google-codelab-step label="Overview" duration="0">
+        <p>This CodeLab will walk you through the basics of performing a <strong>Solace Runtime Discovery</strong> scan of your <em>existing</em> (or a demo) Solace application / broker.</p>
+<p>This CodeLab is only a placeholder and meant to accompany the live coding stream here: <a href="https://www.youtube.com/watch?v=gXNI7kwFjjo" target="_blank">https://www.youtube.com/watch?v=gXNI7kwFjjo</a></p>
 <p class="image-container"><img alt="Thumbnail" src="img/b981deae0dee0a74.png"></p>
-<p>The GUI representation of the data that we will be ingesting is here: https://solacese.github.io/faa-scds-feeds-gui/</p>
-<p>We will be doing a Solace Discovery Scan.  You will need to log into the Solace Event Portal: https://console.solace.cloud/</p>
-<p>Downlaod the Discovery agent</p>
-<p>Use the Following credentials to do Solace &#34;Runtime Discovery&#34;.  (note, these credentials will also work for a Topic Discovery scan):</p>
+<p>The streaming US aviation data used in this CodeLab will eventually be moved somewhere more permanent, and this CodeLab will be updated at that point.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="0">
+        <p>Not a lot:</p>
+<ul>
+<li>Solace Event Portal (Solace Cloud) account: FREE!! <a href="https://console.solace.cloud/" target="_blank">https://console.solace.cloud/</a></li>
+<li>Docker</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Visualize some US Flight Event Stream" duration="0">
+        <p>Some of the data we will be looking can be displayed visually on a map.  To see this, try the following link: <a href="https://solacese.github.io/faa-scds-feeds-gui/" target="_blank">https://solacese.github.io/faa-scds-feeds-gui/</a></p>
+<p><img alt="GUI" src="img/b56e150acd0aa761.png"><em>(Props to Andrew and Robert)</em></p>
+<p>Use either the existing credentials or these:</p>
+<ul>
+<li>Broker URL: <code>mrz5j97864i9m.messaging.solace.cloud</code></li>
+<li>Message VPN: <code>us-aviation-demo</code></li>
+<li>Client Username: <code>public</code></li>
+<li>Client Password: <code>ilikeplanes</code></li>
+</ul>
+<p>At the top of the map, toggle between &#34;hand&#34; to pan around, or &#34;box&#34; to draw filtered areas of the map.  The blue button above them will delete all filtered areas.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Login to Solace Cloud Console" duration="0">
+        <p>We will be doing a Solace Discovery Scan.  You will need to log into the Solace Event Portal: <a href="https://console.solace.cloud/" target="_blank">https://console.solace.cloud/</a></p>
+<ul>
+<li>Click on &#34;Discovery&#34;</li>
+<li>Click on &#34;How do I run a Discovery Scan&#34; at the top</li>
+<li>Download and run the Discovery agent</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="The Discovery Agent" duration="0">
+        <p>The agent is a local application running on your localhost or whatever server your Docker is running on.  Point your favourite browser to <code>http://localhost:8120</code> to see the Agent GUI.</p>
+<p>Use the following credentials to do Solace &#34;Runtime Discovery&#34;.  (note, these credentials will also work for a Topic Discovery scan):</p>
 <ul>
 <li>Client Username: <code>public</code></li>
 <li>Client Password: <code>ilikeplanes</code></li>
-<li>SEMP Username: &#34;</li>
-<li>SEMP Password: &#34;</li>
+<li>SEMP Username: <code>readonly</code></li>
+<li>SEMP Password: <code>readonly</code></li>
 <li>Client Protocol: <code>tcp</code></li>
 <li>Client Host: <code>mrz5j97864i9m.messaging.solace.cloud</code></li>
 <li>SEMP Host: <code>mrz5j97864i9m.messaging.solace.cloud</code></li>
@@ -50,60 +90,38 @@
 <li>Topics Subscriptions: <code>></code></li>
 <li>Scan Duration: <code>60</code> (seconds)</li>
 </ul>
-<h2 is-upgraded>Info Boxes</h2>
-<p>Plain Text followed by green &amp; yellow info boxes</p>
-<aside class="warning"><p>This will appear in a yellow info box.</p>
-</aside>
-<aside class="special"><p>This will appear in a green info box.</p>
-</aside>
-<h2 is-upgraded>Bullets</h2>
-<p>Plain Text followed by bullets</p>
+<h3 is-upgraded>Of course, feel free to scan any broker / Message VPN that you have access to</h3>
+<p>After the scan is complete, upload it to your Solace Cloud account.  Or download the JSON if you wish, you can upload it later.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Importing to Designer" duration="0">
+        <p>Back in Solace Cloud Console, under the Designer, you should see the scan you just ran. Click the three vertical dots and &#34;Import to Designer&#34;.</p>
+<p>You will be presented with two sets of data:</p>
 <ul>
-<li>Hello</li>
-<li>CodeLab</li>
-<li>World</li>
+<li>the topic hierarchy scanned</li>
+<li>any scanned Solace clients that were connected, and their subscriptions</li>
 </ul>
-<h2 is-upgraded>Numbered List</h2>
-<ol type="1">
-<li>List</li>
-<li>Using</li>
-<li>Numbers</li>
-</ol>
-<h2 is-upgraded>Add an Image or a GIF</h2>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<h2 is-upgraded>Creating Events from Topics</h2>
+<p>Navigate through the topic hierarchy.  When you navigate/expand a topic tree all the way down to the leaf node, you can then create an event with that static topic.  There will appear a little + sign and allow you to create a Portal Event.</p>
+<p>To create a topic level with mulitple values (e.g. enums or variable), click the checkmark box to the left of the first value at that level, and then say &#34;Select All&#34;.  Then you can create a variable for that level.</p>
+<p>Watch the video for more details, or check back later when this CodeLab is updated.</p>
+<h2 is-upgraded>Detecting Client Applications</h2>
+<p>On the 2nd tab, <strong>Queues &amp; Direct Clients</strong>, you can see what consumers are active and consuming data from Solace.  These can be generated into Portal Appliations.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
-        <p>Enter environment setup &amp; prerequisites here</p>
-<h2 is-upgraded>Add a Link</h2>
-<p>Add a link! <a href="https://www.google.com" target="_blank">Example of a Link</a></p>
-<h2 is-upgraded>Embed an iframe</h2>
-<iframe class="embedded-iframe" src="https://codepen.io/tzoght/embed/yRNZaP"></iframe>
+      <google-codelab-step label="Move to the Designer" duration="0">
+        <p>Once Events and Applications have been created from your scan, you can move into the Designer view and start enhancing the data there (e.g. description, owner, etc.).  Note that for scanned Events (topics), the Schema is not automatically generated as Solace (currently) don&#39;t reverse engineer schemas from published payloads.</p>
+<p>Finally, you can export the AsyncAPI schema of any Applications you like, and then use any AsyncAPI code generator to build you a new application framework for publishing or subscribing to the data.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 1" duration="0">
-        
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Custom Step 2" duration="0">
-        
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Custom Step 3" duration="0">
-        
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
-<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+      <google-codelab-step label="Next Steps" duration="0">
+        <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 
       </google-codelab-step>
