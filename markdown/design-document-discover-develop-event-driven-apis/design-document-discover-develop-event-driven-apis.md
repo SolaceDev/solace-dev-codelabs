@@ -107,7 +107,7 @@ git clone https://github.com/Mrc0113/ep-design-workshop.git
 
 ![ep_select_designer](img/ep_select_designer.webp)
 
-✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file.
+✅ Then import the previously downloaded Application Domain file by clicking the toolbox icon at the top right of the _Designer_ and choose `Import` from the Application Domain File section.
 
 ![ep_click_import](img/ep_click_import.png)
 
@@ -306,8 +306,16 @@ Next we should decide what we want the data to look like once we have processed 
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain and its time to get creating!
    ![](img/domain-dive.gif)
 
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_  
-   ![](img/create-schema.png) 1. Name: PaymentCharged 1. Content Type: JSON 1. Shared: YES 1. Owner: Assign Yourself 1. Tags: NONE 1. Description: NONE 1. Versions: Leave unchecked 1. Content:
+1. On the Upper Right Corner, Click the toolbox icon and then click _Create_ next to the schemas section
+   ![](img/create-schema.png)
+   1. Name: PaymentCharged
+   1. Content Type: JSON
+   1. Shared: YES
+   1. Owner: Assign Yourself
+   1. Tags: NONE
+   1. Description: NONE
+   1. Versions: Leave unchecked
+   1. Content:
 
 ```
 {
@@ -589,8 +597,23 @@ So now that we have constructed the payload format for the PaymentCharged event,
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
-   ![](img/create-event.png) 1. Name: PaymentCharged 1. Shared: YES 1. Description: NONE 1. Topic Scheme: Solace 1. Topic 1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/` 1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event 1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}` 1. Value: 1. Keep the Schema radio button selected 1. Choose the Schema "PaymentCharged" that we created in the previous step 1. Owner: Assign Yourself 1. Tags: NONE 1. Revision Comment: <Optional> "Initial Creation of Event" 1. Click _Save_
+1. On the Upper Right Corner, Click the toolbox icon and then click _Create_ next to the event section
+   ![](img/create-schema.png)
+   1. Name: PaymentCharged
+   1. Shared: YES
+   1. Description: NONE
+   1. Topic Scheme: Solace
+   1. Topic
+   1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/`
+   1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
+   1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}`
+   1. Value:
+   1. Keep the Schema radio button selected
+   1. Choose the Schema "PaymentCharged" that we created in the previous step
+   1. Owner: Assign Yourself
+   1. Tags: NONE
+   1. Revision Comment: <Optional> "Initial Creation of Event"
+   1. Click _Save_
 
 ### Step 4a: Design _ProcessPayment_ Application
 
@@ -598,7 +621,7 @@ Now for the fun part! We need to design the event-driven interface of the _Proce
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+1. On the Upper Right Corner, Click the toolbox icon and then click _Create_ next to the application section
    1. Name: ProcessPayment
    1. Description: NONE
    1. Application Class: Unspecified
@@ -622,7 +645,7 @@ Remember back to our use case... We have designed how we process payment but sti
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+1. On the Upper Right Corner, Click the toolbox icon and then click _Create_ next to the application section
    1. Name: InvoiceSystem
    1. Description: NONE
    1. Application Class: Unspecified
