@@ -25,7 +25,7 @@ Instead of plowing through logs, trying to understand what happened, NYC Modern 
 
 In this CodeLab you’ll learn about:
 
-✅ How OpenTelemetry works (the basics, if you'd like more detail here is a [solid intro blog post.](https://blog.newrelic.com/product-news/what-is-opentelemetry/))
+✅ How OpenTelemetry works (the basics, if you'd like more detail here is a [solid intro blog post.](https://newrelic.com/solutions/opentelemetry))
 
 ✅ How to get the Solace PubSub+ Python API, and set up a basic environment.
 
