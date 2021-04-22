@@ -13,6 +13,6 @@
   "status": ["published"],
   "category": ["solace", "taxi", "event portal"],
   "tags": ["web", "workshop"],
-  "feedback": "https://solace.community/categories/pubsub%2B-event-portal",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/design-document-discover-develop-event-driven-apis",
   "url": "design-document-discover-develop-event-driven-apis"
 }
