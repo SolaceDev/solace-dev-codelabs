@@ -249,7 +249,15 @@
 <li>First we must decide what Event Exchange Pattern (EEP) we will use. For Maximum flexibility, and because time is not of the essence, we will leverage &#34;Event-Carried State Transfer&#34;.</li>
 <li>Click into the <em>Designer</em> component of the Event Portal<br><img src="img/94601e7d4aec711b.png"></li>
 <li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain and its time to get creating! <img src="img/7c92481b5a3081f6.gif"></li>
-<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema<br></em><img src="img/d0c6af51b9e6953a.png"> 1. Name: PaymentCharged 1. Content Type: JSON 1. Shared: YES 1. Owner: Assign Yourself 1. Tags: NONE 1. Description: NONE 1. Versions: Leave unchecked 1. Content:<pre><code>{
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Schema<br></em><img src="img/d0c6af51b9e6953a.png"><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Content Type: JSON</li>
+<li>Shared: YES</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Description: NONE</li>
+<li>Versions: Leave unchecked</li>
+<li>Content:<pre><code>{
 &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
 &#34;$id&#34;: &#34;http://example.com/example.json&#34;,
 &#34;type&#34;: &#34;object&#34;,
@@ -258,27 +266,27 @@
 &#34;default&#34;: {},
 &#34;examples&#34;: [
 {
-  &#34;payment_charged_id&#34;: &#34;23232323&#34;,
-  &#34;timestamp&#34;: &#34;2020-06-03T16:51:47.29612-04:00&#34;,
-  &#34;information_source&#34;: &#34;ProcessPayment&#34;,
-  &#34;payment_status&#34;: &#34;accepted&#34;,
-  &#34;invoice_system_id&#34;: &#34;PSG-32923&#34;,
-  &#34;amount_charged&#34;: 12.32,
-  &#34;ride_id&#34;: 2345234,
-  &#34;entity_type&#34;: &#34;Driver&#34;,
-  &#34;driver&#34;: {
-    &#34;driver_id&#34;: 1234132,
-    &#34;first_name&#34;: &#34;Frank&#34;,
-    &#34;last_name&#34;: &#34;Smith&#34;,
-    &#34;rating&#34;: 4,
-    &#34;car_class&#34;: &#34;SUV&#34;
-  },
-  &#34;passenger&#34;: {
-    &#34;passenger_id&#34;: 2345243,
-    &#34;first_name&#34;: &#34;Jesse&#34;,
-    &#34;last_name&#34;: &#34;Menning&#34;,
-    &#34;rating&#34;: 2
-  }
+&#34;payment_charged_id&#34;: &#34;23232323&#34;,
+&#34;timestamp&#34;: &#34;2020-06-03T16:51:47.29612-04:00&#34;,
+&#34;information_source&#34;: &#34;ProcessPayment&#34;,
+&#34;payment_status&#34;: &#34;accepted&#34;,
+&#34;invoice_system_id&#34;: &#34;PSG-32923&#34;,
+&#34;amount_charged&#34;: 12.32,
+&#34;ride_id&#34;: 2345234,
+&#34;entity_type&#34;: &#34;Driver&#34;,
+&#34;driver&#34;: {
+&#34;driver_id&#34;: 1234132,
+&#34;first_name&#34;: &#34;Frank&#34;,
+&#34;last_name&#34;: &#34;Smith&#34;,
+&#34;rating&#34;: 4,
+&#34;car_class&#34;: &#34;SUV&#34;
+},
+&#34;passenger&#34;: {
+&#34;passenger_id&#34;: 2345243,
+&#34;first_name&#34;: &#34;Jesse&#34;,
+&#34;last_name&#34;: &#34;Menning&#34;,
+&#34;rating&#34;: 2
+}
 }
 ],
 &#34;required&#34;: [
@@ -295,230 +303,230 @@
 ],
 &#34;properties&#34;: {
 &#34;payment_charged_id&#34;: {
-  &#34;$id&#34;: &#34;#/properties/payment_charged_id&#34;,
-  &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The payment_charged_id schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: &#34;&#34;,
-  &#34;examples&#34;: [
-    &#34;23232323&#34;
-  ]
+&#34;$id&#34;: &#34;#/properties/payment_charged_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_charged_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;23232323&#34;
+]
 },
 &#34;timestamp&#34;: {
-  &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
-  &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The timestamp schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: &#34;&#34;,
-  &#34;examples&#34;: [
-    &#34;2020-06-03T16:51:47.29612-04:00&#34;
-  ]
+&#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The timestamp schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;2020-06-03T16:51:47.29612-04:00&#34;
+]
 },
 &#34;information_source&#34;: {
-  &#34;$id&#34;: &#34;#/properties/information_source&#34;,
-  &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The information_source schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: &#34;&#34;,
-  &#34;examples&#34;: [
-    &#34;ProcessPayment&#34;
-  ]
+&#34;$id&#34;: &#34;#/properties/information_source&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The information_source schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;ProcessPayment&#34;
+]
 },
 &#34;payment_status&#34;: {
-  &#34;$id&#34;: &#34;#/properties/payment_status&#34;,
-  &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The payment_status schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: &#34;&#34;,
-  &#34;examples&#34;: [
-    &#34;accepted&#34;
-  ]
+&#34;$id&#34;: &#34;#/properties/payment_status&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The payment_status schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;accepted&#34;
+]
 },
 &#34;invoice_system_id&#34;: {
-  &#34;$id&#34;: &#34;#/properties/invoice_system_id&#34;,
-  &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The invoice_system_id schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: &#34;&#34;,
-  &#34;examples&#34;: [
-    &#34;PSG-32923&#34;
-  ]
+&#34;$id&#34;: &#34;#/properties/invoice_system_id&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The invoice_system_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;PSG-32923&#34;
+]
 },
 &#34;amount_charged&#34;: {
-  &#34;$id&#34;: &#34;#/properties/amount_charged&#34;,
-  &#34;type&#34;: &#34;number&#34;,
-  &#34;title&#34;: &#34;The amount_charged schema&#34;,
-  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: 0,
-  &#34;examples&#34;: [
-    12.32
-  ]
+&#34;$id&#34;: &#34;#/properties/amount_charged&#34;,
+&#34;type&#34;: &#34;number&#34;,
+&#34;title&#34;: &#34;The amount_charged schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+12.32
+]
 },
 &#34;ride_id&#34;: {
-  &#34;$id&#34;: &#34;#/properties/ride_id&#34;,
+&#34;$id&#34;: &#34;#/properties/ride_id&#34;,
+&#34;type&#34;: &#34;integer&#34;,
+&#34;title&#34;: &#34;The ride_id schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: 0,
+&#34;examples&#34;: [
+2345234
+]
+},
+&#34;entity_type&#34;: {
+&#34;$id&#34;: &#34;#/properties/entity_type&#34;,
+&#34;type&#34;: &#34;string&#34;,
+&#34;title&#34;: &#34;The entity_type schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: &#34;&#34;,
+&#34;examples&#34;: [
+&#34;Driver&#34;
+]
+},
+&#34;driver&#34;: {
+&#34;$id&#34;: &#34;#/properties/driver&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The driver schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;driver_id&#34;: 1234132,
+  &#34;first_name&#34;: &#34;Frank&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;rating&#34;: 4,
+  &#34;car_class&#34;: &#34;SUV&#34;
+}
+],
+&#34;required&#34;: [
+&#34;driver_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;,
+&#34;car_class&#34;
+],
+&#34;properties&#34;: {
+&#34;driver_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/driver_id&#34;,
   &#34;type&#34;: &#34;integer&#34;,
-  &#34;title&#34;: &#34;The ride_id schema&#34;,
+  &#34;title&#34;: &#34;The driver_id schema&#34;,
   &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
   &#34;default&#34;: 0,
   &#34;examples&#34;: [
-    2345234
+    1234132
   ]
 },
-&#34;entity_type&#34;: {
-  &#34;$id&#34;: &#34;#/properties/entity_type&#34;,
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/first_name&#34;,
   &#34;type&#34;: &#34;string&#34;,
-  &#34;title&#34;: &#34;The entity_type schema&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
   &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
   &#34;default&#34;: &#34;&#34;,
   &#34;examples&#34;: [
-    &#34;Driver&#34;
+    &#34;Frank&#34;
   ]
 },
-&#34;driver&#34;: {
-  &#34;$id&#34;: &#34;#/properties/driver&#34;,
-  &#34;type&#34;: &#34;object&#34;,
-  &#34;title&#34;: &#34;The driver schema&#34;,
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
   &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: {},
+  &#34;default&#34;: &#34;&#34;,
   &#34;examples&#34;: [
-    {
-      &#34;driver_id&#34;: 1234132,
-      &#34;first_name&#34;: &#34;Frank&#34;,
-      &#34;last_name&#34;: &#34;Smith&#34;,
-      &#34;rating&#34;: 4,
-      &#34;car_class&#34;: &#34;SUV&#34;
-    }
-  ],
-  &#34;required&#34;: [
-    &#34;driver_id&#34;,
-    &#34;first_name&#34;,
-    &#34;last_name&#34;,
-    &#34;rating&#34;,
-    &#34;car_class&#34;
-  ],
-  &#34;properties&#34;: {
-    &#34;driver_id&#34;: {
-      &#34;$id&#34;: &#34;#/properties/driver/properties/driver_id&#34;,
-      &#34;type&#34;: &#34;integer&#34;,
-      &#34;title&#34;: &#34;The driver_id schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: 0,
-      &#34;examples&#34;: [
-        1234132
-      ]
-    },
-    &#34;first_name&#34;: {
-      &#34;$id&#34;: &#34;#/properties/driver/properties/first_name&#34;,
-      &#34;type&#34;: &#34;string&#34;,
-      &#34;title&#34;: &#34;The first_name schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: &#34;&#34;,
-      &#34;examples&#34;: [
-        &#34;Frank&#34;
-      ]
-    },
-    &#34;last_name&#34;: {
-      &#34;$id&#34;: &#34;#/properties/driver/properties/last_name&#34;,
-      &#34;type&#34;: &#34;string&#34;,
-      &#34;title&#34;: &#34;The last_name schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: &#34;&#34;,
-      &#34;examples&#34;: [
-        &#34;Smith&#34;
-      ]
-    },
-    &#34;rating&#34;: {
-      &#34;$id&#34;: &#34;#/properties/driver/properties/rating&#34;,
-      &#34;type&#34;: &#34;integer&#34;,
-      &#34;title&#34;: &#34;The rating schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: 0,
-      &#34;examples&#34;: [
-        4
-      ]
-    },
-    &#34;car_class&#34;: {
-      &#34;$id&#34;: &#34;#/properties/driver/properties/car_class&#34;,
-      &#34;type&#34;: &#34;string&#34;,
-      &#34;title&#34;: &#34;The car_class schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: &#34;&#34;,
-      &#34;examples&#34;: [
-        &#34;SUV&#34;
-      ]
-    }
-  },
-  &#34;additionalProperties&#34;: true
+    &#34;Smith&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    4
+  ]
+},
+&#34;car_class&#34;: {
+  &#34;$id&#34;: &#34;#/properties/driver/properties/car_class&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The car_class schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;SUV&#34;
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
 },
 &#34;passenger&#34;: {
-  &#34;$id&#34;: &#34;#/properties/passenger&#34;,
-  &#34;type&#34;: &#34;object&#34;,
-  &#34;title&#34;: &#34;The passenger schema&#34;,
+&#34;$id&#34;: &#34;#/properties/passenger&#34;,
+&#34;type&#34;: &#34;object&#34;,
+&#34;title&#34;: &#34;The passenger schema&#34;,
+&#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+&#34;default&#34;: {},
+&#34;examples&#34;: [
+{
+  &#34;passenger_id&#34;: 2345243,
+  &#34;first_name&#34;: &#34;Jesse&#34;,
+  &#34;last_name&#34;: &#34;Menning&#34;,
+  &#34;rating&#34;: 2
+}
+],
+&#34;required&#34;: [
+&#34;passenger_id&#34;,
+&#34;first_name&#34;,
+&#34;last_name&#34;,
+&#34;rating&#34;
+],
+&#34;properties&#34;: {
+&#34;passenger_id&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/passenger_id&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The passenger_id schema&#34;,
   &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-  &#34;default&#34;: {},
+  &#34;default&#34;: 0,
   &#34;examples&#34;: [
-    {
-      &#34;passenger_id&#34;: 2345243,
-      &#34;first_name&#34;: &#34;Jesse&#34;,
-      &#34;last_name&#34;: &#34;Menning&#34;,
-      &#34;rating&#34;: 2
-    }
-  ],
-  &#34;required&#34;: [
-    &#34;passenger_id&#34;,
-    &#34;first_name&#34;,
-    &#34;last_name&#34;,
-    &#34;rating&#34;
-  ],
-  &#34;properties&#34;: {
-    &#34;passenger_id&#34;: {
-      &#34;$id&#34;: &#34;#/properties/passenger/properties/passenger_id&#34;,
-      &#34;type&#34;: &#34;integer&#34;,
-      &#34;title&#34;: &#34;The passenger_id schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: 0,
-      &#34;examples&#34;: [
-        2345243
-      ]
-    },
-    &#34;first_name&#34;: {
-      &#34;$id&#34;: &#34;#/properties/passenger/properties/first_name&#34;,
-      &#34;type&#34;: &#34;string&#34;,
-      &#34;title&#34;: &#34;The first_name schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: &#34;&#34;,
-      &#34;examples&#34;: [
-        &#34;Jesse&#34;
-      ]
-    },
-    &#34;last_name&#34;: {
-      &#34;$id&#34;: &#34;#/properties/passenger/properties/last_name&#34;,
-      &#34;type&#34;: &#34;string&#34;,
-      &#34;title&#34;: &#34;The last_name schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: &#34;&#34;,
-      &#34;examples&#34;: [
-        &#34;Menning&#34;
-      ]
-    },
-    &#34;rating&#34;: {
-      &#34;$id&#34;: &#34;#/properties/passenger/properties/rating&#34;,
-      &#34;type&#34;: &#34;integer&#34;,
-      &#34;title&#34;: &#34;The rating schema&#34;,
-      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
-      &#34;default&#34;: 0,
-      &#34;examples&#34;: [
-        2
-      ]
-    }
-  },
-  &#34;additionalProperties&#34;: true
+    2345243
+  ]
+},
+&#34;first_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/first_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The first_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Jesse&#34;
+  ]
+},
+&#34;last_name&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/last_name&#34;,
+  &#34;type&#34;: &#34;string&#34;,
+  &#34;title&#34;: &#34;The last_name schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: &#34;&#34;,
+  &#34;examples&#34;: [
+    &#34;Menning&#34;
+  ]
+},
+&#34;rating&#34;: {
+  &#34;$id&#34;: &#34;#/properties/passenger/properties/rating&#34;,
+  &#34;type&#34;: &#34;integer&#34;,
+  &#34;title&#34;: &#34;The rating schema&#34;,
+  &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+  &#34;default&#34;: 0,
+  &#34;examples&#34;: [
+    2
+  ]
+}
+},
+&#34;additionalProperties&#34;: true
 }
 },
 &#34;additionalProperties&#34;: true
 }
 </code></pre>
-<ol type="1">
+</li>
 <li>Revision Comment:  &#34;Initial Creation of Schema&#34;</li>
 <li>Click <em>Save</em></li>
 </ol>
@@ -529,7 +537,24 @@
 <ol type="1">
 <li>Click into the <em>Designer</em> component of the Event Portal</li>
 <li>Double Click on the <em>NYC Modern Taxi Co - Back Office</em> Application Domain</li>
-<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Event</em><img src="img/68184728c8db59f3.png"> 1. Name: PaymentCharged 1. Shared: YES 1. Description: NONE 1. Topic Scheme: Solace 1. Topic 1. As you can see the domain aleady has some of the &#34;Event Topic Root&#34; <code>taxinyc/backoffice/</code> 1. We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event 1. We will use the topic name of: <code>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code> 1. Value: 1. Keep the Schema radio button selected 1. Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step 1. Owner: Assign Yourself 1. Tags: NONE 1. Revision Comment:  &#34;Initial Creation of Event&#34; 1. Click <em>Save</em></li>
+<li>On the Upper Right Corner, Click the <em>Create</em> button and select <em>Create Event</em><img src="img/68184728c8db59f3.png"><ol type="1">
+<li>Name: PaymentCharged</li>
+<li>Shared: YES</li>
+<li>Description: NONE</li>
+<li>Topic Scheme: Solace</li>
+<li>Topic</li>
+<li>As you can see the domain aleady has some of the &#34;Event Topic Root&#34; <code>taxinyc/backoffice/</code></li>
+<li>We need to apply the best practice of <em>Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID</em> to this event</li>
+<li>We will use the topic name of: <code>taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}</code></li>
+<li>Value:</li>
+<li>Keep the Schema radio button selected</li>
+<li>Choose the Schema &#34;PaymentCharged&#34; that we created in the previous step</li>
+<li>Owner: Assign Yourself</li>
+<li>Tags: NONE</li>
+<li>Revision Comment:  &#34;Initial Creation of Event&#34;</li>
+<li>Click <em>Save</em></li>
+</ol>
+</li>
 </ol>
 <h2 is-upgraded>Step 4a: Design <em>ProcessPayment</em> Application</h2>
 <p>Now for the fun part! We need to design the event-driven interface of the <em>ProcessPayment</em> Application. This is pretty easy as it has one input which triggers a single output.</p>

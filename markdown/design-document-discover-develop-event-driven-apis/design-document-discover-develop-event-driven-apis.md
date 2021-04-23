@@ -307,7 +307,15 @@ Next we should decide what we want the data to look like once we have processed 
    ![](img/domain-dive.gif)
 
 1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_  
-   ![](img/create-schema.png) 1. Name: PaymentCharged 1. Content Type: JSON 1. Shared: YES 1. Owner: Assign Yourself 1. Tags: NONE 1. Description: NONE 1. Versions: Leave unchecked 1. Content:
+   ![](img/create-schema.png)
+   1. Name: PaymentCharged
+   1. Content Type: JSON
+   1. Shared: YES
+   1. Owner: Assign Yourself
+   1. Tags: NONE
+   1. Description: NONE
+   1. Versions: Leave unchecked
+   1. Content:
 
 ```
 {
@@ -590,7 +598,22 @@ So now that we have constructed the payload format for the PaymentCharged event,
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
 1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
-   ![](img/create-event.png) 1. Name: PaymentCharged 1. Shared: YES 1. Description: NONE 1. Topic Scheme: Solace 1. Topic 1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/` 1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event 1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}` 1. Value: 1. Keep the Schema radio button selected 1. Choose the Schema "PaymentCharged" that we created in the previous step 1. Owner: Assign Yourself 1. Tags: NONE 1. Revision Comment: <Optional> "Initial Creation of Event" 1. Click _Save_
+   ![](img/create-event.png)
+   1. Name: PaymentCharged
+   1. Shared: YES
+   1. Description: NONE
+   1. Topic Scheme: Solace
+   1. Topic
+   1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/`
+   1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
+   1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}`
+   1. Value:
+   1. Keep the Schema radio button selected
+   1. Choose the Schema "PaymentCharged" that we created in the previous step
+   1. Owner: Assign Yourself
+   1. Tags: NONE
+   1. Revision Comment: <Optional> "Initial Creation of Event"
+   1. Click _Save_
 
 ### Step 4a: Design _ProcessPayment_ Application
 
