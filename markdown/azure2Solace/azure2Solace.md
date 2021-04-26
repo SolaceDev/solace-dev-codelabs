@@ -5,7 +5,7 @@ tags: iguide
 categories: Azure, C#
 environments: Web
 status: published
-feedback link: https://github.com/solacese/azure2Solace
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/azure2Solace/azure2Solace.md
 
 # Stream data from Azure Service Bus to Solace PubSub+ Event broker Using Azure Function
 
@@ -19,7 +19,7 @@ This codelab specifically talks about how you can easily stream data from Azure 
 
 You will find the Azure function code [here](https://github.com/solacese/azure2Solace).
 
-To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click [here](https://docs.solace.com/Configuring-and-Managing/HTTP-Header-Authentication-Azure-Event-Hub.htm).
+To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click [here](https://docs.solace.com/Configuring-and-Managing/OAuth-Authentication-Azure-Event-Hub.htm).
 
 ## High Level Architecture of this codelab's goal
 
