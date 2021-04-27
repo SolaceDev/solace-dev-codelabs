@@ -81,6 +81,8 @@ helm install solace-node-sample . -f values.yaml
 
 ## Step 3: Run the Node.js Sample Applications
 
+Duration: 0:02:00
+
 In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the [sample applications](https://github.com/SolaceSamples/solace-samples-nodejs). If you haven't already done so, install the [Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) extensions. Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows. Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation). Using the Kubernetes extension, right click on the "solace-node-sample" pod and select "Attach Visual Studio Code".  This will open a new window inside the container using the Remote Container extension. Notice the in the bottom left corner of the new window it says "solace-node-sample".
 
 ![attach VSC](./img/Attach-VSC.png)

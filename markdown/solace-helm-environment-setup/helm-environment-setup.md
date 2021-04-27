@@ -183,6 +183,8 @@ With that the environment is setup, the Kubernetes extension can see the cluster
 
 ## Step 5: Install the PubSub+ Helm Chart
 
+Duration: 0:02:00
+
 ### There are three charts in the solacecharts repo:
 
 - **pubsubplus** - Deploy a single-node non-HA Solace PubSub+ Event Broker Software onto a Kubernetes Cluster
