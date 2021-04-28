@@ -83,7 +83,7 @@ Download Docker Desktop for Windows and run the installer. Make sure the "Instal
 
 ### Step 2.2: Launch Docker Desktop Settings
 
-When the installer completes the installation, launch Docker Desktop from the start menu. Click thorugh the tutorials and navigate to the settings.
+When the installer completes the installation, launch Docker Desktop from the start menu. Click through the tutorials and navigate to the settings.
 
 ![Run Docker](./img/Step-2-2-Docker-Desktop.png)
 
