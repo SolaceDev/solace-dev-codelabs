@@ -19,7 +19,7 @@ In a previous [CodeLab](https://codelabs.solace.dev/codelabs/helm-environment-se
 
 Duration: 0:05:00
 
-My colleage Ken Barr created a simple [chart](https://github.com/KenBarr/solace-node-sample) that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github.  To get started, clone the solace-node-sample repo from github.  From your work directory execute the following command.
+My colleage Ken Barr created a simple [chart](https://github.com/KenBarr/solace-node-sample) that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github. To get started, clone the solace-node-sample repo from github. From your work directory execute the following command.
 
 Note: If this is the first time using github from your WSL Ubuntu environment, you will need to setup your ssh keys to be able to authenticate with github.
 
@@ -47,7 +47,9 @@ command:
     chmod +x publish.sh
     node src/basic-samples/TopicSubscriber.js ws://{{.Values.psb.name}}:8008 subscriber@default default
 ```
+
 The fragment above does the following:
+
 - Installs a few packages (bash, git and openssh)
 - Installs the solace javascript api from npm (the base container image is the offical node.js so, it comes with npm already installed)
 - Clones the Solace node.js samples
@@ -71,7 +73,7 @@ kubectl get services
 
 Edit the values.yaml file and replace "MUST_SPECIFY_SERVICE_NAME" with the service name of the PubSub+ broker (in this case pubsubplus-dev-1587734193-pubsubplus-dev).
 
-Now the chart is ready to be deployed.  Change directory into the sikace-node-samples and install the chart.
+Now the chart is ready to be deployed. Change directory into the sikace-node-samples and install the chart.
 
 ```bash
 helm install solace-node-sample . -f values.yaml
@@ -83,19 +85,19 @@ helm install solace-node-sample . -f values.yaml
 
 Duration: 0:02:00
 
-In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the [sample applications](https://github.com/SolaceSamples/solace-samples-nodejs). If you haven't already done so, install the [Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) extensions. Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows. Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation). Using the Kubernetes extension, right click on the "solace-node-sample" pod and select "Attach Visual Studio Code".  This will open a new window inside the container using the Remote Container extension. Notice the in the bottom left corner of the new window it says "solace-node-sample".
+In this step we will use Visual Studio Code and the remote developement extensions to attach to the node sample container and run the [sample applications](https://github.com/SolaceSamples/solace-samples-nodejs). If you haven't already done so, install the [Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) extensions. Open a new Visual Studio Code window; the remote container extension unfortunately does not work with WSL at time of writing so, this will need to be done from Windows. Make sure that Kubectl is in your windows path (Docker Desktop should have done this during installation). Using the Kubernetes extension, right click on the "solace-node-sample" pod and select "Attach Visual Studio Code". This will open a new window inside the container using the Remote Container extension. Notice the in the bottom left corner of the new window it says "solace-node-sample".
 
 ![attach VSC](./img/Attach-VSC.png)
 
-  Split the terminal window and use the Remote Containers extension (click the remote containers icon on the left) to display the container logs by right clicking the container and selecting "Show Container Log".
+Split the terminal window and use the Remote Containers extension (click the remote containers icon on the left) to display the container logs by right clicking the container and selecting "Show Container Log".
 
 ![sample subscriber output](./img/VSC-Container-Log.png)
 
-You can see that the subscriber application is running and ready to recieve messages.
+You can see that the subscriber application is running and ready to receive messages.
 
 ![sample subscriber output](./img/VSC-Container-Log2.png)
 
-Execute the publish.sh script to publish a message and see that the messages was recieved by the subscriber app in the logs (the subscriber was started by the helm chart).
+Execute the publish.sh script to publish a message and see that the messages was received by the subscriber app in the logs (the subscriber was started by the helm chart).
 
 ```bash
 cd /
@@ -104,4 +106,12 @@ cd /
 
 ![sample publisher output](./img/VSC-Publish-Message.png)
 
-In this codelab we have used the remote developement capabilities of Visual Studio Code along with Helm and Kubernetes (supplied by Docker Desktop) to deploy some Solace sample applications.  The sample applicatoins were used to send and recieve messages using a publish / subscribe messaging pattern.  The Solace PubSub+ broker instance was deployed using the same environment in the [previous codelab](https://codelabs.solace.dev/codelabs/helm-environment-setup/index.html?index=..%2F..index). 
+## Takeaways
+
+Duration: 0:04:00
+
+In this codelab we have used the remote development capabilities of Visual Studio Code along with Helm and Kubernetes (supplied by Docker Desktop) to deploy some Solace sample applications. The sample applications were used to send and receive messages using a publish / subscribe messaging pattern. The Solace PubSub+ broker instance was deployed using the same environment in the [previous codelab](https://codelabs.solace.dev/codelabs/helm-environment-setup/).
+
+![Soly Image Caption](img/soly.gif)
+
+Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.

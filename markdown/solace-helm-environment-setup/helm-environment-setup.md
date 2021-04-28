@@ -35,9 +35,9 @@ Setting up the dev environment and launching a dev instance of PubSub+ will be d
 
 Duration: 0:10:00
 
-If you don’t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS. Instructions from Microsoft on how to install WSL can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10).  Follow the instructions to install WSL2 and make it the default version.  A previous version of this codelab used WSL1 with Ubuntu 18.04.  This version will use WSL2 and [Ubuntu 20.04](https://www.microsoft.com/en-ca/p/ubuntu-2004-lts/9n6svws3rx71?rtc=1&activetab=pivot:overviewtab). Once WSL is enabled and version 2 is set as the default, the easiest way to install Ubuntu 20.04 is via the [Microsoft Store](https://aka.ms/wslstore). 
+If you don’t already have the Windows Subsystem for Linux (WSL) configured, then you will need to enable that and install an OS. Instructions from Microsoft on how to install WSL can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Follow the instructions to install WSL2 and make it the default version. A previous version of this codelab used WSL1 with Ubuntu 18.04. This version will use WSL2 and [Ubuntu 20.04](https://www.microsoft.com/en-ca/p/ubuntu-2004-lts/9n6svws3rx71?rtc=1&activetab=pivot:overviewtab). Once WSL is enabled and version 2 is set as the default, the easiest way to install Ubuntu 20.04 is via the [Microsoft Store](https://aka.ms/wslstore).
 
-Select Ubuntu 
+Select Ubuntu
 ![Microsoft Store](./img/Step-1-1-Microsoft-Store.png)
 
 Select Install
@@ -58,42 +58,43 @@ $ sudo apt upgrade
 
 And just to be sure, make sure that Ubuntu was properly installed into WSL2.
 Open a PowerShell Window as administrator and enter the following command.
+
 ```powershell
 > wsl -l -v
 ```
+
 ![WSL Version](./img/Step-1-5-PowerShell.png)
 
 ### Once that is setup, it is time to install Docker Desktop in step 2.
-
 
 ## Step 2: Install Docker Desktop
 
 Duration: 0:10:00
 
-In oder to accomplish the goal of using Helm to install a dev instance of PubSub+, access to a Kubernetes cluster is required. Docker Desktop has an option to provide this and it's easy to setup. The following instructions will install Docker Desktop on your Windows PC.  If you already have Docker Desktop installed you can skip to the settings.
+In oder to accomplish the goal of using Helm to install a dev instance of PubSub+, access to a Kubernetes cluster is required. Docker Desktop has an option to provide this and it's easy to setup. The following instructions will install Docker Desktop on your Windows PC. If you already have Docker Desktop installed you can skip to the settings.
 
 ### Step 2.1: Download and Install Docker Desktop
 
 [Install Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 
-Download Docker Desktop for Windows and run the installer.  Make sure the "Install required Windows components for WSL 2" box is checked and hit "Ok".
+Download Docker Desktop for Windows and run the installer. Make sure the "Install required Windows components for WSL 2" box is checked and hit "Ok".
 
 ![Install Docker](./img/Step-2-1-Docker-Install.png)
 
-### Step 2.2:  Launch Docker Desktop Settings
+### Step 2.2: Launch Docker Desktop Settings
 
-When the installer completes the installation, launch Docker Desktop from the start menu.  Click thorugh the tutorials and navigate to the settings.
+When the installer completes the installation, launch Docker Desktop from the start menu. Click thorugh the tutorials and navigate to the settings.
 
 ![Run Docker](./img/Step-2-2-Docker-Desktop.png)
 
-### Step 2.3:  Configure WSL Integration
+### Step 2.3: Configure WSL Integration
 
-Navigate to "Resources" and "WSL INTEGRATION".  Enable "Ubuntu".
+Navigate to "Resources" and "WSL INTEGRATION". Enable "Ubuntu".
 ![Docker Resources](./img/Step-2-3-Docker-Resources.png)
 
-### Step 2.4:  Enable Kubernetes
+### Step 2.4: Enable Kubernetes
 
-Navigate to "Kubernetes" and check the "Enable Kubernetes" box.  Then select "Apply & Restart".
+Navigate to "Kubernetes" and check the "Enable Kubernetes" box. Then select "Apply & Restart".
 ![Docker Kubernetes](./img/Step-2-4-Docker-Kubernetes.png)
 
 Click "Install".
@@ -103,7 +104,7 @@ When the install is complete you will see the green Kubernetes icon in the botto
 
 ![Docker Kubernetes Install2](./img/Step-2-6-Docker-Kubernetes-Install-Complete.png)
 
-If you open a PowerShell window or a terminal in the Ubuntu install, you will see that Docker Desktop has installed the kubernetes cli (kubectl) in both environments.  With that, you have a functioning single node Kubernetes environment.
+If you open a PowerShell window or a terminal in the Ubuntu install, you will see that Docker Desktop has installed the kubernetes cli (kubectl) in both environments. With that, you have a functioning single node Kubernetes environment.
 
 ### The next step is to install Helm
 
@@ -111,9 +112,9 @@ If you open a PowerShell window or a terminal in the Ubuntu install, you will se
 
 Duration: 0:05:00
 
-The CLIs for Docker and Kubernetes were installed by Docker Desktop (in Windows and WSL-Ubuntu).  Now we must configure Helm in WSL. 
+The CLIs for Docker and Kubernetes were installed by Docker Desktop (in Windows and WSL-Ubuntu). Now we must configure Helm in WSL.
 
-### Step 3.1:  Install Helm Binary
+### Step 3.1: Install Helm Binary
 
 To install Helm, I followed the instructions for the binary install of Helm in Linux (which basically involves copying the Helm binary).
 
@@ -129,7 +130,7 @@ $ sudo mv linux-amd64/helm /usr/local/bin/helm
 
 ![Helm Install](./img/Step-3-1-Helm-Setup.png)
 
-### Step 3.2:  Install Help Repos
+### Step 3.2: Install Help Repos
 
 Finally install the Helm repos:
 
@@ -140,7 +141,7 @@ $ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kuberne
 
 ![Helm Repos](./img/Step-3-2-Helm-Repos.png)
 
-It is also possible to install Helm in Windows if you prefer to work in PowerShell.  If you use Chocolatey, there is a [Helm package](https://community.chocolatey.org/packages/kubernetes-helm) available there.
+It is also possible to install Helm in Windows if you prefer to work in PowerShell. If you use Chocolatey, there is a [Helm package](https://community.chocolatey.org/packages/kubernetes-helm) available there.
 
 ### Next step is to configure the extensions in VSC.
 
@@ -150,18 +151,18 @@ Duration: 0:02:00
 
 Install [Visual Studio Code](https://code.visualstudio.com/Download) (if not already installed).
 
-### Step 4.1:  Install the following extensions in Visual Studio Code:
+### Step 4.1: Install the following extensions in Visual Studio Code:
 
 - **Remote - Development Pack** – This will allow you to use the Ubuntu terminal in Code (instead of Power Shell)
 - **Kubernetes** – This extension allows you to install Helm charts directly from Code to different Kubernetes backends (in this case Docker Desktop)
 
-Note:  I also installed the Docker extension but, this is not required.
+Note: I also installed the Docker extension but, this is not required.
 
-With Code and the Remote – WSL extension, everything else can be done from the Ubuntu terminal in Code. 
+With Code and the Remote – WSL extension, everything else can be done from the Ubuntu terminal in Code.
 
-### Step 4.2:  Launch Remote VSC Window
+### Step 4.2: Launch Remote VSC Window
 
-Launch VSC remote window.  Use the "Remote-WSL: New Window Using Distro..." command to open a remote window to Ubuntu WSL.
+Launch VSC remote window. Use the "Remote-WSL: New Window Using Distro..." command to open a remote window to Ubuntu WSL.
 
 ![VSC Remote Window](./img/Step-4-1-VSC-Remote-Distro.png)
 
@@ -171,7 +172,7 @@ The new remote window has "WSL: Unbuntu" in the bottom left corner to indicate t
 
 Note: Windows Firewall may ask you to allow access for node setup the VSC remote server.
 
-### Step 4.3:  Install the Kubernetes Extension in the Remote WSL: Ubuntu Window
+### Step 4.3: Install the Kubernetes Extension in the Remote WSL: Ubuntu Window
 
 Install the Kubernetes extension in the remote VSC window (same as previously done in the local VSC window).
 
@@ -193,7 +194,7 @@ Duration: 0:02:00
 
 I deployed pubsubplus-dev because my desktop doesn’t have a lot of resources.
 
-### Step 5.1:  Install the pubsubplus-dev Chart
+### Step 5.1: Install the pubsubplus-dev Chart
 
 ![VSC - Helm Install](./img/Step-5-1-Helm-Install.png)
 
@@ -254,7 +255,7 @@ NOTE: At initial deployment it may take a few minutes for the LoadBalancer IP to
     echo -e "\nProtocol\tAddress\n"`kubectl get svc --namespace default pubsubplus-dev-1618757067-pubsubplus-dev -o jsonpath="{range .spec.ports[*]}{.name}\t$SERVICE_IP:{.port}\n"`
 ```
 
-### Step 5-2:  Check that the PubSub+ Pod is Running
+### Step 5-2: Check that the PubSub+ Pod is Running
 
 Now the Kubernetes extension can be used to see the PubSub+ pod running on the docker-desktop Kubernetes cluster.
 
@@ -280,14 +281,22 @@ Paste the command into the terminal.
 echo `kubectl get secret --namespace default <name of your pod>-pubsubplus-dev-secrets -o jsonpath="{.data.username_admin_password}" | base64 --decode`
 ```
 
-### Step 6-2:  Login to the PubSub+ Manager
+### Step 6-2: Login to the PubSub+ Manager
 
-Login to the PubSub+ Broker Manager using a web-browser [http://localhost:8080](http://localhost:8080).  The username is admin and the password is the output from the previously entered command (in this case AkQxKq1yM1).
+Login to the PubSub+ Broker Manager using a web-browser [http://localhost:8080](http://localhost:8080). The username is admin and the password is the output from the previously entered command (in this case AkQxKq1yM1).
 
 ![Manager Login](./img/Step-6-3-Manager-Login.png)
 
 ![Manager](./img/Step-6-4-Manager.png)
 
+## Takeaways
+
+Duration: 0:02:00
+
 That shows how easy it is to deploy PubSub+ using the new Solace Helm charts recently released on [Artifact Hub](https://artifacthub.io/packages/search?page=1&ts_query_web=solace). All running on a Windows desktop using Docker Desktop, WSL, Visual Studio Code and Helm.
 
 The next [CodeLab](https://codelabs.solace.dev/codelabs/helm-node-samples) will use the environment that we just setup to run some of the PubSub+ Sample Applications from [https://github.com/SolaceSamples](https://github.com/SolaceSamples).
+
+![Soly Image Caption](img/soly.gif)
+
+Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
