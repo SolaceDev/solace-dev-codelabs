@@ -19,14 +19,14 @@ In this code lab we’ll build and expand your toolbox by learning how an Event 
 
 Throughout this workshop we will get hands on and talk about:
 
-PubSub+ Event Portal
+### PubSub+ Event Portal
 
-- Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.
-- Document Applications, Events and Schemas along with best practices for documentation
-- Use Discovery capability to see what you already have in runtime and audit for changes
-- Use the Event Catalog and Designer to Learn, Understand and Ideate
+1. Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.
+1. Document Applications, Events and Schemas along with best practices for documentation
+1. Use Discovery capability to see what you already have in runtime and audit for changes
+1. Use the Event Catalog and Designer to Learn, Understand and Ideate
 
-AsyncAPI
+### AsyncAPI
 
 - AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.
 - Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices
@@ -724,7 +724,7 @@ Duration: 0:08:00
 Events are only as good as their documentation. After all, it is up to a human to understand what something is and make a determination as to wither it provides value. This is why documentation is critical for success in Event Driven Architecture. Creating and maintaining good documentation that’s easy to read, enjoyable to interact with and sets up the user for success can be challenging. Great documentation requires effort but has significant implications on the reuse of the events within the eco-system. The PubSub+ Event portal enables you to document Events easily while also managing the decoupled relationships so that users can easily understand the context of an event. Before you sit down and write documentation on events, applications and schemas, its good to consider its purpose along with who will be using it.
 
 Positive
-: Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question “so how does this actually work” and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.
+: Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually represent the complete and current truth. This leads the team to constantly ask the question "so how does this actually work" and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality..
 
 ### Update Documentation of _PaymentCharged_ Event
 
@@ -826,9 +826,13 @@ Duration: 0:36:00
 Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:
 
 1. Kafka – Confluent Kafka, Amazon MSK, Apache Kafka
-1. Solace PubSub+ Event Broker – Coming Soon!
+1. Solace PubSub+ Event Broker
+1. Other? Let us know!
 
-If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal’s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.
+Check out this quick video showing [How to use the PubSub+ Topic Explorer](https://www.youtube.com/watch?v=2lBWnJ4A39E&ab_channel=Solace)
+
+Positive
+: If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal’s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.
 
 ### Automated Discovery and Data Importation from Kafka
 

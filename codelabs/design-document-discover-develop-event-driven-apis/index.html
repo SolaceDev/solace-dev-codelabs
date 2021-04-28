@@ -31,14 +31,14 @@
         <p>Most organizations are adopting an event-driven architecture (EDA) to compete in a world where customer satisfaction requires real-time outcomes.</p>
 <p>In this code lab we&#39;ll build and expand your toolbox by learning how an Event Portal, paired with industry standard specifications and frameworks, enable a smooth journey to bring your EDA from initial architecture and design to code running in production while also setting your team up for success as the business needs, architecture and applications themselves are enhanced over time.</p>
 <p>Throughout this workshop we will get hands on and talk about:</p>
-<p>PubSub+ Event Portal</p>
-<ul>
+<h2 is-upgraded>PubSub+ Event Portal</h2>
+<ol type="1">
 <li>Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.</li>
 <li>Document Applications, Events and Schemas along with best practices for documentation</li>
 <li>Use Discovery capability to see what you already have in runtime and audit for changes</li>
 <li>Use the Event Catalog and Designer to Learn, Understand and Ideate</li>
-</ul>
-<p>AsyncAPI</p>
+</ol>
+<h2 is-upgraded>AsyncAPI</h2>
 <ul>
 <li>AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.</li>
 <li>Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices</li>
@@ -674,7 +674,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Document Events, Applications and Schemas" duration="8">
-        <aside class="special"><p>Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.</p>
+        <aside class="special"><p>Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually represent the complete and current truth. This leads the team to constantly ask the question &#34;so how does this actually work&#34; and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality..</p>
 </aside>
 <h2 is-upgraded>Update Documentation of <em>PaymentCharged</em> Event</h2>
 <p>Remember how we did not provide any description or tags for the Events and Applications we created before? Well, lets go in and follow our best practices to fix this. Lets enhance the documentation of the <em>PaymentCharged</em> Event</p>
@@ -762,9 +762,12 @@ N/A
         <p>Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:</p>
 <ol type="1">
 <li>Kafka – Confluent Kafka, Amazon MSK, Apache Kafka</li>
-<li>Solace PubSub+ Event Broker – Coming Soon!</li>
+<li>Solace PubSub+ Event Broker</li>
+<li>Other? Let us know!</li>
 </ol>
-<p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
+<p>Check out this quick video showing <a href="https://www.youtube.com/watch?v=2lBWnJ4A39E&ab_channel=Solace" target="_blank">How to use the PubSub+ Topic Explorer</a></p>
+<aside class="special"><p>If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal&#39;s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.</p>
+</aside>
 <h2 is-upgraded>Automated Discovery and Data Importation from Kafka</h2>
 <p>Once you have decided on the application domains that are required for your enterprise, it is time to start the data importation process.</p>
 <p>If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.</p>
@@ -972,7 +975,7 @@ self.client.tls_insecure_set(True)
       </google-codelab-step>
     
       <google-codelab-step label="Implement: Other Options!" duration="4">
-        <p>You can create event driven applications in a wide variety of different options as shown here: <img alt="APIs and Protocols" src="img/c728c0f6039a73b8.png"></p>
+        <p>You can create event driven applications in a wide variety of different options as shown here: <img alt="APIs and Protocols" src="img/10260c32d88ffc1.png"></p>
 <h2 is-upgraded>Generate Custom Code</h2>
 <p>Since the AsyncAPI Specification provides a machine readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
 <h2 is-upgraded>Use an Integration Platform</h2>
