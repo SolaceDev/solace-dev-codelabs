@@ -10,18 +10,9 @@
   "summary": "In this tutorial we’ll cover how to design, extend and implement your event-driven APIs using Solace PubSub+ Event Portal",
   "source": "design-document-discover-develop-event-driven-apis.md",
   "theme": "",
-  "status": [
-    "published"
-  ],
-  "category": [
-    "solace",
-    "taxi",
-    "event portal"
-  ],
-  "tags": [
-    "web",
-    "workshop"
-  ],
-  "feedback": "https://solace.community/categories/pubsub%2B-event-portal",
+  "status": ["published"],
+  "category": ["solace", "taxi", "event portal"],
+  "tags": ["web", "workshop"],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/design-document-discover-develop-event-driven-apis",
   "url": "design-document-discover-develop-event-driven-apis"
 }
