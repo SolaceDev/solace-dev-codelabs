@@ -87,7 +87,7 @@ We'll install the generator itself later 👍
 
 #### Sign-up for Solace Cloud
 
-✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
+✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required.
 
 ![sc_trial](img/sc_trial.webp)
 
@@ -174,7 +174,7 @@ Fill in the fields as follows:
 1. Under _Content_ paste the JSON schema in the code block below. This schema was generated from a sample message using [jsonschema.net](https://jsonschema.net)
 1. Click _Save_
 
-``` 
+```
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
@@ -454,10 +454,10 @@ public class Application {
 								a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
 				// Calculate the window average in RideAveragePayload objects
 				.map(accumulator -> {
-					if (accumulator.getRideCount() == 0) { 
+					if (accumulator.getRideCount() == 0) {
 						// Window was empty, return empty RideAveragePayload
 						return new RideAveragePayload(BigDecimal.ZERO, 20, BigDecimal.ZERO, 0, sdf.format(new Date()));
-					} else { 
+					} else {
 						// Calculate averages based on window
 						return new RideAveragePayload(
 								(accumulator.getTotalMeter().divide(new BigDecimal(accumulator.getRideCount()))), 20,
