@@ -84,7 +84,7 @@ Positive
 
 #### Sign-up for Solace Cloud
 
-✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
+✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required.
 
 ![sc_trial](img/sc_trial.webp)
 
