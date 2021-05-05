@@ -162,7 +162,7 @@ With Code and the Remote – WSL extension, everything else can be done from the
 
 ### Step 4.2: Launch Remote VSC Window
 
-Launch VSC remote window. Use the "Remote-WSL: New Window Using Distro..." command to open a remote window to Ubuntu WSL.
+Launch VSC remote window. Select view->command palette "Remote-WSL: New Window Using Distro..." command to open a remote window to Ubuntu WSL.
 
 ![VSC Remote Window](./img/Step-4-1-VSC-Remote-Distro.png)
 
