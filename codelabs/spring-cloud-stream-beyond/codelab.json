@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-05-12T16:37:28-04:00",
+  "id": "spring-cloud-stream-beyond",
+  "duration": 19,
+  "title": "Spring Cloud Stream - Beyond the Basics",
+  "summary": "This Codelab Covers more advanced features of using Spring Cloud Stream and the Solace PubSub+ Binder",
+  "source": "spring-cloud-stream-beyond.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring",
+    "java"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/spring-cloud-stream-beyond",
+  "url": "spring-cloud-stream-beyond"
+}
