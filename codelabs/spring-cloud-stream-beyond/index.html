@@ -27,58 +27,287 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/spring-cloud-stream-beyond">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Enter a codelab overview here: what &amp; why and github repo link where you can find related code if applicable</p>
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="3">
+        <p>This codelab is a follow-on to the <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank">Spring Cloud Stream Basics</a> one. If you aren&#39;t yet familiar with the Spring Cloud Stream framework go ahead and jump over there to get a quick introduction to the framework. This codelab will go into more detail (Beyond the Basics 😜) of developing your Cloud Stream microservice. We will be using the Solace binder and Event Broker thoughout. The majority of features we will learn today apply at the framework level and do not depend on the underlying broker/binder of choice, however a few will be Solace specific and I will try to specify that when necessary.</p>
+<p>💡 You&#39;ll Learn:</p>
+<ul>
+<li>How to choose your communication model</li>
+<li>How to use concurrency to scale your apps</li>
+<li>How to use Message Headers</li>
+<li>How to subscribe using Wildcards</li>
+<li>How to publish to dynamic topics and in batches</li>
+<li>How to handle error scenarios</li>
+</ul>
+<p>💎 Valuable Resources:</p>
+<ul>
+<li>The Spring Cloud Stream <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference" target="_blank">Reference Guide</a></li>
+<li>Solace Binder <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter" target="_blank">Docs</a></li>
+<li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
+<li>Solace Sample <a href="https://github.com/SolaceSamples/solace-samples-spring" target="_blank">Github Repository</a></li>
+</ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
+      <google-codelab-step label="What you need: Prerequisites" duration="5">
+        <p>🛠  This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>Create your Messaging Service</h2>
+<p>✅ (1) Sign up for a free Solace Cloud account</p>
+<p>Navigate to <a href="https://console.solace.cloud/login/new-account" target="_blank">this link</a> and fill out the required information. No credit card required! If you already have an account, skip right to #2.</p>
+<p>✅ (2) Create a messaging service</p>
+<p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the Solace Cloud Landing page.</p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img/ef5d21fb1d1ed968.webp"></p>
+<p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
+<p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img/cb19b564edf593a2.webp"></p>
+<p>Fill out all the details for your messaging service, and then click &#34;Create&#34; at the bottom of the page. Note: make sure you choose the &#34;Developer&#34; option for the Service Type</p>
+<p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img/80575f986e660014.png"></p>
+<p>Your service should be ready to use in a few minutes</p>
+<p>✅ (3) Take note of the connection details</p>
+<p>If your messaging service was created successfully, you&#39;ll be routed to the summary page of your new messaging service. From the service summary page, click on the &#34;Connect&#34; tab so we can take note of the connection details we&#39;ll need later.</p>
+<p class="image-container"><img alt="Connect Tab Preview" title="Connect Tab Preview" src="img/e86d5cb7cefa4164.webp"></p>
+<p>After you click the &#34;Connect&#34; tab, click the &#34;Connect with Spring&#34; box, choose &#34;Spring Cloud Stream&#34;, and click the &#34;Connect to Service&#34; option. We&#39;ll be using the &#34;Secured SMF Host&#34; URL in a minute 👍<br><img alt="Solace Web Messaging Tab" title="Solace Messaging Tab" src="img/9ed904700f8ea94c.webp"></p>
+<h2 is-upgraded>Create a Spring Cloud Stream Microservice</h2>
+<p>✅ (1) Create an Empty Spring Cloud Stream Microservice to use throughout this codelab</p>
+<p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉.<br>You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>
+<p>Click the &#34;Generate&#34; button which will download the project. You can then unzip it and import the project into your preferred Java IDE as a maven project. I&#39;ll be using <a href="https://spring.io/tools" target="_blank">Spring Tool Suite 4 for Eclipse</a> in the screenshots.<br>Your imported project should look like this:<br><img alt="Imported Project" title="Imported Project" src="img/eed71f56783ccd45.webp"></p>
+<p>✅ (2) Add your Connection Details from the Messaging Service</p>
+<p>Change the <code>application.properties</code> file to <code>application.yml</code> and copy and paste the <code>spring.cloud.stream.binders</code> part of the Spring Cloud Stream configuration previously found in the &#34;Connect to Service&#34; widget in your Message Service.<br>It should look something like this:</p>
+<pre><code>spring:
+  cloud:
+    stream:
+      binders:
+        solace-cloud:
+          type: solace
+          environment:
+            solace:
+              java:
+                clientUsername: default
+                clientPassword: default
+                host: &#39;tcp://localhost:55555&#39;
+                msgVpn: default
+</code></pre>
+<p>🚀 Setup complete! Let&#39;s get going! 🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Communication Models and How to Choose" duration="7">
+        <h2 is-upgraded>Choosing Publish-Subscribe or Consumer Groups</h2>
+<p>As discussed in the <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank">Spring Cloud Stream Basics</a> codelab, the Cloud Stream framework supports multiple communication models. Since the Solace Binder supports both Publish-Subscribe and Consumer Groups we will focus on those. Note that this decision is made on an input binding, or where you configure consumption of events/messages.</p>
+<p>Before we jump into choosing our consumption model, which is done via configuration, let&#39;s create a quick <code>Consumer</code> app that we can use.</p>
+<ol type="1">
+<li>Open the <code>DemoApplication.java</code> file in your microservice.</li>
+<li>Write a quick <code>Consumer</code> function that receives a <code>String</code><pre><code>@Bean
+public Consumer&lt;String&gt; myConsumer(){
+	return v -&gt; {
+		System.out.println(&#34;Received: &#34; + v);
+	};
+}
+</code></pre>
+</li>
+</ol>
+<p>Now that we have a function we&#39;ll look at the different options to configure the <em>binding</em> which tells the binder how to connect your function to the underlying message broker.</p>
+<p>When using Spring Cloud Stream with the Solace Binder you can decide between 3 options:</p>
+<ol type="1">
+<li>Publish-Subscribe (Non-Durable): My events must be processed in order so I want them processed by one microservice AND I only care about receiving events when my microservice is connected.</li>
+<li>Publish-Subscribe (Durable): My events must be processed in order so I want them processed by one microservice AND I want events saved when my microservice is disconnected.</li>
+<li>Consumer Groups: I need to be able to scale my microservices up/down in order to process my events and order isn&#39;t important.<br></li>
+</ol>
+<aside class="special"><p>💥 Note that sometimes order <strong>and</strong> scaling matters! This is also possible by using dynamic topics and wildcard subscriptions that we&#39;ll cover in an upcoming section. Learn more about Solace topics in <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">this video</a>.</p>
+</aside>
+<h2 is-upgraded>Publish-Subscribe (Non-Durable)</h2>
+<p>There are many use cases where you need to process events in order as they are published to a defined topic. In order to do this with Spring Cloud Stream you would create your <code>Function</code> or <code>Consumer</code> function and configure the input binding for it to receive messagesfrom a specific destination. There are two ways to do this with the Solace binder. The standard way, with no Solace specific configurations, is non-durable and we&#39;ll start there.</p>
+<p>👀 Under the covers this option will use a Non-Durable Anonymous Queue on the broker to hold the messages for the consuming microservice. Let&#39;s check it out!<br>This option will deliver events in order to your microservice while it remains up and running. To do this we just to specify a <code>destination</code>, but NO <code>group</code> on your input binding.</p>
+<p>So open your <code>application.yml</code> file and add the following config to what already exists. This configuration is telling Spring Cloud Stream that you want your <code>myConsumer</code></p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myConsumer
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: spring/cloud/stream
+</code></pre>
+<p>Go ahead and run your app. You should see the app start up and connect to the event broker. Note that under the covers the Solace Binder will bind your function to a Non-Durable Anonymous (or Temporary) queue on the broker.<br>This endpoint type in Solace is a temporary queue that will deliver messages to your app in order while your app remains online. It however is NOT a durable endpoint and will be removed after your application goes offline for more than 30 seconds.</p>
+<p>You&#39;ll see the name of your Anonymous Queue shown in a log entry on the console from the <em>SolaceQueueProvisioner</em> class:</p>
+<pre><code>SolaceQueueProvisioner : Subscribing queue #P2P/QTMP/v:b0e95afab69a/scst/an/59e7cbe3-ec38-4da8-a8fa-d1e428f6eb56/plain/spring/cloud/stream to topic spring/cloud/stream
+
+</code></pre>
+<p>🛠 <strong>Let&#39;s test this out using the </strong><em>Try-Me</em><strong> tab in Solace Cloud.</strong></p>
+<ol type="1">
+<li>Navigate to the Solace Cloud Console</li>
+<li>Choose &#34;Cluster Manager&#34; -&gt; and click the messaging service you created earlier</li>
+<li>Click the &#34;Try-Me!&#34; option on the top menu</li>
+<li>Click &#34;Connect&#34; on the &#34;Publisher&#34; side</li>
+<li>Type in the <code>spring/cloud/stream</code> topic</li>
+<li>Change the &#34;Message&#34; to whatever you&#39;d like and click &#34;Send&#34;</li>
+</ol>
+<aside class="special"><p>💥 Note that you&#39;ll see that the messages arrive in the order that you send them.</p>
+</aside>
+<h2 is-upgraded>TODO - INSERT TRY-ME IMAGE.</h2>
+<p>This option is great when we don&#39;t need to store messages/events when the app is offline, but what if we do!?</p>
+<h2 is-upgraded>Publish-Subscribe (Durable)</h2>
+<p>Sometimes it isn&#39;t enough to be able to deliver messages/events only while the app remains connected to the broker; there are many scenarios where you want messages stored while the app is offline while still maintaining order. In this case the Solace Binder allows you to follow the Publish-Subscribe pattern and consume from an Exclusive Durable Queue that will do just that.</p>
+<aside class="special"><p>💥 As a bonus, this configuration also allows you to create a Primary/Secondary type of configuration where you can have multiple microservices ready to process the events and if the Primary disconnects the Secondary will take over.</p>
+</aside>
+<p>In order to modify the input binding to create an Exclusive Durable Queue we need to add a <code>group</code> to our binding and also set the Solace specific property <code>queueAccessType</code> to <code>EndpointProperties.ACCESSTYPE_NONEXCLUSIVE</code>. We do that with the configuration below.</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myConsumer
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: spring/cloud/stream
+          group: exclusive
+      solace:
+        bindings:
+          myConsumer-in-0:
+            consumer:
+              queue-access-type: 1 #1 is Exclusive; 0 is Non-Exclusive (and default)
+</code></pre>
+<p>Now if you restart your app you&#39;ll see that a durable queue was created.</p>
+<pre><code>SolaceQueueProvisioner : Subscribing queue scst/wk/exclusive/plain/spring/cloud/stream to topic spring/cloud/stream
+</code></pre>
+<p>And if you look in PubSub+ Manager you&#39;ll find that the queue is &#34;Exclusive&#34; which means that the first microservice which connects to it will receive all the messages in the order they are received by the broker.<br><img alt="Exclusive Queue" src="img/73781004194067bb.webp"></p>
+<p>🛠 Go ahead and test it out by sending more messages with the &#34;Try-Me&#34; tab. Now that the queue is durable you can even stop your app, send a bunch of messages and then start it back up to see that they are delivered in order.</p>
+<h2 is-upgraded>Consumer Groups</h2>
+<p>Another popular consuming pattern is using what are called <strong>Consumer Groups</strong>. Consumer groups in Spring Cloud Stream allow you to have multiple consumers sharing the processing of events.<br>To do this you just need to specify a <code>group</code> on your input binding.</p>
+<p>To configure this on our app that has the <code>myConsumer</code> Consumer function your config would look like this.</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myConsumer
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: spring/cloud/stream
+          group: nonexclusive
+</code></pre>
+<p>When using the Solace Binder and specifying a <code>group</code> the binder will actually create a Durable Non-Exclusive Queue Endpoint by default. This durable queue will hold messages for your microservices if they get disconnected.<br>Go ahead and run the app, you&#39;ll see the following log message that specifies the queue.</p>
+<pre><code>SolaceQueueProvisioner : Subscribing queue scst/wk/nonexclusive/plain/spring/cloud/stream to topic spring/cloud/stream
+</code></pre>
+<p>And in the PubSub+ Manager you&#39;ll see that it created a non-exclusive queue:<br><img alt="NonExclusive Queue" src="img/adc7972b1b10e59e.webp"></p>
+<h3 is-upgraded>Scaling</h3>
+<p>So we&#39;re using the Consumer Group pattern (which uses a Non-Exclusive Queue!) so we can have multiple consumers share the processing of events. What are the choices for scaling!?</p>
+<p><strong>Option 1 - Multiple Instances of your Microservice</strong><br>The first option is just to start up more instances of your microservice. This is common in a Kubernetes environment where your microservice runs in it&#39;s own container. Each instance of the microservice will connect to the same non-exclusive queue on the Solace broker and the broker will spread the messages across all consumers.</p>
+<p><strong>Option 2 - Concurrent Message Consumption in a Single Microservice</strong><br>The second option is to use the <a href="https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_consumer_properties" target="_blank">concurrency consumer property</a> to enable concurrent message consumption for a particular consumer binding. Under the covers the Solace binder will create a separate flow for</p>
+<p>Modify your microservice&#39;s configuration to set a concurrency of 5 like seen below:</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myConsumer
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: spring/cloud/stream
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+</code></pre>
+<p>When you restart your app you&#39;ll see that the Solace binder creates 5 separate &#34;flow receivers&#34;. Note that they all share the same Solace session and will process events on separate threads.</p>
+<pre><code>JCSMPInboundChannelAdapter : Creating consumer 1 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
+FlowReceiverContainer : Binding flow receiver container 76e517b1-d1a8-4ab2-975f-e4eb0b12535a
+JCSMPInboundChannelAdapter : Creating consumer 2 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
+FlowReceiverContainer : Binding flow receiver container 0aba1d4b-fe21-42ed-ae3b-db6fc5a62d61
+JCSMPInboundChannelAdapter : Creating consumer 3 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
+FlowReceiverContainer : Binding flow receiver container 67fa395b-6f50-40b5-ab34-b7fff446c50e
+JCSMPInboundChannelAdapter : Creating consumer 4 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
+FlowReceiverContainer : Binding flow receiver container 798380cc-6140-4194-9f14-4bbfe7821485
+JCSMPInboundChannelAdapter : Creating consumer 5 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
+</code></pre>
+<p>✅ If you modify your code to add a logger and change the print line to a log entry, as seen below:</p>
+<pre><code>package com.example.demo;
+
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class DemoApplication {
+
+	private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+
+
+	public static void main(String[] args) {
+		SpringApplication.run(DemoApplication.class, args);
+	}
+
+	@Bean
+	public Consumer&lt;String&gt; myConsumer(){
+		return v -&gt; {
+			logger.info(&#34;Received: &#34; + v);
+		};
+	}
+}
+</code></pre>
+<p>🛠 And send a bunch of messages from the &#34;Try-Me&#34; tab you&#39;ll see that each message is handled in it&#39;s own thread allowing one microservice to process multiple messages at once!</p>
+<pre><code>2021-05-13 16:37:34.137 INFO 85614 --- [pool-4-thread-1] com.example.demo.DemoApplication        : Received: Hello World
+2021-05-13 16:37:34.237 INFO 85614 --- [pool-4-thread-2] com.example.demo.DemoApplication        : Received: Hello World
+2021-05-13 16:37:34.314 INFO 85614 --- [pool-4-thread-3] com.example.demo.DemoApplication        : Received: Hello World
+2021-05-13 16:37:34.333 INFO 85614 --- [pool-4-thread-4] com.example.demo.DemoApplication        : Received: Hello World
+2021-05-13 16:37:34.377 INFO 85614 --- [pool-4-thread-5] com.example.demo.DemoApplication        : Received: Hello World
+</code></pre>
+<p>In most cases you&#39;ll want to do some performance testing to see what mix of scaling works best for you! Maybe you have 2 instances of your microservice each with a <code>concurrency</code> of 5. Unfortunately there is no magic answer that works across the board.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Message Headers" duration="7">
+        <p>They are copied from input message to output message if not set...</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Wildcard Subscriptions" duration="15">
+        <p> Extract topic levels as variables?</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Dynamic Publishing" duration="15">
         
 
       </google-codelab-step>
     
-      <google-codelab-step label="Communication Models and the Solace Binder" duration="0">
-        <h2 is-upgraded>Choosing Persistent Publish-Subscribe or Consumer Groups</h2>
-<p>include hte group or not<br>how this affects the queue that is created</p>
-<h2 is-upgraded>Concurrency</h2>
-<p>how to do it! non-exclusive :)</p>
+      <google-codelab-step label="Batch Publishing" duration="7">
+        <p>&gt;</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Wildcard Subscriptions" duration="0">
-        <p>2 ways: in the destination in queueAdditionalSubscriptions<br> Extract topic levels as variables?</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Dynamic Publishing" duration="0">
-        <p>2 ways: StreamBridge and TARGET_DESTINATION Header</p>
-
+      <google-codelab-step label="Client/Manual Acknowledgements" duration="7">
+        
 
       </google-codelab-step>
     
-      <google-codelab-step label="Batch Publishing" duration="0">
-        <p>return Collection&gt;</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Consumer Error Handling" duration="0">
-        <p>Retry Templates in framework<br>Solace redeliveries and DLQ/DMQ<br>Publish to Error Queue<br>Custom!</p>
-
+      <google-codelab-step label="Consumer Error Handling" duration="15">
+        
 
       </google-codelab-step>
     
-      <google-codelab-step label="Publisher Error Handling" duration="0">
-        <p>How to handle it!</p>
-
+      <google-codelab-step label="Publisher Error Handling" duration="7">
+        
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways &amp; Next Steps" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br><br>✅ &lt; Fill IN TAKEAWAY 2&gt;<br><br>✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+      <google-codelab-step label="Takeaways &amp; Next Steps" duration="3">
+        <p><br><br>✅ &lt; Fill IN TAKEAWAY 2&gt;<br><br>✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
 <p>Next Steps:<br>AsyncAPI Code Gen<br>Tracing?</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
