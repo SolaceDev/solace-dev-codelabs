@@ -110,9 +110,8 @@ spring:
 
 
 ## Communication Models and How to Choose
-Duration: 0:07:00
+Duration: 0:20:00
 
-### Choosing Publish-Subscribe or Consumer Groups
 As discussed in the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) codelab, the Cloud Stream framework supports multiple communication models. Since the Solace Binder supports both Publish-Subscribe and Consumer Groups we will focus on those. Note that this decision is made on an input binding, or where you configure consumption of events/messages. 
 
 Before we jump into choosing our consumption model, which is done via configuration, let's create a quick `Consumer` app that we can use. 
