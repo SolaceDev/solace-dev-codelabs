@@ -166,7 +166,9 @@ If you look at the `pom.xml` file you'll see a few important things:
 
 ### Add Messaging Service Connection Info
 
-Open the `application.properties` file under `src/main/resources` and enter the properties below substituting the connection information with your messaging services' connect info we got from the Solace Cloud Connect tab in the previous section.
+Open the application config file under `src/main/resources` and enter the properties below substituting the connection information with your messaging services' connect info we got from the Solace Cloud Connect tab in the previous section.
+
+**Option 1: application.properties**   
 
 ```
 spring.cloud.stream.binders.solace.type=solace
@@ -177,6 +179,27 @@ spring.cloud.stream.binders.solace.environment.solace.java.clientPassword=defaul
 spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=0
 spring.cloud.stream.binders.solace.environment.solace.java.connectRetriesPerHost=0
 ```
+
+**Option 2: application.yml**   
+```
+spring:
+  cloud:
+    stream:
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                clientPassword: default
+                clientUsername: default
+                connectRetries: 0
+                connectRetriesPerHost: 0
+                host: 'tcp://localhost:55555'
+                msgVpn: default
+```
+
+
 
 ### Write the Java Function
 
@@ -259,12 +282,26 @@ public Function<String, String> reverse(){
 }
 ```
 
-Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the `application.properties` file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
+Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
 
+**Option 1: application.properties**
 ```
 spring.cloud.function.definition=uppercase|reverse
 spring.cloud.stream.function.bindings.uppercasereverse-in-0=input
 spring.cloud.stream.function.bindings.uppercasereverse-out-0=output
+```
+
+**Option 2: application.yml**
+```
+spring:
+  cloud:
+    function:
+      definition: uppercase|reverse
+    stream:
+      function:
+        bindings:
+          uppercasereverse-in-0: input
+          uppercasereverse-out-0: output
 ```
 
 Positive
