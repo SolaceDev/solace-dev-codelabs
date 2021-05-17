@@ -137,6 +137,11 @@ Instead of having to learn Messaging APIs, developers just have to understand th
 
 Duration: 0:10:00
 
+In this section we are going to apply what we learned in the last few sections and create our first "processor" microservice. We'll create the Spring microservice in the diagram below and use the Solace "Try-Me" tab as the producer and consumer. 
+
+![SCSt Uppercase Diagram](img/scstUppercaseDiagram.webp)
+
+
 ### Use Spring Initializr to Generate your Project
 
 🚀 First we're going to use Spring Initializr to generate our Spring Boot project for us.
@@ -237,8 +242,11 @@ Duration: 0:10:00
 
 Another powerful feature of Spring Cloud Stream is inherited from Spring Cloud Function, and that feature is the capability of doing Function Composition. This allows you to create simple functions as Spring Beans that can be individually tested, re-used and chained together to create a processing chain.
 
-Instead of just talking about Function Composition let's try it out 😁.
+We'll extend the processor microservice we created in Step 4 to both uppercase and reverse the String found in the payload of the message. Following functional programming best practices we want to keep our functionals simple and re-usable so instead of just adding the new business logic of reversing the String to the existing Function we'll create a new function and use functional composition to effectively create a processing pipeline in our microservice. The end result will look like the diagram below, note that there are now two separate functions in our microservice. 
 
+![SCSt Uppercase Diagram](img/scstUppercaseReverseDiagram.webp)
+
+Instead of just talking about Function Composition let's try it out 😁.     
 In the same class where you already have your "uppercase" function let's create a "reverse" function that takes in a string and reverses the ordering. This function would like something like this:
 
 ```
@@ -260,7 +268,7 @@ spring.cloud.stream.function.bindings.uppercasereverse-out-0=output
 ```
 
 Positive
-: Note that Spring Cloud Stream performs [Content Type Negotiation](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management).
+: Note that Spring Cloud Stream performs [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
 
 ✅ We now have our function all wired up so go ahead and stop the app and restart it.  
 ✅ Navigate back to the "Try Me" menu in Solace Cloud (Refer to the steps in the "Test your Microservice" section if needed)  
