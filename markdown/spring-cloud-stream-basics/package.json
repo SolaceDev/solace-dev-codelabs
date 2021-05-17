@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch spring-cloud-stream-basics.md --exec 'claat export spring-cloud-stream-basics.md && lsof -c claat -t | xargs kill && cd spring-cloud-stream-basics && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },
