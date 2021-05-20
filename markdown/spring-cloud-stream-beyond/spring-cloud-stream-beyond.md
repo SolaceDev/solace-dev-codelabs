@@ -322,9 +322,91 @@ In most cases you'll want to do some performance testing to see what mix of scal
 ## Message Headers
 Duration: 0:07:00
 Consumer Side
-Publisher Side
 
-They are copied from input message to output message if not set...
+By default when coding your Spring Cloud Stream microservice you are writing Spring Cloud Function beans that can be re-used for multiple purposes and can leverage the framework's [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) to pass your POJOs directly into the function while decoupling your business logic from the specific runtime target and triggering mechanism (web endpoint, stream processor, task). This is convenient, but sometimes when creating a function for a stream processor our business logic requires the use of metadata in the message headers that we need access to on the Consuming side or need to set on the Publishing side.
+
+### Consumer - Accessing Headers
+We'll start with the consuming side. In order to get access to the headers you'll need to set the input argument to a `Message<?>` type. 
+Once you have the Spring Message object you can retrieve a map of the headers using the `getHeaders()` method. Note that because the input argument is now a `Message<?>` you would now use the `getPayload()` method to get the actual payload itself. 
+
+For example, if we modify the `Consumer` from the previous section to take in a `Message<String>` we can now access the headers as seen below. 
+``` java
+@Bean
+public Consumer<Message<String>> myConsumer(){
+      return v -> {
+        logger.info("Received: " + v.getPayload());
+        logger.info("All Headers: " + v.getHeaders());
+      };
+}
+```
+
+And if we want to access individual headers we can then read them from that map. 
+Note that a list of common [Solace Headers are found in the Solace Binder docs](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#solace-headers).
+
+``` java
+@Bean
+public Consumer<Message<String>> myConsumer(){
+      return v -> {
+        logger.info("Received: " + v.getPayload());
+        logger.info("Destination: " + v.getHeaders().get("solace_destination"));
+        logger.info("TTL: " + v.getHeaders().get("solace_timeToLive"));
+      };
+}
+```
+**TODO: Add in app routing using headers?**      
+**NOTE Future Enhancement Coming soon to allow for header mapping capabilities**
+
+### Publishing - Setting Headers
+On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a `Message<?>` object. Note that if you don't return a `Message<?>` object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by *SpringIntegrationProperties.messageHandlerNotPropagatedHeaders* or the Solace Binder `headerExclusions` producer property
+
+For example, the code below sets a header named "Key" to the value "Value" on an outbound message.  
+``` java
+@Bean
+Supplier<Message<String>> mySupplier(){
+	return () -> {
+		return MessageBuilder.withPayload("Hello Headers").setHeader("Key", "Value").build();
+	};
+}
+```
+
+In order to run it go ahead and modify your app config to look like the below: 
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myConsumer;mySupplier
+    stream:
+      poller:
+        fixed-delay: 10000
+      bindings:
+        myConsumer-in-0:
+          destination: spring/cloud/stream
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+        mySupplier-out-0:
+          destination: spring/cloud/stream
+```
+
+And modify your `Consumer` function to print out the "Key" header:
+``` java
+@Bean
+public Consumer<Message<String>> myConsumer() {
+  return v -> {
+    logger.info("Received myConsumer: " + v.getPayload());
+    logger.info("Destination: " + v.getHeaders().get("solace_destination"));
+    logger.info("TTL: " + v.getHeaders().get("solace_timeToLive"));
+    logger.info("My Custom Header: " + v.getHeaders().get("Key"));
+  };
+}
+```
+
+Positive
+: When using the Solace binder you can also set SolaceHeaders with "Write" access as defined [here](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#solace-headers)
+
+Note the Solace Binder offers two producer properties that may come in handy for publishing apps that want to set headers: 
+1. The `spring.cloud.stream.solace.bindings.BINDING_NAME.producer.headerExclusions` property allows you to exclude headers from the published message. 
+1. The `spring.cloud.stream.solace.bindings.BINDING_NAME.producer.nonserializableHeaderConvertToString` property allows you to include the `toString` version of a non-serialiazable header. Note that if this is not set to true and a non-serializable header is set an exception would be thrown. 
 
 ## Wildcard Subscriptions
 Duration: 0:15:00
