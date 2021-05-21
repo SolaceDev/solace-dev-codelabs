@@ -89,7 +89,7 @@
 <p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉.<br>You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>
 <p>Click the &#34;Generate&#34; button which will download the project. You can then unzip it and import the project into your preferred Java IDE as a maven project. I&#39;ll be using <a href="https://spring.io/tools" target="_blank">Spring Tool Suite 4 for Eclipse</a> in the screenshots.<br>Your imported project should look like this:<br><img alt="Imported Project" title="Imported Project" src="img/eed71f56783ccd45.webp"></p>
 <p>✅ (2) Add your Connection Details from the Messaging Service</p>
-<p>Change the <code>application.properties</code> file to <code>application.yml</code> and copy and paste the <code>spring.cloud.stream.binders</code> part of the Spring Cloud Stream configuration previously found in the &#34;Connect to Service&#34; widget in your Message Service.<br>It should look something like this:</p>
+<p>Change the <code>application.properties</code> file to <code>application.yml</code> and copy and paste the <code>spring.cloud.stream.binders</code> part of the Spring Cloud Stream configuration previously found in the &#34;Connect to Service&#34; widget in your Message Service. It should look something like this, but with the values that were provided by your Message Service.</p>
 <pre><code>spring:
   cloud:
     stream:
@@ -133,9 +133,9 @@ public Consumer&lt;String&gt; myConsumer(){
 <aside class="special"><p>💥 Note that sometimes order <strong>and</strong> scaling matters! This is also possible by using dynamic topics and wildcard subscriptions that we&#39;ll cover in an upcoming section. Learn more about Solace topics in <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">this video</a>.</p>
 </aside>
 <h2 is-upgraded>Publish-Subscribe (Non-Durable)</h2>
-<p>There are many use cases where you need to process events in order as they are published to a defined topic. In order to do this with Spring Cloud Stream you would create your <code>Function</code> or <code>Consumer</code> function and configure the input binding for it to receive messagesfrom a specific destination. There are two ways to do this with the Solace binder. The standard way, with no Solace specific configurations, is non-durable and we&#39;ll start there.</p>
+<p>There are many use cases where you need to process events in order as they are published to a defined topic. In order to do this with Spring Cloud Stream you would create your <code>Function</code> or <code>Consumer</code> function and configure the input binding for it to receive messages from a specific destination. There are two ways to do this with the Solace binder. The standard way, with no Solace specific configurations, is non-durable and we&#39;ll start there.</p>
 <p>👀 Under the covers this option will use a Non-Durable Anonymous Queue on the broker to hold the messages for the consuming microservice. Let&#39;s check it out!<br>This option will deliver events in order to your microservice while it remains up and running. To do this we just to specify a <code>destination</code>, but NO <code>group</code> on your input binding.</p>
-<p>So open your <code>application.yml</code> file and add the following config to what already exists. This configuration is telling Spring Cloud Stream that you want your <code>myConsumer</code></p>
+<p>So open your <code>application.yml</code> file and add the following config to what already exists. This configuration is telling Spring Cloud Stream that you want your <code>myConsumer</code> function to receive events that are published to the <code>spring/cloud/stream</code> topic.</p>
 <pre><code>spring:
   cloud:
     function:
@@ -167,7 +167,7 @@ public Consumer&lt;String&gt; myConsumer(){
 <p>Sometimes it isn&#39;t enough to be able to deliver messages/events only while the app remains connected to the broker; there are many scenarios where you want messages stored while the app is offline while still maintaining order. In this case the Solace Binder allows you to follow the Publish-Subscribe pattern and consume from an Exclusive Durable Queue that will do just that.</p>
 <aside class="special"><p>💥 As a bonus, this configuration also allows you to create a Primary/Secondary type of configuration where you can have multiple microservices ready to process the events and if the Primary disconnects the Secondary will take over.</p>
 </aside>
-<p>In order to modify the input binding to create an Exclusive Durable Queue we need to add a <code>group</code> to our binding and also set the Solace specific property <code>queueAccessType</code> to <code>EndpointProperties.ACCESSTYPE_NONEXCLUSIVE</code>. We do that with the configuration below.</p>
+<p>In order to modify the input binding to create an Exclusive Durable Queue we need to add a <code>group</code> to our binding and also set the Solace specific property <code>queueAccessType</code> to use an exclusive queue. We do that with the configuration below.</p>
 <pre><code>spring:
   cloud:
     function:
@@ -208,7 +208,7 @@ public Consumer&lt;String&gt; myConsumer(){
 <h3 is-upgraded>Scaling</h3>
 <p>So we&#39;re using the Consumer Group pattern (which uses a Non-Exclusive Queue!) so we can have multiple consumers share the processing of events. What are the choices for scaling!?</p>
 <p><strong>Option 1 - Multiple Instances of your Microservice</strong><br>The first option is just to start up more instances of your microservice. This is common in a Kubernetes environment where your microservice runs in it&#39;s own container. Each instance of the microservice will connect to the same non-exclusive queue on the Solace broker and the broker will spread the messages across all consumers.</p>
-<p><strong>Option 2 - Concurrent Message Consumption in a Single Microservice</strong><br>The second option is to use the <a href="https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_consumer_properties" target="_blank">concurrency consumer property</a> to enable concurrent message consumption for a particular consumer binding. Under the covers the Solace binder will create a separate flow for</p>
+<p><strong>Option 2 - Concurrent Message Consumption in a Single Microservice</strong><br>The second option is to use the <a href="https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_consumer_properties" target="_blank">concurrency consumer property</a> to enable concurrent message consumption for a particular consumer binding. Under the covers the Solace binder will create a separate flow for each concurrent consumer that will handle events in it&#39;s own thread. Note that this approach allows the concurrent consumers to share the same Solace Session.</p>
 <p>Modify your microservice&#39;s configuration to set a concurrency of 5 like seen below:</p>
 <pre><code>spring:
   cloud:
