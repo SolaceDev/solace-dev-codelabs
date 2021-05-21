@@ -290,7 +290,9 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
       };
 }
 </code></pre>
-<p><strong>TODO: Add in app routing using headers?<br>NOTE Future Enhancement Coming soon to allow for header mapping capabilities</strong></p>
+<p><strong>TODO: Add in app routing using headers?</strong></p>
+<aside class="special"><p>💡 Note that we&#39;re currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers.</p>
+</aside>
 <h2 is-upgraded>Publishing - Setting Headers</h2>
 <p>On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a <code>Message&lt;?&gt;</code> object. Note that if you don&#39;t return a <code>Message&lt;?&gt;</code> object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by <em>SpringIntegrationProperties.messageHandlerNotPropagatedHeaders</em> or the Solace Binder <code>headerExclusions</code> producer property</p>
 <p>For example, the code below sets a header named &#34;Key&#34; to the value &#34;Value&#34; on an outbound message.</p>
@@ -340,8 +342,44 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Wildcard Subscriptions" duration="15">
-        <p> Extract topic levels as variables?</p>
+      <google-codelab-step label="Wildcard Subscriptions" duration="10">
+        <p>Since we&#39;re using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we&#39;re in luck! There are 2 different options for configuring your topic subscriptions on consuming funcitons. Both options are configured in the Spring application properties.</p>
+<h2 is-upgraded>Wildcards in the destination</h2>
+<p>The first way to do it is in the <code>destination</code> property itself. The Solace binder uses the <code>destination</code> property to both name the queue that the app will bind to, but also as a topic subscription on the queue.</p>
+<p>To test this functionality out go ahead and change the <code>myConsumer-in-0</code> binding to have a destination using wildcards and restart your app.</p>
+<pre><code>spring:
+  cloud:
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: &#39;spring/*/stream/&gt;&#39;
+</code></pre>
+<p>Now go ahead and use the <code>Try-Me</code> tab to send a few test messages that match the pattern.<br>Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
+<aside class="warning"><p>Learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a></p>
+</aside>
+<p>If you were to navigate to the queue in the PubSub+ Manager you&#39;ll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.<br><img alt="Wildcard Queue 1" src="img/33ea9137729e70e9.webp"></p>
+<h2 is-upgraded>Wildcards in queueAdditionalSubscrptions</h2>
+<p>The second place you can add topic subscriptions and also use wildcards when using the Solace binder is using the <code>queueAdditionalSubscriptions</code> consumer property.<br>This property is available under <code>spring.cloud.stream.solace.bindings.BINDING_NAME.consumer.queueAdditionalSubscriptions</code> and allows for 1 to many extra topic subscriptions to be added.</p>
+<p>For example, if we wanted to add <code>pub/*/plus</code> and <code>a/b/&gt;</code> subscriptions to our app we could add those subscriptions to the queue by doing the following:</p>
+<pre><code>spring:
+  cloud:
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: &#39;spring/*/stream/&gt;&#39;
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+      solace:
+        bindings:
+          myConsumer-in-0:
+            consumer:
+              queueAdditionalSubscriptions:
+                - &#39;a/b/&gt;&#39;
+                - &#39;pub/*/plus&#39;
+</code></pre>
+<p>After restarting our app we can see that the subscriptions on our queue have been updated to include our two additions:<br><img alt="Wildcard Queue 2" src="img/3699cca6b0769859.webp"></p>
+<p>💥 We can now use Solace wildcards to filter for the exact events that we&#39;re interested in!</p>
 
 
       </google-codelab-step>

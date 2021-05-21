@@ -354,7 +354,9 @@ public Consumer<Message<String>> myConsumer(){
 }
 ```
 **TODO: Add in app routing using headers?**      
-**NOTE Future Enhancement Coming soon to allow for header mapping capabilities**
+
+Positive
+: 💡 Note that we're currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers. 
 
 ### Publishing - Setting Headers
 On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a `Message<?>` object. Note that if you don't return a `Message<?>` object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by *SpringIntegrationProperties.messageHandlerNotPropagatedHeaders* or the Solace Binder `headerExclusions` producer property
@@ -409,9 +411,61 @@ Note the Solace Binder offers two producer properties that may come in handy for
 1. The `spring.cloud.stream.solace.bindings.BINDING_NAME.producer.nonserializableHeaderConvertToString` property allows you to include the `toString` version of a non-serialiazable header. Note that if this is not set to true and a non-serializable header is set an exception would be thrown. 
 
 ## Wildcard Subscriptions
-Duration: 0:15:00
-2 ways: in the destination in queueAdditionalSubscriptions
-<NEW> Extract topic levels as variables? 
+Duration: 0:10:00
+
+Since we're using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we're in luck! There are 2 different options for configuring your topic subscriptions on consuming funcitons. Both options are configured in the Spring application properties. 
+
+### Wildcards in the destination
+The first way to do it is in the `destination` property itself. The Solace binder uses the `destination` property to both name the queue that the app will bind to, but also as a topic subscription on the queue. 
+
+To test this functionality out go ahead and change the `myConsumer-in-0` binding to have a destination using wildcards and restart your app.
+``` yaml
+spring:
+  cloud:
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: 'spring/*/stream/>'
+```
+
+Now go ahead and use the `Try-Me` tab to send a few test messages that match the pattern. 
+Maybe publish to `spring/cloud/stream/5` and `spring/boot/stream/anything`. You should see that the application receives the messages! 
+
+Negative
+: Learn more about Solace wildcards in the [docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+
+If you were to navigate to the queue in the PubSub+ Manager you'll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.      
+![Wildcard Queue 1](img/wildcardQueue1.webp)
+
+
+### Wildcards in queueAdditionalSubscrptions
+The second place you can add topic subscriptions and also use wildcards when using the Solace binder is using the `queueAdditionalSubscriptions` consumer property. 
+This property is available under `spring.cloud.stream.solace.bindings.BINDING_NAME.consumer.queueAdditionalSubscriptions` and allows for 1 to many extra topic subscriptions to be added. 
+
+For example, if we wanted to add `pub/*/plus` and `a/b/>` subscriptions to our app we could add those subscriptions to the queue by doing the following: 
+``` yaml
+spring:
+  cloud:
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: 'spring/*/stream/>'
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+      solace:
+        bindings:
+          myConsumer-in-0:
+            consumer:
+              queueAdditionalSubscriptions:
+                - 'a/b/>'
+                - 'pub/*/plus'
+```
+
+After restarting our app we can see that the subscriptions on our queue have been updated to include our two additions:
+![Wildcard Queue 2](img/wildcardQueue2.webp)
+
+💥 We can now use Solace wildcards to filter for the exact events that we're interested in! 
 
 ## Dynamic Publishing
 Duration: 0:15:00
