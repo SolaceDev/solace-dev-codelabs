@@ -143,7 +143,7 @@ public Consumer&lt;String&gt; myConsumer(){
 <pre><code>SolaceQueueProvisioner : Subscribing queue #P2P/QTMP/v:b0e95afab69a/scst/an/59e7cbe3-ec38-4da8-a8fa-d1e428f6eb56/plain/spring/cloud/stream to topic spring/cloud/stream
 
 </code></pre>
-<p>🛠 <strong>Let&#39;s test this out using the </strong><em>Try-Me</em><strong> tab in Solace Cloud.</strong></p>
+<p>🛠 <strong>Let&#39;s test this out using the &#34;Try-Me&#34; tab in Solace Cloud.</strong></p>
 <ol type="1">
 <li>Navigate to the Solace Cloud Console</li>
 <li>Choose &#34;Cluster Manager&#34; -&gt; and click the messaging service you created earlier</li>
@@ -358,7 +358,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
           consumer:
             concurrency: 5
 </code></pre>
-<p>Now go ahead and use the <code>Try-Me</code> tab to send a few test messages that match the pattern.<br>Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
+<p>Now go ahead and use the &#34;Try-Me&#34; tab to send a few test messages that match the pattern.<br>Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
 <aside class="warning"><p>Learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a></p>
 </aside>
 <p>If you were to navigate to the queue in the PubSub+ Manager you&#39;ll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.<br><img alt="Wildcard Queue 1" src="img/33ea9137729e70e9.webp"></p>
@@ -418,7 +418,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
 </code></pre>
 <aside class="special"><p>Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handle to send alerts during processing.</p>
 </aside>
-<p>🛠 To test this out go ahead and open up the <code>Try-Me</code> tab. On the <em>Subscriber</em> side subscribe to &#34;solace/cid/&gt;&#34;.<br>On the <em>Publisher</em> side, click &#34;Show Advanced&#34;, set a &#34;Correlation ID&#34; of 1 and send a message to the <code>a/b/c</code> topic.<br>Change the &#34;Correlation ID&#34; value to 2 and send again. You should now see that the app is publishing to dynamic topics and your <em>Subscriber</em> is consuming them.</p>
+<p>🛠 To test this out go ahead and open up the &#34;Try-Me&#34; tab. On the <em>Subscriber</em> side subscribe to &#34;solace/cid/&gt;&#34;.<br>On the <em>Publisher</em> side, click &#34;Show Advanced&#34;, set a &#34;Correlation ID&#34; of 1 and send a message to the <code>a/b/c</code> topic.<br>Change the &#34;Correlation ID&#34; value to 2 and send again. You should now see that the app is publishing to dynamic topics and your <em>Subscriber</em> is consuming them.</p>
 <p>You should see something like the image below:<br><img alt="Dynamic Publish 1" src="img/28752f0328bbd677.webp"></p>
 <p>✅ Now you know how to use StreamBridge to publish to dynamic topics!</p>
 <h2 is-upgraded>BinderHeaders.TARGET_DESTINATION</h2>
@@ -454,7 +454,7 @@ public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction()
         myFunction-out-0:
           destination: &#39;my/default/topic&#39;
 </code></pre>
-<p>🛠 Go ahead and test the function by repeating the <code>Try-Me</code> steps that we used above to test the <code>StreamBridge</code> implementation. You should see the same result :)</p>
+<p>🛠 Go ahead and test the function by repeating the &#34;Try-Me&#34; steps that we used above to test the <code>StreamBridge</code> implementation. You should see the same result :)</p>
 
 
       </google-codelab-step>
@@ -478,7 +478,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
 }
 </code></pre>
 <p>The code above will result in 3 messages being sent to the default output binding destination each time a message is received on the input binding.</p>
-<p>If you still have the application properties configured from the previous section you can leave them be, if not go ahead and add these properties:</p>
+<p>If you still have the application properties configured from the previous section you can leave them be, if not go ahead and add these properties. Note that the default output binding destination is <code>my/default/topic</code>.</p>
 <pre><code>spring:
   cloud:
     function:
@@ -491,7 +491,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
         myFunction-out-0:
           destination: &#39;my/default/topic&#39;
 </code></pre>
-<p>🛠 Test it out by starting your app via your IDE or using <code>mvn spring-boot:run</code> inside of your project. Use the <code>Try-Me</code><strong>Subscriber</strong> to subscribe to the <code>my/default/topic/</code> topic and then use the <strong>Publisher</strong> to send a message to the <code>a/b/c</code> topic. You should see your Subscriber receive 3 messages for each message that you send 🎊.</p>
+<p>🛠 Test it out by starting your app via your IDE or using <code>mvn spring-boot:run</code> inside of your project. Use the &#34;Try-Me&#34; <strong>Subscriber</strong> to subscribe to the <code>my/default/topic/</code> topic and then use the <strong>Publisher</strong> to send a message to the <code>a/b/c</code> topic. You should see your Subscriber receive 3 messages for each message that you send 🎊.</p>
 <p class="image-container"><img alt="Batch Publish 1" src="img/92ae493ddd5cff0d.webp"></p>
 <h2 is-upgraded>Batch Publish to Dynamic Binding Destinations</h2>
 <p>😱 That&#39;s cool! But what&#39;s even cooler? You can combine this batch publishing functionality with the dynamic publishing tricks we learned earlier 😱</p>
@@ -516,19 +516,121 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
     };
 }
 </code></pre>
-<p>🛠 Add a topic subscription of <code>some/other/topic/&gt;</code> to your <strong>Try-Me Subscriber</strong>, resent a message to <code>a/b/c</code> and checkout what your <strong>Subscriber</strong> receives.<br>You&#39;ll note that you received 1 message on the default binding destination of <code>my/default/topic</code> and the other messages went to <code>some/other/topic/X</code> where X is a number as defined in the code.</p>
+<p>🛠 Add a topic subscription of <code>some/other/topic/&gt;</code> to your &#34;Try-Me&#34; <strong>Subscriber</strong>, resent a message to <code>a/b/c</code> and checkout what your <strong>Subscriber</strong> receives.</p>
+<p>You&#39;ll note that you received 1 message on the default binding destination of <code>my/default/topic</code> and the other 3 messages went to <code>some/other/topic/X</code> where X is a number as defined in the code.</p>
 <p class="image-container"><img alt="Batch Publish 2" src="img/685fcd89b80d6409.webp"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Client/Manual Acknowledgements" duration="7">
-        
+      <google-codelab-step label="Client/Manual Acknowledgements" duration="10">
+        <p>By default when using Spring Cloud Stream with imperative functions (not reative!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we&#39;ll cover how you can use client/manual acknowledgements to handle this situation.</p>
+<p>Using Client/Manual Acknowledgements can be simplified into a two step process:</p>
+<ol type="1">
+<li>Disable auto-acknowledgement in the acknowledgment callback header</li>
+<li>Acknowledge the message!</li>
+</ol>
+<p>Since we&#39;re dealing with acknowledgements we know we&#39;re essentially dealing with a message/event broker and we&#39;ll need to receive the <code>Message&lt;?&gt;</code> object itself. Once we have the <code>Message&lt;?&gt;</code> object we can access the <code>AcknowledgementCallback</code> in the header and disable auto ack as follows:</p>
+<pre><code>// Disable Auto-Ack
+AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v); 
+ackCallback.noAutoAck(); 
+</code></pre>
+<p>Now that we&#39;ve disabled auto ack we are in charge of handling the Acknowledgement and can choose from 3 options using Spring&#39;s <code>AckUtils</code>. When using Manual Acknowledgements make sure you ALWAYS acknowledge the message! We&#39;ll talk more about when you <em>should</em> use these options in the <strong>Consumer Error Handling</strong> section of this codelab.</p>
+<ol type="1">
+<li>ACCEPT</li>
+<li>REJECT<br></li>
+<li>REQUEUE</li>
+</ol>
+<aside class="warning"><p>Note that the Acknowledgement options of ACCEPT, REJECT, REQUEUE may differ depending on the functionality of the underlying message/event broker so be sure to reference the docs for the binder that you&#39;re using.</p>
+</aside>
+<p>When using the Solace binder and handing your events in multiple threads you&#39;ll also want to ensure that you catch the <code>SolaceAcknowledgementException</code> which may get thrown in a REQUEUE scenarios.</p>
+<pre><code>// Acknowledge the Message!
+try {
+    AckUtils.accept(ackCallback);
+    //AckUtils.requeue(ackCallback);
+    //AckUtils.reject(ackCallback);
+} catch (SolaceAcknowledgmentException e) {
+    //TODO Log a warning? Message was re-queued on broker and will be re-delivered to a consumer
+}
+</code></pre>
+<p>If using the Solace Binder you can learn how it handles the different AckUtils Status options in the <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#manual-message-acknowledgment" target="_blank">Manual Message Acknowledgement binder docs</a>. Refer to the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/acks/AckUtils.html" target="_blank">AckUtils documentation</a> and <a href="https://javadoc.io/doc/org.springframework.integration/spring-integration-core/latest/org/springframework/integration/acks/AcknowledgmentCallback.html" target="_blank">AcknowledgmentCallback documentation</a> for more info on these objects at the Spring level.</p>
+<aside class="special"><p>Two of the most common uses of Manual Acknowledgements are to:<br><br></p>
+<ol type="1">
+<li>Implement the Reactor Pattern and handle messages in separate threads while keeping the number of connections/sessions/flows to the event broker to a minimum.</li>
+<li>Be able to handle many messages when dealing with high throughput. This is common when inserting into a down stream datastore and not wanting to do an insert/update for each and every message.<br></li>
+</ol>
+</aside>
+<p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message&lt;String&gt;</code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
+<ol type="1">
+<li>First off let&#39;s go ahead and change our application configuration to create a fresh queue and set <code>queueMaxMsgRedelivery</code> so we don&#39;t get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to <code>clientAck</code> and the group is used as part of the queue naming convention.<pre><code>spring:
+cloud:
+function:
+  definition: myFunction
+stream:
+  bindings:
+    myFunction-in-0:
+      destination: &#39;a/b/&gt;&#39;
+      group: clientAck
+    myFunction-out-0:
+      destination: &#39;my/default/topic&#39;
+  solace:
+    bindings:
+      myFunction-in-0:
+        consumer:
+           queueMaxMsgRedelivery: 2
+</code></pre>
+</li>
+<li>Next go ahead and modify your java code to add the following Function (comment out or delete other code so it doesn&#39;t interfere)<pre><code>@Bean
+public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
+    return v -&gt; {
+        logger.info(&#34;Received: &#34; + v);
+
+        // Disable Auto-Ack
+        AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v);
+        ackCallback.noAutoAck();
+
+        // TODO Execute Business Logic + Maybe even pass to another thread?
+        // Use CorrelationID for easy business logic...
+        String cid = (String) v.getHeaders().get(&#34;solace_correlationId&#34;);
+            
+        // Acknowledge the Message!
+        try {
+            if (cid.equals(&#34;accept&#34;)) {
+                logger.info(&#34;Accepting the Message&#34;);
+                AckUtils.accept(ackCallback);
+            } else if (cid.equals(&#34;requeue&#34;)) {
+                logger.info(&#34;Requeuing the Message&#34;);
+                AckUtils.requeue(ackCallback);
+                Thread.sleep(60000);
+            } else {
+                logger.info(&#34;Rejecting the Message&#34;);
+                AckUtils.reject(ackCallback);
+                Thread.sleep(60000);
+            }
+        } catch (SolaceAcknowledgmentException e) {
+            logger.warn(&#34;Warning, exception occurred but message will be re-queued on broker and re-delivered&#34;, e);
+            return null; //Don&#39;t send an output message
+        }
+
+        return &#34;My Payload&#34;;
+    };
+}
+</code></pre>
+</li>
+</ol>
+<p>🛠 Let&#39;s test this out using the &#34;Try-Me&#34; tool as usual. In the <strong>Publisher</strong> set the &#34;Correlation Id&#34; (which is under &#34;Show Advanced&#34;) to &#34;accept&#34; and publish a message to the <code>a/b/c</code> topic like seen in the image below.<br><br>🛠 You should see that your microservice accepts the message and if you navigate to your Queue, which should be named <em>scst/wk/nonexclusive/plain/a/b/_</em>, you&#39;ll see that there are no messages remaining on the queue.</p>
+<p>🛠 Now change the &#34;Correlation ID&#34; to &#34;requeue&#34; and send the message again. You&#39;ll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer and set a sleep of 60 seconds after requeuing) you&#39;ll see the message remains on the queue.</p>
+<p class="image-container"><img alt="Client Ack Accept TryMe" src="img/12bf7740ca113af7.webp"></p>
+<p>💡 Now that you know how to use Manual Acknowledgements we&#39;ll talk about when to use them as part of Consumer Error Handling in the next section!</p>
+
 
       </google-codelab-step>
     
       <google-codelab-step label="Consumer Error Handling" duration="15">
-        
+        <p>If a failure occurs it will trigger the configured Spring Retry Template which we&#39;ll cover more in the next section.</p>
+<aside class="warning"><p>When using reactive functions (such as if you&#39;re using <code>Flux</code> or <code>Mono</code>) the framework connects the <code>Flux</code> or <code>Mono</code> into your Function and that&#39;s it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable.<br></p>
+</aside>
+
 
       </google-codelab-step>
     
