@@ -82,7 +82,7 @@ Click on the Get Started button next to the Spring Cloud Stream option.
 
 ![Spring Cloud Stream menu](img/connect-with-spring.png "Spring Cloud Stream menu")
 
-Take note of the "Connect to Service" section and note that the connection details is auto filled for your
+Take note of the "Connect to Service" section and you'll see that the connection details are already configured in the  spring.cloud.stream.binders part of the config to connect a Spring Cloud Stream microservice to your PubSub+ Messaging Service. We'll be using this soon 😄
 
 ![Connect to service menu](img/connect-to-service.png "Connect to service menu")
 
