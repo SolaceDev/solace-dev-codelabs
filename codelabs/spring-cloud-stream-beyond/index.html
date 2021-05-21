@@ -76,7 +76,12 @@
 <p>✅ (3) Take note of the connection details</p>
 <p>If your messaging service was created successfully, you&#39;ll be routed to the summary page of your new messaging service. From the service summary page, click on the &#34;Connect&#34; tab so we can take note of the connection details we&#39;ll need later.</p>
 <p class="image-container"><img alt="Connect Tab Preview" title="Connect Tab Preview" src="img/e86d5cb7cefa4164.webp"></p>
-<p>After you click the &#34;Connect&#34; tab, click the &#34;Connect with Spring&#34; box, choose &#34;Spring Cloud Stream&#34;, and click the &#34;Connect to Service&#34; option. We&#39;ll be using the &#34;Secured SMF Host&#34; URL in a minute 👍<br><img alt="Solace Web Messaging Tab" title="Solace Messaging Tab" src="img/9ed904700f8ea94c.webp"></p>
+<p>After you click the &#34;Connect&#34; tab, sort the supported client library menu by <code>Language</code> and click on the &#34;Connect with Spring&#34; box to expand it.</p>
+<p class="image-container"><img alt="client library menu" title="client library menu" src="img/14bd2ff2d5881592.png"></p>
+<p>Click on the Get Started button next to the Spring Cloud Stream option.</p>
+<p class="image-container"><img alt="Spring Cloud Stream menu" title="Spring Cloud Stream menu" src="img/debb411c798401b5.png"></p>
+<p>Take note of the &#34;Connect to Service&#34; section and you&#39;ll see that the connection details are already configured in the  <code>spring.cloud.stream.binders</code> part of the config to connect a Spring Cloud Stream microservice to your PubSub+ Messaging Service. We&#39;ll be using this soon 😄</p>
+<p class="image-container"><img alt="Connect to service menu" title="Connect to service menu" src="img/ed3cc9cd7f839f23.png"></p>
 <h2 is-upgraded>Create a Spring Cloud Stream Microservice</h2>
 <p>✅ (1) Create an Empty Spring Cloud Stream Microservice to use throughout this codelab</p>
 <p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉.<br>You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>

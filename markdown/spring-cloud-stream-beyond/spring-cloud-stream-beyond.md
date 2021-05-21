@@ -71,8 +71,17 @@ If your messaging service was created successfully, you'll be routed to the summ
 
 ![Connect Tab Preview](img/service-summary-page.webp "Connect Tab Preview")
 
-After you click the "Connect" tab, click the "Connect with Spring" box, choose "Spring Cloud Stream", and click the "Connect to Service" option. We'll be using the "Secured SMF Host" URL in a minute 👍
-![Solace Web Messaging Tab](img/smf-messaging-connect-tab.webp "Solace Messaging Tab")
+After you click the "Connect" tab, sort the supported client library menu by `Language` and click on the "Connect with Spring" box to expand it. 
+
+![client library menu](img/connect-tab.png "client library menu")
+
+Click on the Get Started button next to the Spring Cloud Stream option. 
+
+![Spring Cloud Stream menu](img/connect-with-spring.png "Spring Cloud Stream menu")
+
+Take note of the "Connect to Service" section and you'll see that the connection details are already configured in the  `spring.cloud.stream.binders` part of the config to connect a Spring Cloud Stream microservice to your PubSub+ Messaging Service. We'll be using this soon 😄
+
+![Connect to service menu](img/connect-to-service.png "Connect to service menu")
 
 ### Create a Spring Cloud Stream Microservice 
 
