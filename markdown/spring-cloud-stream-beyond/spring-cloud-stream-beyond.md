@@ -529,7 +529,7 @@ Your code will look something like this:
 @Bean
 public Function<Message<String>, Message<String>> myFunction() {
     return v -> {
-        logger.info("Received myConsumer: " + v.getPayload());
+        logger.info("Received myFunction: " + v.getPayload());
         logger.info("CorrelationID: " + v.getHeaders().get("solace_correlationId"));
         
         // Use whatever business logic you'd like to figure out the topic!
@@ -563,7 +563,83 @@ spring:
 
 ## Batch Publishing
 Duration: 0:07:00
-return Collection<Message<?>>
+
+Sometimes when following the `Supplier` or the `Function` pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you'd like, but there is also another option. That options is to return a `Collection<Message<?>>` object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it's own message. 
+
+### Batch Publish to Default Binding Destination
+👀 Let's check it out! Go ahead and **comment out your previous code** and create a `myFunction` function that takes in a String and returns a `Collection<Message<String>>`. It should look something like this: 
+``` java 
+@Bean
+public Function<String, Collection<Message<String>>> myFunction() {
+    return v -> {
+        logger.info("Received: " + v);
+        
+        ArrayList<Message<String>> msgList = new ArrayList<Message<String>>();
+        msgList.add(MessageBuilder.withPayload("Payload 1").build());
+        msgList.add(MessageBuilder.withPayload("Payload 2").build());
+        msgList.add(MessageBuilder.withPayload("Payload 3").build());
+        
+        return msgList;
+    };
+}
+```
+
+The code above will result in 3 messages being sent to the default output binding destination each time a message is received on the input binding.  
+
+If you still have the application properties configured from the previous section you can leave them be, if not go ahead and add these properties:
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: 'a/b/>'
+          group: nonexclusive
+        myFunction-out-0:
+          destination: 'my/default/topic'
+```
+
+🛠 Test it out by starting your app via your IDE or using `mvn spring-boot:run` inside of your project. Use the `Try-Me` **Subscriber** to subscribe to the `my/default/topic/` topic and then use the **Publisher** to send a message to the `a/b/c` topic. You should see your Subscriber receive 3 messages for each message that you send 🎊. 
+
+![Batch Publish 1](img/batchPublishTryMe.webp)
+
+### Batch Publish to Dynamic Binding Destinations
+😱 That's cool! But what's even cooler? You can combine this batch publishing functionality with the dynamic publishing tricks we learned earlier 😱
+
+Check out this Function noting a few things: 
+🥳 You can use both StreamBridge & BinderHeaders.TARGET_DESTINATION in conjunction with Batch Publishing
+😎 When using StreamBridge you don't need to actually build the Message object, just like before
+🤑 When using BinderHeaders.TARGET_DESTINATION you can have some messages go to the default binding destination and others go to dynamic ones!
+
+``` java
+@Bean
+public Function<String, Collection<Message<String>>> myFunction(StreamBridge sb) {
+    return v -> {
+        logger.info("Received: " + v);
+        
+        // Do some processing & use StreamBridge to send an Alert to a dynamic topic
+        sb.send("some/other/topic/1", v);
+        
+        // Do some more processing and create a list of messages to send upon returning
+        ArrayList<Message<String>> msgList = new ArrayList<Message<String>>();
+        // Send to default topic
+        msgList.add(MessageBuilder.withPayload("Payload 1").build());
+        // Send to dynamic topics using BinderHeaders.TARGET_DESTINATION
+        msgList.add(MessageBuilder.withPayload("Payload 2").setHeader(BinderHeaders.TARGET_DESTINATION, "some/other/topic/2").build());
+        msgList.add(MessageBuilder.withPayload("Payload 3").setHeader(BinderHeaders.TARGET_DESTINATION, "some/other/topic/3").build());
+        
+        return msgList;
+    };
+}
+```
+
+🛠 Add a topic subscription of `some/other/topic/>` to your **Try-Me Subscriber**, resent a message to `a/b/c` and checkout what your **Subscriber** receives. 
+You'll note that you received 1 message on the default binding destination of `my/default/topic` and the other messages went to `some/other/topic/X` where X is a number as defined in the code. 
+
+![Batch Publish 2](img/batchPublishTryMe2.webp)
+
 
 ## Client/Manual Acknowledgements
 Duration: 0:07:00

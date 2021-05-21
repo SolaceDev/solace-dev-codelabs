@@ -428,7 +428,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
 <pre><code>@Bean
 public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction() {
     return v -&gt; {
-        logger.info(&#34;Received myConsumer: &#34; + v.getPayload());
+        logger.info(&#34;Received myFunction: &#34; + v.getPayload());
         logger.info(&#34;CorrelationID: &#34; + v.getHeaders().get(&#34;solace_correlationId&#34;));
         
         // Use whatever business logic you&#39;d like to figure out the topic!
@@ -460,7 +460,64 @@ public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction()
       </google-codelab-step>
     
       <google-codelab-step label="Batch Publishing" duration="7">
-        <p>&gt;</p>
+        <p>Sometimes when following the <code>Supplier</code> or the <code>Function</code> pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you&#39;d like, but there is also another option. That options is to return a <code>Collection&lt;Message&lt;?&gt;&gt;</code> object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it&#39;s own message.</p>
+<h2 is-upgraded>Batch Publish to Default Binding Destination</h2>
+<p>👀 Let&#39;s check it out! Go ahead and <strong>comment out your previous code</strong> and create a <code>myFunction</code> function that takes in a String and returns a <code>Collection&lt;Message&lt;String&gt;&gt;</code>. It should look something like this:</p>
+<pre><code>@Bean
+public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunction() {
+    return v -&gt; {
+        logger.info(&#34;Received: &#34; + v);
+        
+        ArrayList&lt;Message&lt;String&gt;&gt; msgList = new ArrayList&lt;Message&lt;String&gt;&gt;();
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 1&#34;).build());
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 2&#34;).build());
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 3&#34;).build());
+        
+        return msgList;
+    };
+}
+</code></pre>
+<p>The code above will result in 3 messages being sent to the default output binding destination each time a message is received on the input binding.</p>
+<p>If you still have the application properties configured from the previous section you can leave them be, if not go ahead and add these properties:</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: &#39;a/b/&gt;&#39;
+          group: nonexclusive
+        myFunction-out-0:
+          destination: &#39;my/default/topic&#39;
+</code></pre>
+<p>🛠 Test it out by starting your app via your IDE or using <code>mvn spring-boot:run</code> inside of your project. Use the <code>Try-Me</code><strong>Subscriber</strong> to subscribe to the <code>my/default/topic/</code> topic and then use the <strong>Publisher</strong> to send a message to the <code>a/b/c</code> topic. You should see your Subscriber receive 3 messages for each message that you send 🎊.</p>
+<p class="image-container"><img alt="Batch Publish 1" src="img/92ae493ddd5cff0d.webp"></p>
+<h2 is-upgraded>Batch Publish to Dynamic Binding Destinations</h2>
+<p>😱 That&#39;s cool! But what&#39;s even cooler? You can combine this batch publishing functionality with the dynamic publishing tricks we learned earlier 😱</p>
+<p>Check out this Function noting a few things:<br>🥳 You can use both StreamBridge &amp; BinderHeaders.TARGET_DESTINATION in conjunction with Batch Publishing<br>😎 When using StreamBridge you don&#39;t need to actually build the Message object, just like before<br>🤑 When using BinderHeaders.TARGET_DESTINATION you can have some messages go to the default binding destination and others go to dynamic ones!</p>
+<pre><code>@Bean
+public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunction(StreamBridge sb) {
+    return v -&gt; {
+        logger.info(&#34;Received: &#34; + v);
+        
+        // Do some processing &amp; use StreamBridge to send an Alert to a dynamic topic
+        sb.send(&#34;some/other/topic/1&#34;, v);
+        
+        // Do some more processing and create a list of messages to send upon returning
+        ArrayList&lt;Message&lt;String&gt;&gt; msgList = new ArrayList&lt;Message&lt;String&gt;&gt;();
+        // Send to default topic
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 1&#34;).build());
+        // Send to dynamic topics using BinderHeaders.TARGET_DESTINATION
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 2&#34;).setHeader(BinderHeaders.TARGET_DESTINATION, &#34;some/other/topic/2&#34;).build());
+        msgList.add(MessageBuilder.withPayload(&#34;Payload 3&#34;).setHeader(BinderHeaders.TARGET_DESTINATION, &#34;some/other/topic/3&#34;).build());
+        
+        return msgList;
+    };
+}
+</code></pre>
+<p>🛠 Add a topic subscription of <code>some/other/topic/&gt;</code> to your <strong>Try-Me Subscriber</strong>, resent a message to <code>a/b/c</code> and checkout what your <strong>Subscriber</strong> receives.<br>You&#39;ll note that you received 1 message on the default binding destination of <code>my/default/topic</code> and the other messages went to <code>some/other/topic/X</code> where X is a number as defined in the code.</p>
+<p class="image-container"><img alt="Batch Publish 2" src="img/685fcd89b80d6409.webp"></p>
 
 
       </google-codelab-step>
