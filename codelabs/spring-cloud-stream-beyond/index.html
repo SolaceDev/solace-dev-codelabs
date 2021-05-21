@@ -346,13 +346,17 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
         <p>Since we&#39;re using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we&#39;re in luck! There are 2 different options for configuring your topic subscriptions on consuming funcitons. Both options are configured in the Spring application properties.</p>
 <h2 is-upgraded>Wildcards in the destination</h2>
 <p>The first way to do it is in the <code>destination</code> property itself. The Solace binder uses the <code>destination</code> property to both name the queue that the app will bind to, but also as a topic subscription on the queue.</p>
-<p>To test this functionality out go ahead and change the <code>myConsumer-in-0</code> binding to have a destination using wildcards and restart your app.</p>
+<p>To test this functionality out go ahead and change the configuration of <code>myConsumer-in-0</code> to have a destination using wildcards and restart your app.</p>
 <pre><code>spring:
   cloud:
+    function:
     stream:
       bindings:
         myConsumer-in-0:
           destination: &#39;spring/*/stream/&gt;&#39;
+          group: nonexclusive
+          consumer:
+            concurrency: 5
 </code></pre>
 <p>Now go ahead and use the <code>Try-Me</code> tab to send a few test messages that match the pattern.<br>Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
 <aside class="warning"><p>Learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a></p>
@@ -363,6 +367,8 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
 <p>For example, if we wanted to add <code>pub/*/plus</code> and <code>a/b/&gt;</code> subscriptions to our app we could add those subscriptions to the queue by doing the following:</p>
 <pre><code>spring:
   cloud:
+    function:
+      definition: myConsumer
     stream:
       bindings:
         myConsumer-in-0:
@@ -385,7 +391,71 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
       </google-codelab-step>
     
       <google-codelab-step label="Dynamic Publishing" duration="15">
+        <p>Now that we know how to subscribe using wildcards we&#39;re halfway to taking advantage of Solace&#39;s dynamic topics. The second part of that is of course to be able to publish to whatever topic we need to! We want to publish to a unique topic for each event, no worries I&#39;ve got you covered!</p>
+<p>The Spring Cloud Stream framework allows for 2 different ways to publish to dynamic topics using the imperative style.</p>
+<ol type="1">
+<li>Using <code>StreamBridge</code></li>
+<li>Using the <code>BinderHeaders.TARGET_DESTINATION</code> header</li>
+</ol>
+<aside class="warning"><p>If you&#39;re using the reactive programming style you can use the <code>EmitterProcessor</code> for dynamic publishing but we won&#39;t be covering that in this codelab.</p>
+</aside>
+<h2 is-upgraded>StreamBridge</h2>
+<p>The first option for dynamic publishing is using <code>StreamBridge</code>. Note that this option is processed at the framework level and will work with any Cloud Stream binder that you choose to use. <code>StreamBridge</code> will cache a channel within Spring for each destination that you publish to. This options is solid if you&#39;re going to be publishing to a small number of destinations as the channel will remain in cache and you can lookup the channel for monitoring/metrics if you desire. Note that the number of channels cached is configurable via <code>spring.cloud.stream.dynamic-destination-cache-size</code>.</p>
+<p>Let&#39;s update our <code>myConsumer</code> function to publish to dynamic topics.</p>
+<pre><code>@Bean
+public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
+    return v -&gt; {
+        logger.info(&#34;Received myConsumer: &#34; + v.getPayload());
+        logger.info(&#34;CorrelationID: &#34; + v.getHeaders().get(&#34;solace_correlationId&#34;));
         
+        // Use whatever business logic you&#39;d like to figure out the topic!
+        String cid = (String) v.getHeaders().get(&#34;solace_correlationId&#34;);
+        String myTopic = &#34;solace/cid/&#34;.concat(cid);
+        logger.info(&#34;Publishing to: &#34; + myTopic);
+        sb.send(myTopic , v.getPayload());
+    };
+}
+</code></pre>
+<aside class="special"><p>Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handle to send alerts during processing.</p>
+</aside>
+<p>🛠 To test this out go ahead and open up the <code>Try-Me</code> tab. On the <em>Subscriber</em> side subscribe to &#34;solace/cid/&gt;&#34;.<br>On the <em>Publisher</em> side, click &#34;Show Advanced&#34;, set a &#34;Correlation ID&#34; of 1 and send a message to the <code>a/b/c</code> topic.<br>Change the &#34;Correlation ID&#34; value to 2 and send again. You should now see that the app is publishing to dynamic topics and your <em>Subscriber</em> is consuming them.</p>
+<p>You should see something like the image below:<br><img alt="Dynamic Publish 1" src="img/28752f0328bbd677.webp"></p>
+<p>✅ Now you know how to use StreamBridge to publish to dynamic topics!</p>
+<h2 is-upgraded>BinderHeaders.TARGET_DESTINATION</h2>
+<p>The second way to publish to a dynamic destination is to use the <code>BinderHeaders.TARGET_DESTINATION</code> header. Note that this option will only work with binders that explicity support the feature, including Solace. When setting this header the framework is actually delegating the dynamic publishing to the Binder itself and therefore may result in better performance than the StreamBridge option depending on the binder&#39;s implementation.<br>🚀 If using the Solace binder this dynamic publishing option results in lower latencies as the Binder doesn&#39;t create/cache Spring Integration channels.</p>
+<p>Different than when using StreamBridge, when using the <code>BinderHeaders.TARGET_DESTINATION</code> option you would actually use a <code>Function</code> or <code>Supplier</code> and return a <code>Message&lt;?&gt;</code> with the header set to the destination you&#39;d like the message to be published to. If the <code>BinderHeaders.TARGET_DESTINATION</code> header is set it will override the default <code>destination</code> that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired.</p>
+<p>Let&#39;s create a <code>myFunction</code> Function that will perform the same processing that we just implemented with <code>StreamBridge</code>.<br><br>Your code will look something like this:</p>
+<pre><code>@Bean
+public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction() {
+    return v -&gt; {
+        logger.info(&#34;Received myConsumer: &#34; + v.getPayload());
+        logger.info(&#34;CorrelationID: &#34; + v.getHeaders().get(&#34;solace_correlationId&#34;));
+        
+        // Use whatever business logic you&#39;d like to figure out the topic!
+        String cid = (String) v.getHeaders().get(&#34;solace_correlationId&#34;);
+        String myTopic = &#34;solace/cid/&#34;.concat(cid);
+        logger.info(&#34;Publishing to: &#34; + myTopic);
+        return MessageBuilder.withPayload(v.getPayload()).setHeader(BinderHeaders.TARGET_DESTINATION, myTopic).build();
+    };
+}
+</code></pre>
+<p>Go ahead and update your Spring configuration to look like the following. This configuration sets the input and output bindings for your function <code>myFunction</code> and also sets the default output topic to <code>my/default/topic</code> which the app overrides.</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: &#39;a/b/&gt;&#39;
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+        myFunction-out-0:
+          destination: &#39;my/default/topic&#39;
+</code></pre>
+<p>🛠 Go ahead and test the function by repeating the <code>Try-Me</code> steps that we used above to test the <code>StreamBridge</code> implementation. You should see the same result :)</p>
+
 
       </google-codelab-step>
     

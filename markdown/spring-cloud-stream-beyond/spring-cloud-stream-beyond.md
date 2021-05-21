@@ -418,14 +418,18 @@ Since we're using the Solace binder we really want to be able to make topic subs
 ### Wildcards in the destination
 The first way to do it is in the `destination` property itself. The Solace binder uses the `destination` property to both name the queue that the app will bind to, but also as a topic subscription on the queue. 
 
-To test this functionality out go ahead and change the `myConsumer-in-0` binding to have a destination using wildcards and restart your app.
+To test this functionality out go ahead and change the configuration of `myConsumer-in-0` to have a destination using wildcards and restart your app.
 ``` yaml
 spring:
   cloud:
+    function:
     stream:
       bindings:
         myConsumer-in-0:
           destination: 'spring/*/stream/>'
+          group: nonexclusive
+          consumer:
+            concurrency: 5
 ```
 
 Now go ahead and use the `Try-Me` tab to send a few test messages that match the pattern. 
@@ -446,6 +450,8 @@ For example, if we wanted to add `pub/*/plus` and `a/b/>` subscriptions to our a
 ``` yaml
 spring:
   cloud:
+    function:
+      definition: myConsumer
     stream:
       bindings:
         myConsumer-in-0:
@@ -469,7 +475,91 @@ After restarting our app we can see that the subscriptions on our queue have bee
 
 ## Dynamic Publishing
 Duration: 0:15:00
-2 ways: StreamBridge and TARGET_DESTINATION Header
+
+Now that we know how to subscribe using wildcards we're halfway to taking advantage of Solace's dynamic topics. The second part of that is of course to be able to publish to whatever topic we need to! We want to publish to a unique topic for each event, no worries I've got you covered! 
+
+The Spring Cloud Stream framework allows for 2 different ways to publish to dynamic topics using the imperative style.  
+1. Using `StreamBridge`
+1. Using the `BinderHeaders.TARGET_DESTINATION` header
+
+Negative
+: If you're using the reactive programming style you can use the `EmitterProcessor` for dynamic publishing but we won't be covering that in this codelab. 
+
+### StreamBridge
+The first option for dynamic publishing is using `StreamBridge`. Note that this option is processed at the framework level and will work with any Cloud Stream binder that you choose to use. `StreamBridge` will cache a channel within Spring for each destination that you publish to. This options is solid if you're going to be publishing to a small number of destinations as the channel will remain in cache and you can lookup the channel for monitoring/metrics if you desire. Note that the number of channels cached is configurable via `spring.cloud.stream.dynamic-destination-cache-size`. 
+
+Let's update our `myConsumer` function to publish to dynamic topics. 
+``` java
+@Bean
+public Consumer<Message<String>> myConsumer(StreamBridge sb) {
+    return v -> {
+        logger.info("Received myConsumer: " + v.getPayload());
+        logger.info("CorrelationID: " + v.getHeaders().get("solace_correlationId"));
+        
+        // Use whatever business logic you'd like to figure out the topic!
+        String cid = (String) v.getHeaders().get("solace_correlationId");
+        String myTopic = "solace/cid/".concat(cid);
+        logger.info("Publishing to: " + myTopic);
+        sb.send(myTopic , v.getPayload());
+    };
+}
+```
+
+Positive
+: Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handle to send alerts during processing.
+
+🛠 To test this out go ahead and open up the `Try-Me` tab. On the *Subscriber* side subscribe to "solace/cid/>". 
+On the *Publisher* side, click "Show Advanced", set a "Correlation ID" of 1 and send a message to the `a/b/c` topic. 
+Change the "Correlation ID" value to 2 and send again. You should now see that the app is publishing to dynamic topics and your *Subscriber* is consuming them. 
+
+You should see something like the image below: 
+![Dynamic Publish 1](img/dynamicPublish1.webp)
+
+✅ Now you know how to use StreamBridge to publish to dynamic topics!
+
+### BinderHeaders.TARGET_DESTINATION
+The second way to publish to a dynamic destination is to use the `BinderHeaders.TARGET_DESTINATION` header. Note that this option will only work with binders that explicity support the feature, including Solace. When setting this header the framework is actually delegating the dynamic publishing to the Binder itself and therefore may result in better performance than the StreamBridge option depending on the binder's implementation. 
+🚀 If using the Solace binder this dynamic publishing option results in lower latencies as the Binder doesn't create/cache Spring Integration channels. 
+
+Different than when using StreamBridge, when using the `BinderHeaders.TARGET_DESTINATION` option you would actually use a `Function` or `Supplier` and return a `Message<?>` with the header set to the destination you'd like the message to be published to. If the `BinderHeaders.TARGET_DESTINATION` header is set it will override the default `destination` that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired. 
+
+Let's create a `myFunction` Function that will perform the same processing that we just implemented with `StreamBridge`.    
+Your code will look something like this: 
+``` java
+@Bean
+public Function<Message<String>, Message<String>> myFunction() {
+    return v -> {
+        logger.info("Received myConsumer: " + v.getPayload());
+        logger.info("CorrelationID: " + v.getHeaders().get("solace_correlationId"));
+        
+        // Use whatever business logic you'd like to figure out the topic!
+        String cid = (String) v.getHeaders().get("solace_correlationId");
+        String myTopic = "solace/cid/".concat(cid);
+        logger.info("Publishing to: " + myTopic);
+        return MessageBuilder.withPayload(v.getPayload()).setHeader(BinderHeaders.TARGET_DESTINATION, myTopic).build();
+    };
+}
+```
+
+Go ahead and update your Spring configuration to look like the following. This configuration sets the input and output bindings for your function `myFunction` and also sets the default output topic to `my/default/topic` which the app overrides.  
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: 'a/b/>'
+          group: nonexclusive
+          consumer:
+            concurrency: 5
+        myFunction-out-0:
+          destination: 'my/default/topic'
+```
+
+🛠 Go ahead and test the function by repeating the `Try-Me` steps that we used above to test the `StreamBridge` implementation. You should see the same result :) 
+
 
 ## Batch Publishing
 Duration: 0:07:00
