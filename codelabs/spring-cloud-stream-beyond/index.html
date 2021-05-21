@@ -45,6 +45,8 @@
 <li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
 <li>Solace Sample <a href="https://github.com/SolaceSamples/solace-samples-spring" target="_blank">Github Repository</a></li>
 </ul>
+<aside class="special"><p>👉 <strong>Have Questions? Ask them in the </strong><a href="https://solace.community" target="_blank"><strong>Solace Community</strong></a> 👈</p>
+</aside>
 
 
       </google-codelab-step>
@@ -632,7 +634,15 @@ public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
       </google-codelab-step>
     
       <google-codelab-step label="Consumer Error Handling" duration="15">
-        <p>If a failure occurs it will trigger the configured Spring Retry Template which we&#39;ll cover more in the next section.</p>
+        <h2 is-upgraded>Provided by the Framework</h2>
+<p>Spring Retry Template in framework<br>Problem? return null to not send the message downstream</p>
+<h2 is-upgraded>Provided by the Solace Binder</h2>
+<p>Solace redeliveries and DLQ/DMQ<br>Publish to Error Queue</p>
+<h2 is-upgraded>Guidance</h2>
+<ol type="1">
+<li>Keep it simple when possible!</li>
+<li>If you need to keep control then evaluate your error scenarios: infrastructure related (might work if we retry), processing related (won&#39;t work for retries) and choose path forward...</li>
+</ol>
 <aside class="warning"><p>When using reactive functions (such as if you&#39;re using <code>Flux</code> or <code>Mono</code>) the framework connects the <code>Flux</code> or <code>Mono</code> into your Function and that&#39;s it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable.<br></p>
 </aside>
 
@@ -640,7 +650,24 @@ public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
       </google-codelab-step>
     
       <google-codelab-step label="Publisher Error Handling" duration="7">
-        
+        <p>When creating event-driven microservices you are using asynchronous communications by default. This can sometimes make it tricky to handle publishing errors. Luckily there are a few options available to you when using Spring Cloud Stream with the Solace Binder, if using other binders please check as error handling options may differ.</p>
+<p>The two options are:</p>
+<ol type="1">
+<li>Producer Error Channels</li>
+<li>Publisher Confirmation</li>
+</ol>
+<aside class="special"><p>If you&#39;re using the Solace Binder, definitely take a read through the Solace Binders docs for <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#failed-producer-message-error-handling" target="_blank">Failed Producer Error Handling.</a></p>
+</aside>
+<h2 is-upgraded>Producer Error Channels</h2>
+<p>Producer Error Channels allow you to remain asynchronous and have a callback triggered when a send/publishing failure occurs. This can be enabled by setting the <code>errorChannelEnabled</code> producer property to true. Note that this functionality is disabled by default.</p>
+<p>//TODO Show config<br>//TODO Add Listener in code<br>//TODO Set ACL Profile to force failure<br>//TODO Send message<br>//TODO Show message failure</p>
+<h2 is-upgraded>Publisher Confirmations</h2>
+<p>If you need to wait to ensure your message was absolutely retrieved by the broker before continuing processing or you just want to keep the code simple and avoid extra callbacks then Publisher Confirmations in conjunction with StreamBridge may be the way to go for publishing messages from your microservice. This option allows you to use a <code>Future</code> to wait for publish confirmations and may differ per binder. With the Solace binder, for each message you create a <code>CorrelationData</code> instance and set it as your <code>SolaceBinderHeaders.CONFIRM_CORRELATION</code> header value. You can then use <code>CorrelationData.getFuture().get()</code> to wait for the publish acknowledgement from the broker. If the publish failed then an exception woulld be thrown.</p>
+<p>//TODO Show code (take from docs)<br>//TODO Send message<br>//TODO Show message failure</p>
+<aside class="warning"><p>⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.</p>
+</aside>
+<p>🚨 <strong>Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later</strong></p>
+
 
       </google-codelab-step>
     

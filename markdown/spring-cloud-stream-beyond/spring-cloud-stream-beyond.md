@@ -28,6 +28,9 @@ This codelab is a follow-on to the [Spring Cloud Stream Basics](https://codelabs
 * Spring Sample [Github Repository](https://github.com/spring-cloud/spring-cloud-stream-samples)
 * Solace Sample [Github Repository](https://github.com/SolaceSamples/solace-samples-spring)
 
+Positive
+: 👉 **Have Questions? Ask them in the [Solace Community](https://solace.community)** 👈
+
 ## What you need: Prerequisites
 Duration: 0:05:00
 
@@ -769,19 +772,54 @@ public Function<Message<String>, String> myFunction() {
 
 ## Consumer Error Handling
 Duration: 0:15:00
-Retry Templates in framework
+
+### Provided by the Framework
+Spring Retry Template in framework
+Problem? return null to not send the message downstream
+
+### Provided by the Solace Binder
 Solace redeliveries and DLQ/DMQ
 Publish to Error Queue
-Custom!
 
-If a failure occurs it will trigger the configured Spring Retry Template which we'll cover more in the next section. 
+### Guidance
+1. Keep it simple when possible! 
+1. If you need to keep control then evaluate your error scenarios: infrastructure related (might work if we retry), processing related (won't work for retries) and choose path forward...
 
 Negative
-: When using reactive functions (such as if you're using `Flux` or `Mono`) the framework connects the `Flux` or `Mono` into your Function and that's it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable.  
+: When using reactive functions (such as if you're using `Flux` or `Mono`) the framework connects the `Flux` or `Mono` into your Function and that's it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable.     
 
 ## Publisher Error Handling
 Duration: 0:07:00
-How to handle it!
+
+When creating event-driven microservices you are using asynchronous communications by default. This can sometimes make it tricky to handle publishing errors. Luckily there are a few options available to you when using Spring Cloud Stream with the Solace Binder, if using other binders please check as error handling options may differ. 
+
+The two options are: 
+1. Producer Error Channels
+1. Publisher Confirmation
+
+Positive
+: If you're using the Solace Binder, definitely take a read through the Solace Binders docs for [Failed Producer Error Handling.](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#failed-producer-message-error-handling)
+
+### Producer Error Channels
+Producer Error Channels allow you to remain asynchronous and have a callback triggered when a send/publishing failure occurs. This can be enabled by setting the `errorChannelEnabled` producer property to true. Note that this functionality is disabled by default. 
+
+//TODO Show config
+//TODO Add Listener in code
+//TODO Set ACL Profile to force failure
+//TODO Send message 
+//TODO Show message failure
+
+### Publisher Confirmations
+If you need to wait to ensure your message was absolutely retrieved by the broker before continuing processing or you just want to keep the code simple and avoid extra callbacks then Publisher Confirmations in conjunction with StreamBridge may be the way to go for publishing messages from your microservice. This option allows you to use a `Future` to wait for publish confirmations and may differ per binder. With the Solace binder, for each message you create a `CorrelationData` instance and set it as your `SolaceBinderHeaders.CONFIRM_CORRELATION` header value. You can then use `CorrelationData.getFuture().get()` to wait for the publish acknowledgement from the broker. If the publish failed then an exception woulld be thrown. 
+
+//TODO Show code (take from docs) 
+//TODO Send message 
+//TODO Show message failure
+
+Negative
+: ⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.
+
+🚨 **Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later** 
 
 ## Takeaways & Next Steps
 Duration: 0:03:00
