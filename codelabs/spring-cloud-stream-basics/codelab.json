@@ -3,16 +3,24 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-09-02T16:36:34-04:00",
+  "updated": "2021-05-21T09:44:57-04:00",
   "id": "spring-cloud-stream-basics",
   "duration": 40,
   "title": "Spring Cloud Stream Basics",
   "summary": "This codelab walks a developer through the basics of Spring Cloud Stream",
   "source": "spring-cloud-stream-basics.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["spring", "java"],
-  "tags": ["web", "workshop"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring",
+    "java"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/spring-cloud-stream-basics/spring-cloud-stream-basics.md",
   "url": "spring-cloud-stream-basics"
 }
