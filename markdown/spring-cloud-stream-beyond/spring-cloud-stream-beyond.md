@@ -47,7 +47,7 @@ Duration: 0:05:00
 
 ✅ (1) Sign up for a free Solace Cloud account
 
-Navigate to [this link](https://console.solace.cloud/login/new-account) and fill out the required information. No credit card required! If you already have an account, skip right to #2.
+Navigate to [this link](https://console.solace.cloud/login/new-account?utm_source=devrel) and fill out the required information. No credit card required! If you already have an account, skip right to #2.
 
 ✅ (2) Create a messaging service
 
@@ -785,39 +785,14 @@ How to handle it!
 
 ## Takeaways & Next Steps
 Duration: 0:03:00
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3> 
 
-Next Steps: 
-AsyncAPI Code Gen
-Tracing?
+Hopefully you learned quite a bit about the use of Spring Cloud Stream to create event-driven microservices, especially when it comes to using it with the Solace binder and Solace PubSub+ Event Brokers.  
+
+For next steps I would recommend:
+✅ Checking out the [AsyncAPI Code Generator Template for Spring Cloud Stream](https://github.com/asyncapi/java-spring-cloud-stream-template). This template allows you to start with a design and generate a Spring Cloud Stream microservice that is pre-configured with the input and output bindings necessary for your microservice to be wired up to the underlying messaging system. Don't want to read? Here is a [YouTube video](https://youtu.be/QEDL6AqsaJc) covering AsyncAPI code gen with Spring Cloud Stream!
+✅ Learn about Solace Event Broker's Multi-protocol capabilties that allow your Spring Cloud Stream apps to exchange events/messages with other Spring and non-Spring apps. [YouTube Video!](https://youtu.be/FHoyGgP2TZM) 
+✅ Learning about the [Solace Event Portal](https://console.solace.cloud/login/new-account?utm_source=devrel) which allows you to design your EDA and export AsyncAPI documents to help kickstart code generation. 
 
 ![Soly Image Caption](img/soly.gif)
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
-
-### Info Boxes
-Plain Text followed by green & yellow info boxes 
-
-Negative
-: This will appear in a yellow info box.
-
-Positive
-: This will appear in a green info box.
-
-### Bullets
-Plain Text followed by bullets
-* Hello
-* CodeLab
-* World
-
-### Numbered List
-1. List
-1. Using
-1. Numbers
-
-### Add an Image or a GIF
-
-![Soly Image Caption](img/soly.gif)
-
