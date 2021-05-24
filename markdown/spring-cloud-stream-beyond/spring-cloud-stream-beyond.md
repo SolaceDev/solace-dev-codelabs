@@ -185,7 +185,7 @@ SolaceQueueProvisioner : Subscribing queue #P2P/QTMP/v:b0e95afab69a/scst/an/59e7
 Positive
 : 💥 Note that you'll see that the messages arrive in the order that you send them. 
 
-### TODO - INSERT TRY-ME IMAGE.
+![TryMeSCS](img/tryMeSCS.webp)
 
 This option is great when we don't need to store messages/events when the app is offline, but what if we do!?
 
@@ -331,7 +331,7 @@ In most cases you'll want to do some performance testing to see what mix of scal
 
 
 ## Message Headers
-Duration: 0:07:00
+Duration: 0:10:00
 Consumer Side
 
 By default when coding your Spring Cloud Stream microservice you are writing Spring Cloud Function beans that can be re-used for multiple purposes and can leverage the framework's [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) to pass your POJOs directly into the function while decoupling your business logic from the specific runtime target and triggering mechanism (web endpoint, stream processor, task). This is convenient, but sometimes when creating a function for a stream processor our business logic requires the use of metadata in the message headers that we need access to on the Consuming side or need to set on the Publishing side.
@@ -364,7 +364,6 @@ public Consumer<Message<String>> myConsumer(){
       };
 }
 ```
-**TODO: Add in app routing using headers?**      
 
 Positive
 : 💡 Note that we're currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers. 
@@ -654,7 +653,7 @@ You'll note that you received 1 message on the default binding destination of `m
 
 
 ## Client/Manual Acknowledgements
-Duration: 0:10:00
+Duration: 0:12:00
 
 By default when using Spring Cloud Stream with imperative functions (not reative!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we'll cover how you can use client/manual acknowledgements to handle this situation. 
 
@@ -879,7 +878,7 @@ Okay so we have all of these options, how do we choose what what to do when hand
 ✅ Now that we know about exception handling options on the Consumer side we'll cover Publisher error handling in the next section!
 
 ## Publisher Error Handling
-Duration: 0:07:00
+Duration: 0:12:00
 
 When creating event-driven microservices you are using asynchronous communications by default. This can sometimes make it tricky to handle publishing errors. Luckily there are a few options available to you when using Spring Cloud Stream with the Solace Binder, if using other binders please check as error handling options may differ. 
 

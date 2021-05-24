@@ -161,7 +161,7 @@ public Consumer&lt;String&gt; myConsumer(){
 </ol>
 <aside class="special"><p>💥 Note that you&#39;ll see that the messages arrive in the order that you send them.</p>
 </aside>
-<h2 is-upgraded>TODO - INSERT TRY-ME IMAGE.</h2>
+<p class="image-container"><img alt="TryMeSCS" src="img/6b6cce25f0d23f9.webp"></p>
 <p>This option is great when we don&#39;t need to store messages/events when the app is offline, but what if we do!?</p>
 <h2 is-upgraded>Publish-Subscribe (Durable)</h2>
 <p>Sometimes it isn&#39;t enough to be able to deliver messages/events only while the app remains connected to the broker; there are many scenarios where you want messages stored while the app is offline while still maintaining order. In this case the Solace Binder allows you to follow the Publish-Subscribe pattern and consume from an Exclusive Durable Queue that will do just that.</p>
@@ -274,7 +274,7 @@ public class DemoApplication {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Message Headers" duration="7">
+      <google-codelab-step label="Message Headers" duration="10">
         <p>By default when coding your Spring Cloud Stream microservice you are writing Spring Cloud Function beans that can be re-used for multiple purposes and can leverage the framework&#39;s <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management" target="_blank">Content Type Negotiation</a> to pass your POJOs directly into the function while decoupling your business logic from the specific runtime target and triggering mechanism (web endpoint, stream processor, task). This is convenient, but sometimes when creating a function for a stream processor our business logic requires the use of metadata in the message headers that we need access to on the Consuming side or need to set on the Publishing side.</p>
 <h2 is-upgraded>Consumer - Accessing Headers</h2>
 <p>We&#39;ll start with the consuming side. In order to get access to the headers you&#39;ll need to set the input argument to a <code>Message&lt;?&gt;</code> type.<br>Once you have the Spring Message object you can retrieve a map of the headers using the <code>getHeaders()</code> method. Note that because the input argument is now a <code>Message&lt;?&gt;</code> you would now use the <code>getPayload()</code> method to get the actual payload itself.</p>
@@ -297,7 +297,6 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
       };
 }
 </code></pre>
-<p><strong>TODO: Add in app routing using headers?</strong></p>
 <aside class="special"><p>💡 Note that we&#39;re currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers.</p>
 </aside>
 <h2 is-upgraded>Publishing - Setting Headers</h2>
@@ -530,7 +529,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
 
       </google-codelab-step>
     
-      <google-codelab-step label="Client/Manual Acknowledgements" duration="10">
+      <google-codelab-step label="Client/Manual Acknowledgements" duration="12">
         <p>By default when using Spring Cloud Stream with imperative functions (not reative!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we&#39;ll cover how you can use client/manual acknowledgements to handle this situation.</p>
 <p>Using Client/Manual Acknowledgements can be simplified into a two step process:</p>
 <ol type="1">
@@ -727,7 +726,7 @@ public Function&lt;String, String&gt; myFunction() {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Publisher Error Handling" duration="7">
+      <google-codelab-step label="Publisher Error Handling" duration="12">
         <p>When creating event-driven microservices you are using asynchronous communications by default. This can sometimes make it tricky to handle publishing errors. Luckily there are a few options available to you when using Spring Cloud Stream with the Solace Binder, if using other binders please check as error handling options may differ.</p>
 <p>The two options are:</p>
 <ol type="1">
