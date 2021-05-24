@@ -661,7 +661,7 @@ public Function<String, Collection<Message<String>>> myFunction(StreamBridge sb)
 }
 ```
 
-🛠 Add a topic subscription of `some/other/topic/>` to your "Try-Me" **Subscriber**, resent a message to `a/b/c` and checkout what your **Subscriber** receives.      
+🛠 Add a topic subscription of `some/other/topic/>` to your "Try-Me" **Subscriber**, resend a message to `a/b/c` and checkout what your **Subscriber** receives.      
 
 You'll note that you received 1 message on the default binding destination of `my/default/topic` and the other 3 messages went to `some/other/topic/X` where X is a number as defined in the code. 
 
