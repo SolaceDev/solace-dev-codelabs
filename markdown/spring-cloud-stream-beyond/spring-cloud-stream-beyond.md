@@ -864,7 +864,7 @@ public Function<Message<String>, String> myFunction() {
 
 
 **Don't send a message!**
-It is common to have a microservice that an event, processes it, and publishes an outbound event. But what if I don't want to send an output message!? The framework makes this easy, just `return null` and no outbound message will be published. 
+It is common to have a microservice that receives an event, processes it, and publishes an outbound event. But what if I don't want to send an output message!? The framework makes this easy, just `return null` and no outbound message will be published. 
 
 ```java
 @Bean

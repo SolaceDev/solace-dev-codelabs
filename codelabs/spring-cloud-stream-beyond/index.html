@@ -712,7 +712,7 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
 }
 </code></pre>
 <p>🛠 Go ahead and use the &#34;Try-Me&#34; tool to publish a message to the &#34;a/b/c&#34; topic. You should see that the binding specific error handler received the message.</p>
-<p><strong>Don&#39;t send a message!</strong><br>It is common to have a microservice that an event, processes it, and publishes an outbound event. But what if I don&#39;t want to send an output message!? The framework makes this easy, just <code>return null</code> and no outbound message will be published.</p>
+<p><strong>Don&#39;t send a message!</strong><br>It is common to have a microservice that receives an event, processes it, and publishes an outbound event. But what if I don&#39;t want to send an output message!? The framework makes this easy, just <code>return null</code> and no outbound message will be published.</p>
 <pre><code>@Bean
 public Function&lt;String, String&gt; myFunction() {
     return v -&gt; {
