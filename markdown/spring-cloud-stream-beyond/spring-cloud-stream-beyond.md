@@ -529,7 +529,7 @@ public Consumer<Message<String>> myConsumer(StreamBridge sb) {
 ```
 
 Positive
-: Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handle to send alerts during processing.
+: Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handy to send alerts during processing.
 
 🛠 To test this out go ahead and open up the "Try-Me" tab. On the *Subscriber* side subscribe to "solace/cid/>". 
 On the *Publisher* side, click "Show Advanced", set a "Correlation ID" of 1 and send a message to the `a/b/c` topic. 
@@ -671,7 +671,7 @@ You'll note that you received 1 message on the default binding destination of `m
 ## Client/Manual Acknowledgements
 Duration: 0:12:00
 
-By default when using Spring Cloud Stream with imperative functions (not reative!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we'll cover how you can use client/manual acknowledgements to handle this situation. 
+By default when using Spring Cloud Stream with imperative functions (not reactive!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we'll cover how you can use client/manual acknowledgements to handle this situation. 
 
 Using Client/Manual Acknowledgements can be simplified into a two step process:  
 1. Disable auto-acknowledgement in the acknowledgment callback header
@@ -781,7 +781,7 @@ public Function<Message<String>, String> myFunction() {
 🛠 Let's test this out using the "Try-Me" tool as usual. In the **Publisher** set the "Correlation Id" (which is under "Show Advanced") to "accept" and publish a message to the `a/b/c` topic like seen in the image below.         
 🛠 You should see that your microservice accepts the message and if you navigate to your Queue, which should be named *scst/wk/nonexclusive/plain/a/b/_*, you'll see that there are no messages remaining on the queue. 
 
-🛠 Now change the "Correlation ID" to "requeue" and send the message again. You'll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer and set a sleep of 60 seconds after requeuing) you'll see the message remains on the queue.
+🛠 Now change the "Correlation ID" to "requeue" and send the message again. You'll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer, and set a sleep of 60 seconds after requeuing) you'll see the message remains on the queue.
 
 ![Client Ack Accept TryMe](img/clientAckAcceptTryMe.webp)
 
@@ -938,7 +938,7 @@ public Function<Message<String>, String> myFunction() {
 ```
 
 ### Guidance
-Okay so we have all of these options, how do we choose what what to do when handling errors? It of course all goes back to your requirements.
+Okay so we have all of these options, how do we choose what to do when handling errors? It of course all goes back to your requirements.
 1. In general, keep it simple when possible! 
  * Handle your exceptions and don't throw them when possible.  
  * Think about how your function might fail and configure the `RetryTemplate` (Would Retrying really help?) and binding specific error channel appropriately.
@@ -992,7 +992,7 @@ public void handlePublishError(ErrorMessage message) {
 }	
 ```
 
-🛠 The easiest way to test this out when using Solace is to prevent our `client-username` from being able to publish to our output destination. `
+🛠 The easiest way to test this out when using Solace is to prevent our `client-username` from being able to publish to our output destination.
 * Log in to the PubSub+ Manager
 * Choose your VPN and choose "Access Control" 
 * Click "ACL Profiles" and click on the ACL Profile for your Client Username. (By default it is "default")
@@ -1054,7 +1054,7 @@ spring:
 🛠 Go ahead and use the "Try-Me" tool to send a message to the `a/b/c` topic with a payload of "Hello World". You'll see the app processes the message and Publishing succceeds. If you then change the payload of the message to "fail" you'll see that the Publish to the `my/default/topic` fails and "Publish Failed" is logged. This allows the developer to execute error handling prior to exiting the funtion. 
 
 Negative
-: ⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.
+: ⚠️  Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.
 
 🚨 **Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later** 
 

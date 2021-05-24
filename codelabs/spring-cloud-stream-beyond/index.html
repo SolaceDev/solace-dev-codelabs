@@ -440,7 +440,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
     };
 }
 </code></pre>
-<aside class="special"><p>Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handle to send alerts during processing.</p>
+<aside class="special"><p>Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handy to send alerts during processing.</p>
 </aside>
 <p>🛠 To test this out go ahead and open up the &#34;Try-Me&#34; tab. On the <em>Subscriber</em> side subscribe to &#34;solace/cid/&gt;&#34;.<br>On the <em>Publisher</em> side, click &#34;Show Advanced&#34;, set a &#34;Correlation ID&#34; of 1 and send a message to the <code>a/b/c</code> topic.<br>Change the &#34;Correlation ID&#34; value to 2 and send again. You should now see that the app is publishing to dynamic topics and your <em>Subscriber</em> is consuming them.</p>
 <p>You should see something like the image below:<br><img alt="Dynamic Publish 1" src="img/28752f0328bbd677.webp"></p>
@@ -551,7 +551,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
       </google-codelab-step>
     
       <google-codelab-step label="Client/Manual Acknowledgements" duration="12">
-        <p>By default when using Spring Cloud Stream with imperative functions (not reative!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we&#39;ll cover how you can use client/manual acknowledgements to handle this situation.</p>
+        <p>By default when using Spring Cloud Stream with imperative functions (not reactive!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we&#39;ll cover how you can use client/manual acknowledgements to handle this situation.</p>
 <p>Using Client/Manual Acknowledgements can be simplified into a two step process:</p>
 <ol type="1">
 <li>Disable auto-acknowledgement in the acknowledgment callback header</li>
@@ -649,7 +649,7 @@ public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
 </li>
 </ol>
 <p>🛠 Let&#39;s test this out using the &#34;Try-Me&#34; tool as usual. In the <strong>Publisher</strong> set the &#34;Correlation Id&#34; (which is under &#34;Show Advanced&#34;) to &#34;accept&#34; and publish a message to the <code>a/b/c</code> topic like seen in the image below.<br><br>🛠 You should see that your microservice accepts the message and if you navigate to your Queue, which should be named <em>scst/wk/nonexclusive/plain/a/b/_</em>, you&#39;ll see that there are no messages remaining on the queue.</p>
-<p>🛠 Now change the &#34;Correlation ID&#34; to &#34;requeue&#34; and send the message again. You&#39;ll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer and set a sleep of 60 seconds after requeuing) you&#39;ll see the message remains on the queue.</p>
+<p>🛠 Now change the &#34;Correlation ID&#34; to &#34;requeue&#34; and send the message again. You&#39;ll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer, and set a sleep of 60 seconds after requeuing) you&#39;ll see the message remains on the queue.</p>
 <p class="image-container"><img alt="Client Ack Accept TryMe" src="img/12bf7740ca113af7.webp"></p>
 <p>💡 Now that you know how to use Manual Acknowledgements we&#39;ll talk about when to use them as part of Consumer Error Handling in the next section!</p>
 
@@ -775,7 +775,7 @@ public Function&lt;String, String&gt; myFunction() {
 }
 </code></pre>
 <h2 is-upgraded>Guidance</h2>
-<p>Okay so we have all of these options, how do we choose what what to do when handling errors? It of course all goes back to your requirements.</p>
+<p>Okay so we have all of these options, how do we choose what to do when handling errors? It of course all goes back to your requirements.</p>
 <ol type="1">
 <li>In general, keep it simple when possible!<br><br><ul>
 <li>Handle your exceptions and don&#39;t throw them when possible.<br></li>
@@ -829,7 +829,7 @@ public void handlePublishError(ErrorMessage message) {
     logger.info(&#34;Original Message: &#34; + message.getOriginalMessage());
 }	
 </code></pre>
-<p>🛠 The easiest way to test this out when using Solace is to prevent our <code>client-username</code> from being able to publish to our output destination. `</p>
+<p>🛠 The easiest way to test this out when using Solace is to prevent our <code>client-username</code> from being able to publish to our output destination.</p>
 <ul>
 <li>Log in to the PubSub+ Manager</li>
 <li>Choose your VPN and choose &#34;Access Control&#34;</li>
@@ -880,7 +880,7 @@ public Consumer&lt;String&gt; myConsumer(StreamBridge sb) {
           destination: &#39;a/b/&gt;&#39;
 </code></pre>
 <p>🛠 Go ahead and use the &#34;Try-Me&#34; tool to send a message to the <code>a/b/c</code> topic with a payload of &#34;Hello World&#34;. You&#39;ll see the app processes the message and Publishing succceeds. If you then change the payload of the message to &#34;fail&#34; you&#39;ll see that the Publish to the <code>my/default/topic</code> fails and &#34;Publish Failed&#34; is logged. This allows the developer to execute error handling prior to exiting the funtion.</p>
-<aside class="warning"><p>⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.</p>
+<aside class="warning"><p>⚠️  Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.</p>
 </aside>
 <p>🚨 <strong>Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later</strong></p>
 
