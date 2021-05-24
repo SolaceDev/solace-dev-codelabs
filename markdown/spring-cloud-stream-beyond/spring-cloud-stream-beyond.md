@@ -772,20 +772,111 @@ public Function<Message<String>, String> myFunction() {
 ## Consumer Error Handling
 Duration: 0:15:00
 
+There are several mechanisms available to the developer when consuming messages with a Spring Cloud Stream microservice. Some of these mechanisms are internal to the framework and available for any binder, while others are specific to the binder that you're using. In this codelab I'll cover the framework options as well as error handling options made available by the Solace Binder. 
+
 ### Provided by the Framework
-Spring Retry Template in framework
-Problem? return null to not send the message downstream
 
-### Provided by the Solace Binder
-Solace redeliveries and DLQ/DMQ
-Publish to Error Queue
+**Retries**
+The [Error Handling](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-overview-error-handling) section in the Spring Cloud Stream reference guide goes into more detail around the available options, but in general for developers using imperative functions the framework provides retrying of exceptions using the [Spring Retry](https://github.com/spring-projects/spring-retry) library and developers creating reactive functions can take advantage of `retryBackoff` capabilities in project reactor. 
 
-### Guidance
-1. Keep it simple when possible! 
-1. If you need to keep control then evaluate your error scenarios: infrastructure related (might work if we retry), processing related (won't work for retries) and choose path forward...
+The framework provides reasonable defaults, but when using the the `SpringRetry` library you can configure the `RetryTemplate` to configure options such the number of retry events, the backoff interval and even which exceptions to retry or not retry. If you need custom retry logic you can also provide your own instance of the `RetryTemplate` for use. It is important to note that these retries take place inside of the microservice itself and the message is not being sent back to the underlying message system. 
 
 Negative
-: When using reactive functions (such as if you're using `Flux` or `Mono`) the framework connects the `Flux` or `Mono` into your Function and that's it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable.     
+: When using reactive functions (such as if you're using `Flux` or `Mono`) the framework connects the `Flux` or `Mono` into your Function and that's it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable per your requirements.
+
+Configuring the `RetryTemplate` on an input binding would look something like this:
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: 'a/b/>'
+          group: clientAck
+          consumer:
+            max-attempts: 5
+            back-off-initial-interval: 1
+            back-off-multiplier: 3
+            default-retryable: true
+            retryable-exceptions:
+              java.lang.IllegalStateException: true
+```
+
+**Don't send a message!**
+It is common to have a microservice that an event, processes it, and publishes an outbound event. But what if I don't want to send an output message!? The framework makes this easy, just `return null` and no outbound message will be published. 
+
+```java
+@Bean
+public Function<String, String> myFunction() {
+    return v -> {
+        logger.info("Received: " + v);
+            
+        if (!sendMessageDownstream(v)) {
+          logger.warn("Not Sending an Outbound Message");
+          return null;
+        } else {
+          return processMessage(v);
+        }
+    };
+}
+```
+
+### Provided by the Solace Binder
+So what happens after internal retries are exhausted!? The message is given back to the binder which for further error handling.
+I'll cover error handling by example in this codelab, but be sure to read the [Failed Consumer Message Error Handling](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#failed-consumer-message-error-handling) section of the Solace Binder docs for all the detail. 
+
+At a high level the Solace Binder offers 2 options: 
+1. **Requeuing the message back to the queue on the Solace Event Broker.** Note that this is the default option. By putting the message back on the queue the broker will re-deliver the message to a consuming app. This may result in it being re-delivered to the same microservice instance or potentially another instance in your consumer group. If you are going to use this option be sure to consider what you want your queue's max message redelivery to be set to and also consider if you would like a Solace [Dead Message Queue](https://docs.solace.com/Configuring-and-Managing/Setting-Dead-Msg-Queues.htm) . 
+1. **Publishing the message to a separate Error Queue**. This option can be chosen by setting the `autoBindErrorQueue` consumer property option to true and will result in the Binder creating a separate error queue to publish errors to(by default). The Error Queue will be a Durable Queue on the Solace Event Broker and can be configured by the options starting with "errorQueue" in the [Solace Consumer Properties](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#solace-consumer-properties). This option allows your messages that result in an exception to be published elsewhere for further error handling. 
+
+✅ Here is an example of how you would configure the error queue to be used on our `myFunction` example. 
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: 'a/b/>'
+          group: clientAck
+            max-attempts: 1
+        myFunction-out-0:
+          destination: 'my/default/topic'
+      solace:
+        bindings:
+          myFunction-in-0:
+            consumer:
+               autoBindErrorQueue: true
+               errorQueueMaxDeliveryAttempts: 3
+               errorQueueAccessType: 1
+               errorQueueRespectsMsgTtl: true
+```
+
+✅ If we start our app with the configuration above we'll see that an error queue named `scst/error/wk/clientAck/plain/a/b/_` is created. You can see it in PubSub+ Manager. 
+
+![Error Queue](img/errorQueue.webp)
+
+
+🛠 The easiest way to test these options out are to have your function `throw new RuntimeException("Oh no!!")` and use the "Try-Me" tab to send test messages 👍
+
+
+### Guidance
+//TODO ADD in app error channel options...probably also need an image
+Okay so we have all of these options, how do we choose what what to do when handling errors? It of course all goes back to your requirements.
+1. In general, keep it simple when possible! 
+ * Handle your exceptions and don't throw them when possible.  
+ * Think about how your function might fail and configure the `RetryTemplate` appropriately. Would Retrying really help? 
+ * Do you want messages that do throw exceptions to end up on another queue? (use `autoBindErrorQueue`)
+1. If you need more control and are fine writing more messaging specific code then I would make use of both the internal framework and binder error handling options in conjunction with **Client/Manual Acknowledgements** that we covered in a previous section. Then do something like the following: 
+ * Handle your exceptions and don't throw them
+ * Think about how your function might fail and configure the `RetryTemplate` appropriately. Would Retrying really help? 
+ * Use the Client/Manual Ack to `REQUEUE` messages that end in an error scenario that may be successful if retried, even if by another instance in the Consumer Group. For example, maybe an infrastructure issue where your microservice couldn't get a response from a downstream service. 
+ * Identify your failure scenarios that wouldn't work if retried and consider if you want to send them all to one queue for further processing or to several destinations. If one queue then use the `autoBindErrorQueue` option and use the Client/Manual Ack to `REJECT` the message and let the binder handle it for you. However, if you prefer to send to several destinations for error processing then use `StreamBridge` as covered in the **Dynamic Publishing** section to publish where you'd like. After publishing be sure to use the Client/Manual Ack to `ACCEPT` the message.  
+
+✅ Now that we know about exception handling options on the Consumer side we'll cover Publisher error handling in the next section!
 
 ## Publisher Error Handling
 Duration: 0:07:00
@@ -802,18 +893,92 @@ Positive
 ### Producer Error Channels
 Producer Error Channels allow you to remain asynchronous and have a callback triggered when a send/publishing failure occurs. This can be enabled by setting the `errorChannelEnabled` producer property to true. Note that this functionality is disabled by default. 
 
-//TODO Show config
-//TODO Add Listener in code
-//TODO Set ACL Profile to force failure
-//TODO Send message 
-//TODO Show message failure
+✅ Let's continue using our `myFunction` function and configure the outbound side to enable the publisher error channel. 
+``` yaml
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: 'a/b/>'
+          group: clientAck
+        myFunction-out-0:
+          destination: 'my/default/topic'
+          producer:
+            error-channel-enabled: true
+```
+
+✅ Next we need to add a listener in the code
+``` java
+@ServiceActivator(inputChannel="my/default/topic.errors")
+public void handlePublishError(ErrorMessage message) {
+    logger.warn("Message Publish Failed for: " + message);
+    logger.info("Original Message: " + message.getOriginalMessage());
+}	
+```
+
+🛠 The easiest way to test this out when using Solace is to prevent our `client-username` from being able to publish to our output destination. `
+* Log in to the PubSub+ Manager
+* Choose your VPN and choose "Access Control" 
+* Click "ACL Profiles" and click on the ACL Profile for your Client Username. (By default it is "default")
+* Click "Publish Topic", verify the "Publish Default Action" is "Allow" 
+* Click the "+ Exception" button and add "my/default/topic"     
+![ACL Profile](img/aclProfile.webp)
+
+🛠 Let's use the "Try-Me" tool to send a message to the `a/b/c` topic and trigger our function. 
+![Try Me ABC](img/tryMeABC.webp)
+
+🛠 You should see that our listener logged the message failed to publish and you can add custom error handling logic. 
+
 
 ### Publisher Confirmations
-If you need to wait to ensure your message was absolutely retrieved by the broker before continuing processing or you just want to keep the code simple and avoid extra callbacks then Publisher Confirmations in conjunction with StreamBridge may be the way to go for publishing messages from your microservice. This option allows you to use a `Future` to wait for publish confirmations and may differ per binder. With the Solace binder, for each message you create a `CorrelationData` instance and set it as your `SolaceBinderHeaders.CONFIRM_CORRELATION` header value. You can then use `CorrelationData.getFuture().get()` to wait for the publish acknowledgement from the broker. If the publish failed then an exception woulld be thrown. 
+If you need to wait to ensure your message was absolutely retrieved by the broker before continuing processing or you just want to keep the code simple and avoid extra callbacks then Publisher Confirmations in conjunction with StreamBridge may be the way to go for publishing messages from your microservice. This option allows you to use a `Future` to wait for publish confirmations and may differ per binder. With the Solace binder, for each message you create a `CorrelationData` instance and set it as your `SolaceBinderHeaders.CONFIRM_CORRELATION` header value. You can then use `CorrelationData.getFuture().get()` to wait for the publish acknowledgement from the broker. If the publish failed then an exception would be thrown. Read more in the [Publisher Confirmations](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#publisher-confirmations) section of the Solace Binder docs. 
 
-//TODO Show code (take from docs) 
-//TODO Send message 
-//TODO Show message failure
+To test this out go ahead and delete or comment out your current function and app config and replace it with the Function and binding config below. This code will wire up the `myConsumer` **Consumer** that will receive a message and use `StreamBridge` to send outgoing messages. By using StreamBridge we can send while still in our function and use the `Future` to wait for the publish to succeed or fail. Note that the code below will result in a failure if a  message is published to the `a/b/c` topic with a payload of "fail" assuming that we still have the *ACL Profile* set up to deny publishing to the `my/default/topic` as configured earlier in this section.       
+
+**Java Code**
+``` java
+@Bean
+public Consumer<String> myConsumer(StreamBridge sb) {
+    return v -> {
+        logger.info("Received myConsumer: " + v);
+
+        CorrelationData correlationData = new CorrelationData();
+        Message<String> message = MessageBuilder.withPayload("My Payload")
+                .setHeader(SolaceBinderHeaders.CONFIRM_CORRELATION, correlationData).build();
+
+        if (v.equals("fail")) {
+            sb.send("my/default/topic", message);
+        } else {
+            sb.send("pub/sub/plus", message);
+        }
+        
+        try {
+            correlationData.getFuture().get(30, TimeUnit.SECONDS);
+            logger.info("Publish Successful");
+            // Do success logic
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            logger.error("Publish Failed");
+            // Do failure logic
+        }
+    };
+}
+```
+
+**Spring Config - for application.yml**
+``` yaml
+spring:
+  cloud:
+    function:
+       definition: myConsumer
+    stream:
+      bindings:
+        myConsumer-in-0:
+          destination: 'a/b/>'
+```
+🛠 Go ahead and use the "Try-Me" tool to send a message to the `a/b/c` topic with a payload of "Hello World". You'll see the app processes the message and Publishing succceeds. If you then change the payload of the message to "fail" you'll see that the Publish to the `my/default/topic` fails and "Publish Failed" is logged. This allows the developer to execute error handling prior to exiting the funtion. 
 
 Negative
 : ⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.
