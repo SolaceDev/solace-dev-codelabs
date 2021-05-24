@@ -12,7 +12,9 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## What you'll learn: Overview
 Duration: 0:03:00
 
-This codelab is a follow-on to the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) one. If you aren't yet familiar with the Spring Cloud Stream framework go ahead and jump over there to get a quick introduction to the framework. This codelab will go into more detail (Beyond the Basics 😜) of developing your Cloud Stream microservice. We will be using the Solace binder and Event Broker thoughout. The majority of features we will learn today apply at the framework level and do not depend on the underlying broker/binder of choice, however a few will be Solace specific and I will try to specify that when necessary. 
+This codelab is a follow-on to the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) one. If you aren't yet familiar with the Spring Cloud Stream framework go ahead and jump over there to get a quick introduction to the framework. This codelab will go into more detail (Beyond the Basics 😜) of developing your Cloud Stream microservice with imperative functions. We will be using the Solace binder and Event Broker thoughout. The majority of features we will learn today apply at the framework level and do not depend on the underlying broker/binder of choice, however a few will be Solace specific and I will try to specify that when necessary. 
+
+Also note that while Spring Cloud Stream supports both imperative and reactive functions this codelab will be focused on the use of imperative ones. 
 
 💡 You'll Learn:
 * How to choose your communication model
@@ -165,7 +167,7 @@ spring:
           destination: spring/cloud/stream
 ```
 
-Go ahead and run your app. You should see the app start up and connect to the event broker. Note that under the covers the Solace Binder will bind your function to a Non-Durable Anonymous (or Temporary) queue on the broker. 
+Go ahead and run your app from your IDE or use `mvn clean spring-boot:run`. You should see the app start up and connect to the event broker. Note that under the covers the Solace Binder will bind your function to a Non-Durable Anonymous (or Temporary) queue on the broker.    
 This endpoint type in Solace is a temporary queue that will deliver messages to your app in order while your app remains online. It however is NOT a durable endpoint and will be removed after your application goes offline for more than 30 seconds.     
 
 You'll see the name of your Anonymous Queue shown in a log entry on the console from the *SolaceQueueProvisioner* class: 
@@ -174,11 +176,19 @@ SolaceQueueProvisioner : Subscribing queue #P2P/QTMP/v:b0e95afab69a/scst/an/59e7
 
 ```
 
-🛠 **Let's test this out using the "Try-Me" tab in Solace Cloud.**
-1. Navigate to the Solace Cloud Console
-1. Choose "Cluster Manager" -> and click the messaging service you created earlier
-1. Click the "Try-Me!" option on the top menu
+🛠 **Let's test this out using the "Try-Me" tab in the PubSub+ Manager.**
+1. Get to the "Try-Me" tab!
+1. If using Docker, Software or Hardware PubSub+ Event Brokers
+  1. Navigate to PubSub+ Manager, `localhost:8080` by default when using Software but otherwise get from your Admin
+  1. Default username and password is `admin` and `admin`
+  1. Choose your Messaging VPN, by default it would be `default`
+1. If using Solace PubSub+ Cloud
+  1. Navigate to the Solace PubSub+ Cloud Console
+  1. Choose "Cluster Manager" -> and click the messaging service you created earlier
+  1. Click the "Open PubSub+ Broker Manager" link at the top right
+1. Click the "Try-Me!" option on the left menu
 1. Click "Connect" on the "Publisher" side
+  1. If it doesn't automatically connect use the credentials we got during Step 2. 
 1. Type in the `spring/cloud/stream` topic
 1. Change the "Message" to whatever you'd like and click "Send"
 
@@ -213,7 +223,7 @@ spring:
               queue-access-type: 1 #1 is Exclusive; 0 is Non-Exclusive (and default)
 ```
 
-Now if you restart your app you'll see that a durable queue was created. 
+Now if you restart your app in your IDE or use `ctrl-c` followed by `mvn clean spring-boot:run` on the cli you'll see that a durable queue was created. 
 ```
 SolaceQueueProvisioner : Subscribing queue scst/wk/exclusive/plain/spring/cloud/stream to topic spring/cloud/stream
 ```
@@ -242,7 +252,7 @@ spring:
 ```
 
 When using the Solace Binder and specifying a `group` the binder will actually create a Durable Non-Exclusive Queue Endpoint by default. This durable queue will hold messages for your microservices if they get disconnected. 
-Go ahead and run the app, you'll see the following log message that specifies the queue. 
+Go ahead and run the app via your IDE or using `mvn clean spring-boot:run`, you'll see the following log message that specifies the queue. 
 ```
 SolaceQueueProvisioner : Subscribing queue scst/wk/nonexclusive/plain/spring/cloud/stream to topic spring/cloud/stream
 ```
@@ -274,7 +284,7 @@ spring:
             concurrency: 5
 ```
 
-When you restart your app you'll see that the Solace binder creates 5 separate "flow receivers". Note that they all share the same Solace session and will process events on separate threads. 
+When you restart your app in your IDE or use `ctrl-c` followed by `mvn clean spring-boot:run` on the cli you'll see that the Solace binder creates 5 separate "flow receivers". Note that they all share the same Solace session and will process events on separate threads. 
 ```
 JCSMPInboundChannelAdapter : Creating consumer 1 of 5 for inbound adapter 5722ebd9-7f2a-40ba-b635-235a86938638
 FlowReceiverContainer : Binding flow receiver container 76e517b1-d1a8-4ab2-975f-e4eb0b12535a
@@ -428,7 +438,7 @@ Since we're using the Solace binder we really want to be able to make topic subs
 ### Wildcards in the destination
 The first way to do it is in the `destination` property itself. The Solace binder uses the `destination` property to both name the queue that the app will bind to, but also as a topic subscription on the queue. 
 
-To test this functionality out go ahead and change the configuration of `myConsumer-in-0` to have a destination using wildcards and restart your app.
+To test this functionality out go ahead and change the configuration of `myConsumer-in-0` to have a destination using wildcards and restart your app in your IDE or using `ctrl-c` followed by `mvn clean spring-boot:run` on the cli.
 ``` yaml
 spring:
   cloud:
@@ -505,12 +515,15 @@ public Consumer<Message<String>> myConsumer(StreamBridge sb) {
     return v -> {
         logger.info("Received myConsumer: " + v.getPayload());
         logger.info("CorrelationID: " + v.getHeaders().get("solace_correlationId"));
-        
+
         // Use whatever business logic you'd like to figure out the topic!
         String cid = (String) v.getHeaders().get("solace_correlationId");
+        if (cid == null) {
+            cid = Integer.toString(1);
+        }
         String myTopic = "solace/cid/".concat(cid);
         logger.info("Publishing to: " + myTopic);
-        sb.send(myTopic , v.getPayload());
+        sb.send(myTopic, v.getPayload());
     };
 }
 ```
@@ -544,6 +557,9 @@ public Function<Message<String>, Message<String>> myFunction() {
         
         // Use whatever business logic you'd like to figure out the topic!
         String cid = (String) v.getHeaders().get("solace_correlationId");
+        if (cid == null) {
+          cid = Integer.toString(1);
+        }
         String myTopic = "solace/cid/".concat(cid);
         logger.info("Publishing to: " + myTopic);
         return MessageBuilder.withPayload(v.getPayload()).setHeader(BinderHeaders.TARGET_DESTINATION, myTopic).build();
@@ -611,7 +627,7 @@ spring:
           destination: 'my/default/topic'
 ```
 
-🛠 Test it out by starting your app via your IDE or using `mvn spring-boot:run` inside of your project. Use the "Try-Me" **Subscriber** to subscribe to the `my/default/topic/` topic and then use the **Publisher** to send a message to the `a/b/c` topic. You should see your Subscriber receive 3 messages for each message that you send 🎊. 
+🛠 Test it out by starting your app via your IDE or using `mvn clean spring-boot:run` inside of your project. Use the "Try-Me" **Subscriber** to subscribe to the `my/default/topic/` topic and then use the **Publisher** to send a message to the `a/b/c` topic. You should see your Subscriber receive 3 messages for each message that you send 🎊. 
 
 ![Batch Publish 1](img/batchPublishTryMe.webp)
 
@@ -734,6 +750,9 @@ public Function<Message<String>, String> myFunction() {
             // TODO Execute Business Logic + Maybe even pass to another thread?
             // Use CorrelationID for easy business logic...
             String cid = (String) v.getHeaders().get("solace_correlationId");
+            if (cid == null) {
+				cid = "none";
+			}
             
             // Acknowledge the Message!
             try {
@@ -795,13 +814,54 @@ spring:
           destination: 'a/b/>'
           group: clientAck
           consumer:
-            max-attempts: 5
+            max-attempts: 2
             back-off-initial-interval: 1
             back-off-multiplier: 3
             default-retryable: true
             retryable-exceptions:
               java.lang.IllegalStateException: true
 ```
+
+**Consumer Error Channels**
+After the Retries have been exhausted the Cloud Stream framework will next send an `ErrorMessage` to a binding specific error channel, which is formatted as `<destination>.<group>.errors`. You can configure a `@ServiceActivator` to listen on that Spring Integration channel to try to handle the Exception. If you do not register a listener then the framework will pass the `ErrorMessage` along to the global `errorChannel` Spring Integration Channel where a different `@ServiceActivator` can listen. However, if listening on this global errorChannel do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it's own error handling. This global errorChannel is moreso useful for logging or publishing an alert elsewhere. 
+
+Here is an example `@ServiceActivator` listening to the binding specific error channel. Note that `inputChannel` name is derived from the yaml above that defines the destination as `a/b/>` and the group as `clientAck`. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler. 
+``` java
+@ServiceActivator(inputChannel = "a/b/>.clientAck.errors") 
+public void handleError(ErrorMessage message) {
+    logger.info("Binding Specific Error Handler executing business logic for: " + message.toString());
+    logger.info("Exception is here: " + message.getPayload());
+}
+```
+
+And here is an example of a `@ServiceActivator` listening on the global error channel. Note that the global error channel will only receive the ErrorMessage if there is no binding specific error channel. 
+``` java
+@ServiceActivator(inputChannel = "errorChannel")
+public void handleNotificationErrorChannel(ErrorMessage message) {
+    logger.info("Global errorChannel received msg. NO BUSINESS LOGIC HERE! Notify ONLY!" + message.toString());
+}
+```
+
+🛠 You can easily test this out be changing your `myFunction` to throw a RuntimeException like below:
+``` java
+public Function<Message<String>, String> myFunction() {
+    return v -> {
+        logger.info("Received: " + v);
+
+        // Logic to Avoid infinite loop of message being re-delivered when testing error
+        // handling during codelab. DO NOT USE IN PRODUCTION CODE
+        if (true == (Boolean) v.getHeaders().get("solace_redelivered")) {
+            logger.warn("Exiting successfully to ACK msg and avoid infinite redelivieres");
+            return null;
+        }
+
+        throw new RuntimeException("Oh no!");
+    };
+}
+```
+
+🛠 Go ahead and use the "Try-Me" tool to publish a message to the "a/b/c" topic. You should see that the binding specific error handler received the message. 
+
 
 **Don't send a message!**
 It is common to have a microservice that an event, processes it, and publishes an outbound event. But what if I don't want to send an output message!? The framework makes this easy, just `return null` and no outbound message will be published. 
@@ -814,7 +874,7 @@ public Function<String, String> myFunction() {
             
         if (!sendMessageDownstream(v)) {
           logger.warn("Not Sending an Outbound Message");
-          return null;
+          return null; //Don't send a message, but ACCEPT it to remove it from the queue
         } else {
           return processMessage(v);
         }
@@ -841,7 +901,7 @@ spring:
         myFunction-in-0:
           destination: 'a/b/>'
           group: clientAck
-            max-attempts: 1
+            max-attempts: 2
         myFunction-out-0:
           destination: 'my/default/topic'
       solace:
@@ -860,18 +920,32 @@ spring:
 
 
 🛠 The easiest way to test these options out are to have your function `throw new RuntimeException("Oh no!!")` and use the "Try-Me" tab to send test messages 👍
+``` java
+public Function<Message<String>, String> myFunction() {
+    return v -> {
+        logger.info("Received: " + v);
 
+        // Logic to Avoid infinite loop of message being re-delivered when testing error
+        // handling during codelab. DO NOT USE IN PRODUCTION CODE
+        if (true == (Boolean) v.getHeaders().get("solace_redelivered")) {
+            logger.warn("Exiting successfully to ACK msg and avoid infinite redelivieres");
+            return null;
+        }
+
+        throw new RuntimeException("Oh no!");
+    };
+}
+```
 
 ### Guidance
-//TODO ADD in app error channel options...probably also need an image
 Okay so we have all of these options, how do we choose what what to do when handling errors? It of course all goes back to your requirements.
 1. In general, keep it simple when possible! 
  * Handle your exceptions and don't throw them when possible.  
- * Think about how your function might fail and configure the `RetryTemplate` appropriately. Would Retrying really help? 
+ * Think about how your function might fail and configure the `RetryTemplate` (Would Retrying really help?) and binding specific error channel appropriately.
  * Do you want messages that do throw exceptions to end up on another queue? (use `autoBindErrorQueue`)
 1. If you need more control and are fine writing more messaging specific code then I would make use of both the internal framework and binder error handling options in conjunction with **Client/Manual Acknowledgements** that we covered in a previous section. Then do something like the following: 
  * Handle your exceptions and don't throw them
- * Think about how your function might fail and configure the `RetryTemplate` appropriately. Would Retrying really help? 
+ * Think about how your function might fail and configure the `RetryTemplate` (Would Retrying really help?) and binding specific error channel appropriately.
  * Use the Client/Manual Ack to `REQUEUE` messages that end in an error scenario that may be successful if retried, even if by another instance in the Consumer Group. For example, maybe an infrastructure issue where your microservice couldn't get a response from a downstream service. 
  * Identify your failure scenarios that wouldn't work if retried and consider if you want to send them all to one queue for further processing or to several destinations. If one queue then use the `autoBindErrorQueue` option and use the Client/Manual Ack to `REJECT` the message and let the binder handle it for you. However, if you prefer to send to several destinations for error processing then use `StreamBridge` as covered in the **Dynamic Publishing** section to publish where you'd like. After publishing be sure to use the Client/Manual Ack to `ACCEPT` the message.  
 
@@ -983,6 +1057,29 @@ Negative
 : ⚠️i Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.
 
 🚨 **Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later** 
+
+## Testing
+Duration: 0:03:00
+
+This section will (might 😝) be expanded in the future, for now these are the things to keep in mind: 
+1. Write your code using Spring Cloud Function and keep your functions simple. Test your functions with unit tests that do not require the underlying message broker.
+1. Spring Cloud Stream does offer a test binder which is automatically included if you generate your microservice from [start.spring.io](https://start.spring.io). Check out the [Testing](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_testing) section of the Spring Cloud Stream reference guide for guidance on how to use it. This can be used to test simple binding configurations. 
+``` xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-stream</artifactId>
+    <scope>test</scope>
+    <classifier>test-binder</classifier>
+    <type>test-jar</type>
+</dependency>
+```
+1. Keep in mind that the test binder will not be able to simulate the topic to queue mappings that occur with the Solace Binder & Solace PubSub+ Event Broker. Because of this you will want to run integration tests in a "real environment" that has an actual PubSub+ Event Broker. This is usually done by spinning up an Event Broker in a docker container or in [PubSub+ Cloud](https://console.solace.cloud/?utm_source=devrel) using the REST API.
+
 
 ## Takeaways & Next Steps
 Duration: 0:03:00
