@@ -137,7 +137,10 @@ public Consumer<String> myConsumer(){
 		System.out.println("Received: " + v);
 	};
 }
-```
+```     
+
+Positive
+: If you are using eclipse you can use `ctrl + shift + o` on Windows or `cmd + shift + o` on Mac to include imports. You want to choose the `java.util.function.Consumer` if given multiple options.
 
 Now that we have a function we'll look at the different options to configure the *binding* which tells the binder how to connect your function to the underlying message broker. 
 
