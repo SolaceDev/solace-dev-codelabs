@@ -137,7 +137,10 @@ public Consumer<String> myConsumer(){
 		System.out.println("Received: " + v);
 	};
 }
-```
+```     
+
+Positive
+: If you are using eclipse you can use `ctrl + shift + o` on Windows or `cmd + shift + o` on Mac to include imports. You want to choose the `java.util.function.Consumer` if given multiple options.
 
 Now that we have a function we'll look at the different options to configure the *binding* which tells the binder how to connect your function to the underlying message broker. 
 
@@ -443,6 +446,7 @@ To test this functionality out go ahead and change the configuration of `myConsu
 spring:
   cloud:
     function:
+      definition: myConsumer
     stream:
       bindings:
         myConsumer-in-0:
@@ -714,8 +718,7 @@ Positive
 
 👉 Let's go ahead and put it all together with a simple sample Function (**Comment out previous code**) that receives a `Message<String>`, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message. 
 
-1. First off let's go ahead and change our application configuration to create a fresh queue and set `queueMaxMsgRedelivery` so we don't get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to `clientAck` and the group is used as part of the queue naming convention.
-
+1️⃣  First off let's go ahead and change our application configuration to create a fresh queue and set `queueMaxMsgRedelivery` so we don't get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to `clientAck` and the group is used as part of the queue naming convention.
 ``` yaml
 spring:
   cloud:
@@ -735,7 +738,7 @@ spring:
                queueMaxMsgRedelivery: 2
 ```
 
-1. Next go ahead and modify your java code to add the following Function (comment out or delete other code so it doesn't interfere)     
+2️⃣  Next go ahead and modify your java code to add the following Function (comment out or delete other code so it doesn't interfere)     
 
 ``` java
 @Bean
