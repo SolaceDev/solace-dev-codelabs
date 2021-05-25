@@ -102,8 +102,8 @@
 </code></pre>
 <p>✅ Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="ep_select_designer" src="img/4b83f881a1de9b5.webp"></p>
-<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the file.</p>
-<p class="image-container"><img alt="ep_click_import" src="img/292b8f20a9c16c60.png"></p>
+<p>✅ Then import the previously downloaded Application Domain file by clicking the <code>Toolkit</code> icon at the top right of the <em>Designer</em> and importing the file.</p>
+<p class="image-container"><img alt="ep_click_import" src="img/74dc40267b4899c1.png"></p>
 <p>🚀 Setup complete! Let&#39;s get going! 🚀</p>
 
 
@@ -149,8 +149,70 @@
 <li><strong>Content Type</strong>: JSON</li>
 <li>Click <em>Add/Remove Owners</em> and choose yourself</li>
 <li>Under <em>Content</em> paste the JSON schema in the code block below. This schema was generated from a sample message using <a href="https://jsonschema.net" target="_blank">jsonschema.net</a></li>
-<li>Click <em>Save<br></em><code>{<br>&#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,<br>&#34;$id&#34;: &#34;http://example.com/example.json&#34;,<br>&#34;type&#34;: &#34;object&#34;,<br>&#34;title&#34;: &#34;The root schema&#34;,<br>&#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,<br>&#34;default&#34;: {},<br>&#34;examples&#34;: [<br>    {<br>        &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,<br>        &#34;avg_meter_reading&#34;: 21.615217,<br>        &#34;avg_passenger_count&#34;: 1.5,<br>        &#34;window_duration_sec&#34;: 300,<br>        &#34;window_ride_count&#34;: 5<br>    }<br>],<br>&#34;required&#34;: [<br>    &#34;timestamp&#34;,<br>    &#34;avg_meter_reading&#34;,<br>    &#34;avg_passenger_count&#34;,<br>    &#34;window_duration_sec&#34;,<br>    &#34;window_ride_count&#34;<br>],<br>&#34;additionalProperties&#34;: true,<br>&#34;properties&#34;: {<br>    &#34;timestamp&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/timestamp&#34;,<br>        &#34;type&#34;: &#34;string&#34;,<br>        &#34;title&#34;: &#34;The timestamp schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: &#34;&#34;,<br>        &#34;examples&#34;: [<br>            &#34;2020-06-04T20:09:59.99832-04:00&#34;<br>        ]<br>    },<br>    &#34;avg_meter_reading&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            21.615217<br>        ]<br>    },<br>    &#34;avg_passenger_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,<br>        &#34;type&#34;: &#34;number&#34;,<br>        &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0.0,<br>        &#34;examples&#34;: [<br>            1.5<br>        ]<br>    },<br>    &#34;window_duration_sec&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_duration_sec schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            300<br>        ]<br>    },<br>    &#34;window_ride_count&#34;: {<br>        &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,<br>        &#34;type&#34;: &#34;integer&#34;,<br>        &#34;title&#34;: &#34;The window_ride_count schema&#34;,<br>        &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,<br>        &#34;default&#34;: 0,<br>        &#34;examples&#34;: [<br>            5<br>        ]<br>    }<br>}<br>}<br></code></li>
+<li>Click <em>Save</em></li>
 </ol>
+<pre><code>{
+  &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema&#34;,
+  &#34;$id&#34;: &#34;http://example.com/example.json&#34;,
+  &#34;type&#34;: &#34;object&#34;,
+  &#34;title&#34;: &#34;The root schema&#34;,
+  &#34;description&#34;: &#34;The root schema comprises the entire JSON document.&#34;,
+  &#34;default&#34;: {},
+  &#34;examples&#34;: [
+    {
+      &#34;timestamp&#34;: &#34;2020-06-04T20:09:59.99832-04:00&#34;,
+      &#34;avg_meter_reading&#34;: 21.615217,
+      &#34;avg_passenger_count&#34;: 1.5,
+      &#34;window_duration_sec&#34;: 300,
+      &#34;window_ride_count&#34;: 5
+    }
+  ],
+  &#34;required&#34;: [&#34;timestamp&#34;, &#34;avg_meter_reading&#34;, &#34;avg_passenger_count&#34;, &#34;window_duration_sec&#34;, &#34;window_ride_count&#34;],
+  &#34;additionalProperties&#34;: true,
+  &#34;properties&#34;: {
+    &#34;timestamp&#34;: {
+      &#34;$id&#34;: &#34;#/properties/timestamp&#34;,
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;title&#34;: &#34;The timestamp schema&#34;,
+      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+      &#34;default&#34;: &#34;&#34;,
+      &#34;examples&#34;: [&#34;2020-06-04T20:09:59.99832-04:00&#34;]
+    },
+    &#34;avg_meter_reading&#34;: {
+      &#34;$id&#34;: &#34;#/properties/avg_meter_reading&#34;,
+      &#34;type&#34;: &#34;number&#34;,
+      &#34;title&#34;: &#34;The avg_meter_reading schema&#34;,
+      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+      &#34;default&#34;: 0.0,
+      &#34;examples&#34;: [21.615217]
+    },
+    &#34;avg_passenger_count&#34;: {
+      &#34;$id&#34;: &#34;#/properties/avg_passenger_count&#34;,
+      &#34;type&#34;: &#34;number&#34;,
+      &#34;title&#34;: &#34;The avg_passenger_count schema&#34;,
+      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+      &#34;default&#34;: 0.0,
+      &#34;examples&#34;: [1.5]
+    },
+    &#34;window_duration_sec&#34;: {
+      &#34;$id&#34;: &#34;#/properties/window_duration_sec&#34;,
+      &#34;type&#34;: &#34;integer&#34;,
+      &#34;title&#34;: &#34;The window_duration_sec schema&#34;,
+      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+      &#34;default&#34;: 0,
+      &#34;examples&#34;: [300]
+    },
+    &#34;window_ride_count&#34;: {
+      &#34;$id&#34;: &#34;#/properties/window_ride_count&#34;,
+      &#34;type&#34;: &#34;integer&#34;,
+      &#34;title&#34;: &#34;The window_ride_count schema&#34;,
+      &#34;description&#34;: &#34;An explanation about the purpose of this instance.&#34;,
+      &#34;default&#34;: 0,
+      &#34;examples&#34;: [5]
+    }
+  }
+}
+</code></pre>
 <p class="image-container"><img alt="ep_createSchema" src="img/4aacd0934f669813.webp"></p>
 <p>✅ We have now created a new payload schema and the schema has automatically been added to our event.</p>
 <p class="image-container"><img alt="ep_createEventWithSchema" src="img/1d481298bdfa155.webp"></p>

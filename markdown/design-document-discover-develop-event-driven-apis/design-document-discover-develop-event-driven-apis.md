@@ -110,7 +110,7 @@ git clone https://github.com/Mrc0113/ep-design-workshop.git
 
 ![ep_select_designer](img/ep_select_designer.webp)
 
-✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file.
+✅ Then import the previously downloaded Application Domain file by clicking the `Toolkit` icon at the top right of the _Designer_ and importing the file.
 
 ![ep_click_import](img/ep_click_import.png)
 
