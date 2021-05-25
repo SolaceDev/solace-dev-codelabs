@@ -35,6 +35,7 @@ Negative
 ## Set-up & Prerequisites
 
 Duration: 0:10:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -151,6 +152,7 @@ find . -name ScSProcessorFeaturesDynamic.java -exec sed -i '' 's/ATTENDEE/UNIQUE
 ## Create Your First Source & Sink
 
 Duration: 0:30:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -247,6 +249,7 @@ Positive
 ## Discover the ease of 1-to-Many with Publish-Subscribe
 
 Duration: 0:10:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -300,6 +303,7 @@ Positive
 ## Creating your first Processor
 
 Duration: 0:20:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -390,6 +394,7 @@ Positive
 ## Reactive with Spring Cloud Streams
 
 Duration: 0:10:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -457,6 +462,7 @@ Positive
 ## Multiple Processor Chaining
 
 Duration: 0:10:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -495,6 +501,7 @@ Positive
 ## Painless Multi-protocol with MQTT
 
 Duration: 0:10:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
@@ -542,6 +549,7 @@ Positive
 ## Review & Continued Learning!
 
 Duration: 0:05:00
+
 Negative
 : **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
