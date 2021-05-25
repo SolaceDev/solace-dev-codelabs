@@ -10,9 +10,17 @@
   "summary": "Using Spring Cloud Streams w/ Solace PubSub+",
   "source": "solace-workshop-scs.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["spring", "java"],
-  "tags": ["web", "workshop"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring",
+    "java"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
   "feedback": "github.com/SolaceTraining/solace-workshop-scs",
   "url": "solace-workshop-scs"
 }

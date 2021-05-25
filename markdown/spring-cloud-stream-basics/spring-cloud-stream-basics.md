@@ -30,6 +30,9 @@ Valuable Resources:
 - Spring Sample [Github Repository](https://github.com/spring-cloud/spring-cloud-stream-samples)
 - Solace Sample [Github Repository](https://github.com/SolaceSamples/solace-samples-spring)
 
+Positive
+: After you complete this codelab be sure to checkout the [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) one!
+
 ## What You'll Need
 
 Duration: 0:08:00
@@ -331,8 +334,9 @@ Reversing: HELLO WORLD!
 
 Duration: 0:02:00
 
-✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!  
-✅ Learn how to generate Cloud Stream apps using AsyncAPI [here](https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0).  
+✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!
+✅ Move on to the [Spring Cloud Stream Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) codelab.
+✅ Learn how to generate Cloud Stream apps using AsyncAPI [here](https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0). 
 ✅ Learn how to publish to dynamic topics using Spring Cloud Stream by a sample [here](https://github.com/SolaceSamples/solace-samples-spring/blob/master/cloud-stream-dynamic-destination-processor/src/main/java/com/solace/samples/spring/scs/DynamicDestinationProcessor.java).
 
 ![solly_wave](img/solly_wave.webp)
