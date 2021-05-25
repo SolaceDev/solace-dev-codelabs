@@ -371,6 +371,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
 <pre><code>spring:
   cloud:
     function:
+      definition: myConsumer
     stream:
       bindings:
         myConsumer-in-0:
@@ -588,66 +589,64 @@ try {
 </ol>
 </aside>
 <p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message&lt;String&gt;</code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
-<ol type="1">
-<li>First off let&#39;s go ahead and change our application configuration to create a fresh queue and set <code>queueMaxMsgRedelivery</code> so we don&#39;t get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to <code>clientAck</code> and the group is used as part of the queue naming convention.<pre><code>spring:
-cloud:
-function:
-  definition: myFunction
-stream:
-  bindings:
-    myFunction-in-0:
-      destination: &#39;a/b/&gt;&#39;
-      group: clientAck
-    myFunction-out-0:
-      destination: &#39;my/default/topic&#39;
-  solace:
-    bindings:
-      myFunction-in-0:
-        consumer:
-           queueMaxMsgRedelivery: 2
+<p>1️⃣  First off let&#39;s go ahead and change our application configuration to create a fresh queue and set <code>queueMaxMsgRedelivery</code> so we don&#39;t get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to <code>clientAck</code> and the group is used as part of the queue naming convention.</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: &#39;a/b/&gt;&#39;
+          group: clientAck
+        myFunction-out-0:
+          destination: &#39;my/default/topic&#39;
+      solace:
+        bindings:
+          myFunction-in-0:
+            consumer:
+               queueMaxMsgRedelivery: 2
 </code></pre>
-</li>
-<li>Next go ahead and modify your java code to add the following Function (comment out or delete other code so it doesn&#39;t interfere)<pre><code>@Bean
+<p>2️⃣  Next go ahead and modify your java code to add the following Function (comment out or delete other code so it doesn&#39;t interfere)</p>
+<pre><code>@Bean
 public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
-    return v -&gt; {
-        logger.info(&#34;Received: &#34; + v);
+        return v -&gt; {
+            logger.info(&#34;Received: &#34; + v);
 
-        // Disable Auto-Ack
-        AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v);
-        ackCallback.noAutoAck();
+            // Disable Auto-Ack
+            AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v);
+            ackCallback.noAutoAck();
 
-        // TODO Execute Business Logic + Maybe even pass to another thread?
-        // Use CorrelationID for easy business logic...
-        String cid = (String) v.getHeaders().get(&#34;solace_correlationId&#34;);
-        if (cid == null) {
+            // TODO Execute Business Logic + Maybe even pass to another thread?
+            // Use CorrelationID for easy business logic...
+            String cid = (String) v.getHeaders().get(&#34;solace_correlationId&#34;);
+            if (cid == null) {
 				cid = &#34;none&#34;;
 			}
             
-        // Acknowledge the Message!
-        try {
-            if (cid.equals(&#34;accept&#34;)) {
-                logger.info(&#34;Accepting the Message&#34;);
-                AckUtils.accept(ackCallback);
-            } else if (cid.equals(&#34;requeue&#34;)) {
-                logger.info(&#34;Requeuing the Message&#34;);
-                AckUtils.requeue(ackCallback);
-                Thread.sleep(60000);
-            } else {
-                logger.info(&#34;Rejecting the Message&#34;);
-                AckUtils.reject(ackCallback);
-                Thread.sleep(60000);
+            // Acknowledge the Message!
+            try {
+                if (cid.equals(&#34;accept&#34;)) {
+                    logger.info(&#34;Accepting the Message&#34;);
+                    AckUtils.accept(ackCallback);
+                } else if (cid.equals(&#34;requeue&#34;)) {
+                    logger.info(&#34;Requeuing the Message&#34;);
+                    AckUtils.requeue(ackCallback);
+                    Thread.sleep(60000);
+                } else {
+                    logger.info(&#34;Rejecting the Message&#34;);
+                    AckUtils.reject(ackCallback);
+                    Thread.sleep(60000);
+                }
+            } catch (SolaceAcknowledgmentException e) {
+                logger.warn(&#34;Warning, exception occurred but message will be re-queued on broker and re-delivered&#34;, e);
+                return null; //Don&#39;t send an output message
             }
-        } catch (SolaceAcknowledgmentException e) {
-            logger.warn(&#34;Warning, exception occurred but message will be re-queued on broker and re-delivered&#34;, e);
-            return null; //Don&#39;t send an output message
-        }
 
-        return &#34;My Payload&#34;;
-    };
+            return &#34;My Payload&#34;;
+        };
 }
 </code></pre>
-</li>
-</ol>
 <p>🛠 Let&#39;s test this out using the &#34;Try-Me&#34; tool as usual. In the <strong>Publisher</strong> set the &#34;Correlation Id&#34; (which is under &#34;Show Advanced&#34;) to &#34;accept&#34; and publish a message to the <code>a/b/c</code> topic like seen in the image below.<br><br>🛠 You should see that your microservice accepts the message and if you navigate to your Queue, which should be named <em>scst/wk/nonexclusive/plain/a/b/_</em>, you&#39;ll see that there are no messages remaining on the queue.</p>
 <p>🛠 Now change the &#34;Correlation ID&#34; to &#34;requeue&#34; and send the message again. You&#39;ll see that the message gets requeued and if you navigate to your queue in PubSub+ Manager in a timely manner (within 2 minutes since we set retries to 2, are using a single consumer, and set a sleep of 60 seconds after requeuing) you&#39;ll see the message remains on the queue.</p>
 <p class="image-container"><img alt="Client Ack Accept TryMe" src="img/12bf7740ca113af7.webp"></p>
