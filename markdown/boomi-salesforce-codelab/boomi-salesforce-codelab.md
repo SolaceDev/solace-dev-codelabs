@@ -71,9 +71,9 @@ Inside of your logged into Solace Cloud Account navigate to the Event Portal Des
 
 ![event](img/ep_select_designer.webp)
 
-Then import the downloaded Application Domain files by clicking the `Import` button at the top right of the _Designer_ and importing the files.
+Then import the downloaded Application Domain files by clicking the `Toolkit` icon at the top right of the _Designer_ and importing the files.
 
-![ep_click_import](img/ep_click_import.webp)
+![ep_click_import](img/ep_click_import.png)
 
 ### ⚙️ High-level Architecture overview with the Solace Event Portal
 
@@ -133,13 +133,13 @@ Follow the steps in the [Getting Started with Boomi and Solace codelab](https://
 
 ### ⚙️ Generate the Solace Event Portal token
 
-1. You’ll generate the token needed to connect to the Event Portal from Boomi. Click on the very last icon in the left hand column takes you to the User Profile (the label will be your account name, not Solace CTO 😄) Note: if you’ve already generated an Event Portal token for another CodeLab, feel free to reuse it.
-   ![image007](img/image007.png)
-1. Click on Token Management
+![image007](img/image007.png)
+
+1. Click on Token Management  
    ![image008](img/image008.png)
-1. Click on Create Token
+1. Click on Create Token  
    ![image009](img/image009.png)
-1. Name the token BoomiUIAccess. Give it the “Event Portal Read” permission:
+1. Name the token BoomiUIAccess. Give it the “Event Portal Read” permission:  
    ![image010](img/image010.png)
 1. Click on Generate Token
    ![image011](img/image011.png)
@@ -153,11 +153,11 @@ Negative
 ### ⚙️ Connect the process to listen for Solace events
 
 1. Go to the [Boomi Integrate UI](https://platform.boomi.com/AtomSphere.html#build)
-1. Open the Hello World – Listen for Solace Event process you just added to your workspace.
+1. Open the Hello World – Listen for Solace Event process you just added to your workspace.  
    ![image013](img/image013.png)
 1. Click on the start shape, then click on the pencil icon next to the Solace Event Portal and PubSub+ Connection field
    ![image014](img/image014.png)
-1. Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section.
+1. Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section.  
    ![image015](img/image015.png)
 1. Click on Test Connection. Select an atom, then click Next. You should get a message indicating that the test connection was successful. Then save and close the Connection.
    ![image016](img/image016.png)
@@ -165,10 +165,10 @@ Negative
    ![image017](img/image017.png)
 1. Click on the Import button
    ![image018](img/image018.png)
-1. Pick an atom, and use the Event Portal connection that you just modified.
+1. Pick an atom, and use the Event Portal connection that you just modified.  
    ![image019](img/image019.png)
-1. Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK.
-   ![image020](img/image020.png)
+1. Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK.  
+   ![image020](img/image020.png)  
    Boomi grabs the schema from the Event Portal and creates a response profile (you’ll use this for mapping in a later section). It also brings the topic subscription format from Event Portal.
    ![image021](img/image021.png)
 
@@ -185,13 +185,17 @@ Negative
 
 1. Save the Process, then click on Create Packaged Component using default options. Proceed to Deploy the new components to your atom.
    ![image022](img/image022.png)
+
 1. Ensure that the Solace listener is up and running by going to Manage > Atom Management
    ![image023](img/image023.png)
-1. Click on your atom
+
+1. Click on your atom  
    ![image024](img/image024.png)
+
 1. In the middle column, select Listeners
    ![image025](img/image025.png)
-1. You should see the listener up and running, with a green circle next to it.
+
+1. You should see the listener up and running, with a green circle next to it.  
    ![image026](img/image026.png)
 
 Positive
