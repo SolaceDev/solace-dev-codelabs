@@ -87,9 +87,9 @@ We'll install the generator itself later 👍
 
 #### Sign-up for Solace Cloud
 
-✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
+✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required.
 
-![sc_trial](img/sc_trial.webp)
+![sc_trial](img/sc_trial.png)
 
 #### Import Application Domain
 
@@ -111,7 +111,7 @@ git clone https://github.com/Mrc0113/design-to-code-workshop.git
 
 ![ep_select_designer](img/ep_select_designer.webp)
 
-✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file.
+✅ Then import the previously downloaded Application Domain file by clicking the `Toolkit` icon at the top right of the _Designer_ and importing the file.
 
 ![ep_click_import](img/ep_click_import.png)
 
@@ -174,83 +174,67 @@ Fill in the fields as follows:
 1. Under _Content_ paste the JSON schema in the code block below. This schema was generated from a sample message using [jsonschema.net](https://jsonschema.net)
 1. Click _Save_
 
-``` 
+```json
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-        {
-            "timestamp": "2020-06-04T20:09:59.99832-04:00",
-            "avg_meter_reading": 21.615217,
-            "avg_passenger_count": 1.5,
-            "window_duration_sec": 300,
-            "window_ride_count": 5
-        }
-    ],
-    "required": [
-        "timestamp",
-        "avg_meter_reading",
-        "avg_passenger_count",
-        "window_duration_sec",
-        "window_ride_count"
-    ],
-    "additionalProperties": true,
-    "properties": {
-        "timestamp": {
-            "$id": "#/properties/timestamp",
-            "type": "string",
-            "title": "The timestamp schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "2020-06-04T20:09:59.99832-04:00"
-            ]
-        },
-        "avg_meter_reading": {
-            "$id": "#/properties/avg_meter_reading",
-            "type": "number",
-            "title": "The avg_meter_reading schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
-            "examples": [
-                21.615217
-            ]
-        },
-        "avg_passenger_count": {
-            "$id": "#/properties/avg_passenger_count",
-            "type": "number",
-            "title": "The avg_passenger_count schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0.0,
-            "examples": [
-                1.5
-            ]
-        },
-        "window_duration_sec": {
-            "$id": "#/properties/window_duration_sec",
-            "type": "integer",
-            "title": "The window_duration_sec schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                300
-            ]
-        },
-        "window_ride_count": {
-            "$id": "#/properties/window_ride_count",
-            "type": "integer",
-            "title": "The window_ride_count schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                5
-            ]
-        }
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "timestamp": "2020-06-04T20:09:59.99832-04:00",
+      "avg_meter_reading": 21.615217,
+      "avg_passenger_count": 1.5,
+      "window_duration_sec": 300,
+      "window_ride_count": 5
     }
+  ],
+  "required": ["timestamp", "avg_meter_reading", "avg_passenger_count", "window_duration_sec", "window_ride_count"],
+  "additionalProperties": true,
+  "properties": {
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The timestamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["2020-06-04T20:09:59.99832-04:00"]
+    },
+    "avg_meter_reading": {
+      "$id": "#/properties/avg_meter_reading",
+      "type": "number",
+      "title": "The avg_meter_reading schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0.0,
+      "examples": [21.615217]
+    },
+    "avg_passenger_count": {
+      "$id": "#/properties/avg_passenger_count",
+      "type": "number",
+      "title": "The avg_passenger_count schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0.0,
+      "examples": [1.5]
+    },
+    "window_duration_sec": {
+      "$id": "#/properties/window_duration_sec",
+      "type": "integer",
+      "title": "The window_duration_sec schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [300]
+    },
+    "window_ride_count": {
+      "$id": "#/properties/window_ride_count",
+      "type": "integer",
+      "title": "The window_ride_count schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [5]
+    }
+  }
 }
 ```
 
@@ -454,10 +438,10 @@ public class Application {
 								a.getTotalPassengers() + taxiUpdate.getPassengerCount()))
 				// Calculate the window average in RideAveragePayload objects
 				.map(accumulator -> {
-					if (accumulator.getRideCount() == 0) { 
+					if (accumulator.getRideCount() == 0) {
 						// Window was empty, return empty RideAveragePayload
 						return new RideAveragePayload(BigDecimal.ZERO, 20, BigDecimal.ZERO, 0, sdf.format(new Date()));
-					} else { 
+					} else {
 						// Calculate averages based on window
 						return new RideAveragePayload(
 								(accumulator.getTotalMeter().divide(new BigDecimal(accumulator.getRideCount()))), 20,

@@ -19,14 +19,14 @@ In this code lab we’ll build and expand your toolbox by learning how an Event 
 
 Throughout this workshop we will get hands on and talk about:
 
-PubSub+ Event Portal
+### PubSub+ Event Portal
 
-- Architect, Design and extend an EDA which includes multiple Applications, Events and Schemas.
-- Document Applications, Events and Schemas along with best practices for documentation
-- Use Discovery capability to see what you already have in runtime and audit for changes
-- Use the Event Catalog and Designer to Learn, Understand and Ideate
+1. **Architect, Design and extend** an EDA which includes multiple Applications, Events and Schemas.
+1. **Document** Applications, Events and Schemas along with best practices for documentation
+1. Use **Discovery** capability to see what you already have in runtime and audit for changes
+1. Use the **Event Catalog and Designer** to Learn, Understand and Ideate
 
-AsyncAPI
+### AsyncAPI
 
 - AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.
 - Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices
@@ -77,17 +77,20 @@ We'll install the generator itself later 👍
 - Username: `public-taxi-user`
 - Password: `iliketaxis`
 
-✅ Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissions to publish to `test/taxinyc/>`
+Positive
+: Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissions to publish to `test/taxinyc/>`
 
 ### Prepare PubSub+ Event Portal
 
 #### Sign-up for Solace Cloud
 
-✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
+✅ If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). Note that no credit card is required.
 
-![sc_trial](img/sc_trial.webp)
+![sc_trial](img/sc_trial.png)
 
-#### Import Existing Designed EDA
+## Import Existing Designed EDA
+
+Duration: 0:02:00
 
 ✅ Download the Application Domain export file: [EventPortalExport_Initial.json](https://github.com/Mrc0113/ep-design-workshop/blob/main/EventPortalExport_Initial.json)
 
@@ -107,7 +110,7 @@ git clone https://github.com/Mrc0113/ep-design-workshop.git
 
 ![ep_select_designer](img/ep_select_designer.webp)
 
-✅ Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file.
+✅ Then import the previously downloaded Application Domain file by clicking the `Toolkit` icon at the top right of the _Designer_ and importing the file.
 
 ![ep_click_import](img/ep_click_import.png)
 
@@ -117,7 +120,15 @@ git clone https://github.com/Mrc0113/ep-design-workshop.git
 
 Duration: 0:08:00
 
-Before we dive deeper, lets ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal.
+Before we dive deeper, lets ensure we are all aligned with terminology of the objects and concepts we will use in PubSub+ Event Portal. In this section we'll go over
+
+1. Application Domain & Workspace
+1. Events and Topics
+1. Schemas
+1. Applications
+1. Kafka Specific Objects and Terminology
+   1. Consumer Groups
+   1. Connector
 
 ### Application Domain & Workspace
 
@@ -218,21 +229,21 @@ For more information about topic best practices, review the [Topic Architecture 
 
 There are multiple Event Exchange Patterns (EEP) that should be considered when using EDA:
 
-#### Thin Event Notification
+#### 1. Thin Event Notification
 
 - If using a _Thin Event Notification_ pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink’s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible.
 
 Positive
 : The pro of this pattern however is that the data is smaller in size and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes.
 
-#### Hypermedia-Driven Events
+#### 2. Hypermedia-Driven Events
 
 - If using _Hypermedia-Driven Events_ pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client’s access level.
 
 Negative
 : The con to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior.
 
-#### Event-Carried State Transfer
+#### 3. Event-Carried State Transfer
 
 - If using _Event-Carried State Transfer_ pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes.
 
@@ -261,7 +272,7 @@ In order to react in a real-time manner the team has decided that we want to pro
 Positive
 : The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
 
-<p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
+Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us](https://data.cityofnewyork.us) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.
 
 ## Design an Event Driven Architecture
 
@@ -306,7 +317,7 @@ Next we should decide what we want the data to look like once we have processed 
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain and its time to get creating!
    ![](img/domain-dive.gif)
 
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Schema_  
+1. On the Upper Right Corner, Click the toolbox icon and select _Create Schema_  
    ![](img/create-schema.png)
    1. Name: PaymentCharged
    1. Content Type: JSON
@@ -597,17 +608,21 @@ So now that we have constructed the payload format for the PaymentCharged event,
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Event_
-   ![](img/create-event.png)
+1. On the Upper Right Corner, Click the toolbox icon and select _Create Event_
+   ![](img/create-schema.png)
    1. Name: PaymentCharged
    1. Shared: YES
    1. Description: NONE
-   1. Topic Scheme: Solace
-   1. Topic
-   1. As you can see the domain aleady has some of the "Event Topic Root" `taxinyc/backoffice/`
-   1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event
-   1. We will use the topic name of: `taxinyc/backoffice/payment/charged/v1/${payment_status}/${driver_id}/${passenger_id}`
-   1. Value:
+   1. Logical Event Mesh: NYC Modern Taxi Logical Event Mesh
+   1. Click on the `Set Topic Address`. Note: you can see the domain already has some of the "Event Topic Root" `taxinyc/backoffice/`
+   1. We need to apply the best practice of _Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID_ to this event. The topic name will be: `taxinyc/backoffice/payment/charged/v1/{payment_status}/{driver_id}/{passenger_id}`
+      ![](img/set-topic-address.png)
+   1. Click on the Create Level `+` icon
+   1. Make sure the `Literal` radio button is selected, and set the name as `payment`
+   1. Iterate through the remaining literals
+   1. When you reach the dynamic variables component of the topic (e.g. `{payment_status}`), make sure you select `Variable` as the topic type. Your topic address should look like this
+      ![](img/topic-hierarchy.png)
+   1. click Set and Return to Event when done
    1. Keep the Schema radio button selected
    1. Choose the Schema "PaymentCharged" that we created in the previous step
    1. Owner: Assign Yourself
@@ -621,10 +636,10 @@ Now for the fun part! We need to design the event-driven interface of the _Proce
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+1. On the Upper Right Corner, Click the toolbox icon and select _Create Application_
    1. Name: ProcessPayment
    1. Description: NONE
-   1. Application Class: Unspecified
+   1. Application Type: Standard
    1. Owners: Assign Yourself
    1. Tags: NONE
    1. Associated Events:
@@ -635,9 +650,10 @@ Now for the fun part! We need to design the event-driven interface of the _Proce
    1. Revision Comment: <Optional> "Initial Creation of Application"
    1. Click _Save_
 1. You should now see the newly added application on the graph!
+   ![](img/processPayment-application.png)
 
 Positive
-: Pro Tip!: If you wanted to develop/implement this application you could right click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
+: Pro Tip!: If you wanted to develop/implement this application you could right click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code! This is coming up in coming sections
 
 ### Step 4b: Design _InvoiceSystem_ Application
 
@@ -645,10 +661,10 @@ Remember back to our use case... We have designed how we process payment but sti
 
 1. Click into the _Designer_ component of the Event Portal
 1. Double Click on the _NYC Modern Taxi Co - Back Office_ Application Domain
-1. On the Upper Right Corner, Click the _Create_ button and select _Create Application_
+1. On the Upper Right Corner, Click the toolbox icon and select _Create Application_
    1. Name: InvoiceSystem
    1. Description: NONE
-   1. Application Class: Unspecified
+   1. Application Type: Standard
    1. Owners: Assign Yourself
    1. Tags: NONE
    1. Associated Events:
@@ -724,7 +740,7 @@ Duration: 0:08:00
 Events are only as good as their documentation. After all, it is up to a human to understand what something is and make a determination as to wither it provides value. This is why documentation is critical for success in Event Driven Architecture. Creating and maintaining good documentation that’s easy to read, enjoyable to interact with and sets up the user for success can be challenging. Great documentation requires effort but has significant implications on the reuse of the events within the eco-system. The PubSub+ Event portal enables you to document Events easily while also managing the decoupled relationships so that users can easily understand the context of an event. Before you sit down and write documentation on events, applications and schemas, its good to consider its purpose along with who will be using it.
 
 Positive
-: Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question “so how does this actually work” and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.
+: Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually represent the complete and current truth. This leads the team to constantly ask the question "so how does this actually work" and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality..
 
 ### Update Documentation of _PaymentCharged_ Event
 
@@ -766,6 +782,7 @@ N/A
                 1. Click Done
         1. The documentation should look something like:
             ![asyncapi_doc2](img/EventDoc.png)
+        1. Add "Update event docs" in the Revision Comments section
         1. Click _Save_
 
 ### Update Documentation of _ProcessPayment_ Application
@@ -817,6 +834,7 @@ N/A
                 1. Click Done
         1. The documentation should look something like:
             ![asyncapi_doc2](img/AppDoc.png)
+        1. Add "Update event docs" in the Revision Comments section
         1. Click _Save_
 
 ## Discover Existing EDA Assets
@@ -826,9 +844,13 @@ Duration: 0:36:00
 Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:
 
 1. Kafka – Confluent Kafka, Amazon MSK, Apache Kafka
-1. Solace PubSub+ Event Broker – Coming Soon!
+1. Solace PubSub+ Event Broker
+1. Other? Let us know!
 
-If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal’s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.
+Check out this quick video showing [How to use the PubSub+ Topic Explorer](https://www.youtube.com/watch?v=2lBWnJ4A39E&ab_channel=Solace)
+
+Positive
+: If you have a non-supported Event Broker type/configuration, then you will need add the schemas, events and applications to the Event Portal manually by using your existing documentation. While this may seem like a lot of work, it may be possible to capture this metadata and use the PubSub+ Event Portal’s APIs in order to automate the ingestion of this data. The benefits of doing this from a dependency management perspective is enormous as your EDA evolves and enables you to begin to manage and expose the existing event-driven capabilities implemented.
 
 ### Automated Discovery and Data Importation from Kafka
 
