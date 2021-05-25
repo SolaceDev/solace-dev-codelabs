@@ -58,7 +58,7 @@ After you create your Solace Cloud account and sign in to the Solace Cloud Conso
 
 ![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.webp "Solace Cloud Event Mesh")
 
-Click on 'Messaging Services' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
+Click on 'Cluster Manager' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
 
 ![Solace Cloud Landing Page](img/landing-page-signup.webp "Solace Cloud Landing Page")
 
@@ -74,9 +74,17 @@ If your messaging service was created successfully, you'll be routed to the summ
 
 ![Connect Tab Preview](img/service-summary-page.webp "Connect Tab Preview")
 
-After you click the "Connect" tab, click the "Solace Messaging" box, and then take note of the "Connection Details" section. We'll be using the "Secured SMF Host" URL.
+After you click the "Connect" tab, sort the supported client library menu by `Language` and click on the "Connect with Spring" box to expand it. 
 
-![Solace Web Messaging Tab](img/smf-messaging-connect-tab.webp "Solace Messaging Tab")
+![client library menu](img/connect-tab.png "client library menu")
+
+Click on the Get Started button next to the Spring Cloud Stream option. 
+
+![Spring Cloud Stream menu](img/connect-with-spring.png "Spring Cloud Stream menu")
+
+Take note of the "Connect to Service" section and you'll see that the connection details are already configured in the  spring.cloud.stream.binders part of the config to connect a Spring Cloud Stream microservice to your PubSub+ Messaging Service. We'll be using this soon 😄
+
+![Connect to service menu](img/connect-to-service.png "Connect to service menu")
 
 🚀 Setup complete! Let's get going! 🚀
 
@@ -137,6 +145,11 @@ Instead of having to learn Messaging APIs, developers just have to understand th
 
 Duration: 0:10:00
 
+In this section we are going to apply what we learned in the last few sections and create our first "processor" microservice. We'll create the Spring microservice in the diagram below and use the Solace "Try-Me" tab as the producer and consumer. 
+
+![SCSt Uppercase Diagram](img/scstUppercaseDiagram.webp)
+
+
 ### Use Spring Initializr to Generate your Project
 
 🚀 First we're going to use Spring Initializr to generate our Spring Boot project for us.
@@ -161,7 +174,9 @@ If you look at the `pom.xml` file you'll see a few important things:
 
 ### Add Messaging Service Connection Info
 
-Open the `application.properties` file under `src/main/resources` and enter the properties below substituting the connection information with your messaging services' connect info we got from the Solace Cloud Connect tab in the previous section.
+Open the application config file under `src/main/resources` and enter the properties below substituting the connection information with your messaging services' connect info we got from the Solace Cloud Connect tab in the previous section.
+
+**Option 1: application.properties**   
 
 ```
 spring.cloud.stream.binders.solace.type=solace
@@ -172,6 +187,27 @@ spring.cloud.stream.binders.solace.environment.solace.java.clientPassword=defaul
 spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=0
 spring.cloud.stream.binders.solace.environment.solace.java.connectRetriesPerHost=0
 ```
+
+**Option 2: application.yml**   
+```
+spring:
+  cloud:
+    stream:
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                clientPassword: default
+                clientUsername: default
+                connectRetries: 0
+                connectRetriesPerHost: 0
+                host: 'tcp://localhost:55555'
+                msgVpn: default
+```
+
+
 
 ### Write the Java Function
 
@@ -237,8 +273,11 @@ Duration: 0:10:00
 
 Another powerful feature of Spring Cloud Stream is inherited from Spring Cloud Function, and that feature is the capability of doing Function Composition. This allows you to create simple functions as Spring Beans that can be individually tested, re-used and chained together to create a processing chain.
 
-Instead of just talking about Function Composition let's try it out 😁.
+We'll extend the processor microservice we created in Step 4 to both uppercase and reverse the String found in the payload of the message. Following functional programming best practices we want to keep our functionals simple and re-usable so instead of just adding the new business logic of reversing the String to the existing Function we'll create a new function and use functional composition to effectively create a processing pipeline in our microservice. The end result will look like the diagram below, note that there are now two separate functions in our microservice. 
 
+![SCSt Uppercase Diagram](img/scstUppercaseReverseDiagram.webp)
+
+Instead of just talking about Function Composition let's try it out 😁.     
 In the same class where you already have your "uppercase" function let's create a "reverse" function that takes in a string and reverses the ordering. This function would like something like this:
 
 ```
@@ -251,16 +290,30 @@ public Function<String, String> reverse(){
 }
 ```
 
-Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the `application.properties` file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
+Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
 
+**Option 1: application.properties**
 ```
 spring.cloud.function.definition=uppercase|reverse
 spring.cloud.stream.function.bindings.uppercasereverse-in-0=input
 spring.cloud.stream.function.bindings.uppercasereverse-out-0=output
 ```
 
+**Option 2: application.yml**
+```
+spring:
+  cloud:
+    function:
+      definition: uppercase|reverse
+    stream:
+      function:
+        bindings:
+          uppercasereverse-in-0: input
+          uppercasereverse-out-0: output
+```
+
 Positive
-: Note that Spring Cloud Stream performs [Content Type Negotiation](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#content-type-management).
+: Note that Spring Cloud Stream performs [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
 
 ✅ We now have our function all wired up so go ahead and stop the app and restart it.  
 ✅ Navigate back to the "Try Me" menu in Solace Cloud (Refer to the steps in the "Test your Microservice" section if needed)  

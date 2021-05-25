@@ -1,0 +1,19 @@
+{
+  "name": "codelab-bootstrap",
+  "version": "1.0.0",
+  "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch helm-environment-setup.md --exec 'claat export helm-environment-setup.md && lsof -c claat -t | xargs kill && cd helm-environment-setup && claat serve'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/helm-environment-setup"
+  },
+  "keywords": [
+    "codelab"
+  ],
+  "dependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
