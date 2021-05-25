@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-05-25T16:54:49-04:00",
+  "updated": "2019-10-15T16:10:48-04:00",
   "id": "solace-workshop-scs-pcf",
   "duration": 175,
   "title": "Using Spring Cloud Stream with Solace PubSub+ in PCF",
