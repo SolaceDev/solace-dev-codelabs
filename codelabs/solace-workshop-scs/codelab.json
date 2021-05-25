@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-05-25T16:59:20-04:00",
+  "updated": "2019-10-17T15:25:37-04:00",
   "id": "solace-workshop-scs",
   "duration": 110,
   "title": "Spring Cloud Streams with Solace PubSub+",
