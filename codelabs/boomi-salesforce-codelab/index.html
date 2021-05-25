@@ -71,8 +71,8 @@
 <p><a href="https://raw.githubusercontent.com/jmenning-solace/nycmoderntaxi/master/event_portal/NYC-Modern-Taxi-Co-Ops.json" target="_blank">Operations</a></p>
 <p>Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="event" src="img/4b83f881a1de9b5.webp"></p>
-<p>Then import the downloaded Application Domain files by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the files.</p>
-<p class="image-container"><img alt="ep_click_import" src="img/f63ff3368081d92c.webp"></p>
+<p>Then import the downloaded Application Domain files by clicking the <code>Toolkit</code> icon at the top right of the <em>Designer</em> and importing the files.</p>
+<p class="image-container"><img alt="ep_click_import" src="img/74dc40267b4899c1.png"></p>
 <h2 is-upgraded>⚙️ High-level Architecture overview with the Solace Event Portal</h2>
 <ol type="1">
 <li>Go to the Solace Event Portal Designer <a href="https://console.solace.cloud/designer" target="_blank">https://console.solace.cloud/designer</a></li>
@@ -121,11 +121,11 @@
         <h2 is-upgraded>⚙️ Get connection values for PubSub+</h2>
 <p>Follow the steps in the <a href="https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html?#1" target="_blank">Getting Started with Boomi and Solace codelab</a> to get the connection values for your Solace PubSub+ Broker</p>
 <h2 is-upgraded>⚙️ Generate the Solace Event Portal token</h2>
+<p class="image-container"><img alt="image007" src="img/e4c6b392ee8c2e8b.png"></p>
 <ol type="1">
-<li>You&#39;ll generate the token needed to connect to the Event Portal from Boomi. Click on the very last icon in the left hand column takes you to the User Profile (the label will be your account name, not Solace CTO 😄) Note: if you&#39;ve already generated an Event Portal token for another CodeLab, feel free to reuse it. <img alt="image007" src="img/e4c6b392ee8c2e8b.png"></li>
-<li>Click on Token Management <img alt="image008" src="img/35200ee16bbc9659.png"></li>
-<li>Click on Create Token <img alt="image009" src="img/7a109cb5931339a.png"></li>
-<li>Name the token BoomiUIAccess. Give it the &#34;Event Portal Read&#34; permission: <img alt="image010" src="img/4831a2ccb5594690.png"></li>
+<li>Click on Token Management<br><img alt="image008" src="img/35200ee16bbc9659.png"></li>
+<li>Click on Create Token<br><img alt="image009" src="img/7a109cb5931339a.png"></li>
+<li>Name the token BoomiUIAccess. Give it the &#34;Event Portal Read&#34; permission:<br><img alt="image010" src="img/4831a2ccb5594690.png"></li>
 <li>Click on Generate Token <img alt="image011" src="img/62db5813a72e09cd.png"></li>
 <li>Copy the generated token to a text editor. You will use it in the next section.</li>
 </ol>
@@ -135,14 +135,14 @@
 <h2 is-upgraded>⚙️ Connect the process to listen for Solace events</h2>
 <ol type="1">
 <li>Go to the <a href="https://platform.boomi.com/AtomSphere.html#build" target="_blank">Boomi Integrate UI</a></li>
-<li>Open the Hello World – Listen for Solace Event process you just added to your workspace. <img alt="image013" src="img/a1fa7506c3eb90cb.png"></li>
+<li>Open the Hello World – Listen for Solace Event process you just added to your workspace.<br><img alt="image013" src="img/a1fa7506c3eb90cb.png"></li>
 <li>Click on the start shape, then click on the pencil icon next to the Solace Event Portal and PubSub+ Connection field <img alt="image014" src="img/55132fb4875e4dde.png"></li>
-<li>Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section. <img alt="image015" src="img/db6f54dc09655cc9.png"></li>
+<li>Fill in the Solace Event Portal and Event Broker connection information you gathered in the last section.<br><img alt="image015" src="img/db6f54dc09655cc9.png"></li>
 <li>Click on Test Connection. Select an atom, then click Next. You should get a message indicating that the test connection was successful. Then save and close the Connection. <img alt="image016" src="img/db1814abeb708f74.png"></li>
 <li>Next, modify the Connector Operation by clicking on the pencil icon. <img alt="image017" src="img/f1dbc33bc166beab.png"></li>
 <li>Click on the Import button <img alt="image018" src="img/15c3d140766ed373.png"></li>
-<li>Pick an atom, and use the Event Portal connection that you just modified. <img alt="image019" src="img/4c8045af4b0bb22d.png"></li>
-<li>Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK. <img alt="image020" src="img/c4f2dc1225685954.png"> Boomi grabs the schema from the Event Portal and creates a response profile (you&#39;ll use this for mapping in a later section). It also brings the topic subscription format from Event Portal. <img alt="image021" src="img/572fb19e9c07a051.png"></li>
+<li>Pick an atom, and use the Event Portal connection that you just modified.<br><img alt="image019" src="img/4c8045af4b0bb22d.png"></li>
+<li>Event Portal returns a list of events currently available on the Event Portal. Select the DriverUpserted event, and click on OK.<br><img alt="image020" src="img/c4f2dc1225685954.png"><br> Boomi grabs the schema from the Event Portal and creates a response profile (you&#39;ll use this for mapping in a later section). It also brings the topic subscription format from Event Portal. <img alt="image021" src="img/572fb19e9c07a051.png"></li>
 </ol>
 <ul>
 <li>Change the destination to <code>NYCTAXI.BACKOFFICE.BOOMI.UPDATEDRIVERDB</code> This will be the Solace queue that the process binds to. Solace will create it automatically when you deploy the process for the first time.</li>
@@ -156,9 +156,9 @@
 <ol type="1">
 <li>Save the Process, then click on Create Packaged Component using default options. Proceed to Deploy the new components to your atom. <img alt="image022" src="img/c7ef788b1a794037.png"></li>
 <li>Ensure that the Solace listener is up and running by going to Manage &gt; Atom Management <img alt="image023" src="img/24e4d6bbe63db17d.png"></li>
-<li>Click on your atom <img alt="image024" src="img/5bf7798733f6fb69.png"></li>
+<li>Click on your atom<br><img alt="image024" src="img/5bf7798733f6fb69.png"></li>
 <li>In the middle column, select Listeners <img alt="image025" src="img/f6793dba81e17f58.png"></li>
-<li>You should see the listener up and running, with a green circle next to it. <img alt="image026" src="img/e812d78b04a21a22.png"></li>
+<li>You should see the listener up and running, with a green circle next to it.<br><img alt="image026" src="img/e812d78b04a21a22.png"></li>
 </ol>
 <aside class="special"><p>You&#39;ll test this flow in the next section once you have a publisher process up and running. So what did you just do? You just created the Boomi flow and the Solace objects needed for the solution. Once we have a publisher (which you&#39;ll do in the next step), you&#39;ll be able route a message through Boomi using Solace.</p>
 </aside>
