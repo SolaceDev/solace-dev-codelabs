@@ -383,7 +383,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
             concurrency: 5
 </code></pre>
 <p>Now go ahead and use the &#34;Try-Me&#34; tab to send a few test messages that match the pattern.<br>Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
-<aside class="warning"><p>Learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a></p>
+<aside class="special"><p>Learn more about why you&#39;d want to use Hierarchical Topics and Wildcard Subscriptions in the <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">All About Solace Topics!</a> video! You can also learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a>.</p>
 </aside>
 <p>If you were to navigate to the queue in the PubSub+ Manager you&#39;ll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.<br><img alt="Wildcard Queue 1" src="img/33ea9137729e70e9.webp"></p>
 <h2 is-upgraded>Wildcards in queueAdditionalSubscrptions</h2>
