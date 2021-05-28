@@ -460,7 +460,7 @@ Now go ahead and use the "Try-Me" tab to send a few test messages that match the
 Maybe publish to `spring/cloud/stream/5` and `spring/boot/stream/anything`. You should see that the application receives the messages! 
 
 Positive
-: Learn more about why you'd want to use Hierarchical Topics and Wildcard Subscriptions in the [All About Solace Topics!](https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace) video! You can also learn more about Solace wildcards in the [docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm).
+: Learn more about why you'd want to use Hierarchical Topics and Wildcard Subscriptions in the [All About Solace Topics](https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace) video! You can also learn more about Solace wildcards in the [docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm).
 
 If you were to navigate to the queue in the PubSub+ Manager you'll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.      
 ![Wildcard Queue 1](img/wildcardQueue1.webp)
