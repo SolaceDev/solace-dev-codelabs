@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-06-08T11:20:56-07:00",
+  "id": "Boomi-request-reply",
+  "duration": 19,
+  "title": "Title of codelab goes here",
+  "summary": "",
+  "source": "Boomi-request-reply.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Boomi-request-reply",
+  "url": "Boomi-request-reply"
+}
