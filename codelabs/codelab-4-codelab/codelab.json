@@ -3,16 +3,23 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-07T09:17:48-05:00",
+  "updated": "2021-06-11T11:46:13-07:00",
   "id": "codelab-4-codelab",
   "duration": 31,
   "title": "Codelab to Create a Codelab",
   "summary": "Create a Codelab Using Markdown",
   "source": "codelab-4-codelab.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["solace", "codelabs"],
-  "tags": ["web"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "codelabs"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab",
   "url": "codelab-4-codelab"
 }

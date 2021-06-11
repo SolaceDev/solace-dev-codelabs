@@ -99,12 +99,14 @@ $ export PATH=$PATH:$GOROOT/bin
         <p>Start by</p>
 <ol type="1">
 <li>Forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a><br><img alt="image_caption" src="img/3e59622c038312bb.png"></li>
-<li>Clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username and <code>&lt;name_of_codelab&gt;</code> with the name of your codelabs</li>
+<li>Clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username and <code>&lt;name_of_codelab&gt;</code> with the name of your codelabs. See note below if you do not have ssh setup</li>
 </ol>
 <pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </code></pre>
+<aside class="warning"><p>If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git</code></p>
+</aside>
 <p>Then follow one of the two options in the next two steps: Automated or Manual</p>
 
 
@@ -122,7 +124,7 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 <li>Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal <code>npm install</code></li>
 <li>Compile and start the claat server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file</li>
 <li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
-<li>When ready, run <code>export.sh</code></li>
+<li>When ready, run the export script as follows <code>./export.sh</code></li>
 </ol>
 <aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
 </aside>
