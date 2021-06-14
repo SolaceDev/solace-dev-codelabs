@@ -228,10 +228,11 @@
 <p>This will be left as an exercise to the reader. Once you turn it on, navigate back to the &#34;Queues&#34; tab, select your queue, and see what &#34;Actions&#34; you can find to perform.</p>
 <aside class="warning"><p><strong>NOTE:</strong> if using <strong>Solace Cloud</strong>, you will have to send a service request to the Solace Cloud Support team to enable Replay on your broker. Click on the &#34;?&#34; icon in Solace Cloud Mission Control, and say that you would like to test out Replay. <img alt="picture" src="img/c060693ffe03ed7b.png"></p>
 </aside>
-<p>Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again.</p>
-<p>For more information about Replay, check the following links:</p>
+<p>Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again. But recall: <strong>Solace does not use replay for recovery</strong>... if a subscriber application crashes after receiving a message but hasn&#39;t ACKnowledged it, the broker will resend the message when the subscriber reconnects.</p>
+<p>For more information about Replay and/or acknowledging messages, check the following links:</p>
 <ul>
 <li><a href="https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay" target="_blank">https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay</a></li>
+<li><a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm" target="_blank">https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm</a></li>
 </ul>
 
 

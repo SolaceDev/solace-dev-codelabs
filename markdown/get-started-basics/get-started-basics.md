@@ -384,11 +384,12 @@ Negative
 ![picture](img/cloud-support.png)
 
 
-Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again.
+Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again. But recall: **Solace does not use replay for recovery**... if a subscriber application crashes after receiving a message but hasn't ACKnowledged it, the broker will resend the message when the subscriber reconnects.
 
-For more information about Replay, check the following links:
+For more information about Replay and/or acknowledging messages, check the following links:
 
 * [https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay](https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay)
+* [https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm](https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm)
 
 
 
