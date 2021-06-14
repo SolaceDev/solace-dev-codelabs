@@ -2,7 +2,7 @@ author: Aaron Lee
 summary: Absolute basics of first connecting to a Solace event broker
 id: get-started-basics
 tags: howto
-categories:
+categories: solace
 environments: Web
 status: Published
 feedback link: https://solace.community/

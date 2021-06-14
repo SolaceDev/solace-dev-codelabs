@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-3921398-10",
-  "updated": "2021-06-14T20:28:13+08:00",
+  "updated": "2021-06-14T21:18:11+08:00",
   "id": "get-started-basics",
   "duration": 42,
   "title": "Absolute Solace Basics - Getting Started with Solace PubSub+ Event Broker",
@@ -13,7 +13,9 @@
   "status": [
     "published"
   ],
-  "category": null,
+  "category": [
+    "solace"
+  ],
   "tags": [
     "howto",
     "web"
