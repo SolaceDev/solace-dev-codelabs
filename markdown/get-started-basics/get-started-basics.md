@@ -375,13 +375,20 @@ For more information on Guaranteed messaging and queues, please refer to these l
 
 Duration: 0:04:00
 
+![picture](img/create-replay.png)
+
 This will be left as an exercise to the reader. Once you turn it on, navigate back to the "Queues" tab, select your queue, and see what "Actions" you can find to perform.
 
 Negative
-: **NOTE:** if using **Solace Cloud**, you will have to send a service request to the Solace Cloud team to enable Replay on your broker. Click on the "?" icon in Solace Cloud Mission Control, and say that you would like to test out Replay.
+: **NOTE:** if using **Solace Cloud**, you will have to send a service request to the Solace Cloud Support team to enable Replay on your broker. Click on the "?" icon in Solace Cloud Mission Control, and say that you would like to test out Replay.
 ![picture](img/cloud-support.png)
 
 
+Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again.
+
+For more information about Replay, check the following links:
+
+* [https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay](https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay)
 
 
 
