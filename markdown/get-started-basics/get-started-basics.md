@@ -151,6 +151,8 @@ Login with credentials `admin` / `admin`.  Once connected, you should presented 
 ![picture](img/vpn.png)
 
 
+Click on that box!
+
 
 
 
@@ -253,7 +255,7 @@ Each and every message can be published to a unique topic, depending on the even
 Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:
 
 * `*` single-level wildcard, matches up to the next level `/`. Can be used with a prefix e.g.: `abc*`
-* `>` multi-level wildcard, matches 1-or-more levels. Must occur at the end of the topic subscription.
+* `>` multi-level wildcard, matches one-or-more levels. Must occur at the end of the topic subscription.
 
 Some examples of Solace topic subscriptions:
 * `hello/world/*`
@@ -281,7 +283,7 @@ Positive
 
 Duration: 0:03:00
 
-To use Solace's Guaranteed delivery (aka persistent delivery) so that no messages can be lost, even during network disconnects or broker restarts, then we need a **queue endpoint** to hold onto the messages for the consumer while it might be offline.
+To use Solace's Guaranteed delivery (aka persistent messaging) so that no messages can be lost, even during network disconnects or broker restarts, then we need a **queue endpoint** to hold onto the messages for the consumer while it might be offline.
 
 On the left side of the Manager GUI, click on "Queues":
 ![picture](img/queues01.png)
@@ -300,7 +302,7 @@ Optionally configure some settings (e.g. max quota), but you can leave everythin
 
 You have a new queue! 🎉 
 
-### A Bit of Best Practices: Queue Subscriptions
+### A Bit of Best Practices: Queue Subscriptions!
 
 Now, Solace supports publishing directly to a queue, and many legacy point-to-point style applications still do this. But there are massive architectural benefits to using the **Publish-Subscribe** or **pub/sub** pattern. And for this, we will need to **add a topic subscription to the queue**, so it attracts messages with matching topics (just like the test WebSocket app was doing).
 
@@ -347,7 +349,7 @@ Enter the name of your queue, and hit "Start Consume":
 
 This will _bind_ the Subscriber application to the queue, and any data that the queue receives will be send to the application.
 
-Now ready to publish. On the Publisher side, change the topic to something that will match the (wildcarded?) subscription you added to the queue. Ensure that you have changed the "Delivery Mode" (aka quality of service) to **Persistent**:
+Now you're ready to publish. On the Publisher side, change the topic to something that will match the (wildcarded?) subscription you added to the queue. Ensure that you have changed the "Delivery Mode" (aka quality of service) to **Persistent**:
 ![picture](img/try-me-pers3.png)
 
 Hit "Publish" and make sure your messages appear on the other side.
@@ -356,7 +358,7 @@ Hit "Publish" and make sure your messages appear on the other side.
 Now try disconnecting the Subscriber application, and publish a few more messages. Reconnect the subscriber and rebind to the queue and observe what happens.
 
 Negative
-: **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced concept. For most use cases, ensure the publisher has set the Delivery Mode to "Persistent" when sending Guaranteed messages.
+: **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced concept. For use cases where end-to-end persistence is desired, ensure the publisher has set the Delivery Mode of the message to "Persistent" for sending Guaranteed messages.
 
 For more information on Guaranteed messaging and queues, please refer to these links:
 
