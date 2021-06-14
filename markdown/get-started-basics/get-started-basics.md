@@ -8,7 +8,7 @@ status: Published
 feedback link: https://solace.community/
 analytics account: UA-3921398-10
 
-# Absolute Solace Basics - Getting Started with Solace PubSub+ Event Broker
+# A Solace Primer - Getting Started with Solace PubSub+ Event Broker
 
 
 
@@ -19,7 +19,7 @@ analytics account: UA-3921398-10
 
 Duration: 0:01:00
 
-In this introductory CodeLab, you'll learn how to:
+Hello and welcome!  If you've never interacted with a Solace event broker before, you're in the right place. In this introductory CodeLab, you'll learn how to:
 
 * Setup a **Solace PubSub+ event broker**, and/or start a **PubSub+ Cloud** service
 * Login to the PubSub+ Manager GUI
@@ -33,7 +33,7 @@ In this introductory CodeLab, you'll learn how to:
 
 
 Positive
-: This CodeLab does not cover the Event Portal. That will be addressed in a separate CodeLab.
+: This CodeLab does not cover the **Event Portal**. That will be addressed in a separate CodeLab.
 
 
 
@@ -62,25 +62,6 @@ To run the software broker, you'll need to have Docker, VirtualBox, VMWare Playe
 Duration: 0:10:00
 
 Let's get access to a Solace PubSub+ event broker!
-
-### Software Broker
-
-There are multiple options on how to install/download/configure/run the PubSub+ broker:
-
-* If you Docker installed, this is [probably the easist way](https://solace.com/products/event-broker/software/getting-started/). Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:
-
-```
-docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
-```
-
-* Other Docker options are here: [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
-* To run VirtualBox, VMWare, HyperV, and others: check out [solace.com/downloads](https://solace.com/downloads)
-* Lots of other software install options are here:
-   * [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
-   * [https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm) 
-
-
-
 
 
 ### PubSub+ Cloud
@@ -113,23 +94,38 @@ Positive
 
 
 
+### Software Broker
+
+There are multiple options on how to install/download/configure/run the PubSub+ broker:
+
+* If you Docker installed, this is [probably the easist way](https://solace.com/products/event-broker/software/getting-started/). Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:
+
+```
+docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+
+```
+   * Other Docker options are here: [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
+
+Negative
+: **NOTE:** if you are running on a **Mac**, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the `docker run` command above, with `-p 4444:55555`
+
+* To run VirtualBox, VMWare, HyperV, and others: check out [solace.com/downloads](https://solace.com/downloads)
+* Lots of other software install options are here:
+   * [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
+   * [https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm)
+
+
+
+
+
+
+
+
 ## Log in to the Management GUI
 
 Duration: 0:02:00
 
 Ok, now that we (are pretty sure we) have a Solace broker up and running, let's log in to it!
-
-### Installed Software Broker
-
-If you've installed Solace on your local host (laptop or whatever), point your browser to [http://localhost:8080](http://localhost:8080).  Or whatever IP address where it's running.  Just remember to use port 8080 for the managment access. You should see a login screen like:
-
-![picture](img/login.png)
-
-
-Login with credentials `admin` / `admin`.  Once connected, you should presented with a screen to choose which Message VPN to use.  You will only have one, the "default" VPN:
-
-![picture](img/vpn.png)
-
 
 ### Solace PubSub+ Cloud
 
@@ -143,6 +139,16 @@ Notice some of the buttons across the top:
 * At the top-right, there should be a button saying "Open PubSub+ Broker Manager".  Click on that to go into the Manager GUI.
 
 
+### Installed Software Broker
+
+If you've installed Solace on your local host (laptop or whatever), point your browser to [http://localhost:8080](http://localhost:8080).  Or whatever IP address where it's running.  Just remember to use port 8080 for the managment access. You should see a login screen like:
+
+![picture](img/login.png)
+
+
+Login with credentials `admin` / `admin`.  Once connected, you should presented with a screen to choose which Message VPN to use.  You will only have one, the "default" VPN:
+
+![picture](img/vpn.png)
 
 
 
@@ -174,7 +180,7 @@ On the left side of the screen are the main sections to navigate through:
 * **Try Me!** this is where we will connect two WebSocket test applications
 
 Positive
-: Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttoms across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.
+: Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.
 
 
 
@@ -196,12 +202,13 @@ Click on the "Connect" button of both the Publisher and the Subscriber.  The gre
 
 ### Solace Cloud
 
-**NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.
+Negative
+: **NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.
 
 ![picture](img/connect.png)
 
 
-Choose, "Solace Web Messaging" and copy the username, password, and port for Secure `wss`. Back on the Try Me! tab, click the little right-arrow `>` next to the Connect button to open the dropdown list, and enter your connection information (make sure you use the correct port number).
+Choose, "Solace Web Messaging" and copy the username, password, and port for Secure `wss`. Back on the Try Me! tab, click the little right-arrow `>` next to the "Connect" button to open the dropdown list, and enter your connection information (make sure you use the correct port number).
 
 ![picture](img/try-me-cloud.png)
 
@@ -229,16 +236,16 @@ Try changing the topic and see what happens. Try unsubscribing and see what happ
 
 Duration: 0:05:00
 
-Solace supports a **hierarchical topic** structure, which mean you can be very descriptive in defining your topic... use it to describe the contents/intent of your message/payload data. No need to use flat, coarse-grained topic labels like other brokers. Check out this documenation and this video for more information:
-* [https://docs.solace.com/PubSub-Basics/Understanding-Topics.htm](https://docs.solace.com/PubSub-Basics/Understanding-Topics.htm)
-* [https://www.youtube.com/watch?v=PP1nNlgERQI](https://www.youtube.com/watch?v=PP1nNlgERQI)
+Solace supports a **hierarchical topic** structure, which mean you can be very descriptive in defining your topic... use it to describe the contents/intent of your message payload data. No need to use flat, coarse-grained topic labels like other brokers. Check out this documenation and this video for more information:
+* [Docs: Understanding Topics](https://docs.solace.com/PubSub-Basics/Understanding-Topics.htm)
+* [Video: All About Solace Topics](https://www.youtube.com/watch?v=PP1nNlgERQI)
 
 Each and every message can be published to a unique topic, depending on the event metadata. Some examples of valid Solace topics are:
 * `hello/world/solace`
 * `acme/taxi/rider/hail`
 * `city/train/1234/alert/stopped`
 * `mfg/plant42/inv/update/p12345667`
-* `payme/debit/qr/bank01/f89a09-f89c065a3/ok`
+* `payme/debit/qr/bank01/f89a09-2b9c065a3/ok`
 
 
 ### Subscription Wildcards
@@ -349,7 +356,7 @@ Hit "Publish" and make sure your messages appear on the other side.
 Now try disconnecting the Subscriber application, and publish a few more messages. Reconnect the subscriber and rebind to the queue and observe what happens.
 
 Negative
-: **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced topic. For most use cases, ensure the publisher has set the Delivery Mode to "Persistent" when sending Guaranteed messages.
+: **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced concept. For most use cases, ensure the publisher has set the Delivery Mode to "Persistent" when sending Guaranteed messages.
 
 For more information on Guaranteed messaging and queues, please refer to these links:
 
@@ -368,7 +375,9 @@ Duration: 0:04:00
 
 This will be left as an exercise to the reader. Once you turn it on, navigate back to the "Queues" tab, select your queue, and see what "Actions" you can find to perform.
 
-Note: if using Solace Cloud, you will have to send a service request to the Solace Cloud team to enable Replay on your broker.
+Negative
+: **NOTE:** if using **Solace Cloud**, you will have to send a service request to the Solace Cloud team to enable Replay on your broker. Click on the "?" icon in Solace Cloud Mission Control, and say that you would like to test out Replay.
+![picture](img/cloud-support.png)
 
 
 
