@@ -2,8 +2,8 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
-  "updated": "2020-10-21T16:31:04-04:00",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-06-11T11:46:13-07:00",
   "id": "codelab-4-codelab",
   "duration": 31,
   "title": "Codelab to Create a Codelab",
@@ -14,13 +14,12 @@
     "published"
   ],
   "category": [
-    "codelab",
-    "markdown"
+    "solace",
+    "codelabs"
   ],
   "tags": [
     "web"
   ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/codelab-4-codelab",
-  "ga": "UA-3921398-10",
   "url": "codelab-4-codelab"
 }

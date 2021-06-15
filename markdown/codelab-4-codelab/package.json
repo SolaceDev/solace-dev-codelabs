@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch codelab-4-codelab.md --exec 'claat export codelab-4-codelab.md && lsof -i :9090 -t | xargs kill && cd codelab-4-codelab && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },

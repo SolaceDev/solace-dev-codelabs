@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch boomi-getting-started.md --exec 'claat export boomi-getting-started.md && lsof -c claat -t | xargs kill && cd boomi-getting-started && claat serve'"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SolaceDev/solace-dev-codelabs/"
   },

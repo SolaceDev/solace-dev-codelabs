@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="opentelemetry-intro"
                   title="Using OpenTelemetry to find your event in a haystack"
                   environment="web"
@@ -30,11 +30,11 @@
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
         <aside class="special"><p>If you&#39;d like to learn more about OpenTelemetry architecture, but don&#39;t care about hands-on stuff, you can find it in my blog post <a href="https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/" target="_blank">What is distributed tracing and how does OpenTelemetry work for event-driven integration?</a></p>
 </aside>
-<p>No business likes an angry user.  That goes double if the user is a taxi driver. The language can be...intense.</p>
-<p>As NYC Modern Taxi Company modernizes its operations through event-based integration, things will go wrong.  What&#39;s important is that issues are resolved quickly and as painlessly as possible for the end user, so the taxis keep moving.  To help with that, NYC Modern Taxi is adding OpenTelemetry distributed tracing to all of their microservices.  The goal is to trace events at they move through Solace and potentially dozens of microservices.</p>
+<p>No business likes an angry user. That goes double if the user is a taxi driver. The language can be...intense.</p>
+<p>As NYC Modern Taxi Company modernizes its operations through event-based integration, things will go wrong. What&#39;s important is that issues are resolved quickly and as painlessly as possible for the end user, so the taxis keep moving. To help with that, NYC Modern Taxi is adding OpenTelemetry distributed tracing to all of their microservices. The goal is to trace events at they move through Solace and potentially dozens of microservices.</p>
 <p>Instead of plowing through logs, trying to understand what happened, NYC Modern Taxi can instead search through graphs like these that show how the event moved across microservices: <img alt="flame-graph" src="img/408a406967e1d087.png"></p>
 <p>In this CodeLab you&#39;ll learn about:</p>
-<p>✅ How OpenTelemetry works (the basics, if you&#39;d like more detail here is a <a href="https://blog.newrelic.com/product-news/what-is-opentelemetry/" target="_blank">solid intro blog post.</a>)</p>
+<p>✅ How OpenTelemetry works (the basics, if you&#39;d like more detail here is a <a href="https://newrelic.com/solutions/opentelemetry" target="_blank">solid intro blog post.</a>)</p>
 <p>✅ How to get the Solace PubSub+ Python API, and set up a basic environment.</p>
 <p>✅ How to include OpenTelemetry tracing in your processes</p>
 <p>✅ How to visualize your event-driven applications with Jaeger</p>
@@ -46,12 +46,12 @@
       <google-codelab-step label="What you need: Prerequisites" duration="7">
         <ol type="1">
 <li>A general understanding of <a href="https://docs.solace.com/#Messagin" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
-<li>A free trial account of Solace PubSub+ Cloud.   Don&#39;t have one? <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a></li>
+<li>A free trial account of Solace PubSub+ Cloud. Don&#39;t have one? <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a></li>
 <li><a href="https://www.jaegertracing.io/download/" target="_blank">Download Jaeger</a> for free in the OS of your choosing</li>
 <li><a href="https://www.python.org/downloads/" target="_blank">Download Python</a> for free in the OS of your choosing</li>
-<li><a href="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro" target="_blank">Download the sample code</a>   Or use git commands to grab it from <a href="https://github.com/jmenning-solace/nycmoderntaxi.git" target="_blank">GitHub</a>.</li>
+<li><a href="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro" target="_blank">Download the sample code</a> Or use git commands to grab it from <a href="https://github.com/jmenning-solace/nycmoderntaxi.git" target="_blank">GitHub</a>.</li>
 </ol>
-<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs.  <a href="https://solace.community/categories/python-api" target="_blank">Read more about the Python API.</a>.</p>
+<aside class="warning"><p>It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. <a href="https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga" target="_blank">Read more about the Python API.</a>.</p>
 </aside>
 
 
@@ -59,10 +59,10 @@
     
       <google-codelab-step label="Use Case Overview 🚕" duration="3">
         <p>At Solace, we&#39;ve been following the story of NYC Modern Taxi, a taxi company struggling to stay relevant by creating a new ride sharing app. To be clear, it&#39;s a fake company. But its problems are all too real.</p>
-<p>At midnight, NYC Modern Taxi went live with the app, and in the morning drivers started complaining about not being able to login.  The issue appeared to be with events moving from Salesforce (where potential drivers are recruited) into an operations database used by the mobile application.  But given the number of hops the event took along the way, the location of the issue wasn&#39;t exactly clear.</p>
+<p>At midnight, NYC Modern Taxi went live with the app, and in the morning drivers started complaining about not being able to login. The issue appeared to be with events moving from Salesforce (where potential drivers are recruited) into an operations database used by the mobile application. But given the number of hops the event took along the way, the location of the issue wasn&#39;t exactly clear.</p>
 <p class="image-container"><img alt="opening_graphic" src="img/6d1c5f5d8450a6f4.png"></p>
-<p>Luckily, to give support personnel better visibility into what&#39;s happening at runtime, NYC Modern Taxi added OpenTelemetry to their microservices.  In contrast to traditional tracing with line after line of text, distributed tracing shows you a searchable, graphical picture of when, where and how one event flowed through your enterprise. It let NYC Modern Taxi watch the Tommy&#39;s account update zig to the cloud,  zag into an on-premises data center, fan out into 40 thanks to a pub-sub architecture, slow down in a bottle neck and then...watch a programming error stop it completely.</p>
-<p>Since you can&#39;t recreate the whole infrastucture here, you&#39;ll focus on a small slice.  A &#34;Salesforce&#34; Python script will publish a message to Solace.  That message will  be consumed by two additional Python scripts, one playing the role of an outbound REST call, the other mocking a database insert.  Each process sends a trace to Jaeger, which both collects them and displays in pretty, useful pictures.</p>
+<p>Luckily, to give support personnel better visibility into what&#39;s happening at runtime, NYC Modern Taxi added OpenTelemetry to their microservices. In contrast to traditional tracing with line after line of text, distributed tracing shows you a searchable, graphical picture of when, where and how one event flowed through your enterprise. It let NYC Modern Taxi watch the Tommy&#39;s account update zig to the cloud, zag into an on-premises data center, fan out into 40 thanks to a pub-sub architecture, slow down in a bottle neck and then...watch a programming error stop it completely.</p>
+<p>Since you can&#39;t recreate the whole infrastucture here, you&#39;ll focus on a small slice. A &#34;Salesforce&#34; Python script will publish a message to Solace. That message will be consumed by two additional Python scripts, one playing the role of an outbound REST call, the other mocking a database insert. Each process sends a trace to Jaeger, which both collects them and displays in pretty, useful pictures.</p>
 <p class="image-container"><img alt="logicalarch" src="img/bbd310e7f0a80695.png"></p>
 
 
@@ -75,13 +75,13 @@
 <li>Software broker image (Docker, Virtual image)</li>
 <li>Solace Cloud service instance</li>
 </ol>
-<p>This tutorial will walk you through setting up a Solace Cloud service instance, which also gives you access to the Event Portal. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event  Broker: Software</a> documentation</p>
+<p>This tutorial will walk you through setting up a Solace Cloud service instance, which also gives you access to the Event Portal. If you are interested in setting up a local broker running on Docker or a virtual machine check out the <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/SW-Broker-Image-Setup.htm" target="_blank">PubSub+ Event Broker: Software</a> documentation</p>
 <h2 is-upgraded>Sign up for free Solace Cloud account</h2>
 <p>Navigate to the <a href="https://console.solace.cloud/login/new-account" target="_blank">Create a New Account</a> page and fill out the required information. No credit card required!</p>
 <h2 is-upgraded>Create a messaging service</h2>
 <p>After you create your Solace Cloud account and sign in to the Solace Cloud Console, you&#39;ll be routed to the event mesh page.</p>
-<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img/500ee282af1b6d9f.png"></p>
-<p>Click on ‘Messaging Services&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
+<p class="image-container"><img alt="Solace Cloud Event Mesh Page" title="Solace Cloud Event Mesh" src="img/876ed3d60069605f.webp"></p>
+<p>Click on ‘Cluster Manager&#39; and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:</p>
 <p class="image-container"><img alt="Solace Cloud Landing Page" title="Solace Cloud Landing Page" src="img/a7ea4d393008a8c3.png"></p>
 <p>Fill out all the details for your messaging service, and then click &#34;Create&#34; at the bottom of the page.</p>
 <p class="image-container"><img alt="Create Solace Cloud Messaging Service" title="Solace Cloud Messaging Service" src="img/b2fd05043df1c5cd.png"></p>
@@ -94,18 +94,18 @@
       </google-codelab-step>
     
       <google-codelab-step label="Set up Jaeger All-In-One" duration="5">
-        <p>Jaeger collects and visualizes the spans created by your microservices.  It has several different components such as an underlying database, a GUI and a span collector, but fortunately it has an all-in-one distribution that makes setup easy.</p>
+        <p>Jaeger collects and visualizes the spans created by your microservices. It has several different components such as an underlying database, a GUI and a span collector, but fortunately it has an all-in-one distribution that makes setup easy.</p>
 <aside class="warning"><p>If you don&#39;t have a tool that opens .gz files, you can download one. <a href="https://www.7-zip.org/download.html" target="_blank">7-Zip</a> is a good free option</p>
 </aside>
 <h2 is-upgraded>Steps to install</h2>
 <ol type="1">
-<li>Extract the Jaeger distribution file you downloaded as part of the prerequisites.  (e.g. <code>jaeger-1.17.1-windows-amd64.tar.gz</code> on Windows)</li>
+<li>Extract the Jaeger distribution file you downloaded as part of the prerequisites. (e.g. <code>jaeger-1.17.1-windows-amd64.tar.gz</code> on Windows)</li>
 <li>Open a command terminal.</li>
 <li>Run <code>jaeger-all-in-one</code></li>
 <li>Using a web browser, navigate to <code>http://localhost:16686/</code></li>
-<li>You should be greeted by a picture of a...chipmunk? Gopher?  Not really sure.</li>
+<li>You should be greeted by a picture of a...chipmunk? Gopher? Not really sure.</li>
 </ol>
-<aside class="warning"><p>You&#39;ll need to keep the terminal window running Jaeger open.  If you close it, you&#39;ll lose the traces you&#39;ve collected.</p>
+<aside class="warning"><p>You&#39;ll need to keep the terminal window running Jaeger open. If you close it, you&#39;ll lose the traces you&#39;ve collected.</p>
 </aside>
 <p>✔️ You&#39;ve created the second part of the solution! <img alt="check2" src="img/b66fd01b526bd42e.png"></p>
 
@@ -113,7 +113,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Set up Python environment" duration="12">
-        <p>Python is a great language for prototyping applications.  It&#39;s easy to get up and running quickly, and since it doesn&#39;t compile you just change a line and reload.  This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the <a href="https://solace.community/categories/python-api" target="_blank">Solace PubSub+ Python API</a>.  And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.</p>
+        <p>Python is a great language for prototyping applications. It&#39;s easy to get up and running quickly, and since it doesn&#39;t compile you just change a line and reload. This CodeLab uses Python to simulate Salesforce publishing the message and two event consumers using the <a href="https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga" target="_blank">Solace PubSub+ Python API</a>. And since there is a native OpenTelemetry API for Python it can produce the OpenTelemetry tracing as well.</p>
 <h2 is-upgraded>Steps to install</h2>
 <ol type="1">
 <li>Open the Python installer that you downloaded in the prerequisites.</li>
@@ -121,14 +121,14 @@
 </ol>
 <aside class="special"><p>Be sure to include Python in your PATH variable as per the download instructions</p>
 </aside>
-<p>Once it&#39;s complete, you should have a program called IDLE (Integrated Development and Learning Environment).	 <img alt="IDLE" title="IDLE" src="img/7d2f16bbb5d719e4.png"></p>
+<p>Once it&#39;s complete, you should have a program called IDLE (Integrated Development and Learning Environment). <img alt="IDLE" title="IDLE" src="img/7d2f16bbb5d719e4.png"></p>
 <p>That&#39;s what you&#39;ll use to modify and run the Python scripts.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Create the &#34;Salesforce&#34; message publisher" duration="10">
-        <aside class="special"><p>This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events.  If that&#39;s your passion, Solace has a great <a href="https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/" target="_blank">CodeLab about event-enabling Salesforce with Boomi and Solace</a>.  Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API.  If you want to know more about those capabilities, there will be a CodeLab soon.</p>
+        <aside class="special"><p>This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events. If that&#39;s your passion, Solace has a great <a href="https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/" target="_blank">CodeLab about event-enabling Salesforce with Boomi and Solace</a>. Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API. If you want to know more about those capabilities, there will be a CodeLab soon.</p>
 </aside>
 <ol type="1">
 <li>If you haven&#39;t already, unzip the CodeLabs code into a convenient directory</li>
@@ -164,7 +164,7 @@ Process finished with exit code 0
 <p>✔️ You&#39;ve created the third part of the solution! <img alt="check3" src="img/d9b3a7d4319017c.png"></p>
 <h2 is-upgraded>Code Walk Through (optional)</h2>
 <ol type="1">
-<li>The code creates a trace factory, using the default TracerProvider.  The code creates the actual tracer later on using this factory.</li>
+<li>The code creates a trace factory, using the default TracerProvider. The code creates the actual tracer later on using this factory.</li>
 <li>The we create the Jaeger exporter, which contains the details on how to connect to Jaeger. As you can see, it&#39;s running locally on port 6831.<pre><code>trace.set_tracer_provider(TracerProvider())
 jaeger_exporter = jaeger.JaegerSpanExporter(
 	service_name=&#34;&lt;Boomi&gt; Listen for Salesforce Platform Account, publish Solace DriverUpserted&#34;,
@@ -177,7 +177,7 @@ jaeger_exporter = jaeger.JaegerSpanExporter(
 BatchExportSpanProcessor(jaeger_exporter)
 </code></pre>
 </li>
-<li>Using the trace factory that you created above, you get an instance of a trace, called tracer.  Using tracer, you create a span, which describes what happens in this microservice.<pre><code>tracer = trace.get_tracer(__name__)
+<li>Using the trace factory that you created above, you get an instance of a trace, called tracer. Using tracer, you create a span, which describes what happens in this microservice.<pre><code>tracer = trace.get_tracer(__name__)
 # THIS IS PER https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/messaging.md
 parentSpan = tracer.start_span(
 	&#34;RideUpdated send&#34;,
@@ -196,7 +196,7 @@ parentSpan = tracer.start_span(
 span_id = parentSpan.get_context().span_id`
 </code></pre>
 </li>
-<li>As the script publishes the event, it includes the trace id and the span id as two headers in the message.  Downstream consumers now have access to them.<pre><code>outbound_msg = OutboundMessage.builder() \
+<li>As the script publishes the event, it includes the trace id and the span id as two headers in the message. Downstream consumers now have access to them.<pre><code>outbound_msg = OutboundMessage.builder() \
 	.with_property(&#34;trace_id&#34;, str(trace_id)) \
 	.with_property(&#34;span_id&#34;, str(span_id)) \
 	.build(&#34;Hello World! This is a message published from Python!&#34;)
@@ -223,9 +223,7 @@ Execute Direct Consume - String
 Subscribed to: opentelemetry/helloworld
 </code></pre>
 </li>
-<li>The database consumer listens for incoming message until it receives a keyboard interrupt.  At that point you&#39;ll see a message that says:<pre><code>Process finished with exit code 0
-</code></pre>
-</li>
+<li>The database consumer listens for incoming message until it receives a keyboard interrupt. At that point you&#39;ll see a message that says: Process finished with exit code 0</li>
 </ol>
 <p>🔁 Repeat this process with <code>solace_telemetry_consumer_REST.py</code>, so you have two consumers running at the same time.</p>
 <aside class="warning"><p>Don&#39;t forget to activate your Python virtual env in the new terminal you open!</p>
@@ -249,7 +247,7 @@ print(&#34;parentSpan span_id on receiver side:&#34; + span_id)
 <li>Using the span_id and trace_id, it then recreates the pubisher&#39;s context<pre><code>propagated_context = SpanContext(int(trace_id), int(span_id), True)
 </code></pre>
 </li>
-<li>Using the recreated context, it then opens a new span, specifying the parent span as the publisher.  This allows the linkage between the publisher and the consumer.<pre><code>childSpan = tracer.start_span(&#34;RideUpdated receive&#34;, parent=propagated_context)
+<li>Using the recreated context, it then opens a new span, specifying the parent span as the publisher. This allows the linkage between the publisher and the consumer.<pre><code>childSpan = tracer.start_span(&#34;RideUpdated receive&#34;, parent=propagated_context)
 </code></pre>
 </li>
 </ol>
@@ -262,8 +260,8 @@ print(&#34;parentSpan span_id on receiver side:&#34; + span_id)
 <ol type="1">
 <li>Run the two consumers in two separate terminal instances</li>
 <li>Run the publisher in another terminal instance</li>
-<li>As soon as you run the publisher, you should see a log entries in each of the consumers showing that the events were received.  The logs should look like:<pre><code>CALLBACK: Message Received on Topic: opentelemetry/helloworld.
-Message String: Hello World! This is a message published from Python! 
+<li>As soon as you run the publisher, you should see a log entries in each of the consumers showing that the events were received. The logs should look like:<pre><code>CALLBACK: Message Received on Topic: opentelemetry/helloworld.
+Message String: Hello World! This is a message published from Python!
 
 
 parentSpan trace_id on receiver side:18915100849980568506040033268233107768

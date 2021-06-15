@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2020-10-01T13:31:34-04:00",
   "id": "azure2Solace",
   "duration": 47,
@@ -21,7 +21,6 @@
     "iguide",
     "web"
   ],
-  "feedback": "https://github.com/solacese/azure2Solace",
-  "ga": "UA-3921398-10",
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/azure2Solace/azure2Solace.md",
   "url": "azure2Solace"
 }

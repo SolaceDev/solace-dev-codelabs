@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2019-10-15T16:10:48-04:00",
   "id": "solace-workshop-scs-pcf",
   "duration": 175,
@@ -15,15 +15,12 @@
   ],
   "category": [
     "spring",
-    "java",
-    "solace",
-    "pcf"
+    "java"
   ],
   "tags": [
     "web",
     "workshop"
   ],
-  "feedback": "https://github.com/SolaceTraining/solace-workshop-scs/issues",
-  "ga": "UA-3921398-10",
+  "feedback": "github.com/SolaceTraining/solace-workshop-scs",
   "url": "solace-workshop-scs-pcf"
 }

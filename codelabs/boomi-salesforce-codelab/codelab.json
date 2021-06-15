@@ -2,7 +2,7 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
+  "mainga": "UA-49880327-14",
   "updated": "2020-10-01T13:28:49-04:00",
   "id": "boomi-salesforce-codelab",
   "duration": 103,
@@ -10,20 +10,9 @@
   "summary": "",
   "source": "boomi-salesforce-codelab.md",
   "theme": "",
-  "status": [
-    "draft"
-  ],
-  "category": [
-    "boomi",
-    "salesforce",
-    "azure",
-    "taxi"
-  ],
-  "tags": [
-    "web",
-    "workshop"
-  ],
+  "status": ["draft"],
+  "category": ["boomi", "salesforce", "azure", "taxi"],
+  "tags": ["web", "workshop"],
   "feedback": "https://github.com/jmenning-solace/nycmoderntaxi",
-  "ga": "UA-3921398-10",
   "url": "boomi-salesforce-codelab"
 }

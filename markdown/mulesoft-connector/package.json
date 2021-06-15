@@ -1,0 +1,20 @@
+{
+  "name": "codelab-bootstrap",
+  "version": "1.0.0",
+  "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch mulesoft-connector.md --exec \"claat export -o temp/ mulesoft-connector.md && ./node_modules/kill-port/cli.js --port 9090 && cd temp/mulesoft-connector && claat serve\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/mulesoft-connector"
+  },
+  "keywords": [
+    "codelab"
+  ],
+  "dependencies": {
+    "kill-port": "^1.6.1",
+    "nodemon": "^2.0.3"
+  }
+}

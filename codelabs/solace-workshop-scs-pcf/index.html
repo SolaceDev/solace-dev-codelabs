@@ -20,15 +20,17 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="solace-workshop-scs-pcf"
                   title="Using Spring Cloud Stream with Solace PubSub&#43; in PCF"
                   environment="web"
-                  feedback-link="https://github.com/SolaceTraining/solace-workshop-scs/issues">
+                  feedback-link="github.com/SolaceTraining/solace-workshop-scs">
     
       <google-codelab-step label="CodeLab Overview" duration="10">
-        <p>Using Java &amp; Spring Cloud Streams (SCS) to create Event-Driven Applications with PubSub+ in PCF</p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p>Using Java &amp; Spring Cloud Streams (SCS) to create Event-Driven Applications with PubSub+ in PCF</p>
 <ul>
 <li>The purpose of this codelab is to introduce java developers to creating event-driven applications with Spring Cloud Streams and PubSub+ in Pivotal Cloud Foundry</li>
 <li>&#34;Spring Cloud Stream is a framework for building highly scalable event-driven microservices connected with shared messaging systems.&#34;</li>
@@ -37,14 +39,16 @@
 <p class="image-container"><img alt="story_section1" src="img/74c5ab5aa7a9cf08.png"></p>
 <aside class="special"><p><strong>Developer Resources</strong><br>Spring Cloud Stream Project Home: <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">https://spring.io/projects/spring-cloud-stream</a><br>The latest version of Spring Clouds Streams as of the creation of this lab is Greenwich.SR1 (2.1.4)<br>The Reference Guide for that current version is available <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle" target="_blank">here</a>.</p>
 </aside>
-<aside class="warning"><p>The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events.  While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud.  When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.</p>
+<aside class="warning"><p>The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events. While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud. When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.</p>
 </aside>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Set-up &amp; Prerequisites" duration="20">
-        <p class="image-container"><img alt="story_section2" src="img/c634d97d30498a69.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section2" src="img/c634d97d30498a69.png"></p>
 <h2 is-upgraded>Developer IDE &amp; Code Access</h2>
 <h3 is-upgraded>IDE Setup</h3>
 <p>The recommended IDE for the workshop is Spring Tools Suite (STS) <a href="https://spring.io/tools" target="_blank">Download Here</a>. STS comes with some niceties, such as autodeploy, when used with spring-boot-devtools. Participants can of course use another IDE if preferred. It is also recommended that you begin the workshop with an empty STS workspace to avoid any unforeseen issues with existing projects/configurations/code.</p>
@@ -53,7 +57,7 @@
 <li>Maven 3.5.3 or higher (ensure it&#39;s on your PATH) <a href="https://maven.apache.org/install.html" target="_blank">Install steps here</a></li>
 <li>Use the latest JDK 1.8 (ensure your PATH &amp; JAVA_HOME are updated as needed)</li>
 <li>If using STS/Eclipse ensure your JDK 1.8 is thei default &#34;Installed JRE&#34; by choosing &#34;Windows&#34; -&gt; &#34;Preferences&#34; -&gt; &#34;Java&#34; -&gt; &#34;Installed JREs&#34;</li>
-<li>If the correct JDK does not already have a checkmark next to it then click the &#34;Add&#34; button, choose &#34;Standard VM&#34;, click &#34;Next&#34;, navigate to your JDK -&gt; Click &#34;Finish&#34;. Then click the checkbox next to the added JRE and click &#34;Apply and close&#34;<br></li>
+<li>If the correct JDK does not already have a checkmark next to it then click the &#34;Add&#34; button, choose &#34;Standard VM&#34;, click &#34;Next&#34;, navigate to your JDK -&gt; Click &#34;Finish&#34;. Then click the checkbox next to the added JRE and click &#34;Apply and close&#34;</li>
 </ul>
 <h3 is-upgraded>Code Access</h3>
 <ul>
@@ -80,7 +84,7 @@
 <li>09-scs-processor-positive</li>
 <li>10-spring-boot-mqttwebapp</li>
 </ul>
-<aside class="warning"><p>Note:  There will be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.</p>
+<aside class="warning"><p>Note: There will be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.</p>
 </aside>
 <ul>
 <li>The workshop uses a common data model which contains the Tweet object which is processed by the SCS services. You will need to prepare the shared artifact for use across the projects.</li>
@@ -93,22 +97,24 @@ $ mvn clean install
 </ul>
 <h2 is-upgraded>Create and/or Verify access to a Solace PubSub+ Service</h2>
 <h3 is-upgraded>PubSub+ Service in Solace Cloud</h3>
-<p>If you want to stand up your Solace PubSub+ Service in Solace Cloud go ahead and login or signup at the <a href="https://console.solace.cloud/login/new-account" target="_blank">Cloud Signup Page</a>.  Note that a free tier is available and will work for this workshop.</p>
+<p>If you want to stand up your Solace PubSub+ Service in Solace Cloud go ahead and login or signup at the <a href="https://console.solace.cloud/login/new-account" target="_blank">Cloud Signup Page</a>. Note that a free tier is available and will work for this workshop.</p>
 <h3 is-upgraded>Local Solace PubSub+ Instance</h3>
-<p>When developing your application, you may want to test using a local instance of the Solace PubSub+ Event Broker.  Refer to the Solace <a href="https://solace.com/software/getting-started/" target="_blank">Docker Getting Started Guide</a> to get you up and running quickly with a broker instance running in Docker.  You may skip this step if you decide to use a broker running in PCF or Solace Cloud.</p>
+<p>When developing your application, you may want to test using a local instance of the Solace PubSub+ Event Broker. Refer to the Solace <a href="https://solace.com/software/getting-started/" target="_blank">Docker Getting Started Guide</a> to get you up and running quickly with a broker instance running in Docker. You may skip this step if you decide to use a broker running in PCF or Solace Cloud.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Deploy Your First Source &amp; Sink" duration="45">
-        <p class="image-container"><img alt="story_section3" src="img/552516a043e3db5a.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section3" src="img/552516a043e3db5a.png"></p>
 <h2 is-upgraded>Application Architecture</h2>
 <p>At the end of this section we will have created the apps below!<br>The Source will send out tweets that will be received by the marketing Sink.</p>
 <p class="image-container"><img alt="1 Application Architecture" src="img/ad95e9f36014b52d.png"></p>
 <aside class="warning"><p>SCS Provides 3 Binding Interfaces:<br>1: Sink - &#34;Identifies the contract for the message consumer by providing the destination from which the message is consumed.&#34;<br>2: Source - &#34;Identifies the contract for the message producer by providing the destination to which the produced message is sent.&#34;<br>3: Processor - &#34;Encapsulates both the sink and the source contracts by exposing two destinations that allow consumption and production of messages.&#34;</p>
 </aside>
 <h2 is-upgraded>Deploying a Source</h2>
-<p>Before our company can do anything with the tweets we have to start to receive an incoming stream of them!  Let&#39;s get started! Please navigate to the &#34;02-scs-source-tweets&#34; project in your IDE.</p>
+<p>Before our company can do anything with the tweets we have to start to receive an incoming stream of them! Let&#39;s get started! Please navigate to the &#34;02-scs-source-tweets&#34; project in your IDE.</p>
 <h3 is-upgraded>Learn the Project Structure</h3>
 <p>Before we take a look at the code, let&#39;s take a quick look at the structure of a Spring Cloud Streams project.</p>
 <ul>
@@ -129,7 +135,7 @@ $ mvn clean install
 </aside>
 <p class="image-container"><img alt="SCS Sample Implementation" src="img/191b59cec4b3474b.png"></p>
 <ul>
-<li>One last thing to look at and then we&#39;ll deploy your first source! Go ahead and open your application.yml file. This file holds the bindings that tells the SCS binder how to connect your input/output channels to the specified middleware at runtime.<br></li>
+<li>One last thing to look at and then we&#39;ll deploy your first source! Go ahead and open your application.yml file. This file holds the bindings that tells the SCS binder how to connect your input/output channels to the specified middleware at runtime.</li>
 </ul>
 <p class="image-container"><img alt="SCS Application Config File" src="img/1ec3375dc0672892.png"></p>
 <aside class="special"><p>SCS apps are not restricted to only using one binder at a time. This allows a SCS app the flexibility of receiving events from one binder/location/environment/etc, performing business logic and then sending new events to another binder/location/environment/etc.<br>Also note that because bindings are dynamically configured at run-time you don&#39;t have to touch the code to switch out your binder of choice, environment info, etc.</p>
@@ -144,14 +150,14 @@ $ mvn clean install
 <li>Whichever way you started the app you should see the app start, connect and begin to send tweets by looking at the console.</li>
 </ul>
 <p class="image-container"><img alt="story_section3_g2" src="img/39fe5ed1c324f817.png"></p>
-<p>To do this we will deploy a sink app.  Recall that a sink app binds to an INPUT channel.</p>
+<p>To do this we will deploy a sink app. Recall that a sink app binds to an INPUT channel.</p>
 <h2 is-upgraded>Deploying a Sink</h2>
 <ul>
 <li>Open the &#34;03-scs-sink-analytics&#34; project</li>
 <li>Take a look at the code in the <em>ScsSinkAnalytics.java</em> class; you&#39;ll notice we have a very simple class with only a few methods. As we saw earlier, the <em>@StreamListener</em> attribute identifies which channel our <em>sink</em> method will receive events from. Also notice that the sink method is expecting a POJO tweet parameter of type <em>Tweet</em></li>
 <li>Now update the <em>application.yml</em> file for the &#34;03-scs-sink-analytics&#34; project with the same info that you used when deploying the source app.</li>
 <li>While updating this file also replace the <strong>ATTENDEE_NAME</strong> group with your unique name</li>
-<li>Time to deploy!  Deploy the &#34;03-scs-sink-analytics&#34; app the same way you started &#34;02-scs-source-tweets&#34;</li>
+<li>Time to deploy! Deploy the &#34;03-scs-sink-analytics&#34; app the same way you started &#34;02-scs-source-tweets&#34;</li>
 <li>Now that your sink is started you should see it logging the tweets as they come in!</li>
 </ul>
 <aside class="warning"><p>Note that Spring Cloud Streams <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_provided_messageconverters" target="_blank">provides message converters</a> which enable the conversion of a payload to/from a specified format/shape (such as a Tweet POJO in our case) based on the argumentType in the method signature and the contentType specified on the message. The default content type is application/json.</p>
@@ -166,26 +172,28 @@ $ mvn clean install
       </google-codelab-step>
     
       <google-codelab-step label="Deploy to Pivotal Cloud Foundry" duration="20">
-        <p class="image-container"><img alt="story_section4" src="img/911f2c66e9d0e690.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section4" src="img/911f2c66e9d0e690.png"></p>
 <h2 is-upgraded>Configure a Cloud Foundry Target in STS</h2>
-<p>STS provides integrated support for deploying, running and debugging your SCS services in PCF.  In the Boot Dashboard view, configure a connection to your PCF deployment by clicking the &#34;+&#34; button as seen in the image below.</p>
+<p>STS provides integrated support for deploying, running and debugging your SCS services in PCF. In the Boot Dashboard view, configure a connection to your PCF deployment by clicking the &#34;+&#34; button as seen in the image below.</p>
 <p class="image-container"><img alt="Configuring a connection to Cloud Foundry in STS(use button circled in red)" src="img/1a64fd3fa78db22a.png"></p>
-<p>Follow the dialog prompts and fill in the username / password associated with your PCF account.  You may need to skip SSL validation if your PCF deployment uses self-signed certificates.</p>
+<p>Follow the dialog prompts and fill in the username / password associated with your PCF account. You may need to skip SSL validation if your PCF deployment uses self-signed certificates.</p>
 <h2 is-upgraded>Cloud Foundry CLI Setup</h2>
 <ul>
 <li>Install the cf-cli using these instructions: <a href="https://docs.cloudfoundry.org/cf-cli/install-go-cli.html" target="_blank">Install CF CLI</a></li>
 <li>Login to your cf org &amp; space with your API endpoint, username/email &amp; password.</li>
 <li>Choose the proper Org &amp; Space<pre><code>$ cf login -a &lt;API_URL&gt; -u &lt;USERNAME&gt;
-$ Password&gt; 
+$ Password&gt;
 </code></pre>
 </li>
 </ul>
 <h2 is-upgraded>Verify PubSub+ Service in Pivotal Cloud Foundry (PCF)</h2>
-<p>If you are using PCF, your administrator will have created an org and space for your workshop demo in which you can deploy and run your microservices.  Moreover, a Solace PubSub+ service instance will have been created so that it can be bound by any app running in the space and automatically lookup credentials to connect to a broker instance running in PCF.  You should determine the name of this service instance before deploying or running your application to avoid any service binding errors.  You can do this through the Apps Manager or via the cf CLI. You&#39;ll need this service instance name later so don&#39;t forget it.</p>
-<pre><code>$ cf services 
-Getting services in org test-org / space development as user1... 
-name                    service             plan                       bound apps  
-solace-pubsub-service   solace-pubsub       Enterprise Shared Plan     sample-app 
+<p>If you are using PCF, your administrator will have created an org and space for your workshop demo in which you can deploy and run your microservices. Moreover, a Solace PubSub+ service instance will have been created so that it can be bound by any app running in the space and automatically lookup credentials to connect to a broker instance running in PCF. You should determine the name of this service instance before deploying or running your application to avoid any service binding errors. You can do this through the Apps Manager or via the cf CLI. You&#39;ll need this service instance name later so don&#39;t forget it.</p>
+<pre><code>$ cf services
+Getting services in org test-org / space development as user1...
+name                    service             plan                       bound apps
+solace-pubsub-service   solace-pubsub       Enterprise Shared Plan     sample-app
 </code></pre>
 <h2 is-upgraded>Deploy the Source to PCF</h2>
 <h3 is-upgraded>IF PARTICIPATING IN AN INSTRUCTOR LED WORKSHOP THE INSTRUCTOR WILL PUSH TO PCF. YOU ARE WELCOME TO RUN LOCALLY IF YOU WOULD LIKE</h3>
@@ -230,7 +238,9 @@ $ cf push
       </google-codelab-step>
     
       <google-codelab-step label="Discover the ease of 1-to-Many with Publish-Subscribe" duration="10">
-        <p class="image-container"><img alt="story_section5_g1" src="img/ceeff772d463d4df.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section5_g1" src="img/ceeff772d463d4df.png"></p>
 <h2 is-upgraded>Application Architecture</h2>
 <p>At the end of this section we will have added the Factory Tweet Board Sink.</p>
 <p class="image-container"><img alt="2 Application Architecture" src="img/7f171fecebc03f2.png"></p>
@@ -241,7 +251,7 @@ $ cf push
 <li>Open the <em>ScsSinkTweetBoard.java</em> class</li>
 <li>Add the <em>@EnableBinding(Sink.class)</em> annotation to label the app as a Sink</li>
 <li>Add a &#34;sink&#34; method that takes in a &#34;Tweet&#34; POJO from the INPUT channel and logs that it was received.</li>
-<li>Update the application.yml file, verify that there is indeed a destination configured for the input channel, and add your name to the end of the destination name (e.g: TWEETS.Q.BOARD.Marc).  Note that by not specifying a group we are using the &#34;Publish-Subscribe&#34; messaging model.</li>
+<li>Update the application.yml file, verify that there is indeed a destination configured for the input channel, and add your name to the end of the destination name (e.g: TWEETS.Q.BOARD.Marc). Note that by not specifying a group we are using the &#34;Publish-Subscribe&#34; messaging model.</li>
 <li>If not deploying to PCF you&#39;ll also need to update the host, msgVpn, clientUsername, clientPassword in the application.yml file.</li>
 <li>If you are deploying to PCF you&#39;ll need to open the <em>manifest.yml</em> file and update 2 items: 1) Update the solace service name, and 2) Change <strong>ATTENDEE_NAME</strong> to your name</li>
 </ul>
@@ -271,7 +281,9 @@ $ cf push
       </google-codelab-step>
     
       <google-codelab-step label="Creating your first Processor" duration="30">
-        <p>So far in this workshop we have created source or sink applications. In this section we will create our first processor.</p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p>So far in this workshop we have created source or sink applications. In this section we will create our first processor.</p>
 <p class="image-container"><img alt="story_section6_g1" src="img/3b35000a8848b68e.png"></p>
 <h2 is-upgraded>Application Architecture</h2>
 <p>In order to meet our new goal we will add the Features processor and a new Sink as seen below.</p>
@@ -289,12 +301,12 @@ $ cf push
 </aside>
 <ul>
 <li>Note that in the application.yml file the bindings that are listed include input, outputFeature, and outputNoFeature as defined in our custom bindings interface.</li>
-<li>Update the <strong>ATTENDEE_NAME</strong> to be your name each time it occurs in the application.yaml file.<br></li>
+<li>Update the <strong>ATTENDEE_NAME</strong> to be your name each time it occurs in the application.yaml file.</li>
 <li>If not using PubSub+ in PCF, update the host, msgVpn, clientUsername, clientPassword in the application.yml file so we can connect to the PubSub+ service</li>
 <li>Deploy the app in the same manner that you&#39;ve been deploying the others. (Don&#39;t forget to update the <strong>ATTENDEE_NAME</strong> &amp; the solace service in the manifest.yml file to point to your PubSub+ service!)</li>
 </ul>
 <h3 is-upgraded>Processor using Dynamic Destinations</h3>
-<aside class="warning"><p>At this point you might be thinking &#34;Okay these custom binding interfaces are great, but what if I don&#39;t know how many or what to call my output channels at design time?&#34; Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation!  Dynamic destinations allow you to use business logic to define your destinations at runtime.</p>
+<aside class="warning"><p>At this point you might be thinking &#34;Okay these custom binding interfaces are great, but what if I don&#39;t know how many or what to call my output channels at design time?&#34; Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation! Dynamic destinations allow you to use business logic to define your destinations at runtime.</p>
 </aside>
 <ul>
 <li>Let&#39;s create a second feature processor that makes use of dynamic destinations.</li>
@@ -317,9 +329,9 @@ $ cf push
 <li>Open the <em>ScsSinkBossideas.java</em> class</li>
 <li>Add the <em>@EnableBinding(Sink.class)</em> annotation to label the app as a Sink</li>
 <li>Add a &#34;sink&#34; method that takes in a &#34;Tweet&#34; POJO from the INPUT channel and logs that it was received.</li>
-<li>Update the application.yml file and verify that there is indeed a destination &amp; group configured for the input channel. Note that by specifying a group we are now using the consumer group model. Since this application will likely do further processing in the future we want to provide the option of scaling up to keep up with the number of events that come in. *Replace <strong>ATTENDEE_NAME</strong> with your unique name in BOTH spots*</li>
+<li>Update the application.yml file and verify that there is indeed a destination &amp; group configured for the input channel. Note that by specifying a group we are now using the consumer group model. Since this application will likely do further processing in the future we want to provide the option of scaling up to keep up with the number of events that come in. _Replace <strong>ATTENDEE_NAME</strong> with your unique name in BOTH spots_</li>
 <li>At this point we have created our &#34;07-scs-sink-bossideas&#34; application and it needs to be deployed. Time to see if you&#39;ve been paying attention!</li>
-<li>Deploy the app in the same manner that you&#39;ve been deploying the others. (<strong>Don&#39;t forget to update the ATTENDEE_NAME and  solace service in the manifest.yml file to point to your PubSub+ service!</strong>)</li>
+<li>Deploy the app in the same manner that you&#39;ve been deploying the others. (<strong>Don&#39;t forget to update the ATTENDEE_NAME and solace service in the manifest.yml file to point to your PubSub+ service!</strong>)</li>
 </ul>
 <h2 is-upgraded>Update the Tweet Board Subscription</h2>
 <p>Note that our processor that we created earlier in this lab publishes to multiple topics essentially splitting our feed into two. Due to our new requirements to not show new features on the twitter board we need to update that sink appropriately.</p>
@@ -338,14 +350,16 @@ $ cf push
 </ul>
 <aside class="warning"><p>spring-boot-devtools is handy for development and adds features such as automatic restart and remote debugging. Click <a href="https://www.baeldung.com/spring-boot-devtools" target="_blank">here</a> for a high level overview of some of the functionality it provides.</p>
 </aside>
-<aside class="special"><p>Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don&#39;t underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don&#39;t mix upper and lower case! A good topic hierarchy might be defined as &#34;&lt;country&gt;/&lt;state&gt;/&lt;locality&gt;&#34; which would allow you to subscribe to all events in a given country &#34;canada/&gt;&#34; or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they&#39;re in &#34;*/*/sanjose&#34;<br></p>
+<aside class="special"><p>Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don&#39;t underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don&#39;t mix upper and lower case! A good topic hierarchy might be defined as &#34;&lt;country&gt;/&lt;state&gt;/&lt;locality&gt;&#34; which would allow you to subscribe to all events in a given country &#34;canada/&gt;&#34; or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they&#39;re in &#34;*/*/sanjose&#34;</p>
 </aside>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Reactive with Spring Cloud Streams" duration="10">
-        <p class="image-container"><img alt="story_section7" src="img/a9ea92de3482c4d3.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section7" src="img/a9ea92de3482c4d3.png"></p>
 <aside class="warning"><p>Spring Cloud Streams currently has two different ways to follow a Reactive (Functional) Programming Model: Spring Cloud Functions and spring-cloud-stream-reactive. We&#39;re going to concentrate on Spring Cloud Functions since the latter option is marked for deprecation.</p>
 </aside>
 <h2 is-upgraded>Application Architecture</h2>
@@ -361,18 +375,20 @@ $ cf push
 </aside>
 <ul>
 <li>Open the application.yaml file and change <strong>ATTENDEE_NAME</strong> to your unique name</li>
-<li>Now that we&#39;ve seen how to create a SCS app using Spring Cloud Functions go ahead and deploy it.  (Don&#39;t forget to update the <strong>ATTENDEE_NAME</strong> &amp; solace service in the manifest.yml file to point to your PubSub+ service!)</li>
+<li>Now that we&#39;ve seen how to create a SCS app using Spring Cloud Functions go ahead and deploy it. (Don&#39;t forget to update the <strong>ATTENDEE_NAME</strong> &amp; solace service in the manifest.yml file to point to your PubSub+ service!)</li>
 <li>After deploying you should start to see the BEFORE and AFTER log entries scrolling across the console where the AFTER log entries do not contain any uppercase letters in the text field.</li>
 </ul>
-<aside class="special"><p>From the Spring docs, Spring Cloud Functions allows you to &#34;Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task.&#34;  Read more here: <a href="https://spring.io/projects/spring-cloud-function" target="_blank">https://spring.io/projects/spring-cloud-function</a></p>
+<aside class="special"><p>From the Spring docs, Spring Cloud Functions allows you to &#34;Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task.&#34; Read more here: <a href="https://spring.io/projects/spring-cloud-function" target="_blank">https://spring.io/projects/spring-cloud-function</a></p>
 </aside>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Multiple Processor Chaining" duration="15">
-        <p class="image-container"><img alt="story_section8" src="img/55800129a03e799a.png"></p>
-<aside class="warning"><p>Obviously this company has some morality issues :)<br>In the real world you should definitely not modify people&#39;s speech or create fake news!<br></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section8" src="img/55800129a03e799a.png"></p>
+<aside class="warning"><p>Obviously this company has some morality issues :)<br>In the real world you should definitely not modify people&#39;s speech or create fake news!</p>
 </aside>
 <h2 is-upgraded>Application Architecture</h2>
 <p>A processor will be added to our architecture in order to convert negative words to positive ones.</p>
@@ -410,7 +426,9 @@ $ cf push
       </google-codelab-step>
     
       <google-codelab-step label="Painless Multi-protocol with MQTT" duration="10">
-        <p class="image-container"><img alt="story_section9" src="img/d27e95d661524099.png"></p>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<p class="image-container"><img alt="story_section9" src="img/d27e95d661524099.png"></p>
 <h2 is-upgraded>Application Architecture</h2>
 <p>To meet this new requirement we are going to add the MQTT Web App shown in the diagram below:</p>
 <p class="image-container"><img alt="6 Application Architecture" src="img/61f25fbd274e7d6c.png"></p>
@@ -430,14 +448,14 @@ $ cf push
 <h2 is-upgraded>Create the Web App</h2>
 <h3 is-upgraded>IF PARTICIPATING IN AN INSTRUCTOR LED WORKSHOP THE INSTRUCTOR WILL PERFORM THIS SECTION. YOU ARE WELCOME TO RUN LOCALLY IF YOU WOULD LIKE</h3>
 <ul>
-<li>Since we&#39;re Spring experts let&#39;s go ahead and whip up a quick Spring Boot app that uses JavaScript and the open source MQTT Paho library to connect to PubSub+ and receive the stream of tweets.<br></li>
+<li>Since we&#39;re Spring experts let&#39;s go ahead and whip up a quick Spring Boot app that uses JavaScript and the open source MQTT Paho library to connect to PubSub+ and receive the stream of tweets.</li>
 <li>Open the &#34;10-spring-boot-mqttwebapp&#34; project</li>
 <li>Check out the <em>pom.xml</em> file and notice that there is nothing spring-cloud-streams related; only spring boot!</li>
 <li>Then open up the <em>mqttListener.html</em> to see how simple it was to connect &amp; receive events using MQTT Paho.</li>
 <li>In <em>mqttListener.html</em> update the host/port/username/credentials to connect to PubSub+ (Search for &#34;UPDATE&#34; to find where the updates need to be made) using the information found in the previous subsection.</li>
-<li>Lastly look at the <em>MqttWebApp.java</em> class.  You&#39;ll see that we just have a simple RestController that is smart enough to make the files in src/main/resources/static available for HTTP access.</li>
+<li>Lastly look at the <em>MqttWebApp.java</em> class. You&#39;ll see that we just have a simple RestController that is smart enough to make the files in src/main/resources/static available for HTTP access.</li>
 <li>Now that we&#39;ve taken a look at how the app works go ahead and deploy it.</li>
-<li>Once deployed navigate to *http://<strong>LOOKUP YOUR ROUTE</strong>/mqttListener.html* to see the incoming tweets! You can lookup your route in the apps manager or by using the command below:<pre><code>$ cf app 10-spring-boot-mqttwebapp
+<li>Once deployed navigate to <em>http://</em><strong>LOOKUP YOUR ROUTE</strong><em>/mqttListener.html</em> to see the incoming tweets! You can lookup your route in the apps manager or by using the command below:<pre><code>$ cf app 10-spring-boot-mqttwebapp
 </code></pre>
 </li>
 </ul>
@@ -448,7 +466,9 @@ $ cf push
       </google-codelab-step>
     
       <google-codelab-step label="Review &amp; Continued Learning!" duration="5">
-        <h2 is-upgraded>Review</h2>
+        <aside class="warning"><p><strong>Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the </strong><a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0" target="_blank"><strong>Spring Cloud Stream Basics</strong></a><strong> Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.</strong></p>
+</aside>
+<h2 is-upgraded>Review</h2>
 <p class="image-container"><img alt="story_section10" src="img/85df5439561c4947.png"></p>
 <aside class="special"><p>Hopefully you not only learned how to use Spring Cloud Streams today, but also how it enables developers to concentrate on achieving business goals by removing the need to learn messaging APIs. You should also now have a solid understanding of how implementing an event-driven architecture allows for loose coupling between your apps which enables rapid addition of new functionality.</p>
 </aside>
@@ -462,31 +482,6 @@ $ cf push
 <li><a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#spring-cloud-stream-overview-metrics-emitter" target="_blank">Actuator for metrics</a></li>
 <li><a href="https://cloud.spring.io/spring-cloud-sleuth/single/spring-cloud-sleuth.html" target="_blank">Sleuth for tracing</a></li>
 </ul>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Markdown Syntax Backup" duration="0">
-        <pre><code>public static void main(String args[]){
-  System.out.println(&#34;Hello World!&#34;);
-  }
-</code></pre>
-<aside class="special"><p>This will appear in a green info box.</p>
-</aside>
-<aside class="warning"><p>This will appear in a yellow info box.</p>
-</aside>
-<p><a href="https://www.google.com" target="_blank">Example of a Link</a></p>
-<p>Adding an image<br><img alt="image_caption" src="img/3c1a18672fbd28c8.png"></p>
-<ul>
-<li>List</li>
-<li>using</li>
-<li>bullets</li>
-</ul>
-<ol type="1">
-<li>List</li>
-<li>Using</li>
-<li>Numbers</li>
-</ol>
 
 
       </google-codelab-step>
