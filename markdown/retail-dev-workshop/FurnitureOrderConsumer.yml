@@ -1,0 +1,55 @@
+components:
+  schemas:
+    OrderValidated:
+      $schema: 'http://json-schema.org/draft-07/schema#'
+      type: object
+      title: The Root Schema
+      definitions: {}
+      required:
+        - id
+        - type
+        - channel
+        - validationStatus
+        - totalPrice
+        - timestamp
+      properties:
+        totalPrice:
+          type: string
+          title: The totalPrice schema
+          $id: '#/properties/totalPrice'
+        channel:
+          type: string
+          title: The channel schema
+          $id: '#/properties/channel'
+        id:
+          type: string
+          title: The id schema
+          $id: '#/properties/id'
+        type:
+          type: string
+          title: The type schema
+          $id: '#/properties/type'
+        validationStatus:
+          type: string
+          title: The validationStatus schema
+          $id: '#/properties/validationStatus'
+        timestamp:
+          type: string
+          title: The timestamp schema
+          $id: '#/properties/timestamp'
+      $id: 'http://example.com/root.json'
+  messages:
+    FurnitureOrderValidated:
+      payload:
+        $ref: '#/components/schemas/OrderValidated'
+      schemaFormat: application/vnd.aai.asyncapi+json;version=2.0.0
+      contentType: application/json
+channels:
+  retailco/order/update/validated/v1/B2C/furniture:
+    publish:
+      message:
+        $ref: '#/components/messages/FurnitureOrderValidated'
+asyncapi: 2.0.0
+info:
+  title: FurnitureOrderConsumer
+  version: 0.0.1
