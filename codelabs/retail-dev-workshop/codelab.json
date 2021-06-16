@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-06-15T21:59:06-04:00",
+  "id": "retail-dev-workshop",
+  "duration": 75,
+  "title": "Retail Developer Workshop",
+  "summary": "This codelab walks you through how to use Solace PubSub+ Event Portal to design applications, events, and schemas, export AsyncAPI specifications, generate code using AsyncAPI Generator, and see your events flow across your apps.",
+  "source": "retail-dev-workshop.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "retail",
+    "spring",
+    "event portal",
+    "asyncapi"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/retail-dev-workshop",
+  "url": "retail-dev-workshop"
+}

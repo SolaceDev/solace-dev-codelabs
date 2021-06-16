@@ -1,0 +1,335 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Retail Developer Workshop</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="retail-dev-workshop"
+                  title="Retail Developer Workshop"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/retail-dev-workshop">
+    
+      <google-codelab-step label="What You&#39;ll Learn" duration="5">
+        <p>Welcome to the hands-on portion of this workshop!</p>
+<p>Now that you&#39;ve learned a little bit about Solace and watched the demo video to set the stage, it&#39;s your turn to try things out for yourself. We&#39;ll jump into the goals of this portion of the workshop shortly, but first let&#39;s recap the main technologies you&#39;ll be using:</p>
+<ol type="1">
+<li><strong>Solace Cloud</strong>: Enterprise-grade messaging as a service, on demand in your favorite public and virtual private clouds, and in your preferred on-premises and cloud Kubernetes environments. You&#39;ll log into the Solace Cloud console, start your own service, and use it to run the event streams of your applications.</li>
+<li><strong>Solace PubSub+ Event Portal</strong>: You&#39;ll be extending the model that you saw in the video demo. While you&#39;re not working as a team during this workshop think about how a tool like this would be useful as you collaborate with your team on a day to day basis to design, implement, and iteratively enhance applications.</li>
+<li><strong>AsyncAPI</strong>: AsyncAPI is an open source initiative that seeks to improve the current state of Event-Driven Architectures (EDA). The initiative&#39;s long-term goal is to make working with EDAs as easy as it is to work with REST APIs, from documentation to code generation, from discovery to event management. You&#39;ll be exporting AsyncAPI specifications from Event Portal and using the AsyncAPI Generator to kickstart application development.</li>
+<li><strong>Spring Cloud Stream</strong>: Spring Cloud Stream is a framework for building highly scalable event-driven microservices connected with shared messaging systems. The framework provides a flexible programming model built on already established and familiar Spring idioms and best practices. You&#39;ll generate a code skeleton for a Spring Cloud Stream application and then sprinkle in some business logic, seeing how easy it is to develop event-driven applications with modern tooling.</li>
+</ol>
+<p class="image-container"><img alt="Hello from Solly" src="img/44f356558033e250.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Case Overview" duration="5">
+        <p>You are working as a technologist at Retail Co—the world&#39;s premier retailer—during an exciting time. Forward looking executives have decided to transform the overall business architecture of the company to an event based model in order to become more agile as a business, to improve SLAs, and to reduce costs. This transformation initiative was prompted by technology teams running into challenges related to data replication, data movement, and data access and security because Retail Co&#39;s core business processes consist of a complicated sprawl of distributed internal and external systems, and many of those systems have dependencies on mainframe systems.</p>
+<p>The initial use case Retail Co&#39;s executives are targeting is their primary order process.</p>
+<p>As the order process exists today, orders are flowing from Retail Co&#39;s customer facing web frontend to a mainframe system of record. Transforming this process will first require those orders to be captured using a change data capture (CDC) strategy and pushed into the Solace event mesh. Once the order events are flowing throughout the Solace event mesh, application teams will be able to build event-driven microservices to do things with the order events like order validation, product line specific logic, etc.</p>
+<h2 is-upgraded><em>Architecture diagram</em></h2>
+<p class="image-container"><img alt="Architecture Diagram" src="img/5bffdcd21b7c3381.png"></p>
+<h2 is-upgraded><em>Recap of video demo</em></h2>
+<p>So far, Retail Co&#39;s stellar innovation group has already been able to:</p>
+<ol type="1">
+<li><strong>Deploy event brokers</strong>: moving to an event based model is impossible without an intermediary system called an event broker. Event brokers are like databases in that it&#39;s best to deploy them close to where your applications are running. Retail Co&#39;s engineers have successfully deployed event brokers into all the locations where applications are running.</li>
+<li><strong>Create an event mesh</strong>: some event brokers require outside processes to replicate events between brokers/clusters, but Solace PubSub+ Event Brokers have built-in features that allow you to connect them to form an event mesh. An event mesh allows your applications to connect to their local event broker but send/receive events to/from applications connected to any other event broker connected to the mesh. Logically it acts as one giant event broker. Retail Co have configured the event brokers they deployed to form an event mesh.</li>
+<li><strong>Model the initial event flows in Event Portal</strong>: the model currently includes the CDC Order Source, Order Validation Processor, and Paper Order Consumer applications, showing events sourced from a mainframe system being validated and processed by event-driven microservices. This model was built to be extended and iterated on as more application teams transition to adopt the event based model of building applications.</li>
+<li><strong>Event-enable mainframe order systems</strong>: it&#39;s currently not cost effective to replace mainframe systems, so the next best thing is to extend their value by making their data readily available throughout the enterprise. In practice, this is usually accomplished using strategies like <a href="https://en.wikipedia.org/wiki/Change_data_capture" target="_blank">change data capture (CDC)</a> or bridging (MQ, REST, etc). In the interest of not bloating this CodeLab with too many requirements, this step was mimicked with a CDC Order Source—a small Node.js application that publishes out <em>OrderCreated</em> events.</li>
+<li><strong>Build Order Validation Processor and Paper Order Consumer microservices</strong>: Retail Co&#39;s stellar innovation group has built out the first event-driven microservices in the company in order to prove out a multi-step event-driven process. <em>Order Validation Processor</em> consumes <em>OrderCreated</em> events and publishes different flavors of <em>OrderValidated</em> events, and the <em>Paper Order Consumer</em> application consumes <em>PaperOrderValidated</em> events. Next step is migrating crufty old services as well as building net new microservices to consume the event streams that the innovation group has made readily available in the event mesh.</li>
+</ol>
+<h2 is-upgraded><em>What you&#39;ll be doing</em></h2>
+<ol type="1">
+<li><strong>Deploy an event broker</strong>: even though event brokers are something that are usually managed by central teams and exposed to application teams, and the Retail Co&#39;s innovation group has already set up an event mesh, being the good technologist that you are you want to test things out yourself. For the purposes of this workshop, you&#39;ll be deploying a Solace PubSub+ Event Broker: Cloud developer-tier service.</li>
+<li><strong>Extend the Event Portal model</strong>: you&#39;ll take the initial Event Portal model that includes the CDC Order Source, Order Validation Processor, and Paper Order Consumer applications and extend it to include another consumer application—the Furniture Order Consumer. The point of this exercise is to click around and get a feel for Event Portal as well as to appreciate how it aids collaboration, discovery, and event reuse across teams.</li>
+<li><strong>Develop the Furniture Order Consumer</strong>: you&#39;ll export the AsyncAPI specification for the Furniture Order Consumer application you just modeled, generate a Spring Cloud Spring code skeleton from it, and then fill in some very basic business logic to see how easy it is to interact with events once they&#39;re on a Solace event mesh. Solace makes filtering events dead simple, so adding product line specific microservices like this one is as easy as subscribing to a subset of the overall orders event stream using topic filters—no provisioning/broker configuration changes required. This will show you that modern tooling makes event-driven architecture accessible to developers of all experience levels because frameworks are available that abstract away complicated messaging APIs in favor of event-handler style code execution.</li>
+<li><strong>Run your application</strong>: you&#39;ll run the Furniture Order Consumer you just developed and feel like an event-driven pro.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What You&#39;ll Need" duration="5">
+        <p>This page covers the setup required for this CodeLab.</p>
+<h2 is-upgraded>AsyncAPI Generator</h2>
+<p>You&#39;ll need either Node.js or Docker to install/run the AsyncAPI Generator:</p>
+<p><strong>Node</strong></p>
+<ul>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+ (Check version using <code>npm -version</code>)</li>
+</ul>
+<p>On Mac, you can <code>brew install node</code>.<br>For other systems, <a href="https://nodejs.org/en/download/package-manager/" target="_blank">Installing Node.js via package manager</a>.</p>
+<p><strong>Docker</strong></p>
+<p><a href="https://docs.docker.com/get-docker/" target="_blank">Get Docker</a></p>
+<h2 is-upgraded>Spring Cloud Stream</h2>
+<p>Spring Cloud Stream requires Java and Maven to use.</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)<br><br><ul>
+<li>On Mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE</li>
+</ul>
+<h2 is-upgraded>Solace Cloud</h2>
+<p>If you already have a Solace Cloud account just login, otherwise please sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>.</p>
+<aside class="special"><p><strong>Note:</strong> if you are participating in an instructor led workshop run by Solace, you may have been invited to join a shared Solace Cloud Organization. Check your email for the signup link so that you&#39;ll be able to collaborate with your teammates and use the shared Event Portal instance.</p>
+</aside>
+<p class="image-container"><img alt="sc_trial" src="img/fa73039f398cef7a.webp"></p>
+<aside class="special"><p><strong>Note:</strong> no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trial.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Starting a Solace Cloud Service" duration="10">
+        <p>This page covers how to start a Solace PubSub+ Event Broker: Cloud service.</p>
+<h2 is-upgraded>Step 1: From the Cluster Manager tab, click on the + button</h2>
+<p class="image-container"><img alt="Create New Service Button" src="img/5b3ffbbbb320e827.png"></p>
+<h2 is-upgraded>Step 2: Fill out the required details for the service</h2>
+<p class="image-container"><img alt="Create Service Page" src="img/e2327e0fef442545.png"></p>
+<ul>
+<li>Select Developer Service Type</li>
+<li>Select a public cloud to deploy the service in</li>
+<li>Give the event broker service a name. <code>&lt;cloud provider&gt;-&lt;your name&gt;</code> is a good naming convention, e.g. <code>aws-andrew-roberts</code>.</li>
+</ul>
+<h2 is-upgraded>Step 3: Wait for the service&#39;s underlying resources to provision</h2>
+<p class="image-container"><img alt="Service Creating" src="img/5c93e6ef32e52d77.png"></p>
+<h2 is-upgraded>Step 4: Explore the management console for your new event broker service</h2>
+<p class="image-container"><img alt="Service Done Creating" src="img/d8972a7e108db86e.png"></p>
+<p class="image-container"><img alt="Service Management Page" src="img/d3e2bc785649c35a.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modeling the Furniture Order Consumer" duration="25">
+        <p>This page covers how to model the Furniture Order Consumer microservice in Event Portal.</p>
+<h2 is-upgraded>Step 1: Import the initial Application Domain model</h2>
+<p>As described in the Use Case Overview page, Retail Co&#39;s stellar innovation group has put together a model in Event Portal for the initial event flows that include the <em>CDC Order Source</em>, <em>Order Validation Processor</em>, and <em>Paper Order Consumer</em> applications, showing events sourced from a mainframe system being validated and processed by event-driven microservices.</p>
+<aside class="special"><p><strong>Note</strong>: If you are participating in an instructor led workshop, this step should have been completed for you. Navigate to the Event Portal Designer view of the Solace Cloud Console and check to see if there&#39;s an Application Domain configured just for you (FirstName LastName). If there is, the initial model should be there waiting for you to extend.</p>
+</aside>
+<p>To import the initial model, first download the Application Domain export file: <a href="https://github.com/solacese/retail-dev-workshop/blob/master/event-portal/RetailCo-Template-Initial.json" target="_blank">RetailCo-Template-Initial.json</a></p>
+<p><strong>You can download the file via curl or by cloning the git repo</strong></p>
+<pre><code>curl -k -XGET https://github.com/solacese/retail-dev-workshop/blob/master/event-portal/RetailCo-Template-Initial.json -o RetailCo-Template-Initial.json
+</code></pre>
+<p>OR</p>
+<pre><code>git clone https://github.com/solacese/retail-dev-workshop.git
+</code></pre>
+<p>Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
+<p class="image-container"><img alt="Select Event Portal Designer" src="img/7d88fd79566b535a.png"></p>
+<p>Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the file.</p>
+<p class="image-container"><img alt="Event Portal Click Import" src="img/292b8f20a9c16c60.png"></p>
+<h2 is-upgraded>Step 2: Extending the initial model</h2>
+<p>Now that you&#39;re familiar with the use case and you&#39;ve imported the Application Domain into the Event Portal, let&#39;s put our application developer team hats on and update the model to include another application.</p>
+<p>Open the <em>RetailCo-Template-Initial</em> Application Domain that you previously imported in the Event Portal Designer (or your ready-to-go personal Application Domain if you&#39;re currently in an instructor led workshop, <em>FirstName LastName</em>). You should see the following model:</p>
+<p class="image-container"><img alt="RetailCo Initial Template" src="img/545b8963b5f4704a.png"></p>
+<p>We&#39;ll be extending this initial Application Domain model by adding a <em>Furniture Order Consumer</em> Application. Similar to the <em>Paper Order Consumer</em> that is already modeled, the <em>Furniture Order Consumer</em> application will be consuming a specific flavor of validated <em>OrderCreated</em> events—<em>FurnitureOrderValidated</em> events.</p>
+<h3 is-upgraded>Add the <em>FurnitureOrderConsumer</em> Application</h3>
+<p>The first step towards doing this is to add the RideDropoffProcessor.</p>
+<p>Right click on the graph and choose <em>Create Application</em>.</p>
+<p>Fill in the fields as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: <em>FurnitureOrderConsumer</em></li>
+<li><strong>Description</strong>: This is a Spring Cloud Stream microservice that will consume <em>FurnitureOrderValidated</em> events.</li>
+<li><strong>Application Type</strong>: Leave as &#34;Standard&#34;</li>
+<li><strong>Owners</strong>: Click <em>Add/Remove Owners</em> and choose yourself</li>
+<li><strong>Tags</strong>: Click <em>Add/Remove Tags</em> and add &#34;SCSt&#34; as a tag. This tag is short for &#34;Spring Cloud Stream&#34; which is the framework we will use to develop our microservice later.</li>
+<li><strong>Associated Events/Client Delivery Endpoints</strong>: Leave empty for now</li>
+<li>Click the <em>Save</em> Button</li>
+</ol>
+<p>✅ You should now see <em>FurnitureOrderConsumer</em> added to the graph.</p>
+<p class="image-container"><img alt="Application Model Added" src="img/8861a2da9fe350c8.png"></p>
+<h3 is-upgraded>Add the <em>FurnitureOrderValidated</em> Event</h3>
+<p>Next we need to create the <em>FurnitureOrderValidated</em> event and associate it with the <em>OrderValidated</em> schema that defines it&#39;s payload.</p>
+<p>Right click on the graph and choose <em>Create Event</em>.</p>
+<p>Fill in the fields as follows:</p>
+<ol type="1">
+<li><strong>Name</strong>: <em>FurnitureOrderValidated</em></li>
+<li>Leave the <em>Shared</em> checkbox unticked.</li>
+<li><strong>Description</strong>: This event contains the details associated with validated furniture orders.</li>
+<li><strong>Logical Event Mesh</strong>: Select <em>TemplateInitial</em></li>
+<li><strong>Topic Address</strong>: Use the topic builder to create the structure <code>retailco/order/update/validated/v1/B2C/furniture</code>, note: all topic levels are <em>Literal</em> in this example.</li>
+<li><strong>Value</strong>: Select <em>Schema</em> and then pick <em>OrderValidated</em> from the dropdown.</li>
+<li><strong>Owners</strong>: Click <em>Add/Remove Owners</em> and choose yourself</li>
+</ol>
+<aside class="special"><p>When designing your own Event-Driven Architecture, properly designing your topic space is an important step towards achieving the benefits promised by EDA. Be sure to take the time to read our <a href="https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm" target="_blank">Topic Architecture Best Practices</a>.</p>
+</aside>
+<p>✅ Go ahead and click <em>Save</em> to complete the creation of our <em>FurnitureOrderValidated</em> event.</p>
+<p class="image-container"><img alt="Event Added" src="img/cd0090c9d4e9c8d3.png"></p>
+<p>After you click save, if you click the <em>Events</em> tab in the top tab panel, then <em>FurnitureOrderValidated</em>, you&#39;ll see the details of the event you just created. If you then click the green <em>View Details</em> link next to the <em>Schema</em> property, you&#39;ll be able to see the details of the <em>OrderValidated</em> schema you associated with the event.</p>
+<p class="image-container"><img alt="Event Details" src="img/c321f260d5b1e28.png"></p>
+<h3 is-upgraded>Update <em>OrderValidationProcessor</em> to produce <em>FurnitureOrderValidated</em> events</h3>
+<p>Now that we&#39;ve created our <em>FurnitureOrderValidated</em> event and defined its payload, we need to update <em>OrderValidationProcessor</em> to produce it.</p>
+<p><strong>To do this follow these steps:</strong></p>
+<ol type="1">
+<li>Right click on the <em>OrderValidationProcessor</em> Application and choose <em>Manage Events</em></li>
+<li>For ease of searching, tick the <em>Only show events in this Application Domain</em> checkbox on</li>
+<li>Search for &#34;FurnitureOrderValidated&#34; and click &#34;Pub&#34; next to it since the <em>OrderValidationProcessor</em> needs to publish these events.</li>
+<li>Click <em>Save</em></li>
+</ol>
+<p>✅ <em>OrderValidationProcessor</em> is now complete and you should see it publishing both <em>PaperOrderValidated</em> and <em>FurnitureOrderValidated</em> events.</p>
+<p class="image-container"><img alt="OrderValidationProcessor Updated" src="img/97bc861e6fb7388b.png"></p>
+<h3 is-upgraded>Update <em>FurnitureOrderConsumer</em> to consume <em>FurnitureOrderValidated</em> events</h3>
+<p>Lastly, we need to update <em>FurnitureOrderConsumer</em> to consume <em>FurnitureOrderValidated</em> events.</p>
+<p><strong>To do this follow these steps:</strong></p>
+<ol type="1">
+<li>Right click on the <em>FurnitureOrderConsumer</em> Application and choose <em>Manage Events</em></li>
+<li>For ease of searching, tick the <em>Only show events in this Application Domain</em> checkbox on</li>
+<li>Search for &#34;FurnitureOrderValidated&#34; and click &#34;Sub&#34; next to it since the <em>FurnitureOrderConsumer</em> needs to subscribe to these events.</li>
+<li>Click <em>Save</em></li>
+</ol>
+<p>✅ <em>FurnitureOrderConsumer</em> is now complete and you should see it consuming <em>FurnitureOrderValidated</em> events published by the <em>OrderValidationProcessor</em>!</p>
+<p class="image-container"><img alt="FurnitureOrderConsumer Updated" src="img/8f8dd6a4385da392.png"></p>
+<p>Next up, we&#39;ll develop the application in Spring Cloud Stream with the help of AsyncAPI Generator.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install the AsyncAPI Generator" duration="3">
+        <p>Now that we&#39;ve defined the architecture for our use case in the Event Portal we&#39;re ready to write some code! But we don&#39;t want to have to write everything from scatch so we&#39;re going to use the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
+<p>In order to use the AsyncAPI Generator we first need to install the CLI.</p>
+<p>If you have the prequisites installed as defined earlier in the &#34;What You&#39;ll Need&#34; section you should be able to pop open your terminal and use the command below to install the CLI.</p>
+<pre><code>npm install -g @asyncapi/generator
+</code></pre>
+<aside class="warning"><p>Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.</p>
+</aside>
+<p>If you don&#39;t have Node.js installed or would rather use Docker, they also make AsyncAPI Generator available as an image and provide instructions for it <a href="https://github.com/asyncapi/generator#cli-usage-with-docker" target="_blank">here</a>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Developing the Furniture Order Consumer" duration="15">
+        <p>On to developing the <em>FurnitureOrderConsumer</em> microservice. As mentioned, we want to implement this app using the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework. For more information on the framework the <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/" target="_blank">reference guide</a> is an excellent resource.</p>
+<h2 is-upgraded>Generate the Code Skeleton</h2>
+<p>In the Solace Event Portal right click on the <em>FurnitureOrderConsumer</em>, Choose <em>Download AsyncAPI</em>, Choose <em>YAML</em>, and click <em>Download</em>.</p>
+<p class="image-container"><img alt="Download AsyncAPI" src="img/4c7cdeee05978d50.png"></p>
+<p>It should includes a lot of the information about the app that we defined via the Event Portal, including:</p>
+<ul>
+<li>The <strong>title</strong> and <strong>description</strong> under the <strong>info</strong> section</li>
+<li>Our <strong>events</strong>, referred to as <strong>messages</strong> in the AsyncAPI specification</li>
+<li>The <strong>schemas</strong> that define the payloads of our events</li>
+<li>The <strong>channels</strong> on which the events are exchanged, i.e. Solace topics</li>
+</ul>
+<p class="image-container"><img alt="AsyncAPI Spec" src="img/a788f92b3ed48cf3.png"></p>
+<aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
+</aside>
+<p>We&#39;re now ready to generate the code! Head over to your terminal and enter the following command:</p>
+<pre><code>ag -o FurnitureOrderConsumer -p binder=solace -p artifactId=FurnitureOrderConsumer -p groupId=org.retailco.orders -p javaPackage=org.retailco.orders -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Desktop/FurnitureOrderConsumer.yml @asyncapi/java-spring-cloud-stream-template
+</code></pre>
+<p>Note the different pieces of the command:</p>
+<ul>
+<li><code>ag</code> is the AsyncAPI Generator command</li>
+<li><code>-o</code> is the output directory</li>
+<li><code>-p</code> allows you to specify <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#parameters" target="_blank">parameters</a> defined for the template you&#39;re using</li>
+<li><code>binder</code> is the Spring Cloud Stream binder you wish to use, in this case Solace</li>
+<li><code>artifactId</code> &amp; <code>groupId</code> configure Maven params of the same names</li>
+<li><code>javaPackage</code> specifies the Java Package to place the generated classes into</li>
+<li><code>host</code>, <code>username</code>, <code>password</code> and <code>msgVpn</code> allow you to set binder connection information, i.e. Solace connection details</li>
+<li>The YAML file (second to last option) is the location of your AsyncAPI specification</li>
+<li>And lastly, <code>@asyncapi/java-spring-cloud-stream-template</code> is the AsyncAPI Generator template we are using.</li>
+</ul>
+<p>✅ After running the command you should see output that ends with where you can find your generated files.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /private/tmp/codelab/FurnitureOrderConsumer.
+</code></pre>
+<p>💥Boom💥 We&#39;ve generated our code skeleton!</p>
+<h2 is-upgraded>Import and Explore the Generated Project</h2>
+<p>The generated project is a Maven project, so head over to your favorite IDE and import the project so we can add our business logic. Once imported you should see something like the image below:</p>
+<p class="image-container"><img alt="IDE Import" src="img/d27fd2bd7c97dcf7.png"></p>
+<p>A few notes on the project:</p>
+<ul>
+<li>The generated Java classes are in the <code>org.retailco.orders</code> package that we specified.</li>
+<li>The <code>OrderValidated</code> POJO was generated from the schema defined in our AsyncAPI spec, and includes getters/setters/toString/etc.</li>
+<li><code>Application.java</code> contains a Consumer method that will trigger whenever an event is received on the channel specified by the event definition, and inside the method can use a functional programming model to access the event&#39;s payload as an already-deserialized <code>OrderValidated</code> object.</li>
+<li>The Consumer methods name, <code>retailcoOrderUpdateValidatedV1B2CFurnitureConsumer</code>, was autogenerated by removing the topic delimiter <code>/</code> and camel casing each topic level. This CAN be overridden by modifying the AsyncAPI specification file before running the code generator to include a <code>x-scs-function-name</code> property, and the queue name for the Consumer can also be overridden using the <code>x-scs-destination</code> property. More details <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">here</a>.</li>
+<li>The <code>application.yml</code> file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.</li>
+<li>The <code>pom.xml</code> file contains the dependencies needed for the microservice. These include the <code>spring-cloud-starter-stream-solace</code> dependency which allows you to use the Solace SCSt Binder.</li>
+</ul>
+<h2 is-upgraded>Fill in the Business Logic</h2>
+<p>Navigate to and open the <code>Application.java</code> file. We&#39;re going to edit the <em>retailcoOrderUpdateValidatedV1B2CFurnitureConsumer</em> method to add our business logic. Remember that our Use Case defines that our <em>FurnitureOrderConsumer</em> should listen to the stream of <em>FurnitureOrderValidated</em> events. In real life, we&#39;d be doing something with the validated orders-but in this CodeLab we&#39;re just logging out some of the payload properties to show how easy they are to access.</p>
+<p>Go ahead and code up this business logic yourself or feel free to add your business logic by looking at the code snippet available below.</p>
+<pre><code>package org.retailco.orders;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import java.util.function.Consumer;
+
+
+@SpringBootApplication
+public class Application {
+
+	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class);
+	}
+
+	@Bean
+	public Consumer&lt;OrderValidated&gt; retailcoOrderUpdateValidatedV1B2CFurnitureConsumer() {
+    return furnitureOrderValidated -&gt; {
+      logger.info(&#34;Received Furniture Order Validated Event: &#34; + furnitureOrderValidated.toString());
+    };
+	}
+}
+
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connecting the Applications" duration="5">
+        <p>Now that our <em>FurnitureOrderConsumer</em> app has been developed, let&#39;s run it!</p>
+<p>If your IDE has support for Spring Boot you can run it as a Spring Boot App.</p>
+<p>Or run it from the terminal by navigating to the directory with the pom and running the <code>mvn clean spring-boot:run</code> command.</p>
+<aside class="warning"><p>If you get an error that says something like <code>Web server failed to start. Port XXXX was already in use.</code> then change the <code>server.port</code> value in <code>application.yml</code> to an open port.</p>
+</aside>
+<aside class="special"><p>Notice that by using Spring Cloud Stream the developer doesn&#39;t need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer.</p>
+</aside>
+<p><strong>The microservice is now is now running, connected to the Solace Event Broker, and receiving events. You should see the payloads of the FurnitureOrderValidated events being logged to your console!</strong></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="2">
+        <p>✅ <a href="solace.com/products/portal" target="_blank">Solace Event Portal</a> is a tool that helps you design and visualize your Event-Driven Architecture, discover what applications/events/schemas exist, collaborate with your team, and kickstart development via exporting of AsyncAPI specifications.</p>
+<p>✅ <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a> templates streamline the way developers create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI specifications.</p>
+<p>✅ <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> allows developers to implement highly scalable, event-driven microservices without having to learn how to use messaging APIs.</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
