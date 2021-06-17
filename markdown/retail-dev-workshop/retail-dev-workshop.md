@@ -159,7 +159,7 @@ Inside of your logged into Solace Cloud Account navigate to the Event Portal Des
 
 ![Select Event Portal Designer](img/ep_select_designer.png)
 
-Then import the previously downloaded Application Domain file by clicking the `Import` button at the top right of the _Designer_ and importing the file.
+Then import the previously downloaded Application Domain file by right clicking on the _Designer_ canvas like in the screenshot below.
 
 ![Event Portal Click Import](img/ep_click_import.png)
 
@@ -175,9 +175,11 @@ We'll be extending this initial Application Domain model by adding a _Furniture 
 
 #### Add the _FurnitureOrderConsumer_ Application
 
-The first step towards doing this is to add the RideDropoffProcessor.
+The first step towards doing this is to add the _FurnitureOrderConsumer_.
 
-Right click on the graph and choose _Create Application_.
+Right click on the background of the canvas of the _Graph View_ and choose _Create Application_, shown in screenshot below.
+
+![Event Portal Click Create App](img/ep_click_create_app.png)
 
 Fill in the fields as follows:
 
@@ -197,7 +199,9 @@ Fill in the fields as follows:
 
 Next we need to create the _FurnitureOrderValidated_ event and associate it with the _OrderValidated_ schema that defines it's payload.
 
-Right click on the graph and choose _Create Event_.
+Right click on the background of the canvas of the _Graph View_ and choose _Create Event_, shown in screenshot below.
+
+![Event Portal Click Create App](img/ep_click_create_event.png)
 
 Fill in the fields as follows:
 
@@ -205,7 +209,7 @@ Fill in the fields as follows:
 2. Leave the _Shared_ checkbox unticked.
 3. **Description**: This event contains the details associated with validated furniture orders.
 4. **Logical Event Mesh**: Select _TemplateInitial_
-5. **Topic Address**: Use the topic builder to create the structure `retailco/order/update/validated/v1/B2C/furniture`, note: all topic levels are _Literal_ in this example.
+5. **Topic Address**: Use the topic builder to create the structure `retailco/order/update/validated/v1/B2C/furniture` by creating one topic level at a time. When you click _Create Level_, you'll have to fill out some details. Notes: all topic levels are _Literal_ in this example, and _Name_ refers to the actual value of that particular topic level (unless you are defining a _Variable_ topic level, in which case the name is simply an Event Portal-only logical label).
 6. **Value**: Select _Schema_ and then pick _OrderValidated_ from the dropdown.
 7. **Owners**: Click _Add/Remove Owners_ and choose yourself
 
@@ -298,7 +302,7 @@ Positive
 We're now ready to generate the code! Head over to your terminal and enter the following command:
 
 ```bash
-ag -o FurnitureOrderConsumer -p binder=solace -p artifactId=FurnitureOrderConsumer -p groupId=org.retailco.orders -p javaPackage=org.retailco.orders -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Desktop/FurnitureOrderConsumer.yml @asyncapi/java-spring-cloud-stream-template
+ag -o FurnitureOrderConsumer -p binder=solace -p artifactId=FurnitureOrderConsumer -p groupId=org.retailco.orders -p javaPackage=org.retailco.orders -p host=tcps://mr-6tk1zswq96n.messaging.solace.cloud:55443 -p username=solace-cloud-client -p password=vk10kjmr1j4pd7q4ml3ej0a83n -p msgVpn=azure-east-us-2 ~/Downloads/FurnitureOrderConsumer.yml @asyncapi/java-spring-cloud-stream-template
 ```
 
 Note the different pieces of the command:
