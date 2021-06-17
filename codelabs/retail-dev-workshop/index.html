@@ -136,16 +136,17 @@
 </code></pre>
 <p>Inside of your logged into Solace Cloud Account navigate to the Event Portal Designer by clicking &#34;Designer&#34; in the menu on the left.</p>
 <p class="image-container"><img alt="Select Event Portal Designer" src="img/7d88fd79566b535a.png"></p>
-<p>Then import the previously downloaded Application Domain file by clicking the <code>Import</code> button at the top right of the <em>Designer</em> and importing the file.</p>
-<p class="image-container"><img alt="Event Portal Click Import" src="img/292b8f20a9c16c60.png"></p>
+<p>Then import the previously downloaded Application Domain file by right clicking on the <em>Designer</em> canvas like in the screenshot below.</p>
+<p class="image-container"><img alt="Event Portal Click Import" src="img/9f2171d36020a26a.png"></p>
 <h2 is-upgraded>Step 2: Extending the initial model</h2>
 <p>Now that you&#39;re familiar with the use case and you&#39;ve imported the Application Domain into the Event Portal, let&#39;s put our application developer team hats on and update the model to include another application.</p>
 <p>Open the <em>RetailCo-Template-Initial</em> Application Domain that you previously imported in the Event Portal Designer (or your ready-to-go personal Application Domain if you&#39;re currently in an instructor led workshop, <em>FirstName LastName</em>). You should see the following model:</p>
 <p class="image-container"><img alt="RetailCo Initial Template" src="img/545b8963b5f4704a.png"></p>
 <p>We&#39;ll be extending this initial Application Domain model by adding a <em>Furniture Order Consumer</em> Application. Similar to the <em>Paper Order Consumer</em> that is already modeled, the <em>Furniture Order Consumer</em> application will be consuming a specific flavor of validated <em>OrderCreated</em> events—<em>FurnitureOrderValidated</em> events.</p>
 <h3 is-upgraded>Add the <em>FurnitureOrderConsumer</em> Application</h3>
-<p>The first step towards doing this is to add the RideDropoffProcessor.</p>
-<p>Right click on the graph and choose <em>Create Application</em>.</p>
+<p>The first step towards doing this is to add the <em>FurnitureOrderConsumer</em>.</p>
+<p>Right click on the background of the canvas of the <em>Graph View</em> and choose <em>Create Application</em>, shown in screenshot below.</p>
+<p class="image-container"><img alt="Event Portal Click Create App" src="img/a70f681b578cebd4.png"></p>
 <p>Fill in the fields as follows:</p>
 <ol type="1">
 <li><strong>Name</strong>: <em>FurnitureOrderConsumer</em></li>
@@ -160,14 +161,15 @@
 <p class="image-container"><img alt="Application Model Added" src="img/8861a2da9fe350c8.png"></p>
 <h3 is-upgraded>Add the <em>FurnitureOrderValidated</em> Event</h3>
 <p>Next we need to create the <em>FurnitureOrderValidated</em> event and associate it with the <em>OrderValidated</em> schema that defines it&#39;s payload.</p>
-<p>Right click on the graph and choose <em>Create Event</em>.</p>
+<p>Right click on the background of the canvas of the <em>Graph View</em> and choose <em>Create Event</em>, shown in screenshot below.</p>
+<p class="image-container"><img alt="Event Portal Click Create App" src="img/250d180d6d465d7d.png"></p>
 <p>Fill in the fields as follows:</p>
 <ol type="1">
 <li><strong>Name</strong>: <em>FurnitureOrderValidated</em></li>
 <li>Leave the <em>Shared</em> checkbox unticked.</li>
 <li><strong>Description</strong>: This event contains the details associated with validated furniture orders.</li>
 <li><strong>Logical Event Mesh</strong>: Select <em>TemplateInitial</em></li>
-<li><strong>Topic Address</strong>: Use the topic builder to create the structure <code>retailco/order/update/validated/v1/B2C/furniture</code>, note: all topic levels are <em>Literal</em> in this example.</li>
+<li><strong>Topic Address</strong>: Use the topic builder to create the structure <code>retailco/order/update/validated/v1/B2C/furniture</code> by creating one topic level at a time. When you click <em>Create Level</em>, you&#39;ll have to fill out some details. Notes: all topic levels are <em>Literal</em> in this example, and <em>Name</em> refers to the actual value of that particular topic level (unless you are defining a <em>Variable</em> topic level, in which case the name is simply an Event Portal-only logical label).</li>
 <li><strong>Value</strong>: Select <em>Schema</em> and then pick <em>OrderValidated</em> from the dropdown.</li>
 <li><strong>Owners</strong>: Click <em>Add/Remove Owners</em> and choose yourself</li>
 </ol>
@@ -233,7 +235,7 @@
 <aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
 </aside>
 <p>We&#39;re now ready to generate the code! Head over to your terminal and enter the following command:</p>
-<pre><code>ag -o FurnitureOrderConsumer -p binder=solace -p artifactId=FurnitureOrderConsumer -p groupId=org.retailco.orders -p javaPackage=org.retailco.orders -p host=localhost:55555 -p username=default -p password=default -p msgVpn=default ~/Desktop/FurnitureOrderConsumer.yml @asyncapi/java-spring-cloud-stream-template
+<pre><code>ag -o FurnitureOrderConsumer -p binder=solace -p artifactId=FurnitureOrderConsumer -p groupId=org.retailco.orders -p javaPackage=org.retailco.orders -p host=tcps://mr-6tk1zswq96n.messaging.solace.cloud:55443 -p username=solace-cloud-client -p password=vk10kjmr1j4pd7q4ml3ej0a83n -p msgVpn=azure-east-us-2 ~/Downloads/FurnitureOrderConsumer.yml @asyncapi/java-spring-cloud-stream-template
 </code></pre>
 <p>Note the different pieces of the command:</p>
 <ul>
