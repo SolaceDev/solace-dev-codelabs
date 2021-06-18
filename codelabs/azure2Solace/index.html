@@ -20,19 +20,19 @@
   </style>
 </head>
 <body>
-  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
-  <google-codelab codelab-gaid="UA-3921398-10"
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
                   id="azure2Solace"
                   title="Stream data from Azure Service Bus to Solace PubSub&#43; Event broker Using Azure Function"
                   environment="web"
-                  feedback-link="https://github.com/solacese/azure2Solace">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/azure2Solace/azure2Solace.md">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
         <p>Often there is a requirement where architects and developer use messaging services like Azure Service Bus or Event Hub to move realtime data between apps running locally. However organizations need this realtime information to flow across various regions, cloud and/or data centers. To accomplish that one needs an Event Mesh that provides hybrid cloud connectivity.</p>
 <p>Solace is an industry leader and its PubSub+ event brokers makes such an Event Mesh a reality.</p>
 <p>This codelab specifically talks about how you can easily stream data from Azure messaging service &#34;ServiceBus&#34; to Solace using Azure function.</p>
 <p>You will find the Azure function code <a href="https://github.com/solacese/azure2Solace" target="_blank">here</a>.</p>
-<p>To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click <a href="https://docs.solace.com/Configuring-and-Managing/HTTP-Header-Authentication-Azure-Event-Hub.htm" target="_blank">here</a>.</p>
+<p>To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click <a href="https://docs.solace.com/Configuring-and-Managing/OAuth-Authentication-Azure-Event-Hub.htm" target="_blank">here</a>.</p>
 
 
       </google-codelab-step>
@@ -53,20 +53,20 @@
       </google-codelab-step>
     
       <google-codelab-step label="Configure the Solace PubSub&#43; Event broker to receives messages on a queue" duration="5">
-        <p>In this example we will create two queues in Solace PubSub+, one of it will receive messages from Azure function over HTTP and another over C#. Log on to Solace Console</p>
+        <p>In this example we will create two queues in Solace PubSub+, one of it will receive messages from Azure function over HTTP and another over C#.<br>Log on to Solace Console</p>
 <ol type="1">
 <li>Create a queue that will receive data from Azure function using REST<pre><code>solace&gt; enable
 solace# configure
-solace# (configure)# message-spool message-vpn &lt;VPN Name&gt; 
+solace# (configure)# message-spool message-vpn &lt;VPN Name&gt;
 solace(configure/message-spool/message-vpn)# create queue azure-rest-queue
-solace(configure/message-vpn/my-azure-queue )# permission all consume 
+solace(configure/message-vpn/my-azure-queue )# permission all consume
 solace(configure/message-vpn/my-azure-queue )# subscription topic azure/2/solace-rest
 solace(configure/message-vpn/my-azure-queue )# no shutdown
 solace(configure/message-vpn/my-azure-queue )# exit
 </code></pre>
 </li>
 <li>Create a queue that will receive data from Azure function using C#<pre><code>solace(configure/message-spool/message-vpn)# create queue azure-c#-queue
-solace(configure/message-vpn/my-azure-queue )# permission all consume 
+solace(configure/message-vpn/my-azure-queue )# permission all consume
 solace(configure/message-vpn/my-azure-queue )# subscription topic azure/2/solace
 solace(configure/message-vpn/my-azure-queue )# no shutdown
 solace(configure/message-vpn/my-azure-queue )# end
@@ -78,11 +78,11 @@ solace(configure/message-vpn/my-azure-queue )# end
       </google-codelab-step>
     
       <google-codelab-step label="Azure Function Setup - For C#/.Net using Solace C# APIs" duration="15">
-        <p>Azure allows you to use multiple programming languages and APIs. However, for this codelab, I will walk you through usage of  C# using Solace C#API  and REST .</p>
+        <p>Azure allows you to use multiple programming languages and APIs. However, for this codelab, I will walk you through usage of C# using Solace C#API and REST .</p>
 <ol type="1">
-<li>Create a new Azure function project in Visual Studio <img alt=" " src="img/a7026d963c310020.png"> Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
-<li>Configure your new project <img alt=" " src="img/287630390af48b5e.png"></li>
-<li>Create a new Azure Function application <img alt=" " src="img/87278c1c6551ad67.png"> In the above screen you will do the following:<ul>
+<li>Create a new Azure function project in Visual Studio<br><img alt=" " src="img/a7026d963c310020.png"><br>Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
+<li>Configure your new project<br><img alt=" " src="img/287630390af48b5e.png"></li>
+<li>Create a new Azure Function application<br><img alt=" " src="img/87278c1c6551ad67.png"><br>In the above screen you will do the following:<ul>
 <li>Select <strong>Azure Service Bus Trigger</strong> from the list</li>
 <li>Specifiy <strong>Storage Account</strong></li>
 <li>Specify <strong>Connection String Setting Name</strong>. This is the name that we will use in the Azure function code later.</li>
@@ -98,11 +98,12 @@ solace(configure/message-vpn/my-azure-queue )# end
 //Update the Solace Topic string below &#34;solace-topic&#34;: &#34;azure/2/solace&#34;
 </code></pre>
 </li>
-<li>Using NuGet package manager, search and install Solace library. <img alt=" " src="img/27e8e2de10cce313.png"></li>
+<li>Using NuGet package manager, search and install Solace library.<br><img alt=" " src="img/27e8e2de10cce313.png"></li>
 <li>Create a new class called <strong>SolacePublisher</strong> and add the following code to <strong>SolacePublisher.cs</strong> class.<pre><code>using System;
 using SolaceSystems.Solclient.Messaging;
 using System.Threading;
 using System.Text;
+
 namespace SB2SolaceCSharp
 {
 public class SolacePublisher
@@ -115,6 +116,7 @@ public class SolacePublisher
     private string sHost = &#34;default&#34;;
     private string sTopic = &#34;default&#34;;
     //public Object lockThis = new Object();
+
     public SolacePublisher(string Host, string UserName, string Password, string VPNName, string Topic)
     {
         this.sHost = Host;
@@ -124,6 +126,7 @@ public class SolacePublisher
         this.sTopic = Topic;
         connect2Solace();
     }
+
     ~SolacePublisher()
     {
         Console.WriteLine(&#34;In destructor - Will try to dispose session and context&#34;);
@@ -140,22 +143,27 @@ public class SolacePublisher
             context = null;
             Console.WriteLine(&#34;In destructor - disposed context&#34;);
         }
+
     }
+
     public void sendMessage2Solace(String msg)
     {
         IMessage message = ContextFactory.Instance.CreateMessage();
         message.Destination = ContextFactory.Instance.CreateTopic(sTopic);
         message.DeliveryMode = MessageDeliveryMode.Direct;
         message.BinaryAttachment = Encoding.ASCII.GetBytes(msg);
+
         Console.WriteLine(&#34;About to send message &#39;{0}&#39; to topic &#39;{1}&#39;&#34;, msg, sTopic);
         session.Send(message);
         message.Dispose();
         Console.WriteLine(&#34;Message sent. Exiting.&#34;);
     }
+
     public void connect2Solace()
     {
         Console.WriteLine(&#34;In connect2Solace&#34;);
         ContextFactoryProperties cfp = new ContextFactoryProperties();
+
         // Set log level.
         cfp.SolClientLogLevel = SolLogLevel.Warning;
         // Log errors to console.
@@ -164,16 +172,19 @@ public class SolacePublisher
         ContextFactory.Instance.Init(cfp);
         ContextProperties contextProps = new ContextProperties();
         SessionProperties sessionProps = new SessionProperties();
+
         sessionProps.Host = sHost;
         sessionProps.UserName = sUserName;
         sessionProps.Password = sPassword;
         sessionProps.SSLValidateCertificate = false;
         sessionProps.VPNName = sVPNName;
+
         //Connection retry logic
         sessionProps.ConnectRetries = 3; //-1 means try to connect forever.
         sessionProps.ConnectTimeoutInMsecs = 5000; //10 seconds
         sessionProps.ReconnectRetries = 3; //-1 means try to reconnect forever.
         sessionProps.ReconnectRetriesWaitInMsecs = 5000; //wait for 5 seconds before retry
+
         // Compression is set as a number from 0-9, where 0 means &#34;disable
         // compression&#34;, and 9 means max compression. The default is no
         // compression.
@@ -181,9 +192,13 @@ public class SolacePublisher
         // compressed SMF port on the appliance, as long as no SMF port is
         // explicitly specified.
         //sessionProps.CompressionLevel = 9;
+
         #region Create the Context
+
         context = ContextFactory.Instance.CreateContext(contextProps, null);
+
         #endregion
+
         #region Create and connect the Session
         session = context.CreateSession(sessionProps, null, null);
         session.Connect();
@@ -200,16 +215,20 @@ using Microsoft.Extensions.Logging;
 using SolaceSystems.Solclient.Messaging;
 using System.Threading;
 using System.Text;
+
 namespace SB2SolaceCSharp
 {
+
 public static class Function1
 {
+
     private static SolacePublisher solaceConnection = new SolacePublisher(
         Environment.GetEnvironmentVariable(&#34;solace-host&#34;),
         Environment.GetEnvironmentVariable(&#34;solace-username&#34;),
         Environment.GetEnvironmentVariable(&#34;solace-password&#34;),
         Environment.GetEnvironmentVariable(&#34;solace-vpnname&#34;),
         Environment.GetEnvironmentVariable(&#34;solace-topic&#34;));
+
     [FunctionName(&#34;Function1&#34;)]
     public static void Run([ServiceBusTrigger(&#34;azure2solacecsharp&#34;, Connection = &#34;SBConnection&#34;)]string myQueueItem, ILogger log)
     {
@@ -221,11 +240,11 @@ public static class Function1
 </code></pre>
 </li>
 <li>Now Build your project.</li>
-<li>Publish your Azure function as follows: <img alt=" " src="img/f7f8a10ca463a1e0.png"><img alt=" " src="img/df9cf913eb98b333.png"><img alt=" " src="img/74a6b15ae2ef7da4.png"><img alt=" " src="img/3c1d1f5fb60b12a.png"><img alt=" " src="img/67f8320e667591f4.png"><img alt=" " src="img/8f71854c71df4b63.png"><img alt=" " src="img/b311185231477329.png"></li>
-<li>Now that your function is published, logon to your Azure portal and start the function app.   <img alt=" " src="img/83cc2e30a42c90bd.png"></li>
-<li>Lets look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus.   <img alt=" " src="img/25d8ef984094f47a.png"></li>
-<li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). Below is a screen grab of console output from my test application.   <img alt=" " src="img/440a5c9ede3505f9.png"></li>
-<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.   <img alt=" " src="img/d76d5177e70fce64.png"></li>
+<li>Publish your Azure function as follows:<br><img alt=" " src="img/f7f8a10ca463a1e0.png"><img alt=" " src="img/df9cf913eb98b333.png"><img alt=" " src="img/74a6b15ae2ef7da4.png"><img alt=" " src="img/3c1d1f5fb60b12a.png"><img alt=" " src="img/67f8320e667591f4.png"><img alt=" " src="img/8f71854c71df4b63.png"><img alt=" " src="img/b311185231477329.png"></li>
+<li>Now that your function is published, logon to your Azure portal and start the function app.<br><img alt=" " src="img/83cc2e30a42c90bd.png"></li>
+<li>Lets look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus.<br><img alt=" " src="img/25d8ef984094f47a.png"></li>
+<li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function). Below is a screen grab of console output from my test application.<br><img alt=" " src="img/440a5c9ede3505f9.png"></li>
+<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.<br><img alt=" " src="img/d76d5177e70fce64.png"></li>
 </ol>
 
 
@@ -233,9 +252,9 @@ public static class Function1
     
       <google-codelab-step label="For C#/.Net using REST APIs" duration="15">
         <ol type="1">
-<li>Create a new Azure function project in Visual Studio <img alt=" " src="img/a7026d963c310020.png"> Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
-<li>Configure your new project <img alt=" " src="img/89cc9d1eb380bb01.png"></li>
-<li>Create a new Azure Function application <img alt=" " src="img/87278c1c6551ad67.png"> In the above screen you will do the following:<ul>
+<li>Create a new Azure function project in Visual Studio<br><img alt=" " src="img/a7026d963c310020.png"><br>Select <strong>Azure Functions</strong> from the list and click <strong>Next</strong></li>
+<li>Configure your new project<br><img alt=" " src="img/89cc9d1eb380bb01.png"></li>
+<li>Create a new Azure Function application<br><img alt=" " src="img/87278c1c6551ad67.png"><br>In the above screen you will do the following:<ul>
 <li>Select <strong>Azure Service Bus Trigger</strong> from the list</li>
 <li>Specifiy <strong>Storage Account</strong></li>
 <li>Specify <strong>Connection String Setting Name</strong>. This is the name that we will use in the Azure function code later.</li>
@@ -243,20 +262,20 @@ public static class Function1
 <li>Click <strong>Next</strong> to finish create a project.</li>
 </ul>
 </li>
-<li>Open the <strong>local.settings.json</strong> file and add the following properties as shown in the code below:<pre><code>	//Update all the below property values to point to your environment
-&#34;SBConnection&#34;: &#34;Endpoint=sb://sumeet.servicebus.windows.net/;SharedAccessKeyName=sendListen;SharedAccessKey=xxxxxxxxxxxxxxxxxxxxxxxx;&#34;,
-&#34;solace-host&#34;: &#34;sumeet-solace.mymaas.net&#34;,
-&#34;solace-tls&#34;: false,
-&#34;solace-plain-text-port&#34;: 80,
-&#34;solace-tls-port&#34;: 443,
-&#34;solace-username&#34;: &#34;default&#34;,
-&#34;solace-password&#34;: &#34;dc7u1ne2ps16r5p1ss2frq4b4n&#34;,
-&#34;solace-topic&#34;: &#34;azure/2/solace-rest&#34;
+<li>Open the <strong>local.settings.json</strong> file and add the following properties as shown in the code below:<pre><code>		//Update all the below property values to point to your environment
+	&#34;SBConnection&#34;: &#34;Endpoint=sb://sumeet.servicebus.windows.net/;SharedAccessKeyName=sendListen;SharedAccessKey=xxxxxxxxxxxxxxxxxxxxxxxx;&#34;,
+	&#34;solace-host&#34;: &#34;sumeet-solace.mymaas.net&#34;,
+	&#34;solace-tls&#34;: false,
+	&#34;solace-plain-text-port&#34;: 80,
+	&#34;solace-tls-port&#34;: 443,
+	&#34;solace-username&#34;: &#34;default&#34;,
+	&#34;solace-password&#34;: &#34;dc7u1ne2ps16r5p1ss2frq4b4n&#34;,
+	&#34;solace-topic&#34;: &#34;azure/2/solace-rest&#34;
 }
 }
 </code></pre>
 </li>
-<li>Using NuGet package manager, search and install Solace library. <img alt=" " src="img/27e8e2de10cce313.png"></li>
+<li>Using NuGet package manager, search and install Solace library.<br><img alt=" " src="img/27e8e2de10cce313.png"></li>
 <li>Rename function1.cs to <strong>funcSB2SolaceREST.cs</strong> and Copy the below code in <strong>funcSB2SolaceREST.cs</strong><pre><code>using System;
 using System.Net.Http;
 using System.Reflection;
@@ -265,13 +284,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+
 namespace SB2SolaceRest
 {
+
 public static class funcSB2SolaceREST
 {
     private static readonly HttpClient _Client = new HttpClient();
     private static string solaceRESTUrl = null;
     private static Boolean init = initializeHttpClient();
+
     [FunctionName(&#34;funcSB2SolaceREST&#34;)]
     public static async void Run([ServiceBusTrigger(&#34;azure2solacerest&#34;, Connection = &#34;SBConnection&#34;)] string myQueueItem, ILogger log)
     {
@@ -295,6 +317,7 @@ public static class funcSB2SolaceREST
             throw new Exception(&#34;Unable to initialize HTTP Client&#34;);
         }
     }
+
     public static bool initializeHttpClient()
     {
         if (!init)
@@ -327,15 +350,15 @@ public static class funcSB2SolaceREST
 <li>Now that your function is published, logon to your Azure portal and start the function app.</li>
 <li>Look at the Solace queue via Solace broker&#39;s WebUI that will be receiving messages from servicebus and confirm there are no messages sitting in the queue.</li>
 <li>Send test messages to Service Bus Queue (on which you have configured the trigger to invoke above Azure function).</li>
-<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.   <img alt=" " src="img/e556bc06a515a435.png"></li>
+<li>Refresh your Solace broker&#39;s WebUI to confirm you have received messages from ServiceBus.<br><img alt=" " src="img/e556bc06a515a435.png"></li>
 </ol>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ You have learned how to create an Azure function that helps you stream data from ServiceBus to Solace PubSub+ Event broker.<br> ✅ You can use similar approach to integrate with Azure, Blob Storage, Event Hub, IoT Hub, Cosmos Db etc.<br> ✅ Event though this codelab uses C#, you can use other programming languages supported by Azure functions.</p>
-<p>✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation <a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm" target="_blank">here</a>.	</p>
+        <p>✅ You have learned how to create an Azure function that helps you stream data from ServiceBus to Solace PubSub+ Event broker.<br><br>✅ You can use similar approach to integrate with Azure, Blob Storage, Event Hub, IoT Hub, Cosmos Db etc.<br><br>✅ Event though this codelab uses C#, you can use other programming languages supported by Azure functions.</p>
+<p>✅ The code provided here is for demonstration purposes only. It is not production ready and hence you must refer Solace PubSub+ C# .Net API refernce documentation <a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/dotNet-API/net-api-home.htm" target="_blank">here</a>.</p>
 <p>✅ For more information on Azure functions connectors check out the <a href="https://solace.com/connectors/?fwp_connectors_search=azure" target="_blank">PubSub+ Connector Hub</a> page</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/f3045cf027293e9e.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>

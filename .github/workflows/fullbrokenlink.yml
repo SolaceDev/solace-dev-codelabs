@@ -1,0 +1,23 @@
+name: codelabs.solace.dev link checker
+on:
+  push:
+    branches: [master]
+
+jobs:
+  linkChecker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Link Checker
+        uses: lycheeverse/lychee-action@v1.0.7
+        id: lychee
+        with:
+          args: https://codelabs.solace.dev/
+      - name: Create Issue From File
+        uses: peter-evans/create-issue-from-file@v2
+        with:
+          title: Link Checker Report
+          content-filepath: ./lychee/out.md
+          labels: report, automated issue
+      - name: Fail if there were link errors
+        run: exit ${{ steps.lychee.outputs.exit_code }}
