@@ -68,7 +68,7 @@ Let's get access to a Solace PubSub+ event broker!
 
 Super easy, with no setup or hardware or anything required.  _Solace as a Service_!  Point your browser to [console.solace.cloud](https://console.solace.cloud/login/new-account) to sign up for a free account.
 
-![picture](img/sign-up2.png)
+![picture](img/sign-up3.png)
 
 
 Enter your specifics, and get signed up for an account.
@@ -98,7 +98,7 @@ Positive
 
 There are multiple options on how to install/download/configure/run the PubSub+ broker:
 
-* If you Docker installed, this is [probably the easist way](https://solace.com/products/event-broker/software/getting-started/). Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:
+* If you have Docker installed, this is [probably the easist way](https://solace.com/products/event-broker/software/getting-started/). Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:
 
 ```
 docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
