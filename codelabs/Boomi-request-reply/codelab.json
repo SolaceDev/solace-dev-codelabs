@@ -3,17 +3,21 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-06-08T11:20:56-07:00",
+  "updated": "2021-06-18T12:52:16-07:00",
   "id": "Boomi-request-reply",
-  "duration": 19,
-  "title": "Title of codelab goes here",
+  "duration": 27,
+  "title": "How to use the Solace Connector for Boomi Request Action",
   "summary": "",
   "source": "Boomi-request-reply.md",
   "theme": "",
   "status": [
-    "published"
+    "draft"
   ],
-  "category": null,
+  "category": [
+    "boomi",
+    "request",
+    "reply"
+  ],
   "tags": [
     "web"
   ],
