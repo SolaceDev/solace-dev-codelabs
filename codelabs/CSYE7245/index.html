@@ -27,6 +27,58 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/CSYE7245">
     
+      <google-codelab-step label="Overview" duration="0">
+        <p>In this Project, I became more adept at using <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> and <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a>. I combined satellite data and storm data via Python scripts and pipeline.</p>
+<p>It was a big challenge. Because I think parameter passing in <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline is a little strange. For example, I use <code>"Data Combine" >> beam.FlatMap(combine, beam.pvalue.AsDict(stormEvents))</code> to combine the files. I defined <code>combine</code> function as below:</p>
+<pre><code language="language-python" class="language-python">def combine(fields, stormEvent):
+	if fields[0] != &#39;id&#39; and len(fields) == 21:
+        if fields[0].startswith(&#34;S&#34;):
+            eventId = fields[0]
+            fields.extend(stormEvent[eventId])
+            yield fields
+        else:
+            fields.extend([&#34;&#34;] * 37)
+            yield fields
+    elif fields[0] == &#39;id&#39;:
+        fields.extend(stormEvent[&#34;SEVENT_ID&#34;])
+        yield fields
+</code></pre>
+<p>I don&#39;t know how <code>beam.FlatMap</code> works to pass two parameters to <code>combine</code> function.</p>
+<p>However, actually, <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline is a great tool for big data analytics. Because combine with the Dataflow in <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a>, I can see the job graph clearly. And compared to processing data by Python script, the command of <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline is more concise and easier to understand.</p>
+<p>The <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a> is also a useful tool to analyze big data. In this assignment, the first problem I encountered was the data size was extremely large. The data took up too much local space. Moving these data to cloud is a good choice. After getting familiar with the Platform, I think, it is very easy to manage my workflow in the Platform. I can upload all data to the Cloud Storage Buckets. I can edit my codes in Cloud shell Editor. I can run my codes in Cloud shell Terminal and put the output data into the Cloud Storage Buckets. And the visualization is also attractive. Like I said, I can see the <a href="https://console.cloud.google.com/dataflow/jobs/us-central1/2021-07-09_21_02_22-8307640423329231949?pageState=(%22dfTime%22:(%22s%22:%222021-07-10T04:02:23.005Z%22,%22e%22:%222021-07-10T04:08:44.034Z%22))&project=hardy-portal-318606" target="_blank">Dataflow graph</a> in the Platform. After loading my output data into BigQuery, I can see my data in the Platform directly. By means of <a href="https://datastudio.google.com/" target="_blank">Google Data Studio</a>, BigQuery Data can also be visualized. And in <a href="https://datastudio.google.com/" target="_blank">Google Data Studio</a>, I can do some simple things with the data, such as filter, sort and transferring data format. It is helpful for feature engineering before build machine learning models if needed.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Combine Method" duration="0">
+        <p>In this assignment, I combined satellite data and storm data by following steps.</p>
+<ul>
+<li>I used the storm data named <strong><em>StormEvents_details-ftp_v1.0_d2018_c20210604.csv.gz</em></strong> to create a dictionary. The keys are EVENT_ID column in the storm data at first. But the EVENT_ID are float format, so I add a <strong>&#34;S&#34;</strong> before EVENT_ID as the key. And about the value of dictionary, I used columns apart from EVENT_ID and other columns which duplicate with the satellite data.</li>
+<li>I loaded the satellite data called <strong><em>CATALOG.csv</em></strong> into pipeline. I had deleted some invalid data in <strong><em>CATALOG.csv</em></strong> before I loaded it. For example, each event in <strong><em>CATALOG.csv</em></strong> should have five img_type s, so I removed the data whose number of img_type is less than five.</li>
+<li>After that, I combined satellite data and storm data together via <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> command <code>"Data Combine" >> beam.FlatMap(combine, beam.pvalue.AsDict(stormEvents))</code>.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenges" duration="0">
+        <p>There are many challenges working with this architecture.</p>
+<ul>
+<li>Firstly, as I mentioned above, the parameter passing in <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline is a little strange to me.</li>
+<li>Secondly, when I encountered some trouble about <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> and <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a>, I could find limited resources in stackoverflow, compare to some Python troubles. So I had to read the official documents of <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> and <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a> carefully, sometimes even source codes of some commands. It was a boring process, but efficient. It made me get a higher-level understanding of these tools. When I was reading the documents and source codes, I was not just focus on how to solve the troubles, but much deeper. It made me know more about inside commands and tools about how it works.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Benefit and Cost" duration="0">
+        <p>Except for the benefit what I mentioned above, the other benefit of this architecture is that it doesn&#39;t occupy any local storage space or CPU. It is very important to deal with Big Data for individual and some companies. Because Big Data always means hundreds of GBs or TBs, even PBs. It is impossible for us, most individuals and companies, to buy a professional server for data processing. Then <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a> is a great choice. And the Platform can be combined well with <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline. The job Dataflow can be displayed by these tools.</p>
+<p>I also found this architecture in <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a> is much slower than run same codes locally. But this issue may be caused by that I only used the default compute engine. There are also many high-performance machines, but much more expensive. I am in a free trial. And I think the performance of default compute engine is acceptable. So I didn&#39;t buy another machine.</p>
+<p>To sum up, I think this architecture via <a href="https://beam.apache.org/" target="_blank">Apache.beam</a> pipeline and <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Platform</a> is appropriate for this project. You can see my <a href="https://console.cloud.google.com/dataflow/jobs/us-central1/2021-07-09_21_02_22-8307640423329231949?pageState=(%22dfTime%22:(%22s%22:%222021-07-10T04:02:23.005Z%22,%22e%22:%222021-07-10T04:08:44.034Z%22))&project=hardy-portal-318606" target="_blank">Dataflow</a> and <a href="https://datastudio.google.com/s/hjq0Q7qP-Lk" target="_blank">brief report</a> of this project in <a href="https://datastudio.google.com/" target="_blank">Google Data Studio</a>.</p>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
