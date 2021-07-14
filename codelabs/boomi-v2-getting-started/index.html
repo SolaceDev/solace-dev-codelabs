@@ -100,8 +100,9 @@
 </aside>
 <p>You can either navigate to the links below for more information or follow the steps after</p>
 <ol type="1">
-<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows_beec31b0-477d-430b-a744-cedb3a8d67eb.html" target="_blank">Windows Machine</a>.</li>
-<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Using_Docker_to_install_a_local_Atom_on_Linux_b54f0e8c-c02c-4eea-87f5-7233d1c5e0a5.html" target="_blank">Using Docker</a>.</li>
+<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html" target="_blank">Windows Machine</a>.</li>
+<li><a href="https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html" target="_blank">Linux</a>.</li>
+<li><a href="https://github.com/anthonyrabiaza/Boomi-on-Mac" target="_blank">MacOS Using Docker</a></li>
 </ol>
 <p>👉 Navigate to the <strong>Manage</strong> tab and click on <strong>Atom Management</strong></p>
 <p class="image-container"><img alt="manage" title="manage" src="img/d980c9704ab58742.png"></p>
@@ -220,7 +221,7 @@
 <p class="image-container"><img alt="canvas1" title="canvas1" src="img/d046c499857fab57.png"></p>
 <h2 is-upgraded>5. Add a Notify shape</h2>
 <p>In order to test out the end to end connection and make sure that the events sent from the Solace PubSub+ broker are being received by the Solace Boomi Connector, we want to add a way to log the events received. To do so, lets go ahead and add a Notify shape</p>
-<p>👉 Search for and drag the notify shape into the canvas</p>
+<p>👉 Search for and drag the notify shape into the canvas from the &#34;Search Shapes&#34; section</p>
 <p class="image-container"><img alt="notify-search" title="notify-search" src="img/864d86b2f698ac1b.png"></p>
 <p>👉 Configure the Notify shape to log the payload received from the message sent</p>
 <p class="image-container"><img alt="notify-config" title="notify-config" src="img/453fb3d88e644529.png"></p>
@@ -257,7 +258,7 @@
 <h2 is-upgraded>Publish events 💥!</h2>
 <p>👉 Navigate back to your Solace Cloud console, select the messaging service and navigate to the Try Me! tab</p>
 <p class="image-container"><img alt="tryme" title="tryme" src="img/3aeb0cdd196e3610.png"></p>
-<p>👉 In the Publisher section, click on the <strong>Connect</strong> button, change the topic to be <code>acme/rideshare/ride/requested/0.0.1</code> (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want</p>
+<p>👉 In the Publisher section, click on the <strong>Connect</strong> button, change the topic to be <code>taxi/nyc/v1/dropoff/rideX</code> (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want</p>
 <p class="image-container"><img alt="publisher-connect" title="publisher-connect" src="img/47867f9558f91220.png"></p>
 <p>👉 Smash that Publish button.</p>
 <h2 is-upgraded>Check out the logs</h2>
@@ -267,7 +268,7 @@
 <p>👉 Click on the view process logs icon</p>
 <p class="image-container"><img alt="logs" title="logs" src="img/fe3b45adbc7fc741.png"><img alt="logs2" title="logs2" src="img/9c8b1ddce355367b.png"><img alt="logs3" title="logs3" src="img/8de84267dc8fc191.png"></p>
 <p>You&#39;re done!</p>
-<aside class="special"><p>Note that any publisher that publishes on topic <code>acme/rideshare/ride/requested/0.0.1</code> will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged</p>
+<aside class="special"><p>Note that any publisher that publishes on topic <code>taxi/nyc/v1/dropoff/&gt;</code> will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged</p>
 </aside>
 
 

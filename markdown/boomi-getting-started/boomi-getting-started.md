@@ -114,8 +114,9 @@ Positive
 
 You can either navigate to the links below for more information or follow the steps after
 
-1. [Windows Machine](https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows_beec31b0-477d-430b-a744-cedb3a8d67eb.html).
-1. [Using Docker](https://help.boomi.com/bundle/integration/page/t-atm-Using_Docker_to_install_a_local_Atom_on_Linux_b54f0e8c-c02c-4eea-87f5-7233d1c5e0a5.html).
+1. [Windows Machine](https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html).
+1. [Linux](https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html).
+1. [MacOs Using Docker](https://github.com/anthonyrabiaza/Boomi-on-Mac).
 
 👉 Navigate to the **Manage** tab and click on **Atom Management**
 
