@@ -40,7 +40,6 @@
 </ul>
 <h2 is-upgraded>Video</h2>
 <p>You can also watch a video on how you can contribute to authoring a codelab by visiting this <a href="https://www.youtube.com/watch?v=2B8ev-hSbcM" target="_blank">YouTube link</a> or watching the video below</p>
-<iframe class="youtube-video" src="https://www.youtube.com/embed/2B8ev-hSbcM?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
       </google-codelab-step>
@@ -59,24 +58,24 @@
 </ul>
 <h2 is-upgraded>Option B: Download from cli: MacOS/Linux setup</h2>
 <h3 is-upgraded>Install Go</h3>
-<pre><code>$ brew install go
+<pre><code language="language-bash" class="language-bash">$ brew install go
 </code></pre>
 <h3 is-upgraded>Setup Go Environment Variables</h3>
 <p>Below is what I set on mac, but instructions are <a href="https://golang.org/doc/install" target="_blank">here</a> for other OS options</p>
-<pre><code>$ export GOPATH=$HOME/Go
+<pre><code language="language-bash" class="language-bash">$ export GOPATH=$HOME/Go
 $ export GOROOT=/usr/local/opt/go/libexec
 $ export PATH=$PATH:$GOPATH/bin
 $ export PATH=$PATH:$GOROOT/bin
 </code></pre>
 <h3 is-upgraded>Install claat</h3>
 <p><strong>Option A: from CLI using go</strong></p>
-<pre><code>$ go get -u -v github.com/googlecodelabs/tools/claat
+<pre><code language="language-bash" class="language-bash">$ go get -u -v github.com/googlecodelabs/tools/claat
 </code></pre>
 <p><strong>Option B: pre-compiled binary</strong></p>
 <p>Navigate to the <a href="https://github.com/googlecodelabs/tools/releases" target="_blank">Google Codelabs release page</a> and install it from there</p>
 <h3 is-upgraded>Confirm claat installment</h3>
 <p>You should now have the <em>claat</em> command available to you.</p>
-<pre><code>$ claat
+<pre><code language="language-bash" class="language-bash">$ claat
 </code></pre>
 
 
@@ -85,6 +84,9 @@ $ export PATH=$PATH:$GOROOT/bin
       <google-codelab-step label="Solace Guidelines" duration="5">
         <h2 is-upgraded>Content Guidance</h2>
 <p>✅ Each codelab should be focused on one topic or a very small group of related topics.<br> ✅ Use sections to separate steps for ease of navigation<br> ✅ Include an &#34;Overview&#34; or &#34;What You&#39;ll Learn Section&#34; at the beginning of a codelab<br> ✅ Include an &#34;Environment Setup&#34; or &#34;What You&#39;ll Need Section&#34; section that sets up the environment, if necessary.<br> ✅ Try to make the codelab fun and engaging using images and/or gifs<br> ✅ Provide code used in a separate public git repo</p>
+<h2 is-upgraded>Tips</h2>
+<p>💡 To capture a multi-part topic, create smaller sections of the topic and organize the section titles as parts and sub-sections to capture the grouping of content. <img alt="image_caption" src="img/178b3e6312bbd308.jpg"></p>
+<p>💡 Attempt to give complete context when specifying properties, configuration etc as much as possible. <img alt="image_caption" src="img/ca24759abb110fa7.jpg"></p>
 <h2 is-upgraded>Where to create your codelab</h2>
 <p>📌 Create your codelab in the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> for version tracking<br> 📌 All other code can be kept in a separate repo<br> 📌 Example codelab markdown structure can be found on the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/solace-battleship" target="_blank">Battleship markdown</a> and the <a href="https://github.com/solacetraining/solace-battleship" target="_blank">Battleship source code</a></p>
 <h2 is-upgraded>Content Reviewer</h2>
@@ -101,18 +103,20 @@ $ export PATH=$PATH:$GOROOT/bin
 <li>Forking the solace-dev-codelabs repo from <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">https://github.com/SolaceDev/solace-dev-codelabs</a><br><img alt="image_caption" src="img/3e59622c038312bb.png"></li>
 <li>Clone your fork. Note: replace <code>&lt;Your_Github_User&gt;</code> with your github username and <code>&lt;name_of_codelab&gt;</code> with the name of your codelabs. See note below if you do not have ssh setup</li>
 </ol>
-<pre><code>git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
+<pre><code language="language-bash" class="language-bash">git clone git@github.com:&lt;Your_Github_User&gt;/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </code></pre>
-<aside class="warning"><p>If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git</code></p>
+<aside class="special"><p>If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><br><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git</code></p>
+</aside>
+<aside class="warning"><p>Do not forget to checkout the code into a new branch <strong>git checkout -b &lt;add-codelab-name_of_codelab&gt;</strong>. This would help facilitating a peer review and approve/reject changes without affecting the published content.</p>
 </aside>
 <p>Then follow one of the two options in the next two steps: Automated or Manual</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Option A: Create your initial Codelab - Automated" duration="5">
+      <google-codelab-step label="Create a new Codelab - Automated [Option A]" duration="5">
         <h2 is-upgraded>Prerequisites</h2>
 <ul>
 <li>NodeJS</li>
@@ -126,19 +130,22 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 <li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
 <li>When ready, run the export script as follows <code>./export.sh</code></li>
 </ol>
+<aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
 <aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
 </aside>
-<p>🚀 Go ahead to the <strong>Step 7</strong> and add your codelabs on the main repo</p>
+<p>🚀 Go ahead to the <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Option B: Create your initial Codelab - Manual" duration="8">
-        <p>Create a folder under the <code>markdown</code> directory with your codelab as the dir name. This is where your markdown file and related artifacts (such as images) will reside.</p>
+      <google-codelab-step label="Create a new Codelab - Manual [Option B]" duration="0">
+        <p>Create a folder <code>&lt;name-of-codelab&gt;</code> under the <code>markdown</code> directory. This is where your markdown file and related artifacts (such as images) will reside.</p>
+<p>Navigate to the <code>&lt;name-of-codelab&gt;</code> directory.</p>
 <p>Go ahead and create a markdown file where you&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
 <aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
 </aside>
-<pre><code>$ vim unique-codelab-identifier.md
+<pre><code language="language-bash" class="language-bash">$ vim unique-codelab-identifier.md
 </code></pre>
 <h3 is-upgraded>Fill-in the header metadata</h3>
 <p>Copy and paste the headers below into your markdown file and change the values appropriately. Guidelines are available below the sample headers.</p>
@@ -180,7 +187,7 @@ feedback link: A link where users can go to provide feedback (e.g. the git repo 
 <h3 is-upgraded>Add Sections &amp; Durations</h3>
 <p>Then for each section use Header 2 or ‘##&#39; &amp; specify an optional duration beneath for time remaining calculations Optional section times will be used to automatically total &amp; remaining tutorial times In markdown I&#39;ve found that the time is formatted hh:mm:ss</p>
 <p>Example</p>
-<pre><code>## Section 1
+<pre><code language="language-bash" class="language-bash">## Section 1
 Duration: 0:10:00
 
 ## Section 2
@@ -231,7 +238,7 @@ Add an image!
 <p>More Markdown Parser examples can be found <a href="https://github.com/googlecodelabs/tools/tree/master/claat/parser/md" target="_blank">here</a>.</p>
 <h2 is-upgraded>Export &amp; Serve Locally</h2>
 <p>Now that you have an initial codelab defined in your markdown file let&#39;s go ahead and generate the static site content. We can export &amp; serve the content locally using the <code>claat</code> command that we installed earlier.</p>
-<pre><code>$ claat export codelab.md
+<pre><code language="language-bash" class="language-bash">$ claat export codelab.md
 $ claat serve
 </code></pre>
 <ul>
@@ -239,7 +246,7 @@ $ claat serve
 <li>Choose the directory that matches your &#34;id&#34; that you put in the headers.</li>
 <li>Viola! You should have your first codelab!</li>
 </ul>
-<p>Repeat the export and serve locally everyt ime you make a new change in the markdown file</p>
+<p>Repeat the export and serve locally every ime you make a new change in the markdown file</p>
 <aside class="special"><p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
 </aside>
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
@@ -248,7 +255,7 @@ $ claat serve
 <p>When you&#39;re done, export your static web content to the <code>codelabs</code> folder.</p>
 <aside class="special"><p>Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
 </aside>
-<pre><code># If creating a new codelab
+<pre><code language="language-bash" class="language-bash"># If creating a new codelab
 mkdir markdown/&lt;header-metadata-id&gt;
 # Add your markdown content in the markdown/&lt;header-metadata-id&gt;/&lt;file-name&gt;.md directory
 # Add your images in the markdown/&lt;header-metadata-id&gt;/img directory
@@ -258,6 +265,26 @@ cd markdown/&lt;header-metadata-id&gt;
 # Note the google analytics code used. Keep as is below
 claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
+<aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
+</aside>
+<p>🚀 Go ahead to the <strong>Step 8</strong> and add your codelabs on the main repo</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modify an existing Codelab" duration="3">
+        <h2 is-upgraded>Steps</h2>
+<ol type="1">
+<li>Navigate to the <code>/markdown/&lt;name-of-codelab&gt;</code> directory</li>
+<li>Compile and start the claat server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file</li>
+<li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
+<li>When ready, run the export script as follows <code>./export.sh</code></li>
+</ol>
+<aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
+<aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
+</aside>
+<p>🚀 Go ahead to the <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>
@@ -265,7 +292,7 @@ claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
       <google-codelab-step label="Add your Codelab to solace.dev/codelabs" duration="5">
         <h2 is-upgraded>Stage your Codelab</h2>
 <p>Add your changes and any newly created files, then commit &amp; push the changes. From your <strong>codelabs root</strong> directory, execute:</p>
-<pre><code>cd solace-dev-codelabs
+<pre><code language="language-bash" class="language-bash">cd solace-dev-codelabs
 git add .
 git commit -m &#39;Added or Updated &lt;header-metadata-id&gt; codelab&#39;
 git push origin add-codelab-&lt;id&gt;
@@ -273,7 +300,7 @@ git push origin add-codelab-&lt;id&gt;
 <h2 is-upgraded>Create a Pull Request</h2>
 <p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs</code> and create a pull request against master.</p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
-<aside class="special"><p>We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.</p>
+<aside class="special"><p>We recommend a technical review of the codelab to verify the technical steps and make sure they work as mentioned in the codelab.</p>
 </aside>
 <h2 is-upgraded>Thank You!</h2>
 <p>Thank you for contributing to Solace Codelabs! Please reach out to the Solace DevRel team with any questions.</p>
@@ -287,6 +314,7 @@ git push origin add-codelab-&lt;id&gt;
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
