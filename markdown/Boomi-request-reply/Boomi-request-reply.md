@@ -19,8 +19,6 @@ You will learn how to implement the Solace Connector for Boomi Request Action.
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
-
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messagin).
 1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html) Codelab.
 
@@ -37,17 +35,26 @@ Positive
 
 ## Use Case Overview
 
-Duration: 0:15:00
-
 In this example, we will be using the new Request Action within the Solace Connector Shape to perform a blocking synchronous request/reply in the middle of a Boomi Process.  We will be using Solace to handle the request which means the document that we feed to the Solace Connector Request will be published onto a topic.  The replying service will consume that document, do something with it, and reply to a dynamically created ReplyTo topic with the response and the CorrelationID (also dynamically created by the Solace Connector).  
 
-We are not going to create a service replier the first time through.  We are going to use a Solace web GUI to perform the reply so we can better see the inner workings.  
+We are not going to create a service replier the first time through.  We are going to use a Solace web GUI to perform the reply so we can better see the inner workings. 
+
+![Boomi Request - Solace Shape](img/BoomiRequest-SolaceShape.png)
+* 1 - The Boomi Process will be setup to publish a request to the topic T/boomi/request
+*  - You will configure a Solace Broker to handle
+* 2 - You will use the Try Me feature of the Solace Web GUI to function as a Javascript client listening to T/boomi/request
+* 3 - You will see the request come in and manually respond using the Try Me feature (copy and paste the generated ReplyTo topic and correlation ID)
+* 4 - The Solace Broker will route the reply to the waiting Boomi Process
+
+POSITIVE
+: This is the most basic implementation of this pattern.  Queues, ACL's and other Solace features can be used for persistence, access lock down and much more.
 
 Let’s get started!
 
 ## Create a Boomi Request Process
 The first thing we will do is create a simple Process in Boomi that makes a request via a publication to a Solace topic
-1. In your Boomi environment, create a new Process.  You may call it anything you like, we will be calling ours Boomi Requestor
+### Create a new Process
+* In your Boomi environment, create a new Process.  You may call it anything you like, we will be calling ours Boomi Requestor
 
 ![Boomi Request Process Create](img/CreateBoomiReqReplyProcess.png)
 1. Configure the Solace Connector Shape
@@ -118,3 +125,14 @@ There should be a generated Correlation ID that we need to include in our reply.
 * And you can check the Source data for the Stop Shape to see what data was returned.
 ![StopShapeSourceData.png](img/StopShapeSourceData.png)
 * Can Solace support mid-Process requests?  Yes, it can!
+
+## Conclusion
+### What did you learn?
+We now have a native way for Boomi Atom Processes to communicate with external services in the middle of process execution by using what you learned in this codelab:
+
+1. How to configure and deploy the Solace Connector using the Request Operation.
+1. How to use that to request data/processing from an external service
+Positive
+: This service could reside as another Process on the same Boomi Atom, another Booomi Atom in the same DC, another Boomi Atom half way around the world.  The only requirement is that is can connect to the Solace Event Mesh.
+1. How to use Solace Try-Me to test successful operation of the new Solace Connector Operation.
+
