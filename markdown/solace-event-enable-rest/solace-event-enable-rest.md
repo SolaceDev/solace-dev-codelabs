@@ -588,7 +588,7 @@ Click on "Queue Bindings" in the top menu:
 Click on "+ Queue Binding" in the top-right to create a new binding:
 ![alt-text-here](gfx/rdp_08.png)
 
-Enter the name of your new queue to bind to this RDP, E.g. `q_rdp_get`. Click "Create":
+Enter the name of your new queue to bind to this RDP, E.g. `q_rest_get`. Click "Create":
 ![alt-text-here](gfx/rdp_09.png)
 
 Click "Apply":
