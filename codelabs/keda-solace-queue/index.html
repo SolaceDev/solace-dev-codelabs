@@ -1,0 +1,503 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Scale a Kubernetes Deployment using KEDA with Solace PubSub&#43; Event Queues</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="keda-solace-queue"
+                  title="Scale a Kubernetes Deployment using KEDA with Solace PubSub&#43; Event Queues"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/keda-solace-queue">
+    
+      <google-codelab-step label="Introduction" duration="5">
+        <p>The purpose of this CodeLab is to provide an introduction to Kubernetes Event-Driven Autoscaler (KEDA) and the Solace PubSub+ Event Broker Queue Scaler. <a href="https://keda.sh" target="_blank">KEDA</a> is a <a href="https://www.cncf.io" target="_blank">CNCF</a> sandbox project (current as of this writing). It&#39;s purpose is to augment the capability of the native <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">Kubernetes Horizontal Pod Autoscaler</a>. It does this by providing an interface for HPA to retrieve custom metric values that can be used for scaling. The <a href="http://need-ref" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a> defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current <strong><em>Message Count</em></strong> and <strong><em>Message Spool Usage</em></strong>. Based on the values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The instructions in this CodeLab will provide a practical guide to using KEDA and the Solace Event Queue Scaler with Solace Event Brokers.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you&#39;ll learn" duration="2">
+        <p>In the course of this CodeLab, you will learn:</p>
+<ul>
+<li>How to install KEDA to your Kubernetes Cluster</li>
+<li>The basics of how KEDA works with Kubernetes Horizonal Pod Autoscaler (HPA)</li>
+<li>How to configure KEDA to scale an application based on a Solace PubSub+ Event Broker Queue</li>
+<li>How to scale an Application based on message backlog (message count) on a queue</li>
+<li>How to scale an Application based on the message spool usage (resources utilized) on a queue</li>
+<li>How to Manage HPA behavior using KEDA Configuration</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="10">
+        <h2 is-upgraded>Proficiencies</h2>
+<p>This Codelab assumes that you have at least minimum proficiency with:</p>
+<ul>
+<li>Kubernetes, including command line administration using <code>kubectl</code> command</li>
+<li>Solace PubSub+ Event Broker</li>
+<li>Messaging system concepts</li>
+</ul>
+<h2 is-upgraded>Desktop Software</h2>
+<p>You must have following command line tools available to complete the CodeLab. Links are provided to respective web sites if you need to complete installation.</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/tasks/tools/" target="_blank">kubectl</a></li>
+<li><a href="https://helm.sh/docs/intro/quickstart/" target="_blank">Helm</a></li>
+</ul>
+<h2 is-upgraded>Kubernetes</h2>
+<p>Access to a Kubernetes cluster is required to complete the Codelab</p>
+<ul>
+<li>Size Requirements?</li>
+<li>Administrative Access (Define? Create/Deploy)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you&#39;ll do" duration="15">
+        <h2 is-upgraded>Install Software</h2>
+<p>We will use <strong>Helm</strong> to install software to your Kubernetes cluster. <strong>Helm</strong> charts (coded instructions for installation) are available in public repositories.</p>
+<ul>
+<li>KEDA - We will use <strong>Helm</strong> to deploy the KEDA software to the Kubernetes cluster in <code>namespace=keda</code></li>
+<li>Solace PubSub+ Event Broker (Dev Mode) - We will install a small scale Event Broker to complete the lab in <code>namespace=solace</code></li>
+</ul>
+<h2 is-upgraded>Create Deployments</h2>
+<p>We will create the following objects on the Kubernetes cluster in <code>namespace=solace</code>:</p>
+<ul>
+<li><strong>kedalab-helper</strong> - Kubernetes <strong>Pod</strong> that will be created for the purpose of running configuration scripts and to publish messages.</li>
+<li><strong>solace-consumer</strong> - Kubernetes <strong>Deployment</strong> that we will scale using KEDA and the Solace Queue Scaler.</li>
+</ul>
+<h2 is-upgraded>Configure KEDA to Scale the solace-consumer Deployment</h2>
+<p>These objects define the KEDA configuration and will be created in <code>namespace=solace</code>:</p>
+<ul>
+<li><strong>kedalab-scaled-object</strong> - KEDA <strong>ScaledObject</strong> informs KEDA that a Scaler (Solace Scaler for this Codelab) will be applied to our deployment</li>
+<li><strong>kedalab-solace-secret</strong> - Kubernetes <strong>Secret</strong> with encoded credentials for the admin ID to connect to the Solace SEMP endpoint of our broker</li>
+<li><strong>kedalab-trigger-auth</strong> - KEDA <strong>TriggerAuthentication</strong>; bridges a KEDA <strong>ScaledObject</strong> configuration to a Kubernetes <strong>Secret</strong></li>
+</ul>
+<h2 is-upgraded>Publish Messages and Observe!</h2>
+<ul>
+<li>We will use SDK-Perf utility, provided for you on <strong>kedalab-helper</strong> pod, to publish messages to our broker.</li>
+<li>Based upon the message backlogs that we create, we will observe how KEDA scales the <strong>solace-consumer</strong> deployment</li>
+</ul>
+<aside class="special"><p>Let&#39;s Get Started!</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install KEDA" duration="15">
+        <p>You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the <a href="https://keda.sh/docs/2.3/deploy/" target="_blank">KEDA Web site</a>. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.</p>
+<aside class="warning"><p>If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br><em>It may be necessary to update the installation OR uninstall keda and re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4</em></p>
+</aside>
+<h2 is-upgraded>Install KEDA Using Helm</h2>
+<ol type="1">
+<li>Add Helm repo (if not already added) <code>bash<br>helm repo add kedacore https://kedacore.github.io/charts</code><br> 2. Update Helm repo <code>bash<br>helm repo update<br></code></li>
+<li>Install KEDA Using the Helm chart:  <pre><code language="language-bash" class="language-bash">kubectl create namespace keda
+helm install keda kedacore/keda --namespace keda
+
+## ***IMPORTANT*** Use the following until KEDA 2.4 release is available.
+## * The Solace Scaler will not be available in the KEDA images
+##   until v2.4 is GA!
+## * The command below will pull the image from a private registry
+##   instead of the ghcr.io/kedacore registry.
+## * Note: The keda namespace must be created as above
+helm install keda kedacore/keda --namespace keda --set image.keda.repository=docker.io/dennisbrinley/keda --set image.keda.tag=main --set image.metricsApiServer.repository=docker.io/dennisbrinley/keda-metrics-apiserver --set image.metricsApiServer.tag=main
+</code></pre>
+<ol type="1">
+<li>Check your installation  <pre><code language="language-bash" class="language-bash">## Make sure that the deployments/pods are Ready!
+kubectl get deployments -n keda
+kubectl get pods -n keda
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Solace PubSub Event Broker" duration="15">
+        <p>Follow the instructions to install a Solace PubSub+ Event Broker to your Kubernetes cluster. The broker will be installed to a namespace called <code>solace</code>. The broker will be created with an administrative user=<strong>admin</strong> and password=<strong>KedaLabAdminPwd1</strong>. We will configure the broker subsequently in the next section.</p>
+<ol type="1">
+<li>Add Helm repo <code>bash<br>helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts</code><br> 2. Update Helm repo <code>bash<br>helm repo update<br></code></li>
+<li>Create <code>solace</code> namespace  <pre><code language="language-bash" class="language-bash">kubectl create namespace solace
+</code></pre>
+<ol type="1">
+<li>Install the temporary broker  <pre><code language="language-bash" class="language-bash">##  This installation will use ephemereal storage, which means if pod is shut down and restored, the configuration will be lost.
+helm install kedalab solacecharts/pubsubplus-dev --namespace solace --set solace.usernameAdminPassword=KedaLabAdminPwd1 --set storage.persistent=false
+</code></pre>
+<pre><code language="language-bash" class="language-bash">##  Use the following command instead of the previous one if you want to keep the Solace broker beyond the time spent on the code lab:
+##  helm install kedalab solacecharts/pubsubplus-dev --namespace solace --set solace.usernameAdminPassword=KedaLabAdminPwd1
+</code></pre>
+</li>
+<li>Wait and Verify  <pre><code>## Command will hold until the pod = kedalab-pubsubplus-dev-0 is ready for use
+## Note: This make take up to a minute if you execute immediately after deploying the broker
+kubectl wait -n solace --for=condition=Ready --timeout=120s pod/kedalab-pubsubplus-dev-0
+## Then, double-check:
+kubectl get statefulsets -n solace kedalab-pubsubplus-dev -o wide
+kubectl get pods -n solace kedalab-pubsubplus-dev-0 -o wide
+</code></pre>
+</li>
+<li><strong>OPTIONAL</strong> - You can connect to the broker and inspect the installation using a web browser. The installed broker will have the default configuration. (We haven&#39;t configured it yet)</li>
+</ol>
+  <ul>
+<li>First, you&#39;ll need to obtain the service IP Address for the broker:  <pre><code language="language-bash" class="language-bash">kubectl get services -n solace kedalab-pubsubplus-dev
+## *** OR ***
+kubectl get services -n solace kedalab-pubsubplus-dev -o jsonpath=&#34;{.status.loadBalancer.ingress[0].ip}&#34;
+</code></pre>
+</li>
+</ul>
+  <ul>
+<li>Next, use the IP Address in a web browser to navigate to the Solace Console: <br><code>http://[service-external-ip-address]:8080<br>## e.g. http://34.199.88.200:8080<br></code></li>
+<li>Enter the username and password: <strong>admin/KedaLabAdminPwd1</strong></li>
+<li>You should be connected to the Solace PubSub+ Event Broker</li>
+</ul>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy Apps and Configure Solace PubSub&#43; Event Broker" duration="20">
+        <p>After these steps are complete, we will have a configured Solace Event Broker, our kedalab-helper pod will be available, and the solace-consumer will be ready to process messages.</p>
+<h2 is-upgraded>Create kedalab-helper Pod</h2>
+<p>The kedalab-help pod contains configuration scripts and tools we need to complete the lab. We will create it on our Kubernetes cluster.</p>
+<ol type="1">
+<li>Navigate from the lab root directory to the configs directory: <code>bash<br>cd ./configs</code><br> 2. Apply the kedalab-helper.yaml file to the cluster to create the pod: <code>bash<br>kubectl apply -f kedalab-helper.yaml<br></code></li>
+<li>Verify that the pod is created and ready:  <pre><code language="language-bash" class="language-bash">kubectl get pods -n solace
+##  OUTPUT
+##  ------
+##  NAME                               READY   STATUS        RESTARTS   AGE
+##  kedalab-helper                     1/1     Running       0          45s
+##  (and others)
+</code></pre>
+<h2 is-upgraded>Configure Solace PubSub+ Event Broker</h2>
+  Next, we&#39;ll execute a script included on kedalab-helper to configure our Solace PubSub+ Event Broker with the objects necessary for the code lab. Execute the following command to configure the Event Broker:  <pre><code language="language-bash" class="language-bash">kubectl exec -n solace kedalab-helper -- ./config/config_solace.sh
+</code></pre>
+</li>
+</ol>
+<aside class="special"><p>If you completed optional step #6 above in <a href="#install-solace-pubsub-event-broker" target="_blank">Install Solace PubSub Event Broker</a>, then you can view the results of the configuration script: Refresh the screen to observe the configured VPN and associated objects. If you navigate to the queue <code>SCALED_CONSUMER_QUEUE1</code>, you can view the attached consumers. Initially zero, this list will grow and shrink as we publish messages with KEDA configured.</p>
+</aside>
+<h2 is-upgraded>Create solace-consumer Deployment</h2>
+<p>The Solace PubSub+ Event Broker should be created and configured prior to completing this step. Create the <code>solace-consumer</code> deployment by executing the following steps:</p>
+<ol type="1">
+<li>Navigate from the lab root directory to the configs directory (if you&#39;re not already there): <code>bash<br>cd ./configs</code><br> 2. Apply the solace-consumer.yaml file to the cluster to create the deployment: <code>bash<br>kubectl apply -f solace-consumer.yaml<br></code></li>
+<li>Verify that the consumer is deployed and ready <code>bash<br>kubectl get deployments -n solace<br>kubectl get pods -n solace</code><br> Positive : Note that there should be one replica of the <code>solace-consumer</code> pod running at this point. We are now ready to proceed with using KEDA to scale the solace-consumer deployment! ## Review KEDA ScaledObject Configuration Duration: 0:15:00 A KEDA ScaledObject provides the core configuration for KEDA. This section explains the We are going to apply a file called <code>scaledobject-complete.yaml</code> to the Kubernetes cluster. This file contains a KEDA <strong>ScaledObject</strong>, <strong>TriggerAuthentication </strong><em>and</em> a Kubernetes <strong>Secret</strong> to manage credentials. The ScaledObject is shown in the exerpt below. (Elipses are in horizontalPodAutoscalerConfig, indicating that section is eliminated from the reproduction). <code>yaml<br>apiVersion: keda.sh/v1alpha1<br>kind: ScaledObject<br>metadata:<br>name:      kedalab-scaled-object<br>namespace: solace<br>spec:<br>scaleTargetRef:<br>apiVersion:    apps/v1<br>kind:          Deployment<br>name:          solace-consumer<br>pollingInterval:  5<br>cooldownPeriod:  10<br>minReplicaCount:  0<br>maxReplicaCount: 10<br>advanced:<br>horizontalPodAutoscalerConfig:<br>   ...                     ## Removed for brevity<br>triggers:<br>- type: solace-event-queue<br>metadata:<br>  solaceSempBaseURL:       http://kedalab-pubsubplus-dev.solace.svc.cluster.local:8080<br>  messageVpn:              keda_vpn<br>  queueName:               SCALED_CONSUMER_QUEUE1<br>  messageCountTarget:      &#39;20&#39;<br>  messageSpoolUsageTarget: &#39;1&#39;<br>authenticationRef:<br>  name: kedalab-trigger-auth<br></code></li>
+</ol>
+<p>The ScaledObject:</p>
+<ul>
+<li>References a specific deployment, in this example: <code>spec.scaleTargetRef.name=solace-consumer</code></li>
+<li>Is declared in <code>namespace=solace</code>, the same namespace as the solace-consumer</li>
+<li>Declares at least one or more <code>triggers</code></li>
+</ul>
+<p>The following table describes important KEDA ScaledObject configuration parameters.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Field Name</p>
+</td><td colspan="1" rowspan="1"><p>Codelab Value</p>
+</td><td colspan="1" rowspan="1"><p>Impact</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>pollingInterval</p>
+</td><td colspan="1" rowspan="1"><p><em>5</em></p>
+</td><td colspan="1" rowspan="1"><p>KEDA will poll the Solace SEMP API every 5 seconds</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>cooldownPeriod</p>
+</td><td colspan="1" rowspan="1"><p><em>10</em></p>
+</td><td colspan="1" rowspan="1"><p>This is the period in seconds that must elapse before KEDA will scale the application from 1 replica to zero replicas</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>minReplicaCount</p>
+</td><td colspan="1" rowspan="1"><p><em>0</em></p>
+</td><td colspan="1" rowspan="1"><p>If there are no messages on the queue, then our solace-consumer deployment will scale to zero replicas</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>maxReplicaCount</p>
+</td><td colspan="1" rowspan="1"><p><em>10</em></p>
+</td><td colspan="1" rowspan="1"><p>KEDA/HPA may scale the solace-consumer deployment up to 10 replicas</p>
+</td></tr>
+</table>
+<aside class="special"><p>We will discuss the <code>horizonalPodAutoscalerConfig</code> in our last exercise.</p>
+</aside>
+<h2 is-upgraded>Solace Event Queue Trigger</h2>
+<p>Let&#39;s inspect the <code>triggers:</code> section of the ScaledObject. The trigger type is specified as <code>solace-event-queue</code>. The fields contained in the trigger configuration shown here <em>are specific to a Solace Event Queue scaler.</em> Other trigger types interface with different technology and logically have different requirements. The Solace Event Queue Scaler uses the SEMP API to obtain metrics from the broker. Therefore, we expect that then information necessary to connect to SEMP is required.</p>
+<p>The <code>solaceSempBaseURL</code>, <code>messageVpn</code>, and <code>queueName</code> form a path to the queue we&#39;ll use for scaling the Deployment. Note the fields called out in the following table and their impact on the scaling operation.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Field Name</p>
+</td><td colspan="1" rowspan="1"><p>Codelab Value</p>
+</td><td colspan="1" rowspan="1"><p>Impact</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>solaceSempBaseURL</p>
+</td><td colspan="1" rowspan="1"><p><em>SEMP URL</em></p>
+</td><td colspan="1" rowspan="1"><p>Solace SEMP Endpoint in format: <code>&lt;protocol&gt;://&lt;host-or-service&gt;:&lt;port&gt;</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>messageVpn</p>
+</td><td colspan="1" rowspan="1"><p><em>keda_vpn</em></p>
+</td><td colspan="1" rowspan="1"><p>Message VPN hosted on the Solace broker</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>queueName</p>
+</td><td colspan="1" rowspan="1"><p><em>SCALED_CONSUMER_QUEUE1</em></p>
+</td><td colspan="1" rowspan="1"><p>The name of the queue being monitored</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>messageCountTarget</p>
+</td><td colspan="1" rowspan="1"><p><em>20</em></p>
+</td><td colspan="1" rowspan="1"><p>The average number of messages desired per replica.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>messageSpoolUsageTarget</p>
+</td><td colspan="1" rowspan="1"><p><em>1</em></p>
+</td><td colspan="1" rowspan="1"><p>Value in Megabytes; The average spool usage desired per replica</p>
+</td></tr>
+</table>
+<aside class="warning"><p><strong>AT LEAST</strong> one of <code>messageCountTarget</code> or <code>messageSpoolUsageTarget</code> is required. If both values are present, the metric value resulting in the higher desired replicas will be used. (Standard KEDA/HPA behavior)</p>
+</aside>
+<aside class="special"><p>You can find more information about the <a href="https://keda.sh/docs" target="_blank">Solace Event Queue Trigger</a> on the KEDA web site.</p>
+</aside>
+<h2 is-upgraded>Metric Target Values</h2>
+<p>Target values, <code>messageCountTarget</code> and <code>messageSpoolUsageTarget</code> for the Solace Queue Scaler, represent the <em>maximum</em> value desired per replica for the metric. From the Kubernetes HPA Documentation, the computation is expressed as:</p>
+<pre><code>desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
+</code></pre>
+<p>Using <code>messageCountTarget</code> as an example. The target value for the lab is 20.</p>
+<ul>
+<li>If the average number (per active replica) of messages on the queue backlog is greater than this value, then the deployment will scale up to more replicas. For example, if there are 44 messages on the queue and two active replicas (mean average = 22), then the target deployment will scale up to 3 replicas to meet the demand (<em>observed</em> 22 msg/replica &gt; 20 msg/replica <em>desired</em>)</li>
+<li>If the current replica count is zero, and the messageCount is 1, then the application will scale to 1 replica</li>
+</ul>
+<p><strong>Based on this configuration, we can expect that the Deployment will scale:</strong></p>
+<ul>
+<li>To zero replicas if there are no messages on the input queue for more than 10 seconds</li>
+<li>To a maximum of 10 replicas.</li>
+<li>To 10 replicas if <code>messageCount</code> from SEMP &gt; 180 messages on the queue when it is polled.</li>
+<li>To 10 replicas if the <code>messageSpoolUsage</code> from SEMP &gt; 9 Megabytes</li>
+</ul>
+<aside class="special"><p>Note that HPA has no ability to scale from 0 -&gt; 1 or from 1 -&gt; 0 replicas. This is done by KEDA.</p>
+</aside>
+<h2 is-upgraded>KEDA Trigger Authentication</h2>
+<p>Note that the Trigger record in the ScaledObject depicted above specifies <code>authenticationRef.name=kedalab-trigger-auth</code>. This reference points to a KEDA TriggerAuthentication record. The contents are shown below. The TriggerAuthentication maps authentication parameters to the Solace Trigger. In this case, the parameters are mapped to a Kubernetes Secret called <code>kedalab-solace-secret</code>. The <code>username</code> and <code>password</code> will be used to authenticate to the Solace SEMP RESTful API.</p>
+<pre><code language="language-yaml" class="language-yaml">apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: kedalab-trigger-auth
+  namespace: solace
+spec:
+  secretTargetRef:
+    - parameter:   username
+      name:        kedalab-solace-secret
+      key:         SEMP_USER
+    - parameter:   password
+      name:        kedalab-solace-secret
+      key:         SEMP_PASSWORD
+</code></pre>
+<aside class="special"><p><strong>TriggerAuthentication</strong> You can find more information about <strong>TriggerAuthentication</strong> records on the KEDA Web site: <a href="https://keda.sh/docs/2.3/concepts/authentication/" target="_blank">KEDA Authentication</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create KEDA ScaledObject with Solace Queue Trigger" duration="15">
+        <h2 is-upgraded>Pre-Flight Check</h2>
+<p>At this point, the following statements should all be <strong>true</strong>:</p>
+<ul>
+<li>KEDA is installed</li>
+<li>Solace PubSub+ Event Broker is installed <em>and</em> configured for the Codelab</li>
+<li>kedalab-helper Pod is created and ready to accept commands</li>
+<li>solace-consumer Deployment is created <em>and</em> there is 1 active replica (pod)</li>
+</ul>
+<p><strong>OPTIONAL</strong> - We can verify these conditions with the following commands:</p>
+<pre><code language="language-bash" class="language-bash">kubectl get deployments -n keda
+## Result: keda-metrics-apiserver, keda-operator READY
+
+kubectl get pods -n solace
+## Result: kedalab-helper, kedalab-pubsubplus-dev-0, and solace-consumer-[identifiers] listed
+</code></pre>
+<h2 is-upgraded>Apply the KEDA ScaledObject</h2>
+<p><em>And Secret + TriggerAuthentication!</em> We will apply the ScaledObject to the cluster and observe the Deployment scale to zero replicas.</p>
+<ol type="1">
+<li>We will use a separate terminal window to watch KEDA scale the application. Open a new terminal window and execute one of the following commands. These commands will check the status of the deployment or the replica pods continuously. &#34;`bash  Watch the solace scaler deployment  kubectl get deployment solace-consumer -n solace -w</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="OR Watch the solace scaler pods" duration="0">
+        <p>kubectl get pods -n solace -w</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="(You can also open two separate terminal windows and do both)" duration="15">
+        <pre><code>2. In your main terminal window, make sure you are in the configs/ directory and execute the command:
+```bash
+kubectl apply -f scaledobject-complete.yaml
+</code></pre>
+<ol type="1">
+<li>You should observe the replicas scale to zero pods after a few seconds. You can observe the activity in one of your terminal windows where you have an active watch <code>-w</code> option, or execute <code>kubectl get deployments solace-consumer -n solace</code></li>
+<li>View the HPA (Horizontal Pod Autoscaler) entry - When a ScaledObject is created for KEDA, KEDA creates a scaler in the Horizonal Pod Autoscaler (HPA). We can check the HPA entry with the following command.  <pre><code language="language-bash" class="language-bash">kubectl get hpa -n solace
+</code></pre>
+<ol type="1">
+<li><strong>OPTIONAL</strong> - In your watch window, press Control-C to stop the command from watching the deployment or pod replicas and return to a command prompt. (Or you can leave this command active for the next exercise)  <h2 is-upgraded>Recap: Create KEDA ScaledObject with Solace Queue Trigger</h2>
+  In this exercise we checked our readiness and then created a KEDA ScaledObject. We verified that the ScaledObject was created and active by watching the solace-consumer Deployment scale to zero replicas, and by checking the HPA entry. Positive</li>
+</ol>
+  There should be 0 replicas of the solace-consumer running in the Kubernetes cluster at this point!  Scale Deployment on Queue Message Count    <h2 is-upgraded>Execute Steps: Scale on Message Count</h2>
+  <ol type="1">
+<li>Watch KEDA scale the application. <em>(Skip this step if the watch is already active.)</em> Open a separate terminal window and execute one of the following commands. These commands will check the status of the deployment or the replica pods continuously. (When we publish messages, we can watch the deployment replicas scale up and down while this command is active.)  <pre><code language="language-bash" class="language-bash">##  Watch the solace scaler deployment (less noisy)
+kubectl get deployment solace-consumer -n solace -w
+##  OR Watch the solace scaler pods
+kubectl get pods -n solace -w
+##  (You can also open two separate terminal windows and do both)
+</code></pre>
+</li>
+</ol>
+</li>
+<li>Publish Messages - We will use SDK-Perf (Java Command-Line app) to write messages to the queue read by the solace-consumer application. At this point, there should be no active instances of the solace-consumer application. We will publish 400 messages to the queue at a rate of 50 messages per second. Each message will have a 256 byte payload. On your command line, enter:  <pre><code language="language-bash" class="language-bash">kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -cip=kedalab-pubsubplus-dev:55555 -cu consumer_user@keda_vpn -cp=consumer_pwd -mr 50 -mn 400 -msx 256 -mt=persistent -pql=SCALED_CONSUMER_QUEUE1
+#### ******* CREATE SCRIPT FOR THIS?
+</code></pre>
+<ol type="1">
+<li>Observe Scaling - View the the scaling of solace-consumer deployment in the command line window Upon publication of our messages. We expect:</li>
+</ol>
+  <ul>
+<li>KEDA will detect that the application should be active and scale the application to 1 replica.</li>
+<li>Horizontal Pod Autoscaler will then take over and scale the application to 10 replicas.</li>
+<li>When the messages have finished processing, HPA will reduce the total replicas to 1.</li>
+<li>KEDA scales the application zero replicas</li>
+</ul>
+  <ol type="1">
+<li>OPTIONAL - In your watch window, press Control-C to stop the command from watching the deployment or pod replicas and return to a command prompt. (Or you can leave this command active for the next exercise) Positive</li>
+</ol>
+  You can repeat Step 2, Publish Messages, as many times as you like and review the results. You can also modify the <code>sdkperf</code> command options to see the effects if you are familiar with the tool. The command <code>kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -h</code> will display the options.  <h2 is-upgraded>Recap: Scale on Message Count</h2>
+  We published messages to the consumer input queue hosted on our Solace Broker. We observed KEDA and HPA scale the application based on the message count from 0 to 10 replicas, and back down to 0 replicas after the input queue was cleared. PositiveThe solace-consumer should have scaled back down from its maximum of 10 back down to 0 replicas  Scale Deployment on Queue Message Spool Size    <h2 is-upgraded>Execute Steps: Scale on Message Spool Size</h2>
+  <ol type="1">
+<li>Watch KEDA scale the application. <em>(Skip if the watch is already active.)</em> Open a separate terminal window and execute one of the following commands. These commands will check the status of the deployment or the replica pods continuously. (When we publish messages, we can watch the deployment replicas scale up and down while this command is active.)  <pre><code language="language-bash" class="language-bash">##  Watch the solace scaler deployment (less noisy)
+kubectl get deployment solace-consumer -n solace -w
+##  OR Watch the solace scaler pods
+kubectl get pods -n solace -w
+##  (You can also open two separate terminal windows and do both)
+</code></pre>
+</li>
+</ol>
+</li>
+<li>Publish Messages - We will use SDK-Perf (Java Command-Line app) to write messages to the queue read by the solace-consumer application. At this point, there should be no active instances of the solace-consumer application. We will publish 50 messages to the queue at a rate of 10 messages per second. Each message will have a 4194304 byte (4 megabyte) payload. On your command line, enter:  <pre><code language="language-bash" class="language-bash">kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -cip=kedalab-pubsubplus-dev:55555 -cu consumer_user@keda_vpn -cp=consumer_pwd -mr 10 -mn 50 -msx 4194304 -mt=persistent -pql=SCALED_CONSUMER_QUEUE1
+#### ******* CREATE SCRIPT FOR THIS?
+</code></pre>
+<ol type="1">
+<li>Observe Scaling - View the the scaling of solace-consumer deployment in the command line window Upon publication of our messages. We expect:</li>
+</ol>
+  <ul>
+<li>KEDA will detect that the application should be active and scale the application to 1 replica.</li>
+<li>Horizontal Pod Autoscaler will then take over and scale the application to 10 replicas.</li>
+<li>When the messages have finished processing, HPA will reduce the total replicas to 1.</li>
+<li>KEDA scales the application zero replicas</li>
+</ul>
+  <ol type="1">
+<li>OPTIONAL - In your watch window, press Control-C to stop the command from watching the deployment or pod replicas and return to a command prompt. (Or you can leave this command active for the next exercise)  <h2 is-upgraded>Recap: Scale on Message Spool Size</h2>
+  We published messages to the consumer input queue hosted on our Solace Broker. We observed KEDA and HPA scale the application based on the message spool size from 0 to 10 replicas, and back down to 0 replicas after the input queue was cleared. Positive</li>
+</ol>
+  The solace-consumer should have scaled back down from its maximum of 10 back down to 0 replicas  <h2 is-upgraded>Modify HPA Behavior</h2>
+  <em>flapping</em> of replicas as observed metrics fluctuate. See <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">Kubernetes Horizonal Pod Autoscaler</a> for more details.  <h2 is-upgraded>Initial HPA Behavior Configuration</h2>
+  Consider the following excerpt from the ScaledObject (this section was elipsized in the earlier excerpt). This is the configuration that was used in the excercises we just completed. It specifies that HPA is permitted to scale down 100 <em>Percent</em> of the maximum pods in a 10 second period; and to scale up a maximum of 10 <em>Pods</em> in a 10 second period (The maximum number of replicas is 10). The <code>stabilizationWindowSeconds</code> is zero and therefore has no effect. Effectively, this means that HPA can fully scale up from 1 to 10 pods or down from 10 to 1 pods in a ten second period. &#34;`yaml horizontalPodAutoscalerConfig: behavior: scaleDown: stabilizationWindowSeconds: 0 policies:  <ul>
+<li>type:          Percent value:         100 periodSeconds: 10 scaleUp: stabilizationWindowSeconds: 0 policies:</li>
+<li>type:          Pods value:         10 periodSeconds: 10 selectPolicy:    Max &#34;`</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Updated HPA Behavior Configuration</h2>
+<p>We will update the configuration to reflect the following exerpt.</p>
+<pre><code language="language-yaml" class="language-yaml">horizontalPodAutoscalerConfig:
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30
+      policies:
+      - type:          Pods
+        value:         5
+        periodSeconds: 10
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type:          Pods
+        value:         2
+        periodSeconds: 10
+</code></pre>
+<p>Given this configuration, we expect that two replicas may created and up to 5 may be removed during a 10 second period. In addition, <em>scaleDown</em> has <code>stabilizationWindowSeconds=30</code> seconds. This parameter allows us to smooth out the scaling curve so that HPA is not constantly scaling up and down due to localized fluctuations in observed metric values. From the Kubernetes HPA documentation:</p>
+<p>When the metrics indicate that the target should be scaled down the algorithm looks into previously computed desired states and uses the highest value from the specified interval.</p>
+<p>Therefore, the highest desired replica count computed over a window of the last 30 seconds will be used when scaling down.</p>
+<h2 is-upgraded>Execute Steps: Updated HPA Behavior Configuration</h2>
+<ol type="1">
+<li>Watch KEDA scale the application. <em>(Skip if the watch is already active.)</em> Open a separate terminal window and execute one of the following commands. These commands will check the status of the deployment or the replica pods continuously. <code>bash<br>kubectl get deployment solace-consumer -n solace -w</code><br> 2. Update the ScaledObject to adjust the HPA Behavior to our updated configuration. _This update also contains the TriggerAuthentication and Secret figuration. <code>bash<br>kubectl apply -f scaledobject-complete-hpa.yaml<br></code></li>
+<li>Publish Messages - We will publish messages a load of messages as before: 400 messages total at a rate of 50 messages per second.  <pre><code language="language-bash" class="language-bash">kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -cip=kedalab-pubsubplus-dev:55555 -cu consumer_user@keda_vpn -cp=consumer_pwd -mr 50 -mn 400 -msx 256 -mt=persistent -pql=SCALED_CONSUMER_QUEUE1
+</code></pre>
+<ol type="1">
+<li>Observe Scaling - View the the scaling of solace-consumer deployment in the command line window Upon publication of our messages. We expect:</li>
+</ol>
+  <ul>
+<li>KEDA will detect that the application should be active and scale the application to 1 replica.</li>
+<li>Horizontal Pod Autoscaler will then take over and scale the application, incrementing by 2 replicas at a time (It may not reach the maximum of 10 replicas).</li>
+<li>The maximum replica count reached will hold longer than necessary to process all of the messages due to the <code>stabilizationWindowSeconds=30</code> setting on <em>scaleDown</em></li>
+<li>When the messages have finished processing and the stabilization window expires, HPA will scale down to 1 replica, decrementing by a maximum of 5 at a time.</li>
+<li>KEDA scales the application zero replicas</li>
+</ul>
+  <ol type="1">
+<li>In your watch window, press Control-C to stop the command from watching the deployment or pod replicas and return to a command prompt.  <h2 is-upgraded>Recap: Updated HPA Behavior Configuration</h2>
+  In this exercise we modified the HPA configuration in our scaled object. Then we published messages and observed effects, showing that we can control the increment and rate at which replicas are created and destroyed. And we observed how the stabilization window can be used to smooth out scaling over time due to temporary spikes in metric values.  Clean Up  </li>
+<li>On a command line, navigate to the <code>[codelab-root]/configs</code> directory (if you&#39;re not already there):  <pre><code language="language-bash" class="language-bash">cd ./configs
+</code></pre>
+</li>
+</ol>
+</li>
+<li>Delete the scaled KEDA Scaled Object and verify (Deletes the ScaledObject, TriggerAuthentication, and Secret)  <pre><code language="language-bash" class="language-bash">kubectl delete -f scaled-object.yaml -n solace
+kubectl get scaledobjects -n solace
+</code></pre>
+<ol type="1">
+<li>Delete the solace-consumer Deployment and verify <code>bash<br>kubectl delete -f solace-consumer.yaml -n solace<br>kubectl get deployments -n solace<br></code></li>
+</ol>
+</li>
+<li>Delete the kedalab-helper Pod and verify  <pre><code language="language-bash" class="language-bash">kubectl delete -f kedalab-helper.yaml
+kubectl get pods kedalab-helper -n solace
+</code></pre>
+<ol type="1">
+<li>Delete the Solace PubSub+ Event Broker (If Desired) <code>bash<br>helm uninstall kedalab --namespace solace<br>kubectl get statefulsets -n solace<br></code></li>
+</ol>
+</li>
+<li>Delete the <code>solace</code> namespace (assuming it is empty).  <pre><code language="language-bash" class="language-bash">kubectl get pods,services,scaledobjects,secrets,triggerauthentications -n solace
+kubectl delete namespace solace
+</code></pre>
+<ol type="1">
+<li>If desired, delete KEDA from the cluster <code>bash<br>helm uninstall keda --namespace keda<br></code></li>
+</ol>
+</li>
+<li>If the last step is complete, then delete the <code>keda</code> namespace  <pre><code language="language-bash" class="language-bash">kubectl delete namespace keda
+</code></pre>
+Conclusion  In the course of this CodeLab you learned how to install KEDA. And you learned how to configure KEDA to use the Solace Event Queue Scaler to scale deployments.  <h2 is-upgraded>Takeaways</h2>
+  ✅ Scale one of your own applications using your own broker. ✅ The scaler is still experimental: At a minimum, TLS must be added to make it operational (on our TODO list) ✅ Look for Blogs and Updates about KEDA and the Solace Event Queue Scaler on Solace Community!  <h2 is-upgraded>References</h2>
+  <ul>
+<li><a href="https://keda.sh" target="_blank">KEDA Web Site</a></li>
+<li><a href="https://keda.sh/docs/2.4/scalers/solace-event-queue/" target="_blank">KEDA - Solace PubSub+ Event Broker Queue Scaler</a></li>
+<li><a href="https://github.com/kedacore/keda" target="_blank">KEDA GitHub Project</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">Kubernetes Horizontal Pod Autoscaler</a> Positive</li>
+</ul>
+  Thank you for trying Solace-KEDA CodeLab! We hope you found it informative. <img alt="Soly Image Caption" src="img/44f356558033e250.gif"></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
