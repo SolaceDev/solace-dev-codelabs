@@ -106,9 +106,13 @@ helm repo add kedacore https://kedacore.github.io/charts
 helm repo update
 ```
 
-### Install KEDA Using the Helm chart:
+### Create keda namespace
 ```bash
 kubectl create namespace keda
+```
+
+### Install KEDA Using the Helm chart:
+```bash
 helm install keda kedacore/keda --namespace keda
 
 ## ***IMPORTANT*** Use the following until KEDA 2.4 release is available.
@@ -127,7 +131,7 @@ kubectl get deployments -n keda
 kubectl get pods -n keda
 ```
 
-## Install Solace PubSub Event Broker
+## Install Solace PubSub+ Event Broker
 
 Duration: 0:15:00
 
@@ -185,7 +189,7 @@ http://[service-external-ip-address]:8080
 
 _You should be connected to the Solace PubSub+ Event Broker_
 
-## Deploy Apps and Configure Solace PubSub+ Event Broker
+## Deploy Apps and Configure Solace Broker
 
 Duration: 0:20:00
 
@@ -231,7 +235,7 @@ kubectl get pods -n solace
 Positive
 : Note that there should be one replica of the **solace-consumer** pod running at this point. We are now ready to proceed with using KEDA to scale the solace-consumer deployment!
 
-## Review KEDA ScaledObject Configuration
+## Review ScaledObject Configuration
 
 Duration: 0:15:00
 
@@ -338,7 +342,7 @@ spec:
 Positive
 :  **TriggerAuthentication** You can find more information about **TriggerAuthentication** records on the KEDA Web site: [KEDA Authentication](https://keda.sh/docs/2.3/concepts/authentication/)
 
-## Create KEDA ScaledObject with Solace Queue Trigger
+## Create ScaledObject with Solace Queue Trigger
 
 Duration: 0:15:00
 
@@ -378,10 +382,25 @@ kubectl apply -f https://codelabs.solace.dev/codelabs/keda-solace-queue/config/s
 You should observe the replicas scale to zero pods after a few seconds. You can observe the activity in one of your terminal windows where you have an active watch `-w` option, or execute `kubectl get deployments solace-consumer -n solace`
 
 ### View the HPA (Horizontal Pod Autoscaler) entry
-When a ScaledObject is created for KEDA, KEDA creates a scaler in the Horizonal Pod Autoscaler (HPA). We can check the HPA entry with the following command.
+When a ScaledObject is created for KEDA, KEDA creates a scaler in the Horizonal Pod Autoscaler (HPA). We can list HPA entries with the following command.
 
 ```bash
 kubectl get hpa -n solace
+```
+
+Note the generated name: `keda-hpa-kedalab-scaled-object`. Let's look at the details of our scaler:
+
+```bash
+kubectl describe hpa -n solace keda-hpa-kedalab-scaled-object
+```
+
+In the output, you should be able to find the named metrics and the target values, as well as the target values as shown below. Note that the **Min replicas** value is 1, even though our KEDA configuration specified zero. This is because HPA is not capable of scaling to zero replicas, and this entry is used by HPA exclusively, not by KEDA. KEDA itself has reponsibility for scaling from 0 -> 1 and 1 -> 0 replicas. Also, the current values are shown as `<unknown>`. The reason is because (if KEDA is working properly), the target deployment has been scaled to zero replicas.
+```yaml
+Metrics:                                                                          ( current / target )
+  "solace-keda_vpn-SCALED_CONSUMER_QUEUE1-msgcount" (target average value):       <unknown> / 20
+  "solace-keda_vpn-SCALED_CONSUMER_QUEUE1-msgspoolusage" (target average value):  <unknown> / 1048576
+Min replicas:                                                                     1
+Max replicas:                                                                     10
 ```
 
 ### **OPTIONAL**: Stop the Watch Command
@@ -540,6 +559,28 @@ _This update also contains the TriggerAuthentication and Secret configuration._
 kubectl apply -f https://codelabs.solace.dev/codelabs/keda-solace-queue/config/scaledobject-complete-hpa.yaml
 ```
 
+### Inspect the updated HPA entry
+When we first created the HPA scaler, you were invited to view the configuration. Let's check the details again after the changes:
+
+```bash
+kubectl describe hpa -n solace keda-hpa-kedalab-scaled-object
+```
+
+This time, let's focus on the `Behavior:` section. The output should be as follows or similar. Note the **Scale Up** and **Scale Down** values have been updated to 2 and 5 respectively.
+```yaml
+Behavior:
+  Scale Up:
+    Stabilization Window: 0 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 2  Period: 10 seconds
+  Scale Down:
+    Stabilization Window: 30 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 5  Period: 10 seconds
+```
+
 ### Publish Messages
 We will publish a load of messages as before: 400 messages total at a rate of 50 messages per second.
 
@@ -592,11 +633,19 @@ kubectl delete -f https://codelabs.solace.dev/codelabs/keda-solace-queue/config/
 helm uninstall kedalab --namespace solace
 ```
 
+### Check that solace namespace is empty
+```bash
+kubectl get deployments,statefulsets,pods,services,hpa,scaledobjects,secrets,triggerauthentications -n solace
+
+## If there is a solace secret left over, then delete it explicitly before proceeding
+## Type: kubernetes.io/service-account-token
+kubectl delete secret -n solace <token-name>
+```
+
 ### Delete the solace namespace (assuming it is empty).
+If you delete the namespace without clearing all of the objects, then the operation may hang indefinitely.
 
 ```bash
-kubectl get deployments,statefulsets,pods,services,scaledobjects,secrets,triggerauthentications -n solace
-
 ## Ok to proceed if empty!
 kubectl delete namespace solace
 ```
