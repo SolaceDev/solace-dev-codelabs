@@ -1,0 +1,189 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>How to use the Solace Connector for Boomi Request Action</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="Boomi-request-reply"
+                  title="How to use the Solace Connector for Boomi Request Action"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Boomi-request-reply">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <p>Sometimes Boomi Atom Processes need to communicate with external services in the middle of process execution.  Anything from pulling data from a database, calling a service for a credit check, or validating the status of a warranty claim for processing a product return.  These are synchronous types of calls, meaning the Boomi Atom Process needs to wait for the response before proceeding.  On May 15th 2021, Boomi released the latest version of the Solace connector to support this type of interaction, support for a Request Action in the Solace Connector Shape.</p>
+<p>You will learn how to implement the Solace Connector for Boomi Request Action.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="0">
+        <ol type="1">
+<li>A general understanding of <a href="https://docs.solace.com/#Messagin" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
+<li>Basic knowledge of the Boomi GUI and deployments. A good place to start would be the <a href="https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html" target="_blank">Getting Started with Boomi and Solace</a> Codelab.</li>
+</ol>
+<p>After you finish the Getting Started with Boomi and Solace codelab, you&#39;ll have the following</p>
+<ul>
+<li>A Solace trial account</li>
+<li>A Boomi trial account</li>
+<li>A local atom up and running</li>
+<li>An understanding of how to deploy a Boomi process to a Boomi Atom</li>
+</ul>
+<p>Positive : If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Case Overview" duration="0">
+        <p>In this example, we will be using the new Request Action within the Solace Connector Shape to perform a blocking synchronous request/reply in the middle of a Boomi Process.  We will be using Solace to handle the request which means the document that we feed to the Solace Connector Request will be published onto a topic.  The replying service will consume that document, do something with it, and reply to a dynamically created ReplyTo topic with the response and the CorrelationID (also dynamically created by the Solace Connector).</p>
+<p>We are not going to create a service replier the first time through.  We are going to use a Solace web GUI to perform the reply so we can better see the inner workings.</p>
+<p class="image-container"><img alt="Boomi Request - Solace Shape" src="img/7121a349bed90396.png"></p>
+<ul>
+<li>1 - The Boomi Process will be setup to publish a request to the topic T/boomi/request</li>
+<li><ul>
+<li>You will configure a Solace Broker to handle</li>
+</ul>
+</li>
+<li>2 - You will use the Try Me feature of the Solace Web GUI to function as a Javascript client listening to T/boomi/request</li>
+<li>3 - You will see the request come in and manually respond using the Try Me feature (copy and paste the generated ReplyTo topic and correlation ID)</li>
+<li>4 - The Solace Broker will route the reply to the waiting Boomi Process</li>
+</ul>
+<p>POSITIVE : This is the most basic implementation of this pattern.  Queues, ACL&#39;s and other Solace features can be used for persistence, access lock down and much more.</p>
+<p>Let&#39;s get started!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a Boomi Request Process" duration="0">
+        <p>The first thing we will do is create a simple Process in Boomi that makes a request via a publication to a Solace topic</p>
+<h2 is-upgraded>Create a new Process</h2>
+<ul>
+<li>In your Boomi environment, create a new Process.  You may call it anything you like, we will be calling ours Boomi Requestor</li>
+</ul>
+<p class="image-container"><img alt="Boomi Request Process Create" src="img/d6caea8a1299f6a5.png"></p>
+<ol type="1">
+<li>Configure the Solace Connector Shape</li>
+</ol>
+<ul>
+<li>Set the start shape type to &#34;No Data&#34; <img alt="No Data Start Shape" src="img/6ecfba9d1e00a8a5.png"></li>
+</ul>
+<ol type="1">
+<li>Drag a Message Shape onto the canvas and give it some sample data</li>
+</ol>
+<ul>
+<li>I am putting a silly question in, but it does not matter.  We are not really processing this data. <img alt="Message Shape - sample data" src="img/a971400b6b53c38c.png"></li>
+</ul>
+<ol type="1">
+<li>Drag a Solace Connector Shape onto the canvas and configure to send a Request</li>
+</ol>
+<ul>
+<li>Set the Connection to your Solace instance</li>
+<li>Configure the operation as below.</li>
+<li>You can use any topic you like, or just copy the one I have below</li>
+<li>Set the Reply Timeout in the Request Operation to 100000, so we have plenty of time to manually respond. <img alt="Solace Request Operation - sample data" src="img/c6a4ae5bc9ed200.png"></li>
+</ul>
+<p>Positive : Remember, we will be using topics only in this example.  This means there is nothing to create/configure on the Solace side as topics are dynamic.  In this case our topic name is &#34;T/boomi/request&#34;.</p>
+<ul>
+<li>Add a Stop Shape to the end and then wire the shapes together and click Save <img alt="Completed Request Proocess - sample data" src="img/808b7c7c214d2ad4.png"></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace Try-Me Feature" duration="0">
+        <ol type="1">
+<li>Prepare the Solace WebUI Try-Me tab to function as the consumer of the posted request and the replier to the Boomi Atom Process</li>
+</ol>
+<ul>
+<li>Login to your Solace PS+ Service that your Boomi Process is pointed to.  Mine is hosted in Solace Cloud.</li>
+<li>Click on the Try-Me link on the left <img alt="Try-me" src="img/d7be26914c9d09a1.png"></li>
+<li>Connect the Publisher by changing the default port to 443 for Solace Cloud.</li>
+<li>Set the Username</li>
+<li>Set the Password</li>
+</ul>
+<p class="image-container"><img alt="Try me cnofig" src="img/8827139f2349a408.png"></p>
+<ul>
+<li>You can get these values in the Connect tab of the Solace Cloud Console <img alt="SolaceCloudConnectionDetails" src="img/ee42ccb6fdd2aabb.png"></li>
+<li>Confirm the &#34;Same as Publisher&#34; checkbox is checked for the Subscriber and connect both the Publisher and Subcriber to the Solace Broker by clicking Connect on each. <img alt="PublisherSubscriberConnected.png" src="img/856637335ff43fc7.png"></li>
+<li>Lastly, have the Subscriber start listening on the topic to which we will publih by typing the topic name in and clicking on Subscribe. <img alt="SubscribedToTopic" src="img/c03d55b24e5606e.png"></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Test" duration="0">
+        <p>Positive : Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along.  Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply.  You can do this as many times as you like.</p>
+<ol type="1">
+<li>Use the Test capability in Boomi to test the Request Process</li>
+</ol>
+<ul>
+<li>Go back to your Boomi Process and click Test in the upper right</li>
+</ul>
+<p class="image-container"><img alt="InitiateProcessTest" src="img/c7e63bf36c7ffb6b.png"></p>
+<ul>
+<li>You should see your test process look to hang on the Solace Request Shape. <img alt="BoomiProcessBlockOnRequest" src="img/3e2115e8b6a64d61.png"></li>
+<li>Once you see this, switch over to your Solace Try Me UI</li>
+</ul>
+<ol type="1">
+<li>Use the Solace Subscriber to confirm receipt of the request from the Boomi Process</li>
+</ol>
+<ul>
+<li>You should see that the message we configured in the Boomi Process has been recieved by our listener.  Note 3 things: The messages text should be what you entered. There should be a generated ReplyTo topic name to which we will reply. There should be a generated Correlation ID that we need to include in our reply. <img alt="RequestReceivedBySolace.png" src="img/faa956f8835fe391.png"></li>
+</ul>
+<ol type="1">
+<li>Use the Solace Publisher to publish the reply</li>
+</ol>
+<ul>
+<li>Copy and paste the ReplyTo and CorrelationID values into the Publisher and also add some text if you want to confirm that the response payload is also captured.  You will need to click on &#34;Show Advanced&#34; in order to include the CorrelationID. <img alt="PublishResponse.png" src="img/533b7b6097a6cd3b.png"></li>
+</ul>
+<ol type="1">
+<li>Use the Boomi Test capability to confirm reciept of the reply and process completion.</li>
+</ol>
+<ul>
+<li>The Boomi Process should have completed with success. <img alt="BoomiProcessComplete.png" src="img/556942c42079bf97.png"></li>
+<li>And you can check the Source data for the Stop Shape to see what data was returned. <img alt="StopShapeSourceData.png" src="img/94af0be12ff0ddd8.png"></li>
+<li>Can Solace support mid-Process requests?  Yes, it can!</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Conclusion" duration="0">
+        <h2 is-upgraded>What did you learn?</h2>
+<p>We now have a native way for Boomi Atom Processes to communicate with external services in the middle of process execution by using what you learned in this codelab:</p>
+<ol type="1">
+<li>How to configure and deploy the Solace Connector using the Request Operation.</li>
+<li>How to use that to request data/processing from an external service Positive : This service could reside as another Process on the same Boomi Atom, another Booomi Atom in the same DC, another Boomi Atom half way around the world.  The only requirement is that is can connect to the Solace Event Mesh.</li>
+<li>How to use Solace Try-Me to test successful operation of the new Solace Connector Operation.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
