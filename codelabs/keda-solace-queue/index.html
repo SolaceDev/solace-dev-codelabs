@@ -34,7 +34,7 @@
 <h2 is-upgraded>What is the Solace Scaler?</h2>
 <p>The <a href="https://keda.sh/docs/2.4cale/sollace-event-queue/" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a> defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current <strong><em>Message Count</em></strong> and <strong><em>Message Spool Usage</em></strong>. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.</p>
 <p>Consider the following diagram. A Solace PubSub+ Event Broker hosts a set of queues. The messages from each queue are being consumed by a microservice deployed to a Kubernetes cluster. KEDA uses the Solace Scaler to interface with the PubSub+ Broker via the SEMP API to obtain metrics related to the queue. In this example, we are interested in <em>Message Count</em>. Based on the Message Count retrieved for each queue, KEDA and the Horizontal Pod Autoscaler maintain the appropriate number of desired replicas.</p>
-<p class="image-container"><img alt="KEDA-Solace PubSub+" src="img/2394b7c6c2e054a6.jpeg"></p>
+<p class="image-container"><img alt="KEDA-Solace PubSub+" src="img/387edeeef3344bf8.jpeg"></p>
 <h2 is-upgraded>The Goal</h2>
 <p>The instructions in this CodeLab will provide a practical guide to using KEDA for the purpose of scaling consumers of Solace Queues.</p>
 
@@ -125,14 +125,6 @@
 </code></pre>
 <h2 is-upgraded>Install KEDA Using the Helm chart:</h2>
 <pre><code language="language-bash" class="language-bash">helm install keda kedacore/keda --namespace keda
-
-## ***IMPORTANT*** Use the following until KEDA 2.4 release is available.
-## * The Solace Scaler will not be available in the KEDA images
-##   until v2.4 is GA!
-## * The command below will pull the image from a private registry
-##   instead of the ghcr.io/kedacore registry.
-## * Note: The keda namespace must be created as above
-helm install keda kedacore/keda --namespace keda --set image.keda.repository=docker.io/dennisbrinley/keda --set image.keda.tag=main --set image.metricsApiServer.repository=docker.io/dennisbrinley/keda-metrics-apiserver --set image.metricsApiServer.tag=main
 </code></pre>
 <h2 is-upgraded>Check your installation</h2>
 <pre><code language="language-bash" class="language-bash">## Make sure that the deployments/pods are Ready!

@@ -114,14 +114,6 @@ kubectl create namespace keda
 ### Install KEDA Using the Helm chart:
 ```bash
 helm install keda kedacore/keda --namespace keda
-
-## ***IMPORTANT*** Use the following until KEDA 2.4 release is available.
-## * The Solace Scaler will not be available in the KEDA images
-##   until v2.4 is GA!
-## * The command below will pull the image from a private registry
-##   instead of the ghcr.io/kedacore registry.
-## * Note: The keda namespace must be created as above
-helm install keda kedacore/keda --namespace keda --set image.keda.repository=docker.io/dennisbrinley/keda --set image.keda.tag=main --set image.metricsApiServer.repository=docker.io/dennisbrinley/keda-metrics-apiserver --set image.metricsApiServer.tag=main
 ```
 
 ### Check your installation

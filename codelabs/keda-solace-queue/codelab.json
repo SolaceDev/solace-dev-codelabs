@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-07-30T14:59:21-04:00",
+  "updated": "2021-08-19T18:11:49-04:00",
   "id": "keda-solace-queue",
   "duration": 180,
   "title": "KEDA with Solace PubSub+ Event Queues",
