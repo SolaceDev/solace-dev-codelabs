@@ -1,0 +1,262 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>A Solace Primer - Getting Started with Solace PubSub&#43; Event Broker</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-3921398-10"></google-codelab-analytics>
+  <google-codelab codelab-gaid="UA-3921398-10"
+                  id="get-started-basics"
+                  title="A Solace Primer - Getting Started with Solace PubSub&#43; Event Broker"
+                  environment="web"
+                  feedback-link="https://solace.community/">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p>Hello and welcome!  If you&#39;ve never interacted with a Solace event broker before, you&#39;re in the right place. In this introductory CodeLab, you&#39;ll learn how to:</p>
+<ul>
+<li>Setup a <strong>Solace PubSub+ event broker</strong>, and/or start a <strong>PubSub+ Cloud</strong> service</li>
+<li>Login to the PubSub+ Manager GUI</li>
+<li>Utilize test WebSockets applications to send and receive data using <strong>Publish-Subscribe</strong>, the fundamental communication pattern for event-driven applications</li>
+<li>Improve routing and filtering using <strong>topic hierarchies and wildcards</strong></li>
+<li>Create a durable queue for <strong>Guaranteed</strong> Messaging</li>
+<li>Test Guaranteed messaging to ensure no message loss</li>
+<li>Enable <strong>Replay</strong> on the Solace broker, and test it</li>
+</ul>
+<p class="image-container"><img alt="picture" src="img/e9acad34fc34a8c8.png"></p>
+<aside class="special"><p>This CodeLab does not cover the <strong>Event Portal</strong>. That will be addressed in a separate CodeLab.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="1">
+        <p>In order to complete this CodeLab, you will need to get access to a Solace PubSub+ event broker.</p>
+<p>At minimum, you will need to have internet access and a browser to use Solace PubSub+ Cloud.</p>
+<p>To run the software broker, you&#39;ll need to have Docker, VirtualBox, VMWare Player, or another similar technology available to you.  More details in the next step.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Starting a Solace PubSub&#43; Event Broker" duration="10">
+        <p>Let&#39;s get access to a Solace PubSub+ event broker!</p>
+<h2 is-upgraded>PubSub+ Cloud</h2>
+<p>Super easy, with no setup or hardware or anything required.  <em>Solace as a Service</em>!  Point your browser to <a href="https://console.solace.cloud/login/new-account" target="_blank">console.solace.cloud</a> to sign up for a free account.</p>
+<p class="image-container"><img alt="picture" src="img/141ea03bdd9ebc1d.png"></p>
+<p>Enter your specifics, and get signed up for an account.</p>
+<p>Once you are logged in, you should see something like this:</p>
+<p class="image-container"><img alt="picture" src="img/55cf7b7d79664e5.png"></p>
+<p>Click on &#34;Cluster Manager&#34; to go into where you create and manage your broker services.  Then click the big &#34;+&#34; Plus button to create a new Service.  Ensure you have selected Developer Service, choose a cloud provider you&#39;d like to host the broker, and then click the map to find a region close to you:</p>
+<p class="image-container"><img alt="picture" src="img/8c1c4a649ca6c677.png"></p>
+<p>Give your Solace PubSub+ Cloud service instance a name, and then tell it to start!  Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc.  It takes about 5 minutes, and then you&#39;ll be ready!</p>
+<aside class="special"><p>It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
+</aside>
+<h2 is-upgraded>Software Broker</h2>
+<p>There are multiple options on how to install/download/configure/run the PubSub+ broker:</p>
+<ul>
+<li>If you have Docker installed, this is <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">probably the easist way</a>. Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:  <pre><code>docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+</code></pre>
+<ul>
+<li>Other Docker options are here: <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm</a></li>
+</ul>
+</li>
+</ul>
+<aside class="warning"><p><strong>NOTE:</strong> if you are running on a <strong>Mac</strong>, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the <code>docker run</code> command above, with <code>-p 4444:55555</code></p>
+</aside>
+<ul>
+<li>To run VirtualBox, VMWare, HyperV, and others: check out <a href="https://solace.com/downloads" target="_blank">solace.com/downloads</a></li>
+<li>Lots of other software install options are here:  <ul>
+<li><a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm</a></li>
+<li><a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm</a></li>
+</ul>
+</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Log in to the Management GUI" duration="2">
+        <p>Ok, now that we (are pretty sure we) have a Solace broker up and running, let&#39;s log in to it!</p>
+<h2 is-upgraded>Solace PubSub+ Cloud</h2>
+<p>Once your service is deployed and ready, simply click on it to go into it and look at some basic configuration information:</p>
+<p class="image-container"><img alt="picture" src="img/317f41284b791582.png"></p>
+<p>Notice some of the buttons across the top:</p>
+<ul>
+<li>The &#34;Connect&#34; tab shows you all the required connection information for your messaging pub/sub applications (e.g. host, username, password, etc.), which we&#39;ll need in later steps. The info can be grouped either by protocol or by programming language.</li>
+<li>At the top-right, there should be a button saying &#34;Open PubSub+ Broker Manager&#34;.  Click on that to go into the Manager GUI.</li>
+</ul>
+<h2 is-upgraded>Installed Software Broker</h2>
+<p>If you&#39;ve installed Solace on your local host (laptop or whatever), point your browser to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.  Or whatever IP address where it&#39;s running.  Just remember to use port 8080 for the managment access. You should see a login screen like:</p>
+<p class="image-container"><img alt="picture" src="img/8531bcb7ac7e7bef.png"></p>
+<p>Login with credentials <code>admin</code> / <code>admin</code>.  Once connected, you should presented with a screen to choose which Message VPN to use.  You will only have one, the &#34;default&#34; VPN:</p>
+<p class="image-container"><img alt="picture" src="img/4a7463aaf3cb8971.png"></p>
+<p>Click on that box!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Looking around the PubSub&#43; Manager" duration="5">
+        <p>Welcome to the Solace event broker management GUI!  From this webapp, you&#39;ll be able to view configured and runtime information, create new queues, create usernames and profiles, and other various administrative tasks for the Solace broker.</p>
+<p class="image-container"><img alt="picture" src="img/86c89b5a3abc3e13.png"></p>
+<p>On the left side of the screen are the main sections to navigate through:</p>
+<ul>
+<li><strong>Message VPN:</strong> VPN-level stats and config (a <a href="https://docs.solace.com/PubSub-Basics/Message-VPNs.htm" target="_blank">Message VPN</a> is a <em>virtual partition</em> of a single broker... one Solace broker can host multiple Message VPNs, and each VPN can have different authorization schemes and topic spaces; client/messaging application activity happens within the scope of a VPN)</li>
+<li><strong>Clients:</strong> information about connected and configured client applications</li>
+<li><strong>Queues:</strong> used for Guaranteed / persistent messaging</li>
+<li><strong>Connectors:</strong> helpful wizards to connect to a variety of web services</li>
+<li><strong>Access Control:</strong> where you create new client usernames, ACL profiles, and client profiles</li>
+<li><strong>Replay:</strong> where you can enable replay, to allow the broker to send previous messages again  <ul>
+<li><strong>NOTE:</strong> Solace brokers do not use replay for recovery of persistent data (like Kafka)... there is a more fine-grained approach in Solace where each individual message is ACKnowledged to the broker when the consumer application is done with it</li>
+</ul>
+</li>
+<li><strong>Try Me!</strong> this is where we will connect two WebSocket test applications</li>
+</ul>
+<aside class="special"><p>Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Try Me!" duration="5">
+        <p>On the left menu, click the <strong>Try Me!</strong> button to load the two WebSocket test apps: a Publisher (left) and a Subscriber (right).</p>
+<p class="image-container"><img alt="picture" src="img/38836a78964d1b4.png"></p>
+<p>Click on the &#34;Connect&#34; button of both the Publisher and the Subscriber.  The green &#34;Connected&#34; icon should light up. This creates <em>two WebSocket connections</em> from your browser using a JavaScript API into the Solace event broker. The two apps are going to talk to each other <em>through</em> the Solace broker, even though they are running on the same page.</p>
+<h2 is-upgraded>Solace Cloud</h2>
+<aside class="warning"><p><strong>NOTE:</strong> if using <strong>Solace Cloud</strong>, you will need to enter your client application credentials here, rather than using the <code>default</code> values.  These can be found on the &#34;Connect&#34; tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.</p>
+</aside>
+<p class="image-container"><img alt="picture" src="img/38a33aada9340558.png"></p>
+<p>Choose, &#34;Solace Web Messaging&#34; and copy the username, password, and port for Secure <code>wss</code>. Back on the Try Me! tab, click the little right-arrow <code>></code> next to the &#34;Connect&#34; button to open the dropdown list, and enter your connection information (make sure you use the correct port number).</p>
+<p class="image-container"><img alt="picture" src="img/f296fe7f337cf9b4.png"></p>
+<h2 is-upgraded>Connected!</h2>
+<p>Once you are connected, hit the &#34;Subscribe&#34; button on the right to add a single topic subscription to the Subscriber application (currently <code>try-me</code> topic). On the left side, try Publishing some messages and ensure they go through.</p>
+<p>Try changing the topic and see what happens. Try unsubscribing and see what happens. When using <strong>Direct</strong> messaging, subscribing clients must be online (and subscribed) in order to receive published messages.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Topic Hierarchies and Wildcards" duration="5">
+        <p>Solace supports a <strong>hierarchical topic</strong> structure, which mean you can be very descriptive in defining your topic... use it to describe the contents/intent of your message payload data. No need to use flat, coarse-grained topic labels like other brokers. Check out this documenation and this video for more information:</p>
+<ul>
+<li><a href="https://docs.solace.com/PubSub-Basics/Understanding-Topics.htm" target="_blank">Docs: Understanding Topics</a></li>
+<li><a href="https://www.youtube.com/watch?v=PP1nNlgERQI" target="_blank">Video: All About Solace Topics</a></li>
+</ul>
+<p>Each and every message can be published to a unique topic, depending on the event metadata. Some examples of valid Solace topics are:</p>
+<ul>
+<li><code>hello/world/solace</code></li>
+<li><code>acme/taxi/rider/hail</code></li>
+<li><code>city/train/1234/alert/stopped</code></li>
+<li><code>mfg/plant42/inv/update/p12345667</code></li>
+<li><code>payme/debit/qr/bank01/f89a09-2b9c065a3/ok</code></li>
+</ul>
+<h2 is-upgraded>Subscription Wildcards</h2>
+<p>Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:</p>
+<ul>
+<li><code>*</code> single-level wildcard, matches up to the next level <code>/</code>. Can be used with a prefix e.g.: <code>abc*</code></li>
+<li><code>></code> multi-level wildcard, matches one-or-more levels. Must occur at the end of the topic subscription.</li>
+</ul>
+<p>Some examples of Solace topic subscriptions:</p>
+<ul>
+<li><code>hello/world/*</code></li>
+<li><code>acme/taxi/rider/></code></li>
+<li><code>city/*/*/alert/></code></li>
+<li><code>mfg/plant*/inv/update/></code></li>
+<li><code>payme/debit/*/bank01/*/ok</code></li>
+</ul>
+<p>You can read more about <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">topic wildcard subscriptions</a> here.</p>
+<aside class="special"><p>Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating a Queue for Guaranteed Delivery" duration="3">
+        <p>To use Solace&#39;s Guaranteed delivery (aka persistent messaging) so that no messages can be lost, even during network disconnects or broker restarts, then we need a <strong>queue endpoint</strong> to hold onto the messages for the consumer while it might be offline.</p>
+<p>On the left side of the Manager GUI, click on &#34;Queues&#34;: <img alt="picture" src="img/fdc60b8e72aff999.png"></p>
+<p>Click the &#34;+ Queue&#34; to create a new queue: <img alt="picture" src="img/16568d4d77e5e90e.png"></p>
+<p>Give the queue a name, and hit &#34;Create&#34;: <img alt="picture" src="img/ef89d322c5be59a0.png"></p>
+<p>Optionally configure some settings (e.g. max quota), but you can leave everything as-is for now. Hit &#34;Apply&#34;: <img alt="picture" src="img/b0d17c4b2e1f7e2a.png"></p>
+<p>You have a new queue! 🎉</p>
+<h2 is-upgraded>A Bit of Best Practices: Queue Subscriptions!</h2>
+<p>Now, Solace supports publishing directly to a queue, and many legacy point-to-point style applications still do this. But there are massive architectural benefits to using the <strong>Publish-Subscribe</strong> or <strong>pub/sub</strong> pattern. And for this, we will need to <strong>add a topic subscription to the queue</strong>, so it attracts messages with matching topics (just like the test WebSocket app was doing).</p>
+<p>Click on the queue to go into its details: <img alt="picture" src="img/79108de500d5c053.png"></p>
+<p>Click on the &#34;Subscriptions&#34; tab on the top row: <img alt="picture" src="img/1c3f996f7354fe20.png"></p>
+<p>Click on the &#34;+ Subscription&#34; to add a new subscription(s): <img alt="picture" src="img/4c0ac222462e45dc.png"></p>
+<p>Enter a new topic subscription, feel free to use wildcards: <img alt="picture" src="img/7526394a5821b499.png"></p>
+<p>Add another one if you wish, queues can have multiple subscriptions: <img alt="picture" src="img/5b9ddf532e4cf74.png"></p>
+<p>Click &#34;Create&#34; and that&#39;s it... your queue now has topic subscriptions to attract messages published on matching topics!</p>
+<aside class="special"><p>Some brokers call this &#34;topic-to-queue chaining&#34; or &#34;topic-to-queue mapping&#34;, but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Persistent Pub/Sub Try Me!" duration="5">
+        <p>Now that a queue is created for the consumer, we can test it out with the Try Me! test apps again. On the Try Me! tab, on right right side Subscriber, click the &#34;Bind to endpoint to receive guaranteed messages&#34; button: <img alt="picture" src="img/349d70d7a3aad56a.png"></p>
+<p>Enter the name of your queue, and hit &#34;Start Consume&#34;: <img alt="picture" src="img/4fd55f5a5ba3f277.png"></p>
+<p>This will <em>bind</em> the Subscriber application to the queue, and any data that the queue receives will be send to the application.</p>
+<p>Now you&#39;re ready to publish. On the Publisher side, change the topic to something that will match the (wildcarded?) subscription you added to the queue. Ensure that you have changed the &#34;Delivery Mode&#34; (aka quality of service) to <strong>Persistent</strong>: <img alt="picture" src="img/e788e3a58b8c706f.png"></p>
+<p>Hit &#34;Publish&#34; and make sure your messages appear on the other side. <img alt="picture" src="img/7229ad3bf7c89421.png"></p>
+<p>Now try disconnecting the Subscriber application, and publish a few more messages. Reconnect the subscriber and rebind to the queue and observe what happens.</p>
+<aside class="warning"><p><strong>NOTE:</strong> it is possible to publish your messages as &#34;Direct&#34;, and they will still go into the queue if the topic subscription matches. This is called <em>message promotion</em> and is a more advanced concept. For use cases where end-to-end persistence is desired, ensure the publisher has set the Delivery Mode of the message to &#34;Persistent&#34; for sending Guaranteed messages.</p>
+</aside>
+<p>For more information on Guaranteed messaging and queues, please refer to these links:</p>
+<ul>
+<li><a href="https://docs.solace.com/PubSub-Basics/Core-Concepts-Message-Delivery-Modes.htm" target="_blank">https://docs.solace.com/PubSub-Basics/Core-Concepts-Message-Delivery-Modes.htm</a></li>
+<li><a href="https://docs.solace.com/PubSub-Basics/Core-Concepts-Endpoints-Queues.htm" target="_blank">https://docs.solace.com/PubSub-Basics/Core-Concepts-Endpoints-Queues.htm</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Enabling Message Replay" duration="4">
+        <p class="image-container"><img alt="picture" src="img/27f4bcb23bd76a29.png"></p>
+<p>This will be left as an exercise to the reader. Once you turn it on, navigate back to the &#34;Queues&#34; tab, select your queue, and see what &#34;Actions&#34; you can find to perform.</p>
+<aside class="warning"><p><strong>NOTE:</strong> if using <strong>Solace Cloud</strong>, you will have to send a service request to the Solace Cloud Support team to enable Replay on your broker. Click on the &#34;?&#34; icon in Solace Cloud Mission Control, and say that you would like to test out Replay. <img alt="picture" src="img/ea7ba7aa93d499c3.png"></p>
+</aside>
+<p>Back on the Try Me! tab, even though the Subscriber has consumed and ACKnowledged all its Guaranteed messages, you can use Repaly to send the messages to it again. But recall: <strong>Solace does not use replay for recovery</strong>... if a subscriber application crashes after receiving a message but hasn&#39;t ACKnowledged it, the broker will resend the message when the subscriber reconnects.</p>
+<p>For more information about Replay and/or acknowledging messages, check the following links:</p>
+<ul>
+<li><a href="https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay" target="_blank">https://docs.solace.com/Overviews/Message-Replay-Overview.htm?Highlight=replay</a></li>
+<li><a href="https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm" target="_blank">https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Acknowledging-Messages.htm</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <p>This CodeLab has shown the very basics of application messaging using publish-subscribe and the Solace event broker.  For next steps, please consider one of these other CodeLab tutorials:</p>
+<ul>
+<li><a href="https://codelabs.solace.dev/codelabs/exploring-solace-native-apis/index.html" target="_blank">Exploring Solace Native APIs - The Basics</a></li>
+<li><a href="https://codelabs.solace.dev/codelabs/solace-event-enable-rest/index.html" target="_blank">How to Event-Enable your REST Architecture with Solace PubSub+</a></li>
+</ul>
+<p>Thank you for your time.  Please come find us on <a href="https://solace.community/" target="_blank">Solace Community</a> to ask any questions!</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

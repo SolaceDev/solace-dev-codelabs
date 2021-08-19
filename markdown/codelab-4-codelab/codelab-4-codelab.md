@@ -125,13 +125,17 @@ Start by
 1. Forking the solace-dev-codelabs repo from [https://github.com/SolaceDev/solace-dev-codelabs](https://github.com/SolaceDev/solace-dev-codelabs)  
    ![image_caption](img/fork.png)
 
-2. Clone your fork. Note: replace `<Your_Github_User>` with your github username and `<name_of_codelab>` with the name of your codelabs
+2. Clone your fork. Note: replace `<Your_Github_User>` with your github username and `<name_of_codelab>` with the name of your codelabs. See note below if you do not have ssh setup
 
 ```bash
 git clone git@github.com:<Your_Github_User>/solace-dev-codelabs.git
 cd solace-dev-codelabs
 git checkout -b add-codelab-<name_of_codelab>
 ```
+
+Negative
+: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:  
+`git clone https://github.com/<Your_Github_User>/solace-dev-codelabs.git`
 
 Then follow one of the two options in the next two steps: Automated or Manual
 
@@ -150,7 +154,7 @@ Duration: 0:05:00
 1. Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal `npm install`
 1. Compile and start the claat server by running `npm run watch`. Note: This will open a tab in your browser and serve your markdown file
 1. Edit your `<name-of-codelab>.md` file in your text editor of choice
-1. When ready, run `export.sh`
+1. When ready, run the export script as follows `./export.sh`
 
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory

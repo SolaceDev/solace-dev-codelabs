@@ -109,8 +109,9 @@ Positive
 
 You can either navigate to the links below for more information or follow the steps after
 
-1. [Windows Machine](https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows_beec31b0-477d-430b-a744-cedb3a8d67eb.html).
-1. [Using Docker](https://help.boomi.com/bundle/integration/page/t-atm-Using_Docker_to_install_a_local_Atom_on_Linux_b54f0e8c-c02c-4eea-87f5-7233d1c5e0a5.html).
+1. [Windows Machine](https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html).
+1. [Linux](https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html).
+1. [MacOS Using Docker](https://github.com/anthonyrabiaza/Boomi-on-Mac)
 
 👉 Navigate to the **Manage** tab and click on **Atom Management**
 
@@ -305,7 +306,7 @@ Positive
 
 In order to test out the end to end connection and make sure that the events sent from the Solace PubSub+ broker are being received by the Solace Boomi Connector, we want to add a way to log the events received. To do so, lets go ahead and add a Notify shape
 
-👉 Search for and drag the notify shape into the canvas
+👉 Search for and drag the notify shape into the canvas from the "Search Shapes" section
 
 ![notify-search](img/notify-search.png "notify-search")
 
@@ -370,7 +371,7 @@ Positive
 
 ![tryme](img/tryme.png "tryme")
 
-👉 In the Publisher section, click on the **Connect** button, change the topic to be `acme/rideshare/ride/requested/0.0.1` (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want
+👉 In the Publisher section, click on the **Connect** button, change the topic to be `taxi/nyc/v1/dropoff/rideX` (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want
 
 ![publisher-connect](img/publisher-connect.png "publisher-connect")
 
@@ -394,7 +395,7 @@ You will see the process reporting menu with your newly created **NewProcess** p
 You're done!
 
 Positive
-: Note that any publisher that publishes on topic `acme/rideshare/ride/requested/0.0.1` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
+: Note that any publisher that publishes on topic `taxi/nyc/v1/dropoff/>` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
 
 ## Takeaways
 
