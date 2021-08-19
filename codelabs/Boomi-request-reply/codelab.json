@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-07-22T16:15:56-07:00",
+  "updated": "2021-08-19T13:16:47-07:00",
   "id": "Boomi-request-reply",
   "duration": 5,
   "title": "How to use the Solace Connector for Boomi Request Action",
@@ -15,8 +15,7 @@
   ],
   "category": [
     "boomi",
-    "request",
-    "reply"
+    "request-reply"
   ],
   "tags": [
     "web"
