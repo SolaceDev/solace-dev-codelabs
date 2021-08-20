@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solace-consumer
+  namespace: solace
+spec:
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+      name: docker-test-pod
+    spec:
+      containers:
+      - name: solace-jms-consumer
+        image: ghcr.io/solacelabs/kedalab-consumer:latest
+        env:
+        - name:  SOLACE_CLIENT_HOST
+          value: tcp://kedalab-pubsubplus-dev:55555
+        - name:  SOLACE_CLIENT_MSGVPN
+          value: keda_vpn
+        - name:  SOLACE_CLIENT_USERNAME
+          value: consumer_user
+        - name:  SOLACE_CLIENT_PASSWORD
+          value: consumer_pwd
+        - name:  SOLACE_CLIENT_QUEUENAME
+          value: SCALED_CONSUMER_QUEUE1
+        - name:  SOLACE_CLIENT_CONSUMER_DELAY
+          value: '1000'
+        imagePullPolicy: Always
+      restartPolicy: Always
