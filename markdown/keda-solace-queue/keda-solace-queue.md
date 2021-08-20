@@ -32,6 +32,8 @@ The instructions in this CodeLab will provide a practical guide to using KEDA fo
 
 Duration: 00:02:00
 
+![KEDA Word](img/keda-word.png)
+
 - How to install KEDA to your Kubernetes Cluster
 - The basics of how KEDA works with Kubernetes Horizonal Pod Autoscaler (HPA)
 - How to configure KEDA to scale an application based on a Solace PubSub+ Event Broker Queue
@@ -91,6 +93,8 @@ Positive
 
 Duration: 0:15:00
 
+![](img/keda-icon.png)
+
 You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the [KEDA Web site](https://keda.sh/docs/2.3/deploy/). We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.
 
 Negative
@@ -126,6 +130,8 @@ kubectl get pods -n keda
 ## Install Solace PubSub+ Event Broker
 
 Duration: 0:15:00
+
+![Solace PubSub+ Event Broker](img/solace-pubsubplus.png)
 
 Follow the instructions to install a Solace PubSub+ Event Broker to your Kubernetes cluster. The broker will be installed to `namespace=solace`. The broker will be created with an administrative user=**admin** and password=**KedaLabAdminPwd1**. We will configure the broker subsequently in the next section.
 

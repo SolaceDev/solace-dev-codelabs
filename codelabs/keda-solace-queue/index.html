@@ -42,7 +42,8 @@
       </google-codelab-step>
     
       <google-codelab-step label="What you&#39;ll learn" duration="2">
-        <ul>
+        <p class="image-container"><img alt="KEDA Word" src="img/de29ee8fc5bf583.png"></p>
+<ul>
 <li>How to install KEDA to your Kubernetes Cluster</li>
 <li>The basics of how KEDA works with Kubernetes Horizonal Pod Autoscaler (HPA)</li>
 <li>How to configure KEDA to scale an application based on a Solace PubSub+ Event Broker Queue</li>
@@ -111,7 +112,8 @@
       </google-codelab-step>
     
       <google-codelab-step label="Install KEDA" duration="15">
-        <p>You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the <a href="https://keda.sh/docs/2.3/deploy/" target="_blank">KEDA Web site</a>. We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.</p>
+        <p class="image-container"><img src="img/218cce86b2d8dd75.png"></p>
+<p>You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the <a href="https://keda.sh/docs/2.3/deploy/" target="_blank">KEDA Web site</a>. We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.</p>
 <aside class="warning"><p>If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br><em>It may be necessary to update the installation OR to uninstall keda and then re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4</em>.</p>
 </aside>
 <h2 is-upgraded>Add Helm repo (if not already added)</h2>
@@ -136,7 +138,8 @@ kubectl get pods -n keda
       </google-codelab-step>
     
       <google-codelab-step label="Install Solace PubSub&#43; Event Broker" duration="15">
-        <p>Follow the instructions to install a Solace PubSub+ Event Broker to your Kubernetes cluster. The broker will be installed to <code>namespace=solace</code>. The broker will be created with an administrative user=<strong>admin</strong> and password=<strong>KedaLabAdminPwd1</strong>. We will configure the broker subsequently in the next section.</p>
+        <p class="image-container"><img alt="Solace PubSub+ Event Broker" src="img/b988d6019600508f.png"></p>
+<p>Follow the instructions to install a Solace PubSub+ Event Broker to your Kubernetes cluster. The broker will be installed to <code>namespace=solace</code>. The broker will be created with an administrative user=<strong>admin</strong> and password=<strong>KedaLabAdminPwd1</strong>. We will configure the broker subsequently in the next section.</p>
 <h2 is-upgraded>Add Helm repo</h2>
 <pre><code language="language-bash" class="language-bash">helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
 </code></pre>
