@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-08-21T23:30:37+08:00",
+  "id": "FinalReport",
+  "duration": 0,
+  "title": "Final Project Report – Web App",
+  "summary": "",
+  "source": "FinalReport.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/FinalReport",
+  "url": "FinalReport"
+}
