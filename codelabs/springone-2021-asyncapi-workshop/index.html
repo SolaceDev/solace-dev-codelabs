@@ -1,0 +1,315 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="springone-2021-asyncapi-workshop"
+                  title="Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/springone-2021-asyncapi-workshop">
+    
+      <google-codelab-step label="Overview" duration="0">
+        <p>Are you passionate about building modern, real-time applications? Is your organization adopting an event-driven architecture (EDA) to compete in our event-driven world? Build and expand your developer toolbox by learning how to define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an event mesh.</p>
+<p>In this workshop, we will create API Products that helps others to consume  Business capabilities of a <em>SmartTown</em> where APIs are a way of life. We will also</p>
+<ul>
+<li>Learn how to define asynchronous APIs.</li>
+<li>Use the AsyncAPI Generator template for Spring Cloud Stream.</li>
+<li>Develop event-driven microservices using Spring Cloud Stream and Java.</li>
+<li>Connect your microservices to an event mesh made of PubSub+ Event Brokers and stream events across the globe</li>
+</ul>
+<p>Prerequisites</p>
+<ul>
+<li>Intermediate level of knowledge coding with Java</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Requirements" duration="8">
+        <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>AsyncAPI Generator Requirements</h2>
+<p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
+<ul>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+ (Check version using <code>npm -version</code>)</li>
+</ul>
+<p>We&#39;ll install the generator itself later 👍</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>PubSub+ Event Broker</h2>
+<p>✅ The credentials for connecting to Solace PubSub+ Event Broker will be shared by the instructor.</p>
+<ul>
+<li>SMF Host: <code>tcp://?????.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>springone-2021</code></li>
+<li>Username: <code>smarttown</code></li>
+<li>Password: <code>smarttown</code></li>
+</ul>
+<p>✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop.</p>
+<aside class="special"><p>If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
+</aside>
+<p>✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations  to stream events across the globe.🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Spring Cloud Stream" duration="0">
+        <p class="image-container"><img alt="Cloud Stream Intro" src="img/f4bfccdf4fb492d0.png"></p>
+<p>Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we&#39;ll cover in a bit. The framework is based on Spring Boot and Spring Integration.</p>
+<p>Spring Cloud Stream has three different types of message exchange contracts as pictures below.</p>
+<ol type="1">
+<li>Suppliers are sources of events</li>
+<li>Sinks are consumers of events</li>
+<li>Processors are both consumers and subscribers of events</li>
+</ol>
+<h2 is-upgraded>Message Exchange Contracts Map to Java Functions</h2>
+<p>As of Spring Cloud Stream v3 the preferred programming model is to use Java Functions to implement your cloud stream apps.</p>
+<p>We just mentioned the 3 types of Cloud Stream message exchange contract are &#34;Sources&#34;, &#34;Sinks&#34; and &#34;Processors&#34;. Those map to functions as follows:</p>
+<ul>
+<li><code>java.util.function.Supplier</code> -&gt; Source [Producer/Publisher of Events]</li>
+<li><code>java.util.function.Consumer</code> -&gt; Sink [Subscriber/Consumer of Events]</li>
+<li><code>java.util.function.Function</code> -&gt; Processor [ Consumes, Processes, and Produces Events ]</li>
+</ul>
+<h2 is-upgraded>Binders</h2>
+<p>Spring Cloud Stream Binders are really what make the framework useful. Binders provide an abstraction layer between your code and the messaging systems over which events are flowing. This allows you to write your code without having to worry about learning messaging APIs! When messages are sent or received from the messaging system they pass through the messaging system specific binder which knows how to communicate with that specific message broker.</p>
+<p>As of the creation of this codelab the available Cloud Stream Binders are:</p>
+<ul>
+<li>RabbitMQ</li>
+<li>Apache Kafka</li>
+<li>Amazon Kinesis</li>
+<li>Google PubSub</li>
+<li>Solace PubSub+</li>
+<li>Azure Event Hubs</li>
+<li>Apache RocketMQ</li>
+</ul>
+<aside class="special"><p>Today we&#39;re going to use the <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter" target="_blank">Solace PubSub+ Binder</a> which supports publish subscribe and consumer groups.</p>
+</aside>
+<h2 is-upgraded>Communication Models</h2>
+<p>Instead of having to learn Messaging APIs, developers just have to understand the communication models that Spring Cloud Stream supports. There are 3 supported models, but support varies per binder.</p>
+<ol type="1">
+<li>Publish-subscribe: subscribers are independent from each other &amp; receive events in order</li>
+<li>Consumer groups: fan-out and load-balancing across multiple consumers</li>
+<li>Stateful partitioning support: in-order processing for consistency and performance</li>
+</ol>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li>The Spring Cloud Stream <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference" target="_blank">Reference Guide</a></li>
+<li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="AsyncAPI" duration="0">
+        <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
+<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world. It is an open source initiative that provides both a specification to describe and document your asynchronous applications in a machine-readable format, and tooling (such as code generators) to make life easier for developers tasked with implementing them.</p>
+<h2 is-upgraded>AsyncAPI Document</h2>
+<p>The first step is to obtain an AsyncAPI document that defines the application that you want to develop. Per the specification, this document is represented as JSON objects and must conform to the JSON standards. YAML, being a superset of JSON, can also be used. There are two main ways of going about obtaining this document: manually create the document or use an event portal.</p>
+<p>If you decide to manually create the document after familiarizing yourself with the specification, don&#39;t worry – you won&#39;t be starting with a blank slate. The AsyncAPI initiative has provided a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make this easier. On the left side of the playground you can familiarize yourself with the specification and make changes to a real AsyncAPI document, and as you do so the right side of the screen updates to show how the document is parsed into a more human-readable format.</p>
+<p>Alternatively you can generate this document from EDA tools such as Event Portal of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design your event-driven architecture. The team would define the applications that exist in the system, as well as the events that are exchanged and the schemas which define them. Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
+<h2 is-upgraded>AsyncAPI Generator</h2>
+<p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
+<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we&#39;re going to use the Spring Cloud Stream template.</p>
+<p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
+<pre><code>Example:  
+
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git 
+</code></pre>
+<h2 is-upgraded>Coding Business Logic</h2>
+<p>The generated spring project looks like a regular Spring Boot Java project with generated classes under the javaPackage and an <em>application.yml</em> file for configuration. Generated classes under javaPackage include Plain Old Java Objects (POJOs) defined from the schemas in the AsyncAPI document and <em>Application.java</em> which contains the actual Spring Cloud Functions where we&#39;ll add our business logic.</p>
+<p>The generator will add additional functions to handle messages delivered on the channels as defined in the AsyncAPI document.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Event Mesh" duration="0">
+        <p class="image-container"><img src="img/124f1525945a39ad.png"></p>
+<p>An event mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices. It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.</p>
+<p>In other words, an event mesh is an architecture layer that allows events from one application to be dynamically routed and received by any other application no matter where these applications are deployed (no cloud, private cloud, public cloud). This layer is composed of a network of event brokers.</p>
+<h2 is-upgraded>How is &#34;event mesh&#34; different from service mesh?</h2>
+<p>Event mesh complements service mesh. It is a layer parallel to service mesh and completes the application architecture by providing the full set of inter-application communication patterns: service mesh for RESTful and general request/reply interactions; event mesh for asynchronous, event-based interactions. Refer to the layering diagram below for position of each in an application stack.</p>
+<p>Both meshes are similar in that they enable better communication between applications by putting certain functions into a layer between the network and the application. However, there are a few important distinctions:</p>
+<ul>
+<li>Service mesh connects microservices in cloud environments – Kubernetes only today – with the promise of enabling this communication between different Kubernetes clusters and perhaps other clouds in the future.</li>
+<li>Event mesh connects not only microservices but also legacy applications, cloud-native services, devices, and data sources/sinks and these can operate both in cloud and non-cloud environments. An event mesh can connect any event source to any event handler.</li>
+</ul>
+<p class="image-container"><img src="img/91841023828ddc88.png"></p>
+<p>The generic capabilities of an event mesh:</p>
+<ul>
+<li>A network of interconnected event brokers that can be deployed in any cloud, PaaS or non-cloud (so it includes all capabilities of an event broker but is distributed)</li>
+<li>Provides dynamic distribution of events so that event consumers can receive events from any event producer, no matter where the producer and consumer are attached to the mesh, without the need for configuration of event routing</li>
+</ul>
+<p>In other words, an ‘event mesh&#39; is:</p>
+<ol type="1">
+<li>inherently ‘event-driven&#39;</li>
+<li>created by connecting event brokers</li>
+<li>environment agnostic (can be deployed anywhere) and</li>
+<li>dynamic</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="API Products" duration="0">
+        <p>API Products help others consume your Business capabilities.</p>
+<ul>
+<li>Bundles of related APIs that meet the needs of developers who serve different business functions</li>
+<li>Deliver synchronous/REST APIs for long-term value vs. one-time projects</li>
+<li>Produced, shared and consumed through a developer portal</li>
+<li>Managed by a product manager - roadmap, price, lifecycle</li>
+</ul>
+<h2 is-upgraded>What about Event-Driven APIs?</h2>
+<p>Event-Driven APIs offers a subscription &#34;push&#34; model rather than the request-response model of conventional RESTful APIs. Can be implemented using an event gateway for publish/subscribe distribution.</p>
+<p class="image-container"><img src="img/b580e6bce337e55d.jpg"></p>
+<p>API Product implementations employs microservice architecture internally and expose the functionality through APIs, while hiding the underlying implementation. The externally exposed API Products are grouped by Domain facilitating better cataloging, documentation and governance.</p>
+<p>In the SmartTown business case, let us create an API Product that monitors temperature and generate alerts.</p>
+<p class="image-container"><img src="img/dd35605fe374ba27.jpg"></p>
+<h2 is-upgraded>Solace PubSub+ Event Portal</h2>
+<p>PubSub+ Event Portal lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.</p>
+<p>With the PubSub+ Event Portal, you can:</p>
+<ul>
+<li>Define and model event-driven systems</li>
+<li>Visualize existing relationships</li>
+<li>Develop consistent event-driven applications</li>
+<li>Discover and share events of interest</li>
+<li>Govern the event-driven system</li>
+<li>Integrate with 3rd-party systems for programmatic interactions</li>
+<li>Manage and audit changes to events, schemas, and applications</li>
+<li>Runtime event discovery</li>
+<li>Understand statistics about events</li>
+</ul>
+<p class="image-container"><img src="img/90589fcb7e51e18b.jpg"></p>
+<h2 is-upgraded>Solace PubSub+ Event Portal - Designer</h2>
+<p>Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and associate the payload schema to these events. It provides a graphical representation of application domains, applications, schemas, and events. Designer is also used to visualize the interaction of events between applications and to provision your architecture into the Event Portal.</p>
+<p class="image-container"><img src="img/268be4af80ceffde.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SmartTown (Internal View)" duration="4">
+        <p>SmartTown uses information and communication technology to improve operational efficiency, share information with the public and provide a better quality of government service and citizen welfare. SmartTown uses internal microservice architecture with functionality exposed through APIs and externally exposed API products while hiding the implementation details.</p>
+<h2 is-upgraded>Event-Driven Design</h2>
+<p class="image-container"><img src="img/b365ef2a2c5484e3.jpg"></p>
+<h3 is-upgraded>Topology View</h3>
+<p class="image-container"><img src="img/83c8831ad1685cad.jpg"></p>
+<p>Though the SmartTown EDA solution shall encompass various aspects of automation and control - we will scope only the Analytics and Operations applications for this workshop.</p>
+<h3 is-upgraded>Domain View</h3>
+<p class="image-container"><img src="img/68daf43a1a2bef9.jpg"></p>
+<p>A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.</p>
+<h3 is-upgraded>Application View</h3>
+<p class="image-container"><img src="img/1b32fb86be60fe0e.jpg"></p>
+<p>A view of an application with its publish/subscribe event permissions and topic details.</p>
+<h3 is-upgraded>Event View</h3>
+<p class="image-container"><img src="img/d44b3a110f0d2d80.jpg"></p>
+<p>Following events are generated and consumed by the Applications.</p>
+<ul>
+<li><strong>TemperatureReading</strong> - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp</li>
+<li><strong>OperationalAlert</strong> - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SmartTown (External View)" duration="0">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Microservices" duration="0">
+        <p>SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors.</p>
+<p>This would result in two distinct microservices:</p>
+<ol type="1">
+<li>A Sensor Data Simulator microservice, which will publish temperature reading every second (or a fixed period). For simplicity sake, the reading of CPU temperature where the microservice is run is used.</li>
+<li>A second microservice that subscribes to the temperature reading events and publish an alert event with appropriate priority set.</li>
+</ol>
+<p>In the current workshop, we will be focusing on the following Applications:</p>
+<ul>
+<li>Dashboard: Application that can subscribe to both temperature reading and alert events to plot a real-time dashboard.</li>
+<li>Analytics: Application that can subscribe to both temperature reading and alert events to provide an offline reporting and analytics facility.</li>
+</ul>
+<p>There could be more applications that can combine the temperature and alert events with their domain logic and derive business values (but not considered in the current scope):</p>
+<ul>
+<li>Transit Tracking</li>
+<li>Schedule Management</li>
+<li>Energy Management</li>
+<li>Maintenance Ticketing</li>
+</ul>
+<h2 is-upgraded>IoT Data Collector Microservice (Sensor Data Simulator)</h2>
+<p>In real world, this would have been a service that any device that collects temperature reading from a device (using IoT sensors) and publish an event with device context details like location, zone, device id, device class, timestamp etc.</p>
+<p>In this workshop, we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.</p>
+<aside class="special"><p>We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution</p>
+</aside>
+<h2 is-upgraded>AC-City Alert Generator Microservice</h2>
+<p>A microservice that subscribes to temperature reading events and generates alerts based on the detected temperature range with appropriate priority (LOW, MEDIUM or HIGH). This alert event carries the context of city, alert type and level to facilitate a city-level temperature alert aggregation and management.</p>
+<p>In this workshop, this application will be built from scratch by:</p>
+<ol type="1">
+<li>Downloading the AsyncAPI document of th Event API Product on the Solace PubSub+ platform</li>
+<li>Generating Spring Cloud Stream microservice from the AsyncAPI document</li>
+<li>Implementing business logic to generate alert</li>
+</ol>
+<aside class="special"><p>We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution</p>
+</aside>
+<p>we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.</p>
+<p>There could be other applications that can connect and subscribe to alert and temperature reading events as long as they have the right credentials and appropriate permissions. Thus an effective event-drive solution can be built on Publish-Subscribe architecture that can serve both internal and external applications.</p>
+<p>Just like how REST APIs can be catalogued and discovered, Event APIs can also be published and consumed seamlessly, which was not possible before the advent of Event API Products.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Workshop - Setup" duration="0">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Workshop - Exercise" duration="0">
+        <h2 is-upgraded>IoT Sensor Data Simulator Microservice</h2>
+<p>Exercise steps and more...</p>
+<h2 is-upgraded>AC-City Alert Generator Microservice</h2>
+<p>Exercise steps and more...</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Conclusion" duration="0">
+        <p>Description of setup, general access and overview</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
