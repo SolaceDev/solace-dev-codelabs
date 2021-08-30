@@ -2,7 +2,7 @@ author: Giri Venkatesan
 summary: SpringOne 2021 workshop for Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh
 id: springone-2021-asyncapi-workshop
 tags:XX
-categories:XXX
+categories: Spring,Java,AsyncAPI
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/springone-2021-asyncapi-workshop
