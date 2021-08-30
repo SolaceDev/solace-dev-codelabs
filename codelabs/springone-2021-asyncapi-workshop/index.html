@@ -29,7 +29,7 @@
     
       <google-codelab-step label="Overview" duration="0">
         <p>Are you passionate about building modern, real-time applications? Is your organization adopting an event-driven architecture (EDA) to compete in our event-driven world? Build and expand your developer toolbox by learning how to define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an event mesh.</p>
-<p>In this workshop, we will create API Products that helps others to consume  Business capabilities of a <em>SmartTown</em> where APIs are a way of life. We will also</p>
+<p>In this workshop, we will create API Products that helps others to consume Business capabilities of a <em>SmartTown</em> where APIs are a way of life. We will also</p>
 <ul>
 <li>Learn how to define asynchronous APIs.</li>
 <li>Use the AsyncAPI Generator template for Spring Cloud Stream.</li>
@@ -39,6 +39,7 @@
 <p>Prerequisites</p>
 <ul>
 <li>Intermediate level of knowledge coding with Java</li>
+<li>Computer</li>
 </ul>
 
 
@@ -75,7 +76,7 @@
 <p>✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop.</p>
 <aside class="special"><p>If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
 </aside>
-<p>✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations  to stream events across the globe.🚀</p>
+<p>✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations to stream events across the globe.🚀</p>
 
 
       </google-codelab-step>
@@ -138,9 +139,9 @@
 <p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
 <p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we&#39;re going to use the Spring Cloud Stream template.</p>
 <p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
-<pre><code>Example:  
+<pre><code>Example:
 
-ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git 
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
 </code></pre>
 <h2 is-upgraded>Coding Business Logic</h2>
 <p>The generated spring project looks like a regular Spring Boot Java project with generated classes under the javaPackage and an <em>application.yml</em> file for configuration. Generated classes under javaPackage include Plain Old Java Objects (POJOs) defined from the schemas in the AsyncAPI document and <em>Application.java</em> which contains the actual Spring Cloud Functions where we&#39;ll add our business logic.</p>
@@ -309,7 +310,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
-  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

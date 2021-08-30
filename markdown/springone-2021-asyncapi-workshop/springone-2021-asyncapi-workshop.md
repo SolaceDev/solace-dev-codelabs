@@ -9,20 +9,21 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 # Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh
 
-## Overview 
+## Overview
 
 Are you passionate about building modern, real-time applications? Is your organization adopting an event-driven architecture (EDA) to compete in our event-driven world? Build and expand your developer toolbox by learning how to define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an event mesh.
 
-In this workshop, we will create API Products that helps others to consume  Business capabilities of a _SmartTown_ where APIs are a way of life. We will also
+In this workshop, we will create API Products that helps others to consume Business capabilities of a _SmartTown_ where APIs are a way of life. We will also
 
-* Learn how to define asynchronous APIs.
-* Use the AsyncAPI Generator template for Spring Cloud Stream.
-* Develop event-driven microservices using Spring Cloud Stream and Java.
-* Connect your microservices to an event mesh made of PubSub+ Event Brokers and stream events across the globe
-
+- Learn how to define asynchronous APIs.
+- Use the AsyncAPI Generator template for Spring Cloud Stream.
+- Develop event-driven microservices using Spring Cloud Stream and Java.
+- Connect your microservices to an event mesh made of PubSub+ Event Brokers and stream events across the globe
 
 Prerequisites
-* Intermediate level of knowledge coding with Java
+
+- Intermediate level of knowledge coding with Java
+- Computer
 
 ## Requirements
 
@@ -58,13 +59,13 @@ We'll install the generator itself later 👍
 - Username: `smarttown`
 - Password: `smarttown`
 
-✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop. 
- 
+✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop.
+
 Positive
-: If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free). 
+: If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free).
 Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
 
-✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations  to stream events across the globe.🚀
+✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations to stream events across the globe.🚀
 
 ## Spring Cloud Stream
 
@@ -77,7 +78,6 @@ Spring Cloud Stream has three different types of message exchange contracts as p
 1. Suppliers are sources of events
 2. Sinks are consumers of events
 3. Processors are both consumers and subscribers of events
-
 
 ### Message Exchange Contracts Map to Java Functions
 
@@ -143,9 +143,9 @@ The AsyncAPI Code Generator supports templates to generate code for a variety of
 The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.
 
 ```
-Example:  
+Example:
 
-ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git 
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
 ```
 
 ### Coding Business Logic
@@ -168,15 +168,15 @@ Event mesh complements service mesh. It is a layer parallel to service mesh and 
 
 Both meshes are similar in that they enable better communication between applications by putting certain functions into a layer between the network and the application. However, there are a few important distinctions:
 
-* Service mesh connects microservices in cloud environments – Kubernetes only today – with the promise of enabling this communication between different Kubernetes clusters and perhaps other clouds in the future.
-* Event mesh connects not only microservices but also legacy applications, cloud-native services, devices, and data sources/sinks and these can operate both in cloud and non-cloud environments. An event mesh can connect any event source to any event handler.
+- Service mesh connects microservices in cloud environments – Kubernetes only today – with the promise of enabling this communication between different Kubernetes clusters and perhaps other clouds in the future.
+- Event mesh connects not only microservices but also legacy applications, cloud-native services, devices, and data sources/sinks and these can operate both in cloud and non-cloud environments. An event mesh can connect any event source to any event handler.
 
 ![](img/service-mesh-vs-event-mesh.png)
 
 The generic capabilities of an event mesh:
 
-* A network of interconnected event brokers that can be deployed in any cloud, PaaS or non-cloud (so it includes all capabilities of an event broker but is distributed)
-* Provides dynamic distribution of events so that event consumers can receive events from any event producer, no matter where the producer and consumer are attached to the mesh, without the need for configuration of event routing
+- A network of interconnected event brokers that can be deployed in any cloud, PaaS or non-cloud (so it includes all capabilities of an event broker but is distributed)
+- Provides dynamic distribution of events so that event consumers can receive events from any event producer, no matter where the producer and consumer are attached to the mesh, without the need for configuration of event routing
 
 In other words, an ‘event mesh’ is:
 
@@ -186,11 +186,13 @@ In other words, an ‘event mesh’ is:
 1. dynamic
 
 ## API Products
+
 API Products help others consume your Business capabilities.
-* Bundles of related APIs that meet the needs of developers who serve different business functions
-* Deliver synchronous/REST APIs for long-term value vs. one-time projects
-* Produced, shared and consumed through a developer portal
-* Managed by a product manager - roadmap, price, lifecycle
+
+- Bundles of related APIs that meet the needs of developers who serve different business functions
+- Deliver synchronous/REST APIs for long-term value vs. one-time projects
+- Produced, shared and consumed through a developer portal
+- Managed by a product manager - roadmap, price, lifecycle
 
 ### What about Event-Driven APIs?
 
@@ -204,21 +206,21 @@ In the SmartTown business case, let us create an API Product that monitors tempe
 
 ![](img/smarttown-apiproduct.jpg)
 
-
 ### Solace PubSub+ Event Portal
+
 PubSub+ Event Portal lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.
 
 With the PubSub+ Event Portal, you can:
 
-* Define and model event-driven systems
-* Visualize existing relationships
-* Develop consistent event-driven applications
-* Discover and share events of interest
-* Govern the event-driven system
-* Integrate with 3rd-party systems for programmatic interactions
-* Manage and audit changes to events, schemas, and applications
-* Runtime event discovery
-* Understand statistics about events
+- Define and model event-driven systems
+- Visualize existing relationships
+- Develop consistent event-driven applications
+- Discover and share events of interest
+- Govern the event-driven system
+- Integrate with 3rd-party systems for programmatic interactions
+- Manage and audit changes to events, schemas, and applications
+- Runtime event discovery
+- Understand statistics about events
 
 ![](img/event-portal.jpg)
 
@@ -239,16 +241,19 @@ SmartTown uses information and communication technology to improve operational e
 ![](img/smarttown-eda-design.jpg)
 
 #### Topology View
+
 ![](img/smarttown-topology-view.jpg)
 
 Though the SmartTown EDA solution shall encompass various aspects of automation and control - we will scope only the Analytics and Operations applications for this workshop.
 
 #### Domain View
+
 ![](img/smarttown-domain-view.jpg)
 
 A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.
 
 #### Application View
+
 ![](img/smarttown-application-view.jpg)
 
 A view of an application with its publish/subscribe event permissions and topic details.
@@ -258,32 +263,36 @@ A view of an application with its publish/subscribe event permissions and topic 
 ![](img/smarttown-event-view.jpg)
 
 Following events are generated and consumed by the Applications.
-* __TemperatureReading__ - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp
-* __OperationalAlert__ - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.
+
+- **TemperatureReading** - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp
+- **OperationalAlert** - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.
 
 ## SmartTown (External View)
 
 ## Microservices
 
-SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors. 
+SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors.
 
 This would result in two distinct microservices:
 
 1. A Sensor Data Simulator microservice, which will publish temperature reading every second (or a fixed period). For simplicity sake, the reading of CPU temperature where the microservice is run is used.
-1. A second microservice that subscribes to the temperature reading events and publish an alert event with appropriate priority set. 
+1. A second microservice that subscribes to the temperature reading events and publish an alert event with appropriate priority set.
 
 In the current workshop, we will be focusing on the following Applications:
-* Dashboard: Application that can subscribe to both temperature reading and alert events to plot a real-time dashboard. 
-* Analytics: Application that can subscribe to both temperature reading and alert events to provide an offline reporting and analytics facility. 
-  
-There could be more applications that can combine the temperature and alert events with their domain logic and derive business values (but not considered in the current scope): 
-* Transit Tracking
-* Schedule Management
-* Energy Management
-* Maintenance Ticketing
+
+- Dashboard: Application that can subscribe to both temperature reading and alert events to plot a real-time dashboard.
+- Analytics: Application that can subscribe to both temperature reading and alert events to provide an offline reporting and analytics facility.
+
+There could be more applications that can combine the temperature and alert events with their domain logic and derive business values (but not considered in the current scope):
+
+- Transit Tracking
+- Schedule Management
+- Energy Management
+- Maintenance Ticketing
 
 ### IoT Data Collector Microservice (Sensor Data Simulator)
-In real world, this would have been a service that any device that collects temperature reading from a device (using IoT sensors) and publish an event with device context details like location, zone, device id, device class, timestamp etc. 
+
+In real world, this would have been a service that any device that collects temperature reading from a device (using IoT sensors) and publish an event with device context details like location, zone, device id, device class, timestamp etc.
 
 In this workshop, we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.
 
@@ -291,12 +300,14 @@ Positive
 : We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
 
 ### AC-City Alert Generator Microservice
+
 A microservice that subscribes to temperature reading events and generates alerts based on the detected temperature range with appropriate priority (LOW, MEDIUM or HIGH). This alert event carries the context of city, alert type and level to facilitate a city-level temperature alert aggregation and management.
 
 In this workshop, this application will be built from scratch by:
+
 1. Downloading the AsyncAPI document of th Event API Product on the Solace PubSub+ platform
 1. Generating Spring Cloud Stream microservice from the AsyncAPI document
-3. Implementing business logic to generate alert
+1. Implementing business logic to generate alert
 
 Positive
 : We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
@@ -309,11 +320,16 @@ Just like how REST APIs can be catalogued and discovered, Event APIs can also be
 
 ## Workshop - Setup
 
-
 ## Workshop - Exercise
+
 ### IoT Sensor Data Simulator Microservice
+
 Exercise steps and more...
+
 ### AC-City Alert Generator Microservice
+
 Exercise steps and more...
+
 ## Conclusion
+
 Description of setup, general access and overview
