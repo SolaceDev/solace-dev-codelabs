@@ -66,7 +66,7 @@
 <li>Your favorite Java IDE 💥</li>
 </ul>
 <h2 is-upgraded>PubSub+ Event Broker</h2>
-<p>✅ The credentials for connecting to Solace PubSub+ Event Broker will be shared by the instructor.</p>
+<p>✅ Use the following credentials for connecting to PubSub+ Broker. The SMF Host details will be shared by the instructor.</p>
 <ul>
 <li>SMF Host: <code>tcp://?????.messaging.solace.cloud:55555</code></li>
 <li>Message VPN: <code>springone-2021</code></li>
@@ -123,6 +123,9 @@
 <ul>
 <li>The Spring Cloud Stream <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference" target="_blank">Reference Guide</a></li>
 <li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
+<li>Solace Sample <a href="https://github.com/SolaceSamples/solace-samples-spring" target="_blank">Github Repository</a></li>
+<li>Solace Codelab - <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/" target="_blank">Spring Cloud Stream - Basics</a></li>
+<li>Solace Codelab - <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond" target="_blank">Spring Cloud Stream - Beyond the Basics</a></li>
 </ul>
 
 
@@ -130,70 +133,84 @@
     
       <google-codelab-step label="AsyncAPI" duration="0">
         <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
-<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world. It is an open source initiative that provides both a specification to describe and document your asynchronous applications in a machine-readable format, and tooling (such as code generators) to make life easier for developers tasked with implementing them.</p>
+<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.</p>
+<p>It is an open source initiative that provides both</p>
+<ul>
+<li>a specification to describe and document your asynchronous applications in a machine-readable format, and</li>
+<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.</li>
+</ul>
 <h2 is-upgraded>AsyncAPI Document</h2>
-<p>The first step is to obtain an AsyncAPI document that defines the application that you want to develop. Per the specification, this document is represented as JSON objects and must conform to the JSON standards. YAML, being a superset of JSON, can also be used. There are two main ways of going about obtaining this document: manually create the document or use an event portal.</p>
-<p>If you decide to manually create the document after familiarizing yourself with the specification, don&#39;t worry – you won&#39;t be starting with a blank slate. The AsyncAPI initiative has provided a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make this easier. On the left side of the playground you can familiarize yourself with the specification and make changes to a real AsyncAPI document, and as you do so the right side of the screen updates to show how the document is parsed into a more human-readable format.</p>
-<p>Alternatively you can generate this document from EDA tools such as Event Portal of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design your event-driven architecture. The team would define the applications that exist in the system, as well as the events that are exchanged and the schemas which define them. Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
+<p>An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.</p>
+<p>The AsyncAPI initiative provides a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make the document creation easier.</p>
+<p class="image-container"><img alt="AsyncAPI Playground" src="img/71a9c5c8c7eabdb4.jpg"></p>
+<p>Alternatively you can generate this document from EDA tools such as <a href="https://solace.com/products/portal/" target="_blank">Event Portal</a> of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture.</p>
+<p>Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
 <h2 is-upgraded>AsyncAPI Generator</h2>
 <p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
-<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we&#39;re going to use the Spring Cloud Stream template.</p>
+<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we&#39;re going to use the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">Spring Cloud Stream template</a>.</p>
 <p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
 <pre><code>Example:
 
 ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
 </code></pre>
 <h2 is-upgraded>Coding Business Logic</h2>
-<p>The generated spring project looks like a regular Spring Boot Java project with generated classes under the javaPackage and an <em>application.yml</em> file for configuration. Generated classes under javaPackage include Plain Old Java Objects (POJOs) defined from the schemas in the AsyncAPI document and <em>Application.java</em> which contains the actual Spring Cloud Functions where we&#39;ll add our business logic.</p>
-<p>The generator will add additional functions to handle messages delivered on the channels as defined in the AsyncAPI document.</p>
+<p>The generated spring project is a regular Spring Boot Java project with generated classes under the javaPackage and an <em>application.yml</em> file for configuration. It contains:</p>
+<ul>
+<li>Generated classes under javaPackage include POJOs defined from the schemas in the AsyncAPI document and</li>
+<li><em>Application.java</em> which contains the actual Spring Cloud Functions to handle messages delivered on the channels as defined in the AsyncAPI document where we&#39;ll add our business logic.</li>
+</ul>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://www.asyncapi.com/generator" target="_blank">AsyncAPI Code Generator</a></li>
+<li><a href="https://solace.com/blog/asyncapi-vs-openapi/" target="_blank">AsyncAPI vs OpenAPI</a></li>
+<li><a href="https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/" target="_blank">AsyncAPI Code Generation: Microservices Using Spring Cloud Stream</a></li>
+</ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Event Mesh" duration="0">
         <p class="image-container"><img src="img/124f1525945a39ad.png"></p>
-<p>An event mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices. It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.</p>
-<p>In other words, an event mesh is an architecture layer that allows events from one application to be dynamically routed and received by any other application no matter where these applications are deployed (no cloud, private cloud, public cloud). This layer is composed of a network of event brokers.</p>
+<p>An Event Mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices.</p>
+<p>It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.</p>
 <h2 is-upgraded>How is &#34;event mesh&#34; different from service mesh?</h2>
-<p>Event mesh complements service mesh. It is a layer parallel to service mesh and completes the application architecture by providing the full set of inter-application communication patterns: service mesh for RESTful and general request/reply interactions; event mesh for asynchronous, event-based interactions. Refer to the layering diagram below for position of each in an application stack.</p>
+<p><a href="https://solace.com/blog/event-mesh-service-mesh-for-microservices/" target="_blank">Event mesh complements service mesh</a> completing the application connectivity layer to provide the full set of inter-application communication patterns enterprises need to realize their digital transformation ambitions. It is a layer parallel to service mesh and completes the application architecture by providing the full set of inter-application communication patterns.</p>
+<p>Service mesh for RESTful and general request/reply interactions; event mesh for asynchronous, event-based interactions.</p>
 <p>Both meshes are similar in that they enable better communication between applications by putting certain functions into a layer between the network and the application. However, there are a few important distinctions:</p>
 <ul>
 <li>Service mesh connects microservices in cloud environments – Kubernetes only today – with the promise of enabling this communication between different Kubernetes clusters and perhaps other clouds in the future.</li>
 <li>Event mesh connects not only microservices but also legacy applications, cloud-native services, devices, and data sources/sinks and these can operate both in cloud and non-cloud environments. An event mesh can connect any event source to any event handler.</li>
 </ul>
-<p class="image-container"><img src="img/91841023828ddc88.png"></p>
-<p>The generic capabilities of an event mesh:</p>
-<ul>
-<li>A network of interconnected event brokers that can be deployed in any cloud, PaaS or non-cloud (so it includes all capabilities of an event broker but is distributed)</li>
-<li>Provides dynamic distribution of events so that event consumers can receive events from any event producer, no matter where the producer and consumer are attached to the mesh, without the need for configuration of event routing</li>
-</ul>
-<p>In other words, an ‘event mesh&#39; is:</p>
+<p class="image-container"><img src="img/61e319beddc18f7d.gif"></p>
+<p>An event mesh is:</p>
 <ol type="1">
 <li>inherently ‘event-driven&#39;</li>
 <li>created by connecting event brokers</li>
 <li>environment agnostic (can be deployed anywhere) and</li>
 <li>dynamic</li>
 </ol>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://solace.com/what-is-an-event-mesh/" target="_blank">What is an Event Mesh?</a></li>
+<li><a href="https://solace.com/resources/event-mesh" target="_blank">Event Mesh - Resources</a></li>
+<li><a href="https://www.youtube.com/watch?v=8Pln8dNSd4U" target="_blank">How to Build an Event Mesh with Solace PubSub+</a></li>
+</ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="API Products" duration="0">
-        <p>API Products help others consume your Business capabilities.</p>
-<ul>
-<li>Bundles of related APIs that meet the needs of developers who serve different business functions</li>
-<li>Deliver synchronous/REST APIs for long-term value vs. one-time projects</li>
-<li>Produced, shared and consumed through a developer portal</li>
-<li>Managed by a product manager - roadmap, price, lifecycle</li>
-</ul>
-<h2 is-upgraded>What about Event-Driven APIs?</h2>
-<p>Event-Driven APIs offers a subscription &#34;push&#34; model rather than the request-response model of conventional RESTful APIs. Can be implemented using an event gateway for publish/subscribe distribution.</p>
+        <p>API products are groups of related APIs that fulfill some business functions, often in a bounded content helping others to consume your Business capabilities.</p>
+<h2 is-upgraded>Event-Driven APIs</h2>
+<p>Event-Driven APIs offers a subscription &#34;push&#34; model rather than the request-response model of conventional RESTful APIs. They are implemented using an event gateway for publish/subscribe distribution.</p>
 <p class="image-container"><img src="img/b580e6bce337e55d.jpg"></p>
-<p>API Product implementations employs microservice architecture internally and expose the functionality through APIs, while hiding the underlying implementation. The externally exposed API Products are grouped by Domain facilitating better cataloging, documentation and governance.</p>
-<p>In the SmartTown business case, let us create an API Product that monitors temperature and generate alerts.</p>
-<p class="image-container"><img src="img/dd35605fe374ba27.jpg"></p>
+<ul>
+<li>API Product implementations employs microservice architecture internally and expose the functionality through APIs, while hiding the underlying implementation.</li>
+<li>Exposed API Products are grouped by Domain facilitating better <em>cataloging</em>, <em>documentation</em> and <em>governance</em>.</li>
+</ul>
 <h2 is-upgraded>Solace PubSub+ Event Portal</h2>
-<p>PubSub+ Event Portal lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.</p>
+<p>The Market&#39;s First API Portal...for Events</p>
+<p><a href="https://solace.com/blog/api-portal-for-events/" target="_blank">PubSub+ Event Portal</a> lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.</p>
 <p>With the PubSub+ Event Portal, you can:</p>
 <ul>
 <li>Define and model event-driven systems</li>
@@ -210,6 +227,12 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <h2 is-upgraded>Solace PubSub+ Event Portal - Designer</h2>
 <p>Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and associate the payload schema to these events. It provides a graphical representation of application domains, applications, schemas, and events. Designer is also used to visualize the interaction of events between applications and to provision your architecture into the Event Portal.</p>
 <p class="image-container"><img src="img/268be4af80ceffde.jpg"></p>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal.htm" target="_blank">PubSub+ Event Portal - Overview</a></li>
+<li><a href="https://solace.com/resources/pubsub-event-portal/eventportal-get-started-demo-video" target="_blank">PubSub+ Event Portal - Getting started</a></li>
+<li><a href="https://solace.com/resources/pubsub-event-portal" target="_blank">PubSub+ Event Portal - Resources</a></li>
+</ul>
 
 
       </google-codelab-step>
@@ -218,28 +241,38 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
         <p>SmartTown uses information and communication technology to improve operational efficiency, share information with the public and provide a better quality of government service and citizen welfare. SmartTown uses internal microservice architecture with functionality exposed through APIs and externally exposed API products while hiding the implementation details.</p>
 <h2 is-upgraded>Event-Driven Design</h2>
 <p class="image-container"><img src="img/b365ef2a2c5484e3.jpg"></p>
-<h3 is-upgraded>Topology View</h3>
+<h3 is-upgraded>Application Domain View</h3>
 <p class="image-container"><img src="img/83c8831ad1685cad.jpg"></p>
 <p>Though the SmartTown EDA solution shall encompass various aspects of automation and control - we will scope only the Analytics and Operations applications for this workshop.</p>
-<h3 is-upgraded>Domain View</h3>
+<h3 is-upgraded>Application View</h3>
 <p class="image-container"><img src="img/68daf43a1a2bef9.jpg"></p>
 <p>A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.</p>
-<h3 is-upgraded>Application View</h3>
-<p class="image-container"><img src="img/1b32fb86be60fe0e.jpg"></p>
-<p>A view of an application with its publish/subscribe event permissions and topic details.</p>
-<h3 is-upgraded>Event View</h3>
-<p class="image-container"><img src="img/d44b3a110f0d2d80.jpg"></p>
-<p>Following events are generated and consumed by the Applications.</p>
+<h3 is-upgraded><em>&#34;SmartTown - Operations&#34;</em> - Events</h3>
 <ul>
 <li><strong>TemperatureReading</strong> - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp</li>
-<li><strong>OperationalAlert</strong> - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.</li>
+<li><strong>OperationalAlert</strong> - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.  <h3 is-upgraded>Event Details View</h3>
+</li>
 </ul>
+<p class="image-container"><img src="img/d44b3a110f0d2d80.jpg"></p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="SmartTown (External View)" duration="0">
-        
+        <p>The process to creating a digital value chain around API Products involves a well defined steps as described below. <img src="img/8ed1aee349773f46.jpg"></p>
+<p>The <em>3. Curate</em> step involves bundling of high-value, share-worthy events. The resulting bundle is released as a spec based on a commonly understood spec or standard - like AsyncAPI.</p>
+<p>AsyncAPI also provides tools to generate code (supports popular languages) helping consumers directly go from spec-to-code, leaving the only responsibility of updating the business logic.</p>
+<ul>
+<li>Set the Event API product name, description and server connection settings (connection url and protocol). <img src="img/1b11b9beb1c0de56.jpg"></li>
+<li>Grant permission on events for Publish &amp; Subscribe <img src="img/aa89e71f7ae7e66.jpg"></li>
+<li>Save the API Product</li>
+</ul>
+<p>The <em>4. Release</em> step involves exposing the curated bundle of APIs to make them discoverable.</p>
+<ul>
+<li>PubSub+ Event Portal hosts the curated Event API products on publicly accessible URLs. <img src="img/5a1fa40957e83956.jpg"></li>
+<li>Exposed AsyncAPI URL <img src="img/30c3f2e560d9dddc.jpg"></li>
+</ul>
+
 
       </google-codelab-step>
     
@@ -250,18 +283,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <li>A Sensor Data Simulator microservice, which will publish temperature reading every second (or a fixed period). For simplicity sake, the reading of CPU temperature where the microservice is run is used.</li>
 <li>A second microservice that subscribes to the temperature reading events and publish an alert event with appropriate priority set.</li>
 </ol>
-<p>In the current workshop, we will be focusing on the following Applications:</p>
-<ul>
-<li>Dashboard: Application that can subscribe to both temperature reading and alert events to plot a real-time dashboard.</li>
-<li>Analytics: Application that can subscribe to both temperature reading and alert events to provide an offline reporting and analytics facility.</li>
-</ul>
-<p>There could be more applications that can combine the temperature and alert events with their domain logic and derive business values (but not considered in the current scope):</p>
-<ul>
-<li>Transit Tracking</li>
-<li>Schedule Management</li>
-<li>Energy Management</li>
-<li>Maintenance Ticketing</li>
-</ul>
 <h2 is-upgraded>IoT Data Collector Microservice (Sensor Data Simulator)</h2>
 <p>In real world, this would have been a service that any device that collects temperature reading from a device (using IoT sensors) and publish an event with device context details like location, zone, device id, device class, timestamp etc.</p>
 <p>In this workshop, we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.</p>
@@ -277,23 +298,327 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 </ol>
 <aside class="special"><p>We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution</p>
 </aside>
-<p>we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.</p>
-<p>There could be other applications that can connect and subscribe to alert and temperature reading events as long as they have the right credentials and appropriate permissions. Thus an effective event-drive solution can be built on Publish-Subscribe architecture that can serve both internal and external applications.</p>
-<p>Just like how REST APIs can be catalogued and discovered, Event APIs can also be published and consumed seamlessly, which was not possible before the advent of Event API Products.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Workshop - Setup" duration="0">
-        
+      <google-codelab-step label="Workshop - IoT Sensor Data Simulation" duration="0">
+        <h2 is-upgraded>Clone Git repository</h2>
+<ul>
+<li>Launch Terminal application</li>
+<li>Execute the following command <br><code>git clone https://github.com/Mrc0113/smarttown.GitHub</code><br> This would create a directory by name <strong>smarttown</strong> and checkout the git repository contents. <img src="img/94886ba9f23033a9.jpg"></li>
+</ul>
+<p>The directory <strong>cloudstream/iot-data-collector</strong> contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.</p>
+<h2 is-upgraded>Launch Spring Tool Suite</h2>
+<ul>
+<li>Open Spring Cloud Suite tool by clicking on the icon in the desktop</li>
+<li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; <img src="img/9388c63d98a7f33a.jpg"></li>
+</ul>
+<h3 is-upgraded>TemperatureReading.java</h3>
+<p>✅ Review the TemperatureReading java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
+<h3 is-upgraded>Application.java</h3>
+<p>✅ Review the Application.java, specifically the Supplier function.</p>
+<pre><code>@Bean
+Supplier&lt;Message&lt;TemperatureReading&gt;&gt; publishTemperatureData()  {
+  return () -&gt; {
+    // Collect CPU metrics 
+    SystemInfo si = new SystemInfo();
+    HardwareAbstractionLayer hal = si.getHardware();
+    Sensors sensors = hal.getSensors();
+    CentralProcessor processor = hal.getProcessor();
+    double[] loadAverage = processor.getSystemLoadAverage(1);
+    BigDecimal cpuLoad = new BigDecimal((loadAverage[0] &lt; 0 ? 0 : loadAverage[0]));
+    BigDecimal cpuTemp = new BigDecimal(50.0 + cpuLoad.doubleValue() * 8.0);
+    // Construct the topic name with alert type and priority as per the Topic hierarchy design
+    // SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}
+    String topic = &#34;SmartTown/Operations/temperatureReading/created/v1/&#34; + city + &#34;/&#34; + latitude + &#34;/&#34; + longitude;	        			
+    TemperatureReading data = new TemperatureReading(cpuLoad, city, latitude, longitude, cpuTemp);
+    logger.info(data.toString());	
+
+    // Set the target destination on the message with the constructed topic name
+    return MessageBuilder.withPayload(data)
+            .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+            .build();		
+  };
+}	
+
+</code></pre>
+<p>✅ The Supplier function is a Cloud Stream message exchange contract that publishes an event to configured Event Broker.</p>
+<p>✅ Notice the topic name construction:</p>
+<p><strong>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</strong></p>
+<p>The values for variables <em>city, latitude</em> and <em>longitude</em> are read from the configuration file.</p>
+<p>The topic name is dynamically constructed by concatenating the root topic name and dynamic values picked up from the application configuration.</p>
+<p>✅ The return value from the <em>Supplier</em> function is a Spring Cloud Stream <em>Message</em> that is set with destination as the dynamic topic, which is effectively a publish on the Event Broker.</p>
+<p>✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using <em>stress</em> system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.</p>
+<aside class="special"><p><em>stress</em> utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings. To run the stress command, type:<br><br><code>stress -c 4 -t 180</code><br><br> This will simulate load on the VM and till timeout after 180 seconds.</p>
+</aside>
+<h3 is-upgraded>application.yml</h3>
+<aside class="special"><p>Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<p>✅ Review the application.yml</p>
+<pre><code>server.port: 8082
+application:
+  city: &lt;enter your city here&gt;      # e.g., Bangalore
+  latitude: &lt;enter latitude&gt;        # e.g., 13.019568
+  longitude: &lt;enter longitude&gt;      # e.g., 77.596809
+spring:
+  cloud:
+    function:
+      definition: publishTemperatureData
+    stream:
+      bindings:
+        publishTemperatureData-out-0:
+          destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: &#39;tcp://xxxxx.messaging.solace.cloud:55555&#39;
+                msgVpn: springone-2021
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      
+</code></pre>
+<p>Affect the following changes on the yaml file:</p>
+<ol type="1">
+<li>Goto <a href="https://www.latlong.net" target="_blank">Latlang.net</a> and enter your city name to get latitude and longitude values</li>
+<li>In the yml file  <ul>
+<li>Update your city name</li>
+<li>Update latitude</li>
+<li>Update longitude</li>
+<li>Update the msgVpn name (instructor to provide the host name)</li>
+</ul>
+</li>
+<li>Save the file</li>
+</ol>
+<h3 is-upgraded>Running the IoT Data Simulation</h3>
+<p>✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.</p>
+<pre><code>cd ~/smarttown/cloudstream/iot-data-collector
+mvn clean spring-boot:run
+</code></pre>
+<p>This should run the simulator microservice and publish temperature reading events to the Event Broker.</p>
+<pre><code>mvn clean spring-boot:run
+
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------&lt; com.springone:iot-data-collector &gt;------------------
+[INFO] Building iot-data-collector 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ iot-data-collector ---
+[INFO] Deleting /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target
+[INFO]
+[INFO] &gt;&gt;&gt; spring-boot-maven-plugin:2.5.3:run (default-cli) &gt; test-compile @ iot-data-collector &gt;&gt;&gt;
+[INFO]
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ iot-data-collector ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ iot-data-collector ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target/classes
+[INFO]
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ iot-data-collector ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ iot-data-collector ---
+[INFO] No sources to compile
+[INFO]
+[INFO] &lt;&lt;&lt; spring-boot-maven-plugin:2.5.3:run (default-cli) &lt; test-compile @ iot-data-collector &lt;&lt;&lt;
+[INFO]
+[INFO]
+[INFO] --- spring-boot-maven-plugin:2.5.3:run (default-cli) @ iot-data-collector ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.3)
+
+2021-08-31 17:55:10.355  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : Starting Application using Java 15.0.2 on pragya with PID 23500 (/Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target/classes started by vengatagirivenkatesan in /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector)
+2021-08-31 17:55:10.356  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : No active profile set, falling back to default profiles: default
+2021-08-31 17:55:10.834  INFO 23500 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;errorChannel&#39; has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-08-31 17:55:10.840  INFO 23500 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;integrationHeaderChannelRegistry&#39; has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-08-31 17:55:10.877  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;org.springframework.integration.config.IntegrationManagementConfiguration&#39; of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 17:55:10.885  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationChannelResolver&#39; of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 17:55:10.886  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationDisposableAutoCreatedBeans&#39; of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 17:55:11.056  INFO 23500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
+2021-08-31 17:55:11.069  INFO 23500 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-31 17:55:11.069  INFO 23500 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.50]
+2021-08-31 17:55:11.125  INFO 23500 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-31 17:55:11.125  INFO 23500 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 734 ms
+2021-08-31 17:55:11.618  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the &#39;errorChannel&#39; channel
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel &#39;application.errorChannel&#39; has 1 subscriber(s).
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;_org.springframework.integration.errorLogger&#39;
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {router} as a subscriber to the &#39;publishTemperatureData_integrationflow.channel#0&#39; channel
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.integration.channel.DirectChannel    : Channel &#39;application.publishTemperatureData_integrationflow.channel#0&#39; has 1 subscriber(s).
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;publishTemperatureData_integrationflow.org.springframework.integration.config.ConsumerEndpointFactoryBean#0&#39;
+2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-08-31 17:55:14.129  INFO 23500 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-08-31 17:55:14.164  INFO 23500 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-08-31 17:55:14.683  INFO 23500 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (smfclient 1)
+2021-08-31 17:55:14.956  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-08-31 17:55:14.956  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 17:55:15.011  INFO 23500 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/temperatureReading/created/v1/*/*/* &lt;message handler ID: e3778ae1-24f1-41ae-9ec3-512c2172e097&gt;
+2021-08-31 17:55:15.011  INFO 23500 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-08-31 17:55:15.267  INFO 23500 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.publishTemperatureData-out-0&#39; has 1 subscriber(s).
+2021-08-31 17:55:15.270  INFO 23500 --- [           main] o.s.i.e.SourcePollingChannelAdapter      : started bean &#39;publishTemperatureData_integrationflow.org.springframework.integration.config.SourcePollingChannelAdapterFactoryBean#0&#39;
+2021-08-31 17:55:15.280  INFO 23500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path &#39;&#39;
+2021-08-31 17:55:15.287  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : Started Application in 5.234 seconds (JVM running for 5.482)
+2021-08-31 17:55:15.386  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
+2021-08-31 17:55:16.425  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
+2021-08-31 17:55:17.431  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
+2021-08-31 17:55:18.435  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
+2021-08-31 17:55:19.442  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.85986328125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=68.1591796875]
+....
+</code></pre>
+<h3 is-upgraded>Simulate CPU load on the machine</h3>
+<p>✅ Open a terminal and run the following command to simulate load on the machine.</p>
+<pre><code>stress -c 6 -t 180
+</code></pre>
+<p>As the CPU load increases, you will see the temperature reading increasing as well. This variation will help the alert generator microservice (next one) to publish temperature alerts with different priority levels.</p>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Workshop - Exercise" duration="0">
-        <h2 is-upgraded>IoT Sensor Data Simulator Microservice</h2>
-<p>Exercise steps and more...</p>
-<h2 is-upgraded>AC-City Alert Generator Microservice</h2>
-<p>Exercise steps and more...</p>
+      <google-codelab-step label="Workshop - Alert Generator Microservice" duration="0">
+        <p>We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.</p>
+<h2 is-upgraded>Download AsyncAPI document</h2>
+<p>✅ Open Chrome browser and go to the following url:</p>
+<p>https://apiproducts.solace.cloud/website/jl88aq4apg5</p>
+<p class="image-container"><img src="img/30c3f2e560d9dddc.jpg"></p>
+<p>Click on <strong>Download YAML</strong> button and save the file in smarttown/cloudstream directory.</p>
+<p>Since the downloaded file is in <em>Downloads</em> folder, move it manually to the <em>smarttown/cloudstream</em> folder.</p>
+<pre><code>mv ~/Downloads/asyncapi.yaml ~/smarttown/cloudstream
+</code></pre>
+<h2 is-upgraded>Generate code usign AsyncAPI Code Generator</h2>
+<p>✅ Change directory to cloudstream and run the following command</p>
+<pre><code>cd ~/smarttown/cloudstream
+</code></pre>
+<aside class="special"><p>Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<p>Run the following command to invoke AsyncAPI code generator utility.</p>
+<pre><code>ag -o ac-city-alert-generator -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.springone -p javaPackage=com.springone.asyncapi.alertgenerator -p host=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555 -p username=smarttown -p password=smarttown -p msgVpn=springone-2021 asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+</code></pre>
+<p>This command will take some time (ninute or so) and complete with the following message.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /home/ubuntu/smarttown/cloudstream/ac-city-alert-generator.
+</code></pre>
+<p>XXXX</p>
+<h2 is-upgraded>Open Spring Tool Suite</h2>
+<ul>
+<li>Open Spring Cloud Suite tool by clicking on the icon in the desktop (if not open already)</li>
+<li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; and choose smarttown/cloudstream folder. <img src="img/abdd429eeb4200de.jpg"></li>
+</ul>
+<h3 is-upgraded>TemperatureReading.java</h3>
+<p>✅ Review the TemperatureReading java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
+<p>It is sames as the TemperatureReading POJO present in the iot-data-collector microservice.</p>
+<h3 is-upgraded>OperationalAlert.java</h3>
+<p>✅ Review the OperationalAlert java file. It carries operational alert data - a simple POJO with attributes and corresponding getters/setters.</p>
+<h3 is-upgraded>Application.java</h3>
+<aside class="warning"><p>Due to a minor bug in the AsyncAPI code generator (ag utility), you have to manually</p>
+</aside>
+<p>✅ Review the Application.java, specifically the Supplier function.</p>
+<pre><code>@Bean
+Supplier&lt;Message&lt;TemperatureReading&gt;&gt; publishTemperatureData()  {
+  return () -&gt; {
+    // Collect CPU metrics 
+    SystemInfo si = new SystemInfo();
+    HardwareAbstractionLayer hal = si.getHardware();
+    Sensors sensors = hal.getSensors();
+    CentralProcessor processor = hal.getProcessor();
+    double[] loadAverage = processor.getSystemLoadAverage(1);
+    BigDecimal cpuLoad = new BigDecimal((loadAverage[0] &lt; 0 ? 0 : loadAverage[0]));
+    BigDecimal cpuTemp = new BigDecimal(50.0 + cpuLoad.doubleValue() * 8.0);
+    // Construct the topic name with alert type and priority as per the Topic hierarchy design
+    // SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}
+    String topic = &#34;SmartTown/Operations/temperatureReading/created/v1/&#34; + city + &#34;/&#34; + latitude + &#34;/&#34; + longitude;	        			
+    TemperatureReading data = new TemperatureReading(cpuLoad, city, latitude, longitude, cpuTemp);
+    logger.info(data.toString());	
+
+    // Set the target destination on the message with the constructed topic name
+    return MessageBuilder.withPayload(data)
+            .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+            .build();		
+  };
+}	
+
+</code></pre>
+<p>✅ The Supplier function is a Cloud Stream message exchange contract that publishes an event to configured Event Broker.</p>
+<p>✅ Notice the topic name construction:</p>
+<p><strong>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</strong></p>
+<p>The values for variables <em>city, latitude</em> and <em>longitude</em> are read from the configuration file.</p>
+<p>The topic name is dynamically constructed by concatenating the root topic name and dynamic values picked up from the application configuration.</p>
+<p>✅ The return value from the <em>Supplier</em> function is a Spring Cloud Stream <em>Message</em> that is set with destination as the dynamic topic, which is effectively a publish on the Event Broker.</p>
+<p>✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using <em>stress</em> system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.</p>
+<aside class="special"><p><em>stress</em> utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings. To run the stress command, type:<br><br><code>stress -c 4 -t 180</code><br><br> This will simulate load on the VM and till timeout after 180 seconds.</p>
+</aside>
+<h3 is-upgraded>application.yml</h3>
+<aside class="special"><p>Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<p>✅ Review the application.yml</p>
+<pre><code>server.port: 8082
+application:
+  city: &lt;enter your city here&gt;      # e.g., Bangalore
+  latitude: &lt;enter latitude&gt;        # e.g., 13.019568
+  longitude: &lt;enter longitude&gt;      # e.g., 77.596809
+spring:
+  cloud:
+    function:
+      definition: publishTemperatureData
+    stream:
+      bindings:
+        publishTemperatureData-out-0:
+          destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: &#39;tcp://xxxxx.messaging.solace.cloud:55555&#39;
+                msgVpn: springone-2021
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      
+</code></pre>
+<p>Affect the following changes on the yaml file:</p>
+<ol type="1">
+<li>Goto <a href="https://www.latlong.net" target="_blank">Latlang.net</a> and enter your city name to get latitude and longitude values</li>
+<li>In the yml file  <ul>
+<li>Update your city name</li>
+<li>Update latitude</li>
+<li>Update longitude</li>
+<li>Update the msgVpn name (instructor to provide the host name)</li>
+</ul>
+</li>
+<li>Save the file</li>
+</ol>
+<h3 is-upgraded>Running the IoT Data Simulation</h3>
+<p>✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.</p>
+<pre><code>cd ~/smarttown/cloudstream/iot-data-collector
+mvn clean spring-boot:run
+</code></pre>
+<p>This should run the simulator microservice and publish temperature reading events to the Event Broker.</p>
 
 
       </google-codelab-step>
@@ -310,6 +635,7 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

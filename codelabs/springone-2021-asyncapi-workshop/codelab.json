@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-08-30T10:18:40-07:00",
+  "updated": "2021-08-31T19:01:52+05:30",
   "id": "springone-2021-asyncapi-workshop",
   "duration": 12,
   "title": "Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh",
@@ -19,8 +19,9 @@
     "asyncapi"
   ],
   "tags": [
+    "springone",
     "web",
-    "xx"
+    "workshop"
   ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/springone-2021-asyncapi-workshop",
   "url": "springone-2021-asyncapi-workshop"
