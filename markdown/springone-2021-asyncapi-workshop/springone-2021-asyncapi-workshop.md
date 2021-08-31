@@ -196,10 +196,10 @@ Both meshes are similar in that they enable better communication between applica
 
 An event mesh is:
 
-1. inherently ‘event-driven’
-2. created by connecting event brokers
-3. environment agnostic (can be deployed anywhere) and
-4. dynamic
+1. Inherently ‘event-driven’
+2. Created by connecting event brokers
+3. Environment agnostic (can be deployed anywhere) and
+4. Dynamic
 
 ### Valuable Resources:
 
@@ -209,7 +209,7 @@ An event mesh is:
 
 ## API Products
 
-API products are groups of related APIs that fulfill some business functions, often in a bounded content helping others to consume your Business capabilities.
+API products are groups of related APIs that fulfil some business functions, often in a bounded content helping others to consume your Business capabilities.
 
 ### Event-Driven APIs
 
@@ -285,10 +285,7 @@ A view that captures the relationship between Applications within the Domain bas
 
 ## SmartTown (External View)
 
-The process to creating a digital value chain around API Products involves a well defined steps as described below.
-![](img/5-step-process.jpg)
-
-The _3. Curate_ step involves bundling of high-value, share-worthy events. The resulting bundle is released as a spec based on a commonly understood spec or standard - like AsyncAPI. 
+Next step in building an Event API product involves bundling of high-value, share-worthy events. The resulting bundle is released as a specification for public consumption. The generated specification is based on a commonly understood standard - like AsyncAPI. 
 
 AsyncAPI also provides tools to generate code (supports popular languages) helping consumers directly go from spec-to-code, leaving the only responsibility of updating the business logic.
 
@@ -299,13 +296,17 @@ AsyncAPI also provides tools to generate code (supports popular languages) helpi
 ![](img/3-curate-and-bundle-2.jpg)
 * Save the API Product
 
-The _4. Release_ step involves exposing the curated bundle of APIs to make them discoverable. 
+The next logical step is to expose the curated bundle of APIs to make them discoverable. 
 * PubSub+ Event Portal hosts the curated Event API products on publicly accessible URLs.
 ![](img/4-expose-to-consumer-1.jpg)
 * Exposed AsyncAPI URL
 ![](img/4-expose-to-consumer-2.jpg)
 
+Interested parties can download the AsyncAPI specification from this public URL and build applications with minimal code using AsyncAPI codegen tools.
+
 ## Microservices
+
+![](img/smarttown-eda-design.jpg)
 
 SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors.
 
@@ -329,7 +330,7 @@ A microservice that subscribes to temperature reading events and generates alert
 
 In this workshop, this application will be built from scratch by:
 
-1. Downloading the AsyncAPI document of th Event API Product on the Solace PubSub+ platform
+1. Downloading the AsyncAPI document of the Event API Product on the Solace PubSub+ platform
 1. Generating Spring Cloud Stream microservice from the AsyncAPI document
 1. Implementing business logic to generate alert
 
@@ -338,17 +339,22 @@ Positive
 
 ## Workshop - IoT Sensor Data Simulation
 
+<!-- Positive
+: For this workshop, required repositories have been pre-cloned and present in the VM. You can skip the following section and start with __Launch Spring Tool Suite__ -->
+
 ###Clone Git repository
 
 * Launch Terminal application 
 * Execute the following command 
   ```
-  git clone https://github.com/Mrc0113/smarttown.GitHub
+  cd ~/github
+
+  git clone https://github.com/Mrc0113/smarttown.git
   ```
   This would create a directory by name __smarttown__ and checkout the git repository contents.
   ![](img/workshop-setup-1.jpg)
 
-The directory __cloudstream/iot-data-collector__ contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.
+The directory __github/cloudstream/iot-data-collector__ contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.
 
 ###Launch Spring Tool Suite
 
@@ -397,21 +403,26 @@ Supplier<Message<TemperatureReading>> publishTemperatureData()  {
 
 __SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}__
 
-The values for variables _city, latitude_ and _longitude_ are read from the configuration file.
+The values for variables _city, latitude_ and _longitude_ are read from the configuration file via @Value annotation.
+
+```
+    @Value("${application.latitude}")
+    public BigDecimal latitude;
+    @Value("${application.longitude}")
+    public BigDecimal longitude;
+    @Value("${application.city}")
+    public String city;
+
+```
 
 The topic name is dynamically constructed by concatenating the root topic name and dynamic values picked up from the application configuration. 
 
-✅ The return value from the _Supplier_ function is a Spring Cloud Stream _Message_ that is set with destination as the dynamic topic, which is effectively a publish on the Event Broker.
+✅ The return value from the _Supplier_ function is a Spring Cloud Stream _Message_ that is set with destination as the dynamic topic and published to the Broker.
 
 ✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using _stress_ system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.
 
 Positive
 : _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
-To run the stress command, type:    
-```   
-stress -c 4 -t 180
-```   
-This will simulate load on the VM and till timeout after 180 seconds.
 
 ####application.yml
 
@@ -440,7 +451,7 @@ spring:
           environment:
             solace:
               java:
-                host: 'tcp://xxxxx.messaging.solace.cloud:55555'
+                host: 'tcp://xxxxx.messaging.solace.cloud:55555' # get the host name from instructor
                 msgVpn: springone-2021
                 clientUsername: smarttown
                 clientPassword: smarttown
@@ -458,14 +469,14 @@ Affect the following changes on the yaml file:
    * Update your city name
    * Update latitude
    * Update longitude
-   * Update the msgVpn name (instructor to provide the host name)
+   * Update the host name (instructor to provide the host name)
 3. Save the file
 
 ####Running the IoT Data Simulation
 
 ✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.
 ```
-cd ~/smarttown/cloudstream/iot-data-collector
+cd ~/github/smarttown/cloudstream/iot-data-collector
 mvn clean spring-boot:run
 ```
 This should run the simulator microservice and publish temperature reading events to the Event Broker.
@@ -473,38 +484,45 @@ This should run the simulator microservice and publish temperature reading event
 ```
 mvn clean spring-boot:run
 
+
+ubuntu@ip-172-31-4-68:~/github/smarttown/cloudstream/iot-data-collector$ mvn clean spring-boot:run
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
 [INFO] Scanning for projects...
-[INFO]
+[INFO] 
 [INFO] ------------------< com.springone:iot-data-collector >------------------
 [INFO] Building iot-data-collector 0.0.1-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
+[INFO] 
 [INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ iot-data-collector ---
-[INFO] Deleting /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target
-[INFO]
+[INFO] Deleting /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target
+[INFO] 
 [INFO] >>> spring-boot-maven-plugin:2.5.3:run (default-cli) > test-compile @ iot-data-collector >>>
-[INFO]
+[INFO] 
 [INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ iot-data-collector ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
 [INFO] Using 'UTF-8' encoding to copy filtered properties files.
 [INFO] Copying 1 resource
 [INFO] Copying 0 resource
-[INFO]
+[INFO] 
 [INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ iot-data-collector ---
 [INFO] Changes detected - recompiling the module!
-[INFO] Compiling 2 source files to /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target/classes
-[INFO]
+[INFO] Compiling 2 source files to /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target/classes
+[INFO] 
 [INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ iot-data-collector ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
 [INFO] Using 'UTF-8' encoding to copy filtered properties files.
-[INFO] skip non existing resourceDirectory /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/src/test/resources
-[INFO]
+[INFO] skip non existing resourceDirectory /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/src/test/resources
+[INFO] 
 [INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ iot-data-collector ---
 [INFO] No sources to compile
-[INFO]
+[INFO] 
 [INFO] <<< spring-boot-maven-plugin:2.5.3:run (default-cli) < test-compile @ iot-data-collector <<<
-[INFO]
-[INFO]
+[INFO] 
+[INFO] 
 [INFO] --- spring-boot-maven-plugin:2.5.3:run (default-cli) @ iot-data-collector ---
 [INFO] Attaching agents: []
 
@@ -516,41 +534,56 @@ mvn clean spring-boot:run
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.5.3)
 
-2021-08-31 17:55:10.355  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : Starting Application using Java 15.0.2 on pragya with PID 23500 (/Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector/target/classes started by vengatagirivenkatesan in /Users/vengatagirivenkatesan/git/smarttown/cloudstream/iot-data-collector)
-2021-08-31 17:55:10.356  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : No active profile set, falling back to default profiles: default
-2021-08-31 17:55:10.834  INFO 23500 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
-2021-08-31 17:55:10.840  INFO 23500 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
-2021-08-31 17:55:10.877  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2021-08-31 17:55:10.885  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationChannelResolver' of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2021-08-31 17:55:10.886  INFO 23500 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2021-08-31 17:55:11.056  INFO 23500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
-2021-08-31 17:55:11.069  INFO 23500 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2021-08-31 17:55:11.069  INFO 23500 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.50]
-2021-08-31 17:55:11.125  INFO 23500 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-08-31 17:55:11.125  INFO 23500 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 734 ms
-2021-08-31 17:55:11.618  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel 'application.errorChannel' has 1 subscriber(s).
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean '_org.springframework.integration.errorLogger'
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {router} as a subscriber to the 'publishTemperatureData_integrationflow.channel#0' channel
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.integration.channel.DirectChannel    : Channel 'application.publishTemperatureData_integrationflow.channel#0' has 1 subscriber(s).
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean 'publishTemperatureData_integrationflow.org.springframework.integration.config.ConsumerEndpointFactoryBean#0'
-2021-08-31 17:55:11.619  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
-2021-08-31 17:55:14.129  INFO 23500 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
-2021-08-31 17:55:14.164  INFO 23500 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
-2021-08-31 17:55:14.683  INFO 23500 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (smfclient 1)
-2021-08-31 17:55:14.956  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
-2021-08-31 17:55:14.956  INFO 23500 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
-2021-08-31 17:55:15.011  INFO 23500 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/temperatureReading/created/v1/*/*/* <message handler ID: e3778ae1-24f1-41ae-9ec3-512c2172e097>
-2021-08-31 17:55:15.011  INFO 23500 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
-2021-08-31 17:55:15.267  INFO 23500 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel 'application.publishTemperatureData-out-0' has 1 subscriber(s).
-2021-08-31 17:55:15.270  INFO 23500 --- [           main] o.s.i.e.SourcePollingChannelAdapter      : started bean 'publishTemperatureData_integrationflow.org.springframework.integration.config.SourcePollingChannelAdapterFactoryBean#0'
-2021-08-31 17:55:15.280  INFO 23500 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path ''
-2021-08-31 17:55:15.287  INFO 23500 --- [           main] c.s.asyncapi.datacollector.Application   : Started Application in 5.234 seconds (JVM running for 5.482)
-2021-08-31 17:55:15.386  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
-2021-08-31 17:55:16.425  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
-2021-08-31 17:55:17.431  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
-2021-08-31 17:55:18.435  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.673828125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=67.04296875]
-2021-08-31 17:55:19.442  INFO 23500 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=3.85986328125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=68.1591796875]
+2021-08-31 15:30:04.526  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : Starting Application using Java 11.0.10 on ip-172-31-4-68 with PID 7223 (/home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/iot-data-collector)
+2021-08-31 15:30:04.529  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : No active profile set, falling back to default profiles: default
+2021-08-31 15:30:05.179  INFO 7223 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-08-31 15:30:05.188  INFO 7223 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-08-31 15:30:05.231  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.237  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationChannelResolver' of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.238  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.424  INFO 7223 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
+2021-08-31 15:30:05.431  INFO 7223 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-31 15:30:05.432  INFO 7223 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.50]
+2021-08-31 15:30:05.490  INFO 7223 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-31 15:30:05.490  INFO 7223 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 919 ms
+2021-08-31 15:30:06.025  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel 'application.errorChannel' has 1 subscriber(s).
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean '_org.springframework.integration.errorLogger'
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {router} as a subscriber to the 'publishTemperatureData_integrationflow.channel#0' channel
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.integration.channel.DirectChannel    : Channel 'application.publishTemperatureData_integrationflow.channel#0' has 1 subscriber(s).
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean 'publishTemperatureData_integrationflow.org.springframework.integration.config.ConsumerEndpointFactoryBean#0'
+2021-08-31 15:30:06.027  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-08-31 15:30:06.072  INFO 7223 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-08-31 15:30:06.090  INFO 7223 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-08-31 15:30:06.109  INFO 7223 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (smfclient 1)
+2021-08-31 15:30:06.136  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-08-31 15:30:06.136  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 15:30:06.206  INFO 7223 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/temperatureReading/created/v1/*/*/* <message handler ID: 79002921-86ea-41b4-8e3f-31f4f4d6a4cf>
+2021-08-31 15:30:06.206  INFO 7223 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-08-31 15:30:06.217  INFO 7223 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel 'application.publishTemperatureData-out-0' has 1 subscriber(s).
+2021-08-31 15:30:06.219  INFO 7223 --- [           main] o.s.i.e.SourcePollingChannelAdapter      : started bean 'publishTemperatureData_integrationflow.org.springframework.integration.config.SourcePollingChannelAdapterFactoryBean#0'
+2021-08-31 15:30:06.229  INFO 7223 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path ''
+2021-08-31 15:30:06.238  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : Started Application in 2.143 seconds (JVM running for 2.44)
+2021-08-31 15:30:06.277  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:07.331  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:08.337  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:09.344  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:10.351  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:11.358  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:12.365  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:13.372  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:14.379  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:15.386  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:16.392  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:17.399  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:18.405  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:19.412  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:20.418  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:21.424  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:22.431  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:23.438  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+rttown/cloudstream/iot-data-collector$ 
+....
 ....
 ```
 
@@ -567,26 +600,78 @@ As the CPU load increases, you will see the temperature reading increasing as we
 
 We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.
 
-###Download AsyncAPI document
+###Review API Product URL
 
 ✅ Open Chrome browser and go to the following url:
 
-https://apiproducts.solace.cloud/website/jl88aq4apg5
+_[Instructor to share the AsyncAPI public url]_
 
 ![](img/workshop-setup-5.jpg)
 
-Click on __Download YAML__ button and save the file in smarttown/cloudstream directory.
+You can click on the __Download YAML__ button and download the document from this portal - just you need to move it to the cloudstream folder.
 
-Since the downloaded file is in _Downloads_ folder, move it manually to the _smarttown/cloudstream_ folder.
+Run the following command on a terminal window
 ```
-mv ~/Downloads/asyncapi.yaml ~/smarttown/cloudstream
+mv ~/Downloads/asyncapi.yaml ~/github/smarttown/asyncapi/
 ```
+
+✅ Make the following updates to the asyncapi.yaml file
+
+```
+Append the line below 
+
+      x-scs-function-name: processTemperatureReading
+
+a) After 
+
+channels:
+  SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
+    subscribe:
+
+b) And after
+
+  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
+    publish:
+```
+
+With this change, the channels section of the YAML file will look like this
+```
+channels:
+  SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
+    subscribe:
+      x-scs-function-name: processTemperatureReading
+      message:
+        $ref: "#/components/messages/OperationalAlert"
+    parameters:
+      AlertType:
+        schema:
+          type: "string"
+      AlertPriority:
+        schema:
+          type: "string"
+  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
+    publish:
+      x-scs-function-name: processTemperatureReading
+      message:
+        $ref: "#/components/messages/TemperatureReading"
+    parameters:
+      city:
+        schema:
+          type: "string"
+      latitude:
+        schema:
+          type: "string"
+      longitude:
+        schema:
+          type: "string"
+```
+
 ###Generate code usign AsyncAPI Code Generator
 
 ✅ Change directory to cloudstream and run the following command
 
 ```
-cd ~/smarttown/cloudstream
+cd ~/github/smarttown/cloudstream
 ```
 
 Positive
@@ -595,17 +680,15 @@ Positive
 Run the following command to invoke AsyncAPI code generator utility.
 
 ```
-ag -o ac-city-alert-generator -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.springone -p javaPackage=com.springone.asyncapi.alertgenerator -p host=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555 -p username=smarttown -p password=smarttown -p msgVpn=springone-2021 asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+ag -o ac-city-alert-generator -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.springone -p javaPackage=com.springone.asyncapi.alertgenerator -p host=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555 -p username=smarttown -p password=smarttown -p msgVpn=springone-2021 ../asyncapi/asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 ```
 
-This command will take some time (ninute or so) and complete with the following message.
+This command will take some time (minute or so) and complete with the following message.
 
 ```
 Done! ✨
-Check out your shiny new generated files at /home/ubuntu/smarttown/cloudstream/ac-city-alert-generator.
+Check out your shiny new generated files at /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator.
 ```
-XXXX
-
 ###Open Spring Tool Suite
 
 * Open Spring Cloud Suite tool by clicking on the icon in the desktop (if not open already)
@@ -616,67 +699,116 @@ XXXX
 
 ✅ Review the TemperatureReading java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters. 
 
-It is sames as the TemperatureReading POJO present in the iot-data-collector microservice.
+It is same as the TemperatureReading POJO present in the iot-data-collector microservice.
 
 ####OperationalAlert.java
 
 ✅ Review the OperationalAlert java file. It carries operational alert data - a simple POJO with attributes and corresponding getters/setters. 
 
-####Application.java
-
 Negative
-: Due to a minor bug in the AsyncAPI code generator (ag utility), you have to manually 
+: Add the import statement manually at the top of the file along with other import statements.
+```
+import com.fasterxml.jackson.annotation.JsonProperty;
+```
+
+####Application.java
 
 ✅ Review the Application.java, specifically the Supplier function.
 
+Negative
+: Add the @Bean annotation before the Function statement 
+```
+  @Bean
+	public Function<TemperatureReading, Message<OperationalAlert>> processTemperatureReading() {
+```
+Add the import statement manually at the top of the file along with other import statements.
+```
+import org.springframework.context.annotation.Bean;
+```
+
+Let us review the Function
 ```
 @Bean
-Supplier<Message<TemperatureReading>> publishTemperatureData()  {
-  return () -> {
-    // Collect CPU metrics 
-    SystemInfo si = new SystemInfo();
-    HardwareAbstractionLayer hal = si.getHardware();
-    Sensors sensors = hal.getSensors();
-    CentralProcessor processor = hal.getProcessor();
-    double[] loadAverage = processor.getSystemLoadAverage(1);
-    BigDecimal cpuLoad = new BigDecimal((loadAverage[0] < 0 ? 0 : loadAverage[0]));
-    BigDecimal cpuTemp = new BigDecimal(50.0 + cpuLoad.doubleValue() * 8.0);
-    // Construct the topic name with alert type and priority as per the Topic hierarchy design
-    // SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}
-    String topic = "SmartTown/Operations/temperatureReading/created/v1/" + city + "/" + latitude + "/" + longitude;	        			
-    TemperatureReading data = new TemperatureReading(cpuLoad, city, latitude, longitude, cpuTemp);
-    logger.info(data.toString());	
+  public Function<TemperatureReading, Message<OperationalAlert>> processTemperatureReading() {
+    return data -> {
+      // Add business logic here.
+      logger.info(data.toString());
+      String alertType = "string";
+      String alertPriority = "string";
+      String topic = String.format("SmartTown/Operations/OperationalAlert/created/v1/%s/%s",
+        alertType, alertPriority);
+      OperationalAlert payload = new OperationalAlert();
+      Message message = MessageBuilder
+        .withPayload(payload)
+        .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+        .build();
 
-    // Set the target destination on the message with the constructed topic name
-    return MessageBuilder.withPayload(data)
-            .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
-            .build();		
-  };
-}	
-
+      return message;
+    };
+  }
 ```
 
-✅ The Supplier function is a Cloud Stream message exchange contract that publishes an event to configured Event Broker.
+This Spring Cloud Stream _Function_ contract is a processor that subscribes to __TemperatureReading__ message, and publishes a __OperationalAlert__ message. 
+
+The business logic of what transpires in this function is something we will be coding here. Our goal is to generate Alerts of HighTemperature type with three distinct priority levels:
+* LOW: When temperature > 60 and <= 70
+* MEDIUM: When temperature > 70 and <= 80
+* HIGH: When temperature > 80
+
+With the updated logic, the Function contract will be
+```
+@Bean
+public Function<TemperatureReading, Message<OperationalAlert>> processTemperatureReading() {
+  return data -> {
+    // NOTE: A return value of null indicates that no message will be published to the Broker 
+    if (data.getMCpuTemp().doubleValue() <= 60)
+      return null;
+    
+    // Since the goal is to generate temperature alerts, set the alertType to a 
+    // default value of 'HighTemperature' 
+    String alertType = "HighTemperature"; // HighCpuLoad
+    
+    // Based on the defined bounds for Low, Medium and High temperature,
+    // check the incoming temperature reading and set the alert priority appropriately
+    String alertPriority = "High";
+    if (data.getMCpuTemp().doubleValue() > 60 && data.getMCpuTemp().doubleValue() <= 70)
+      alertPriority = "Low";
+    else if (data.getMCpuTemp().doubleValue() > 70 && data.getMCpuTemp().doubleValue() <= 80)
+      alertPriority = "Medium";
+    
+    // Construct the topic name with alert type and priority as per the Topic hierarchy design
+    //		SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}
+    String topic = String.format("SmartTown/Operations/OperationalAlert/created/v1/%s/%s",
+      alertType, alertPriority);
+    
+    // Construct an OperatinalAlert object 
+    OperationalAlert payload = new OperationalAlert(alertPriority, alertType, data.getMCity(), data.getMCpuTemp(), 
+                            data.getMLatitude(), data.getMLongitude());
+    
+    logger.info("Operational Alert: \n" + payload.toString());
+    
+
+    // Add OperationalAlert as type parameter to Message declaration (AsyncAPI codegen will fix this soon)
+    Message<OperationalAlert> message = MessageBuilder
+      .withPayload(payload)
+      .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+      .build();
+
+    return message;
+  };
+```
+
+There could be other internal services like monitor and external applications like analytics, dashboard could subscribe to this Alert event.
 
 ✅ Notice the topic name construction:     
 
-__SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}__
+__SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}__
 
-The values for variables _city, latitude_ and _longitude_ are read from the configuration file.
+The topic name is dynamically constructed by concatenating the root topic name and computed values for _AlertPriority_, and _AlertType_ . 
 
-The topic name is dynamically constructed by concatenating the root topic name and dynamic values picked up from the application configuration. 
-
-✅ The return value from the _Supplier_ function is a Spring Cloud Stream _Message_ that is set with destination as the dynamic topic, which is effectively a publish on the Event Broker.
+✅ The return value from the _Function_ function is a Spring Cloud Stream _Message_ that is set with destination as the dynamic topic and published to the Broker.
 
 ✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using _stress_ system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.
-
-Positive
-: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
-To run the stress command, type:    
-```   
-stress -c 4 -t 180
-```   
-This will simulate load on the VM and till timeout after 180 seconds.
 
 ####application.yml
 
@@ -686,18 +818,15 @@ Positive
 ✅ Review the application.yml
 
 ```
-server.port: 8082
-application:
-  city: <enter your city here>      # e.g., Bangalore
-  latitude: <enter latitude>        # e.g., 13.019568
-  longitude: <enter longitude>      # e.g., 77.596809
 spring:
   cloud:
     function:
-      definition: publishTemperatureData
+      definition: processTemperatureReading
     stream:
       bindings:
-        publishTemperatureData-out-0:
+        processTemperatureReading-out-0:
+          destination: 'SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}'
+        processTemperatureReading-in-0:
           destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
       binders:
         solace-binder:
@@ -705,7 +834,7 @@ spring:
           environment:
             solace:
               java:
-                host: 'tcp://xxxxx.messaging.solace.cloud:55555'
+                host: <enter solace host url> # e.g., 'tcp://xxxxx.messaging.solace.cloud:55555'
                 msgVpn: springone-2021
                 clientUsername: smarttown
                 clientPassword: smarttown
@@ -714,26 +843,170 @@ logging:
     root: info
     org:
       springframework: info
-      
+
 ```
 
 Affect the following changes on the yaml file:
-1. Goto [Latlang.net](https://www.latlong.net) and enter your city name to get latitude and longitude values
-2. In the yml file
-   * Update your city name
-   * Update latitude
-   * Update longitude
-   * Update the msgVpn name (instructor to provide the host name)
-3. Save the file
+1. In the yml file
+   * Update the host name (instructor to provide )
+2. Save the file
 
+## Workshop - Execution
 ####Running the IoT Data Simulation
 
 ✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.
 ```
-cd ~/smarttown/cloudstream/iot-data-collector
+cd ~/github/smarttown/cloudstream/iot-data-collector
 mvn clean spring-boot:run
 ```
 This should run the simulator microservice and publish temperature reading events to the Event Broker.
+
+####Running the Alert Generator
+
+✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.
+```
+cd ~/github/smarttown/cloudstream/ac-city-alert-generator
+mvn clean spring-boot:run
+```
+This should run the alert generator microservice that subscribes to temperature reading event and publishes appropriate operational alert  events to the Event Broker.
+
+Output from the alert generator microservice:
+```
+ubuntu@ip-172-31-4-68:~/github/smarttown/cloudstream/ac-city-alert-generator$ mvn clean spring-boot:run
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------< com.springone:ac-city-alert-generator >----------------
+[INFO] Building ac-city-alert-generator 1
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ ac-city-alert-generator ---
+[INFO] Deleting /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target
+[INFO] 
+[INFO] >>> spring-boot-maven-plugin:2.4.7:run (default-cli) > test-compile @ ac-city-alert-generator >>>
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ ac-city-alert-generator ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ ac-city-alert-generator ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ ac-city-alert-generator ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ ac-city-alert-generator ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot-maven-plugin:2.4.7:run (default-cli) < test-compile @ ac-city-alert-generator <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.4.7:run (default-cli) @ ac-city-alert-generator ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.7)
+
+2021-08-31 16:23:35.125  INFO 10058 --- [           main] c.s.asyncapi.alertgenerator.Application  : Starting Application using Java 11.0.10 on ip-172-31-4-68 with PID 10058 (/home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator)
+2021-08-31 16:23:35.146  INFO 10058 --- [           main] c.s.asyncapi.alertgenerator.Application  : No active profile set, falling back to default profiles: default
+2021-08-31 16:23:35.604  INFO 10058 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-08-31 16:23:35.609  INFO 10058 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'taskScheduler' has been explicitly defined. Therefore, a default ThreadPoolTaskScheduler will be created.
+2021-08-31 16:23:35.612  INFO 10058 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-08-31 16:23:35.642  INFO 10058 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 16:23:35.648  INFO 10058 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationChannelResolver' of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 16:23:35.649  INFO 10058 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 16:23:36.044  INFO 10058 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-08-31 16:23:36.091  INFO 10058 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-08-31 16:23:36.108  INFO 10058 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-08-31 16:23:36.130  INFO 10058 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host 'orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555' (smfclient 1)
+2021-08-31 16:23:36.169  INFO 10058 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-08-31 16:23:36.169  INFO 10058 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 16:23:36.171  INFO 10058 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel 'application.processTemperatureReading-in-0' has 1 subscriber(s).
+2021-08-31 16:23:36.239  INFO 10058 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2021-08-31 16:23:36.239  INFO 10058 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel 'application.errorChannel' has 1 subscriber(s).
+2021-08-31 16:23:36.239  INFO 10058 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean '_org.springframework.integration.errorLogger'
+2021-08-31 16:23:36.239  INFO 10058 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 16:23:36.306  INFO 10058 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType} <message handler ID: c6cd6f7a-99b0-4346-9224-3dc47309018e>
+2021-08-31 16:23:36.306  INFO 10058 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-08-31 16:23:36.316  INFO 10058 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel 'application.processTemperatureReading-out-0' has 1 subscriber(s).
+2021-08-31 16:23:36.318  INFO 10058 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 16:23:36.341  INFO 10058 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creating anonymous (temporary) queue scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_
+2021-08-31 16:23:36.341  INFO 10058 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Testing consumer flow connection to queue scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_ (will not start it)
+2021-08-31 16:23:36.361  INFO 10058 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Connected test consumer flow to queue scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_, closing it
+2021-08-31 16:23:36.364  INFO 10058 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'SmartTown/Operations/temperatureReading/created/v1/*/*/*.anon.f6c9f456-2ede-428b-83e2-0c6812c81dcf.errors' has 1 subscriber(s).
+2021-08-31 16:23:36.364  INFO 10058 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel 'SmartTown/Operations/temperatureReading/created/v1/*/*/*.anon.f6c9f456-2ede-428b-83e2-0c6812c81dcf.errors' has 2 subscriber(s).
+2021-08-31 16:23:36.368  INFO 10058 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating 1 consumer flows for queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_ <inbound adapter 1e171df2-ff26-42bb-bf5a-2f736842fd5c>
+2021-08-31 16:23:36.368  INFO 10058 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating consumer 1 of 1 for inbound adapter 1e171df2-ff26-42bb-bf5a-2f736842fd5c
+2021-08-31 16:23:36.369  INFO 10058 --- [           main] c.s.s.c.s.b.util.FlowReceiverContainer   : Binding flow receiver container 9706be2c-b181-45ce-8488-1e21c86a0503
+2021-08-31 16:23:36.376  INFO 10058 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Subscribing queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_ to topic SmartTown/Operations/temperatureReading/created/v1/*/*/*
+2021-08-31 16:23:36.379  INFO 10058 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : started com.solace.spring.cloud.stream.binder.inbound.JCSMPInboundChannelAdapter@1b6924cb
+2021-08-31 16:23:36.390  INFO 10058 --- [           main] c.s.asyncapi.alertgenerator.Application  : Started Application in 1.632 seconds (JVM running for 1.921)
+2021-08-31 16:23:43.960  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.4375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:45.009  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:46.046  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:47.089  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:47.996  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.3125 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:49.004  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:50.016  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:23:51.022  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.3125 lat: 28.538336 _long: -81.379234 ]
+.....
+2021-08-31 16:24:41.938  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76 lat: 13.019568 _long: 77.596809 ]
+2021-08-31 16:24:42.442  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.4375 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:24:42.942  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.7600000000000051159076974727213382720947265625 lat: 13.019568 _long: 77.596809 ]
+2021-08-31 16:24:43.947  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+.....
+2021-08-31 16:25:02.029  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.240000000000009094947017729282379150390625 lat: 13.019568 _long: 77.596809 ]
+2021-08-31 16:25:02.614  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.0625 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:25:03.034  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 83.520000000000010231815394945442676544189453125 lat: 13.019568 _long: 77.596809 ]
+2021-08-31 16:25:03.620  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.0625 lat: 28.538336 _long: -81.379234 ]
+2021-08-31 16:25:04.038  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 83.520000000000010231815394945442676544189453125 lat: 13.019568 _long: 77.596809 ]
+....
+
+```
+
+####Simulating CPU load to generate 
+
+✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.
+
+Positive
+: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
+To run the stress command, type:    
+```   
+stress -c 6 -t 180
+```   
+This will simulate load on the VM and till timeout after 180 seconds.
+
+
 ## Conclusion
 
 Description of setup, general access and overview
