@@ -463,7 +463,7 @@ logging:
       
 ```
 
-Affect the following changes on the yaml file:
+Affect the following changes on the application configuration file:
 1. Goto [Latlang.net](https://www.latlong.net) and enter your city name to get latitude and longitude values
 2. In the yml file
    * Update your city name
@@ -625,7 +625,7 @@ Append the line below
 a) After 
 
 channels:
-  SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
+  SmartTown/Operations/OperationalAlert/created/v1/{city}/{AlertPriority}/{AlertType}:
     subscribe:
 
 b) And after
@@ -813,7 +813,10 @@ The topic name is dynamically constructed by concatenating the root topic name a
 ####application.yml
 
 Positive
-: Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+: 1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+
+Positive
+: 2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
 
 ✅ Review the application.yml
 
@@ -846,9 +849,18 @@ logging:
 
 ```
 
-Affect the following changes on the yaml file:
+Affect the following changes on the application configuration file:
 1. In the yml file
    * Update the host name (instructor to provide )
+   * Update the bindings for _processTemperatureReading-in-0_ with the City name you are publishing the TemperatureReading events. Assuming that your city is _London_
+      From: 
+      ```
+        destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      ```
+      To: 
+      ```
+        destination: SmartTown/Operations/temperatureReading/created/v1/London/*/*
+      ```
 2. Save the file
 
 ## Workshop - Execution
