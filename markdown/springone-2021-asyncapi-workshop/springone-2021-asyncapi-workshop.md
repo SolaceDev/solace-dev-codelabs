@@ -967,41 +967,67 @@ WARNING: All illegal access operations will be denied in a future release
 2021-08-31 16:23:36.376  INFO 10058 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Subscribing queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/f6c9f456-2ede-428b-83e2-0c6812c81dcf/plain/SmartTown/Operations/temperatureReading/created/v1/_/_/_ to topic SmartTown/Operations/temperatureReading/created/v1/*/*/*
 2021-08-31 16:23:36.379  INFO 10058 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : started com.solace.spring.cloud.stream.binder.inbound.JCSMPInboundChannelAdapter@1b6924cb
 2021-08-31 16:23:36.390  INFO 10058 --- [           main] c.s.asyncapi.alertgenerator.Application  : Started Application in 1.632 seconds (JVM running for 1.921)
-2021-08-31 16:23:43.960  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.4375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:45.009  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:46.046  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:47.089  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:47.996  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.3125 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:49.004  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:50.016  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:23:51.022  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.3125 lat: 28.538336 _long: -81.379234 ]
-.....
-2021-08-31 16:24:41.938  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76 lat: 13.019568 _long: 77.596809 ]
-2021-08-31 16:24:42.442  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.4375 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:24:42.942  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.7600000000000051159076974727213382720947265625 lat: 13.019568 _long: 77.596809 ]
-2021-08-31 16:24:43.947  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-.....
-2021-08-31 16:25:02.029  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.240000000000009094947017729282379150390625 lat: 13.019568 _long: 77.596809 ]
-2021-08-31 16:25:02.614  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.0625 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:25:03.034  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 83.520000000000010231815394945442676544189453125 lat: 13.019568 _long: 77.596809 ]
-2021-08-31 16:25:03.620  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: Low alertType: HighTemperature city: Orlando temperature: 60.0625 lat: 28.538336 _long: -81.379234 ]
-2021-08-31 16:25:04.038  INFO 10058 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
-OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 83.520000000000010231815394945442676544189453125 lat: 13.019568 _long: 77.596809 ]
+....
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:46.280  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:47.290  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.06640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:48.295  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.06640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:49.300  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.06640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:50.304  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.06640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:51.309  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.06640625 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:52.314  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.8203125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:53.315  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.8203125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:54.324  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.8203125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:55.326  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.8203125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:56.331  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.8203125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:57.338  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 78.15234375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:58.336  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 78.15234375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:27:59.341  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 78.15234375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:00.356  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 78.15234375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:01.350  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 78.15234375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:02.355  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.17578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:03.361  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.17578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:04.365  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.17578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:05.370  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.17578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:06.376  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 77.17578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:07.381  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.27734375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:08.381  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.27734375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:09.386  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.27734375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:10.396  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.27734375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:11.400  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.27734375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:12.407  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.09375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:13.414  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.09375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:14.421  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.09375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 07:28:15.433  INFO 44069 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert:
 ....
 
 ```
