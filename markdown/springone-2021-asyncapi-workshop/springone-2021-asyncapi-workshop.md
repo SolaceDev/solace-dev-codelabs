@@ -10,7 +10,6 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 # Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh
 
 ## Overview
-
 Duration: 0:01:00
 
 Are you passionate about building modern, real-time applications? Is your organization adopting an event-driven architecture (EDA) to compete in our event-driven world? Build and expand your developer toolbox by learning how to define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an event mesh.
@@ -28,8 +27,8 @@ Prerequisites
 - Computer
 
 ## Requirements
-
 Duration: 0:01:00
+
 
 🛠 This page covers the setup needed to perform this codelab. 🛠
 
@@ -71,7 +70,6 @@ Note that no credit card is required. You will receive an email to activate the 
 ✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations to stream events across the globe.🚀
 
 ## Spring Cloud Stream
-
 Duration: 0:03:00
 
 ![Cloud Stream Intro](img/spring-cloud-logo.png)
@@ -129,7 +127,6 @@ Instead of having to learn Messaging APIs, developers just have to understand th
 - Solace Codelab - [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond)
 
 ## AsyncAPI
-
 Duration: 0:03:00
 
 ![](img/asyncapi-logo.png)
@@ -179,9 +176,7 @@ The generated spring project is a regular Spring Boot Java project with generate
 - [AsyncAPI Code Generation: Microservices Using Spring Cloud Stream](https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/)
 
 ## Event Mesh
-
 Duration: 0:03:00
-
 
 ![](img/event-mesh-logo.png)
 
@@ -217,7 +212,6 @@ An event mesh is:
 - [How to Build an Event Mesh with Solace PubSub+](https://www.youtube.com/watch?v=8Pln8dNSd4U)
 
 ## API Products
-
 Duration: 0:03:00
 
 API products are groups of related APIs that fulfil some business functions, often in a bounded content helping others to consume your Business capabilities.
@@ -295,8 +289,6 @@ A view that captures the relationship between Applications within the Domain bas
 ![](img/smarttown-event-view.jpg)
 
 ## SmartTown (External View)
-
-
 Duration: 0:03:00
 
 Next step in building an Event API product involves bundling of high-value, share-worthy events. The resulting bundle is released as a specification for public consumption. The generated specification is based on a commonly understood standard - like AsyncAPI. 
@@ -319,9 +311,7 @@ The next logical step is to expose the curated bundle of APIs to make them disco
 Interested parties can download the AsyncAPI specification from this public URL and build applications with minimal code using AsyncAPI codegen tools.
 
 ## Microservices
-
 Duration: 0:03:00
-
 
 ![](img/smarttown-eda-design.jpg)
 
@@ -355,9 +345,8 @@ Positive
 : We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
 
 ## Workshop - IoT Sensor Data Simulation
-
-
 Duration: 0:08:00
+
 
 ###Clone Git repository
 
@@ -481,6 +470,7 @@ logging:
 ```
 
 Affect the following changes on the application configuration file:
+
 1. Goto [Latlang.net](https://www.latlong.net) and enter your city name to get latitude and longitude values
 2. In the yml file
    * Update your city name
@@ -614,7 +604,6 @@ stress -c 6 -t 180
 As the CPU load increases, you will see the temperature reading increasing as well. This variation will help the alert generator microservice (next one) to publish temperature alerts with different priority levels.
 
 ## Workshop - Alert Generator Microservice
-
 Duration: 0:10:00
 
 We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.
@@ -833,6 +822,7 @@ Positive
 Positive
 : 2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
 
+
 ✅ Review the application.yml
 
 ```
@@ -864,6 +854,7 @@ logging:
 
 ```
 
+
 Affect the following changes on the application configuration file:
 1. In the yml file
    * Update the host name (instructor to provide )
@@ -879,10 +870,10 @@ Affect the following changes on the application configuration file:
 2. Save the file
 
 ## Workshop - Execution
-
 Duration: 0:08:00
 
-####Running the IoT Data Simulation
+
+#### Running the IoT Data Simulation
 
 ✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.
 ```
@@ -1047,6 +1038,7 @@ OperationalAlert [ severity: Low alertType: HighTemperature city: Bangalore temp
 [INFO] ------------------------------------------------------------------------
 ubuntu@ip-172-31-30-54:~/github/smarttown/cloudstream/ac-city-alert-generator$ 
 ubuntu@ip-172-31-30-54:~/github/smarttown/cloudstream/ac-city-alert-generator$ mvn clean spring-boot:run
+
 WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
@@ -1094,7 +1086,6 @@ WARNING: All illegal access operations will be denied in a future release
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.4.7)
-
 2021-09-01 10:27:46.445  INFO 10353 --- [           main] c.s.asyncapi.alertgenerator.Application  : Starting Application using Java 11.0.10 on ip-172-31-30-54 with PID 10353 (/home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator)
 2021-09-01 10:27:46.448  INFO 10353 --- [           main] c.s.asyncapi.alertgenerator.Application  : No active profile set, falling back to default profiles: default
 2021-09-01 10:27:46.975  INFO 10353 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
@@ -1184,6 +1175,7 @@ OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore t
 2021-09-01 10:28:41.873  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
 OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 75.280000000000001136868377216160297393798828125 lat: 13.019568 _long: 77.596809 ]
 ................................................................
+
 
 ```
 
