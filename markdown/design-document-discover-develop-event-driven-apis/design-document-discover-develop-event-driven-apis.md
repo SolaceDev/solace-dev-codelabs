@@ -836,7 +836,7 @@ Once you have decided on the application domains that are required for your ente
 
 If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.
 
-[Event Portal Discovery with Kafka Code Lab] (https://codelabs.solace.dev/codelabs/ep-discovery-kafka)
+[Follow the Solace Docs to Perform Event Discovery](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers)
 
 ## The AsyncAPI Initiative
 
