@@ -10,9 +10,20 @@
   "summary": "A guided walk through of PubSub+ Event Portal Discovery with Kafka",
   "source": "ep-discovery-kafka.md",
   "theme": "",
-  "status": ["draft"],
-  "category": ["kafka", "event portal", "taxi"],
-  "tags": ["event-portal", "guide", "kafka", "web"],
+  "status": [
+    "hidden"
+  ],
+  "category": [
+    "kafka",
+    "event portal",
+    "taxi"
+  ],
+  "tags": [
+    "event-portal",
+    "guide",
+    "kafka",
+    "web"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-discovery-kafka",
   "url": "ep-discovery-kafka"
 }
