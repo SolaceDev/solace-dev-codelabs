@@ -1,0 +1,31 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-09-24T18:35:32+05:30",
+  "id": "create-api-products-using-scs-and-ep",
+  "duration": 45,
+  "title": "Creating Event API Products using Spring Cloud Stream, Event Portal and AsyncAPI",
+  "summary": "Building EventAPI Products using Spring Cloud Stream, Event Portal and AsyncAPI",
+  "source": "create-api-products-using-scs-and-ep.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring",
+    "java",
+    "asyncapi",
+    "event portal"
+  ],
+  "tags": [
+    "asyncapi",
+    "event portal",
+    "spring cloud stream",
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/create-api-products-using-scs-and-ep",
+  "url": "create-api-products-using-scs-and-ep"
+}
