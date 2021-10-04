@@ -66,7 +66,14 @@ Ensure that you have captured the following details on connection information th
 - Node.js v12.16+ (Check version using `node -v`)
 - npm v6.13.7+ (Check version using `npm -version`)
 
-We'll install the generator itself later 👍
+Run the following command in a terminal window
+
+```
+npm install -g @asyncapi/generator
+```
+
+Negative
+: If the logged in user doesn't have write permission on /usr/lib/* folders, try running the command with sude prefix -  ```sudo npm install -g @asyncapi/generator```      
 
 ### Spring Cloud Stream Requirements
 
@@ -77,6 +84,23 @@ We'll install the generator itself later 👍
   - On mac you can `brew install maven`
   - Other install instructions [here](https://maven.apache.org/install.html)
 - Your favorite Java IDE 💥
+
+### Clone Git Repository
+
+A ready to use code of few of the microservices referred in this workshop are available in Git. We will use this codebase and build new code wherever necessary to complete this workshop.
+
+Positive
+: Also, the completed solution is available in a branch (solution) on the same repository.
+
+* Launch Terminal application 
+* Execute the following command 
+  ```
+  cd ~/github
+
+  git clone https://github.com/gvensan/smarttown.git
+  ```
+  This would create a directory by name __smarttown__ and checkout the git repository contents.
+  ![](img/workshop-setup-1.jpg)
 
 ## PubSub+ Event Portal
 Duration: 0:03:00
@@ -507,9 +531,7 @@ In the Create Event page:
 
 ## Create Application
 
-✅ Create application under ___Temperature Sensors	
-___ Application  
-
+✅ Create application under ___SmartTown - Operations___
 ![](img/ep-create-application-1.png)
 
 ✅ Launch create application option
@@ -666,7 +688,7 @@ AsyncAPI has emerged as the industry standard for defining asynchronous, event-d
 
 It is an open source initiative that provides both 
 * a specification to describe and document your asynchronous applications in a machine-readable format, and 
-* tooling (such as code generators) to make life easier for developers tasked with implementing them.
+* tooling (such as code generators) to make life easier for developers tasked with implementing them.   
 
 ### AsyncAPI Document
 
@@ -801,18 +823,6 @@ Make a note of the __Host URI__ from the connection detailsx
 
 ## Create IoT Data Simulator MicroService
 Duration: 0:08:00
-
-###Clone Git repository
-
-* Launch Terminal application 
-* Execute the following command 
-  ```
-  cd ~/github
-
-  git clone https://github.com/gvensan/smarttown.git
-  ```
-  This would create a directory by name __smarttown__ and checkout the git repository contents.
-  ![](img/workshop-setup-1.jpg)
 
 The directory __github/cloudstream/ac-city-iot-simulator__ contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.
 
@@ -1072,9 +1082,8 @@ Negative
 : Be sure to update the host URI in the __-p host__ parameter with the host URL noted from the Spring Cloud Stream connection settings in the previous section.     
 
 ``` 
-ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=smarttown -p password=smarttown -p msgVpn=solace-eap asyncapi.yml @asyncapi/java-spring-cloud-stream-template --force-write
+ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=smarttown -p password=smarttown -p msgVpn=solace-eap asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 ```
-
 
 This command will take some time (minute or so) and complete with the following message.
 
