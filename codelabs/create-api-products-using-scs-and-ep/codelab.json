@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-10-04T15:57:19+05:30",
+  "updated": "2021-10-04T22:57:14+05:30",
   "id": "create-api-products-using-scs-and-ep",
   "duration": 47,
   "title": "Creating Event API Products using Spring Cloud Stream, Event Portal and AsyncAPI",

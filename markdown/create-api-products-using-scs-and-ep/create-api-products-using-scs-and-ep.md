@@ -46,11 +46,8 @@ Complete the following steps:
 
 2. __Create an Event Broker Service__ Create an event broker service (or simply a service) using Cluster Manager tool and name the service as `solace-eap`. 
    For more information on accessing the Cloud Console, check out the [documentation](https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm)
-
-3. __Note down your Event Broker Service's Connection Information__ 
-   For more information on accessing the Cloud Console, check out the [documentation](https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm)
    
-4. __Create a Client Username__ Connect to the broker service and open the Message VPN console to add client username under `Access Control` setting. Create a client username `smarttown` with password `smarttown`. 
+3. __Create a Client Username__ Connect to the broker service and open the Message VPN console to add client username under `Access Control` setting. Create a client username `smarttown` with password `smarttown`. 
 
 Ensure that you have captured the following details on connection information that will be used in this codelab.
 
@@ -65,15 +62,6 @@ Ensure that you have captured the following details on connection information th
 
 - Node.js v12.16+ (Check version using `node -v`)
 - npm v6.13.7+ (Check version using `npm -version`)
-
-Run the following command in a terminal window
-
-```
-npm install -g @asyncapi/generator
-```
-
-Negative
-: If the logged in user doesn't have write permission on /usr/lib/* folders, try running the command with sude prefix -  ```sudo npm install -g @asyncapi/generator```      
 
 ### Spring Cloud Stream Requirements
 
