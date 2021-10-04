@@ -19,7 +19,7 @@ The purpose of this CodeLab is to provide an introduction to the **Solace PubSub
 [KEDA](https://keda.sh) is a [CNCF](https://www.cncf.io) sandbox project (current as of this writing). KEDA expands the capability of the native [Kubernetes Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). It does this by providing an interface for HPA to retrieve custom metric values that can be used for scaling.
 
 ### What is the Solace Scaler?
-The [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.4cale/sollace-event-queue/) defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current ***Message Count*** and ***Message Spool Usage***. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.
+The [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.4/scalers/solace/) defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current ***Message Count*** and ***Message Spool Usage***. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.
 
 Consider the following diagram. A Solace PubSub+ Event Broker hosts a set of queues. The messages from each queue are being consumed by a microservice deployed to a Kubernetes cluster. KEDA uses the Solace Scaler to interface with the PubSub+ Broker via the SEMP API to obtain metrics related to the queue. In this example, we are interested in _Message Count_. Based on the Message Count retrieved for each queue, KEDA and the Horizontal Pod Autoscaler maintain the appropriate number of desired replicas. 
 
@@ -673,7 +673,7 @@ In the course of this CodeLab you learned how to install KEDA. And you learned h
 ### References
 
 - [KEDA Web Site](https://keda.sh)
-- [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.4cale/sollace-event-queue/)
+- [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.4/scalers/solace/)
 - [KEDA GitHub Project](https://githhub.com/kedacore/keda)
 - [Kubernetes Horizontal Pod Autoscaler](https://kio/docs/tasks/run-application/horizontal-pod-autoscale/)
 
