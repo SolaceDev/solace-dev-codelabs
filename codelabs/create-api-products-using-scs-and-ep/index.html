@@ -55,7 +55,6 @@
 <ol type="1">
 <li><strong>Log into the PubSub+ Cloud Console</strong>  To start using PubSub+ Cloud, log in to the PubSub+ Cloud Console. For more information on accessing the Cloud Console, check out the <a href="https://docs.solace.com/Solace-Cloud/ggs_login.htm" target="_blank">documentation</a></li>
 <li><strong>Create an Event Broker Service</strong> Create an event broker service (or simply a service) using Cluster Manager tool and name the service as <code>solace-eap</code>. For more information on accessing the Cloud Console, check out the <a href="https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm" target="_blank">documentation</a></li>
-<li><strong>Note down your Event Broker Service&#39;s Connection Information</strong> For more information on accessing the Cloud Console, check out the <a href="https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm" target="_blank">documentation</a></li>
 <li><strong>Create a Client Username</strong> Connect to the broker service and open the Message VPN console to add client username under <code>Access Control</code> setting. Create a client username <code>smarttown</code> with password <code>smarttown</code>.</li>
 </ol>
 <p>Ensure that you have captured the following details on connection information that will be used in this codelab.</p>
@@ -71,7 +70,6 @@
 <li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
 <li>npm v6.13.7+ (Check version using <code>npm -version</code>)</li>
 </ul>
-<p>We&#39;ll install the generator itself later 👍</p>
 <h2 is-upgraded>Spring Cloud Stream Requirements</h2>
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
@@ -83,6 +81,15 @@
 </li>
 <li>Your favorite Java IDE 💥</li>
 </ul>
+<h2 is-upgraded>Clone Git Repository</h2>
+<p>A ready to use code of few of the microservices referred in this workshop are available in Git. We will use this codebase and build new code wherever necessary to complete this workshop.</p>
+<aside class="special"><p>Also, the completed solution is available in a branch (solution) on the same repository.</p>
+</aside>
+<ul>
+<li>Launch Terminal application</li>
+<li>Execute the following command <br><code>cd ~/github<br>git clone https://github.com/gvensan/smarttown.git<br></code></li>
+</ul>
+<p>This would create a directory by name <strong>smarttown</strong> and checkout the git repository contents.   <img src="img/43a3b8686a6a3b71.jpg"></p>
 
 
       </google-codelab-step>
@@ -470,8 +477,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Create Application" duration="0">
-        <p>✅ Create application under ___Temperature Sensors	 ___ Application</p>
-<p class="image-container"><img src="img/a3ab3dad45b30334.png"></p>
+        <p>✅ Create application under <strong><em>SmartTown - Operations</em></strong><img src="img/a3ab3dad45b30334.png"></p>
 <p>✅ Launch create application option</p>
 <p class="image-container"><img src="img/cef4230f892dc4c0.png"></p>
 <h2 is-upgraded>Create Application - Temperature Sensors	</h2>
@@ -593,7 +599,7 @@
 <p>It is an open source initiative that provides both</p>
 <ul>
 <li>a specification to describe and document your asynchronous applications in a machine-readable format, and</li>
-<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.</li>
+<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.<br></li>
 </ul>
 <h2 is-upgraded>AsyncAPI Document</h2>
 <p>An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.</p>
@@ -703,13 +709,7 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="Create IoT Data Simulator MicroService" duration="8">
-        <h2 is-upgraded>Clone Git repository</h2>
-<ul>
-<li>Launch Terminal application</li>
-<li>Execute the following command <br><code>cd ~/github<br>git clone https://github.com/gvensan/smarttown.git<br></code></li>
-</ul>
-<p>This would create a directory by name <strong>smarttown</strong> and checkout the git repository contents.   <img src="img/43a3b8686a6a3b71.jpg"></p>
-<p>The directory <strong>github/cloudstream/ac-city-iot-simulator</strong> contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.</p>
+        <p>The directory <strong>github/cloudstream/ac-city-iot-simulator</strong> contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.</p>
 <p>Import the projects under <strong>github/cloudstream/</strong> directory.</p>
 <h2 is-upgraded>Launch Spring Tool Suite</h2>
 <ul>
@@ -919,7 +919,7 @@ b) And after
 <p>Run the following command to invoke AsyncAPI code generator utility.</p>
 <aside class="warning"><p>Be sure to update the host URI in the <strong>-p host</strong> parameter with the host URL noted from the Spring Cloud Stream connection settings in the previous section.<br></p>
 </aside>
-<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=smarttown -p password=smarttown -p msgVpn=solace-eap asyncapi.yml @asyncapi/java-spring-cloud-stream-template --force-write
+<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=smarttown -p password=smarttown -p msgVpn=solace-eap asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 </code></pre>
 <p>This command will take some time (minute or so) and complete with the following message.</p>
 <pre><code>Done! ✨
