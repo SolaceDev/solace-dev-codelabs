@@ -5,21 +5,14 @@
   "mainga": "UA-49880327-14",
   "updated": "2021-08-19T13:16:47-07:00",
   "id": "Boomi-request-reply",
-  "duration": 5,
+  "duration": 56,
   "title": "How to use the Solace Connector for Boomi Request Action",
   "summary": "",
   "source": "Boomi-request-reply.md",
   "theme": "",
-  "status": [
-    "draft"
-  ],
-  "category": [
-    "boomi",
-    "request-reply"
-  ],
-  "tags": [
-    "web"
-  ],
+  "status": ["draft"],
+  "category": ["boomi", "request-reply"],
+  "tags": ["web"],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Boomi-request-reply",
   "url": "Boomi-request-reply"
 }

@@ -23,6 +23,8 @@ In this codelab, You will learn how to implement the Solace Connector for Boomi 
 
 ## What you need: Prerequisites
 
+Duration: 0:04:00
+
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messagin).
 1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html) Codelab.
 
@@ -37,6 +39,8 @@ Positive
 : If you’re new to the world of events, welcome! Solace has [extensive blogs focusing on event-driven architecture and development.](https://solace.com/blog/)
 
 ## Use Case Overview
+
+Duration: 0:10:00
 
 In this example, we will be using the new Request Action within the Solace Connector Shape to perform a blocking synchronous request/reply in the middle of a Boomi Process. We will be doing the following:
 
@@ -60,6 +64,8 @@ POSITIVE
 Let’s get started!
 
 ## Create a Boomi Request Process
+
+Duration: 0:10:00
 
 The first thing we will do is create a simple Process in Boomi that makes a request via a publication to a Solace topic
 
@@ -95,6 +101,8 @@ Positive
 
 ## Solace Try-Me Feature
 
+Duration: 0:5:00
+
 - Prepare the Solace WebUI Try-Me tab to function as the consumer of the posted request and the replier to the Boomi Atom Process
   1. Login to your Solace PS+ Service that your Boomi Process is pointed to. Mine is hosted in Solace Cloud.
   1. Click on the Try-Me link on the left
@@ -113,6 +121,8 @@ Positive
   ![SubscribedToTopic](img/SubscribedToTopic.png)
 
 ## Test
+
+Duration: 0:20:00
 
 Positive
 : Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.
@@ -147,6 +157,8 @@ Positive
 : **Can Solace support mid-Process requests? Yes, it can!**
 
 ## Conclusion
+
+Duration: 0:2:00
 
 ### What did you learn?
 

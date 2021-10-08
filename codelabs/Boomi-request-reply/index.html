@@ -36,7 +36,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="0">
+      <google-codelab-step label="What you need: Prerequisites" duration="4">
         <ol type="1">
 <li>A general understanding of <a href="https://docs.solace.com/#Messagin" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
 <li>Basic knowledge of the Boomi GUI and deployments. A good place to start would be the <a href="https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html" target="_blank">Getting Started with Boomi and Solace</a> Codelab.</li>
@@ -54,7 +54,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Use Case Overview" duration="0">
+      <google-codelab-step label="Use Case Overview" duration="10">
         <p>In this example, we will be using the new Request Action within the Solace Connector Shape to perform a blocking synchronous request/reply in the middle of a Boomi Process. We will be doing the following:</p>
 <ol type="1">
 <li>Use Solace to handle the request which means the document that we feed to the Solace Connector Request will be published onto a topic.</li>
@@ -77,7 +77,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Create a Boomi Request Process" duration="0">
+      <google-codelab-step label="Create a Boomi Request Process" duration="10">
         <p>The first thing we will do is create a simple Process in Boomi that makes a request via a publication to a Solace topic</p>
 <h2 is-upgraded>Create a new Process</h2>
 <ul>
@@ -110,7 +110,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Solace Try-Me Feature" duration="0">
+      <google-codelab-step label="Solace Try-Me Feature" duration="5">
         <ul>
 <li>Prepare the Solace WebUI Try-Me tab to function as the consumer of the posted request and the replier to the Boomi Atom Process  <ol type="1">
 <li>Login to your Solace PS+ Service that your Boomi Process is pointed to. Mine is hosted in Solace Cloud.</li>
@@ -131,7 +131,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Test" duration="0">
+      <google-codelab-step label="Test" duration="20">
         <aside class="special"><p>Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.</p>
 </aside>
 <ul>
@@ -161,7 +161,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Conclusion" duration="0">
+      <google-codelab-step label="Conclusion" duration="2">
         <h2 is-upgraded>What did you learn?</h2>
 <p>We now have a native way for Boomi Atom Processes to communicate with external services in the middle of process execution by using what you learned in this codelab:</p>
 <ol type="1">
