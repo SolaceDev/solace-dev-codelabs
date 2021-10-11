@@ -59,15 +59,15 @@ Navigate to [this link](https://console.solace.cloud/login/new-account) and fill
 
 After you create your Solace Cloud account and sign in to the Solace Cloud Console, you'll be routed to the Solace Cloud Landing page.
 
-![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.webp "Solace Cloud Event Mesh")
+![Solace Cloud Event Mesh Page](img/landing-page-event-mesh.jpg "Solace Cloud Event Mesh")
 
 Click on 'Cluster Manager' and all the messaging services associated with your account will show up if you have any already created. To create a new service, click either button as depicted in the image below:
 
-![Solace Cloud Landing Page](img/landing-page-signup.webp "Solace Cloud Landing Page")
+![Solace Cloud Landing Page](img/landing-page-signup.jpg "Solace Cloud Landing Page")
 
 Fill out all the details for your messaging service, and then click "Create" at the bottom of the page. Note: make sure you choose the "Developer" option for the Service Type
 
-![Create Solace Cloud Messaging Service](img/create-service.png "Solace Cloud Messaging Service")
+![Create Solace Cloud Messaging Service](img/create-service.jpg "Solace Cloud Messaging Service")
 
 Your service should be ready to use in a few minutes
 
@@ -75,11 +75,11 @@ Your service should be ready to use in a few minutes
 
 If your messaging service was created successfully, you'll be routed to the summary page of your new messaging service. From the service summary page, click on the "Connect" tab so we can take note of the connection details we'll need later.
 
-![Connect Tab Preview](img/service-summary-page.webp "Connect Tab Preview")
+![Connect Tab Preview](img/service-summary-page.jpg "Connect Tab Preview")
 
 After you click the "Connect" tab, sort the supported client library menu by `Language` and click on the "Connect with Spring" box to expand it. 
 
-![client library menu](img/connect-tab.png "client library menu")
+![client library menu](img/connect-tab.jpg "client library menu")
 
 Click on the Get Started button next to the Spring Cloud Stream option. 
 
@@ -87,7 +87,7 @@ Click on the Get Started button next to the Spring Cloud Stream option.
 
 Take note of the "Connect to Service" section and you'll see that the connection details are already configured in the  spring.cloud.stream.binders part of the config to connect a Spring Cloud Stream microservice to your PubSub+ Messaging Service. We'll be using this soon 😄
 
-![Connect to service menu](img/connect-to-service.png "Connect to service menu")
+![Connect to service menu](img/connect-to-service.jpg "Connect to service menu")
 
 🚀 Setup complete! Let's get going! 🚀
 
@@ -152,17 +152,17 @@ In this section we are going to apply what we learned in the last few sections a
 
 ![SCSt Uppercase Diagram](img/scstUppercaseDiagram.webp)
 
-
+We will be using Spring Tool Suite as IDE for the codelab exercise. You can download Spring Tool Suite [here](https://spring.io/tools) 
 ### Use Spring Initializr to Generate your Project
 
 🚀 First we're going to use Spring Initializr to generate our Spring Boot project for us.
 
 1. Open the Spring Tool Suite IDE.
 1. Choose `File -> New -> Spring Starter Project`
-   ![Spring Starter Project](img/springStarterProject.webp)
+   ![Spring Starter Project](img/springStarterProject.jpg)
 1. On the first screen give your project a name of "springone" and click `Next`
 1. On the second screen search for "solace" under Available and choose both "Solace PubSub+" and "Cloud Stream"
-   ![Add Dependencies](img/solaceDependencies.webp)
+   ![Add Dependencies](img/solaceDependencies.png)
 1. Click `Finish`
 
 ✅ You should see a new project named "springone" in your IDE!
@@ -173,11 +173,15 @@ If you look at the `pom.xml` file you'll see a few important things:
 - The java version you chose is included
 - The "Spring Cloud Stream" and "Spring Cloud Starter Stream Solace" dependencies are included
 
-![Pom File](img/pom.webp)
+![Pom File](img/pom.jpg)
 
 ### Add Messaging Service Connection Info
 
 Open the application config file under `src/main/resources` and enter the properties below substituting the connection information with your messaging services' connect info we got from the Solace Cloud Connect tab in the previous section.
+
+### <strong>A. PubSub+ Broker running locally in Docker</strong>
+
+Review your Broker setup running on Docker container and make note of host, port, message VPN, client username and password.
 
 **Option 1: application.properties**   
 
@@ -209,8 +213,50 @@ spring:
                 host: 'tcp://localhost:55555'
                 msgVpn: default
 ```
+Negative
+: If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
 
+### <strong>B. PubSub+ Broker running on Solace Cloud</strong>
 
+Locate and use the credentials from the cloud broker setup.
+![cloud broker setup](img/connect-to-service.jpg)
+
+Negative
+: Update the host, port, message VPN, client username and password based on your cloud connection details.
+
+**Option 1: application.properties**   
+
+```
+spring.cloud.stream.binders.solace.type=solace
+spring.cloud.stream.binders.solace.environment.solace.java.host=tcps://xxxxxxx.messaging.solace.cloud:55443
+spring.cloud.stream.binders.solace.environment.solace.java.msgVpn==**********
+spring.cloud.stream.binders.solace.environment.solace.java.clientUsername=solace-cloud-client
+spring.cloud.stream.binders.solace.environment.solace.java.clientPassword=**********
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=0
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetriesPerHost=0
+```
+
+**Option 2: application.yml**   
+```
+spring:
+  cloud:
+    stream:
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                clientPassword: default
+                clientUsername: default
+                connectRetries: 0
+                connectRetriesPerHost: 0
+                host: tcps://xxxxxxx.messaging.solace.cloud:55443
+                msgVpn: **********
+```
+
+Negative
+: If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
 
 ### Write the Java Function
 
@@ -243,15 +289,37 @@ Negative
 🚀 Let's test it out.
 
 Run your app by right clicking on your project, choosing "Run As" and "Spring Boot App" if using Spring Tool Suite. From the command line you can also run by entering `mvn clean spring-boot:run`
-![Run App](img/runApp.webp)
+![Run App](img/runApp.jpg)
+
+Positive
+: Note: You can find more details about Spring's functional binding in the 'Function Composition' section. You can also refer to [spring documentation] (https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_bindings)
 
 ## Test your Microservice
 
 Duration: 0:03:00
 
+### <strong>A. PubSub+ Broker running locally in Docker</strong>
+✅ In order to test your function open Solace PubSub+ Manager and navigate to the Try Me! tab
+
+![tryme](img/trymeDocker.jpg "tryme")
+
+This page will allow you to send and receive messages to see if your function is working as expected.
+
+To test your function perform the following steps:
+
+1. Click the `Connect` button for the "Subscriber"
+1. Type "uppercase-out-0" into the "Subscribe to a topic to receive direct messages" box and click `Subscribe`
+1. Click the `Connect` button for the "Publisher"
+1. Type "uppercase-in-0" as the topic to publish to.
+1. Type "Spring One is Awesome!" in the "Message Content" box and click `Publish`
+
+🚀 You should see your application printed "Uppercasing: Spring One is Awesome!" in your IDE and the "Subscriber" in the "Try Me!" menu in Solace Cloud should show that a message was received that contained "SPRING ONE IS AWESOME!"
+
+### <strong>B. PubSub+ Broker running on Solace Cloud</strong>
+
 ✅ In order to test your function open Solace Cloud, select the messaging service and navigate to the Try Me! tab
 
-![tryme](img/tryme.png "tryme")
+![tryme](img/tryme.jpg "tryme")
 
 This page will allow you to send and receive messages to see if your function is working as expected.
 
@@ -276,7 +344,7 @@ Duration: 0:10:00
 
 Another powerful feature of Spring Cloud Stream is inherited from Spring Cloud Function, and that feature is the capability of doing Function Composition. This allows you to create simple functions as Spring Beans that can be individually tested, re-used and chained together to create a processing chain.
 
-We'll extend the processor microservice we created in Step 4 to both uppercase and reverse the String found in the payload of the message. Following functional programming best practices we want to keep our functionals simple and re-usable so instead of just adding the new business logic of reversing the String to the existing Function we'll create a new function and use functional composition to effectively create a processing pipeline in our microservice. The end result will look like the diagram below, note that there are now two separate functions in our microservice. 
+We'll extend the processor microservice we created in Step 4 to both uppercase and reverse the String found in the payload of the message. Following functional programming best practices we want to keep our functions simple and re-usable so instead of just adding the new business logic of reversing the String to the existing Function we'll create a new function and use functional composition to effectively create a processing pipeline in our microservice. The end result will look like the diagram below, note that there are now two separate functions in our microservice. 
 
 ![SCSt Uppercase Diagram](img/scstUppercaseReverseDiagram.webp)
 
@@ -297,6 +365,13 @@ Now that we have two functions Spring Cloud Stream won't just assume what bindin
 
 **Option 1: application.properties**
 ```
+spring.cloud.stream.binders.solace.type=solace
+spring.cloud.stream.binders.solace.environment.solace.java.host=tcps://xxxxxxx.messaging.solace.cloud:55443
+spring.cloud.stream.binders.solace.environment.solace.java.msgVpn==**********
+spring.cloud.stream.binders.solace.environment.solace.java.clientUsername=solace-cloud-client
+spring.cloud.stream.binders.solace.environment.solace.java.clientPassword=**********
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetries=0
+spring.cloud.stream.binders.solace.environment.solace.java.connectRetriesPerHost=0
 spring.cloud.function.definition=uppercase|reverse
 spring.cloud.stream.function.bindings.uppercasereverse-in-0=input
 spring.cloud.stream.function.bindings.uppercasereverse-out-0=output
@@ -310,34 +385,90 @@ spring:
       definition: uppercase|reverse
     stream:
       function:
-        bindings:
+        bindings:        
           uppercasereverse-in-0: input
-          uppercasereverse-out-0: output
+          uppercasereverse-out-0: output      
+      binders:
+        solace:
+          type: solace
+          environment:
+            solace:
+              java:
+                clientPassword: *************
+                clientUsername: solace-cloud-client
+                connectRetries: 0
+                connectRetriesPerHost: 0
+                host: tcps://**********.messaging.solace.cloud:55443
+                msgVpn: spring-codelab
 ```
 
 Positive
 : Note that Spring Cloud Stream performs [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
 
 ✅ We now have our function all wired up so go ahead and stop the app and restart it.  
-✅ Navigate back to the "Try Me" menu in Solace Cloud (Refer to the steps in the "Test your Microservice" section if needed)  
-✅ Add a subscription for "output" since that is what we called our output binding name. And publish a message to the "input" topic since that's what we called our input binding.  
-✅ If you published "Hello world!" you should see that the subscriber received a message containing "!DLROW OLLEH" and your application printed the following to the terminal as it processed the message through the pipeline.
-
-```
-Uppercasing: Hello world!
-Reversing: HELLO WORLD!
-```
 
 🥳 Woohoo we have now created a Spring Cloud Stream app that uses a pipeline of functions to process incoming messages!
+
+## Test your Function Composition
+
+Duration: 0:03:00
+
+### <strong>A. PubSub+ Broker running locally in Docker</strong>
+✅ In order to test your function open Solace PubSub+ Manager and navigate to the Try Me! tab
+
+![tryme](img/trymeDockerFC.jpg "tryme")
+
+This page will allow you to send and receive messages to see if your function is working as expected.
+
+To test your function perform the following steps:
+
+1. Click the `Connect` button for the "Subscriber"
+1. Type "output" into the "Subscribe to a topic to receive direct messages" box and click `Subscribe`
+1. Click the `Connect` button for the "Publisher"
+1. Type "input" as the topic to publish to.
+1. Type "Spring One is Awesome!" in the "Message Content" box and click `Publish`
+
+🚀 You should see your application printed 
+
+```
+Uppercasing: Spring One is Awesome!
+Reversing: SPRING ONE IS AWESOME!
+```
+in your IDE and the "Subscriber" in the "Try Me!" menu in Solace Cloud should show that a message was received that contained "!EMOSEWA SI ENO GNIRPS"
+
+### <strong>B. PubSub+ Broker running on Solace Cloud</strong>
+
+✅ In order to test your function composition open Solace Cloud, select the messaging service and navigate to the Try Me! tab
+
+![tryme](img/trymeDockerFC.jpg "tryme")
+
+This page will allow you to send and receive messages to see if your function is working as expected.
+
+To test your function perform the following steps:
+
+1. Click the `Connect` button for the "Subscriber"
+1. Type "output" into the "Subscribe to a topic to receive direct messages" box and click `Subscribe`
+1. Click the `Connect` button for the "Publisher"
+1. Type "input" as the topic to publish to.
+1. Type "Spring One is Awesome!" in the "Message Content" box and click `Publish`
+
+🚀 You should see your application printed 
+
+```
+Uppercasing: Spring One is Awesome!
+Reversing: SPRING ONE IS AWESOME!
+```
+
+in your IDE and the "Subscriber" in the "Try Me!" menu in Solace Cloud should show that a message was received that contained "!EMOSEWA SI ENO GNIRPS"
 
 ## Takeaways + Next Steps
 
 Duration: 0:02:00
 
-✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!
-✅ Move on to the [Spring Cloud Stream Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) codelab.
-✅ Learn how to generate Cloud Stream apps using AsyncAPI [here](https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0). 
-✅ Learn how to publish to dynamic topics using Spring Cloud Stream by a sample [here](https://github.com/SolaceSamples/solace-samples-spring/blob/master/cloud-stream-dynamic-destination-processor/src/main/java/com/solace/samples/spring/scs/DynamicDestinationProcessor.java).
+✅ Hopefully this codelab showed you how easy it can be to create event-driven microservices using Spring Cloud Stream. Note that you didn't have to learn any messaging APIs as the Cloud Stream Binder abstracts them from you!   
+✅ Move on to the [Spring Cloud Stream Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) codelab.  
+✅ Learn how to generate Cloud Stream apps using AsyncAPI [here]  (https://codelabs.solace.dev/codelabs/design-to-code-workshop/#0).  
+✅ Learn how to publish to dynamic topics using Spring Cloud Stream by a sample [here](https://github.com/SolaceSamples/solace-samples-spring/blob/master/cloud-stream-dynamic-destination-processor/src/main/java/com/solace/samples/spring/scs/DynamicDestinationProcessor.java). 
 
 ![solly_wave](img/solly_wave.webp)
 
