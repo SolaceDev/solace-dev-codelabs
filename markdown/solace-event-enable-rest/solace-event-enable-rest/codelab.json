@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-10-22T18:21:36-07:00",
+  "id": "solace-event-enable-rest",
+  "duration": 60,
+  "title": "How to Event-Enable your REST Architecture with Solace PubSub+",
+  "summary": "Learn how to configure a Solace PubSub+ broker to accept any incoming REST requests, and convert them into event-driven pub/sub messages",
+  "source": "solace-event-enable-rest.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "rest",
+    "java"
+  ],
+  "tags": [
+    "howto",
+    "patterns",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md",
+  "url": "solace-event-enable-rest"
+}

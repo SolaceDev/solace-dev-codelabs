@@ -803,7 +803,7 @@ Duration: 0:04:00
 
 Just like we did on the last step of Section A, use the **Try Me!** functionality of the PubSub+ Manager to "snoop" or "sniff" the messages going through Solace:
 
-Enter the subscriptions `GET/>` and `#P2P/*/#rest*/>` into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests.
+Enter the subscriptions `GET/>` and either `#P2P/*/_rest*/>` for SolOS >= 9.9 (or `#P2P/*/#rest*/>` for SolOS < 9.9) into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests.
 ![alt-text-here](gfx/proxy_tryme1.png)
 
 Re-run the same cURL command from the previous section:
