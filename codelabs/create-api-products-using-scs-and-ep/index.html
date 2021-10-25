@@ -117,7 +117,10 @@
 <li>Runtime event discovery</li>
 <li>Understand statistics about events<br></li>
 </ul>
-<h2 is-upgraded>Foundational Elements of PubSub+ Event Portal</h2>
+<h2 is-upgraded>Event Management: PubSub+ Event Portal</h2>
+<p>Single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.</p>
+<p class="image-container"><img src="img/75c9432fb91fd315.png"></p>
+<h2 is-upgraded>Elements of PubSub+ Event Portal</h2>
 <p class="image-container"><img src="img/49431c8620efbb8d.jpg"></p>
 <h3 is-upgraded>Application Domain</h3>
 <p>An application domain represents a namespace where applications, events, and schemas can live.</p>
@@ -157,6 +160,14 @@
 <li>Sinks are consumers of events</li>
 <li>Processors are both consumers and subscribers of events</li>
 </ol>
+<h2 is-upgraded>Spring Cloud Stream Components</h2>
+<p>Spring Cloud Stream introduces three main components that allow developers to utilize messaging in their code:</p>
+<ul>
+<li><strong>Binder</strong> - The component that implements communication with a specific message broker. For example, there is a RabbitMQ Binder, a Kafka Binder, and so on.</li>
+<li><strong>Binding</strong> - The interface for sending and receiving messages. This component links the abstract channels in your code with a topic or queue that&#39;s handled by the binder.</li>
+<li><strong>Message</strong> - The data structure used to communicate with the bindings between your code and your message broker. How this data is packaged and communicated over the message broker is determined by the binder.</li>
+</ul>
+<p class="image-container"><img alt="Cloud Stream Intro" src="img/897b148cc05b38a5.png"></p>
 <h2 is-upgraded>Message Exchange Contracts Map to Java Functions</h2>
 <p>As of Spring Cloud Stream v3 the preferred programming model is to use Java Functions to implement your cloud stream apps.</p>
 <p>We just mentioned the 3 types of Cloud Stream message exchange contract are &#34;Sources&#34;, &#34;Sinks&#34; and &#34;Processors&#34;. Those map to functions as follows:</p>

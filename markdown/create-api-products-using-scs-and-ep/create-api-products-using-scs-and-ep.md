@@ -119,7 +119,11 @@ With the PubSub+ Event Portal, you can:
 - Runtime event discovery
 - Understand statistics about events    
 
-### Foundational Elements of PubSub+ Event Portal
+### Event Management: PubSub+ Event Portal
+Single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.
+
+![](img/event-portal-2.png)
+### Elements of PubSub+ Event Portal
 
 ![](img/event-portal-foundation.jpg)
 
@@ -156,6 +160,15 @@ Spring Cloud Stream has three different types of message exchange contracts as p
 1. Suppliers are sources of events
 1. Sinks are consumers of events
 1. Processors are both consumers and subscribers of events
+
+### Spring Cloud Stream Components
+Spring Cloud Stream introduces three main components that allow developers to utilize messaging in their code:
+
+* __Binder__ - The component that implements communication with a specific message broker. For example, there is a RabbitMQ Binder, a Kafka Binder, and so on.
+* __Binding__ - The interface for sending and receiving messages. This component links the abstract channels in your code with a topic or queue that’s handled by the binder.
+* __Message__ - The data structure used to communicate with the bindings between your code and your message broker. How this data is packaged and communicated over the message broker is determined by the binder.
+
+![Cloud Stream Intro](img/scs-what-is-01.png)
 
 ### Message Exchange Contracts Map to Java Functions
 
