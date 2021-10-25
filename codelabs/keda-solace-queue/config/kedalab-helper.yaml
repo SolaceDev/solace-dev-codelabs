@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kedalab-helper
+  namespace: solace
+spec:
+  containers:
+  - name: sdk-perf
+    image: ghcr.io/solacelabs/kedalab-helper:latest
+    # Just spin & wait forever
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 10; done;" ]
+    imagePullPolicy: Always
+  restartPolicy: Never

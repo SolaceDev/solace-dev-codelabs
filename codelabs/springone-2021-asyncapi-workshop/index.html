@@ -1,0 +1,1075 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="springone-2021-asyncapi-workshop"
+                  title="Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/springone-2021-asyncapi-workshop">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>Are you passionate about building modern, real-time applications? Is your organization adopting an event-driven architecture (EDA) to compete in our event-driven world? Build and expand your developer toolbox by learning how to define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an event mesh.</p>
+<p>In this workshop, we will create API Products that helps others to consume Business capabilities of a <em>SmartTown</em> where APIs are a way of life. We will also</p>
+<ul>
+<li>Learn how to define asynchronous APIs.</li>
+<li>Use the AsyncAPI Generator template for Spring Cloud Stream.</li>
+<li>Develop event-driven microservices using Spring Cloud Stream and Java.</li>
+<li>Connect your microservices to an event mesh made of PubSub+ Event Brokers and stream events across the globe</li>
+</ul>
+<p>Prerequisites</p>
+<ul>
+<li>Intermediate level of knowledge coding with Java</li>
+<li>Computer</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Requirements" duration="1">
+
+        <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
+<h2 is-upgraded>AsyncAPI Generator Requirements</h2>
+<p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
+<ul>
+<li>Node.js v12.16+ (Check version using <code>node -v</code>)</li>
+<li>npm v6.13.7+ (Check version using <code>npm -version</code>)</li>
+</ul>
+<p>We&#39;ll install the generator itself later 👍</p>
+<h2 is-upgraded>Spring Cloud Stream Requirements</h2>
+<p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
+<ul>
+<li>Java 1.8+ (Check version using <code>java -version</code>)</li>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
+<li>On mac you can <code>brew install maven</code></li>
+<li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
+</ul>
+</li>
+<li>Your favorite Java IDE 💥</li>
+</ul>
+<h2 is-upgraded>PubSub+ Event Broker</h2>
+<p>✅ Use the following credentials for connecting to PubSub+ Broker. The SMF Host details will be shared by the instructor.</p>
+<ul>
+<li>SMF Host: <code>tcp://?????.messaging.solace.cloud:55555</code></li>
+<li>Message VPN: <code>springone-2021</code></li>
+<li>Username: <code>smarttown</code></li>
+<li>Password: <code>smarttown</code></li>
+</ul>
+<p>✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop.</p>
+<aside class="special"><p>If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using <a href="https://bit.ly/try-solace-free" target="_blank">this link</a>. Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.</p>
+</aside>
+<p>✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations to stream events across the globe.🚀</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Spring Cloud Stream" duration="3">
+
+        <p class="image-container"><img alt="Cloud Stream Intro" src="img/f4bfccdf4fb492d0.png"></p>
+<p>Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we&#39;ll cover in a bit. The framework is based on Spring Boot and Spring Integration.</p>
+<p>Spring Cloud Stream has three different types of message exchange contracts as pictures below.</p>
+<ol type="1">
+<li>Suppliers are sources of events</li>
+<li>Sinks are consumers of events</li>
+<li>Processors are both consumers and subscribers of events</li>
+</ol>
+<h2 is-upgraded>Message Exchange Contracts Map to Java Functions</h2>
+<p>As of Spring Cloud Stream v3 the preferred programming model is to use Java Functions to implement your cloud stream apps.</p>
+<p>We just mentioned the 3 types of Cloud Stream message exchange contract are &#34;Sources&#34;, &#34;Sinks&#34; and &#34;Processors&#34;. Those map to functions as follows:</p>
+<ul>
+<li><code>java.util.function.Supplier</code> -&gt; Source [Producer/Publisher of Events]</li>
+<li><code>java.util.function.Consumer</code> -&gt; Sink [Subscriber/Consumer of Events]</li>
+<li><code>java.util.function.Function</code> -&gt; Processor [ Consumes, Processes, and Produces Events ]</li>
+</ul>
+<h2 is-upgraded>Binders</h2>
+<p>Spring Cloud Stream Binders are really what make the framework useful. Binders provide an abstraction layer between your code and the messaging systems over which events are flowing. This allows you to write your code without having to worry about learning messaging APIs! When messages are sent or received from the messaging system they pass through the messaging system specific binder which knows how to communicate with that specific message broker.</p>
+<p>As of the creation of this codelab the available Cloud Stream Binders are:</p>
+<ul>
+<li>RabbitMQ</li>
+<li>Apache Kafka</li>
+<li>Amazon Kinesis</li>
+<li>Google PubSub</li>
+<li>Solace PubSub+</li>
+<li>Azure Event Hubs</li>
+<li>Apache RocketMQ</li>
+</ul>
+<aside class="special"><p>Today we&#39;re going to use the <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter" target="_blank">Solace PubSub+ Binder</a> which supports publish subscribe and consumer groups.</p>
+</aside>
+<h2 is-upgraded>Communication Models</h2>
+<p>Instead of having to learn Messaging APIs, developers just have to understand the communication models that Spring Cloud Stream supports. There are 3 supported models, but support varies per binder.</p>
+<ol type="1">
+<li>Publish-subscribe: subscribers are independent from each other &amp; receive events in order</li>
+<li>Consumer groups: fan-out and load-balancing across multiple consumers</li>
+<li>Stateful partitioning support: in-order processing for consistency and performance</li>
+</ol>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li>The Spring Cloud Stream <a href="https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference" target="_blank">Reference Guide</a></li>
+<li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
+<li>Solace Sample <a href="https://github.com/SolaceSamples/solace-samples-spring" target="_blank">Github Repository</a></li>
+<li>Solace Codelab - <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/" target="_blank">Spring Cloud Stream - Basics</a></li>
+<li>Solace Codelab - <a href="https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond" target="_blank">Spring Cloud Stream - Beyond the Basics</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="AsyncAPI" duration="3">
+
+        <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
+<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.</p>
+<p>It is an open source initiative that provides both</p>
+<ul>
+<li>a specification to describe and document your asynchronous applications in a machine-readable format, and</li>
+<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.</li>
+</ul>
+<h2 is-upgraded>AsyncAPI Document</h2>
+<p>An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.</p>
+<p>The AsyncAPI initiative provides a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make the document creation easier.</p>
+<p class="image-container"><img alt="AsyncAPI Playground" src="img/71a9c5c8c7eabdb4.jpg"></p>
+<p>Alternatively you can generate this document from EDA tools such as <a href="https://solace.com/products/portal/" target="_blank">Event Portal</a> of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture.</p>
+<p>Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
+<h2 is-upgraded>AsyncAPI Generator</h2>
+<p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
+<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we&#39;re going to use the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">Spring Cloud Stream template</a>.</p>
+<p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
+<pre><code>Example:
+
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
+</code></pre>
+<h2 is-upgraded>Coding Business Logic</h2>
+<p>The generated spring project is a regular Spring Boot Java project with generated classes under the javaPackage and an <em>application.yml</em> file for configuration. It contains:</p>
+<ul>
+<li>Generated classes under javaPackage include POJOs defined from the schemas in the AsyncAPI document and</li>
+<li><em>Application.java</em> which contains the actual Spring Cloud Functions to handle messages delivered on the channels as defined in the AsyncAPI document where we&#39;ll add our business logic.</li>
+</ul>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://www.asyncapi.com/generator" target="_blank">AsyncAPI Code Generator</a></li>
+<li><a href="https://solace.com/blog/asyncapi-vs-openapi/" target="_blank">AsyncAPI vs OpenAPI</a></li>
+<li><a href="https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/" target="_blank">AsyncAPI Code Generation: Microservices Using Spring Cloud Stream</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Event Mesh" duration="3">
+
+        <p class="image-container"><img src="img/124f1525945a39ad.png"></p>
+<p>An Event Mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices.</p>
+<p>It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.</p>
+<h2 is-upgraded>How is &#34;event mesh&#34; different from service mesh?</h2>
+<p><a href="https://solace.com/blog/event-mesh-service-mesh-for-microservices/" target="_blank">Event mesh complements service mesh</a> completing the application connectivity layer to provide the full set of inter-application communication patterns enterprises need to realize their digital transformation ambitions. It is a layer parallel to service mesh and completes the application architecture by providing the full set of inter-application communication patterns.</p>
+<p>Service mesh for RESTful and general request/reply interactions; event mesh for asynchronous, event-based interactions.</p>
+<p>Both meshes are similar in that they enable better communication between applications by putting certain functions into a layer between the network and the application. However, there are a few important distinctions:</p>
+<ul>
+<li>Service mesh connects microservices in cloud environments – Kubernetes only today – with the promise of enabling this communication between different Kubernetes clusters and perhaps other clouds in the future.</li>
+<li>Event mesh connects not only microservices but also legacy applications, cloud-native services, devices, and data sources/sinks and these can operate both in cloud and non-cloud environments. An event mesh can connect any event source to any event handler.</li>
+</ul>
+<p class="image-container"><img src="img/61e319beddc18f7d.gif"></p>
+<p>An event mesh is:</p>
+<ol type="1">
+<li>Inherently ‘event-driven&#39;</li>
+<li>Created by connecting event brokers</li>
+<li>Environment agnostic (can be deployed anywhere) and</li>
+<li>Dynamic</li>
+</ol>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://solace.com/what-is-an-event-mesh/" target="_blank">What is an Event Mesh?</a></li>
+<li><a href="https://solace.com/resources/event-mesh" target="_blank">Event Mesh - Resources</a></li>
+<li><a href="https://www.youtube.com/watch?v=8Pln8dNSd4U" target="_blank">How to Build an Event Mesh with Solace PubSub+</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="API Products" duration="3">
+
+        <p>API products are groups of related APIs that fulfil some business functions, often in a bounded content helping others to consume your Business capabilities.</p>
+<h2 is-upgraded>Event-Driven APIs</h2>
+<p>Event-Driven APIs offers a subscription &#34;push&#34; model rather than the request-response model of conventional RESTful APIs. They are implemented using an event gateway for publish/subscribe distribution.</p>
+<p class="image-container"><img src="img/b580e6bce337e55d.jpg"></p>
+<ul>
+<li>API Product implementations employs microservice architecture internally and expose the functionality through APIs, while hiding the underlying implementation.</li>
+<li>Exposed API Products are grouped by Domain facilitating better <em>cataloging</em>, <em>documentation</em> and <em>governance</em>.</li>
+</ul>
+<h2 is-upgraded>Solace PubSub+ Event Portal</h2>
+<p>The Market&#39;s First API Portal...for Events</p>
+<p><a href="https://solace.com/blog/api-portal-for-events/" target="_blank">PubSub+ Event Portal</a> lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.</p>
+<p>With the PubSub+ Event Portal, you can:</p>
+<ul>
+<li>Define and model event-driven systems</li>
+<li>Visualize existing relationships</li>
+<li>Develop consistent event-driven applications</li>
+<li>Discover and share events of interest</li>
+<li>Govern the event-driven system</li>
+<li>Integrate with 3rd-party systems for programmatic interactions</li>
+<li>Manage and audit changes to events, schemas, and applications</li>
+<li>Runtime event discovery</li>
+<li>Understand statistics about events</li>
+</ul>
+<p class="image-container"><img src="img/90589fcb7e51e18b.jpg"></p>
+<h2 is-upgraded>Solace PubSub+ Event Portal - Designer</h2>
+<p>Designer is a tool to design and view all aspects of your event-driven architectures. It is through Designer that you can create new events and associate the payload schema to these events. It provides a graphical representation of application domains, applications, schemas, and events. Designer is also used to visualize the interaction of events between applications and to provision your architecture into the Event Portal.</p>
+<p class="image-container"><img src="img/268be4af80ceffde.jpg"></p>
+<h2 is-upgraded>Valuable Resources:</h2>
+<ul>
+<li><a href="https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal.htm" target="_blank">PubSub+ Event Portal - Overview</a></li>
+<li><a href="https://solace.com/resources/pubsub-event-portal/eventportal-get-started-demo-video" target="_blank">PubSub+ Event Portal - Getting started</a></li>
+<li><a href="https://solace.com/resources/pubsub-event-portal" target="_blank">PubSub+ Event Portal - Resources</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SmartTown (Internal View)" duration="4">
+        <p>SmartTown uses information and communication technology to improve operational efficiency, share information with the public and provide a better quality of government service and citizen welfare. SmartTown uses internal microservice architecture with functionality exposed through APIs and externally exposed API products while hiding the implementation details.</p>
+<h2 is-upgraded>Event-Driven Design</h2>
+<p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
+<h3 is-upgraded>Application Domain View</h3>
+<p class="image-container"><img src="img/83c8831ad1685cad.jpg"></p>
+<p>Though the SmartTown EDA solution shall encompass various aspects of automation and control - we will scope only the Analytics and Operations applications for this workshop.</p>
+<h3 is-upgraded>Application View</h3>
+<p class="image-container"><img src="img/68daf43a1a2bef9.jpg"></p>
+<p>A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.</p>
+<h3 is-upgraded><em>&#34;SmartTown - Operations&#34;</em> - Events</h3>
+<ul>
+<li><strong>TemperatureReading</strong> - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp</li>
+<li><strong>OperationalAlert</strong> - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.  <h3 is-upgraded>Event Details View</h3>
+</li>
+</ul>
+<p class="image-container"><img src="img/d44b3a110f0d2d80.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SmartTown (External View)" duration="3">
+
+        <p>Next step in building an Event API product involves bundling of high-value, share-worthy events. The resulting bundle is released as a specification for public consumption. The generated specification is based on a commonly understood standard - like AsyncAPI.</p>
+<p>AsyncAPI also provides tools to generate code (supports popular languages) helping consumers directly go from spec-to-code, leaving the only responsibility of updating the business logic.</p>
+<ul>
+<li>Set the Event API product name, description and server connection settings (connection url and protocol). <img src="img/1b11b9beb1c0de56.jpg"></li>
+<li>Grant permission on events for Publish &amp; Subscribe <img src="img/aa89e71f7ae7e66.jpg"></li>
+<li>Save the API Product</li>
+</ul>
+<p>The next logical step is to expose the curated bundle of APIs to make them discoverable.</p>
+<ul>
+<li>PubSub+ Event Portal hosts the curated Event API products on publicly accessible URLs. <img src="img/5a1fa40957e83956.jpg"></li>
+<li>Exposed AsyncAPI URL <img src="img/30c3f2e560d9dddc.jpg"></li>
+</ul>
+<p>Interested parties can download the AsyncAPI specification from this public URL and build applications with minimal code using AsyncAPI codegen tools.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Microservices" duration="3">
+
+        <p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
+<p>SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors.</p>
+<p>This would result in two distinct microservices:</p>
+<ol type="1">
+<li>A Sensor Data Simulator microservice, which will publish temperature reading every second (or a fixed period). For simplicity sake, the reading of CPU temperature where the microservice is run is used.</li>
+<li>A second microservice that subscribes to the temperature reading events and publish an alert event with appropriate priority set.</li>
+</ol>
+<h2 is-upgraded>IoT Data Collector Microservice (Sensor Data Simulator)</h2>
+<p>In real world, this would have been a service that any device that collects temperature reading from a device (using IoT sensors) and publish an event with device context details like location, zone, device id, device class, timestamp etc.</p>
+<p>In this workshop, we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.</p>
+<aside class="special"><p>We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution</p>
+</aside>
+<h2 is-upgraded>AC-City Alert Generator Microservice</h2>
+<p>A microservice that subscribes to temperature reading events and generates alerts based on the detected temperature range with appropriate priority (LOW, MEDIUM or HIGH). This alert event carries the context of city, alert type and level to facilitate a city-level temperature alert aggregation and management.</p>
+<p>In this workshop, this application will be built from scratch by:</p>
+<ol type="1">
+<li>Downloading the AsyncAPI document of the Event API Product on the Solace PubSub+ platform</li>
+<li>Generating Spring Cloud Stream microservice from the AsyncAPI document</li>
+<li>Implementing business logic to generate alert</li>
+</ol>
+<aside class="special"><p>We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Workshop - IoT Sensor Data Simulation" duration="8">
+
+        <h2 is-upgraded>Clone Git repository</h2>
+<ul>
+<li>Launch Terminal application</li>
+<li>Execute the following command <br><code>cd ~/github<br>git clone https://github.com/Mrc0113/smarttown.git<br></code></li>
+</ul>
+<p>This would create a directory by name <strong>smarttown</strong> and checkout the git repository contents.   <img src="img/94886ba9f23033a9.jpg"></p>
+<p>The directory <strong>github/cloudstream/iot-data-collector</strong> contains a prebuilt spring cloud stream project that can readily publish temperature reading data. You just have to update the application.yml configuration with host details.</p>
+<h2 is-upgraded>Launch Spring Tool Suite</h2>
+<ul>
+<li>Open Spring Cloud Suite tool by clicking on the icon in the desktop</li>
+<li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; <img src="img/9388c63d98a7f33a.jpg"></li>
+</ul>
+<h3 is-upgraded>TemperatureReading.java</h3>
+<p>✅ Review the TemperatureReading java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
+<h3 is-upgraded>Application.java</h3>
+<p>✅ Review the Application.java, specifically the Supplier function.</p>
+<pre><code>@Bean
+Supplier&lt;Message&lt;TemperatureReading&gt;&gt; publishTemperatureData()  {
+  return () -&gt; {
+    // Collect CPU metrics 
+    SystemInfo si = new SystemInfo();
+    HardwareAbstractionLayer hal = si.getHardware();
+    Sensors sensors = hal.getSensors();
+    CentralProcessor processor = hal.getProcessor();
+    double[] loadAverage = processor.getSystemLoadAverage(1);
+    BigDecimal cpuLoad = new BigDecimal((loadAverage[0] &lt; 0 ? 0 : loadAverage[0]));
+    BigDecimal cpuTemp = new BigDecimal(50.0 + cpuLoad.doubleValue() * 8.0);
+    // Construct the topic name with alert type and priority as per the Topic hierarchy design
+    // SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}
+    String topic = &#34;SmartTown/Operations/temperatureReading/created/v1/&#34; + city + &#34;/&#34; + latitude + &#34;/&#34; + longitude;	        			
+    TemperatureReading data = new TemperatureReading(cpuLoad, city, latitude, longitude, cpuTemp);
+    logger.info(data.toString());	
+
+    // Set the target destination on the message with the constructed topic name
+    return MessageBuilder.withPayload(data)
+            .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+            .build();		
+  };
+}	
+
+</code></pre>
+<p>✅ The Supplier function is a Cloud Stream message exchange contract that publishes an event to configured Event Broker.</p>
+<p>✅ Notice the topic name construction:</p>
+<p><strong>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</strong></p>
+<p>The values for variables <em>city, latitude</em> and <em>longitude</em> are read from the configuration file via @Value annotation.</p>
+<pre><code>    @Value(&#34;${application.latitude}&#34;)
+    public BigDecimal latitude;
+    @Value(&#34;${application.longitude}&#34;)
+    public BigDecimal longitude;
+    @Value(&#34;${application.city}&#34;)
+    public String city;
+
+</code></pre>
+<p>The topic name is dynamically constructed by concatenating the root topic name and dynamic values picked up from the application configuration.</p>
+<p>✅ The return value from the <em>Supplier</em> function is a Spring Cloud Stream <em>Message</em> that is set with destination as the dynamic topic and published to the Broker.</p>
+<p>✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using <em>stress</em> system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.</p>
+<aside class="special"><p><em>stress</em> utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.</p>
+</aside>
+<h3 is-upgraded>application.yml</h3>
+<aside class="special"><p>Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<p>✅ Review the application.yml</p>
+<pre><code>server.port: 8082
+application:
+  city: &lt;enter your city here&gt;      # e.g., Bangalore
+  latitude: &lt;enter latitude&gt;        # e.g., 13.019568
+  longitude: &lt;enter longitude&gt;      # e.g., 77.596809
+spring:
+  cloud:
+    function:
+      definition: publishTemperatureData
+    stream:
+      bindings:
+        publishTemperatureData-out-0:
+          destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: &#39;tcp://xxxxx.messaging.solace.cloud:55555&#39; # get the host name from instructor
+                msgVpn: springone-2021
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      
+</code></pre>
+<p>Affect the following changes on the application configuration file:</p>
+
+<ol type="1">
+<li>Goto <a href="https://www.latlong.net" target="_blank">Latlang.net</a> and enter your city name to get latitude and longitude values</li>
+<li>In the yml file  <ul>
+<li>Update your city name</li>
+<li>Update latitude</li>
+<li>Update longitude</li>
+<li>Update the host name (instructor to provide the host name)</li>
+</ul>
+</li>
+<li>Save the file</li>
+</ol>
+<h3 is-upgraded>Running the IoT Data Simulation</h3>
+<p>✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.</p>
+<pre><code>cd ~/github/smarttown/cloudstream/iot-data-collector
+mvn clean spring-boot:run
+</code></pre>
+<p>This should run the simulator microservice and publish temperature reading events to the Event Broker.</p>
+<pre><code>mvn clean spring-boot:run
+
+
+ubuntu@ip-172-31-4-68:~/github/smarttown/cloudstream/iot-data-collector$ mvn clean spring-boot:run
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------&lt; com.springone:iot-data-collector &gt;------------------
+[INFO] Building iot-data-collector 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ iot-data-collector ---
+[INFO] Deleting /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target
+[INFO] 
+[INFO] &gt;&gt;&gt; spring-boot-maven-plugin:2.5.3:run (default-cli) &gt; test-compile @ iot-data-collector &gt;&gt;&gt;
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ iot-data-collector ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ iot-data-collector ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ iot-data-collector ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /home/ubuntu/github/smarttown/cloudstream/iot-data-collector/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ iot-data-collector ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] &lt;&lt;&lt; spring-boot-maven-plugin:2.5.3:run (default-cli) &lt; test-compile @ iot-data-collector &lt;&lt;&lt;
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.5.3:run (default-cli) @ iot-data-collector ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.3)
+
+2021-08-31 15:30:04.526  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : Starting Application using Java 11.0.10 on ip-172-31-4-68 with PID 7223 (/home/ubuntu/github/smarttown/cloudstream/iot-data-collector/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/iot-data-collector)
+2021-08-31 15:30:04.529  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : No active profile set, falling back to default profiles: default
+2021-08-31 15:30:05.179  INFO 7223 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;errorChannel&#39; has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-08-31 15:30:05.188  INFO 7223 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;integrationHeaderChannelRegistry&#39; has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-08-31 15:30:05.231  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;org.springframework.integration.config.IntegrationManagementConfiguration&#39; of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.237  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationChannelResolver&#39; of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.238  INFO 7223 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationDisposableAutoCreatedBeans&#39; of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-08-31 15:30:05.424  INFO 7223 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
+2021-08-31 15:30:05.431  INFO 7223 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-31 15:30:05.432  INFO 7223 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.50]
+2021-08-31 15:30:05.490  INFO 7223 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-31 15:30:05.490  INFO 7223 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 919 ms
+2021-08-31 15:30:06.025  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the &#39;errorChannel&#39; channel
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel &#39;application.errorChannel&#39; has 1 subscriber(s).
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;_org.springframework.integration.errorLogger&#39;
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {router} as a subscriber to the &#39;publishTemperatureData_integrationflow.channel#0&#39; channel
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.integration.channel.DirectChannel    : Channel &#39;application.publishTemperatureData_integrationflow.channel#0&#39; has 1 subscriber(s).
+2021-08-31 15:30:06.026  INFO 7223 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;publishTemperatureData_integrationflow.org.springframework.integration.config.ConsumerEndpointFactoryBean#0&#39;
+2021-08-31 15:30:06.027  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-08-31 15:30:06.072  INFO 7223 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-08-31 15:30:06.090  INFO 7223 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-08-31 15:30:06.109  INFO 7223 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (smfclient 1)
+2021-08-31 15:30:06.136  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-08-31 15:30:06.136  INFO 7223 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-08-31 15:30:06.206  INFO 7223 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/temperatureReading/created/v1/*/*/* &lt;message handler ID: 79002921-86ea-41b4-8e3f-31f4f4d6a4cf&gt;
+2021-08-31 15:30:06.206  INFO 7223 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-08-31 15:30:06.217  INFO 7223 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.publishTemperatureData-out-0&#39; has 1 subscriber(s).
+2021-08-31 15:30:06.219  INFO 7223 --- [           main] o.s.i.e.SourcePollingChannelAdapter      : started bean &#39;publishTemperatureData_integrationflow.org.springframework.integration.config.SourcePollingChannelAdapterFactoryBean#0&#39;
+2021-08-31 15:30:06.229  INFO 7223 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path &#39;&#39;
+2021-08-31 15:30:06.238  INFO 7223 --- [           main] c.s.asyncapi.datacollector.Application   : Started Application in 2.143 seconds (JVM running for 2.44)
+2021-08-31 15:30:06.277  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:07.331  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:08.337  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:09.344  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.66000000000000003108624468950438313186168670654296875, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=55.280000000000001136868377216160297393798828125]
+2021-08-31 15:30:10.351  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:11.358  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:12.365  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:13.372  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:14.379  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.60999999999999998667732370449812151491641998291015625, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.88000000000000255795384873636066913604736328125]
+2021-08-31 15:30:15.386  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:16.392  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:17.399  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:18.405  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:19.412  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.560000000000000053290705182007513940334320068359375, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.4800000000000039790393202565610408782958984375]
+2021-08-31 15:30:20.418  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:21.424  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:22.431  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+2021-08-31 15:30:23.438  INFO 7223 --- [   scheduling-1] c.s.asyncapi.datacollector.Application   : TemperatureReading [mCpuLoad=0.520000000000000017763568394002504646778106689453125, mCity=Bangalore, mLatitude=13.019568, mLongitude=77.596809, mCpuTemp=54.159999999999996589394868351519107818603515625]
+rttown/cloudstream/iot-data-collector$ 
+....
+....
+</code></pre>
+<h3 is-upgraded>Simulate CPU load on the machine</h3>
+<p>✅ Open a terminal and run the following command to simulate load on the machine.</p>
+<pre><code>stress -c 6 -t 180
+</code></pre>
+<p>As the CPU load increases, you will see the temperature reading increasing as well. This variation will help the alert generator microservice (next one) to publish temperature alerts with different priority levels.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Workshop - Alert Generator Microservice" duration="10">
+
+        <p>We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.</p>
+<h2 is-upgraded>Review API Product URL</h2>
+<p>✅ Open Chrome browser and go to the following url:</p>
+<p><em>[Instructor to share the AsyncAPI public url]</em></p>
+<p class="image-container"><img src="img/30c3f2e560d9dddc.jpg"></p>
+<p>You can click on the <strong>Download YAML</strong> button and download the document from this portal - just you need to move it to the cloudstream folder.</p>
+<p>Run the following command on a terminal window</p>
+<pre><code>mv ~/Downloads/asyncapi.yaml ~/github/smarttown/asyncapi/
+</code></pre>
+<p>✅ Make the following updates to the asyncapi.yaml file</p>
+<pre><code>Append the line below 
+
+      x-scs-function-name: processTemperatureReading
+
+a) After 
+
+channels:
+  SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
+    subscribe:
+
+b) And after
+
+  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
+    publish:
+</code></pre>
+<p>With this change, the channels section of the YAML file will look like this</p>
+<pre><code>channels:
+  SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
+    subscribe:
+      x-scs-function-name: processTemperatureReading
+      message:
+        $ref: &#34;#/components/messages/OperationalAlert&#34;
+    parameters:
+      AlertType:
+        schema:
+          type: &#34;string&#34;
+      AlertPriority:
+        schema:
+          type: &#34;string&#34;
+  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
+    publish:
+      x-scs-function-name: processTemperatureReading
+      message:
+        $ref: &#34;#/components/messages/TemperatureReading&#34;
+    parameters:
+      city:
+        schema:
+          type: &#34;string&#34;
+      latitude:
+        schema:
+          type: &#34;string&#34;
+      longitude:
+        schema:
+          type: &#34;string&#34;
+</code></pre>
+<h2 is-upgraded>Generate code usign AsyncAPI Code Generator</h2>
+<p>✅ Change directory to cloudstream and run the following command</p>
+<pre><code>cd ~/github/smarttown/cloudstream
+</code></pre>
+<aside class="special"><p>Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<p>Run the following command to invoke AsyncAPI code generator utility.</p>
+<pre><code>ag -o ac-city-alert-generator -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.springone -p javaPackage=com.springone.asyncapi.alertgenerator -p host=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555 -p username=smarttown -p password=smarttown -p msgVpn=springone-2021 ../asyncapi/asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+</code></pre>
+<p>This command will take some time (minute or so) and complete with the following message.</p>
+<pre><code>Done! ✨
+Check out your shiny new generated files at /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator.
+</code></pre>
+<h2 is-upgraded>Open Spring Tool Suite</h2>
+<ul>
+<li>Open Spring Cloud Suite tool by clicking on the icon in the desktop (if not open already)</li>
+<li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; and choose smarttown/cloudstream folder. <img src="img/abdd429eeb4200de.jpg"></li>
+</ul>
+<h3 is-upgraded>TemperatureReading.java</h3>
+<p>✅ Review the TemperatureReading java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
+<p>It is same as the TemperatureReading POJO present in the iot-data-collector microservice.</p>
+<h3 is-upgraded>OperationalAlert.java</h3>
+<p>✅ Review the OperationalAlert java file. It carries operational alert data - a simple POJO with attributes and corresponding getters/setters.</p>
+<aside class="warning"><p>Add the import statement manually at the top of the file along with other import statements. <br><code>import com.fasterxml.jackson.annotation.JsonProperty;<br></code></p>
+</aside>
+<h3 is-upgraded>Application.java</h3>
+<p>✅ Review the Application.java, specifically the Supplier function.</p>
+<aside class="warning"><p>Add the @Bean annotation before the Function statement <br><code>@Bean<br>public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; processTemperatureReading() {<br></code></p>
+
+</aside>
+<p>Let us review the Function</p>
+<pre><code>@Bean
+  public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; processTemperatureReading() {
+    return data -&gt; {
+      // Add business logic here.
+      logger.info(data.toString());
+      String alertType = &#34;string&#34;;
+      String alertPriority = &#34;string&#34;;
+      String topic = String.format(&#34;SmartTown/Operations/OperationalAlert/created/v1/%s/%s&#34;,
+        alertType, alertPriority);
+      OperationalAlert payload = new OperationalAlert();
+      Message message = MessageBuilder
+        .withPayload(payload)
+        .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+        .build();
+
+      return message;
+    };
+  }
+</code></pre>
+<p>This Spring Cloud Stream <em>Function</em> contract is a processor that subscribes to <strong>TemperatureReading</strong> message, and publishes a <strong>OperationalAlert</strong> message.</p>
+<p>The business logic of what transpires in this function is something we will be coding here. Our goal is to generate Alerts of HighTemperature type with three distinct priority levels:</p>
+<ul>
+<li>LOW: When temperature &gt; 60 and &lt;= 70</li>
+<li>MEDIUM: When temperature &gt; 70 and &lt;= 80</li>
+<li>HIGH: When temperature &gt; 80</li>
+</ul>
+<p>With the updated logic, the Function contract will be</p>
+<pre><code>@Bean
+public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; processTemperatureReading() {
+  return data -&gt; {
+    // NOTE: A return value of null indicates that no message will be published to the Broker 
+    if (data.getMCpuTemp().doubleValue() &lt;= 60)
+      return null;
+    
+    // Since the goal is to generate temperature alerts, set the alertType to a 
+    // default value of &#39;HighTemperature&#39; 
+    String alertType = &#34;HighTemperature&#34;; // HighCpuLoad
+    
+    // Based on the defined bounds for Low, Medium and High temperature,
+    // check the incoming temperature reading and set the alert priority appropriately
+    String alertPriority = &#34;High&#34;;
+    if (data.getMCpuTemp().doubleValue() &gt; 60 &amp;&amp; data.getMCpuTemp().doubleValue() &lt;= 70)
+      alertPriority = &#34;Low&#34;;
+    else if (data.getMCpuTemp().doubleValue() &gt; 70 &amp;&amp; data.getMCpuTemp().doubleValue() &lt;= 80)
+      alertPriority = &#34;Medium&#34;;
+    
+    // Construct the topic name with alert type and priority as per the Topic hierarchy design
+    //		SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}
+    String topic = String.format(&#34;SmartTown/Operations/OperationalAlert/created/v1/%s/%s&#34;,
+      alertType, alertPriority);
+    
+    // Construct an OperatinalAlert object 
+    OperationalAlert payload = new OperationalAlert(alertPriority, alertType, data.getMCity(), data.getMCpuTemp(), 
+                            data.getMLatitude(), data.getMLongitude());
+    
+    logger.info(&#34;Operational Alert: \n&#34; + payload.toString());
+    
+
+    // Add OperationalAlert as type parameter to Message declaration (AsyncAPI codegen will fix this soon)
+    Message&lt;OperationalAlert&gt; message = MessageBuilder
+      .withPayload(payload)
+      .setHeader(BinderHeaders.TARGET_DESTINATION, topic)
+      .build();
+
+    return message;
+  };
+</code></pre>
+<p>There could be other internal services like monitor and external applications like analytics, dashboard could subscribe to this Alert event.</p>
+<p>✅ Notice the topic name construction:</p>
+<p><strong>SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}</strong></p>
+<p>The topic name is dynamically constructed by concatenating the root topic name and computed values for <em>AlertPriority</em>, and <em>AlertType</em> .</p>
+<p>✅ The return value from the <em>Function</em> function is a Spring Cloud Stream <em>Message</em> that is set with destination as the dynamic topic and published to the Broker.</p>
+<p>✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using <em>stress</em> system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.</p>
+<h3 is-upgraded>application.yml</h3>
+<aside class="special"><p>1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
+</aside>
+<aside class="special"><p>2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.</p>
+
+</aside>
+<p>✅ Review the application.yml</p>
+<pre><code>spring:
+  cloud:
+    function:
+      definition: processTemperatureReading
+    stream:
+      bindings:
+        processTemperatureReading-out-0:
+          destination: &#39;SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}&#39;
+        processTemperatureReading-in-0:
+          destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                host: &lt;enter solace host url&gt; # e.g., &#39;tcp://xxxxx.messaging.solace.cloud:55555&#39;
+                msgVpn: springone-2021
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+
+</code></pre>
+<p>Affect the following changes on the application configuration file:</p>
+<ol type="1">
+<li>In the yml file  <ul>
+<li>Update the host name (instructor to provide )</li>
+<li>Update the bindings for <em>processTemperatureReading-in-0</em> with the City name you are publishing the TemperatureReading events. Assuming that your city is <em>London<br></em> From: <br><code>destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*</code><br> To: <br><code>destination: SmartTown/Operations/temperatureReading/created/v1/London/*/*<br></code></li>
+
+</ul>
+</li>
+<li>Save the file</li>
+</ol>
+
+
+      </google-codelab-step>
+        <google-codelab-step label="Workshop - Execution" duration="8">
+
+        <h3 is-upgraded>Running the IoT Data Simulation</h3>
+<p>✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.</p>
+<pre><code>cd ~/github/smarttown/cloudstream/iot-data-collector
+mvn clean spring-boot:run
+</code></pre>
+<p>This should run the simulator microservice and publish temperature reading events to the Event Broker.</p>
+<h3 is-upgraded>Running the Alert Generator</h3>
+<p>✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.</p>
+<pre><code>cd ~/github/smarttown/cloudstream/ac-city-alert-generator
+mvn clean spring-boot:run
+</code></pre>
+<p>This should run the alert generator microservice that subscribes to temperature reading event and publishes appropriate operational alert  events to the Event Broker.</p>
+<p>Output from the alert generator microservice:</p>
+<pre><code>ubuntu@ip-172-31-30-54:~$ cd cl
+bash: cd: cl: No such file or directory
+ubuntu@ip-172-31-30-54:~$ cd github/smarttown/cloudstream/ac-city-alert-generator/
+ubuntu@ip-172-31-30-54:~/github/smarttown/cloudstream/ac-city-alert-generator$ mvn clean spring-boot:run
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------&lt; com.springone:ac-city-alert-generator &gt;----------------
+[INFO] Building ac-city-alert-generator 1
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ ac-city-alert-generator ---
+[INFO] Deleting /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target
+[INFO] 
+[INFO] &gt;&gt;&gt; spring-boot-maven-plugin:2.4.7:run (default-cli) &gt; test-compile @ ac-city-alert-generator &gt;&gt;&gt;
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ ac-city-alert-generator ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ ac-city-alert-generator ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ ac-city-alert-generator ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ ac-city-alert-generator ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] &lt;&lt;&lt; spring-boot-maven-plugin:2.4.7:run (default-cli) &lt; test-compile @ ac-city-alert-generator &lt;&lt;&lt;
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.4.7:run (default-cli) @ ac-city-alert-generator ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.4.7/spring-boot-buildpack-platform-2.4.7.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.4.7/spring-boot-buildpack-platform-2.4.7.pom (3.1 kB at 8.6 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.4/jackson-module-parameter-names-2.11.4.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.4/jackson-module-parameter-names-2.11.4.pom (4.0 kB at 105 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-modules-java8/2.11.4/jackson-modules-java8-2.11.4.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-modules-java8/2.11.4/jackson-modules-java8-2.11.4.pom (3.2 kB at 146 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.pom (1.8 kB at 82 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.pom (1.6 kB at 51 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.4.7/spring-boot-loader-tools-2.4.7.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.4.7/spring-boot-loader-tools-2.4.7.pom (2.3 kB at 81 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.1/maven-common-artifact-filters-3.1.1.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.1/maven-common-artifact-filters-3.1.1.pom (5.8 kB at 242 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.4.7/spring-boot-buildpack-platform-2.4.7.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.4.7/spring-boot-loader-tools-2.4.7.jar
+Downloading from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.jar
+Downloading from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.4/jackson-module-parameter-names-2.11.4.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.4.7/spring-boot-buildpack-platform-2.4.7.jar (202 kB at 2.3 MB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.1/maven-common-artifact-filters-3.1.1.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.4/jackson-module-parameter-names-2.11.4.jar (9.3 kB at 88 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.16/plexus-interpolation-1.16.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.1/maven-common-artifact-filters-3.1.1.jar (61 kB at 428 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.16/plexus-interpolation-1.16.jar (61 kB at 383 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.4.7/spring-boot-loader-tools-2.4.7.jar (245 kB at 1.1 MB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4.jar (205 kB at 874 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4.jar (379 kB at 1.4 MB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.jar (2.7 MB at 8.3 MB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.jar (1.5 MB at 4.3 MB/s)
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.7)
+
+2021-09-01 10:26:09.867  INFO 10117 --- [           main] c.s.asyncapi.alertgenerator.Application  : Starting Application using Java 11.0.10 on ip-172-31-30-54 with PID 10117 (/home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator)
+2021-09-01 10:26:09.883  INFO 10117 --- [           main] c.s.asyncapi.alertgenerator.Application  : No active profile set, falling back to default profiles: default
+2021-09-01 10:26:10.311  INFO 10117 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;errorChannel&#39; has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-09-01 10:26:10.316  INFO 10117 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;taskScheduler&#39; has been explicitly defined. Therefore, a default ThreadPoolTaskScheduler will be created.
+2021-09-01 10:26:10.319  INFO 10117 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;integrationHeaderChannelRegistry&#39; has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-09-01 10:26:10.349  INFO 10117 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;org.springframework.integration.config.IntegrationManagementConfiguration&#39; of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:26:10.355  INFO 10117 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationChannelResolver&#39; of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:26:10.355  INFO 10117 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationDisposableAutoCreatedBeans&#39; of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:26:10.752  INFO 10117 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-09-01 10:26:10.807  INFO 10117 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-09-01 10:26:10.823  INFO 10117 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-09-01 10:26:10.841  INFO 10117 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (smfclient 1)
+2021-09-01 10:26:10.875  INFO 10117 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-09-01 10:26:10.875  INFO 10117 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:26:10.877  INFO 10117 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.processTemperatureReading-in-0&#39; has 1 subscriber(s).
+2021-09-01 10:26:10.935  INFO 10117 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the &#39;errorChannel&#39; channel
+2021-09-01 10:26:10.936  INFO 10117 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel &#39;application.errorChannel&#39; has 1 subscriber(s).
+2021-09-01 10:26:10.936  INFO 10117 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;_org.springframework.integration.errorLogger&#39;
+2021-09-01 10:26:10.936  INFO 10117 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:26:10.994  INFO 10117 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType} &lt;message handler ID: 92e32821-d3a0-44fa-bd69-aff80555ef00&gt;
+2021-09-01 10:26:10.994  INFO 10117 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-09-01 10:26:11.003  INFO 10117 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.processTemperatureReading-out-0&#39; has 1 subscriber(s).
+2021-09-01 10:26:11.004  INFO 10117 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:26:11.025  INFO 10117 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creating anonymous (temporary) queue scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_
+2021-09-01 10:26:11.026  INFO 10117 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Testing consumer flow connection to queue scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ (will not start it)
+2021-09-01 10:26:11.043  INFO 10117 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Connected test consumer flow to queue scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_, closing it
+2021-09-01 10:26:11.046  INFO 10117 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.ed5b436b-b489-4997-a960-191a7e216c42.errors&#39; has 1 subscriber(s).
+2021-09-01 10:26:11.046  INFO 10117 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.ed5b436b-b489-4997-a960-191a7e216c42.errors&#39; has 2 subscriber(s).
+2021-09-01 10:26:11.050  INFO 10117 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating 1 consumer flows for queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ &lt;inbound adapter 7b44f75f-561a-4d6c-a2c9-e74faec2ecfa&gt;
+2021-09-01 10:26:11.050  INFO 10117 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating consumer 1 of 1 for inbound adapter 7b44f75f-561a-4d6c-a2c9-e74faec2ecfa
+2021-09-01 10:26:11.051  INFO 10117 --- [           main] c.s.s.c.s.b.util.FlowReceiverContainer   : Binding flow receiver container f276b9e1-4b94-49b6-9fd6-e37b22c17875
+2021-09-01 10:26:11.057  INFO 10117 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Subscribing queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ to topic SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*
+2021-09-01 10:26:11.058  INFO 10117 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : started com.solace.spring.cloud.stream.binder.inbound.JCSMPInboundChannelAdapter@5a034157
+2021-09-01 10:26:11.069  INFO 10117 --- [           main] c.s.asyncapi.alertgenerator.Application  : Started Application in 1.555 seconds (JVM running for 1.832)
+2021-09-01 10:26:11.218  INFO 10117 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Bangalore temperature: 60.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:26:12.176  INFO 10117 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Bangalore temperature: 60.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:26:13.181  INFO 10117 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Low alertType: HighTemperature city: Bangalore temperature: 60.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+^C2021-09-01 10:27:16.999  INFO 10117 --- [extShutdownHook] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Stopping all 1 consumer flows to queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ &lt;inbound adapter ID: 7b44f75f-561a-4d6c-a2c9-e74faec2ecfa&gt;
+2021-09-01 10:27:17.468  INFO 10117 --- [pool-4-thread-1] c.s.s.c.s.b.i.InboundXMLMessageListener  : Closing flow receiver to destination #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/ed5b436b-b489-4997-a960-191a7e216c42/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_
+2021-09-01 10:27:17.468  INFO 10117 --- [pool-4-thread-1] c.s.s.c.s.b.util.FlowReceiverContainer   : Unbinding flow receiver container f276b9e1-4b94-49b6-9fd6-e37b22c17875
+2021-09-01 10:27:17.473  INFO 10117 --- [extShutdownHook] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : stopped com.solace.spring.cloud.stream.binder.inbound.JCSMPInboundChannelAdapter@5a034157
+2021-09-01 10:27:17.482  INFO 10117 --- [extShutdownHook] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;application.SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.ed5b436b-b489-4997-a960-191a7e216c42.errors&#39; has 1 subscriber(s).
+2021-09-01 10:27:17.482  INFO 10117 --- [extShutdownHook] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;application.SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.ed5b436b-b489-4997-a960-191a7e216c42.errors&#39; has 0 subscriber(s).
+2021-09-01 10:27:17.483  INFO 10117 --- [extShutdownHook] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Stopping producer to topic SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType} &lt;message handler ID: 92e32821-d3a0-44fa-bd69-aff80555ef00&gt;
+2021-09-01 10:27:17.484  INFO 10117 --- [extShutdownHook] c.s.s.c.s.b.util.SharedResourceManager   : 92e32821-d3a0-44fa-bd69-aff80555ef00 is the last user, closing producer...
+2021-09-01 10:27:17.485  INFO 10117 --- [extShutdownHook] o.s.i.endpoint.EventDrivenConsumer       : Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the &#39;errorChannel&#39; channel
+2021-09-01 10:27:17.485  INFO 10117 --- [extShutdownHook] o.s.i.channel.PublishSubscribeChannel    : Channel &#39;application.errorChannel&#39; has 0 subscriber(s).
+2021-09-01 10:27:17.485  INFO 10117 --- [extShutdownHook] o.s.i.endpoint.EventDrivenConsumer       : stopped bean &#39;_org.springframework.integration.errorLogger&#39;
+2021-09-01 10:27:17.488  INFO 10117 --- [extShutdownHook] c.s.s.c.s.b.SolaceMessageChannelBinder   : Closing JCSMP session JCSMPSession
+2021-09-01 10:27:17.489  INFO 10117 --- [extShutdownHook] c.s.j.protocol.impl.TcpClientChannel     : Channel Closed (smfclient 1)
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:11 min
+[INFO] Finished at: 2021-09-01T10:27:17Z
+[INFO] ------------------------------------------------------------------------
+ubuntu@ip-172-31-30-54:~/github/smarttown/cloudstream/ac-city-alert-generator$ 
+ubuntu@ip-172-31-30-54:~/github/smarttown/cloudstream/ac-city-alert-generator$ mvn clean spring-boot:run
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------&lt; com.springone:ac-city-alert-generator &gt;----------------
+[INFO] Building ac-city-alert-generator 1
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ ac-city-alert-generator ---
+[INFO] Deleting /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target
+[INFO] 
+[INFO] &gt;&gt;&gt; spring-boot-maven-plugin:2.4.7:run (default-cli) &gt; test-compile @ ac-city-alert-generator &gt;&gt;&gt;
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ ac-city-alert-generator ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ ac-city-alert-generator ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ ac-city-alert-generator ---
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered resources.
+[INFO] Using &#39;UTF-8&#39; encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ ac-city-alert-generator ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] &lt;&lt;&lt; spring-boot-maven-plugin:2.4.7:run (default-cli) &lt; test-compile @ ac-city-alert-generator &lt;&lt;&lt;
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.4.7:run (default-cli) @ ac-city-alert-generator ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.7)
+
+2021-09-01 10:27:46.445  INFO 10353 --- [           main] c.s.asyncapi.alertgenerator.Application  : Starting Application using Java 11.0.10 on ip-172-31-30-54 with PID 10353 (/home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator/target/classes started by ubuntu in /home/ubuntu/github/smarttown/cloudstream/ac-city-alert-generator)
+2021-09-01 10:27:46.448  INFO 10353 --- [           main] c.s.asyncapi.alertgenerator.Application  : No active profile set, falling back to default profiles: default
+2021-09-01 10:27:46.975  INFO 10353 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;errorChannel&#39; has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2021-09-01 10:27:46.980  INFO 10353 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;taskScheduler&#39; has been explicitly defined. Therefore, a default ThreadPoolTaskScheduler will be created.
+2021-09-01 10:27:46.982  INFO 10353 --- [           main] faultConfiguringBeanFactoryPostProcessor : No bean named &#39;integrationHeaderChannelRegistry&#39; has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2021-09-01 10:27:47.012  INFO 10353 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;org.springframework.integration.config.IntegrationManagementConfiguration&#39; of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:27:47.018  INFO 10353 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationChannelResolver&#39; of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:27:47.019  INFO 10353 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean &#39;integrationDisposableAutoCreatedBeans&#39; of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-09-01 10:27:47.466  INFO 10353 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Creating binder: solace-binder
+2021-09-01 10:27:47.517  INFO 10353 --- [           main] .SolaceMessageChannelBinderConfiguration : Connecting JCSMP session JCSMPSession
+2021-09-01 10:27:47.535  INFO 10353 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (host 1 of 1, smfclient 1, attempt 1 of 1, this_host_attempt: 1 of 21)
+2021-09-01 10:27:47.556  INFO 10353 --- [           main] c.s.j.protocol.impl.TcpClientChannel     : Connected to host &#39;orig=tcp://mrnsau5ltlr4o.messaging.solace.cloud:55555, scheme=tcp://, host=mrnsau5ltlr4o.messaging.solace.cloud, port=55555&#39; (smfclient 1)
+2021-09-01 10:27:47.597  INFO 10353 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Caching the binder: solace-binder
+2021-09-01 10:27:47.598  INFO 10353 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:27:47.599  INFO 10353 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.processTemperatureReading-in-0&#39; has 1 subscriber(s).
+2021-09-01 10:27:47.663  INFO 10353 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the &#39;errorChannel&#39; channel
+2021-09-01 10:27:47.663  INFO 10353 --- [           main] o.s.i.channel.PublishSubscribeChannel    : Channel &#39;application.errorChannel&#39; has 1 subscriber(s).
+2021-09-01 10:27:47.663  INFO 10353 --- [           main] o.s.i.endpoint.EventDrivenConsumer       : started bean &#39;_org.springframework.integration.errorLogger&#39;
+2021-09-01 10:27:47.664  INFO 10353 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:27:47.726  INFO 10353 --- [           main] .s.s.c.s.b.o.JCSMPOutboundMessageHandler : Creating producer to topic SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType} &lt;message handler ID: 3da051b4-c04c-4530-919a-fae91a6e2618&gt;
+2021-09-01 10:27:47.726  INFO 10353 --- [           main] c.s.s.c.s.b.util.SharedResourceManager   : No producer exists, a new one will be created
+2021-09-01 10:27:47.736  INFO 10353 --- [           main] o.s.c.s.m.DirectWithAttributesChannel    : Channel &#39;application.processTemperatureReading-out-0&#39; has 1 subscriber(s).
+2021-09-01 10:27:47.737  INFO 10353 --- [           main] o.s.c.s.binder.DefaultBinderFactory      : Retrieving cached binder: solace-binder
+2021-09-01 10:27:47.761  INFO 10353 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creating anonymous (temporary) queue scst/an/169ea18d-639a-4ac4-92ed-6cdf59ed9fa9/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_
+2021-09-01 10:27:47.762  INFO 10353 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Testing consumer flow connection to queue scst/an/169ea18d-639a-4ac4-92ed-6cdf59ed9fa9/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ (will not start it)
+2021-09-01 10:27:47.779  INFO 10353 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Connected test consumer flow to queue scst/an/169ea18d-639a-4ac4-92ed-6cdf59ed9fa9/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_, closing it
+2021-09-01 10:27:47.782  INFO 10353 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.169ea18d-639a-4ac4-92ed-6cdf59ed9fa9.errors&#39; has 1 subscriber(s).
+2021-09-01 10:27:47.783  INFO 10353 --- [           main] o.s.c.stream.binder.BinderErrorChannel   : Channel &#39;SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*.anon.169ea18d-639a-4ac4-92ed-6cdf59ed9fa9.errors&#39; has 2 subscriber(s).
+2021-09-01 10:27:47.787  INFO 10353 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating 1 consumer flows for queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/169ea18d-639a-4ac4-92ed-6cdf59ed9fa9/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ &lt;inbound adapter 4c845b2d-df84-4724-909e-4dc32b8d63ea&gt;
+2021-09-01 10:27:47.787  INFO 10353 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : Creating consumer 1 of 1 for inbound adapter 4c845b2d-df84-4724-909e-4dc32b8d63ea
+2021-09-01 10:27:47.788  INFO 10353 --- [           main] c.s.s.c.s.b.util.FlowReceiverContainer   : Binding flow receiver container d28d6370-5c02-46b5-95d7-36f013e316e3
+2021-09-01 10:27:47.796  INFO 10353 --- [           main] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Subscribing queue #P2P/QTMP/v:pri-aws-us-west-2a-nsau5ltlr4o/scst/an/169ea18d-639a-4ac4-92ed-6cdf59ed9fa9/plain/SmartTown/Operations/temperatureReading/created/v1/Bangalore/_/_ to topic SmartTown/Operations/temperatureReading/created/v1/Bangalore/*/*
+2021-09-01 10:27:47.798  INFO 10353 --- [           main] c.s.s.c.s.b.i.JCSMPInboundChannelAdapter : started com.solace.spring.cloud.stream.binder.inbound.JCSMPInboundChannelAdapter@6c0905f6
+2021-09-01 10:27:47.814  INFO 10353 --- [           main] c.s.asyncapi.alertgenerator.Application  : Started Application in 1.772 seconds (JVM running for 2.074)
+2021-09-01 10:27:48.690  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:27:49.638  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:27:50.643  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.................................................................
+2021-09-01 10:27:59.687  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 84.479999999999989768184605054557323455810546875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:00.692  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 84.479999999999989768184605054557323455810546875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:01.697  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 84.479999999999989768184605054557323455810546875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:02.702  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 84.479999999999989768184605054557323455810546875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:03.708  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 85.599999999999994315658113919198513031005859375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:04.713  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 85.599999999999994315658113919198513031005859375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:05.717  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 85.599999999999994315658113919198513031005859375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:06.722  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 85.599999999999994315658113919198513031005859375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:07.726  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 85.599999999999994315658113919198513031005859375 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:08.730  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.719999999999998863131622783839702606201171875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:09.735  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.719999999999998863131622783839702606201171875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:10.739  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.719999999999998863131622783839702606201171875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:11.743  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: High alertType: HighTemperature city: Bangalore temperature: 82.719999999999998863131622783839702606201171875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:12.747  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+................................................................2021-09-01 10:28:31.830  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.960000000000007958078640513122081756591796875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:32.834  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.960000000000007958078640513122081756591796875 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:33.839  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:34.843  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:35.847  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:36.852  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+^A2021-09-01 10:28:37.856  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 76.0799999999999982946974341757595539093017578125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:38.860  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 75.280000000000001136868377216160297393798828125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:39.865  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 75.280000000000001136868377216160297393798828125 lat: 13.019568 _long: 77.596809 ]
+^A2021-09-01 10:28:40.869  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 75.280000000000001136868377216160297393798828125 lat: 13.019568 _long: 77.596809 ]
+2021-09-01 10:28:41.873  INFO 10353 --- [pool-4-thread-1] c.s.asyncapi.alertgenerator.Application  : Operational Alert: 
+OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore temperature: 75.280000000000001136868377216160297393798828125 lat: 13.019568 _long: 77.596809 ]
+................................................................
+
+</code></pre>
+<h3 is-upgraded>Simulating CPU load to generate</h3>
+<p>✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.</p>
+<aside class="special"><p><em>stress</em> utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings. To run the stress command, type:<br><br><code>stress -c 6 -t 180</code><br><br> This will simulate load on the VM and till timeout after 180 seconds.</p>
+</aside>
+
+
+      </google-codelab-step>
+      <google-codelab-step label="Takeaways" duration="1">
+        <ul>
+<li>✅ The <a href="solace.com/products/portal" target="_blank">Solace Event Portal</a> is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.</li>
+<li>✅ <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a> templates allow developers to consistently create event-driven applications by generating code skeletons that are pre-wired with the events and channels defined in the AsyncAPI documents.</li>
+<li>✅ <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> allows developers to implement highly scalable, event-driven microservices without having to learn how to use messaging APIs.</li>
+</ul>
+<p class="image-container"><img alt="solly_wave" src="img/9bd2cbed014d29b6.webp"></p>
+<p><strong>Thanks for participating in this codelab!</strong> Let us know what you thought in the <a href="https://solace.community" target="_blank">Solace Community Forum</a> and if you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the <em>Report a mistake</em> button at the bottom left of this codelab.</p>
+
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
