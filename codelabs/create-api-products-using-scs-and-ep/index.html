@@ -226,52 +226,6 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Introduction to AsyncAPI" duration="3">
-        <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
-<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.</p>
-<p>It is an open source initiative that provides both</p>
-<ul>
-<li>a specification to describe and document your asynchronous applications in a machine-readable format, and</li>
-<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.<br></li>
-</ul>
-<h2 is-upgraded>AsyncAPI Document</h2>
-<p>An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.</p>
-<p>The AsyncAPI initiative provides a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make the document creation easier.</p>
-<p class="image-container"><img alt="AsyncAPI Playground" src="img/71a9c5c8c7eabdb4.jpg"></p>
-<p>Alternatively you can generate this document from EDA tools such as <a href="https://solace.com/products/portal/" target="_blank">Event Portal</a> of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture.</p>
-<p>Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
-<h2 is-upgraded>AsyncAPI Generator</h2>
-<p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
-<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols (nodejs, python, go), but for this workshop we&#39;re going to use the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">Spring Cloud Stream template</a>.</p>
-<p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
-<pre><code>Example:
-
-ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
-</code></pre>
-<h2 is-upgraded>Coding Business Logic</h2>
-<p>The generated spring project is a regular Spring Boot application and contains:</p>
-<ul>
-<li>Generated classes under javaPackage, including POJOs defined from the schemas in the AsyncAPI document</li>
-<li><em>application.yml</em> containing Spring Cloud Stream configuration and binding details</li>
-<li><em>Application.java</em> containing implementation of one or more Spring Cloud Stream Functions interfaces asper the AsyncAPI specification  <ul>
-<li>A Supplier function that implements delivery of messages to the channel</li>
-<li>A Producer function that handles messages delivered on the channels</li>
-<li>A Function implementation that processes a delivered message and returns a response message<br></li>
-</ul>
-</li>
-</ul>
-<p>References:</p>
-<ul>
-<li><a href="https://www.asyncapi.com/docs/specifications/v2.2.0" target="_blank">AsyncAPI Specification</a></li>
-<li><a href="https://www.asyncapi.com/generator" target="_blank">AsyncAPI Code Generator</a></li>
-<li><a href="https://github.com/asyncapi/generator#update-the-cli" target="_blank">AsyncAPI Code Generator - GitHub</a></li>
-<li><a href="https://solace.com/blog/asyncapi-vs-openapi/" target="_blank">AsyncAPI vs OpenAPI</a></li>
-<li><a href="https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/" target="_blank">AsyncAPI Code Generation: Microservices Using Spring Cloud Stream</a></li>
-</ul>
-
-
-      </google-codelab-step>
-    
       <google-codelab-step label="SmartTown - Event-Driven Design" duration="3">
         <p>SmartTown uses information and communication technology to improve operational efficiency, share information with the public and provide a better quality of government service and citizen welfare. SmartTown uses internal microservice architecture with functionality exposed through APIs and externally exposed API products while hiding the implementation details.</p>
 <p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
@@ -388,6 +342,52 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <p class="image-container"><img src="img/78c9080c5b0505a6.png"></p>
 <h2 is-upgraded>Applications List</h2>
 <p class="image-container"><img src="img/7fa6599765eefbd3.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Introduction to AsyncAPI" duration="3">
+        <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
+<p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.</p>
+<p>It is an open source initiative that provides both</p>
+<ul>
+<li>a specification to describe and document your asynchronous applications in a machine-readable format, and</li>
+<li>tooling (such as code generators) to make life easier for developers tasked with implementing them.<br></li>
+</ul>
+<h2 is-upgraded>AsyncAPI Document</h2>
+<p>An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.</p>
+<p>The AsyncAPI initiative provides a handy, interactive tool called the <a href="https://playground.asyncapi.io" target="_blank">AsyncAPI playground</a> to make the document creation easier.</p>
+<p class="image-container"><img alt="AsyncAPI Playground" src="img/71a9c5c8c7eabdb4.jpg"></p>
+<p>Alternatively you can generate this document from EDA tools such as <a href="https://solace.com/products/portal/" target="_blank">Event Portal</a> of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture.</p>
+<p>Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.</p>
+<h2 is-upgraded>AsyncAPI Generator</h2>
+<p>AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.</p>
+<p>The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols (nodejs, python, go), but for this workshop we&#39;re going to use the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">Spring Cloud Stream template</a>.</p>
+<p>The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.</p>
+<pre><code>Example:
+
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
+</code></pre>
+<h2 is-upgraded>Coding Business Logic</h2>
+<p>The generated spring project is a regular Spring Boot application and contains:</p>
+<ul>
+<li>Generated classes under javaPackage, including POJOs defined from the schemas in the AsyncAPI document</li>
+<li><em>application.yml</em> containing Spring Cloud Stream configuration and binding details</li>
+<li><em>Application.java</em> containing implementation of one or more Spring Cloud Stream Functions interfaces asper the AsyncAPI specification  <ul>
+<li>A Supplier function that implements delivery of messages to the channel</li>
+<li>A Producer function that handles messages delivered on the channels</li>
+<li>A Function implementation that processes a delivered message and returns a response message<br></li>
+</ul>
+</li>
+</ul>
+<p>References:</p>
+<ul>
+<li><a href="https://www.asyncapi.com/docs/specifications/v2.2.0" target="_blank">AsyncAPI Specification</a></li>
+<li><a href="https://www.asyncapi.com/generator" target="_blank">AsyncAPI Code Generator</a></li>
+<li><a href="https://github.com/asyncapi/generator#update-the-cli" target="_blank">AsyncAPI Code Generator - GitHub</a></li>
+<li><a href="https://solace.com/blog/asyncapi-vs-openapi/" target="_blank">AsyncAPI vs OpenAPI</a></li>
+<li><a href="https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/" target="_blank">AsyncAPI Code Generation: Microservices Using Spring Cloud Stream</a></li>
+</ul>
 
 
       </google-codelab-step>
