@@ -28,8 +28,12 @@
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/create-api-products-using-scs-and-ep">
     
       <google-codelab-step label="Overview" duration="1">
-        <p>If your requirement is to build modern, real-time applications using event-driven architecture (EDA), this codelab will walk you through the steps of how to build Event API products, define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an Solace PubSub+ platform.</p>
-<p>In this codelab, we will create API Products that helps others to consume Business capabilities of a <em>SmartTown</em> where APIs are a way of life. We will also</p>
+        <p>If your requirement is to build modern real-time applications using event-driven architecture (EDA), this codelab is for you!</p>
+<p>This codelab will walk you through the steps to</p>
+<p>✅  build Event API products,<br> ✅  define asynchronous APIs,<br> ✅  implement them using Spring Cloud Stream microservices,<br> ✅  and globally distribute them across multi-cloud and on-premises environments using an Solace PubSub+ platform.</p>
+<p>In this codelab, we will create API Products to consume business capabilities of a <em>SmartTown</em>. The SmartTown implements a microservices architecture for the Heating and Cooling system. More details on this will be covered throughout the codelab.</p>
+<p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
+<p>We will also</p>
 <ul>
 <li>Learn how to define asynchronous APIs.</li>
 <li>Use the AsyncAPI Generator template for Spring Cloud Stream.</li>
@@ -86,25 +90,22 @@
     
       <google-codelab-step label="Clone Git Repository" duration="1">
         <p>A ready to use code of few of the microservices referred in this workshop are available in Git. We will use this codebase and build new code wherever necessary to complete this workshop.</p>
-<aside class="special"><p>Also, the completed solution is available in a branch (solution) on the same repository.</p>
+<aside class="special"><p>Note: the completed solution is available n the <code>solution</code> branch</p>
 </aside>
 <ul>
 <li>Launch Terminal application</li>
-<li>Execute the following command <br><code>cd ~/github<br>git clone https://github.com/gvensan/smarttown.git<br></code></li>
+<li>Execute the following command<br><code>git clone https://github.com/gvensan/smarttown.git</code></li>
 </ul>
-<p>This would create a directory by name <strong>smarttown</strong> and checkout the git repository contents.   <img src="img/d38166efa5c8e5e.jpg"></p>
+<p>Below is the directory structure of the newly cloned <strong>smarttown</strong> folder   <img src="img/d38166efa5c8e5e.jpg"></p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Introduction to PubSub&#43; Event Portal" duration="2">
         <h2 is-upgraded>Solace PubSub+ Event Portal</h2>
-<p>The Market&#39;s First API Portal...for Events.</p>
-<p>Single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.</p>
-<p>With Event Portal, you can use the catalog to help assess which events have high value and which don&#39;t. All of this metadata helps you with your decision making process as to why a log data probably doesn&#39;t have to become enterprise events, but others do.</p>
-<p>Now it&#39;s quite possible to really consider which are the events that would provide value to consumers (both internal and external) and build an Event API Product.</p>
-<p><a href="https://solace.com/blog/api-portal-for-events/" target="_blank">PubSub+ Event Portal</a> lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.</p>
-<p class="image-container"><img src="img/4b2c4dffdbaec7b5.jpg"></p>
+<p>The Solace <a href="https://solace.com/blog/api-portal-for-events/" target="_blank">PubSub+ Event Portal</a> is a single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.</p>
+<p>One of the features of the event portal is the <strong>Catalog</strong>, allowing users assess which events have high value over others to consumers (both internal and external). This information is used to build Event API Product.</p>
+<p class="image-container"><img src="img/90589fcb7e51e18b.jpg"></p>
 <p>With the PubSub+ Event Portal, you can:</p>
 <ul>
 <li>Define and model event-driven systems</li>
@@ -117,9 +118,6 @@
 <li>Runtime event discovery</li>
 <li>Understand statistics about events<br></li>
 </ul>
-<h2 is-upgraded>Event Management: PubSub+ Event Portal</h2>
-<p>Single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.</p>
-<p class="image-container"><img src="img/75c9432fb91fd315.png"></p>
 <h2 is-upgraded>Elements of PubSub+ Event Portal</h2>
 <p class="image-container"><img src="img/49431c8620efbb8d.jpg"></p>
 <h3 is-upgraded>Application Domain</h3>
@@ -154,16 +152,16 @@
       <google-codelab-step label="Introduction to Spring Cloud Stream" duration="3">
         <p class="image-container"><img alt="Cloud Stream Intro" src="img/f4bfccdf4fb492d0.png"></p>
 <p>Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we&#39;ll cover in a bit. The framework is based on Spring Boot and Spring Integration.</p>
-<p>Spring Cloud Stream has three different types of message exchange contracts as pictures below.</p>
+<p>Spring Cloud Stream has three different types of message exchange contracts:</p>
 <ol type="1">
-<li>Suppliers are sources of events</li>
-<li>Sinks are consumers of events</li>
-<li>Processors are both consumers and subscribers of events</li>
+<li><strong>Suppliers</strong> are sources of events</li>
+<li><strong>Sinks</strong> are consumers of events</li>
+<li><strong>Processors</strong> are both consumers and subscribers of events</li>
 </ol>
 <h2 is-upgraded>Spring Cloud Stream Components</h2>
 <p>Spring Cloud Stream introduces three main components that allow developers to utilize messaging in their code:</p>
 <ul>
-<li><strong>Binder</strong> - The component that implements communication with a specific message broker. For example, there is a RabbitMQ Binder, a Kafka Binder, and so on.</li>
+<li><strong>Binder</strong> - The component that implements communication with a specific message broker. For example, there is a RabbitMQ Binder, a Kafka Binder, and so on. Binders abstracts the messaging API</li>
 <li><strong>Binding</strong> - The interface for sending and receiving messages. This component links the abstract channels in your code with a topic or queue that&#39;s handled by the binder.</li>
 <li><strong>Message</strong> - The data structure used to communicate with the bindings between your code and your message broker. How this data is packaged and communicated over the message broker is determined by the binder.</li>
 </ul>
@@ -210,7 +208,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Spring Cloud Stream - API Connection" duration="3">
+      <google-codelab-step label="Spring Cloud Stream - Solace API Connection" duration="3">
         <p>Launch the Broker Service from PubSub+ Console and open the connection tab.</p>
 <p class="image-container"><img src="img/fa773bb2812ac97b.jpg"></p>
 <p>Click on <strong>Get Started</strong> button next to the Spring Cloud Stream library</p>
@@ -231,13 +229,12 @@
 <p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
 <h3 is-upgraded>Application Domains</h3>
 <p class="image-container"><img src="img/83c8831ad1685cad.jpg"></p>
-<p>Though the SmartTown EDA design shall encompass various aspects of automation and control - we will focus on the Analytics and Operations applications for this workshop.</p>
+<p>We will focus on the Analytics and Operations applications for this workshop.</p>
 <h3 is-upgraded>Applications</h3>
 <p class="image-container"><img src="img/68daf43a1a2bef9.jpg"></p>
-<p>A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.</p>
 <h3 is-upgraded>Events</h3>
 <ul>
-<li><strong>TemperatureReading</strong> - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp</li>
+<li><strong>TemperatureReading</strong> - An event generated by a Temperature Sensor (IoT Device) with temperature reading and a timestamp</li>
 <li><strong>OperationalAlert</strong> - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.</li>
 </ul>
 <p class="image-container"><img src="img/d44b3a110f0d2d80.jpg"></p>
@@ -271,23 +268,23 @@
       </google-codelab-step>
     
       <google-codelab-step label="Import Application Domain" duration="3">
-        <p>We will create an event-driven design for SmartTown functions in the Event Portal using Designer tool. To begin with, we will import an application domain export file that contains required event, schema and application domain definitions - we just need to create application and tie the event with those applications.</p>
-<p>✅ Launch Solace PubSub+ Event Portal and open Designer tool</p>
+        <p>We will create an event-driven design for SmartTown functions in the Event Portal using the PubSub+ Designer. To begin with, we will import an application domain export file that contains required event, schema and application domain definitions - we just need to create application and tie the event with those applications.</p>
+<p>✅ Launch Solace PubSub+ Event Portal and open the Designer</p>
 <ul>
-<li>Click on <strong>Import</strong> button next to <strong><em>Application Domain File</em></strong> or right-click on the canvas and choose <strong>Import Application Domain</strong> option.</li>
+<li>Click on <strong>Import</strong> button next to <em>Application Domain File</em> or right-click on the canvas and choose <strong>Import Application Domain</strong> option.</li>
 </ul>
 <p class="image-container"><img src="img/4ba68074d12a506d.png"></p>
-<p>✅ On the file open dialog, choose the file <strong><em>asyncapi-designer-topology.json</em></strong> in <strong>cloudstream</strong> folder of the cloned repository folder.</p>
+<p>✅ On the file open dialog, choose the file <em>asyncapi-designer-topology.json</em> in <strong>cloudstream</strong> folder of the cloned repository folder.</p>
 <p>This import action would create</p>
 <ul>
-<li>Application domains<br>   <ul>
+<li>Application domains<br><ul>
 <li>SmartTown - Operations</li>
 <li>SmartTown - Analytics</li>
 </ul>
 </li>
 <li>Events  <ul>
-<li>TemperatureReading with a topic address of <strong><em>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</em></strong></li>
-<li>OperationalAlert with a topic address of <strong><em>SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}</em></strong></li>
+<li>TemperatureReading with a topic address of <em>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</em></li>
+<li>OperationalAlert with a topic address of <em>SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}</em></li>
 </ul>
 </li>
 <li>Schemas  <ul>
@@ -305,18 +302,18 @@
       </google-codelab-step>
     
       <google-codelab-step label="Create Application" duration="4">
-        <p>✅ Create application under <strong><em>SmartTown - Operations</em></strong><img src="img/a3ab3dad45b30334.png"></p>
+        <p>✅ Create application under <em>SmartTown - Operations</em><img src="img/a3ab3dad45b30334.png"></p>
 <p>✅ Launch create application option</p>
 <p class="image-container"><img src="img/cef4230f892dc4c0.png"></p>
 <h2 is-upgraded>Create Application - Temperature Sensors	</h2>
 <p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
 <p>In the Create Application page:</p>
 <ul>
-<li>Enter <strong>Temperature Sensors</strong> for <strong><em>Name</em></strong></li>
-<li>Choose <strong><em>Standard</em></strong> as selected option for <strong>Application Type</strong></li>
+<li>Enter <strong>Temperature Sensors</strong> for <em>Name</em></li>
+<li>Choose <em>Standard</em> as selected option for <strong>Application Type</strong></li>
 </ul>
 <p class="image-container"><img src="img/8bda94a752be63a5.png"></p>
-<p>✅ Launch <strong><em>Manage</em></strong> events page</p>
+<p>✅ Launch <em>Manage</em> events page</p>
 <p class="image-container"><img src="img/b8002bc73e8588fc.png"></p>
 <p>✅ Set Publish/Subscribe permissions on Events</p>
 <p>In the Manage Events page:</p>
@@ -329,10 +326,10 @@
 <p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
 <p>In the Create Application page:</p>
 <ul>
-<li>Enter <strong>Heating Cooling Controllers - EXTERNAL</strong> for <strong><em>Name</em></strong></li>
-<li>Choose <strong><em>Standard</em></strong> as selected option for <strong>Application Type</strong></li>
+<li>Enter <strong>Heating Cooling Controllers - EXTERNAL</strong> for <em>Name</em></li>
+<li>Choose <em>Standard</em> as selected option for <strong>Application Type</strong></li>
 </ul>
-<p>✅ Launch <strong><em>Manage</em></strong> events page and set Publish/Subscribe permissions on Events</p>
+<p>✅ Launch <em>Manage</em> events page and set Publish/Subscribe permissions on Events</p>
 <p>In the Manage Events page:</p>
 <ul>
 <li>Identify the Events relevant to the application</li>
@@ -380,6 +377,14 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 </ul>
 </li>
 </ul>
+<h2 is-upgraded>AsyncAPI in Event Portal</h2>
+<p>PubSub+ Event Portal makes adopting and using AsyncAPI simple:</p>
+<ul>
+<li><strong>Faster</strong>: you don&#39;t have to edit asyncapi specs by hand</li>
+<li><strong>Ensure Consistency</strong>: changes to events and schemas up stream can easily be exported</li>
+<li><strong>Flexible</strong>: Export Event API Products for interested developer and/or model your application interface and export it</li>
+</ul>
+<p class="image-container"><img src="img/461e3e84c48bcf2f.jpg"></p>
 <p>References:</p>
 <ul>
 <li><a href="https://www.asyncapi.com/docs/specifications/v2.2.0" target="_blank">AsyncAPI Specification</a></li>
@@ -398,14 +403,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <p class="image-container"><img src="img/d011d91ad19822f2.png"></p>
 <p>When it comes to value and exposure, Event-driven applications can combine the classic system and business events to create a bundle as a specification without exposing any of the internal or implementation details. Solace PubSub+ uses AsyncAPI as the standard for API specification for exposing such Event API bundles. Consuming applications also benefits from AsyncAPI&#39;s code-generation facility to focus just on the business logic and not the mundane tasks.</p>
 <p class="image-container"><img src="img/1fb8787c46d1cee0.png"></p>
-<h2 is-upgraded>AsyncAPI in Event Portal</h2>
-<p>PubSub+ Event Portal makes adopting and using AsyncAPI simple:</p>
-<ul>
-<li><strong>Faster</strong>: you don&#39;t have to edit asyncapi specs by hand</li>
-<li><strong>Ensure Consistency</strong>: changes to events and schemas up stream can easily be exported</li>
-<li><strong>Flexible</strong>: Export Event API Products for interested developer and/or model your application interface and export it</li>
-</ul>
-<p class="image-container"><img src="img/461e3e84c48bcf2f.jpg"></p>
 <h2 is-upgraded>References:</h2>
 <ul>
 <li>Getting started with PubSub+ Cloud <a href="https://docs.solace.com/Solace-Cloud/ggs_signup.htm" target="_blank">Documentation</a></li>
@@ -425,10 +422,10 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <p>✅ Configure the API Product settings</p>
 <p>In the Create Event API Product page:</p>
 <ul>
-<li>Enter <strong>HVAC  Controller</strong> for <strong><em>Name</em></strong></li>
-<li>Choose <strong>Default Event Mesh</strong> for <strong><em>Logical Event Mesh</em></strong></li>
-<li>Enter <strong>localhost:55555</strong> for <strong><em>Server URL</em></strong></li>
-<li>Enter <strong>smf</strong> for <strong><em>Server Protocol</em></strong></li>
+<li>Enter <strong>HVAC  Controller</strong> for <em>Name</em></li>
+<li>Choose <strong>Default Event Mesh</strong> for <em>Logical Event Mesh</em></li>
+<li>Enter <strong>localhost:55555</strong> for <em>Server URL</em></li>
+<li>Enter <strong>smf</strong> for <em>Server Protocol</em></li>
 </ul>
 <aside class="warning"><p>Do not yet click on <strong>Save</strong> button, we will configure the Events and then save.</p>
 </aside>
@@ -445,8 +442,8 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 </ul>
 <p class="image-container"><img src="img/fa955d93caaf3a0d.png"></p>
 <ul>
-<li>Mark <strong>TemperatureReading</strong> with <strong><em>Subscribe</em></strong> permission</li>
-<li>Mark <strong>OperationalAlert</strong> with <strong><em>Publish</em></strong> permission</li>
+<li>Mark <strong>TemperatureReading</strong> with <em>Subscribe</em> permission</li>
+<li>Mark <strong>OperationalAlert</strong> with <em>Publish</em> permission</li>
 <li>Click on the <strong>Save</strong> button</li>
 </ul>
 <p>✅ Event API Product list</p>
@@ -480,12 +477,10 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <p class="image-container"><img src="img/6c8480d8bd7fc67b.png"></p>
 <p>✅ Open the website URL in the browser (click on the link)</p>
 <p class="image-container"><img src="img/30c3f2e560d9dddc.jpg"></p>
-<p>You can click on the <strong>Download YAML</strong> button and download the document from this portal - just you need to move it to the cloudstream folder.</p>
-<p>Run the following command on a terminal window</p>
-<pre><code>mv ~/Downloads/asyncapi.yaml ~/github/smarttown/cloudstream/
+<p>You can click on the <strong>Download YAML</strong> button and download the document from this portal. Let&#39;s move it to the <code>cloudstream</code> directory in the previously cloned github repo.</p>
+<p>Navigate to the <code>smarttown/cloudstream</code> directory and run the following command on a terminal window</p>
+<pre><code>mv ~/Downloads/asyncapi.yaml .
 </code></pre>
-<aside class="warning"><p>Make sure that the downloaded yml file is moved to the <strong>~/github/smarttown/cloudstream/</strong> folder.<br></p>
-</aside>
 
 
       </google-codelab-step>
@@ -498,7 +493,7 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <li>Open Spring Cloud Suite tool by clicking on the icon in the desktop</li>
 <li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; <img src="img/18f6e02d781fe65.jpg"></li>
 </ul>
-<h2 is-upgraded>Review <strong><em>ac-city-iot-simulator</em></strong> project</h2>
+<h2 is-upgraded>Review <em>ac-city-iot-simulator</em> project</h2>
 <h3 is-upgraded>TemperatureReading.java</h3>
 <p>✅ Review the TemperatureReading.java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
 <h3 is-upgraded>Application.java</h3>
@@ -569,10 +564,10 @@ spring:
           environment:
             solace:
               java:
-                host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
-                msgVpn: solace-eap
+                host: tcps://&lt;your_host&gt;.messaging.solace.cloud:55443  
+                msgVpn: &lt;your_msgVPN&gt;
                 clientUsername: solace-cloud-client
-                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
+                clientPassword: &lt;your_password&gt;
 logging:
   level:
     root: info
@@ -597,6 +592,7 @@ logging:
 <pre><code>cd ~/github/smarttown/cloudstream/ac-city-iot-simulator
 mvn clean spring-boot:run
 </code></pre>
+<p>Alternatively, you can also run <code>./mvnw clean spring-boot:run</code></p>
 <p>This should run the simulator microservice and publish temperature reading events to the Event Broker.</p>
 <pre><code>mvn clean 
 mvn spring-boot:run
@@ -621,25 +617,21 @@ TemperatureReading [mCpuLoad=6.26708984375, mCity=New York City, mLatitude=40.71
       </google-codelab-step>
     
       <google-codelab-step label="Create Alert Generator Microservice" duration="8">
-        <p>Before we proceed, we have to make minor changes to the AsyncAPI yml file. The yml file is located under <strong>~/github/smarttown/cloudstream/</strong> directory (the last step in <strong><em>Download AsyncAPI Document</em></strong>).</p>
+        <p>Before we proceed, we have to make minor changes to the AsyncAPI yml file. The yml file is located under <strong>~/github/smarttown/cloudstream/</strong> directory (the last step in <em>Download AsyncAPI Document</em>).</p>
 <p>✅ Make the following updates to the asyncapi.yaml file</p>
 <p>Let&#39;s add a few of the template&#39;s configuration options to the download AsyncAPI document.</p>
-<p>Add x-scs-function-name: processTemperatureReading under the subscribe operation and the publish operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the subscribe and the publish operation you are saying you want them handled by the same function!</p>
-<pre><code>Append the line below 
-
-      x-scs-function-name: processTemperatureReading
-
-a) After 
-
-channels:
+<p>Add <code>x-scs-function-name: processTemperatureReading</code> under the <code>subscribe</code> operation and the <code>publish</code> operation under the two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the subscribe and the publish operation you are saying you want them handled by the same function!</p>
+<p>a) After</p>
+<pre><code>channels:
   SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
     subscribe:
-
-b) And after
-
-  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
+</code></pre>
+<p>b) And after</p>
+<pre><code>  SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
     publish:
 </code></pre>
+<aside class="warning"><p>Careful not to mess up the indentation in your YAML file!</p>
+</aside>
 <p>With this change, the channels section of the YAML file will look like this</p>
 <pre><code>channels:
   SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
@@ -694,9 +686,9 @@ b) And after
 <pre><code>cd ~/github/smarttown/cloudstream
 </code></pre>
 <p>Run the following command to invoke AsyncAPI code generator utility.</p>
-<aside class="warning"><p>Be sure to update the host URI in the <strong>-p host</strong> parameter with the host URL noted from the Spring Cloud Stream connection settings in the previous section.<br></p>
+<aside class="warning"><p>Be sure to update the host URI in the <strong>-p host</strong>, <strong>-p username</strong>, <strong>-p password</strong>, and <strong>-p msgVpn</strong> parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.<br></p>
 </aside>
-<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=solace-cloud-client -p password=fv1e2ijrun4r7ol5irkk9i6s4g -p msgVpn=solace-eap asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://&lt;your_host_name&gt;.messaging.solace.cloud:55443 -p username=&lt;username&gt; -p password=&lt;password&gt; -p msgVpn=&lt;msgVPN&gt; asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 </code></pre>
 <p>This command will take some time (minute or so) and complete with the following message.</p>
 <pre><code>Done! ✨
@@ -814,7 +806,7 @@ public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; proce
                 host: &#39;tcps://mrm28q29kuoha.messaging.solace.cloud:55443&#39;
                 msgVpn: sprint-eap
                 clientUsername: solace-cloud-client
-                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
+                clientPassword: &lt;your_password&gt;
 logging:
   level:
     root: info
@@ -886,22 +878,22 @@ mvn clean spring-boot:run
 <li>Create a Event <code>AggregateAlert</code></li>
 <li>Create Application <code>Heating Cooling Controllers - DASHBOARD</code> and set appropriate permissions</li>
 </ul>
-<h2 is-upgraded>Create Schema - <strong><em>AggregateAlert</em></strong></h2>
-<p>✅ Create schema <strong>AggregateAlert</strong> under <strong><em>Smart - Analytics</em></strong> Application</p>
+<h2 is-upgraded>Create Schema - <em>AggregateAlert</em></h2>
+<p>✅ Create schema <strong>AggregateAlert</strong> under <em>Smart - Analytics</em> Application</p>
 <p class="image-container"><img src="img/d0e02558c8da641a.png"></p>
 <p>✅ Launch create schema page</p>
 <p class="image-container"><img src="img/586a39aa9dc14aae.png"></p>
 <p>In the Create Schema page:</p>
 <ul>
-<li>Enter <strong>AggregateAlert</strong> for <strong><em>Name</em></strong></li>
-<li>Enable the checkbox for <strong><em>Shared</em></strong></li>
-<li>Choose <strong>JSON</strong> for <strong><em>Content Type</em></strong></li>
-<li>Click on <strong>Import from file</strong> link in the <strong><em>Content</em></strong> section and choose the file <strong>AggregateAlert-schema.json</strong> in <strong>~/github/smarttown/cloudstream</strong> folder</li>
+<li>Enter <strong>AggregateAlert</strong> for <em>Name</em></li>
+<li>Enable the checkbox for <em>Shared</em></li>
+<li>Choose <strong>JSON</strong> for <em>Content Type</em></li>
+<li>Click on <strong>Import from file</strong> link in the <em>Content</em> section and choose the file <strong>AggregateAlert-schema.json</strong> in <strong>~/github/smarttown/cloudstream</strong> folder</li>
 <li>Click on <strong>Save</strong> button</li>
 </ul>
 <p class="image-container"><img src="img/db2e5231a2a776f9.png"></p>
-<h2 is-upgraded>Create Event - <strong><em>AggregateAlert</em></strong></h2>
-<p>✅ Create event under <strong><em>Smart - Analytics</em></strong> Application Domain</p>
+<h2 is-upgraded>Create Event - <em>AggregateAlert</em></h2>
+<p>✅ Create event under <em>Smart - Analytics</em> Application Domain</p>
 <p class="image-container"><img src="img/8b46414efae531aa.png"></p>
 <p>✅ Launch create event page</p>
 <p class="image-container"><img src="img/855028b5534d144.png"></p>
@@ -909,28 +901,28 @@ mvn clean spring-boot:run
 <p class="image-container"><img src="img/c1e20975a96e4663.png"></p>
 <p>In the Create Event page:</p>
 <ul>
-<li>Enter <strong>AggregateAlert</strong> for <strong><em>Name</em></strong></li>
-<li>Enable the checkbox for <strong><em>Shared</em></strong></li>
-<li>Choose <strong>Default Event Mesh</strong> for <strong><em>Logical Event Mesh</em></strong></li>
-<li>Choose <strong><em>Schema</em></strong> as selected option for <strong>Value  </strong><ul>
+<li>Enter <strong>AggregateAlert</strong> for <em>Name</em></li>
+<li>Enable the checkbox for <em>Shared</em></li>
+<li>Choose <strong>Default Event Mesh</strong> for <em>Logical Event Mesh</em></li>
+<li>Choose <em>Schema</em> as selected option for <strong>Value</strong><ul>
 <li>In the first dropdown select <strong>AggregateAlert</strong></li>
 <li>In the second dropdown select <strong>All Versions</strong></li>
 </ul>
 </li>
 </ul>
-<p>✅ Launch <strong><em>Set Topic Name</em></strong> page</p>
+<p>✅ Launch <em>Set Topic Name</em> page</p>
 <p class="image-container"><img src="img/2cdcb299b6fa3f26.png"></p>
 <p>✅ Set Topic page</p>
 <p class="image-container"><img src="img/355f66c5a103f1ce.png"></p>
-<p>✅ Create level <strong>AggregateAlert</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong> of <em>Literal</em> type</p>
+<p>✅ Create level <strong>AggregateAlert</strong> at the path <em>SmartTown</em>/<em>Analytics</em> of <em>Literal</em> type</p>
 <p class="image-container"><img src="img/b7ba8d783b34f546.png"><img src="img/2e124b962b954bfc.png"></p>
-<p>✅ Create level <strong>created</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong>/<strong><em>AggregateAlert</em></strong> of <em>Literal</em> type</p>
+<p>✅ Create level <strong>created</strong> at the path <em>SmartTown</em>/<em>Analytics</em>/<em>AggregateAlert</em> of <em>Literal</em> type</p>
 <p class="image-container"><img src="img/950f9686c944202d.png"></p>
-<p>✅ Create level <strong>v1</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong>/<strong><em>AggregateAlert</em></strong>/<strong><em>created</em></strong> of <em>Literal</em> type</p>
-<p>✅ Create level <strong>city</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong>/<strong><em>AggregateAlert</em></strong>/<strong><em>created</em></strong>/<strong><em>v1</em></strong> of <em>Variable</em> type</p>
+<p>✅ Create level <strong>v1</strong> at the path <em>SmartTown</em>/<em>Analytics</em>/<em>AggregateAlert</em>/<em>created</em> of <em>Literal</em> type</p>
+<p>✅ Create level <strong>city</strong> at the path <em>SmartTown</em>/<em>Analytics</em>/<em>AggregateAlert</em>/<em>created</em>/<em>v1</em> of <em>Variable</em> type</p>
 <p class="image-container"><img src="img/b245c0aff3b0f9e3.png"></p>
-<p>✅ Create level <strong>AlertPriority</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong>/<strong><em>AlertPriority</em></strong>/<strong><em>created</em></strong>/<strong><em>v1</em></strong>/<strong><em>city</em></strong> of <em>Variable</em> type</p>
-<p>✅ Create level <strong>AlertType</strong> at the path <strong><em>SmartTown</em></strong>/<strong><em>Analytics</em></strong>/<strong><em>AggregateAlert</em></strong>/<strong><em>created</em></strong>/<strong><em>v1</em></strong>/<strong><em>city</em></strong>/<strong><em>AlertPriority</em></strong> of <em>Variable</em> type</p>
+<p>✅ Create level <strong>AlertPriority</strong> at the path <em>SmartTown</em>/<em>Analytics</em>/<em>AlertPriority</em>/<em>created</em>/<em>v1</em>/<em>city</em> of <em>Variable</em> type</p>
+<p>✅ Create level <strong>AlertType</strong> at the path <em>SmartTown</em>/<em>Analytics</em>/<em>AggregateAlert</em>/<em>created</em>/<em>v1</em>/<em>city</em>/<em>AlertPriority</em> of <em>Variable</em> type</p>
 <ul>
 <li>The final topic name structure</li>
 </ul>
@@ -946,10 +938,10 @@ mvn clean spring-boot:run
 <p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
 <p>In the Create Application page:</p>
 <ul>
-<li>Enter <strong>Heating Cooling Controllers - DASHBOARD</strong> for <strong><em>Name</em></strong></li>
-<li>Choose <strong><em>Standard</em></strong> as selected option for <strong>Application Type</strong></li>
+<li>Enter <strong>Heating Cooling Controllers - DASHBOARD</strong> for <em>Name</em></li>
+<li>Choose <em>Standard</em> as selected option for <strong>Application Type</strong></li>
 </ul>
-<p>✅ Launch <strong><em>Manage</em></strong> events page and set Publish/Subscribe permissions on Events</p>
+<p>✅ Launch <em>Manage</em> events page and set Publish/Subscribe permissions on Events</p>
 <p>In the Manage Events page:</p>
 <ul>
 <li>Identify the Events relevant to the application</li>
@@ -959,7 +951,7 @@ mvn clean spring-boot:run
 <p class="image-container"><img src="img/bb820ea22b016376.png"></p>
 <h2 is-upgraded>Applications List</h2>
 <p class="image-container"><img src="img/ef9d56285cb50482.png"></p>
-<h2 is-upgraded>Review <strong><em>ac-city-alert-aggregator</em></strong> project</h2>
+<h2 is-upgraded>Review <em>ac-city-alert-aggregator</em> project</h2>
 <h3 is-upgraded>OperationalAlert.java</h3>
 <p>✅ Review the OperationalAlert.java file. It carries temperature reading data - a simple POJO with alert attributes and corresponding getters/setters.</p>
 <h3 is-upgraded>AggregateAlert.java</h3>
@@ -976,7 +968,7 @@ spring:
     stream:
       bindings:
         aggregateTemperature-out-0:
-          destination: &#39;SmartTown/Operations/AggregateAlert/created/v1/*/*/*&#39;
+          destination: &#39;SmartTown/Analytics/AggregateAlert/created/v1/*/*/*&#39;
         aggregateTemperature-in-0:
           destination: &#39;SmartTown/Operations/OperationalAlert/created/v1/*/*&#39;
       binders:
@@ -988,7 +980,7 @@ spring:
                 host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
                 msgVpn: solace-eap
                 clientUsername: solace-cloud-client
-                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
+                clientPassword: &lt;your_password&gt;
 logging:
   level:
     root: info
@@ -1023,21 +1015,21 @@ AggregateAlert [count=10, severity=Medium, alertType=HighTemperature, city=Melbo
       </google-codelab-step>
     
       <google-codelab-step label="Alert Dashboard (optional)" duration="5">
-        <h2 is-upgraded>Review <strong><em>ac-city-alert-dashboard</em></strong> project</h2>
-<p>Alert Dashboard is a Spring Boot Application that serves static web application with HTML pages &amp; JS scripts. The web application makes a MQTT client connection to the Broker and subscribes to <strong><em>AggregateAlert</em></strong> event, on receipt it simply plots them on the Google Map.</p>
+        <h2 is-upgraded>Review <em>ac-city-alert-dashboard</em> project</h2>
+<p>Alert Dashboard is a Spring Boot Application that serves static web application with HTML pages &amp; JS scripts. The web application makes a MQTT client connection to the Broker and subscribes to <em>AggregateAlert</em> event, on receipt it simply plots them on the Google Map.</p>
 <p>A tooltip facility details the alert nature with information on timestamp, temperature, sample size, city name and geo-coordinates.</p>
 <p>✅ Review the shared.js</p>
 <p>The connection details to establish a MQTT client session is retrieved from the following page.</p>
 <pre><code>  // eclipse test server
   var deets = {
-    host: &#39;mrri685heajs7.messaging.solace.cloud&#39;,
+    host: &#39;&lt;your_host&gt;.messaging.solace.cloud&#39;,
     port: 8443,
     ssl: true,
     username: &#39;solace-cloud-client&#39;,
-    password: &#39;fv1e2ijrun4r7ol5irkk9i6s4g&#39;,
+    password: &#39;&lt;your_password&gt;&#39;,
   }
   
-  var topicName = &#39;SmartTown/Operations/AggregateAlert/created/v1/+/+/+&#39;;
+  var topicName = &#39;SmartTown/Analytics/AggregateAlert/created/v1/+/+/+&#39;;
   var windowSizeSecs = 10000;
 
   // this is for MQTT, it should return a connected or connecting valid Paho client
@@ -1131,7 +1123,6 @@ mvn spring-boot:run -Dspring-boot.run.arguments=&#34;--application.city=Singapor
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
-  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
