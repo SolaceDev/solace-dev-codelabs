@@ -1325,7 +1325,7 @@ Run one or more (maybe all) of the following commands to simulate sensor data fo
 mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=London --application.latitude=51.507351 --application.longitude=-0.127758 --server.port=8091" &
 mvn spring-boot:run -Dspring-boot.run.arguments="--application.city='Sau Paulo' --application.latitude=-23.550520 --application.longitude=-46.633308 --server.port=8092" &
 mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Melbourne --application.latitude=-37.813629 --application.longitude=144.963058 --server.port=8093" &
-mvn spring-boot:run -Dspring-boot.run.arguments="--application.city='San Francisco' --application.latitude=37.774929 --application.longitude=-122.419418 --server.port=8094"
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city='SanFrancisco' --application.latitude=37.774929 --application.longitude=-122.419418 --server.port=8094"
 mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Bangalore --application.latitude=12.971599 --application.longitude=77.594566 --server.port=8095" &
 mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Singapore --application.latitude=1.290453 --application.longitude=103.852038 --server.port=8096" &
 ```
