@@ -283,8 +283,8 @@
 </ul>
 </li>
 <li>Events  <ul>
-<li>TemperatureReading with a topic address of <em>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</em></li>
-<li>OperationalAlert with a topic address of <em>SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}</em></li>
+<li>TemperatureReading with a topic address of <code>SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}</code></li>
+<li>OperationalAlert with a topic address of <code>SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}</code></li>
 </ul>
 </li>
 <li>Schemas  <ul>
@@ -302,10 +302,11 @@
       </google-codelab-step>
     
       <google-codelab-step label="Create Application" duration="4">
-        <p>✅ Create application under <em>SmartTown - Operations</em><img src="img/a3ab3dad45b30334.png"></p>
-<p>✅ Launch create application option</p>
+        <p>Let&#39;s create the Temperature Sensors and the Eternal Heating/Cooling Controllers Applications. To do so:</p>
+<p>✅ Navigate to the <em>SmartTown - Operations</em> Application Domain <img src="img/a3ab3dad45b30334.png"></p>
+<p>✅ Click on create application option</p>
 <p class="image-container"><img src="img/cef4230f892dc4c0.png"></p>
-<h2 is-upgraded>Create Application - Temperature Sensors	</h2>
+<h2 is-upgraded>1️⃣ Temperature Sensors	Application</h2>
 <p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
 <p>In the Create Application page:</p>
 <ul>
@@ -313,17 +314,15 @@
 <li>Choose <em>Standard</em> as selected option for <strong>Application Type</strong></li>
 </ul>
 <p class="image-container"><img src="img/8bda94a752be63a5.png"></p>
-<p>✅ Launch <em>Manage</em> events page</p>
+<p>✅ Click on <em>Manage</em> events page</p>
 <p class="image-container"><img src="img/b8002bc73e8588fc.png"></p>
-<p>✅ Set Publish/Subscribe permissions on Events</p>
 <p>In the Manage Events page:</p>
 <ul>
 <li>Identify the Events relevant to the application</li>
-<li>Click on <strong>Sub</strong> or <strong>Pub</strong> icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)</li>
+<li>Click on the <strong>Pub</strong> icon on the <strong>TemperatureReading</strong> Event indicating the event relationship with the application</li>
 </ul>
 <p class="image-container"><img src="img/e46379900b40f09f.png"></p>
-<h2 is-upgraded>Create Application - Heating Cooling Controllers - EXTERNAL	</h2>
-<p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
+<h2 is-upgraded>2️⃣ External Heating/Cooling Controllers Application</h2>
 <p>In the Create Application page:</p>
 <ul>
 <li>Enter <strong>Heating Cooling Controllers - EXTERNAL</strong> for <em>Name</em></li>
@@ -333,11 +332,13 @@
 <p>In the Manage Events page:</p>
 <ul>
 <li>Identify the Events relevant to the application</li>
-<li>Click on <strong>Sub</strong> or <strong>Pub</strong> icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)</li>
+<li>Click on the <strong>Sub</strong> icon for the <strong>TemperatureReading</strong> Event</li>
+<li>Click on the <strong>Pub</strong> icon for the <strong>Operational Alert</strong> Event</li>
 <li>Click on <strong>Save</strong> button</li>
 </ul>
 <p class="image-container"><img src="img/78c9080c5b0505a6.png"></p>
 <h2 is-upgraded>Applications List</h2>
+<p>When  you click on the Application List tab you will see the following</p>
 <p class="image-container"><img src="img/7fa6599765eefbd3.png"></p>
 
 
@@ -423,14 +424,14 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <p>In the Create Event API Product page:</p>
 <ul>
 <li>Enter <strong>HVAC  Controller</strong> for <em>Name</em></li>
-<li>Choose <strong>Default Event Mesh</strong> for <em>Logical Event Mesh</em></li>
+<li>Choose <strong>LogicalEventMesh</strong> for <em>Logical Event Mesh</em></li>
 <li>Enter <strong>localhost:55555</strong> for <em>Server URL</em></li>
 <li>Enter <strong>smf</strong> for <em>Server Protocol</em></li>
 </ul>
-<aside class="warning"><p>Do not yet click on <strong>Save</strong> button, we will configure the Events and then save.</p>
-</aside>
 <p class="image-container"><img src="img/182f8e2ca3073fab.png"></p>
-<p>✅ Configure Event settings</p>
+<aside class="warning"><p>Do not yet click on <strong>Save</strong> button! We will configure the Events and then save.</p>
+</aside>
+<p>✅ Navigate to the Events tab to configure Event settings</p>
 <p class="image-container"><img src="img/2ab249813f8cfbee.png"></p>
 <ul>
 <li>Click on the <strong>Add Events</strong> button</li>
@@ -442,13 +443,13 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 </ul>
 <p class="image-container"><img src="img/fa955d93caaf3a0d.png"></p>
 <ul>
-<li>Mark <strong>TemperatureReading</strong> with <em>Subscribe</em> permission</li>
-<li>Mark <strong>OperationalAlert</strong> with <em>Publish</em> permission</li>
+<li>Mark <strong>TemperatureReading</strong> with <em>Subscribe</em> property</li>
+<li>Mark <strong>OperationalAlert</strong> with <em>Publish</em> property</li>
 <li>Click on the <strong>Save</strong> button</li>
 </ul>
 <p>✅ Event API Product list</p>
 <p class="image-container"><img src="img/5eec84673b3881e3.png"></p>
-<p>✅ <strong>HVAC Controller</strong> Details</p>
+<p>✅ Click on the <strong>HVAC Controller</strong> Event API product Details</p>
 <p class="image-container"><img src="img/5f21e434824b460b.png"></p>
 <p>A newly created Event API Product can be made externally available or shared through the following methods:</p>
 <ul>
@@ -493,7 +494,7 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
 <li>Open Spring Cloud Suite tool by clicking on the icon in the desktop</li>
 <li>Import cloud stream projects from the smarttown folder as ‘Existing maven projects&#39; <img src="img/18f6e02d781fe65.jpg"></li>
 </ul>
-<h2 is-upgraded>Review <em>ac-city-iot-simulator</em> project</h2>
+<h2 is-upgraded>Review the ac-city-iot-simulator project</h2>
 <h3 is-upgraded>TemperatureReading.java</h3>
 <p>✅ Review the TemperatureReading.java file. It carries temperature reading data - a simple POJO with attributes and corresponding getters/setters.</p>
 <h3 is-upgraded>Application.java</h3>
@@ -662,7 +663,7 @@ TemperatureReading [mCpuLoad=6.26708984375, mCity=New York City, mLatitude=40.71
         schema:
           type: &#34;string&#34;
 </code></pre>
-<p>In the last section of the yml file, in the info section remove the <code>x-view: &#34;provider&#34;</code>.</p>
+<p>Under the <code>info</code> section at the bottom of the yml file, remove the <code>x-view: &#34;provider&#34;</code>.</p>
 <pre><code>info:
   x-generated-time: &#34;2021-09-30 13:15 UTC&#34;
   description: &#34;&#34;
@@ -679,7 +680,7 @@ TemperatureReading [mCpuLoad=6.26708984375, mCity=New York City, mLatitude=40.71
 </code></pre>
 <p>✅ Save the asyncapi.yaml file</p>
 <p>We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.</p>
-<aside class="special"><p>A file with required changes is made available in the folder by name <strong>reference.yml</strong> for your reference.<br></p>
+<aside class="special"><p>A file with required changes is made available in the folder by name <strong>asyncapi-reference.yml</strong> for your reference.<br></p>
 </aside>
 <h2 is-upgraded>Generate code using AsyncAPI Code Generator</h2>
 <p>✅ Change directory to cloudstream and run the following command</p>
@@ -688,7 +689,7 @@ TemperatureReading [mCpuLoad=6.26708984375, mCity=New York City, mLatitude=40.71
 <p>Run the following command to invoke AsyncAPI code generator utility.</p>
 <aside class="warning"><p>Be sure to update the host URI in the <strong>-p host</strong>, <strong>-p username</strong>, <strong>-p password</strong>, and <strong>-p msgVpn</strong> parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.<br></p>
 </aside>
-<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://&lt;your_host_name&gt;.messaging.solace.cloud:55443 -p username=&lt;username&gt; -p password=&lt;password&gt; -p msgVpn=&lt;msgVPN&gt; asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+<pre><code>ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://your_host_name.messaging.solace.cloud:55443 -p username=username -p password=password -p msgVpn=msgVPN asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 </code></pre>
 <p>This command will take some time (minute or so) and complete with the following message.</p>
 <pre><code>Done! ✨
@@ -729,9 +730,9 @@ Check out your shiny new generated files at /home/ubuntu/github/smarttown/clouds
 <p>This Spring Cloud Stream <em>Function</em> contract is a processor that subscribes to <strong>TemperatureReading</strong> message, and publishes a <strong>OperationalAlert</strong> message.</p>
 <p>The business logic of what transpires in this function is something we will be coding here. Our goal is to generate Alerts of HighTemperature type with three distinct priority levels:</p>
 <ul>
-<li>LOW: When temperature &gt; 60 and &lt;= 70</li>
-<li>MEDIUM: When temperature &gt; 70 and &lt;= 80</li>
-<li>HIGH: When temperature &gt; 80</li>
+<li><strong>LOW</strong>: When temperature &gt; 60 and &lt;= 70</li>
+<li><strong>MEDIUM</strong>: When temperature &gt; 70 and &lt;= 80</li>
+<li><strong>HIGH</strong>: When temperature &gt; 80</li>
 </ul>
 <p>With the updated logic, the Function contract will be</p>
 <pre><code>@Bean
@@ -876,23 +877,23 @@ mvn clean spring-boot:run
 <ul>
 <li>Create a Schema <code>AggregateAlert</code></li>
 <li>Create a Event <code>AggregateAlert</code></li>
-<li>Create Application <code>Heating Cooling Controllers - DASHBOARD</code> and set appropriate permissions</li>
+<li>Create Application <code>Heating Cooling Controllers - DASHBOARD</code></li>
 </ul>
-<h2 is-upgraded>Create Schema - <em>AggregateAlert</em></h2>
-<p>✅ Create schema <strong>AggregateAlert</strong> under <em>Smart - Analytics</em> Application</p>
+<h2 is-upgraded>1️⃣ Schema: - <em>AggregateAlert</em> Schema</h2>
+<p>✅ Create schema <strong>AggregateAlert</strong> under the <em>Smart - Analytics</em> Application Domain</p>
 <p class="image-container"><img src="img/d0e02558c8da641a.png"></p>
 <p>✅ Launch create schema page</p>
 <p class="image-container"><img src="img/586a39aa9dc14aae.png"></p>
 <p>In the Create Schema page:</p>
 <ul>
 <li>Enter <strong>AggregateAlert</strong> for <em>Name</em></li>
-<li>Enable the checkbox for <em>Shared</em></li>
 <li>Choose <strong>JSON</strong> for <em>Content Type</em></li>
-<li>Click on <strong>Import from file</strong> link in the <em>Content</em> section and choose the file <strong>AggregateAlert-schema.json</strong> in <strong>~/github/smarttown/cloudstream</strong> folder</li>
+<li>Enable the checkbox for <em>Shared</em></li>
+<li>Under the Content section, click on the <strong>Import from file</strong> link. Choose the file <strong>AggregateAlert-schema.json</strong> in <strong>~/github/smarttown/cloudstream</strong> folder</li>
 <li>Click on <strong>Save</strong> button</li>
 </ul>
 <p class="image-container"><img src="img/db2e5231a2a776f9.png"></p>
-<h2 is-upgraded>Create Event - <em>AggregateAlert</em></h2>
+<h2 is-upgraded>2️⃣ Event - <em>AggregateAlert</em> Event</h2>
 <p>✅ Create event under <em>Smart - Analytics</em> Application Domain</p>
 <p class="image-container"><img src="img/8b46414efae531aa.png"></p>
 <p>✅ Launch create event page</p>
@@ -903,7 +904,7 @@ mvn clean spring-boot:run
 <ul>
 <li>Enter <strong>AggregateAlert</strong> for <em>Name</em></li>
 <li>Enable the checkbox for <em>Shared</em></li>
-<li>Choose <strong>Default Event Mesh</strong> for <em>Logical Event Mesh</em></li>
+<li>Choose <strong>LogicalEventMesh</strong> for <em>Logical Event Mesh</em></li>
 <li>Choose <em>Schema</em> as selected option for <strong>Value</strong><ul>
 <li>In the first dropdown select <strong>AggregateAlert</strong></li>
 <li>In the second dropdown select <strong>All Versions</strong></li>
@@ -934,8 +935,7 @@ mvn clean spring-boot:run
 <ul>
 <li>Click on <strong>Save</strong> button</li>
 </ul>
-<h2 is-upgraded>Create Application - Heating Cooling Controllers - DASHBOARD	</h2>
-<p>The following section describes how to create an application and set its attributes - name, application type and event association.</p>
+<h2 is-upgraded>3️⃣ Application - Heating Cooling Controllers - DASHBOARD	</h2>
 <p>In the Create Application page:</p>
 <ul>
 <li>Enter <strong>Heating Cooling Controllers - DASHBOARD</strong> for <em>Name</em></li>
@@ -945,7 +945,8 @@ mvn clean spring-boot:run
 <p>In the Manage Events page:</p>
 <ul>
 <li>Identify the Events relevant to the application</li>
-<li>Click on <strong>Sub</strong> or <strong>Pub</strong> icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)</li>
+<li>Click on <strong>Sub</strong> for the <strong>OperationalAlert</strong> Event</li>
+<li>Click on <strong>Pub</strong> for the <strong>AggregateAlert</strong> Event</li>
 <li>Click on <strong>Save</strong> button</li>
 </ul>
 <p class="image-container"><img src="img/bb820ea22b016376.png"></p>

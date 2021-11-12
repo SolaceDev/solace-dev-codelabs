@@ -295,8 +295,8 @@ This import action would create
   * SmartTown - Operations
   * SmartTown - Analytics
 * Events
-  * TemperatureReading with a topic address of ___SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}___
-  * OperationalAlert with a topic address of ___SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}___
+  * TemperatureReading with a topic address of `SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}`
+  * OperationalAlert with a topic address of `SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}`
 * Schemas
   * TemperatureReading
   * OperationalAlert
@@ -310,14 +310,16 @@ Positive
 ## Create Application
 Duration: 0:04:00
 
-✅ Create application under ___SmartTown - Operations___
+Let's create the Temperature Sensors and the Eternal Heating/Cooling Controllers Applications. To do so:
+
+✅ Navigate to the ___SmartTown - Operations___ Application Domain 
 ![](img/ep-create-application-1.png)
 
-✅ Launch create application option
+✅ Click on create application option
 
 ![](img/ep-create-application-2.png)
 
-### Create Application - Temperature Sensors	
+### 1️⃣ Temperature Sensors	Application
 
 The following section describes how to create an application and set its attributes - name, application type and event association.
 
@@ -327,21 +329,17 @@ In the Create Application page:
 
 ![](img/ep-create-application-3.png)
 
-✅ Launch ___Manage___ events page
+✅ Click on ___Manage___ events page
 
 ![](img/ep-create-application-4.png)
 
-✅ Set Publish/Subscribe permissions on Events
-
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on the **Pub** icon on the **TemperatureReading** Event indicating the event relationship with the application
 
 ![](img/ep-create-application-5.png)
 
-### Create Application - Heating Cooling Controllers - EXTERNAL	
-
-The following section describes how to create an application and set its attributes - name, application type and event association.
+### 2️⃣ External Heating/Cooling Controllers Application
 
 In the Create Application page:
 - Enter __Heating Cooling Controllers - EXTERNAL__ for ___Name___
@@ -351,12 +349,15 @@ In the Create Application page:
 
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on the __Sub__ icon for the **TemperatureReading** Event 
+- Click on the __Pub__ icon for the **Operational Alert** Event 
 - Click on __Save__ button
 
 ![](img/ep-create-application-6.png)
 
 ### Applications List
+
+When  you click on the Application List tab you will see the following
 
 ![](img/ep-create-application-7.png)
 
@@ -463,16 +464,18 @@ AsyncAPI also provides tools to generate code (supports popular languages) helpi
 
 In the Create Event API Product page:
 - Enter __HVAC  Controller__ for ___Name___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
+- Choose __LogicalEventMesh__ for ___Logical Event Mesh___
 - Enter __localhost:55555__ for ___Server URL___
 - Enter __smf__ for ___Server Protocol___
 
-Negative
-: Do not yet click on __Save__ button, we will configure the Events and then save.
-
 ![](img/ep-eapi-product-2.png)
 
-✅ Configure Event settings
+
+Negative
+: Do not yet click on __Save__ button! We will configure the Events and then save.
+
+
+✅ Navigate to the Events tab to configure Event settings
 
 ![](img/ep-eapi-product-3.png)
 
@@ -485,15 +488,15 @@ Negative
 
 ![](img/ep-eapi-product-5.png)
 
-- Mark __TemperatureReading__ with ___Subscribe___ permission 
-- Mark __OperationalAlert__ with ___Publish___ permission
+- Mark __TemperatureReading__ with ___Subscribe___ property 
+- Mark __OperationalAlert__ with ___Publish___ property
 - Click on the __Save__ button
 
 ✅ Event API Product list 
 
 ![](img/ep-eapi-product-6.png)
 
-✅ __HVAC Controller__ Details 
+✅ Click on the __HVAC Controller__ Event API product Details 
 
 ![](img/ep-eapi-product-7.png)
 
@@ -557,7 +560,7 @@ Import the projects under __github/cloudstream/__ directory.
 * Import cloud stream projects from the smarttown folder as 'Existing maven projects' 
 ![](img/workshop-setup-2.jpg)
 
-###Review ___ac-city-iot-simulator___ project
+###Review the ac-city-iot-simulator project
 
 ####TemperatureReading.java
 
@@ -762,7 +765,7 @@ channels:
           type: "string"
 ```
 
-In the last section of the yml file, in the info section remove the `x-view: "provider"`.  
+Under the `info` section at the bottom of the yml file, remove the `x-view: "provider"`.  
 ```
 info:
   x-generated-time: "2021-09-30 13:15 UTC"
@@ -786,7 +789,7 @@ info:
 We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.
 
 Positive
-: A file with required changes is made available in the folder by name __reference.yml__ for your reference.      
+: A file with required changes is made available in the folder by name __asyncapi-reference.yml__ for your reference.      
 
 ###Generate code using AsyncAPI Code Generator
 
@@ -802,7 +805,7 @@ Negative
 : Be sure to update the host URI in the __-p host__, __-p username__, __-p password__, and __-p msgVpn__ parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.     
 
 ``` 
-ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://<your_host_name>.messaging.solace.cloud:55443 -p username=<username> -p password=<password> -p msgVpn=<msgVPN> asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://your_host_name.messaging.solace.cloud:55443 -p username=username -p password=password -p msgVpn=msgVPN asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 ```
 
 This command will take some time (minute or so) and complete with the following message.
@@ -856,9 +859,9 @@ Let us review the Function
 This Spring Cloud Stream _Function_ contract is a processor that subscribes to __TemperatureReading__ message, and publishes a __OperationalAlert__ message. 
 
 The business logic of what transpires in this function is something we will be coding here. Our goal is to generate Alerts of HighTemperature type with three distinct priority levels:
-* LOW: When temperature > 60 and <= 70
-* MEDIUM: When temperature > 70 and <= 80
-* HIGH: When temperature > 80
+* **LOW**: When temperature > 60 and <= 70
+* **MEDIUM**: When temperature > 70 and <= 80
+* **HIGH**: When temperature > 80
 
 With the updated logic, the Function contract will be
 ```
@@ -1037,11 +1040,11 @@ We will extend the workshop to generate an aggregated alert (over a period/durat
 To accomplish that, we would extend the EDA design:
 * Create a Schema `AggregateAlert`
 * Create a Event `AggregateAlert`
-* Create Application `Heating Cooling Controllers - DASHBOARD` and set appropriate permissions
+* Create Application `Heating Cooling Controllers - DASHBOARD` 
 
-###Create Schema - ___AggregateAlert___
+### 1️⃣ Schema: - ___AggregateAlert___ Schema
 
-✅ Create schema __AggregateAlert__ under ___Smart - Analytics___ Application  
+✅ Create schema __AggregateAlert__ under the ___Smart - Analytics___ Application Domain
 
 ![](img/ep-create-schema-11.png)
 
@@ -1051,14 +1054,14 @@ To accomplish that, we would extend the EDA design:
 
 In the Create Schema page:
 - Enter __AggregateAlert__ for ___Name___
-- Enable the checkbox for ___Shared___
 - Choose __JSON__ for ___Content Type___
-- Click on __Import from file__ link in the ___Content___ section and choose the file __AggregateAlert-schema.json__ in __~/github/smarttown/cloudstream__ folder
+- Enable the checkbox for ___Shared___
+- Under the Content section, click on the __Import from file__ link. Choose the file __AggregateAlert-schema.json__ in __~/github/smarttown/cloudstream__ folder
 - Click on __Save__ button
 
 ![](img/ep-create-schema-13.png)
 
-### Create Event - ___AggregateAlert___
+### 2️⃣ Event - ___AggregateAlert___ Event
 
 ✅ Create event under ___Smart - Analytics___ Application Domain 
 
@@ -1076,7 +1079,7 @@ The following section describes how to create an event and set its attributes - 
 In the Create Event page:
 - Enter __AggregateAlert__ for ___Name___
 - Enable the checkbox for ___Shared___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
+- Choose __LogicalEventMesh__ for ___Logical Event Mesh___
 - Choose ___Schema___ as selected option for __Value__
   - In the first dropdown select __AggregateAlert__ 
   - In the second dropdown select __All Versions__
@@ -1119,9 +1122,7 @@ In the Create Event page:
 
 - Click on __Save__ button
 
-### Create Application - Heating Cooling Controllers - DASHBOARD	
-
-The following section describes how to create an application and set its attributes - name, application type and event association.
+### 3️⃣ Application - Heating Cooling Controllers - DASHBOARD	
 
 In the Create Application page:
 - Enter __Heating Cooling Controllers - DASHBOARD__ for ___Name___
@@ -1131,7 +1132,8 @@ In the Create Application page:
 
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on __Sub__ for the **OperationalAlert** Event
+- Click on __Pub__ for the **AggregateAlert** Event 
 - Click on __Save__ button
 
 ![](img/ep-create-application-11.png)
