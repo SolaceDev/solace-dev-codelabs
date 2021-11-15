@@ -630,14 +630,14 @@ Remote:
       <google-codelab-step label="[C] Building a Replier Messaging App" duration="15">
         <h2 is-upgraded>(AKA Who Needs a REST Server??)</h2>
 <p>Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let&#39;s take a look at some sample/example code to generate a response using a messaging topic consumer.</p>
-<p>The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our <a href="https://github.com/SolaceSamples/solace-samples-java" target="_blank">Samples GitHub repo</a>. However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.). Other APIs are available on https://github.com/solacesamples/</p>
+<p>The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our <a href="https://github.com/SolaceSamples/solace-samples-java-jcsmp" target="_blank">Samples GitHub repo</a>. However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.). Other APIs are available on https://github.com/solacesamples/</p>
 <aside class="special"><p>For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: <a href="https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5" target="_blank">Solace Java Samples Part 1</a> and <a href="https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4" target="_blank">Solace Java Samples Part 2</a></p>
 </aside>
 <h2 is-upgraded>Shutdown the RDP</h2>
 <aside class="warning"><p>Using PubSub+ Manager, CLI, or SEMP: shutdown or disable the RDP to prevent parallel flows from occuring.</p>
 </aside>
 <h2 is-upgraded>Make a Replier App</h2>
-<p>Take a look at the <a href="https://github.com/SolaceSamples/solace-samples-java/blob/master/src/main/java/com/solace/samples/BasicReplier.java" target="_blank">Basic Replier (source code)</a> sample application. We are going to modify it slightly.</p>
+<p>Take a look at the <a href="https://github.com/SolaceSamples/solace-samples-java-jcsmp/blob/master/src/main/java/com/solace/samples/jcsmp/features/BasicReplier.java" target="_blank">Basic Replier (source code)</a> sample application. We are going to modify it slightly.</p>
 <ol type="1">
 <li>Change the topic subscription from <code>tutorial/requests</code> to <code>GET/&gt;</code>, approximately line 50. (Could be any REST verb, using wildcards or not)</li>
 <li>Inside the <code>onReceive()</code> callback method (approximately line 75), replace the line <code>reply.setText(text);</code> with the following, for something more interesting/dynamic:<pre><code>try {

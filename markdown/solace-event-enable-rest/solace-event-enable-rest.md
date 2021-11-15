@@ -828,7 +828,7 @@ Duration: 0:15:00
 
 Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let's take a look at some sample/example code to generate a response using a messaging topic consumer.
 
-The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our [Samples GitHub repo](https://github.com/SolaceSamples/solace-samples-java). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.). Other APIs are available on https://github.com/solacesamples/
+The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our [Samples GitHub repo](https://github.com/SolaceSamples/solace-samples-java-jcsmp). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.). Other APIs are available on https://github.com/solacesamples/
 
 Positive
 : For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: [Solace Java Samples Part 1](https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5) and [Solace Java Samples Part 2](https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4)
@@ -840,7 +840,7 @@ Negative
 
 ### Make a Replier App
 
-Take a look at the [Basic Replier (source code)](https://github.com/SolaceSamples/solace-samples-java/blob/master/src/main/java/com/solace/samples/BasicReplier.java) sample application. We are going to modify it slightly.
+Take a look at the [Basic Replier (source code)](https://github.com/SolaceSamples/solace-samples-java-jcsmp/blob/master/src/main/java/com/solace/samples/jcsmp/features/BasicReplier.java) sample application. We are going to modify it slightly.
 
 1. Change the topic subscription from `tutorial/requests` to `GET/>`, approximately line 50. (Could be any REST verb, using wildcards or not)
 1. Inside the `onReceive()` callback method (approximately line 75), replace the line `reply.setText(text);` with the following, for something more interesting/dynamic:

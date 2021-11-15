@@ -74,7 +74,7 @@ Create a directory in the location of your choice where you'll follow along and 
 
 As an example, using git clone for the java samples:
 
-    git clone https://github.com/SolaceSamples/solace-samples-java
+    git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp
 
 ### Free Solace Stuff!
 
