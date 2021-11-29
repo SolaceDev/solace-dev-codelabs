@@ -127,15 +127,58 @@
 <p>Execute the atom docker installation shell script as follows<br><code>./atomdocker_install64.sh -n &lt;name_of_atom&gt; -k &lt;insert_token&gt;</code></p>
 <p>At this point, you can confirm that the Atom has been created and linked to your AtomSphere when you navigate to the Atom Management in the Manage tab and you will see your newly created atom under the <strong>Unattached Atoms</strong> section</p>
 <p class="image-container"><img alt="unattached-atom" title="unattached-atom" src="img/ba639bb853a9d9e.png"></p>
-<h3 is-upgraded>3. Setup Boomi environment</h3>
-<p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management.html" target="_blank">Environment Management Boomi User Guide</a></p>
+<h3 is-upgraded>2. Setup Boomi environment</h3>
+<p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html" target="_blank">Environment Management Boomi User Guide</a></p>
 <p>Under the Manage menu, navigate to the Atom management and add a new environment <img alt="env-menu" title="env-menu" src="img/c6aa4571508c5c0b.png"></p>
 <p>Give it a name and choose <strong>Test</strong> for the environment classification <img alt="env-setup" title="env-setup" src="img/f5c503b03619544c.png"></p>
-<h3 is-upgraded>4. Attach the Atom to the environment</h3>
-<p>Select your newly created environment and search for your atom to attach it <img alt="env-wiz" title="env-wiz" src="img/b14c06b1f4c9cf93.png"></p>
-<aside class="special"><p>Note: a blue icon next to your newly created Atom means that it has an Online Status</p>
+<h3 is-upgraded>3. Configure and deploy your local Atom via the Java Wizard</h3>
+<p>In this tutorial, we will be setting up a local Atom.</p>
+<aside class="special"><p>You can skip this if you have access to a cloud Atom</p>
 </aside>
-<h3 is-upgraded>🎉 Voila! Now you have your Solace and Boomi environments setup</h3>
+<p>You can either navigate to the links below for more information or follow the steps after</p>
+<ol type="1">
+<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html" target="_blank">Windows Machine</a>.</li>
+<li><a href="https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html" target="_blank">Linux</a>.</li>
+<li><a href="https://github.com/anthonyrabiaza/Boomi-on-Mac" target="_blank">MacOs Using Docker</a>.</li>
+</ol>
+<p>👉 Navigate to the <strong>Manage</strong> tab and click on <strong>Atom Management</strong></p>
+<p class="image-container"><img alt="manage" title="manage" src="img/d980c9704ab58742.png"></p>
+<p>👉 Click on <strong>+New</strong> and choose <strong>Atom</strong></p>
+<p class="image-container"><img alt="new-atom" title="new-atom" src="img/598686ef93a04e84.png"></p>
+<p>👉 Choose the operating system of choice in the <strong>Atom Setup</strong> box</p>
+<p class="image-container"><img alt="atom-setup" title="atom-setup" src="img/6a176c3502dcacb2.png"></p>
+<p>👉 Open terminal and navigate to the location where the atom installer was installed. If you are using Linux or MacOS, make sure to change the mode of the file to make it executable. This is done as follows</p>
+<pre><code>cd &lt;path_to_where_the_installer_is_installed&gt;
+chmod +x atom_install64.sh
+</code></pre>
+<p>👉 Run the installer <code>./atom_install64.sh</code> and follow the on-screen prompt to install the local atom. Make sure to select the previously created environment.</p>
+<aside class="special"><p>Note: you can attach your atom to the environment of choice at a later step from the Boomi cloud UI</p>
+</aside>
+<h3 is-upgraded>[Alternative] Configure and deploy your local Atom via Docker</h3>
+<p>📝 <strong>Notes on Docker installation</strong></p>
+<p>If you have access to the docker version of the atom installer, you can follow the following step.</p>
+<p>The installer is a shell script that you run locally and automatically configure your docker setup</p>
+<ol type="1">
+<li><code>./atomdocker_install64.sh -h</code> for more information on how to run it</li>
+<li>You can generate a token by clicking on <strong>Generate Token</strong> under <strong>Security Options</strong></li>
+<li>Create a <code>/var/boomi</code> directory because the script assumes it already exists and make sure its owned by the current user  <ol type="1">
+<li>Navigate to <code>/var/boomi/</code> after you create it</li>
+<li>Execute the following from terminal <code>chown $USER .</code></li>
+<li>Make sure this directory is shared on docker. This is done by opening the docker preferences and adding it under <strong>File Sharing Resources</strong> tab</li>
+</ol>
+</li>
+</ol>
+<p class="image-container"><img alt="docker-menu" title="docker-menu" src="img/11c554437d6210af.png"><img alt="docker-sharing" title="docker-sharing" src="img/4fd11b172275305.png"></p>
+<p>🏃‍♂️ <strong>Run the atom</strong></p>
+<p>Execute the atom docker installation shell script as follows<br><code>./atomdocker_install64.sh -n &lt;name_of_atom&gt; -k &lt;insert_token&gt;</code></p>
+<p>At this point, you can confirm that the Atom has been created and linked to your AtomSphere when you navigate to the Atom Management in the Manage tab and you will see your newly created atom under the <strong>Unattached Atoms</strong> section</p>
+<p class="image-container"><img alt="unattached-atom" title="unattached-atom" src="img/ba639bb853a9d9e.png"></p>
+<h3 is-upgraded>4. [Optional] Attach the Atom to the environment</h3>
+<p>If you did not attach the atom directly fro the Wizard installer or you are manually running the atom on a docker image, you can follow the following steps to attach the atom to the newly created Environment. To do so, select your newly created environment and search for your atom to attach it <img alt="env-wiz" title="env-wiz" src="img/b14c06b1f4c9cf93.png"></p>
+<aside class="special"><p>Note: a blue icon next to your newly created Atom means that it has an Online Status<br></p>
+</aside>
+<p class="image-container"><img alt="active-atom" title="active-atom" src="img/8c649d9b639b1e6f.png"></p>
+<h3 is-upgraded>🎉 Viola! Now you have your Solace and Boomi environments setup</h3>
 
 
       </google-codelab-step>
@@ -207,10 +250,8 @@
 </aside>
 <h2 is-upgraded>4. Configure Operation</h2>
 <p>Back to the Solace Shape configuration, click on the + icon for the <strong>Operation</strong> section to configure the operation parameters as seen in the screenshot below</p>
-<p>👉 Assign the Mode to Persistent Transacted<br> 👉 Select the Create Queue and Topic Subscription option</p>
-<p class="image-container"><img alt="connectoroperation" title="connectoroperation" src="img/a115f854683db764.png"></p>
-<aside class="special"><p>Note: The <code>Create Queue and Topic Subscription</code> option means that the Solace connector will create the queue and subscription for you behind the scenes</p>
-</aside>
+<p>👉 Assign the Mode to Persistent Transacted<br> 👉 Fill in the destination to the name of the queue. Note: you can either type in a name of a queue that is previously created on the broker or you can have a totally new queue and the connector will automatically deal with the creation of the queue on the broker. Magic.</p>
+<p class="image-container"><img alt="connectoroperation" title="connectoroperation" src="img/a02cac27eea3b261.png"></p>
 <p>👉 Click on the Import Button in the Upper Right. Select your atom and the Solace connection that you just created, then click on Next.</p>
 <p>Boomi grabs the events available to you from the Event Portal, and lists them in a drop down box <img alt="eventlist" title="eventlist" src="img/a079b3f0c19e2463.png"></p>
 <p>👉 Pick the RideRequested event, click Next, then Finish.</p>
@@ -258,8 +299,8 @@
 <h2 is-upgraded>Publish events 💥!</h2>
 <p>👉 Navigate back to your Solace Cloud console, select the messaging service and navigate to the Try Me! tab</p>
 <p class="image-container"><img alt="tryme" title="tryme" src="img/3aeb0cdd196e3610.png"></p>
-<p>👉 In the Publisher section, click on the <strong>Connect</strong> button, change the topic to be <code>taxi/nyc/v1/dropoff/rideX</code> (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want</p>
-<p class="image-container"><img alt="publisher-connect" title="publisher-connect" src="img/47867f9558f91220.png"></p>
+<p>👉 In the Publisher section, click on the <strong>Connect</strong> button, change the topic to be <code>acme/rideshare/ride/requested/rideX</code> (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want</p>
+<p class="image-container"><img alt="publisher-connect" title="publisher-connect" src="img/897edbbd24233384.png"></p>
 <p>👉 Smash that Publish button.</p>
 <h2 is-upgraded>Check out the logs</h2>
 <p>👉 From the Boomi AtomSphere, navigate to the <strong>Process Reporting</strong> section under the Manage tab</p>
@@ -268,7 +309,7 @@
 <p>👉 Click on the view process logs icon</p>
 <p class="image-container"><img alt="logs" title="logs" src="img/fe3b45adbc7fc741.png"><img alt="logs2" title="logs2" src="img/9c8b1ddce355367b.png"><img alt="logs3" title="logs3" src="img/8de84267dc8fc191.png"></p>
 <p>You&#39;re done!</p>
-<aside class="special"><p>Note that any publisher that publishes on topic <code>taxi/nyc/v1/dropoff/&gt;</code> will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged</p>
+<aside class="special"><p>Note that any publisher that publishes on topic <code>acme/rideshare/ride/requested/&gt;</code> will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged</p>
 </aside>
 
 
