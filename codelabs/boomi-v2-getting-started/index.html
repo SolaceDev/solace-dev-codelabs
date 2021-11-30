@@ -94,39 +94,6 @@
 <li><strong>Deploy</strong>: This is where you deploy the packaged process in your Atom for execution</li>
 <li><strong>Manage</strong>: This is where you configure your environment and Atoms</li>
 </ul>
-<h3 is-upgraded>2. Configure and deploy your local Atom</h3>
-<p>In this tutorial, we will be setting up a local Atom.</p>
-<aside class="special"><p>You can skip this if you have access to a cloud Atom</p>
-</aside>
-<p>You can either navigate to the links below for more information or follow the steps after</p>
-<ol type="1">
-<li><a href="https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html" target="_blank">Windows Machine</a>.</li>
-<li><a href="https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html" target="_blank">Linux</a>.</li>
-<li><a href="https://github.com/anthonyrabiaza/Boomi-on-Mac" target="_blank">MacOS Using Docker</a></li>
-</ol>
-<p>👉 Navigate to the <strong>Manage</strong> tab and click on <strong>Atom Management</strong></p>
-<p class="image-container"><img alt="manage" title="manage" src="img/d980c9704ab58742.png"></p>
-<p>👉 Click on <strong>+New</strong> and choose <strong>Atom</strong></p>
-<p class="image-container"><img alt="new-atom" title="new-atom" src="img/598686ef93a04e84.png"></p>
-<p>👉 Choose the operating system of choice in the <strong>Atom Setup</strong> box</p>
-<p class="image-container"><img alt="atom-setup" title="atom-setup" src="img/6a176c3502dcacb2.png"></p>
-<p>📝 <strong>Notes on Docker installation</strong></p>
-<p>The installer is a shell script that you run locally and automatically configure your docker setup</p>
-<ol type="1">
-<li><code>./atomdocker_install64.sh -h</code> for more information on how to run it</li>
-<li>You can generate a token by clicking on <strong>Generate Token</strong> under <strong>Security Options</strong></li>
-<li>Create a <code>/var/boomi</code> directory because the script assumes it already exists and make sure its owned by the current user  <ol type="1">
-<li>Navigate to <code>/var/boomi/</code> after you create it</li>
-<li>Execute the following from terminal <code>chown $USER .</code></li>
-<li>Make sure this directory is shared on docker. This is done by opening the docker preferences and adding it under <strong>File Sharing Resources</strong> tab</li>
-</ol>
-</li>
-</ol>
-<p class="image-container"><img alt="docker-menu" title="docker-menu" src="img/11c554437d6210af.png"><img alt="docker-sharing" title="docker-sharing" src="img/4fd11b172275305.png"></p>
-<p>🏃‍♂️ <strong>Run the atom</strong></p>
-<p>Execute the atom docker installation shell script as follows<br><code>./atomdocker_install64.sh -n &lt;name_of_atom&gt; -k &lt;insert_token&gt;</code></p>
-<p>At this point, you can confirm that the Atom has been created and linked to your AtomSphere when you navigate to the Atom Management in the Manage tab and you will see your newly created atom under the <strong>Unattached Atoms</strong> section</p>
-<p class="image-container"><img alt="unattached-atom" title="unattached-atom" src="img/ba639bb853a9d9e.png"></p>
 <h3 is-upgraded>2. Setup Boomi environment</h3>
 <p>Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to &#34;attach&#34; the atom to. You can read more about Boomi Environments on the <a href="https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html" target="_blank">Environment Management Boomi User Guide</a></p>
 <p>Under the Manage menu, navigate to the Atom management and add a new environment <img alt="env-menu" title="env-menu" src="img/c6aa4571508c5c0b.png"></p>
