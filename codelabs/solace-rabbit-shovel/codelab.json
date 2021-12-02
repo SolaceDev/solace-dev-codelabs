@@ -10,9 +10,16 @@
   "summary": "Bridge data from RabbitMQ to Solace PubSub+ with the RabbitMQ Shovel plugin",
   "source": "rabbitmq-shovel-to-solace.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["rabbitmq", "amqp"],
-  "tags": ["amqp", "iguide", "rabbit", "web"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "rabbitmq",
+    "amqp"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/rabbitmq-shovel-to-solace",
   "url": "solace-rabbit-shovel"
 }
