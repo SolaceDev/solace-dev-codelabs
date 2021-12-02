@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link:
 
-# Integration Spring Framework v4 and v5
+# Integration Guide: Spring Framework v4 and v5
 
 ## What you'll learn: Overview
 Duration: 0:02:00
