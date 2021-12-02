@@ -1,0 +1,842 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Integration Spring Framework v4 and v5</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="spring-framework"
+                  title="Integration Spring Framework v4 and v5"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="2">
+        <p>This document demonstrates how to integrate Solace Java Message Service (JMS) with the Spring Java Framework v4 or v5 for production and consumption of JMS messages. The goal of this document is to outline best practices and sample code for this integration to enable efficient use of both the Spring Framework and Solace JMS.</p>
+<p>Note that a separate project and guide is available for <a href="https://github.com/SolaceProducts/solace-jms-spring-boot" target="_blank">Spring Boot Auto-Configuration</a> with most of the concepts transferable from this guide. The Spring Boot project also provides Spring configuration examples using annotation and classes while this guide uses the Spring XML configuration file.</p>
+<p>The target audience of this document is developers using the Spring Framework with knowledge of both the Spring Java Framework and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or the Spring Framework refer to the referenced documents below.</p>
+<h2 is-upgraded>Related Documentation</h2>
+<ul>
+<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
+<li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
+<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
+<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace PubSub+ Refer to section &#34;Get Solace Messaging Configuration</a></li>
+<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
+<li><a href="https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/html/" target="_blank">Spring Framework v4.3 Reference Documentation</a></li>
+<li><a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/" target="_blank">Spring Framework v5.1 Documentation</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Get Solace Messaging" duration="0">
+        <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Host</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The event broker Message VPN that this client should connect to. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client username. (See Notes below)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client password. (See Notes below)</p>
+</td></tr>
+</table>
+<p>There are several ways you can get access to Solace messaging and find these required properties.</p>
+<h2 is-upgraded>Option 1: Use Solace Cloud</h2>
+<ul>
+<li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
+<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need:  <ul>
+<li>Host:Port (use the JMS URI)</li>
+<li>Message VPN</li>
+<li>Client Username</li>
+<li>Client Password</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
+<h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
+<ul>
+<li>Follow <a href="https://docs.solace.com/Solace-Cloud/Deployment-Considerations/deployment-options.htm" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
+<li>The messaging connectivity information are the following:<ul>
+<li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
+<li>Message VPN: default</li>
+<li>Client Username: sampleUser (can be any value)</li>
+<li>Client Password: samplePassword (can be any value)</li>
+</ul>
+Note: By default, the Solace software event broker &#34;default&#34; message VPN has authentication disabled.</li>
+</ul>
+<h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
+<ul>
+<li>Contact your Solace PubSub+ appliance administrators and obtain the following:  <ul>
+<li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
+<li>The host name or IP address of the appliance hosting your Message-VPN</li>
+<li>A username and password to access the appliance</li>
+</ul>
+</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Integrating with Spring Framework" duration="0">
+        <p>The general Spring Framework support for JMS integration is outlined in detail in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/" target="_blank">Spring Documentation</a>. There are many ways to integrate the Spring Framework and Solace JMS. The configuration outlined in this document makes use of Spring messaging resource caching and JNDI object caching.</p>
+<p>In order to illustrate the Spring Framework integration, the following sections will highlight the required Spring Framework configuration changes and provide snippets of sample code for sending and receiving messages. The full Spring XML configuration file (SolResource.xml) and MessageProducer and MessageConsumer Java code can be found in the in the <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework" target="_blank">GitHub repo of this guide</a>.</p>
+<p>Spring supports several ways of configuring containers. The following sections use the XML-based configuration, but integration with Solace JMS would be equally supported using annotation-based configuration. For more information on Spring container configuration see the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/core.html#beans-java" target="_blank">Spring documentation</a> - Java-based container configuration.</p>
+<p>This integration guide demonstrates how to configure a Spring application to receive and send JMS messages using a shared JMS connection. Accomplishing this requires completion of the following steps.</p>
+<ul>
+<li>Step 1 - Configuration of the Solace PubSub+ event broker.</li>
+<li>Step 2 – Configuring the Spring Framework to connect to the Solace PubSub+ event broker.</li>
+<li>Step 3 – Configuring the Spring Application to receive messages using Solace JMS.</li>
+<li>Step 4 – Configuring the Spring Application to send messages using Solace JMS.</li>
+</ul>
+<h2 is-upgraded>Description of Resources Required</h2>
+<p>This integration guide will demonstrate the creation of Solace resources and configuration of Spring Framework resources. This section outlines the resources that are created and used in the subsequent sections.</p>
+<h3 is-upgraded>Solace Resources</h3>
+<p>The following event broker resources are required for the integration sample in this document.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Event Broker Host</p>
+</td><td colspan="2" rowspan="4"><p>Refer to step Get Solace Messaging  for values</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
+</td><td colspan="1" rowspan="1"><p>Q/requests</p>
+</td><td colspan="1" rowspan="1"><p>Solace destination of messages produced and consumed </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Connection Factory</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/CF/spring</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI Connection factory for controlling Solace JMS connection properties</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/Q/requests</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
+</td></tr>
+</table>
+<h3 is-upgraded>Spring Framework Configuration Resources</h3>
+<p>The following Spring container configuration is referenced in the integration steps. These items are explained in detail in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html" target="_blank">Integration chapter of the Spring Framework documentation</a>. <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/resources/SolResources.xml" target="_blank">SolResources.xml</a>, available from the GitHub project, contains the full Spring configuration file for these resources, and how each of these resources relates to integration with Solace is explained in the subsequent sections as these resources are introduced.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jndi.JndiTemplate</p>
+</td><td colspan="1" rowspan="1"><p>solaceJndiTemplate</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jndi.JndiObjectFactoryBean</p>
+</td><td colspan="1" rowspan="1"><p>solaceConnectionFactory</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jms.connection.CachingConnectionFactory</p>
+</td><td colspan="1" rowspan="1"><p>solaceCachedConnectionFactory</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jms.connection.SingleConnectionFactory</p>
+</td><td colspan="1" rowspan="1"><p>solaceSingleConnectionFactory</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jndi.JndiObjectFactoryBean</p>
+</td><td colspan="1" rowspan="1"><p>destination</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jms.core.JmsTemplate</p>
+</td><td colspan="1" rowspan="1"><p>jmsTemplate</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>org.springframework.jms.listener.DefaultMessageListenerContainer</p>
+</td><td colspan="1" rowspan="1"><p>jmsContainer</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>com.solace.integration.spring.MessageConsumer</p>
+</td><td colspan="1" rowspan="1"><p>messageConsumer</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>com.solace.integration.spring.MessageProducer</p>
+</td><td colspan="1" rowspan="1"><p>messageProducer</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 1 – Configuring the Solace PubSub+ Event Broker</h2>
+<p>The event broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Spring Framework.</p>
+<ul>
+<li>A Message VPN, or virtual event broker, to scope the integration on the event broker. Refer to the section &#34;Get Solace Messaging&#34;</li>
+<li>Client connectivity configuration objects like usernames and profiles</li>
+<li>Guaranteed messaging endpoints for receiving and sending messages</li>
+<li>Appropriate JNDI mappings enabling JMS clients to connect to the event broker configuration</li>
+</ul>
+<p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
+<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm" target="_blank">User Authentication and Authorization</a>.</p>
+<h3 is-upgraded>Creating a Message VPN</h3>
+<p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
+<p>This section outlines how to create a message-VPN called &#34;Solace_Spring_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
+<pre><code>&gt; home
+&gt; enable
+# configure
+(config)# create message-vpn Solace_Spring_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn Solace_Spring_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Setting up Guaranteed Messaging Endpoints</h3>
+<p>This integration guide shows the receipt of messages within the Spring Framework from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB, matching the quota associated with the message VPN. The queue name chosen is &#34;Q/requests&#34;.</p>
+<pre><code>(config)# message-spool message-vpn Solace_Spring_VPN
+(config-message-spool)# create queue Q/requests
+(config-message-spool-queue)# access-type exclusive
+(config-message-spool-queue)# max-spool-usage 2000
+(config-message-spool-queue)# permission all delete
+(config-message-spool-queue)# no shutdown
+(config-message-spool-queue)# exit
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Setting up Solace JNDI References</h3>
+<p>To enable the JMS clients to connect and look up the Queue destination required by Spring, there are two JNDI objects required on the event broker:</p>
+<ul>
+<li>A connection factory: JNDI/CF/spring  <ul>
+<li>Note: Ensure <code>direct-transport</code> is disabled for JMS persistent messaging.</li>
+</ul>
+</li>
+<li>A queue destination: JNDI/Q/requests</li>
+</ul>
+<p>They are configured as follows:</p>
+<pre><code>(config)# jndi message-vpn Solace_Spring_VPN
+(config-jndi)# create connection-factory JNDI/CF/spring
+(config-jndi-connection-factory)# property-list messaging-properties
+(config-jndi-connection-factory-pl)# property default-delivery-mode persistent
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property direct-transport false
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)#
+(config-jndi)# create queue JNDI/Q/requests
+(config-jndi-queue)# property physical-name Q/requests
+(config-jndi-queue)# exit
+(config-jndi)# 
+(config-jndi)# no shutdown
+(config-jndi)# exit
+(config)#
+</code></pre>
+<h2 is-upgraded>Step 2 – Spring Framework – Connecting</h2>
+<p>The following configuration is required to successfully establish a connection from Spring to the Solace PubSub+ event broker.</p>
+<p>The example configuration below uses XML-based container configuration to illustrate the integration. The &#34;<em>IP:PORT</em>&#34; should be updated to reference the actual event broker message-backbone VRF IP.</p>
+<p>In Solace JMS, the &#34;java.naming.security.principal&#34; often uses the format @. This allows specification of the event broker client username (&#34;spring_user&#34;) and message-vpn (&#34;Solace_Spring_VPN&#34;) created in the previous section. Both of these items are mandatory in order to connect to the event broker.</p>
+<p>The &#34;java.naming.security.credentials&#34; is optional and provides the event broker client password for use when authenticating with the event broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the Authentication section.</p>
+<pre><code>  &lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
+    lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;map&gt;
+        &lt;entry key=&#34;java.naming.provider.url&#34; value=&#34;tcp://___IP:PORT___&#34; /&gt;
+        &lt;entry key=&#34;java.naming.factory.initial&#34;
+               value=&#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34; /&gt;
+        &lt;entry key=&#34;java.naming.security.principal&#34; 
+               value=&#34;spring_user@Solace_Spring_VPN&#34; /&gt;
+&lt;!--    &lt;entry key=&#34;java.naming.security.credentials&#34; 
+               value=&#34;spring_password&#34; /&gt;   --&gt;
+      &lt;/map&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+  
+  &lt;bean id=&#34;solaceConnectionFactory&#34; class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34;
+    lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;solaceJndiTemplate&#34; /&gt;
+    &lt;property name=&#34;jndiName&#34; value=&#34;/jms/cf/default&#34; /&gt;
+  &lt;/bean&gt;
+  
+  &lt;bean id=&#34;solaceCachedConnectionFactory&#34; class=&#34;org.springframework.jms.connection.CachingConnectionFactory&#34;&gt;
+    &lt;property name=&#34;targetConnectionFactory&#34; ref=&#34;solaceConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;sessionCacheSize&#34; value=&#34;10&#34; /&gt;
+  &lt;/bean&gt;
+  
+  &lt;bean id=&#34;solaceSingleConnectionFactory&#34; class=&#34;org.springframework.jms.connection.SingleConnectionFactory&#34;&gt;
+    &lt;property name=&#34;targetConnectionFactory&#34; ref=&#34;solaceConnectionFactory&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>The full configuration xml code for this example is available from the following source:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/resources/SolResources.xml" target="_blank">SolResources.xml</a></li>
+</ul>
+<p>The following table explains each bean configuration and its purpose when connecting to the event broker.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Bean Id</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>solaceJndiTemplate</p>
+</td><td colspan="1" rowspan="1"><p>This template outlines general connection details for reaching the Solace JNDI hosted on the event broker. The Solace JNDI is used to look up parameters for client connections and for destinations.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>solaceConnectionFactory</p>
+</td><td colspan="1" rowspan="1"><p>This references a specific connection factory within the Solace JNDI that will be used when creating new connections. The value for &#34;jndiName&#34; is the connection factory name as configured in the Solace JNDI. In the previous section this was configured as &#34;JNDI/CF/spring&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>solaceCachedConnectionFactory</p>
+</td><td colspan="1" rowspan="1"><p>The cached connection factory allows for re-use of the Solace connection when sending messages or receiving messages synchronously. For efficient integration within the Spring Framework, it is essential that connection caching be enabled and configured correctly. There are more details on this in Section 4 Performance Considerations including discussion of the sessionCacheSize attribute. It is this connection factory that is used by the producer when connecting.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>solaceSingleConnectionFactory</p>
+</td><td colspan="1" rowspan="1"><p>The single connection factory should be used with asynchronous consumers using a listener container. It is generally preferable to let the listener container itself handle appropriate caching within its lifecycle. It is this connection factory that is used by the consumer when connecting.</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 3 – Spring Framework – Receiving Messages from Solace</h2>
+<p>The recommended method of receiving messages is through the <code>DefaultMessageListenerContainer</code> following the recommendation found in the section <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-asynchronousMessageReception" target="_blank">Asynchronous Reception – Message-Driven POJOs section of the Spring documentation</a>.</p>
+<h3 is-upgraded>	Configuration</h3>
+<p>The configuration outlined below enables receiving of messages via a <code>DefaultMessageListenerContainer</code> listener container with message processing being handled by the message consumer as outlined in the following  Message Consumer Java Code section.</p>
+<pre><code>  &lt;bean id=&#34;destination&#34; class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;solaceJndiTemplate&#34; /&gt;
+    &lt;property name=&#34;jndiName&#34; value=&#34;queue&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;messageConsumer&#34; class=&#34;com.solacesystems.integration.spring.MessageConsumer&#34;&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;jmsContainer&#34; class=&#34;org.springframework.jms.listener.DefaultMessageListenerContainer&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceSingleConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;destination&#34; ref=&#34;destination&#34; /&gt;
+    &lt;property name=&#34;messageListener&#34; ref=&#34;messageConsumer&#34; /&gt;
+    &lt;property name=&#34;cacheLevelName&#34; value=&#34;CACHE_CONSUMER&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>The following table explains the configuration and its purpose when receiving messages from the event broker.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Bean Id</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>destination</p>
+</td><td colspan="1" rowspan="1"><p>This configuration defines a JMS destination that the consumer will bind to for receiving messages. For the purposes of demonstrating integration, it is the same destination as used when sending messages. The destination is found in JNDI by looking up the name &#34;JNDI/Q/requests&#34; which was previously configured on the event broker JNDI as a queue destination.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>messageConsumer</p>
+</td><td colspan="1" rowspan="1"><p>This configuration identifies the POJO code responsible for processing an incoming JMS message. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>jmsContainer</p>
+</td><td colspan="1" rowspan="1"><p>The JmsContainer links the MessageConsumer with a JMS destination and JMS cached connection using the <code>DefaultMessageListenerContainer</code> from the Spring Framework. This enables messages to be correctly received and processed efficiently within the Spring Framework.</p>
+</td></tr>
+</table>
+<h3 is-upgraded>Message Consumer Java Code</h3>
+<p>The following is an example of receiving messages using the <code>MessageListener</code> interface and the <code>DefaultMessageListenerContainer</code> using the consumer configuration. The callback will print the message text for all received messages for the purposes of the example.</p>
+<pre><code>public class MessageConsumer implements MessageListener {
+
+  public void onMessage(Message message) {
+    // Application specific handling code would follow. 
+    // For this example print the content and the topic of each message
+    try {
+      System.out.println(&#34;Received message &#34; + ((TextMessage) message).getText() + &#34; on destination: &#34; +
+                         message.getJMSDestination().toString());
+    } catch (JMSException ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+}
+</code></pre>
+<p>The message consumer can be run using a simple main() as follows. The following assumes that the XML configuration required is present on the classpath in the file <code>SolResources.xml</code>. The <code>ClassPathXmlApplicationContext</code> is used to lookup the XML configuration on the class path and create a standalone Spring XML application context. This application context then automatically instantiates the <code>DefaultMessageListenerContainer</code>, which will establish the JMS connection and listen for messages over the single JMS connection.</p>
+<pre><code>  public static void main(String[] args) {
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+        new String[] { &#34;SolResources.xml&#34; });
+
+    // Sample access to MessageConsumer
+    // MessageConsumer consumer = (MessageConsumer) context.getBean(&#34;messageConsumer&#34;);
+
+    // context.close();	// Calling close will stop message consumption
+  }
+</code></pre>
+<p>Note that it is also possible to use the <code>MessageListenerAdapter</code> provided by Spring in order to avoid using an interface when receiving messages. This is outlined in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-asynchronousMessageReception" target="_blank">Spring documentation</a> in further detail. In general it makes sense to select the method for receiving messages that most closely matches with the existing behavior of the application. It does not affect the message reception from the event brokers.</p>
+<p>The full source code for this example is available in the following source:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageListener.java" target="_blank">MessageListener.java</a></li>
+</ul>
+<h2 is-upgraded>Step 4 – Spring Framework – Sending Messages to Solace</h2>
+<p>In general the <code>JmsTemplate</code> is a convenient and recommended way to send messages from within the Spring Framework. The <code>JmsTemplate</code> contains several methods for sending messages including methods where the target JMS destination can be specified at send time, or alternatively an option where no destination is provided which uses the default JMS producer destination on send. Details of the <code>JmsTemplate</code> are covered in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-jmstemplate" target="_blank">Java Message Service section of the Spring documentation</a>.</p>
+<h3 is-upgraded>Configuration</h3>
+<p>The configuration below is used by the message producer to send JMS messages to the event broker:</p>
+<pre><code>  &lt;bean id=&#34;destination&#34; class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;solaceJndiTemplate&#34; /&gt;
+    &lt;property name=&#34;jndiName&#34; value=&#34;queue&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;jmsTemplate&#34; class=&#34;org.springframework.jms.core.JmsTemplate&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceCachedConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;defaultDestination&#34; ref=&#34;destination&#34; /&gt;
+    &lt;property name=&#34;deliveryPersistent&#34; value=&#34;true&#34; /&gt;
+    &lt;property name=&#34;explicitQosEnabled&#34; value=&#34;true&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;messageProducer&#34; class=&#34;com.solacesystems.integration.spring.MessageProducer&#34;&gt;
+    &lt;property name=&#34;jmsTemplate&#34; ref=&#34;jmsTemplate&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>The full configuration xml code for this example is available in the following source:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/resources/SolResources.xml" target="_blank">SolResources.xml</a></li>
+</ul>
+<p>The following table explains the configuration and its purpose when publishing to the event broker.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Bean Id</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>destination</p>
+</td><td colspan="1" rowspan="1"><p>This configuration defines a JMS destination for use in sending. The destination is found in JNDI by looking up the name &#34;JNDI/Q/requests&#34; which was previously configured on the event broker JNDI as a queue destination.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>jmsTemplate</p>
+</td><td colspan="1" rowspan="1"><p>The jmsTemplate is the core component of the Spring framework integration with JMS. It contains the reference to the connection factory, a default destination for sending and parameters for customizing the JMS producer from within the Spring framework. A full list of available parameters is documented in [Spring-API].</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>messageProducer</p>
+</td><td colspan="1" rowspan="1"><p>The message producer is a reference to the producer Java code that will be used to send messages to the event broker. This configuration connects that Java code to the correct JmsTemplate configuration. </p>
+</td></tr>
+</table>
+<h3 is-upgraded>Message Producer Java Code</h3>
+<p>The following code sample illustrates basic message publishing from within the Spring Framework. This code will create a simple JMS Text message with contents from the <code>messagetext</code> parameter and send this to the event broker using the default destination of the <code>JmsTemplate</code>.</p>
+<pre><code>public class MessageProducer {
+  private JmsTemplate jmsTemplate;
+
+  public void sendMessages(String messagetext) throws JMSException {
+    getJmsTemplate().send(new MessageCreator() {
+      public Message createMessage(Session session) throws JMSException {
+        Message message = session.createTextMessage(messagetext);
+        return message;
+      }
+    });
+  }
+
+  public JmsTemplate getJmsTemplate() {
+    return jmsTemplate;
+  }
+
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+}
+``` 
+
+Similar to the message consumer, the publishing code could be run using a simple `main()`. The application context is used to lookup the message producer bean and send 10 messages over a cached JMS connection. Note that for sending only, `context.close()` would be called to close `context` after sending the messages. In this example it is not closed immediately because same XML configuration file and `context` is used to demonstrate receiving the messages, see previous section [Message Consumer Java Code](#message-consumer-java-code ).
+
+```java
+  public static void main(String[] args) throws JMSException {
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+        new String[] { &#34;SolResources.xml&#34; });
+    MessageProducer producer = (MessageProducer) context.getBean(&#34;messageProducer&#34;);
+    for (int i = 0; i &lt; 10; i++) {
+      String messagetext = &#34;Test#&#34; + i;
+      System.out.println(&#34;Sending message &#34; + messagetext);
+      producer.sendMessages(messagetext);
+    }
+    // context.close();	// Not closing context here because same context is being used to receive all the messages
+  }
+</code></pre>
+<p>The full source code for this example is available in the following source:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageProducer.java" target="_blank">MessageProducer.java</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sample Application" duration="0">
+        <p>Source code for a sample Spring application, which implements sending 10 messages and waiting for their receipt, has been provided in the <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework" target="_blank">GitHub repo</a> of this guide.</p>
+<p>The sample requires Java and Maven installed.</p>
+<h2 is-upgraded>Building the sample</h2>
+<p>Follow these steps to create and build your project:</p>
+<ol type="1">
+<li>Clone this project from GitHub: <br><code>git clone https://github.com/SolaceLabs/solace-integration-guides.git<br>cd solace-integration-guides/src/spring-framework/<br></code></li>
+<li>Build using Maven: <br><code>mvn install <br></code></li>
+</ol>
+<p>Optionally you can import the Maven project to an IDE like Eclipse to build and execute code from there.</p>
+<h2 is-upgraded>Testing the sample</h2>
+<p>The following example will send 10 test messages and create a consumer to listen to messages on the same destination until terminated:</p>
+<pre><code>mvn exec:java -Dexec.mainClass=com.solace.integration.spring.MessageProducer
+</code></pre>
+<p>This will execute the <code>MessageConsumer.main()</code> method to run a separate receiver-only application:</p>
+<pre><code>mvn exec:java -Dexec.mainClass=com.solace.integration.spring.MessageConsumer
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Performance Considerations" duration="0">
+        <p>The standard JMS API allows clients to send and receive persistent messages at high rates if used efficiently. In order to efficiently use the Solace JMS API, some JMS objects should be cached. The Spring Framework makes it possible to create these objects up front and cache them for re-use. This section outlines how to tune the Spring Framework configuration to properly re-use the following JMS Objects:</p>
+<ul>
+<li>Connection</li>
+<li>Session</li>
+<li>MessageProducer</li>
+<li>MessageConsumer</li>
+<li>Destination</li>
+</ul>
+<h2 is-upgraded>	Caching JMS Connections</h2>
+<p>Section Integrating with Spring Framework outlines the required configuration to enable Connection, Session, MessageProducer and MessageConsumer caching. Failure to correctly cache these objects can result in a new connection being established to the event broker for each message sent. This results in low overall performance and is not a recommended method of operating. It is possible to detect this scenario by monitoring the Solace event logs for frequent client connection and disconnection events.</p>
+<h3 is-upgraded>Producers and Synchronous Consumers</h3>
+<p>In Spring, object caching for producers and synchronous consumers is controlled by the <code>CachingConnectionFactory</code>. A <code>CachingConnectionFactory</code> contains a single JMS Connection which is reused across all <code>JmsTemplates</code>. In order to enable session caching within the JMS Connection, the <code>sessionCacheSize</code> parameter must be set to specify the number of JMS Session objects to cache for reuse.</p>
+<p>One behavior worth noting is that, as outlined in the Spring documentation, if the pool of cached sessions is fully utilized, and a further request for a cached <code>Session</code> is made, then the requested <code>Session</code> will be created and disposed on demand. If you couple this behavior with the fact that the default value is 1 for <code>sessionCacheSize</code>, you can understand that it is important to configure this to a value that is applicable to the end application to avoid the undesirable behavior of creation and disposal on each call to send a message during periods of high demand. This value should be set to the maximum concurrency required by the application.</p>
+<p>The following configuration sample illustrates how to set the various <code>CachingConnectionFactory</code> cache sizes.</p>
+<pre><code>  &lt;bean id=&#34;solaceCachedConnectionFactory&#34; class=&#34;org.springframework.jms.connection.CachingConnectionFactory&#34;&gt;
+    &lt;property name=&#34;targetConnectionFactory&#34; ref=&#34;solaceConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;sessionCacheSize&#34; value=&#34;10&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<h3 is-upgraded>	Asynchronous Consumers using Message Listener Containers</h3>
+<p>For asynchronous reception similar to Java EE&#39;s message-driven bean style, Spring provides a number of message listener containers, including the <code>DefaultMessageListenerContainer</code>. The listener container handles appropriate caching itself within its lifecycle. For this reason, it is not necessary to use a <code>CachingConnectionFactory</code> with the consumer. To cache the consumer property, it is important to use a cache level name of <code>CACHE_CONSUMER</code>.</p>
+<pre><code>  &lt;bean id=&#34;jmsContainer&#34; class=&#34;org.springframework.jms.listener.DefaultMessageListenerContainer&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceSingleConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;destination&#34; ref=&#34;destination&#34; /&gt;
+    &lt;property name=&#34;messageListener&#34; ref=&#34;messageConsumer&#34; /&gt;
+    &lt;property name=&#34;cacheLevelName&#34; value=&#34;CACHE_CONSUMER&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<h2 is-upgraded>	Resolving and Caching JMS Destinations on Send</h2>
+<p>When working with Solace JMS and using the event broker as the JNDI provider, it is also important to know that each JNDI lookup of a destination will result in a JNDI request to and response from the event broker. As such, for efficient integration with Solace JMS, destinations should be cached and reused as much as possible. This is very important for producers to consider when sending messages.</p>
+<p>There are three options for JMS Destination resolution within the Spring framework. The following sections outline performance considerations for each option. The first option is to use the default destination within the <code>JmsTemplate</code>. This is the simplest option. There are also two options for resolving destinations dynamically within the application. The <code>DynamicDestinationResolver</code> is the default option for dynamic destinations and does not make use of JNDI for resolving destinations. The <code>JndiDestinationResolver</code> enables dynamic destinations to be resolved using JNDI.</p>
+<h3 is-upgraded>	Using the default Destination of a producer</h3>
+<p>One common way to configure applications is to have a separate producer for each destination. In this case a producer is equivalent to a destination. If the application is configured in this way, then the Spring framework makes it simple to configure the default JMS destination as part of the <code>JmsTemplate</code> configuration. The <code>JmsTemplate</code> will look up the destination in JNDI on <code>MessageProducer</code> creation, and then it will be reused during publish.</p>
+<p>This configuration is what was demonstrated earlier in this document. The following shows how to set the default destination of a producer through configuration.</p>
+<pre><code>  &lt;bean id=&#34;destination&#34; class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;solaceJndiTemplate&#34; /&gt;
+    &lt;property name=&#34;jndiName&#34; value=&#34;JNDI/Q/requests&#34; /&gt;
+  &lt;/bean&gt;
+  
+  &lt;bean id=&#34;jmsTemplate&#34; class=&#34;org.springframework.jms.core.JmsTemplate&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceCachedConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;defaultDestination&#34; ref=&#34;destination&#34; /&gt;
+    &lt;property name=&#34;deliveryPersistent&#34; value=&#34;true&#34; /&gt;
+    &lt;property name=&#34;explicitQosEnabled&#34; value=&#34;true&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<h3 is-upgraded>Resolving destinations dynamically</h3>
+<p>The <code>DynamicDestinationResolver</code> allows destinations to be resolved using the JMS provider&#39;s specific String to JMS destination mapping. This is very efficient and bypasses JNDI. Therefore destination names provided by the application must be the physical destinations used by the JMS broker. Details related to <code>DynamicDestinationResolver</code> are available at <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-destinations" target="_blank">Spring documentation of Destination Management</a>.</p>
+<p>In the case of Solace JMS this will be the physical queue or topic name.</p>
+<p>The following is an example of how to configure a <code>DynamicDestinationResolver</code>.</p>
+<pre><code>  &lt;bean id=&#34;dynamicDestinationResolver&#34;
+    class=&#34;org.springframework.jms.support.destination.DynamicDestinationResolver&#34; /&gt;
+
+  &lt;bean id=&#34;dynamicJmsTemplate&#34; class=&#34;org.springframework.jms.core.JmsTemplate&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceCachedConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;destinationResolver&#34; ref=&#34;dynamicDestinationResolver&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;dynamicMessageProducer&#34; 
+    class=&#34;com.solacesystems.integration.spring.DynamicMessageProducer&#34;&gt;
+    &lt;property name=&#34;jmsTemplate&#34; ref=&#34;dynamicJmsTemplate&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>And to send messages, the following Java code will use the <code>DynamicDestinationResolver</code> to send messages to a topic of &#34;T/dynamic/topic&#34;.</p>
+<pre><code>public class DynamicMessageProducer {
+  private JmsTemplate jmsTemplate;
+
+  public void sendMessages() throws JMSException {
+    getJmsTemplate().send(&#34;T/dynamic/topic&#34;, new MessageCreator() {
+      public Message createMessage(Session session) throws JMSException {
+        Message message = session.createTextMessage(&#34;test&#34;);
+        return message;
+      }
+    });
+  }
+
+  public JmsTemplate getJmsTemplate() {
+    return jmsTemplate;
+  }
+
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+}
+</code></pre>
+<h3 is-upgraded>	Looking up destinations in JNDI with caching</h3>
+<p>The <code>JndiDestinationResolver</code> allows destinations to be resolved dynamically using JNDI. Because a JNDI lookup is an expensive request, the <code>JndiDestinationResolver</code> also allows for caching of destinations through the <code>setCache()</code> method. When using this destination resolver with Solace JMS, it is very important to enable destination caching for Solace JMS to work effectively. By default, this is enabled in the Spring Framework.</p>
+<p>This destination resolver would be a good option for applications that use a group of destinations and send large numbers of messages across this group of destinations. In this scenario, the JNDI destination lookup would occur once for each unique destination, and then subsequent publishes would use the destination from the local cache avoiding the cost of the JNDI lookup.</p>
+<p>If the application needs to send a small number of messages per destination across a large topic space, then this destination resolver would not be a good choice because this would effectively translate into a JNDI lookup per send, which is inefficient. A better choice in that specific scenario would be the <code>DynamicDestinationResolver</code>.</p>
+<p>The following is an example of how to configure a <code>JndiDestinationResolver</code>.</p>
+<pre><code>  &lt;bean id=&#34;jndiDestinationResolver&#34;
+    class=&#34;org.springframework.jms.support.destination.JndiDestinationResolver&#34;&gt;
+    &lt;property name=&#34;cache&#34; value=&#34;true&#34; /&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;solaceJndiTemplate&#34;/&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;jndiJmsTemplate&#34; class=&#34;org.springframework.jms.core.JmsTemplate&#34;&gt;
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;solaceCachedConnectionFactory&#34; /&gt;
+    &lt;property name=&#34;destinationResolver&#34; ref=&#34;jndiDestinationResolver&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;jndiMessageProducer&#34; 
+    class=&#34;com.solacesystems.integration.spring.JndiMessageProducer&#34;&gt;
+    &lt;property name=&#34;jmsTemplate&#34; ref=&#34;jndiJmsTemplate&#34; /&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>And to send messages, the following Java code will use the <code>JndiDestinationResolver</code> to send messages to a JNDI destination of &#34;JNDI/T/requests&#34;.</p>
+<pre><code>public class JndiMessageProducer {
+  private JmsTemplate jmsTemplate;
+
+  public void sendMessages() throws JMSException {
+    getJmsTemplate().send(&#34;JNDI/T/requests&#34;, new MessageCreator() {
+      public Message createMessage(Session session) throws JMSException {
+        Message message = session.createTextMessage(&#34;test&#34;);
+        return message;
+      }
+    });
+  }
+
+  public JmsTemplate getJmsTemplate() {
+    return jmsTemplate;
+  }
+
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Working with Solace High Availability" duration="0">
+        <p>The <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a> section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a (high-availability) HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
+<p>In general, the Solace documentation contains the following note regarding reconnection:</p>
+<p>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should not attempt to reconnect for at least five minutes.</p>
+<p>In &#34;Setting up Solace JNDI References&#34;, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.</p>
+<pre><code>(config)# jndi message-vpn solace_VPN
+(config-jndi)# create connection-factory JNDI/Sol/CF
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)# exit
+(config)#
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Debugging Tips" duration="0">
+        <p>The key component for debugging integration issues with the Solace JMS API is API logging. Instructions on how to enable logging in the Solace API are described below.</p>
+<h2 is-upgraded>	How to enable Solace JMS API logging</h2>
+<p>The Spring Framework documentation has details on <a href="https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/htmlsingle/#overview-logging" target="_blank">logging within Spring</a>. Since the Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring Solace JMS API logging is very similar to configuring any other Spring Framework logging. The following example shows how to enable debug logging in the Solace JMS API using log4j.</p>
+<p>One note to consider is that since the Solace JMS API has a dependency on the Solace Java API (JCSMP), both of the following logging components should be enabled and tuned when debugging to get full information. For example, to set both to debug level:</p>
+<pre><code>log4j.category.com.solacesystems.jms=DEBUG
+log4j.category.com.solacesystems.jcsmp=DEBUG
+</code></pre>
+<p>There are multiple options for enabling logging within the Spring Framework. By default info logs will be written to the console. This section will focus on using log4j as the logging library, and tuning Solace JMS API logs using the log4j properties. Therefore, in order to enable Solace JMS API logging, a user must do two things:</p>
+<ul>
+<li>Put log4j on the classpath - this is included as a dependency in the project <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/pom.xml" target="_blank">pom.xml</a></li>
+<li>Create a <code>log4j.properties</code> configuration file in the <code>resources</code> folder of the classpath.</li>
+</ul>
+<p>Below is an example <code>log4j.properties</code> file that will enable debug logging within the Solace JMS API.</p>
+<pre><code>log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %t %c{2}:%L - %m%n
+log4j.category.com.solacesystems.jms=DEBUG
+log4j.category.com.solacesystems.jcsmp=DEBUG
+</code></pre>
+<p>With this you can get output in a format similar to the following, which can help in understanding what is happening within the Solace JMS API.</p>
+<pre><code>14:35:01,171 DEBUG main client.ClientRequestResponse:75 - Starting request timer (SMP-EstablishP2pSub) (10000 ms)
+14:35:01,171 DEBUG Context_2_ReactorThread client.ClientRequestResponse:83 - Stopping request timer (SMP-EstablishP2pSub)
+14:35:01,173  INFO main jms.SolConnection:151 - Connection created.
+14:35:01,173  INFO main connection.CachingConnectionFactory:298 - Established shared JMS Connection: com.solacesystems.jms.SolConnection@ca3f2d
+14:35:01,180  INFO main jms.SolConnection:327 - Entering start()
+14:35:01,180  INFO main jms.SolConnection:338 - Leaving start() : Connection started.
+14:35:01,180  INFO jmsContainer-1 jms.SolConnection:252 - Entering createSession()
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Advanced Topics" duration="0">
+        <h2 is-upgraded>Authentication</h2>
+<p>JMS Client authentication is handled by the event broker. The event broker supports a variety of authentications schemes as described in <a href="https://docs.solace.com/Features/Client-authentication-and-authorization.htm" target="_blank">Solace documentation &#34;Client Authentication and Authorization&#34;</a>.  The required JMS authentication properties can be set in the <code>JndiTemplate</code> configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of &#34;spring_user&#34; and password of &#34;spring_password&#34;.</p>
+<pre><code>&lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
+    lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;map&gt;
+        &lt;entry key=&#34;java.naming.provider.url&#34; value=&#34;tcp://___IP:PORT___&#34; /&gt;
+        &lt;entry key=&#34;java.naming.factory.initial&#34;
+               value=&#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34; /&gt;
+        &lt;entry key=&#34;java.naming.security.principal&#34; 
+               value=&#34;spring_user@Solace_Spring_VPN&#34; /&gt;
+        &lt;entry key=&#34;java.naming.security.credentials&#34; 
+               value=&#34;spring_password&#34; /&gt;
+      &lt;/map&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+</code></pre>
+<h2 is-upgraded>	Using SSL Communication</h2>
+<p>This section outlines how to update the event broker and Spring Framework configuration to switch the client connection to using secure connections with the event broker. For the purposes of illustration, this section uses a server certificate on the event broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The Solace documentation <a href="https://docs.solace.com/Features/Client-authentication-and-authorization.htm" target="_blank">Client Authentication and Authorization</a> and <a href="https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm" target="_blank">Solace JNDI and Data Connection Properties</a> outline the extra configuration items required to switch from basic authentication to client certificates.</p>
+<p>To change a Spring application from using a plain text connection to a secure connection, first the event broker configuration must be updated and then the Solace JMS configuration within the Spring Framework must be updated as described in the next sections.</p>
+<h3 is-upgraded>	Configuring the Solace PubSub+ event broker</h3>
+<p>To enable secure connections to the event broker, the following configuration must be updated on the event broker.</p>
+<ul>
+<li>Server Certificate</li>
+<li>TLS/SSL Service Listen Port</li>
+<li>Enable TLS/SSL over SMF in the Message VPN</li>
+</ul>
+<p>The following sections outline how to configure these items.</p>
+<h4 is-upgraded>	Configure the Server Certificate</h4>
+<p>Before starting, here is some background detail on the server certificate required by the event broker. This is from the <a href="https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm" target="_blank">Managing Server Certificates</a> section of the Solace documentation:</p>
+<p>To enable the exchange of information through TLS/SSL-encrypted SMF service, you must set the TLS/SSL server certificate file that the event broker is to use. This server certificate is presented to a client during the TLS/SSL handshakes. A server certificate used by an event broker must be an x509v3 certificate and it must include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.</p>
+<p>The single server certificate file set for the event broker can have a maximum chain depth of three (that is, a single certificate file can contain up to three certificates in a chain that can be used for certificate verification).</p>
+<p>To configure the server certificate, first copy the server certificate to the event broker. For the purposes of this example, assume the server certificate file is named &#34;mycert.pem&#34;.</p>
+<pre><code># copy sftp://[&lt;username&gt;@]&lt;ip-addr&gt;/&lt;remote-pathname&gt;/mycert.pem /certs
+&lt;username&gt;@&lt;ip-addr&gt;&#39;s password:
+#
+</code></pre>
+<p>Then set the server certificate for the event broker.</p>
+<pre><code>(config)# ssl server-certificate mycert.pem
+(config)#
+</code></pre>
+<h4 is-upgraded>	Configure TLS/SSL Service Listen Port</h4>
+<p>By default, the event broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the event broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.</p>
+<pre><code>(config)# service smf
+(config-service-smf)# shutdown
+All SMF and WEB clients will be disconnected.
+Do you want to continue (y/n)? y
+(config-service-smf)# listen-port 55403 ssl
+(config-service-smf)# no shutdown
+(config-service-smf)# exit
+(config)#
+</code></pre>
+<h4 is-upgraded>	Enable TLS/SSL within the Message VPN</h4>
+<p>By default, within Solace message VPNs both the plain-text and SSL services are enabled. If the Message VPN defaults remain unchanged, then this section can be skipped. However, if within the current application VPN, this service has been disabled, then for secure communication to succeed it should be enabled. The steps below show how to enable SSL within the SMF service to allow secure client connections from the Spring Framework.</p>
+<pre><code>(config)# message-vpn Solace_Spring_VPN
+(config-msg-vpn)# service smf
+(config-msg-vpn-service-smf)# ssl
+(config-msg-vpn-service-ssl)# no shutdown
+(config-msg-vpn-service-ssl)# exit
+(config-msg-vpn-service-smf)# exit
+(config-msg-vpn-service)# exit
+(config-msg-vpn)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>	Configuring the Spring Framework</h3>
+<p>The configuration in the Spring Framework requires updating the <code>SolaceJndiTemplate</code> bean in two ways.</p>
+<ul>
+<li>Updating the provider URL to specify the protocol as secure (tcps)</li>
+<li>Adding the required parameters for the secure connection</li>
+</ul>
+<h4 is-upgraded>	Updating the provider URL</h4>
+<p>In order to signal to the Solace JMS API that the connection should be a secure connection, the protocol must be updated in the URI scheme. The Solace JMS API has a URI format as follows:</p>
+<p><code>&lt;URI Scheme&gt;://[username]:[password]@&lt;IP address&gt;[:port]</code></p>
+<p>Recall from Section &#34;Step 2 – Spring Framework – Connecting&#34;, originally, the &#34;java.naming.provider.url&#34; was as follows:</p>
+<p><code>&lt;entry key=&#34;java.naming.provider.url&#34; value=&#34;tcp://___IP:PORT___&#34; /&gt;</code></p>
+<p>This specified a URI scheme of &#34;tcp&#34; which is the plaint-text method of communicating with the event broker. This should be updated to &#34;tcps&#34; to switch to secure communication giving you the following configuration:</p>
+<p><code>&lt;entry key=&#34;java.naming.provider.url&#34; value=&#34;tcps://___IP:PORT___&#34; /&gt;</code></p>
+<h4 is-upgraded>	Adding SSL Related Configuration</h4>
+<p>Additionally, the Solace JMS API must be able to validate the server certificate of the event broker in order to establish a secure connection. To do this, the following trust store parameters need to be provided.</p>
+<p>First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the event broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.</p>
+<p><code>&lt;entry key=&#34;Solace_JMS_SSL_TrustStore&#34; value=&#34;___TrustStore_Path_or_URL___&#34; /&gt;</code></p>
+<p>It is also required to provide a trust store password. This password allows the Solace JMS API to validate the integrity of the contents of the trust store. This is done through the following parameter.</p>
+<p><code>&lt;entry key=&#34;Solace_JMS_SSL_TrustStorePassword&#34; value=&#34;___TrustStore_Password___&#34; /&gt;</code></p>
+<p>There are multiple formats for the trust store file. By default, Solace JMS assumes a format of Java Key Store (JKS). So, if the trust store file follows the JKS format, then this parameter may be omitted. Solace JMS supports two formats for the trust store: &#34;jks&#34; for Java Key Store, or &#34;pkcs12&#34;. Setting the trust store format is done through the following parameter.</p>
+<p><code>&lt;entry key=&#34;Solace_JMS_SSL_TrustStoreFormat&#34; value=&#34;jks&#34; /&gt;</code></p>
+<p>And finally, the authentication scheme must be selected. Solace JMS supports the following authentication schemes for secure connections:</p>
+<ul>
+<li>AUTHENTICATION_SCHEME_BASIC</li>
+<li>AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE</li>
+</ul>
+<p>This integration example will use basic authentication. So, the required parameter is as follows:</p>
+<p><code>&lt;entry key=&#34;Solace_JMS_Authentication_Scheme&#34; value=&#34;AUTHENTICATION_SCHEME_BASIC&#34; /&gt;</code></p>
+<h4 is-upgraded>	Spring Configuration Bean</h4>
+<p>The following example bean outlines all of the required Spring Framework configuration changes to the <code>SolaceJndiTemplate</code> where the user should substitute appropriate values for:</p>
+<ul>
+<li><code>___IP:PORT___</code></li>
+<li><code>___TrustStore_Path_or_URL___</code></li>
+<li><code>___TrustStore_Password___</code></li>
+</ul>
+<pre><code>&lt;bean id=&#34;SolaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
+  lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+  &lt;property name=&#34;environment&#34;&gt;
+    &lt;map&gt;
+      &lt;entry key=&#34;java.naming.provider.url&#34; value=&#34;tcps://___IP:PORT___&#34; /&gt;
+      &lt;entry key=&#34;java.naming.factory.initial&#34;
+             value=&#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34; /&gt;
+      &lt;entry key=&#34;java.naming.security.principal&#34; value=&#34;spring_user&#34; /&gt; 
+      &lt;entry key=&#34;Solace_JMS_VPN&#34; value=&#34;Solace_Spring_VPN&#34; /&gt;
+
+      &lt;!-- SSL Related Configuration --&gt;
+      &lt;entry key=&#34;Solace_JMS_Authentication_Scheme&#34; 
+             value=&#34;AUTHENTICATION_SCHEME_BASIC&#34; /&gt;
+      &lt;entry key=&#34;Solace_JMS_SSL_TrustStore&#34; value=&#34;___TrustStore_Path_or_URL___&#34; /&gt;
+      &lt;entry key=&#34;Solace_JMS_SSL_TrustStoreFormat&#34; value=&#34;jks&#34; /&gt;
+      &lt;entry key=&#34;Solace_JMS_SSL_TrustStorePassword&#34; value=&#34;___TrustStore_Password___&#34; /&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<h2 is-upgraded>	Working with Solace Disaster Recovery</h2>
+<p>Solace&#39;s <a href="https://docs.solace.com/Features/Data-Center-Replication.htm" target="_blank">Data Center Replication documentation</a>  provides details that need to be considered when working with Solace&#39;s Data Center Replication feature. This integration guide will show how the following items are required to have a Spring application successfully connect to a backup data center using the Solace Data Center Replication feature.</p>
+<ul>
+<li>Configuring a Host List within the Spring Framework</li>
+<li>Configuring JMS Reconnection Properties within Solace JNDI</li>
+</ul>
+<h3 is-upgraded>	Configuring a Host List within the Spring Framework</h3>
+<p>As described in <a href="https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration" target="_blank">Solace Feature Guide client configuration</a>, the host list provides the address of the backup data center. This is configured within the Spring Framework through the <code>java.naming.provider.url</code> which is set within the <code>solaceJndiTemplate</code> bean in the sample configuration as follows:</p>
+<pre><code>  &lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
+    lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;map&gt;
+        &lt;entry key=&#34;java.naming.provider.url&#34; 
+               value=&#34;tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__&#34; /&gt;
+        &lt;!-- ... Snip remaining configuration ... --&gt;
+      &lt;/map&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>For the <code>java.naming.provider.url</code> both the active site IP address and standby site IP address are provided. When connecting, the Solace JMS connection will first try the active site, and if it is unable to successfully connect to the active site, it will then try the standby site. This is discussed in more detail in the referenced Solace documentation.</p>
+<h3 is-upgraded>	Configuring reasonable JMS Reconnection Properties within Solace JNDI</h3>
+<p>In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures, and can range from minutes to hours depending on the application. In general, it is best to tune the reconnection by changing the &#34;reconnect retries&#34; parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of &#34;-1&#34; to force the Solace JMS API to reconnect indefinitely.</p>
+<p>The reconnect retries is tuned in the event broker CLI as follows:</p>
+<pre><code>config)# jndi message-vpn Solace_Spring_VPN
+(config-jndi)# connection-factory JNDI/CF/spring
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;-1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)# exit
+(config)#
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

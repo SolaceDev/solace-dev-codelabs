@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-12-02T08:25:44-05:00",
+  "id": "spring-framework",
+  "duration": 2,
+  "title": "Integration Spring Framework v4 and v5",
+  "summary": "The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications - on any kind of deployment platform. A key element of Spring is infrastructural support at the application level.",
+  "source": "spring-framework.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "url": "spring-framework"
+}
