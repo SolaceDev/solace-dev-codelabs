@@ -37,7 +37,6 @@
 <li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
 <li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
-<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace PubSub+ Refer to section &#34;Get Solace Messaging Configuration</a></li>
 <li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
 <li><a href="https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/html/" target="_blank">Spring Framework v4.3 Reference Documentation</a></li>
 <li><a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/" target="_blank">Spring Framework v5.1 Documentation</a></li>
@@ -46,7 +45,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Get Solace Messaging" duration="0">
+      <google-codelab-step label="Get Solace Messaging" duration="10">
         <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Resource</p>
@@ -85,7 +84,7 @@
 <p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
 <h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
 <ul>
-<li>Follow <a href="https://docs.solace.com/Solace-Cloud/Deployment-Considerations/deployment-options.htm" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
+<li>Follow <a href="https://solace.com/downloads/" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
 <li>The messaging connectivity information are the following:<ul>
 <li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
 <li>Message VPN: default</li>
@@ -107,7 +106,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 
       </google-codelab-step>
     
-      <google-codelab-step label="Integrating with Spring Framework" duration="0">
+      <google-codelab-step label="Integrating with Spring Framework" duration="20">
         <p>The general Spring Framework support for JMS integration is outlined in detail in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/" target="_blank">Spring Documentation</a>. There are many ways to integrate the Spring Framework and Solace JMS. The configuration outlined in this document makes use of Spring messaging resource caching and JNDI object caching.</p>
 <p>In order to illustrate the Spring Framework integration, the following sections will highlight the required Spring Framework configuration changes and provide snippets of sample code for sending and receiving messages. The full Spring XML configuration file (SolResource.xml) and MessageProducer and MessageConsumer Java code can be found in the in the <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework" target="_blank">GitHub repo of this guide</a>.</p>
 <p>Spring supports several ways of configuring containers. The following sections use the XML-based configuration, but integration with Solace JMS would be equally supported using annotation-based configuration. For more information on Spring container configuration see the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/core.html#beans-java" target="_blank">Spring documentation</a> - Java-based container configuration.</p>
@@ -192,7 +191,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <li>Appropriate JNDI mappings enabling JMS clients to connect to the event broker configuration</li>
 </ul>
 <p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
-<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm" target="_blank">User Authentication and Authorization</a>.</p>
+<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm?Highlight=cli%20access%20level" target="_blank">User Authentication and Authorization</a>.</p>
 <h3 is-upgraded>Creating a Message VPN</h3>
 <p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
 <p>This section outlines how to create a message-VPN called &#34;Solace_Spring_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
@@ -261,7 +260,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <p>The following configuration is required to successfully establish a connection from Spring to the Solace PubSub+ event broker.</p>
 <p>The example configuration below uses XML-based container configuration to illustrate the integration. The &#34;<em>IP:PORT</em>&#34; should be updated to reference the actual event broker message-backbone VRF IP.</p>
 <p>In Solace JMS, the &#34;java.naming.security.principal&#34; often uses the format @. This allows specification of the event broker client username (&#34;spring_user&#34;) and message-vpn (&#34;Solace_Spring_VPN&#34;) created in the previous section. Both of these items are mandatory in order to connect to the event broker.</p>
-<p>The &#34;java.naming.security.credentials&#34; is optional and provides the event broker client password for use when authenticating with the event broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the Authentication section.</p>
+<p>The &#34;java.naming.security.credentials&#34; is optional and provides the event broker client password for use when authenticating with the event broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the Authentication Section in Advanced Topics</p>
 <pre><code>  &lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
     lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
     &lt;property name=&#34;environment&#34;&gt;
@@ -378,7 +377,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <p>Note that it is also possible to use the <code>MessageListenerAdapter</code> provided by Spring in order to avoid using an interface when receiving messages. This is outlined in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-asynchronousMessageReception" target="_blank">Spring documentation</a> in further detail. In general it makes sense to select the method for receiving messages that most closely matches with the existing behavior of the application. It does not affect the message reception from the event brokers.</p>
 <p>The full source code for this example is available in the following source:</p>
 <ul>
-<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageListener.java" target="_blank">MessageListener.java</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solace/integration/spring/MessageConsumer.java" target="_blank">MessageConsumer.java</a></li>
 </ul>
 <h2 is-upgraded>Step 4 – Spring Framework – Sending Messages to Solace</h2>
 <p>In general the <code>JmsTemplate</code> is a convenient and recommended way to send messages from within the Spring Framework. The <code>JmsTemplate</code> contains several methods for sending messages including methods where the target JMS destination can be specified at send time, or alternatively an option where no destination is provided which uses the default JMS producer destination on send. Details of the <code>JmsTemplate</code> are covered in the <a href="https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-jmstemplate" target="_blank">Java Message Service section of the Spring documentation</a>.</p>
@@ -440,13 +439,10 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
   public void setJmsTemplate(JmsTemplate jmsTemplate) {
     this.jmsTemplate = jmsTemplate;
   }
-}
-``` 
-
-Similar to the message consumer, the publishing code could be run using a simple `main()`. The application context is used to lookup the message producer bean and send 10 messages over a cached JMS connection. Note that for sending only, `context.close()` would be called to close `context` after sending the messages. In this example it is not closed immediately because same XML configuration file and `context` is used to demonstrate receiving the messages, see previous section [Message Consumer Java Code](#message-consumer-java-code ).
-
-```java
-  public static void main(String[] args) throws JMSException {
+} 
+</code></pre>
+<p>Similar to the message consumer, the publishing code could be run using a simple <code>main()</code>. The application context is used to lookup the message producer bean and send 10 messages over a cached JMS connection. Note that for sending only, <code>context.close()</code> would be called to close <code>context</code> after sending the messages. In this example it is not closed immediately because same XML configuration file and <code>context</code> is used to demonstrate receiving the messages, see previous section Message Consumer Java Code</p>
+<pre><code>public static void main(String[] args) throws JMSException {
     ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
         new String[] { &#34;SolResources.xml&#34; });
     MessageProducer producer = (MessageProducer) context.getBean(&#34;messageProducer&#34;);
@@ -467,7 +463,8 @@ Similar to the message consumer, the publishing code could be run using a simple
       </google-codelab-step>
     
       <google-codelab-step label="Sample Application" duration="0">
-        <p>Source code for a sample Spring application, which implements sending 10 messages and waiting for their receipt, has been provided in the <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework" target="_blank">GitHub repo</a> of this guide.</p>
+        <p>Duration 00:10:00</p>
+<p>Source code for a sample Spring application, which implements sending 10 messages and waiting for their receipt, has been provided in the <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework" target="_blank">GitHub repo</a> of this guide.</p>
 <p>The sample requires Java and Maven installed.</p>
 <h2 is-upgraded>Building the sample</h2>
 <p>Follow these steps to create and build your project:</p>
@@ -487,7 +484,7 @@ Similar to the message consumer, the publishing code could be run using a simple
 
       </google-codelab-step>
     
-      <google-codelab-step label="Performance Considerations" duration="0">
+      <google-codelab-step label="Performance Considerations" duration="15">
         <p>The standard JMS API allows clients to send and receive persistent messages at high rates if used efficiently. In order to efficiently use the Solace JMS API, some JMS objects should be cached. The Spring Framework makes it possible to create these objects up front and cache them for re-use. This section outlines how to tune the Spring Framework configuration to properly re-use the following JMS Objects:</p>
 <ul>
 <li>Connection</li>
@@ -620,7 +617,7 @@ Similar to the message consumer, the publishing code could be run using a simple
 
       </google-codelab-step>
     
-      <google-codelab-step label="Working with Solace High Availability" duration="0">
+      <google-codelab-step label="Working with Solace High Availability" duration="20">
         <p>The <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a> section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a (high-availability) HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
 <p>In general, the Solace documentation contains the following note regarding reconnection:</p>
 <p>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should not attempt to reconnect for at least five minutes.</p>
@@ -641,7 +638,7 @@ Similar to the message consumer, the publishing code could be run using a simple
 
       </google-codelab-step>
     
-      <google-codelab-step label="Debugging Tips" duration="0">
+      <google-codelab-step label="Debugging Tips" duration="15">
         <p>The key component for debugging integration issues with the Solace JMS API is API logging. Instructions on how to enable logging in the Solace API are described below.</p>
 <h2 is-upgraded>	How to enable Solace JMS API logging</h2>
 <p>The Spring Framework documentation has details on <a href="https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/htmlsingle/#overview-logging" target="_blank">logging within Spring</a>. Since the Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring Solace JMS API logging is very similar to configuring any other Spring Framework logging. The following example shows how to enable debug logging in the Solace JMS API using log4j.</p>
@@ -675,9 +672,9 @@ log4j.category.com.solacesystems.jcsmp=DEBUG
 
       </google-codelab-step>
     
-      <google-codelab-step label="Advanced Topics" duration="0">
+      <google-codelab-step label="Advanced Topics" duration="20">
         <h2 is-upgraded>Authentication</h2>
-<p>JMS Client authentication is handled by the event broker. The event broker supports a variety of authentications schemes as described in <a href="https://docs.solace.com/Features/Client-authentication-and-authorization.htm" target="_blank">Solace documentation &#34;Client Authentication and Authorization&#34;</a>.  The required JMS authentication properties can be set in the <code>JndiTemplate</code> configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of &#34;spring_user&#34; and password of &#34;spring_password&#34;.</p>
+<p>JMS Client authentication is handled by the event broker. The event broker supports a variety of authentications schemes as described in <a href="https://docs.solace.com/Security/Security-Solace.htm" target="_blank">Solace documentation &#34;Client Authentication and Authorization&#34;</a>.  The required JMS authentication properties can be set in the <code>JndiTemplate</code> configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of &#34;spring_user&#34; and password of &#34;spring_password&#34;.</p>
 <pre><code>&lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
     lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
     &lt;property name=&#34;environment&#34;&gt;
@@ -796,13 +793,13 @@ Do you want to continue (y/n)? y
 &lt;/bean&gt;
 </code></pre>
 <h2 is-upgraded>	Working with Solace Disaster Recovery</h2>
-<p>Solace&#39;s <a href="https://docs.solace.com/Features/Data-Center-Replication.htm" target="_blank">Data Center Replication documentation</a>  provides details that need to be considered when working with Solace&#39;s Data Center Replication feature. This integration guide will show how the following items are required to have a Spring application successfully connect to a backup data center using the Solace Data Center Replication feature.</p>
+<p>Solace&#39;s <a href="https://docs.solace.com/Configuring-and-Managing/Configuring-Data-Center-Replication.htm?Highlight=data%20center%20replication" target="_blank">Data Center Replication documentation</a> provides details that need to be considered when working with Solace&#39;s Data Center Replication feature. This integration guide will show how the following items are required to have a Spring application successfully connect to a backup data center using the Solace Data Center Replication feature.</p>
 <ul>
 <li>Configuring a Host List within the Spring Framework</li>
 <li>Configuring JMS Reconnection Properties within Solace JNDI</li>
 </ul>
 <h3 is-upgraded>	Configuring a Host List within the Spring Framework</h3>
-<p>As described in <a href="https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration" target="_blank">Solace Feature Guide client configuration</a>, the host list provides the address of the backup data center. This is configured within the Spring Framework through the <code>java.naming.provider.url</code> which is set within the <code>solaceJndiTemplate</code> bean in the sample configuration as follows:</p>
+<p>As described in the <a href="https://docs.solace.com/Overviews/Data-Center-Replication-Overview.htm" target="_blank">Replication Overview</a>, the host list provides the address of the backup data center. This is configured within the Spring Framework through the <code>java.naming.provider.url</code> which is set within the <code>solaceJndiTemplate</code> bean in the sample configuration as follows:</p>
 <pre><code>  &lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
     lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
     &lt;property name=&#34;environment&#34;&gt;
