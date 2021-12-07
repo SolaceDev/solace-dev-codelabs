@@ -85,6 +85,9 @@ $ export PATH=$PATH:$GOROOT/bin
       <google-codelab-step label="Solace Guidelines" duration="5">
         <h2 is-upgraded>Content Guidance</h2>
 <p>✅ Each codelab should be focused on one topic or a very small group of related topics.<br> ✅ Use sections to separate steps for ease of navigation<br> ✅ Include an &#34;Overview&#34; or &#34;What You&#39;ll Learn Section&#34; at the beginning of a codelab<br> ✅ Include an &#34;Environment Setup&#34; or &#34;What You&#39;ll Need Section&#34; section that sets up the environment, if necessary.<br> ✅ Try to make the codelab fun and engaging using images and/or gifs<br> ✅ Provide code used in a separate public git repo</p>
+<h2 is-upgraded>Tips</h2>
+<p>💡 To capture a multi-part topic, create smaller sections of the topic and organize the section titles as parts and sub-sections to capture the grouping of content. <img alt="image_caption" src="img/178b3e6312bbd308.jpg"></p>
+<p>💡 Attempt to give complete context when specifying properties, configuration etc as much as possible. <img alt="image_caption" src="img/ca24759abb110fa7.jpg"></p>
 <h2 is-upgraded>Where to create your codelab</h2>
 <p>📌 Create your codelab in the <a href="https://github.com/SolaceDev/solace-dev-codelabs" target="_blank">Solace codelabs repo</a> for version tracking<br> 📌 All other code can be kept in a separate repo<br> 📌 Example codelab markdown structure can be found on the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/solace-battleship" target="_blank">Battleship markdown</a> and the <a href="https://github.com/solacetraining/solace-battleship" target="_blank">Battleship source code</a></p>
 <h2 is-upgraded>Content Reviewer</h2>
@@ -105,14 +108,16 @@ $ export PATH=$PATH:$GOROOT/bin
 cd solace-dev-codelabs
 git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </code></pre>
-<aside class="warning"><p>If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git</code></p>
+<aside class="special"><p>If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><br><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git</code></p>
+</aside>
+<aside class="warning"><p>Do not forget to checkout the code into a new branch <strong>git checkout -b &lt;add-codelab-name_of_codelab&gt;</strong>. This would help facilitating a peer review and approve/reject changes without affecting the published content.</p>
 </aside>
 <p>Then follow one of the two options in the next two steps: Automated or Manual</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Option A: Create your initial Codelab - Automated" duration="5">
+      <google-codelab-step label="Create a new Codelab - Automated [Option A]" duration="5">
         <h2 is-upgraded>Prerequisites</h2>
 <ul>
 <li>NodeJS</li>
@@ -126,15 +131,18 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 <li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
 <li>When ready, run the export script as follows <code>./export.sh</code></li>
 </ol>
+<aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
 <aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
 </aside>
-<p>🚀 Go ahead to the <strong>Step 7</strong> and add your codelabs on the main repo</p>
+<p>🚀 Go ahead to the <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Option B: Create your initial Codelab - Manual" duration="8">
-        <p>Create a folder under the <code>markdown</code> directory with your codelab as the dir name. This is where your markdown file and related artifacts (such as images) will reside.</p>
+      <google-codelab-step label="Create a new Codelab - Manual [Option B]" duration="0">
+        <p>Create a folder <code>&lt;name-of-codelab&gt;</code> under the <code>markdown</code> directory. This is where your markdown file and related artifacts (such as images) will reside.</p>
+<p>Navigate to the <code>&lt;name-of-codelab&gt;</code> directory.</p>
 <p>Go ahead and create a markdown file where you&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
 <aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
 </aside>
@@ -239,7 +247,7 @@ $ claat serve
 <li>Choose the directory that matches your &#34;id&#34; that you put in the headers.</li>
 <li>Viola! You should have your first codelab!</li>
 </ul>
-<p>Repeat the export and serve locally everyt ime you make a new change in the markdown file</p>
+<p>Repeat the export and serve locally every ime you make a new change in the markdown file</p>
 <aside class="special"><p>When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
 </aside>
 <aside class="warning"><p>Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
@@ -258,6 +266,26 @@ cd markdown/&lt;header-metadata-id&gt;
 # Note the google analytics code used. Keep as is below
 claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
+<aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
+</aside>
+<p>🚀 Go ahead to <strong>Step 8</strong> and add your codelabs on the main repo</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modify an existing Codelab" duration="3">
+        <h2 is-upgraded>Steps</h2>
+<ol type="1">
+<li>Navigate to the <code>/markdown/&lt;name-of-codelab&gt;</code> directory</li>
+<li>Compile and start the claat server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file</li>
+<li>Edit your <code>&lt;name-of-codelab&gt;.md</code> file in your text editor of choice</li>
+<li>When ready, run the export script as follows <code>./export.sh</code></li>
+</ol>
+<aside class="warning"><p>If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
+<aside class="special"><p>Exporting your codelab will create the html static files under the <code>codelabs/&lt;name-of-codelab&gt;</code> directory</p>
+</aside>
+<p>🚀 Go ahead to <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
       </google-codelab-step>
@@ -273,7 +301,7 @@ git push origin add-codelab-&lt;id&gt;
 <h2 is-upgraded>Create a Pull Request</h2>
 <p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs</code> and create a pull request against master.</p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
-<aside class="special"><p>We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.</p>
+<aside class="special"><p>We recommend a technical review of the codelab to verify the technical steps and make sure they work as mentioned in the codelab.</p>
 </aside>
 <h2 is-upgraded>Thank You!</h2>
 <p>Thank you for contributing to Solace Codelabs! Please reach out to the Solace DevRel team with any questions.</p>
