@@ -2,7 +2,7 @@ author: AUTHOR_NAME
 summary:
 id: CODELAB_NAME
 tags: iguide
-categories:
+categories: Solace, Integration
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/CODELAB_NAME/CODELAB_NAME.md
