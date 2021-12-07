@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-12-07T17:09:13-05:00",
+  "id": "hermesjms",
+  "duration": 45,
+  "title": "Integration Guide: Hermes JMS",
+  "summary": "",
+  "source": "hermesjms.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "hermes",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/hermesjms",
+  "url": "hermesjms"
+}
