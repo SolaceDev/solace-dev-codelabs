@@ -619,7 +619,7 @@ Remote:
     
       <google-codelab-step label="[C] Configuring a &#34;Sniffer&#34; App" duration="4">
         <p>Just like we did on the last step of Section A, use the <strong>Try Me!</strong> functionality of the PubSub+ Manager to &#34;snoop&#34; or &#34;sniff&#34; the messages going through Solace:</p>
-<p>Enter the subscriptions <code>GET/&gt;</code> and <code>#P2P/*/#rest*/&gt;</code> into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
+<p>Enter the subscriptions <code>GET/&gt;</code> and either <code>#P2P/*/_rest*/&gt;</code> for SolOS &gt;= 9.9 (or <code>#P2P/*/#rest*/&gt;</code> for SolOS &lt; 9.9) into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
 <p>Re-run the same cURL command from the previous section:</p>
 <pre><code>curl -u default:default &#34;http://localhost:9000/get?hello=world&amp;solace=cool&#34;
 </code></pre>
