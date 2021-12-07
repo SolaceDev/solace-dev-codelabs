@@ -10,9 +10,16 @@
   "summary": "A tech stack tutorial with Solace PubSub+, JavaScript, MQTT, and PostgreSQL",
   "source": "solace-js-mqtt-pg.md",
   "theme": "",
-  "status": ["published"],
-  "category": ["javascript", "mqtt"],
-  "tags": ["iguide", "web"],
+  "status": [
+    "published"
+  ],
+  "category": [
+    "javascript",
+    "mqtt"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/solacese/solace-js-mqtt-postgres-blog",
   "url": "solace-js-mqtt-pg"
 }

@@ -1,7 +1,7 @@
 author: Leah Robert
 summary: Bridge data from RabbitMQ to Solace PubSub+ with the RabbitMQ Shovel plugin
 id: solace-rabbit-shovel
-tags: iguide, amqp, rabbit
+tags: 
 categories: RabbitMQ,AMQP
 environments: Web
 status: Published
