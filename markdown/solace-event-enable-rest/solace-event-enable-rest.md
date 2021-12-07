@@ -2,30 +2,32 @@ author: Aaron Lee
 summary: Learn how to configure a Solace PubSub+ broker to accept any incoming REST requests, and convert them into event-driven pub/sub messages
 id: solace-event-enable-rest
 tags: patterns,howto
-categories: REST,Java
+categories: REST,Solace,Java
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md
+feedback link: https://solace.community/categories/pubsub%2B-tutorials
+analytics account: UA-3921398-10
 
-# How to Event-Enable your REST Architecture with Solace PubSub+
+
+# Event-Enable your REST Architecture with Solace PubSub+, Part 1
+
 
 ## Introduction
-
 Duration: 0:02:00
 
-#### > Do you use **REST-over-HTTP** (`GET`, `POST`, etc.) for application communication?? Read on!
+#### > Do you use **REST-over-HTTP** (`GET`, `POST`, etc.) for application communication??  Read on!
 
-In traditional microservice applications, the primary form of communication is often REST-over-HTTP. However, this can be limiting as:
+In traditional microservice applications, the primary form of communication is often REST-over-HTTP.  However, this can be limiting as:
 
-- REST archictecture is client-to-server (not bidirectional)
-- REST-over-HTTP is point-to-point (only one URL destination)
-- HTTP is a synchronous/blocking protocol (waiting for 200 OK)
+ - REST architecture is client-to-server (not bidirectional)
+ - REST-over-HTTP is point-to-point (only one URL destination)
+ - HTTP is a synchronous/blocking protocol (waiting for 200 OK)
 
 Modern applications are embracing **publish-subscribe** communication as a way to enable **event-driven** architectures.
 
-- But how to migrate?
-- How to integrate?
-- Is it possible to combine both traditional REST interaction with efficient pub/sub communication??
+ - But how to migrate?
+ - How to integrate?
+ - Is it possible to combine both traditional REST interaction with efficient pub/sub communication??
 
 Positive
 : **YES IT IS**, using the **Solace PubSub+ Event Broker!**
@@ -34,21 +36,34 @@ Positive
 
 ![asdf](gfx/build.png)
 
-### What you'll learn
 
+### What you'll learn
 - How to configure the Solace PubSub+ broker to accept incoming REST requests
 - How to configure the Solace broker to pass incoming REST requests straight though, similar to a proxy, using a Rest Delivery Point (RDP)
 - How to utilize the publish-subscribe pattern to allow easy access to multiple copies of the same data
 - How to build a Solace messaging application to consume and respond to incoming REST requests
 
-## Prerequisites & Assumptions
 
+### Useful Links
+
+[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+
+[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+
+[Event-Enable REST Video Tutorial](https://youtu.be/7eKAdLhlT1s)
+
+
+
+
+
+
+## Prerequisites & Assumptions
 Duration: 0:02:00
 
 - It is assumed you have a basic understanding of what a Solace PubSub+ event broker is, and what it does.
-- You have access (and _admin_ access) to a Solace PubSub+ broker. This can either be a hardware appliance, the software broker, or a Solace Cloud service instance. (See below)
+- You have access (and _admin_ access) to a Solace PubSub+ broker. This can either be a hardware appliance, the software broker, or a Solace Cloud service instance.  (See below)
 - cURL, Postman, or other REST utility that will allow the injection of REST-over-HTTP requests.
-- (optional) A REST-enabled webserver, web application, or microservice that can accept incoming REST (GET, POST, etc.) requests, and generate a response. If not, the tuorial will use an available [Postman test server](https://postman-echo.com).
+- (optional) A REST-enabled web server, web application, or microservice that can accept incoming REST (GET, POST, etc.) requests, and generate a response. If not, the tutorial will use an available [Postman test server](https://postman-echo.com).
 - (optional) The Solace Java (JCSMP), JavaScript, C#, JMS, or other messaging API, which can be found at either [solace.com/downloads](https://solace.com/downloads) or [github.com/solacesamples](https://github.com/solacesamples).
 
 Negative
@@ -56,41 +71,61 @@ Negative
 
 ### Free Solace Access!
 
-- [Sign up for a free Solace Cloud service (50 connections)](https://console.solace.cloud/login/new-account)
-- [Download the free feature-complete Standard Edition software broker](https://solace.com/downloads/)
-- [Quickstart Video for Solace PubSub+ Docker container](https://youtu.be/s2n5V-IXCaM)
+ - [Sign up for a free Solace Cloud service (50 connections)](https://console.solace.cloud/login/new-account)
+ - [Download the free feature-complete Standard Edition software broker](https://solace.com/downloads/)
+ - [Quickstart Video for Solace PubSub+ Docker container](https://youtu.be/s2n5V-IXCaM)
+
+
+
+
+
+
+
+
+
+
 
 ## Overview of Sections: A, B, and C
-
 Duration: 0:02:00
 
-This tutorial will walk though a number of steps to configure the Solace PubSub+ broker to be used in REST Gateway mode, as well as code examples using the Solace JCSMP (or other) API for building a request-reply backend messaging application.
+This tutorial will walk though a number of steps to configure the Solace PubSub+ broker to be used in REST Gateway mode, as well as code examples using the Solace JCSMP (or other) API for building a request-reply back-end messaging application.
 
 ### Starting Configuration
 
-- In the beginning, you have a client making a REST reqeust to a backend REST server. (We'll use a free one if you don't have one available).
-  ![asdf](gfx/flow_01.png)
+ - In the beginning, you have a client making a REST request to a back-end REST server. (We'll use a free one if you don't have one available).
+![asdf](gfx/flow_01.png)
 
 ### Part A
 
-- First, we configure and test the Solace PubSub+ broker to ensure it is receiving REST requests. Solace will convert the incoming requests to messages for testing.
-  ![asdf](gfx/flow_02.png)
+ - First, we configure and test the Solace PubSub+ broker to ensure it is receiving REST requests. Solace will convert the incoming requests to messages for testing.
+![asdf](gfx/flow_02.png)
 
 ### Part B
 
-- Next, configure all the necessary "outbound" REST components in the Solace broker to allow the REST request to reach the backend REST API, and respond. This allows Solace to essentially be a REST proxy.
-  ![asdf](gfx/flow_03.png)
+ - Next, configure all the necessary "outbound" REST components in the Solace broker to allow the REST request to reach the back-end REST API, and respond.  This allows Solace to essentially be a REST proxy.
+![asdf](gfx/flow_03.png)
 
 ### Part C
 
-- Finally, configure a "sniffer" messaging application to listen to the REST request/reply flow through Solace broker, using the publish-subscribe pattern. Could be very useful for logging, diagnostics, or audit.
-  ![asdf](gfx/flow_04.png)
+ - Finally, configure a "sniffer" messaging application to listen to the REST request/reply flow through Solace broker, using the publish-subscribe pattern. Could be very useful for logging, diagnostics, or audit.
+![asdf](gfx/flow_04.png)
 
-- Configure a messaging application to replace/extend/complement the backend REST server, allowing a REST-to-pub/sub conversion within the Solace broker.
-  ![asdf](gfx/flow_05.png)
+ - Configure a messaging application to replace/extend/complement the back-end REST server,  allowing a REST-to-pub/sub conversion within the Solace broker.
+![asdf](gfx/flow_05.png)
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Three Options for Config Management
-
 Duration: 0:03:00
 
 You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.
@@ -100,7 +135,7 @@ Each section of this CodeLab that performs a configuration step on the Solace br
 Negative
 : **Note:** do _not_ perform all 3 configuration options, just choose 1 for each section.
 
-For any configuration management, you will need a username/password with either admin or read/write level privileges.
+For any configuration management, you will need a username/password with either admin or read/write level privileges.                                                                                                                      
 
 ### PubSub+ Manager GUI
 
@@ -111,12 +146,14 @@ Positive
 
 ![alt-text-here](gfx/tips.png)
 
+
 ### SEMP Management API
 
 All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful **Solace Element Management Protocol** (SEMP) API. For more information on the SEMP API, please consult the following links:
 
-- [SEMPv2 Swagger Reference Documentation](https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html)
-- [SEMP User Guide](https://docs.solace.com/SEMP/Using-SEMP.htm)
+ - [SEMPv2 Swagger Reference Documentation](https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html)
+ - [SEMP User Guide](https://docs.solace.com/SEMP/Using-SEMP.htm)
+
 
 ### Command Line Interface (CLI)
 
@@ -127,25 +164,46 @@ The Solace **Command Line Interface** (CLI) can be reached by one of the followi
 - Software broker running as machine image: login to the machine image, then: `solacectl cli`
 - Hardware appliance: login to port 22 of the management VRF
 
-Note that `show` commands can be run anywhere in CLI, from any "level". But configuration commands must be executed in a specific order.
+Note that `show` commands can be run anywhere in CLI, from any "level".  But configuration commands must be executed in a specific order.
 
 I've also included a lot of double-quotes `"` in the CLI commands for completeness... but you almost never need to use them. FYI. (Just never put a space in any object name!!)
 
-- [Solace CLI Reference Documentation](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
-- [Get Started with CLI (blog)](https://solace.com/blog/getting-started-solos-cli/)
+ - [Solace CLI Reference Documentation](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
+ - [Get Started with CLI (blog)](https://solace.com/blog/getting-started-solos-cli/)
+
+
+
+
+
+
+
+
+
+
+
 
 ## Part A - Objective
-
 Duration: 0:00:00
 
 #### Recall:
 
-- First we configure and test the Solace PubSub+ broker to ensure it is receiving REST requests. Solace will convert the incoming requests to messages for testing.
+ - First we configure and test the Solace PubSub+ broker to ensure it is receiving REST requests. Solace will convert the incoming requests to messages for testing.
 
 ![asdf](gfx/flow_02.png)
 
-## [A] Verify/Assign REST Port
 
+
+
+
+
+
+
+
+
+
+
+
+## [A] Verify/Assign REST Port
 Duration: 0:03:00
 
 In this first section, we will verify what port has been configured (if any) to allow incoming REST requests to your particular Message VPN. If using the `default` Message VPN on the software broker, this section can be skipped.
@@ -155,6 +213,8 @@ Negative
 
 Negative
 : **Note:** if using **Docker** for Windows, Docker for Mac, or using `bridge` networking mode with Docker on Linux, the new port must be added to the container's list of published ports (`-p <new-port>`) when the container is first instantiated (i.e. new ports are not automatically exposed).
+
+
 
 ### PubSub+ Manager
 
@@ -167,12 +227,13 @@ Select "Services" from the Message VPN's menu items:
 Scroll down to the section on REST and verify the port is configured and enabled:
 ![alt-text-here](gfx/port_mgr3.png)
 
+
 ### SEMP
 
 To view the incoming REST port, perform the following (replace `default` with your Message VPN name, and user credentials as appropriate):
 
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*
+curl -u admin:admin "http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*"
 ```
 
 And the response should look something like:
@@ -202,7 +263,7 @@ And the response should look something like:
 To configure the incoming port and enable it using SEMP, perform the following 2 commands. First, shutdown the port:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -212,7 +273,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
 Then change the port number and re-enable it:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -220,12 +281,12 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
         "serviceRestIncomingPlainTextEnabled": true }'
 ```
 
+
 ### CLI
 
-Perform the following `show` command in CLI. Look for the line with `REST` and an `N` in the S(ecure) column for the port to use. If the broker has a server certificate installed, you may use port in the line below (9443 in this case).
+Perform the following `show` command in CLI.  Look for the line with `REST` and an `N` in the S(ecure) column for the port to use.  If the broker has a server certificate installed, you may use port in the line below (9443 in this case).
 
-Note that `solace>` is simply the prompt, ignore that.
-
+Note that `solace>` is simply the prompt, ignore that.  
 ```
 solace> show message-vpn default service
 
@@ -259,19 +320,32 @@ enable
           exit
 ```
 
+
 ### Solace Cloud
 
 If using Solace Cloud, from within the console for your Solace Cloud instance, select "Connect":
-![alt-text-here](gfx/port_sc1.png)
+![alt-text-here](gfx/port_sc1.png)                                                                                                                                
 
 Scroll down to the section on REST and verify the username, password, port, and URL:
 ![alt-text-here](gfx/port_sc2.png)
 
-## [A] Enable REST (Micro)Gateway Mode
 
+
+
+
+
+
+
+
+
+
+
+
+## [A] Enable REST (Micro)Gateway Mode
 Duration: 0:03:00
 
-In this section, we will switch the REST mode for our Message VPN from _Messaging_ (the default) to _Gateway_. Microgateways allow Solace PubSub+ event brokers to act as HTTP load balancers, or simple API gateways between RESTful API clients and RESTful API service providers. Learn more about Microgateways [here](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+In this section, we will switch the REST mode for our Message VPN from _Messaging_ (the default) to _Gateway_. MicroGateways allow Solace PubSub+ event brokers to act as HTTP load balancers, or simple API gateways between RESTful API clients and RESTful API service providers. Learn more about MicroGateways [here](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+
 
 ### PubSub+ Manager
 
@@ -281,12 +355,13 @@ Inside the "Services" menu of the Message VPN, either click "Edit" in the top-ri
 Select _Gateway_ from the drop-down list, and click "Apply":
 ![alt-text-here](gfx/rest_mode_mgr2.png)
 
+
 ### SEMP
 
 Change to `gateway` with just one command:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default" \
   -X PATCH \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -294,9 +369,8 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default \
 ```
 
 To verify, use the previous GET command:
-
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*
+curl -u admin:admin "http://localhost:8080/SEMP/v2/config/msgVpns/default?select=serviceRest*"
 ```
 
 ```
@@ -319,6 +393,7 @@ curl -u admin:admin http://localhost:8080/SEMP/v2/config/msgVpns/default?select=
         "responseCode":200
     }
 ```
+
 
 ### CLI
 
@@ -346,11 +421,23 @@ Total Local Unique Subscriptions:    9
 // snip //
 ```
 
-## [A] Test REST Connectivity
 
+
+
+
+
+
+
+
+
+
+
+
+## [A] Test REST Connectivity
 Duration: 0:06:00
 
 Now that the Message VPN on the Solace broker has been configured for REST Gateway mode, let's verify that REST requests are reaching the broker.
+
 
 ### Inject a REST Request
 
@@ -358,11 +445,10 @@ Using cURL, Postman, or another REST program, inject a REST `GET` request to the
 
 Negative
 : **Note:** the following is not a "management" command, and therefore the **username**, **password**, and **port** are different than the SEMP commands seen thus far. This would be a _client username_ that you create for the Message VPN.
-
+ 
 For example:
-
 ```
-curl -u default:default http://localhost:9000/test -v
+curl -u default:default "http://localhost:9000/test" -v
 ```
 
 And you should see a response similar to the following:
@@ -381,11 +467,13 @@ No subscription matching topic "GET/test"           <----
 Which means that it is reaching the broker, however there is nowhere to route this incoming request as there are no listeners currently configured.
 
 Positive
-: **Recall:** in `gateway` mode, incoming REST requests are "pre-pended" with the REST VERB. So a GET request for path `test` becomes a Solace message with topic `GET/test`
+: **Recall:** in `gateway` mode, incoming REST requests are "pre-pended" with the REST VERB.  So a GET request for path `test` becomes a Solace message with topic `GET/test`
+
 
 ### Consuming the Incoming REST Request
 
 As a test, to simply receive the incoming REST request, let's use the "Try Me!" test app built into the PubSub+ Manager:
+
 
 Click on "Try Me!" on the left-hand menu:
 ![alt-text-here](gfx/tryme_mgr1.png)
@@ -393,7 +481,7 @@ Click on "Try Me!" on the left-hand menu:
 Click on "Connect" for the Subscriber on the right:
 ![alt-text-here](gfx/tryme_mgr2.png)
 
-Enter the subscription `GET/>` into the text field, and click "Subscribe". Recall: the `>` wildcard in Solace is a multi-level wildcard. This subscription will receive anything that is a "GET" request.
+Enter the subscription `GET/>` into the text field, and click "Subscribe".  Recall: the `>` wildcard in Solace is a multi-level wildcard. This subscription will receive anything that is a "GET" request.
 ![alt-text-here](gfx/tryme_mgr3.png)
 
 Resubmit the REST request from before, and it should pop up as a message on the Subscriber's received messages:
@@ -402,53 +490,79 @@ Resubmit the REST request from before, and it should pop up as a message on the 
 Positive
 : Hooray!!
 
+
 ### How about POST requests?
 
-In the Subscriber application's subscription text field, try entering `POST/>` as a subscription. Then, submit a different REST request to see how it appears:
+In the Subscriber application's subscription text field, try entering `POST/>` as a subscription.  Then, submit a different REST request to see how it appears:
 
 ```
-curl -u default:default -X POST http://localhost:9000/hello/world -d '{"body":"hello world!!","status":"great"}' -v
+curl -u default:default -X POST "http://localhost:9000/hello/world" -d '{"body":"hello world!!","status":"great"}' -v
 ```
-
 ![alt-text-here](gfx/tryme_mgr5.png)
 
 Positive
 : Awesome!!
 
-## Part B - Objective
 
+
+
+
+
+
+
+
+
+
+
+
+
+## Part B - Objective
 Duration: 0:00:00
 
 #### Recall:
 
-- Next, configure all the necessary "outbound" REST components in the Solace broker to allow the REST request to reach the backend REST API, and respond. This allows Solace to essentially be a REST proxy.
+
+ - Next, configure all the necessary "outbound" REST components in the Solace broker to allow the REST request to reach the back-end REST API, and respond.  This allows Solace to essentially be a REST proxy.
 
 ![asdf](gfx/flow_03.png)
 
-## [B] Prepare for Outbound REST Pass-Through
 
+
+
+
+
+
+
+
+
+
+
+
+
+## [B] Prepare for Outbound REST Pass-Through                                                                                                                                                                          
 Duration: 0:03:00
 
 For the Solace broker to act as a "pass-through" for REST requests in MicroGateway mode, we need to configure some additional "outbound" components on the broker.
 
 - **A REST Delivery Point (RDP):** this is the "parent" object which contains all the necessary configuration for sending outbound REST requests from the Solace broker
-- **A persistent Queue:** each RDP is bound to one or more queues from which it receives messages
-- **A REST Consumer:** this defines where/how the outbound request will be sent, essentially the destination
+- **A persistent Queue:** each RDP is bound to one or more queues from which it receives messages 
+- **A REST Consumer:** this defines where/how the outbound request will be sent, essentially the destination 
 
 The remainder of this tutorial will use a Postman API test server to generate a response to a HTTP GET request. If you have another API endpoint available to you that you'd like to use, please feel free.
 
+
 ### Test Server Details
 
-- **Host:** postman-echo.com
-- **Port:** 80
-- **Authentication:** none
+ - **Host:** postman-echo.com
+ - **Port:** 80
+ - **Authentication:** none
 
 [Postman Echo Documentation](https://docs.postman-echo.com/?version=latest)
 
-We will use the GET API to receive a response. The response will consist of some JSON, including any parameters that are passed with the URL. E.g.:
+We will use the GET API to receive a response. The response will consist of some JSON, including any parameters that are passed with the URL.  E.g.:
 
 ```
-curl 'http://postman-echo.com:80/get?hello=world&solace=cool'
+curl "http://postman-echo.com:80/get?hello=world&solace=cool"
 ```
 
 Should result in the following response (pretty-printed for visibility):
@@ -470,14 +584,23 @@ Should result in the following response (pretty-printed for visibility):
 }
 ```
 
-## [B] Create a New Queue
 
+
+
+
+
+
+
+
+
+## [B] Create a New Queue 
 Duration: 0:04:00
 
 When sending an outbound REST request, we need to configure a **Queue** to (temporarily) store the message before it gets sent out from the RDP.
 
 Negative
 : **Note:** if creating a _new_ Message VPN, remember that the VPN's `max-spool-quota` size defaults to **0MB**. So when creating a new Message VPN, you must also increase the spool quota for your new VPN.
+
 
 ### PubSub+ Manager
 
@@ -487,10 +610,10 @@ Click on "Queues" on the left-hand menu:
 Click on "+ Queue" in the top-right to create a new queue:
 ![alt-text-here](gfx/q_mgr2.png)
 
-Enter a name for your new queue. E.g. `q_rest_get`. Click "Create":
+Enter a name for your new queue. E.g. `q_rest_get`.  Click "Create":
 ![alt-text-here](gfx/q_mgr3.png)
 
-Adjust any of the default attributes if you wish (e.g. message quota / queue size), although probably unnecessary. Click "Apply":
+Adjust any of the default attributes if you wish (e.g. message quota / queue size), although probably unnecessary.  Click "Apply":
 ![alt-text-here](gfx/q_mgr4.png)
 
 Click on the newly created queue to view it:
@@ -510,12 +633,13 @@ Negative
 
 You can read more about Wilecard Topic Subscriptions [here](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
+
 ### SEMP
 
 Create a new queue:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -530,12 +654,13 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues \
 Add a subscription to it:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q_rest_get/subscriptions \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q_rest_get/subscriptions" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
   -d '{ "subscriptionTopic": "GET/>" }'
 ```
+
 
 ### CLI
 
@@ -556,11 +681,22 @@ enable
 show queue q_rest_get detail
 ```
 
-## [B] Create a REST Delivery Point (RDP)
 
+
+
+
+
+
+
+
+
+
+
+## [B] Create a REST Delivery Point (RDP)
 Duration: 0:05:00
 
 Next, we need to create a new **Rest Delivery Point** (RDP) and bind it to the new queue.
+
 
 ### PubSub+ Manager
 
@@ -573,7 +709,7 @@ Click on "REST" in the top menu:
 Click on "+ REST Delivery Point" in the top-right to create a new RDP:
 ![alt-text-here](gfx/rdp_03.png)
 
-Enter a name for your new RDP. E.g. `rdp_get`. Click "Create":
+Enter a name for your new RDP. E.g. `rdp_get`.  Click "Create":
 ![alt-text-here](gfx/rdp_04.png)
 
 **Enable** the RDP. Click "Apply":
@@ -594,10 +730,12 @@ Enter the name of your new queue to bind to this RDP, E.g. `q_rdp_get`. Click "C
 Click "Apply":
 ![alt-text-here](gfx/rdp_10.png)
 
+
+
 ### SEMP
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -607,7 +745,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints \
 ```
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/queueBindings \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/queueBindings" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -615,6 +753,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp
 ```
 
 ### CLI
+
 
 ```
 home
@@ -630,16 +769,25 @@ enable
 show message-vpn default rest rest-delivery-point * detail
 ```
 
-## [B] Configure a REST Consumer
 
+
+
+
+
+
+
+
+
+## [B] Configure a REST Consumer                                                                                                                                                                                       
 Duration: 0:05:00
 
-The final configuration step on the Solace broker to allow the REST request to pass-through is the **REST Consumer**. This is where the destination server/host is specified.
+The final configuration step on the Solace broker to allow the REST request to pass-through is the **REST Consumer**.  This is where the destination server/host is specified.  
 
 Negative
 : **Note:** if you want to point the REST Consumer to a different REST API endpoint than the example `postman-echo.com`, you will amend some configuration settings in this section (e.g. authentication: basic, username/password).
 
-### PubSub+ Manager
+
+### PubSub+ Manager                                                                                                                                                                                                
 
 From within the newly created RDP, click on "REST Consumers" in the top menu:
 ![alt-text-here](gfx/rc_01.png)
@@ -647,21 +795,22 @@ From within the newly created RDP, click on "REST Consumers" in the top menu:
 Click on "+ REST Consumer" in the top-right to create a new consumer:
 ![alt-text-here](gfx/rc_02.png)
 
-Enter a name for your new consumer. E.g. `rc_get`. Click "Create":
+Enter a name for your new consumer. E.g. `rc_get`.  Click "Create":
 ![alt-text-here](gfx/rc_03.png)
 
 Enable the REST Consumer, and add the remote **host**, **port**, and any authentication required by the downstream REST server. In this example, the host is `postman-echo.com` and the port is `80`. Toggle the enable option and click "Apply"
 ![alt-text-here](gfx/rc_04.png)
 
 Refresh the screen, and ensure the REST Consumer reports an Operational State of **Up**:
-![alt-text-here](gfx/rc_05.png)
+![alt-text-here](gfx/rc_05.png)                                                                                                                                                                                                             
+
 
 ### SEMP
 
 One single SEMP API command will create and configure the REST Consumer:
 
 ```
-curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers \
+curl "http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers" \
   -X POST \
   -u admin:admin \
   -H "Content-type:application/json" \
@@ -678,7 +827,7 @@ curl http://localhost:8080/SEMP/v2/config/msgVpns/default/restDeliveryPoints/rdp
 Make sure that it is reporting a good state, using the Monitor SEMP API:
 
 ```
-curl -u admin:admin http://localhost:8080/SEMP/v2/monitor/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers
+curl -u admin:admin "http://localhost:8080/SEMP/v2/monitor/msgVpns/default/restDeliveryPoints/rdp_get/restConsumers"
 ```
 
 ```
@@ -698,9 +847,10 @@ curl -u admin:admin http://localhost:8080/SEMP/v2/monitor/msgVpns/default/restDe
 // snip //
 ```
 
+
 ### CLI
 
-If continuing from the preious CLI command, and are still inside the `rest-delivery-point` level, start at line 7.
+If continuing from the previous CLI command, and are still inside the `rest-delivery-point` level, start at line 7.
 
 ```
 home
@@ -748,18 +898,25 @@ Remote:
 Positive
 : Yay!
 
-## [B] Test one more time!
 
+
+
+
+
+
+
+
+
+
+## [B] Test one more time!
 Duration: 0:03:00
 
 Now that the configuration is done, let us test using _almost_ the same cURL command from before, except replacing the `postman-echo.com` host and port with the Solace broker's REST port, and adding client username & password as required:
 
 ```
-curl -u default:default 'http://localhost:9000/get?hello=world&solace=cool'
+curl -u default:default "http://localhost:9000/get?hello=world&solace=cool"
 ```
-
 And the output should look like:
-
 ```
 {
   "args": {
@@ -780,25 +937,47 @@ And the output should look like:
   "url": "https://postman-echo.com/get?hello=world&solace=cool"
 }
 ```
+Note the additional headers.  But the original requesting client (cURL in this case) is unaffected.
 
-Note the additional headers. But the original requesting client (cURL in this case) is unaffected.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Part C - Objective
-
 Duration: 0:00:00
 
 #### Recall:
 
-- Finally, configure a "sniffer" messaging application to listen to the REST request/reply flow through Solace broker, using the publish-subscribe pattern. Could be very useful for logging, diagnostics, or audit.
+ - Finally, configure a "sniffer" messaging application to listen to the REST request/reply flow through Solace broker, using the publish-subscribe pattern. Could be very useful for logging, diagnostics, or audit.
 
 ![asdf](gfx/flow_04.png)
 
-- Configure a messaging application to replace/extend/complement the backend REST server, allowing a REST-to-pub/sub conversion within the Solace broker.
+
+ - Configure a messaging application to replace/extend/complement the back-end REST server,  allowing a REST-to-pub/sub conversion within the Solace broker.
 
 ![asdf](gfx/flow_05.png)
 
-## [C] Configuring a "Sniffer" App
 
+
+
+
+
+
+
+
+
+
+
+## [C] Configuring a "Sniffer" App
 Duration: 0:04:00
 
 Just like we did on the last step of Section A, use the **Try Me!** functionality of the PubSub+ Manager to "snoop" or "sniff" the messages going through Solace:
@@ -809,7 +988,7 @@ Enter the subscriptions `GET/>` and `#P2P/*/#rest*/>` into the subscription text
 Re-run the same cURL command from the previous section:
 
 ```
-curl -u default:default 'http://localhost:9000/get?hello=world&solace=cool'
+curl -u default:default "http://localhost:9000/get?hello=world&solace=cool"
 ```
 
 Verify cURL still receives a response, but note that you can **also** see the request and reply in the Subscriber window:
@@ -820,27 +999,41 @@ Positive
 
 This shows that you can have an application passively receive **a copy of all REST request-reply traffic** as it moves through the broker, **without impacting the original actors**. This functionality could be very useful for logging, diagnostics, or audit.
 
-## [C] Building a Replier Messaging App
 
+
+
+
+
+
+
+
+
+
+
+
+
+## [C] Building a Replier Messaging App
 Duration: 0:15:00
 
 ### (AKA Who Needs a REST Server??)
 
 Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let's take a look at some sample/example code to generate a response using a messaging topic consumer.
 
-The following section assumes you are using the Solace Java JCSMP API, which is availalbe at our [Samples GitHub repo](https://github.com/SolaceSamples/solace-samples-java-jcsmp). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.). Other APIs are available on https://github.com/solacesamples/
+The following section assumes you are using the Solace Java JCSMP API, which is available at our [Samples GitHub repo](https://github.com/SolaceSamples/solace-samples-java). However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available on https://github.com/solacesamples/
 
 Positive
 : For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: [Solace Java Samples Part 1](https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5) and [Solace Java Samples Part 2](https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4)
 
+
 ### Shutdown the RDP
 
 Negative
-: Using PubSub+ Manager, CLI, or SEMP: shutdown or disable the RDP to prevent parallel flows from occuring.
+: Using PubSub+ Manager, CLI, or SEMP: shutdown or disable the RDP to prevent parallel flows from occurring.
+
 
 ### Make a Replier App
 
-Take a look at the [Basic Replier (source code)](https://github.com/SolaceSamples/solace-samples-java-jcsmp/blob/master/src/main/java/com/solace/samples/jcsmp/features/BasicReplier.java) sample application. We are going to modify it slightly.
+Take a look at the [Basic Replier (source code)](https://github.com/SolaceSamples/solace-samples-java/blob/master/src/main/java/com/solace/samples/BasicReplier.java) sample application.  We are going to modify it slightly.
 
 1. Change the topic subscription from `tutorial/requests` to `GET/>`, approximately line 50. (Could be any REST verb, using wildcards or not)
 1. Inside the `onReceive()` callback method (approximately line 75), replace the line `reply.setText(text);` with the following, for something more interesting/dynamic:
@@ -860,7 +1053,7 @@ System.out.println(request.dump());  // prints the request message to the consol
 reply.setApplicationMessageId(request.getApplicationMessageId());  // needed for correlation
 ```
 
-1. Run the application, and pass in the required arguments: `hostname username@vpn-name [password]`. E.g.:
+1. Run the application, and pass in the required arguments: `hostname username@vpn-name [password]`.  E.g.:
 
 ```
 BasicReplier localhost default@default
@@ -895,7 +1088,7 @@ User Property Map:                      4 entries
 1. And at the end of the cURL console, you should see the returned payload of "Sample response":
 
 ```
-> curl -u default:default http://localhost:9000/test -v
+> curl -u default:default "http://localhost:9000/test" -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
@@ -918,6 +1111,7 @@ Your path was: get?hello=world&solace=cool              <----
 Positive
 : Success!!
 
+
 ### HTTP Response Codes
 
 1. For more advanced HTTP response codes, add the following to the sample code, just before the reply message is sent:
@@ -937,7 +1131,7 @@ Positive
 1. Restart the Basic Replier, resubmit the REST GET request, and you should see something that looks the following:
 
 ```
-$ curl -u default:default http://localhost:9000/test -v
+$ curl -u default:default "http://localhost:9000/test" -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
@@ -960,9 +1154,14 @@ Your path was: get?hello=world&solace=cool
 Positive
 : Great Success!!
 
+
+
 ### Shared Subscriptions
 
-One very useful feature of Solace for this type backend service is **Shared Subscriptions**. It allows multiple applications to all subscribe to the same subscription _group_, and the Solace broker will round-robin deliver the incoming request/message to only one of the consumers within the group.
+One very useful feature of Solace for this type back-end service is **Shared Subscriptions**.  It allows multiple applications to all subscribe to the same subscription _group_, and the Solace broker will round-robin deliver the incoming request/message to only one of the consumers within the group.  
+
+
+
 
 ## Conclusion, Discussion, Best Practices, Links
 
@@ -970,19 +1169,23 @@ Thanks for making it this far! :-D
 
 ### What we've covered
 
-- Configured the Solace broker to act as a REST proxy
-- Snooped the messages as they have gone through Solace
-- Built a messaging application to replace/extend/complement the functionality of the REST endpoint
+ - Configured the Solace broker to act as a REST proxy
+ - Snooped the messages as they have gone through Solace
+ - Built a messaging application to replace/extend/complement the functionality of the REST endpoint
 
 ### Some Thoughts
 
-- RDPs can be bound to more than one queue.
-- Good practice to have different types of requests (e.g. GET, POST) go to different queues... then they can be serviced differently by more/less consumer threads/connections for differing levels of service.
-- Create a 2nd queue, RDP, and REST Conusmer to have two copies of the REST request getting sent out. Cheap/lazy/easy way for added redundancy.
-- The replacement messging application can either use Direct messaging (like it did in this tutorial), or Guaranteed messaging by using a queue.
-- The [Shared Subscriptions feature](https://docs.solace.com/PubSub-Basics/Direct-Messages.htm#Shared) might be useful for application redundancy / load-balancing, if using Direct messaging.
+ - RDPs can be bound to more than one queue.
+ - Good practice to have different types of requests (e.g. GET, POST) go to different queues... then they can be serviced differently by more/less consumer threads/connections for differing levels of service.
+ - Create a 2nd queue, RDP, and REST Consumer to have two copies of the REST request getting sent out. Cheap/lazy/easy way for added redundancy.
+ - The replacement messaging application can either use Direct messaging (like it did in this tutorial), or Guaranteed messaging by using a queue.
+ - The [Shared Subscriptions feature](https://docs.solace.com/PubSub-Basics/Direct-Messages.htm#Shared) might be useful for application redundancy / load-balancing, if using Direct messaging.
 
 ### Useful Links
+
+[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+
+[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
 
 [Solace REST Message Encoding](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref393979969)
 
@@ -994,6 +1197,7 @@ Thanks for making it this far! :-D
 
 [Solace REST Message Correlation](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#2.2.6.1)
 
+
 #### Thanks!
 
-Thanks for reading my tutorial! Aaron@Solace
+Thanks for reading my tutorial!  Aaron@Solace
