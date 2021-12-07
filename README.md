@@ -6,7 +6,7 @@
 # Solace Codelabs
 The purpose of these codelabs is to create easily consumable, step-by-step tutorials that walk a developer to achieve a goal.  
 
-This repository is included as a submodule in the main [site repo](https://github.com/SolaceDev/solace-dev-codelabs-site). The site is deployed from that repo and codelab artifacts are kept here. 
+This repository is included as a submodule in the main [site repo](https://github.com/SolaceDev/solace-dev-codelabs-site). The main codelabs site is deployed from that repo and codelab artifacts are kept here. 
 
 ## Directories
 
