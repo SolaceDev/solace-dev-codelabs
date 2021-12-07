@@ -349,7 +349,7 @@ claat export -o ../../codelabs/ <header-metadata-id>.md
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
 
-🚀 Go ahead to the **Step 8** and add your codelabs on the main repo
+🚀 Go ahead to **Step 8** and add your codelabs on the main repo
 
 ## Modify an existing Codelab
 
@@ -368,7 +368,7 @@ Negative
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
 
-🚀 Go ahead to the **Step 8** and add your codelabs on the main repo
+🚀 Go ahead to **Step 8** and add your codelabs on the main repo
 
 ## Add your Codelab to solace.dev/codelabs
 
