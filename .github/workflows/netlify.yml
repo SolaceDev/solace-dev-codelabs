@@ -12,6 +12,10 @@ jobs:
         with:
           repository: SolaceDev/solace-dev-codelabs-site
           submodules: recursive
+      - name: Install node 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.2
       - name: Checkout PR
         run: cd site/solace-dev-codelabs && git fetch origin pull/${{ github.event.pull_request.number }}/head:temp && git checkout temp
       - name: build site

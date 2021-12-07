@@ -36,7 +36,7 @@ This codelab covers a lot of ground. You’ll learn about:
 Duration: 0:07:00
 
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messagin).
-1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html) Codelab.
+1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-v2-getting-started/index.html) Codelab.
 1. A free Salesforce developer account. You can sign up here: [https://developer.salesforce.com/signup](https://developer.salesforce.com/signup)
 1. A free Azure account: You can sign up here: [https://azure.microsoft.com/en-us/free/](https://azure.microsoft.com/en-us/free/)
 
@@ -129,7 +129,7 @@ Duration: 0:30:00
 
 ### ⚙️ Get connection values for PubSub+
 
-Follow the steps in the [Getting Started with Boomi and Solace codelab](https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html?#1) to get the connection values for your Solace PubSub+ Broker
+Follow the steps in the [Getting Started with Boomi and Solace codelab](https://codelabs.solace.dev/codelabs/boomi-v2-getting-started/index.html?#1) to get the connection values for your Solace PubSub+ Broker
 
 ### ⚙️ Generate the Solace Event Portal token
 
