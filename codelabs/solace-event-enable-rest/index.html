@@ -25,7 +25,7 @@
                   id="solace-event-enable-rest"
                   title="Event-Enable your REST Architecture with Solace PubSub&#43;, Part 1"
                   environment="web"
-                  feedback-link="https://solace.community/categories/pubsub%2B-tutorials">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md">
     
       <google-codelab-step label="Introduction" duration="2">
         <h3 is-upgraded>&gt; Do you use <strong>REST-over-HTTP</strong> (<code>GET</code>, <code>POST</code>, etc.) for application communication??  Read on!</h3>
@@ -41,8 +41,7 @@
 <li>How to integrate?</li>
 <li>Is it possible to combine both traditional REST interaction with efficient pub/sub communication??</li>
 </ul>
-<aside class="special"><p><strong>YES IT IS</strong>, using the <strong>Solace PubSub+ Event Broker!</strong></p>
-</aside>
+<p>Positive : <strong>YES IT IS</strong>, using the <strong>Solace PubSub+ Event Broker!</strong></p>
 <h2 is-upgraded>What you&#39;ll build</h2>
 <p class="image-container"><img alt="asdf" src="img/b2f8f4ad4e1dd723.png"></p>
 <h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
@@ -68,8 +67,7 @@
 <li>(optional) A REST-enabled web server, web application, or microservice that can accept incoming REST (GET, POST, etc.) requests, and generate a response. If not, the tutorial will use an available <a href="https://postman-echo.com" target="_blank">Postman test server</a>.</li>
 <li>(optional) The Solace Java (JCSMP), JavaScript, C#, JMS, or other messaging API, which can be found at either <a href="https://solace.com/downloads" target="_blank">solace.com/downloads</a> or <a href="https://github.com/solacesamples" target="_blank">github.com/solacesamples</a>.</li>
 </ul>
-<aside class="warning"><p><strong>Note:</strong> this tutorial assumes that you are using the <code>default</code> Message VPN on the software broker. If not (e.g. hardware appliance, Solace Cloud, or just a different VPN), ensure you substitute the proper VPN name, username, etc. as you progress through this tutorial.</p>
-</aside>
+<p>Negative : <strong>Note:</strong> this tutorial assumes that you are using the <code>default</code> Message VPN on the software broker. If not (e.g. hardware appliance, Solace Cloud, or just a different VPN), ensure you substitute the proper VPN name, username, etc. as you progress through this tutorial.</p>
 <h2 is-upgraded>Free Solace Access!</h2>
 <ul>
 <li><a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up for a free Solace Cloud service (50 connections)</a></li>
@@ -106,13 +104,11 @@
       <google-codelab-step label="Three Options for Config Management" duration="3">
         <p>You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.</p>
 <p>Each section of this CodeLab that performs a configuration step on the Solace broker will include all three options.</p>
-<aside class="warning"><p><strong>Note:</strong> do <em>not</em> perform all 3 configuration options, just choose 1 for each section.</p>
-</aside>
+<p>Negative : <strong>Note:</strong> do <em>not</em> perform all 3 configuration options, just choose 1 for each section.</p>
 <p>For any configuration management, you will need a username/password with either admin or read/write level privileges.</p>
 <h2 is-upgraded>PubSub+ Manager GUI</h2>
 <p>The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on &#34;Manage Service&#34; in the top right. (It is a replacement for SolAdmin, if you know that that is).</p>
-<aside class="special"><p><strong>Tip:</strong> throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help!</p>
-</aside>
+<p>Positive : <strong>Tip:</strong> throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help!</p>
 <p class="image-container"><img alt="alt-text-here" src="img/c1f978145c610f80.png"></p>
 <h2 is-upgraded>SEMP Management API</h2>
 <p>All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful <strong>Solace Element Management Protocol</strong> (SEMP) API. For more information on the SEMP API, please consult the following links:</p>
@@ -124,12 +120,12 @@
 <p>The Solace <strong>Command Line Interface</strong> (CLI) can be reached by one of the following methods (as appropriate):</p>
 <ul>
 <li>Software broker, SSH to port 2222, and login with the admin username/password</li>
-<li>Software broker running as Docker container: <code>sudo docker exec -it &lt;container-name&gt; cli</code></li>
+<li>Software broker running as Docker container: <code>sudo docker exec -it <container-name> cli</code></li>
 <li>Software broker running as machine image: login to the machine image, then: <code>solacectl cli</code></li>
 <li>Hardware appliance: login to port 22 of the management VRF</li>
 </ul>
 <p>Note that <code>show</code> commands can be run anywhere in CLI, from any &#34;level&#34;.  But configuration commands must be executed in a specific order.</p>
-<p>I&#39;ve also included a lot of double-quotes <code>&#34;</code> in the CLI commands for completeness... but you almost never need to use them. FYI. (Just never put a space in any object name!!)</p>
+<p>I&#39;ve also included a lot of double-quotes <code>"</code> in the CLI commands for completeness... but you almost never need to use them. FYI. (Just never put a space in any object name!!)</p>
 <ul>
 <li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace CLI Reference Documentation</a></li>
 <li><a href="https://solace.com/blog/getting-started-solos-cli/" target="_blank">Get Started with CLI (blog)</a></li>
@@ -150,10 +146,8 @@
     
       <google-codelab-step label="[A] Verify/Assign REST Port" duration="3">
         <p>In this first section, we will verify what port has been configured (if any) to allow incoming REST requests to your particular Message VPN. If using the <code>default</code> Message VPN on the software broker, this section can be skipped.</p>
-<aside class="warning"><p><strong>Note:</strong> if creating a new Message VPN, you must configure a new/different port than one used by the <code>default</code> Message VPN, 9000. Each VPN needs different ports for REST connectivity.</p>
-</aside>
-<aside class="warning"><p><strong>Note:</strong> if using <strong>Docker</strong> for Windows, Docker for Mac, or using <code>bridge</code> networking mode with Docker on Linux, the new port must be added to the container&#39;s list of published ports (<code>-p &lt;new-port&gt;</code>) when the container is first instantiated (i.e. new ports are not automatically exposed).</p>
-</aside>
+<p>Negative : <strong>Note:</strong> if creating a new Message VPN, you must configure a new/different port than one used by the <code>default</code> Message VPN, 9000. Each VPN needs different ports for REST connectivity.</p>
+<p>Negative : <strong>Note:</strong> if using <strong>Docker</strong> for Windows, Docker for Mac, or using <code>bridge</code> networking mode with Docker on Linux, the new port must be added to the container&#39;s list of published ports (<code>-p <new-port></code>) when the container is first instantiated (i.e. new ports are not automatically exposed).</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Login to the PubSub+ GUI Manager, then select your Message VPN: <img alt="alt-text-here" src="img/af0b3dfe962b426c.png"></p>
 <p>Select &#34;Services&#34; from the Message VPN&#39;s menu items: <img alt="alt-text-here" src="img/74e07d4141811e0.png"></p>
@@ -200,7 +194,7 @@
 </code></pre>
 <h2 is-upgraded>CLI</h2>
 <p>Perform the following <code>show</code> command in CLI.  Look for the line with <code>REST</code> and an <code>N</code> in the S(ecure) column for the port to use.  If the broker has a server certificate installed, you may use port in the line below (9443 in this case).</p>
-<p>Note that <code>solace&gt;</code> is simply the prompt, ignore that.</p>
+<p>Note that <code>solace></code> is simply the prompt, ignore that.</p>
 <pre><code>solace&gt; show message-vpn default service
 
 // snip //
@@ -299,8 +293,7 @@ Total Local Unique Subscriptions:    9
         <p>Now that the Message VPN on the Solace broker has been configured for REST Gateway mode, let&#39;s verify that REST requests are reaching the broker.</p>
 <h2 is-upgraded>Inject a REST Request</h2>
 <p>Using cURL, Postman, or another REST program, inject a REST <code>GET</code> request to the broker on the correct port, using any path you&#39;d like.</p>
-<aside class="warning"><p><strong>Note:</strong> the following is not a &#34;management&#34; command, and therefore the <strong>username</strong>, <strong>password</strong>, and <strong>port</strong> are different than the SEMP commands seen thus far. This would be a <em>client username</em> that you create for the Message VPN.</p>
-</aside>
+<p>Negative : <strong>Note:</strong> the following is not a &#34;management&#34; command, and therefore the <strong>username</strong>, <strong>password</strong>, and <strong>port</strong> are different than the SEMP commands seen thus far. This would be a <em>client username</em> that you create for the Message VPN.</p>
 <p>For example:</p>
 <pre><code>curl -u default:default &#34;http://localhost:9000/test&#34; -v
 </code></pre>
@@ -315,23 +308,20 @@ No subscription matching topic &#34;GET/test&#34;           &lt;----
 &lt;/solace-error-response&gt;
 </code></pre>
 <p>Which means that it is reaching the broker, however there is nowhere to route this incoming request as there are no listeners currently configured.</p>
-<aside class="special"><p><strong>Recall:</strong> in <code>gateway</code> mode, incoming REST requests are &#34;pre-pended&#34; with the REST VERB.  So a GET request for path <code>test</code> becomes a Solace message with topic <code>GET/test</code></p>
-</aside>
+<p>Positive : <strong>Recall:</strong> in <code>gateway</code> mode, incoming REST requests are &#34;pre-pended&#34; with the REST VERB.  So a GET request for path <code>test</code> becomes a Solace message with topic <code>GET/test</code></p>
 <h2 is-upgraded>Consuming the Incoming REST Request</h2>
 <p>As a test, to simply receive the incoming REST request, let&#39;s use the &#34;Try Me!&#34; test app built into the PubSub+ Manager:</p>
 <p>Click on &#34;Try Me!&#34; on the left-hand menu: <img alt="alt-text-here" src="img/24e396b06edf57ce.png"></p>
 <p>Click on &#34;Connect&#34; for the Subscriber on the right: <img alt="alt-text-here" src="img/23732d996a8c0c39.png"></p>
-<p>Enter the subscription <code>GET/&gt;</code> into the text field, and click &#34;Subscribe&#34;.  Recall: the <code>&gt;</code> wildcard in Solace is a multi-level wildcard. This subscription will receive anything that is a &#34;GET&#34; request. <img alt="alt-text-here" src="img/f1a85ec757a124ec.png"></p>
+<p>Enter the subscription <code>GET/></code> into the text field, and click &#34;Subscribe&#34;.  Recall: the <code>></code> wildcard in Solace is a multi-level wildcard. This subscription will receive anything that is a &#34;GET&#34; request. <img alt="alt-text-here" src="img/f1a85ec757a124ec.png"></p>
 <p>Resubmit the REST request from before, and it should pop up as a message on the Subscriber&#39;s received messages: <img alt="alt-text-here" src="img/608e4c1983261ac.png"></p>
-<aside class="special"><p>Hooray!!</p>
-</aside>
+<p>Positive : Hooray!!</p>
 <h2 is-upgraded>How about POST requests?</h2>
-<p>In the Subscriber application&#39;s subscription text field, try entering <code>POST/&gt;</code> as a subscription.  Then, submit a different REST request to see how it appears:</p>
+<p>In the Subscriber application&#39;s subscription text field, try entering <code>POST/></code> as a subscription.  Then, submit a different REST request to see how it appears:</p>
 <pre><code>curl -u default:default -X POST &#34;http://localhost:9000/hello/world&#34; -d &#39;{&#34;body&#34;:&#34;hello world!!&#34;,&#34;status&#34;:&#34;great&#34;}&#39; -v
 </code></pre>
 <p class="image-container"><img alt="alt-text-here" src="img/66866a3236c694e3.png"></p>
-<aside class="special"><p>Awesome!!</p>
-</aside>
+<p>Positive : Awesome!!</p>
 
 
       </google-codelab-step>
@@ -386,8 +376,7 @@ No subscription matching topic &#34;GET/test&#34;           &lt;----
     
       <google-codelab-step label="[B] Create a New Queue" duration="4">
         <p>When sending an outbound REST request, we need to configure a <strong>Queue</strong> to (temporarily) store the message before it gets sent out from the RDP.</p>
-<aside class="warning"><p><strong>Note:</strong> if creating a <em>new</em> Message VPN, remember that the VPN&#39;s <code>max-spool-quota</code> size defaults to <strong>0MB</strong>. So when creating a new Message VPN, you must also increase the spool quota for your new VPN.</p>
-</aside>
+<p>Negative : <strong>Note:</strong> if creating a <em>new</em> Message VPN, remember that the VPN&#39;s <code>max-spool-quota</code> size defaults to <strong>0MB</strong>. So when creating a new Message VPN, you must also increase the spool quota for your new VPN.</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Click on &#34;Queues&#34; on the left-hand menu: <img alt="alt-text-here" src="img/5c41560d2a791a94.png"></p>
 <p>Click on &#34;+ Queue&#34; in the top-right to create a new queue: <img alt="alt-text-here" src="img/103a322d6a191dc5.png"></p>
@@ -396,9 +385,8 @@ No subscription matching topic &#34;GET/test&#34;           &lt;----
 <p>Click on the newly created queue to view it: <img alt="alt-text-here" src="img/1f999dda8905da3a.png"></p>
 <p>Click on &#34;Subscriptions&#34;: <img alt="alt-text-here" src="img/c8ec4418974a5f66.png"></p>
 <p>Click on &#34;+ Subscription&#34; in the top-right to add a new subscription(s): <img alt="alt-text-here" src="img/29c0606cb0cb347c.png"></p>
-<p>Add the subscription <code>GET/&gt;</code> for the queue to attract <em>any</em> HTTP GET requests to the queue. Click &#34;Create&#34;: <img alt="alt-text-here" src="img/7fdee8d2ac20f98.png"></p>
-<aside class="warning"><p><strong>Note:</strong> if you&#39;d like to use another HTTP verb – e.g. HTTP POST – then enter a different/another subscription here: e.g. <code>POST/&gt;</code> or restrict it to just the path you want: <code>GET/query</code>)</p>
-</aside>
+<p>Add the subscription <code>GET/></code> for the queue to attract <em>any</em> HTTP GET requests to the queue. Click &#34;Create&#34;: <img alt="alt-text-here" src="img/7fdee8d2ac20f98.png"></p>
+<p>Negative : <strong>Note:</strong> if you&#39;d like to use another HTTP verb – e.g. HTTP POST – then enter a different/another subscription here: e.g. <code>POST/></code> or restrict it to just the path you want: <code>GET/query</code>)</p>
 <p>You can read more about Wilecard Topic Subscriptions <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">here</a></p>
 <h2 is-upgraded>SEMP</h2>
 <p>Create a new queue:</p>
@@ -487,8 +475,7 @@ show message-vpn default rest rest-delivery-point * detail
     
       <google-codelab-step label="[B] Configure a REST Consumer" duration="5">
         <p>The final configuration step on the Solace broker to allow the REST request to pass-through is the <strong>REST Consumer</strong>.  This is where the destination server/host is specified.</p>
-<aside class="warning"><p><strong>Note:</strong> if you want to point the REST Consumer to a different REST API endpoint than the example <code>postman-echo.com</code>, you will amend some configuration settings in this section (e.g. authentication: basic, username/password).</p>
-</aside>
+<p>Negative : <strong>Note:</strong> if you want to point the REST Consumer to a different REST API endpoint than the example <code>postman-echo.com</code>, you will amend some configuration settings in this section (e.g. authentication: basic, username/password).</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>From within the newly created RDP, click on &#34;REST Consumers&#34; in the top menu: <img alt="alt-text-here" src="img/5c78fe3036b77ba8.png"></p>
 <p>Click on &#34;+ REST Consumer&#34; in the top-right to create a new consumer: <img alt="alt-text-here" src="img/48623b8b11c0f79d.png"></p>
@@ -568,8 +555,7 @@ Remote:
   Outgoing Connections (up):         3       &lt;----
   Outgoing Connections (configured): 3       &lt;----
 </code></pre>
-<aside class="special"><p>Yay!</p>
-</aside>
+<p>Positive : Yay!</p>
 
 
       </google-codelab-step>
@@ -619,13 +605,12 @@ Remote:
     
       <google-codelab-step label="[C] Configuring a &#34;Sniffer&#34; App" duration="4">
         <p>Just like we did on the last step of Section A, use the <strong>Try Me!</strong> functionality of the PubSub+ Manager to &#34;snoop&#34; or &#34;sniff&#34; the messages going through Solace:</p>
-<p>Enter the subscriptions <code>GET/&gt;</code> and either <code>#P2P/*/_rest*/&gt;</code> for SolOS &gt;= 9.9 (or <code>#P2P/*/#rest*/&gt;</code> for SolOS &lt; 9.9) into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
+<p>Enter the subscriptions <code>GET/></code> and either <code>#P2P/*/_rest*/></code> for SolOS &gt;= 9.9 (or <code>#P2P/*/#rest*/></code> for SolOS &lt; 9.9) into the subscription text field. The 2nd subscription will receive all point-to-point replies for REST requests. <img alt="alt-text-here" src="img/86b0d684808f1c82.png"></p>
 <p>Re-run the same cURL command from the previous section:</p>
 <pre><code>curl -u default:default &#34;http://localhost:9000/get?hello=world&amp;solace=cool&#34;
 </code></pre>
 <p>Verify cURL still receives a response, but note that you can <strong>also</strong> see the request and reply in the Subscriber window: <img alt="alt-text-here" src="img/6167f19bb4a01a00.png"></p>
-<aside class="special"><p>Similarly, you could configure a Java, C, JavaScript, C#, etc. client application using Solace APIs to receive the exact same messages by subscribing to the exact same topics.</p>
-</aside>
+<p>Positive : Similarly, you could configure a Java, C, JavaScript, C#, etc. client application using Solace APIs to receive the exact same messages by subscribing to the exact same topics.</p>
 <p>This shows that you can have an application passively receive <strong>a copy of all REST request-reply traffic</strong> as it moves through the broker, <strong>without impacting the original actors</strong>. This functionality could be very useful for logging, diagnostics, or audit.</p>
 
 
@@ -635,35 +620,42 @@ Remote:
         <h2 is-upgraded>(AKA Who Needs a REST Server??)</h2>
 <p>Now that we have verified that the REST MicroGateway feature is passing through the various REST requests, let&#39;s take a look at some sample/example code to generate a response using a messaging topic consumer.</p>
 <p>The following section assumes you are using the Solace Java JCSMP API, which is available at our <a href="https://github.com/SolaceSamples/solace-samples-java" target="_blank">Samples GitHub repo</a>. However, the modifications and concepts apply to other Solace APIs and other messaging APIs (JMS, C, C#, JavaScript, etc.).  Other APIs are available on https://github.com/solacesamples/</p>
-<aside class="special"><p>For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: <a href="https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5" target="_blank">Solace Java Samples Part 1</a> and <a href="https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4" target="_blank">Solace Java Samples Part 2</a></p>
-</aside>
+<p>Positive : For a video guide on how to download, setup, run, and configure the Solace Java Samples, check out these videos: <a href="https://www.youtube.com/watch?v=eTcmeLzkFN8&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=5" target="_blank">Solace Java Samples Part 1</a> and <a href="https://www.youtube.com/watch?v=14yUT5pdyBk&list=PLY1Ks8JEfJR5H6LMgs6EJ_SYcDf3IZsjd&index=4" target="_blank">Solace Java Samples Part 2</a></p>
 <h2 is-upgraded>Shutdown the RDP</h2>
-<aside class="warning"><p>Using PubSub+ Manager, CLI, or SEMP: shutdown or disable the RDP to prevent parallel flows from occurring.</p>
-</aside>
+<p>Negative : Using PubSub+ Manager, CLI, or SEMP: shutdown or disable the RDP to prevent parallel flows from occurring.</p>
 <h2 is-upgraded>Make a Replier App</h2>
 <p>Take a look at the <a href="https://github.com/SolaceSamples/solace-samples-java/blob/master/src/main/java/com/solace/samples/BasicReplier.java" target="_blank">Basic Replier (source code)</a> sample application.  We are going to modify it slightly.</p>
 <ol type="1">
-<li>Change the topic subscription from <code>tutorial/requests</code> to <code>GET/&gt;</code>, approximately line 50. (Could be any REST verb, using wildcards or not)</li>
-<li>Inside the <code>onReceive()</code> callback method (approximately line 75), replace the line <code>reply.setText(text);</code> with the following, for something more interesting/dynamic:<pre><code>try {
-    reply.setText(&#34;Your path was: &#34;+request.getProperties().getString(&#34;JMS_Solace_HTTP_target_path_query_verbatim&#34;));
-} catch (Exception e) {
-    reply.setText(text);
-}
+<li>Change the topic subscription from <code>tutorial/requests</code> to <code>GET/></code>, approximately line 50. (Could be any REST verb, using wildcards or not)</li>
+<li>Inside the <code>onReceive()</code> callback method (approximately line 75), replace the line <code>reply.setText(text);</code> with the following, for something more interesting/dynamic:</li>
+</ol>
+<pre><code>    try {
+        reply.setText(&#34;Your path was: &#34;+request.getProperties().getString(&#34;JMS_Solace_HTTP_target_path_query_verbatim&#34;));
+    } catch (Exception e) {
+        reply.setText(text);
+    }
 </code></pre>
-</li>
-<li>Just after the new <code>try { }</code> block, before the reply message is sent as a response to the request, add the following lines:<pre><code>System.out.println(request.dump());  // prints the request message to the console
+<ol type="1">
+<li>Just after the new <code>try { }</code> block, before the reply message is sent as a response to the request, add the following lines:</li>
+</ol>
+<pre><code>System.out.println(request.dump());  // prints the request message to the console
 reply.setApplicationMessageId(request.getApplicationMessageId());  // needed for correlation
 </code></pre>
-</li>
-<li>Run the application, and pass in the required arguments: <code>hostname username@vpn-name [password]</code>.  E.g.:<pre><code>BasicReplier localhost default@default
+<ol type="1">
+<li>Run the application, and pass in the required arguments: <code>hostname username@vpn-name [password]</code>.  E.g.:</li>
+</ol>
+<pre><code>BasicReplier localhost default@default
 </code></pre>
-</li>
-<li>Resubmit the original REST GET request, and you should see following printed to the console of the BasicReplier app:<pre><code>BasicReplier initializing...
+<ol type="1">
+<li>Resubmit the original REST GET request, and you should see following printed to the console of the BasicReplier app:</li>
+</ol>
+<pre><code>BasicReplier initializing...
 Jan 27, 2020 6:22:00 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
 INFO: Connecting to host &#39;orig=localhost, host=localhost&#39; (host 1 of 1, smfclient 2, attempt 1 of 1, this_host_attempt: 1 of 1)
 Jan 27, 2020 6:22:01 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
 INFO: Connected to host &#39;orig=localhost, host=localhost&#39; (smfclient 2)
 Listening for request messages on topic GET/&gt; ... Press enter to exit
+
 Received request, generating response
 Destination:                            Topic &#39;GET/get&#39;
 AppMessageID:                           ID:Solace-d2dc2510dbfe295a
@@ -674,13 +666,15 @@ Message Id:                             7
 ReplyTo:                                Topic &#39;#P2P/v:aa-local-broke/#rest-e135cb328ef67649/GET/get&#39;
 TimeToLive:                             30000
 User Property Map:                      4 entries
-  Key &#39;JMS_Solace_HTTP_field_Accept&#39; (String): */*
-  Key &#39;JMS_Solace_HTTP_field_User-Agent&#39; (String): curl/7.58.0
-  Key &#39;JMS_Solace_HTTP_method&#39; (String): GET
-  Key &#39;JMS_Solace_HTTP_target_path_query_verbatim&#39; (String): get?hello=world&amp;solace=cool
+      Key &#39;JMS_Solace_HTTP_field_Accept&#39; (String): */*
+      Key &#39;JMS_Solace_HTTP_field_User-Agent&#39; (String): curl/7.58.0
+      Key &#39;JMS_Solace_HTTP_method&#39; (String): GET
+      Key &#39;JMS_Solace_HTTP_target_path_query_verbatim&#39; (String): get?hello=world&amp;solace=cool
 </code></pre>
-</li>
-<li>And at the end of the cURL console, you should see the returned payload of &#34;Sample response&#34;:<pre><code>&gt; curl -u default:default &#34;http://localhost:9000/test&#34; -v
+<ol type="1">
+<li>And at the end of the cURL console, you should see the returned payload of &#34;Sample response&#34;:</li>
+</ol>
+<pre><code>&gt; curl -u default:default &#34;http://localhost:9000/test&#34; -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
@@ -699,24 +693,25 @@ User Property Map:                      4 entries
 * Connection #0 to host localhost left intact
 Your path was: get?hello=world&amp;solace=cool              &lt;----
 </code></pre>
-</li>
-</ol>
-<aside class="special"><p>Success!!</p>
-</aside>
+<p>Positive : Success!!</p>
 <h2 is-upgraded>HTTP Response Codes</h2>
 <ol type="1">
-<li>For more advanced HTTP response codes, add the following to the sample code, just before the reply message is sent:<pre><code>SDTMap props = JCSMPFactory.onlyInstance().createMap();
-try {
-    props.putShort(&#34;JMS_Solace_HTTP_status_code&#34;,(short)403);
-    props.putString(&#34;JMS_Solace_HTTP_reason_phrase&#34;,&#34;declined&#34;);
-} catch (SDTException e) {
-    // won&#39;t happen here
-    e.printStackTrace();
-}
-reply.setProperties(props);
+<li>For more advanced HTTP response codes, add the following to the sample code, just before the reply message is sent:</li>
+</ol>
+<pre><code> SDTMap props = JCSMPFactory.onlyInstance().createMap();
+ try {
+        props.putShort(&#34;JMS_Solace_HTTP_status_code&#34;,(short)403);
+        props.putString(&#34;JMS_Solace_HTTP_reason_phrase&#34;,&#34;declined&#34;);
+ } catch (SDTException e) {
+        // won&#39;t happen here
+        e.printStackTrace();
+ }
+ reply.setProperties(props);
 </code></pre>
-</li>
-<li>Restart the Basic Replier, resubmit the REST GET request, and you should see something that looks the following:<pre><code>$ curl -u default:default &#34;http://localhost:9000/test&#34; -v
+<ol type="1">
+<li>Restart the Basic Replier, resubmit the REST GET request, and you should see something that looks the following:</li>
+</ol>
+<pre><code>$ curl -u default:default &#34;http://localhost:9000/test&#34; -v
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 9000 (#0)
@@ -735,10 +730,7 @@ reply.setProperties(props);
 * Connection #0 to host localhost left intact
 Your path was: get?hello=world&amp;solace=cool
 </code></pre>
-</li>
-</ol>
-<aside class="special"><p>Great Success!!</p>
-</aside>
+<p>Positive : Great Success!!</p>
 <h2 is-upgraded>Shared Subscriptions</h2>
 <p>One very useful feature of Solace for this type back-end service is <strong>Shared Subscriptions</strong>.  It allows multiple applications to all subscribe to the same subscription <em>group</em>, and the Solace broker will round-robin deliver the incoming request/message to only one of the consumers within the group.</p>
 
@@ -781,6 +773,7 @@ Your path was: get?hello=world&amp;solace=cool
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
