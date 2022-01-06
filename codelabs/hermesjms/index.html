@@ -68,7 +68,7 @@
 <h2 is-upgraded>Option 1: Use Solace Cloud</h2>
 <ul>
 <li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
-<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need:  <ul>
+<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need: <ul>
 <li>Host:Port (use the JMS URI)</li>
 <li>Message VPN</li>
 <li>Client Username</li>
@@ -90,7 +90,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 </ul>
 <h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
 <ul>
-<li>Contact your Solace PubSub+ appliance administrators and obtain the following:  <ul>
+<li>Contact your Solace PubSub+ appliance administrators and obtain the following: <ul>
 <li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
 <li>The host name or IP address of the appliance hosting your Message-VPN</li>
 <li>A username and password to access the appliance</li>
@@ -193,13 +193,13 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <pre><code>Solace_JMS_SSL_TrustStore=C:\\JMS\\HermesJMS\\truststore.jks
 Solace_JMS_SSL_TrustStorePassword=myTrustStorePassword
 </code></pre>
-<p>c)	Edit the Hermes JMS session in Start HemesJMS to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the &#34;Sessions&#34; area and select Edit...</p>
+<p>c)	Edit the Hermes JMS session in <a href="#start-hermesjms-and-create-a-new-hermes-jms-session" target="_blank">Start HemesJMS</a> to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the &#34;Sessions&#34; area and select Edit...</p>
 <p class="image-container"><img src="img/3151d996a9626303.png"></p>
-<p>d)	Edit the providerURL property to connect to <code>smfs://&lt;event broker IP&gt;:[&lt;SSL port&gt;]</code>.</p>
+<p>d)	Edit the providerURL property to connect to <code>smfs://<event broker IP>:[<SSL port>]</code>.</p>
 <p>e)	Add &#34;userPropertiesFile&#34; property to the connection factory. This value of this property must be the full file name of the solace.jms.properties file that was created earlier in step (a).</p>
 <p class="image-container"><img src="img/5e0f71f8523fcb77.png"></p>
-<h2 is-upgraded>	Configure Hermes JMS session to connect using client certificate authentication</h2>
-<p>a)	&#34;Configure Hermes JMS session to connect securely over SSL&#34; must be done prior to enabling client certificate authentication.</p>
+<h2 is-upgraded>Configure Hermes JMS session to connect using client certificate authentication</h2>
+<p>a)	<a href="#configure-hermes-jms-session-to-connect-securely-over-ssl" target="_blank">&#34;Configure Hermes JMS session to connect securely over SSL&#34;</a> must be done prior to enabling client certificate authentication.</p>
 <p>b)	Edit the solace.jms.properties custom user property file to specify additional properties, modifying them to point to your actual files, and passwords as necessary.</p>
 <pre><code>Solace_JMS_SSL_TrustStore=C:\\JMS\\HermesJMS\\truststore.jks
 Solace_JMS_SSL_TrustStorePassword=myTrustStorePassword
@@ -247,6 +247,7 @@ Solace_JMS_SSL_PrivateKeyPassword=myPrivateKeyPassword
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

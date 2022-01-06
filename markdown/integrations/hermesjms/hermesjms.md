@@ -2,7 +2,7 @@ author: Tamimi
 summary:
 id: hermesjms
 tags: iguide
-categories: Solace, Hermes, Integration
+categories: HermesJMS, Integration
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/hermesjms
