@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nagios
 
-# Integration Guide: nagios
+# Integration Guide: Nagios Monitoring Toolset
 
 ## Overview
 Duration: 0:05:00
