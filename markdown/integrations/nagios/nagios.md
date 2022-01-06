@@ -2,7 +2,7 @@ author: Tamimi
 summary:
 id: nagios
 tags: iguide
-categories: Solace, Integration
+categories: Nagios, Integration
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nagios
@@ -544,7 +544,7 @@ Cacti is performance monitoring tool based on a LAMP stack (Linux/Apache/MySQL/P
 
 Installation of Cacti and dependencies is a topic of its own and beyond the scope of this document. There are instructions and materials available that can be readily used. Here are some lnks:
 
-* [http://docs.cacti.net/manual:088:1_installation.1_install_unix](https://files.cacti.net/docs/pdf/manual.pdf) 
+* [The Cacti Manual](https://files.cacti.net/docs/pdf/manual.pdf) 
 * [http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/](http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/) 
 * [http://www.cacti.net/downloads/docs/html/debugging.html](http://www.cacti.net/downloads/docs/html/debugging.html) 	
 

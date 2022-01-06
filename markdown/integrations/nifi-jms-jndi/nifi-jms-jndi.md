@@ -69,18 +69,58 @@ This integration guide will demonstrate creation of Solace JMS custom sender and
 The following Solace Event Broker resources are required.
 
 
-
-|Resource|Value|Description|
-|---|---|---|
-|Solace Event Broker IP:Port|__IP:Port__|The IP address and port of the Solace Event Broker message backbone. This is the address client’s use when connecting to the Solace Event Broker to send and receive message. This document uses a value of __IP:PORT__.|
-|Message VPN|default|A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.|
-|Client Username|nifi|The client username.|
-|Client Password||Optional client password. |
-|Solace Queue|toNifi|Solace destination of persistent messages consumed by NiFi|
-|Solace Queue|fromNifi|Solace destination of persistent messages published from NiFi|
-|JNDI Connection Factory|/jms/cf/default|The JNDI Connection factory for controlling Solace JMS connection properties|
-|JNDI Queue Name|/JNDI/Q/toNifi|The JNDI name of the queue used in the samples|
-|JNDI Queue Name|/JNDI/Q/fromNifi|The JNDI name of the queue used in the samples|
+<table>
+    <tr>
+        <td>Resource</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>Solace Event Broker IP:Port</td>
+        <td>__IP:Port__</td>
+        <td>The IP address and port of the Solace Event Broker message backbone. This is the address client’s use when connecting to the Solace Event Broker to send and receive message. This document uses a value of __IP:PORT__.</td>
+    </tr>
+    <tr>
+        <td>Message VPN</td>
+        <td>default</td>
+        <td>A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.</td>
+    </tr>
+    <tr>
+        <td>Client Username</td>
+        <td>nifi</td>
+        <td>The client username.</td>
+    </tr>
+    <tr>
+        <td>Client Password</td>
+        <td></td>
+        <td>Optional client password.</td>
+    </tr>
+    <tr>
+        <td>Solace Queue</td>
+        <td>toNifi</td>
+        <td>Solace destination of persistent messages consumed by NiFi</td>
+    </tr>
+    <tr>
+        <td>Solace Queue</td>
+        <td>fromNifi</td>
+        <td>Solace destination of persistent messages published from NiFi</td>
+    </tr>
+    <tr>
+        <td>JNDI Connection Factory</td>
+        <td>/jms/cf/default</td>
+        <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
+    </tr>
+    <tr>
+        <td>JNDI Queue Name</td>
+        <td>/JNDI/Q/toNifi</td>
+        <td>The JNDI name of the queue used in the samples</td>
+    </tr>
+    <tr>
+        <td>JNDI Queue Name</td>
+        <td>/JNDI/Q/fromNifi</td>
+        <td>The JNDI name of the queue used in the samples</td>
+    </tr>
+</table>
 
 ###	Step 1 – Obtain access to Solace JMS API
 
@@ -89,16 +129,48 @@ The Solace JMS jars are required.  They can be obtained on [Solace Developer Por
 ##### Solace JMS Dependencies
 
 The easiest way to integrate Solace and NiFi is using the client libraries available via public [Maven Central](https://mvnrepository.com/artifact/com.solacesystems/sol-jms). You can download the libraries into a directory and reference them directly, the following resources are all required:
-
-|Resource|Value|Description|
-|---|---|---|
-|Solace Common|sol-common-VERSION.jar|Solace common utilities library.|
-|Solace JCSMP|sol-jcsmp-VERSION.jar|Underlying Solace wireline support libraries.|
-|Solace JMS|sol-jms-VERSION.jar|Solace JMS 1.1 compliant libraries.|
-|Apache Commons language|commons-lang-2.6.jar|Common language libraries.|
-|Apache Commons logging|commons-logging-1.2.jar|Common logging libraries|
-|Apache Log4j 2 Core|log4j-core-2.8.2.jar|log4j 2 core libraries|
-|Apache Log4j 2 API|log4j-api-2.8.2.jar|log4j 2 API libraries|
+<table>
+    <tr>
+        <td>Resource</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>Solace Common</td>
+        <td>sol-common-VERSION.jar</td>
+        <td>Solace common utilities library.</td>
+    </tr>
+    <tr>
+        <td>Solace JCSMP</td>
+        <td>sol-jcsmp-VERSION.jar</td>
+        <td>Underlying Solace wireline support libraries.</td>
+    </tr>
+    <tr>
+        <td>Solace JMS</td>
+        <td>sol-jms-VERSION.jar</td>
+        <td>Solace JMS 1.1 compliant libraries.</td>
+    </tr>
+    <tr>
+        <td>Apache Commons language</td>
+        <td>commons-lang-2.6.jar</td>
+        <td>Common language libraries.</td>
+    </tr>
+    <tr>
+        <td>Apache Commons logging</td>
+        <td>commons-logging-1.2.jar</td>
+        <td>Common logging libraries</td>
+    </tr>
+    <tr>
+        <td>Apache Log4j 2 Core</td>
+        <td>log4j-core-2.8.2.jar</td>
+        <td>log4j 2 core libraries</td>
+    </tr>
+    <tr>
+        <td>Apache Log4j 2 API</td>
+        <td>log4j-api-2.8.2.jar</td>
+        <td>log4j 2 API libraries</td>
+    </tr>
+</table>
 
 ### Step 2 – Configuring the Solace Event Broker
 

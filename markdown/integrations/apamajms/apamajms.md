@@ -44,7 +44,7 @@ These links contain information related to this guide:
 
 
 ## Get Solace Messaging
-Duration:: 0:10:00
+Duration: 0:10:00
 
 
 This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:
@@ -220,9 +220,36 @@ The Solace Event Broker needs to be configured with the following configuration 
 * Guaranteed messaging endpoints for receiving messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.
 
-{% include_relative assets/solaceConfig.md %}
+The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-{% include_relative assets/solaceVpn.md content="apama" %}
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+
+#### Creating a Message VPN
+
+If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the "Message VPN" in the connection details page.
+
+This section outlines how to create a message-VPN called "apama" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
+
+
+
+```
+> home
+> enable
+# configure
+(config)# create message-vpn apama
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn apama
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+```
 
 #### Configuring Client Usernames & Profiles
 

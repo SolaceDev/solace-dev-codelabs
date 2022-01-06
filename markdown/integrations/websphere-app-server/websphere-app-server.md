@@ -2,7 +2,7 @@ author: Tamimi
 summary:
 id: websphere-app-server
 tags: iguide
-categories: Solace, Integration
+categories: Websphere, Integration
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/websphere-app-server
@@ -133,9 +133,20 @@ This integration guide will demonstrate the creation of Solace resources and the
 
 To illustrate this integration example, all named resources created on the Solace PubSub+ event broker will have the following prefixes:
 
-| **Resource** | **Prefix** |
-| Non-JNDI resource | solace_%RESOURCE_NAME% |
-| JNDI names | JNDI/Sol/%RESOURCE_NAME% |
+<table>
+    <tr>
+        <td>Resource</td>
+        <td>Prefix</td>
+    </tr>
+    <tr>
+        <td>Non-JNDI resource</td>
+        <td>solace_%RESOURCE_NAME%</td>
+    </tr>
+    <tr>
+        <td>JNDI names</td>
+        <td>JNDI/Sol/%RESOURCE_NAME%</td>
+    </tr>
+</table>
 
 #### Solace Resources
 
@@ -192,20 +203,63 @@ The following Solace PubSub+ event broker resources are required for the integra
 
 To illustrate this integration example, all named resources created in WebSphere application server will have the following prefixes:
 
-| **Resource** | **Prefix** |
-| Non-JNDI resource | j2c_%RESOURCE_NAME% |
-| JNDI names | JNDI/J2C/%RESOURCE_NAME% |
+<table>
+    <tr>
+        <td>Resource</td>
+        <td>Prefix</td>
+    </tr>
+    <tr>
+        <td>Non-JNDI resource</td>
+        <td>j2c_%RESOURCE_NAME%</td>
+    </tr>
+    <tr>
+        <td>JNDI names</td>
+        <td>JNDI/J2C/%RESOURCE_NAME%</td>
+    </tr>
+</table>
 
 #### Application Server Resources
 
 The following WebSphere application server resources are required for the integration example in this document.
 
-| **Resource** | **JNDI Name** | **JNDI Value** | **Description** |
-| Resource Adapter | N/A | N/A | The Solace JMS Resource Adapter packaged as a Standalone RAR package (Implements a JCA compliant Resource Adapter) |
-| J2C connection factory | j2c_cf | JNDI/J2C/CF | A J2C entity used to access a Solace javax.jms.ConnectionFactory (For Outbound messaging) |
-| J2C activation specification | j2c_as | JNDI/J2C/AS | A J2C entity used to initialize a Message Driven Bean and to bind it to a Solace JMS destination using the Solace implementation of javax.jms.MessageListener (For Inbound messaging) |
-| J2C administered object | j2c_request_queue | JNDI/J2C/Q/requests | A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the event broker |
-| J2C administered object | j2c_reply_queue | JNDI/J2C/Q/replies | A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the event broker |
+<table>
+    <tr>
+        <td>Resource</td>
+        <td>JNDI Name</td>
+        <td>JNDI Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>Resource Adapter</td>
+        <td>N/A</td>
+        <td>N/A</td>
+        <td>The Solace JMS Resource Adapter packaged as a Standalone RAR package (Implements a JCA compliant Resource Adapter)</td>
+    </tr>
+    <tr>
+        <td>J2C connection factory</td>
+        <td>j2c_cf</td>
+        <td>JNDI/J2C/CF</td>
+        <td>A J2C entity used to access a Solace javax.jms.ConnectionFactory (For Outbound messaging)</td>
+    </tr>
+    <tr>
+        <td>J2C activation specification</td>
+        <td>j2c_as</td>
+        <td>JNDI/J2C/AS</td>
+        <td>A J2C entity used to initialize a Message Driven Bean and to bind it to a Solace JMS destination using the Solace implementation of javax.jms.MessageListener (For Inbound messaging)</td>
+    </tr>
+    <tr>
+        <td>J2C administered object</td>
+        <td>j2c_request_queue</td>
+        <td>JNDI/J2C/Q/requests</td>
+        <td>A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the event broker</td>
+    </tr>
+    <tr>
+        <td>J2C administered object</td>
+        <td>j2c_reply_queue</td>
+        <td>JNDI/J2C/Q/replies</td>
+        <td>A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the event broker</td>
+    </tr>
+</table>
 
 ### Solace JMS provider Configuration
 
@@ -216,9 +270,30 @@ The following entities on the Solace PubSub+ event broker need to be configured 
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the event broker configuration.
 
-{% include_relative assets/solaceConfig.md %}
+The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-{% include_relative assets/solaceVpn.md content="solace_VPN" %}
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+
+This section outlines how to create a message-VPN called "solace_VPN" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
+
+```
+> home
+> enable
+# configure
+(config)# create message-vpn solace_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn solace_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+```
 
 #### Configuring Client Usernames & Profiles
 
@@ -274,7 +349,7 @@ To enable the JMS clients to connect and look up the queue destination required 
 
 They are configured as follows:
 
-Note: this will configure a connection factory without XA support as the default for the XA property is False. See section [Enabling XA Support for JMS Connection Factories](#enabling-xa-support ) for XA configuration.
+Note: this will configure a connection factory without XA support as the default for the XA property is False. See section Enabling XA Support for JMS Connection Factories for XA configuration.
 ```
 (config)# jndi message-vpn solace_VPN
 (config-jndi)# create connection-factory JNDI/Sol/CF
@@ -369,7 +444,7 @@ The above information is specified across one or more J2C entities depending on 
 The Solace Resource Adapter includes several custom properties for specifying connectivity and authentication details to the Solace event broker.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple event brokers.
 
 Please refer to [WAS-REF](https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html)  and [JCA-1.5](https://jcp.org/en/jsr/detail?id=112 )
- for more details on configuring general JEE authentication options. The [Authentication](#authentication) section below discusses configuration of Solace specific authentication in more detail. 
+ for more details on configuring general JEE authentication options. The Authentication section below discusses configuration of Solace specific authentication in more detail. 
 
 Steps to configure the Solace JMS Resource Adapter:
 
@@ -405,12 +480,38 @@ Steps to configure the Solace JMS Resource Adapter:
 
 The following table summarizes the values used for the resource adapter's bean properties.
 
-| **Name** | **Value** | **Description** |
-| ConnectionURL | tcp://IP:Port | The connection URL to the event broker of the form: `tcp://IP:Port` (Update the value `IP:Port` with the actual event broker message-backbone VRF IP) |
-| MessageVPN | solace_VPN | A Message VPN, or virtual event broker, to scope the integration on the event broker. |
-| UserName | solace_user | The client username credentials on the event broker |
-| Password |  | Optional password of the Client Username on the event broker |
-| ExtendedProps |  | Semicolon-separated list for [advanced control of the connection](https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm) .  For this example, leave empty.  Supported values are shown below. |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>ConnectionURL</td>
+        <td>tcp://IP:Port</td>
+        <td>The connection URL to the event broker of the form: `tcp://IP:Port` (Update the value `IP:Port` with the actual event broker message-backbone VRF IP)</td>
+    </tr>
+    <tr>
+        <td>MessageVPN</td>
+        <td>solace_VPN</td>
+        <td>A Message VPN, or virtual event broker, to scope the integration on the event broker.</td>
+    </tr>
+    <tr>
+        <td>UserName</td>
+        <td>solace_user</td>
+        <td>The client username credentials on the event broker</td>
+    </tr>
+    <tr>
+        <td>Password</td>
+        <td></td>
+        <td>Optional password of the Client Username on the event broker</td>
+    </tr>
+    <tr>
+        <td>ExtendedProps</td>
+        <td></td>
+        <td>Semicolon-separated list for [advanced control of the connection](https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm) .  For this example, leave empty.  Supported values are shown below.</td>
+    </tr>
+</table>
 
 Extended Properties Supported Values:
 
@@ -479,8 +580,18 @@ Steps to create a J2C Connection Factory:
 
 The following table summarizes the values used for the J2C connection factory custom properties.
 
-| **Name** | **Value** | **Description** |
-| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker. |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>ConnectionFactoryJndiName</td>
+        <td>JNDI/Sol/CF</td>
+        <td>The JNDI name of the JMS connection factory as configured on the event broker.</td>
+    </tr>
+</table>
 
 
 ### Configuring Connection Pooling for a connection factory
@@ -493,8 +604,16 @@ The amounts to be set vary, depending on the demand of the WebSphere application
 
 The most relevant values are:
 
-| Maximum connections | Maximum number of connection created for this pool. |
-| Minimum connections | Minimum number of connections maintained in the pool. |
+<table>
+    <tr>
+        <td>Maximum connections</td>
+        <td>Maximum number of connection created for this pool.</td>
+    </tr>
+    <tr>
+        <td>Minimum connections</td>
+        <td>Minimum number of connections maintained in the pool.</td>
+    </tr>
+</table>
 
 Save and return to the resource adapter configuration page.
 
@@ -544,10 +663,28 @@ Steps to create a J2C Activation Specification:
 
 The following table summarizes the values used for the J2C activation specification custom properties.
 
-| **Name** | **Value** | **Description** |
-| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker. |
-| destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the event broker. |
-| destinationType | javax.jms.Queue | The JMS class name for the desired destination type. |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>connectionFactoryJndiName</td>
+        <td>JNDI/Sol/CF</td>
+        <td>The JNDI name of the JMS connection factory as configured on the event broker.</td>
+    </tr>
+    <tr>
+        <td>destination</td>
+        <td>JNDI/Sol/Q/requests</td>
+        <td>The JNDI name of the JMS destination as configured on the event broker.</td>
+    </tr>
+    <tr>
+        <td>destinationType</td>
+        <td>javax.jms.Queue</td>
+        <td>The JMS class name for the desired destination type.</td>
+    </tr>
+</table>
 
 ### Configuring Administered Objects
 
@@ -592,8 +729,28 @@ Steps to create a J2C administered object (of type Queue)
 
 The following table summarizes the values used for the J2C administered object custom properties:
 
-| **Name** | **Value** | **Description** |
-| Destination | JNDI/Sol/Q/replies | The JNDI name of the JMS destination as configured on the event broker. |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>connectionFactoryJndiName</td>
+        <td>JNDI/Sol/CF</td>
+        <td>The JNDI name of the JMS connection factory as configured on the event broker.</td>
+    </tr>
+    <tr>
+        <td>destination</td>
+        <td>JNDI/Sol/Q/requests</td>
+        <td>The JNDI name of the JMS destination as configured on the event broker.</td>
+    </tr>
+    <tr>
+        <td>destinationType</td>
+        <td>javax.jms.Queue</td>
+        <td>The JMS class name for the desired destination type.</td>
+    </tr>
+</table>
 
 ### Redeploy the resource adapter with the new settings
 
@@ -607,8 +764,8 @@ Source code for an Enterprise Java Beans (EJB) application for WebSphere, implem
 There are three variants:
 
 * [EJBSample-WAS/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/websphere/EJBSample-WAS/ejbModule) - used in this basic application sample.
-* EJBSample-WAS-XA-BMT/ejbModule - used in the [Working with XA Transactions](#working-with-xa-transactions) sample.
-* EJBSample-WAS-XA-CMT/ejbModule - used in the [Working with XA Transactions](#working-with-xa-transactions) sample.
+* EJBSample-WAS-XA-BMT/ejbModule - used in the Working with XA Transactions sample.
+* EJBSample-WAS-XA-CMT/ejbModule - used in the Working with XA Transactions sample.
 
 The structure of all variants is the same:
 
@@ -1123,7 +1280,7 @@ The following examples demonstrate how to receive and send messages using EJB tr
 * [EJBSample-WAS-XA-BMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/)
 * [EJBSample-WAS-XA-CMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/)
 
-For building and deployment instructions refer to the [Sample Application Code](#building-the-samples) section.
+For building and deployment instructions refer to the Sample Application Code section.
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
@@ -1303,9 +1460,23 @@ If a message driven bean is de-activated during a replication failover, the bean
 
 To enable WebSphere to attempt to re-activate the de-activated MDB, configure the reconnection custom properties of the J2C activation specification:
 
-| **Custom Property** | **Default Value** | **Description** |
-| reconnectAttempts | 0 | The number of times to attempt to re-activate an MDB after the MDB has failed to activate. |
-| reconnectInterval | 10 | The time interval in seconds to wait between attempts to re-activate the MDB. |
+<table>
+    <tr>
+        <td>Custom Property</td>
+        <td>Default Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>reconnectAttempts</td>
+        <td>0</td>
+        <td>The number of times to attempt to re-activate an MDB after the MDB has failed to activate.</td>
+    </tr>
+    <tr>
+        <td>reconnectInterval</td>
+        <td>10</td>
+        <td>The time interval in seconds to wait between attempts to re-activate the MDB.</td>
+    </tr>
+</table>
 
 ##### Receiving Messages in a Message Driven Bean
 
@@ -1329,16 +1500,42 @@ The following configuration changes are required to use an external JNDI provide
 
 ##### Solace JMS Resource Adapter configuration
 
-Refer to the [Configuring the Solace Resource Adapter properties](#configuring-the-solace-resource-adapter-properties) section to compare to the default setup.
+Refer to the Configuring the Solace Resource Adapter properties section to compare to the default setup.
 
 The following table summarizes the values used for the resource adapter"s bean properties if using an external JNDI store:
 
-| **Name** | **Value** | **Description** |
-| ConnectionURL | PROVIDER_PROTOCOL://IP:Port | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
-| messageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
-| UserName | jndi_provider_username | The username credential on the external JNDI store (not on the event broker) |
-| Password | jndi_provider_password | The password credential on the external JNDI store (not on the event broker) |
-| ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter properties section](#configuring-the-solace-resource-adapter-properties).
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>ConnectionURL</td>
+        <td>PROVIDER_PROTOCOL://IP:Port</td>
+        <td>The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom`</td>
+    </tr>
+    <tr>
+        <td>messageVPN</td>
+        <td></td>
+        <td>The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store.</td>
+    </tr>
+    <tr>
+        <td>UserName</td>
+        <td>jndi_provider_username</td>
+        <td>The username credential on the external JNDI store (not on the event broker)</td>
+    </tr>
+    <tr>
+        <td>Password</td>
+        <td>jndi_provider_password</td>
+        <td>The password credential on the external JNDI store (not on the event broker)</td>
+    </tr>
+    <tr>
+        <td>ExtendedProps</td>
+        <td>java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign)</td>
+        <td>Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the Solace Resource Adapter properties section.</td>
+    </tr>
+</table>
 
 **Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path.
 
@@ -1350,6 +1547,20 @@ Refer to the relevant sections to compare to the default setup.
 
 The following table summarizes the values used for custom properties if using an external JNDI store:
 
-| **Name** | **Value** | **Description** |
-| connectionFactoryJndiName | CONFIGURED_CF_JNDI_NAME | The JNDI name of the JMS connection factory as configured on the external JNDI store. |
-| destination | CONFIGURED_DESTINATION_JNDI_NAME | The JNDI name of the JMS destination as configured on the external JNDI store. |
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Value</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td>connectionFactoryJndiName</td>
+        <td>CONFIGURED_CF_JNDI_NAME</td>
+        <td>The JNDI name of the JMS connection factory as configured on the external JNDI store.</td>
+    </tr>
+    <tr>
+        <td>destination</td>
+        <td>CONFIGURED_DESTINATION_JNDI_NAME</td>
+        <td>The JNDI name of the JMS destination as configured on the external JNDI store.</td>
+    </tr>
+</table>

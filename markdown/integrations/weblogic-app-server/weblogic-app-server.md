@@ -265,9 +265,30 @@ The following entities on the Solace event broker need to be configured at a min
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace event broker configuration.
 
-{% include_relative assets/solaceConfig.md %}
+The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-{% include_relative assets/solaceVpn.md content="solace_VPN" %}
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+
+This section outlines how to create a message-VPN called "solace_VPN" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
+
+```
+> home
+> enable
+# configure
+(config)# create message-vpn solace_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn solace_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+```
 
 #### Configuring Client Usernames & Profiles
 
@@ -323,7 +344,7 @@ To enable the JMS clients to connect and look up the queue destination required 
 
 They are configured as follows:
 
-Note: this will configure a connection factory without XA support as the default for the XA property is False. See section [Enabling XA Support for JMS Connection Factories](#enabling-xa-support ) for XA configuration.
+Note: this will configure a connection factory without XA support as the default for the XA property is False. See section Enabling XA Support for JMS Connection Factories for XA configuration.
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -405,7 +426,7 @@ The above information is specified across one or more J2C entities depending on 
 
 The Solace resource adapter includes several custom properties for specifying connectivity and authentication details to the Solace Event Broker.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple Solace event brokers.
 
-Please refer to [WL-REF] and [JCA-1.5] for more details on configuring general JEE authentication options. The [Authentication](#authentication) section below discusses configuration of Solace specific authentication in more detail. 
+Please refer to [WL-REF] and [JCA-1.5] for more details on configuring general JEE authentication options. The Authentication section below discusses configuration of Solace specific authentication in more detail. 
 
 Steps to configure the Solace JMS Resource Adapter:
 

@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-01-06T14:31:55-08:00",
+  "id": "nagios",
+  "duration": 130,
+  "title": "Integration Guide: nagios",
+  "summary": "",
+  "source": "nagios.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "nagios",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nagios",
+  "url": "nagios"
+}

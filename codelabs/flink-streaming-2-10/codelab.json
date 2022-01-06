@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-01-06T14:08:31-08:00",
+  "id": "flink-streaming-2-10",
+  "duration": 65,
+  "title": "Integration Guide: Feeding Flink Streaming 2.10 from a Solace Message Bus",
+  "summary": "Apache Flink provides an optimized engine that supports distributed, high-performing, always-available, and accurate data streaming applications. Flink Streaming supports high-throughput, fault-tolerant stream processing of live data streams for continuous processing of unbounded datasets.  The Flink Streaming generic SourceFunction is a simple interface that allows third party applications to push data into Flink in an efficient manner.",
+  "source": "flink-streaming-2-10.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "flink",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/flink-streaming-2-10",
+  "url": "flink-streaming-2-10"
+}

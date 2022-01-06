@@ -220,7 +220,7 @@ Solace_JMS_SSL_TrustStore=C:\\JMS\\HermesJMS\\truststore.jks
 Solace_JMS_SSL_TrustStorePassword=myTrustStorePassword
 ```
 
-c)	Edit the Hermes JMS session in [Start HemesJMS](#start-hermesjms-and-create-a-new-hermes-jms-session) to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the "Sessions" area and select Edit…
+c)	Edit the Hermes JMS session in Start HemesJMS to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the "Sessions" area and select Edit…
 
 ![](img/connect-ssl-1.png)
 
@@ -232,7 +232,7 @@ e)	Add "userPropertiesFile" property to the connection factory. This value of th
 
 ###	Configure Hermes JMS session to connect using client certificate authentication
 
-a)	["Configure Hermes JMS session to connect securely over SSL"](#configure-hermes-jms-session-to-connect-securely-over-ssl) must be done prior to enabling client certificate authentication.
+a)	"Configure Hermes JMS session to connect securely over SSL" must be done prior to enabling client certificate authentication.
 
 b)	Edit the solace.jms.properties custom user property file to specify additional properties, modifying them to point to your actual files, and passwords as necessary.
 

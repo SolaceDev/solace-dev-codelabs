@@ -187,9 +187,30 @@ The Solace Event Broker needs to be configured with the following configuration 
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.
 
 
-{% include_relative assets/solaceConfig.md %}
+The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-{% include_relative assets/solaceVpn.md content="Solace_Fuse_VPN" %}
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+
+This section outlines how to create a message-VPN called "solace_VPN" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
+
+```
+> home
+> enable
+# configure
+(config)# create message-vpn solace_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn solace_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+```
 
 #### Configuring Client Usernames & Profiles
 
@@ -269,7 +290,7 @@ For more details refer to the JBoss Fuse document [JBoss Fuse – JMS] and see t
 
 Using the Blueprint dependency injection framework requires modifications to the root element of the XML code from above reference. The JBoss Fuse document [JBoss Fuse – CONTAINER], section "The Blueprint Container", subsection "Blueprint Configuration" describes this. The following is a direct link to the Red Hat documentation related to Blueprint configuration.
 
-* [DeploySimple-Blueprint-Config](https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.0/html/Deploying_into_the_Container/files/DeploySimple-Blueprint-Config.html)
+* [DeploySimple-Blueprint-Config](https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/deploying_into_apache_karaf/deploysimple-blueprint)
 
 Setting up JBoss Fuse requires two steps to be completed. First, the Solace JMS libraries must be deployed in JBoss Fuse. Then either the correct Spring or Blueprint XML configuration file must be deployed. See the following sections for details.
 
@@ -515,7 +536,7 @@ In general the Solace documentation contains the following note regarding reconn
     occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 ```
 
-In [Setting up Solace JNDI References](#setting-up-solace-jndi-references), the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.
+In Setting up Solace JNDI References, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.
 
 ```
 (config)# jndi message-vpn Solace_Fuse_VPN

@@ -1,0 +1,675 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Integration Guide: nagios</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="nagios"
+                  title="Integration Guide: nagios"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nagios">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>Nagios (previously NetSaint) is an open-source monitoring and alerting system that&#39;s widely used to monitor systems, networks and infrastructure. Objects monitored by Nagios are split into two categories: hosts (physical machines) and services (particular functionalities). Nagios does not perform any host or service checks on its own and relies on plugins to do this. This makes it a very modular and flexible solution.</p>
+<p>Extending this &#34;monitoring by plugin&#34; paradigm of Nagios, Solace provides a set of plugin scripts that perform the event broker and VPN monitoring. Following Nagios convention, the plugins add host (event broker) and service (VPN resources) categories.</p>
+<p>Nagiograph parses output and performance data from Nagios plugins and generates graphs and HTML pages for reporting. Nagiograph stores data in RRD (Round Robin Database) files as time series data. RRDTool is an Open source parser that integrates into Shell scripts, Perl, Python, Ruby, Tcl, etc. The following picture illustrates different components and high level data flow.</p>
+<p class="image-container"><img src="img/6101e7f882915679.png"></p>
+<h2 is-upgraded>Audience</h2>
+<p>This document is primarily intended for Solace administrators and operations teams responsible for setting up and monitoring infrastructure.</p>
+<h2 is-upgraded>Related Documentation</h2>
+<p>These documents contain information related to the feature defined in this document:</p>
+<ul>
+<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
+<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace Event Broker Configuration</a></li>
+<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<h3 is-upgraded>Requirements</h3>
+<ul>
+<li>The installation and setup steps require that you have root access on the CentOS server</li>
+<li>The installation and setup steps also require that you have CLI access to the Solace Event Broker</li>
+<li>The Solace Event Broker should be reachable over network from the CentOS server running Nagios</li>
+</ul>
+<h3 is-upgraded>Assumptions</h3>
+<ul>
+<li>This document is based on SolOS version 7.1.1, though earier versions (such as SolOS 6.2) should work without any changes.</li>
+<li>Setup steps in this guide were tested on CentOS 6.3 CentOS 7.0 (both 64 Bit Minimal install).  Command syntax and file locations would vary on other flavors of Linux.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Get Solace Messaging" duration="10">
+        <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Host</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The event broker Message VPN that this client should connect to. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client username. (See Notes below)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client password. (See Notes below)</p>
+</td></tr>
+</table>
+<p>There are several ways you can get access to Solace messaging and find these required properties.</p>
+<h2 is-upgraded>Option 1: Use Solace Cloud</h2>
+<ul>
+<li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
+<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need: <ul>
+<li>Host:Port (use the JMS URI)</li>
+<li>Message VPN</li>
+<li>Client Username</li>
+<li>Client Password</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
+<h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
+<ul>
+<li>Follow <a href="https://solace.com/downloads/" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
+<li>The messaging connectivity information are the following:<ul>
+<li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
+<li>Message VPN: default</li>
+<li>Client Username: sampleUser (can be any value)</li>
+<li>Client Password: samplePassword (can be any value)</li>
+</ul>
+Note: By default, the Solace software event broker &#34;default&#34; message VPN has authentication disabled.</li>
+</ul>
+<h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
+<ul>
+<li>Contact your Solace PubSub+ appliance administrators and obtain the following: <ul>
+<li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
+<li>The host name or IP address of the appliance hosting your Message-VPN</li>
+<li>A username and password to access the appliance</li>
+</ul>
+</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Nagios Setup" duration="15">
+        <h2 is-upgraded>Prerequisites</h2>
+<p>A working Nagios installatin requires the following packages/tools</p>
+<ul>
+<li>Httpd (Apache)</li>
+<li>RRDTool</li>
+<li>GD Grahics library and related Perl modules</li>
+<li>NRPE (Nagios Remote Plugin Executor)</li>
+</ul>
+<pre><code># yum install -y httpd php gcc glibc glibc-common gd gd-devel make net-snmp wget
+# yum install rrdtool perl-rrdtool perl-GD
+# yum install perl-CGI\* perl-Time-HiRes
+</code></pre>
+<h2 is-upgraded>Enabling EPEL</h2>
+<p>The steps for enabling Extra Packge Repositor (EPEL) are release specific and please check for your install.</p>
+<h3 is-upgraded>CentOS 7</h3>
+<pre><code># wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+# rpm -ivh epel-release-7-5.noarch.rpm
+</code></pre>
+<h3 is-upgraded>CentOS 6.3</h3>
+<pre><code>rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+</code></pre>
+<h2 is-upgraded>Installation</h2>
+<pre><code>yum -y install nagios nagios-plugins-all nagios-plugins-nrpe nrpe 
+</code></pre>
+<h2 is-upgraded>Post install setup</h2>
+<h3 is-upgraded>HTTP Setup</h3>
+<p>Setting up an HTTP server (such as Apache) is beyond the scope of this document. Pl refer to the documentation for your HTTP server.  Nagios setup should have dropped the required config file to setup URL Aliases. The file is typically /nagios.cfg (Eg: /etc/httpd/conf.d/nagios.cfg). If Checking Webadmin below doesn&#39;t work, check the httpd config and logs to see if this file was processed.</p>
+<h3 is-upgraded>Firewall setup</h3>
+<p>Firewall setup and making changes to existing firewall configuration is again beyond the scope of this document. For eg, if you are using iptables (default firewall on CentOS), then you may need to explicitly allow incoming connection on required ports (Refer Additional Topics Section)</p>
+<h3 is-upgraded>Nagios Admin User</h3>
+<p>Create password for nagiosadmin user for web access.</p>
+<pre><code># htpasswd –c /etc/nagios/passwd nagiosadmin
+# systemctl restart httpd
+# systemctl restart nagios
+</code></pre>
+<h2 is-upgraded>Verification</h2>
+<p>Point the webbrowser to <code>http://your-server-ip[:port]/nagios</code> Login with the username nagiosadmin and the password above step (htpassword command).</p>
+<p>Sample page is shown below</p>
+<p class="image-container"><img src="img/3f134cb943f75248.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Nagiosgraph Setup" duration="10">
+        <h2 is-upgraded>Prerequisites</h2>
+<p>NagiosGraph installation requires the following packages/tools</p>
+<ul>
+<li>RRDTool and related Perl modules</li>
+<li>GD Graphics Library and related Perl modules</li>
+</ul>
+<pre><code># yum install rrdtool perl-rrdtool perl-GD
+</code></pre>
+<h2 is-upgraded>Installation</h2>
+<pre><code># cd /opt/pkg # or path of your choice
+# wget http://downloads.sourceforge.net/project/nagiosgraph/nagiosgraph/1.5.2/nagiosgraph-1.5.2.tar.gzwget 
+
+# tar xvzf nagiosgraph-1.5.2.tar.gz
+# cd nagiosgraph-1.5.2
+# ./install.pl --check-prereq
+...
+
+# ./install.pl --layout standalone --prefix /usr/local/nagiosgraph --nagios-perfdata-file=/var/log/nagios/perfdata.log --var-dir=/var/nagios/
+... 
+Continue with this configuration? [y] y
+...
+</code></pre>
+<h2 is-upgraded>Post install setup</h2>
+<p>Run the Solace provided Nagios that modify the Config files appropriately. Edit the script and change the file paths if necessary at the top of the script. Running setup_nagiossolace can be deferred until Solace plugins are installed (in following section).If Solace specific tools are not in place or the Config files not setup, corresponding steps will be skipped.</p>
+<pre><code># ./setup_nagiossolace 
+
+Checking required files ...
+...
+
+Setting up config files ... 
+...
+Restarting services ...
+   nagios :
+nagios (pid 4155) is running...
+   httpd :
+...
+</code></pre>
+<h3 is-upgraded>Restarting Services</h3>
+<pre><code># chkconfig httpd on &amp;&amp; chkconfig nagios on
+# systemctl restart httpd
+# systemctl restart nagios
+</code></pre>
+<h2 is-upgraded>Verification</h2>
+<p>The above script adds another host by name &#34;localhost-gr&#34; with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.</p>
+<p class="image-container"><img src="img/f56c36af444279ba.png"></p>
+<p>Clicking on the graph symbols to the right of service name brings up a graph with various time bracket. A sample graph for one of the services (HTTP) for a day is shown below:</p>
+<p class="image-container"><img src="img/5d2dce074c83b543.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace Nagios Plugin Setup" duration="15">
+        <h2 is-upgraded>Prerequisites</h2>
+<p>Solace Nagios plugin requirs the following tools / packages</p>
+<ul>
+<li>Perl modules to handle XML &amp; Nagios</li>
+<li>Solace pluging package</li>
+</ul>
+<pre><code># yum install perl-CPAN perl-XML-LibXML perl-Nagios-Plugin
+
+# perl -MCPAN -e shell
+##
+cpan&gt; install Nagios::Plugin
+cpan&gt; install Nagios::Plugin::DieNicely
+cpan&gt; install LWP::UserAgent
+cpan&gt; install Nagios::Config
+cpan&gt; exit
+</code></pre>
+<h2 is-upgraded>Installation</h2>
+<h3 is-upgraded>Create Sample file</h3>
+<p>Create a sample event broker Config. This file used by the setup script (below) to create commands for this config. This step can also be repeated for other brokers/vpns using the command mk_nagiossolacecfg script.</p>
+<pre><code># cat cfg/solace-vmr2.cfg 
+# change the your_XXX in this file before running setup_nagiossolace script
+HOSTNAME=solace-vmr2
+HOSTIP=192.168.56.102
+HOSTPORT=8080
+USERNAME=admin
+PASSWORD=*****
+VPNNAME=vpn1
+VPN_BRIDGENAME=bridge_vpn1_to_2
+</code></pre>
+<h3 is-upgraded>Setup Plugin</h3>
+<p>Run the setup_nagiossolace script. This will setup both Nagiosgraph and the solace plugin. If Nagisgraph is already setup, the related steps will be skipped.</p>
+<pre><code># ./mk_nagiossolacecfg cfg/solace-vmr2.cfg 
+
+Generating Nagios config for Solace Event Broker ...
+   Using cfgfile cfg/solace-vmr2.cfg
+   Using template file cfg/solace-templaterouter-no_bi_bridge.cfg
+Generating  config ...
+   /etc/nagios/objects/solace-solace-vmr2.cfg :
+Setting up config files ... 
+   /etc/nagios/nagios.cfg :
+</code></pre>
+<h2 is-upgraded>Verification</h2>
+<p>If the sample event broker info is successfully configured, a host entry matching the event broker hostname from Config file will be added to the web page.</p>
+<p>A sample entry is shown below:</p>
+<p class="image-container"><img src="img/7f431bae62db8ff3.png"></p>
+<p>Clicking on the graph icon to the right of the service name brings up the graphs with options. A sample graph is shown below.</p>
+<p class="image-container"><img src="img/8ed2a21df69d3be2.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="NSCA Setup" duration="10">
+        <p>NSCA (Nagios Service check Acceptor) is a daemon that can accept the requests on behalf of Nagios and update the external command file. Nagios would periodically check the external command file and process them.  This &#34;passive check&#34; is a way to push the external status and alerts into Nagios instead of Nagios pulling the status for configured hosts and services &#34;actively&#34;.  The passive check offers more fine grained intervals and useful for near real time status updates and alerting.</p>
+<p class="image-container"><img src="img/8a43f87082990e17.png"></p>
+<h2 is-upgraded>Installation</h2>
+<p>Step 1. Download  NSCA plugin from the Nagios Exchange. The current version as of this writing is 2.9.1 (<a href="http://prdownloads.sourceforge.net/sourceforge/nagios/nsca-2.9.1.tar.gz" target="_blank">http://prdownloads.sourceforge.net/sourceforge/nagios/nsca-2.9.1.tar.gz</a>)</p>
+<p>Step 2. Untar and follow install instructions in the package.</p>
+<pre><code>$ cd /opt/pkg (or directory of your choice)
+$ wget http://prdownloads.sourceforge.net/sourceforge/nagios/nsca-2.9.1.tar.gz (check the nsca site for latest package name and replace)
+$ tar xvzf nsca-2.9.1.tar.gz (adjust version accordingly)
+$ cd /opt/pkg/nsca-2.9.1/ (adjust version accordingly)
+$ ./configure
+*** Configuration summary for nsca 2.9.1 01-27-2012 ***:
+
+ General Options:
+ -------------------------
+ NSCA port:  5667
+ NSCA user:  nagios
+ NSCA group: nagios
+
+$ make all
+</code></pre>
+<h2 is-upgraded>Post install setup</h2>
+<p>Step 1. Run ./setup_nsca script with source and target directories. The default target dir is /usr/local/nsca</p>
+<p>This will generate required Config file and setup nsca as service.</p>
+<p>NOTE: Check Config file /usr/local/nsca/cfg/nsca.cfg and make changes if required, esp to host IP.</p>
+<pre><code># ./setup_nsca -s /opt/pkg/nsca-2.9.1/
+   srcdir /opt/pkg/nsca-2.9.1/ ok
+   target dir /usr/local/nsca ok
+Checking ...
+...
+Installing ...
+...
+Creating service  ...
+Installation complete!
+</code></pre>
+<p>Step 2. Start service</p>
+<p>Now that the component is installed, start it up.</p>
+<pre><code># systemctl restart nsca
+</code></pre>
+<h2 is-upgraded>Verification</h2>
+<p>Use send_alert or send_ngalert.pl wrapper to send an alert to remote host and test. Use send_alert –h / send_ngalert.pl –h for usage info.</p>
+<h3 is-upgraded>Sending Host Alert</h3>
+<pre><code># ./send_ngalert.pl -n vmr3 -c OK -i Status=UP
+Reading server config : /usr/local/nsca/cfg/nsca_server.cfg
+starting send_nsca client ...
+sending host command: vmr3:0: - [Status=UP] 
+Nov  9 15:40:30 centos7-vm nsca[9888]: Handling the connection...
+1 data packet(s) sent to host successfully.
+
+/var/log/messages Logs
+Nov  9 15:40:30 centos7-vm nsca[9888]: Time difference in packet: 0 seconds for host vmr3
+Nov  9 15:40:30 centos7-vm nsca[9888]: HOST CHECK -&gt; Host Name: &#39;vmr3&#39;, Return Code: &#39;0&#39;, Output: &#39; - [Status=UP]&#39;
+Nov  9 15:40:30 centos7-vm nsca[9888]: Attempting to write to nagios command pipe
+[root@centos7-vm bin]# Nov  9 15:40:30 centos7-vm nsca[9888]: End of connection...
+Nov  9 15:40:30 centos7-vm nagios: EXTERNAL COMMAND: PROCESS_HOST_CHECK_RESULT;vmr3;0; - [Status=UP]
+Nov  9 15:40:33 centos7-vm nagios: PASSIVE HOST CHECK: vmr3;0;- [Status=UP]
+Nov  9 15:40:33 centos7-vm nagios: HOST ALERT: vmr3;UP;HARD;1;- [Status=UP]
+</code></pre>
+<h3 is-upgraded>Sending Service Alert</h3>
+<pre><code># ./send_ngalert.pl -n vmr3 -s hardware -c OK -i Status=UP
+Reading server config : /usr/local/nsca/cfg/nsca_server.cfg
+starting send_nsca client ...
+sending service command: vmr3:hardware:0: - [Status=UP] 
+Nov  9 15:41:16 centos7-vm nsca[9888]: Handling the connection...
+1 data packet(s) sent to host successfully.
+</code></pre>
+<p>/var/log/messages Logs</p>
+<pre><code>Nov  9 15:41:16 centos7-vm nsca[9888]: Time difference in packet: 0 seconds for host vmr3
+Nov  9 15:41:16 centos7-vm nsca[9888]: SERVICE CHECK -&gt; Host Name: &#39;vmr3&#39;, Service Description: &#39;hardware&#39;, Return Code: &#39;0&#39;, Output: &#39; - [Status=UP]&#39;
+Nov  9 15:41:16 centos7-vm nsca[9888]: Attempting to write to nagios command pipe
+Nov  9 15:41:16 centos7-vm nsca[9888]: End of connection...
+Nov  9 15:41:16 centos7-vm nagios: EXTERNAL COMMAND: PROCESS_SERVICE_CHECK_RESULT;vmr3;hardware;0; - [Status=UP]
+Nov  9 15:41:23 centos7-vm nagios: PASSIVE SERVICE CHECK: vmr3;hardware;0;- [Status=UP]
+Nov  9 15:41:23 centos7-vm nagios: SERVICE ALERT: vmr3;hardware;OK;SOFT;2;- [Status=UP]
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="NRPE Setup" duration="15">
+        <p>NRPE (Nagios Remote Plugin Executor) enables executing remote plugins on other Linux/Unix machines, allowing monitoring remote resources such as disk usage, CPU load, etc. Unlike NCSA which is a passive check, this is an active check where the Nagios server pulls the information from remote hosts periodically. This requires that NRPE be configured on both the server and the client end, though the client end changes are relatively light.</p>
+<p class="image-container"><img src="img/84b525783e9465fe.png"></p>
+<p>In the following example, we will continue to use the CenOS 7 server as Nagios server and conigure an Ubuntu server as client.</p>
+<h2 is-upgraded>Prerequisites</h2>
+<p>NRPE requires that the client and server communicate over specified port. Default NRPE port is 5666. Ensure that network connectivity exists between the server and client hosts and the ports are open both ways.</p>
+<h2 is-upgraded>Installation</h2>
+<h3 is-upgraded>Server (CentOS)</h3>
+<p>In addition to Nagios server packages, we would need to install the following. These were already covered in previous sections and listed here for completeness and for any standalone installs.</p>
+<ul>
+<li>NRPE</li>
+<li>Nagios Pluggins</li>
+<li>OpenSSL</li>
+</ul>
+<pre><code># yum install -y nrpe nagios-plugins-all openssl  
+</code></pre>
+<h3 is-upgraded>Client (Ubuntu)</h3>
+<p>On the remote client hosts, we would need to install the Nagios plugins and NRPE daemon component.</p>
+<pre><code># apt-get install openssl nagios-nrpe-server nagios-plugins nagios-plugins-basic nagios-plugins-standard
+</code></pre>
+<h2 is-upgraded>Post Install Configuration</h2>
+<h3 is-upgraded>Client Configuration</h3>
+<p>Step 1. Add Nagios server IP to allowed_hosts in nrpe.cfg</p>
+<pre><code># grep ^allowed_hosts /etc/nagios/nrpe.cfg
+allowed_hosts=127.0.0.1,192.168.56.201,192.168.1.223
+</code></pre>
+<p>Step 2. Restart service</p>
+<pre><code>systemctl start  nagios-nrpe-server
+</code></pre>
+<h3 is-upgraded>Server Configuration</h3>
+<p>Step 1. Add config file per client under nagios objects directory. A sample config file for ubuntu server is given in &#34;Setup Scripts and Config Files&#34; section.</p>
+<p>Step 2. Update nagios.cfg (/etc/nagios by default) and add the client config file.</p>
+<p>For eg:</p>
+<pre><code>root@centos7-vm conf.d# tail /etc/nagios/nagios.cfg
+cfg_file=/etc/nagios/objects/nrpe-test1.cfg 
+</code></pre>
+<p>Step 3. Now verify the config and fix any errors</p>
+<pre><code>nagios -v /etc/nagios/nagios.cfg
+</code></pre>
+<p>Step 4. Restart services</p>
+<pre><code># systemctl restart nagios
+# systemctl restart nrpe
+# systemctl restart httpd
+</code></pre>
+<h2 is-upgraded>Verification</h2>
+<p>After susseful NRPE configuration, the newly added host(s) would appear on the Nagios dashboard. In the screenshot below, the added NRPE client (ubuntu-svr) is shown with ping and other NRPE service status.</p>
+<p class="image-container"><img src="img/8c409d3b365968fc.png"></p>
+<h2 is-upgraded>NCSA vs NRPE</h2>
+<p>Both NCSA and NRPE enable remote host monitoring with Nagios. This section looks at the advantages and differences.</p>
+<ol type="1">
+<li>NCSA does passive check. This mean client choses when to send the status to the server. This allowes fine grain control over the update timing and useful for near real time updates</li>
+<li>NCSA doesn&#39;t require any daemon to be running on the client as the client pushes the update periodically. This leads to simpler install</li>
+<li>NRPE does active check. The server pulls the info from the client periodically. This is better suited for centrally adminsterored policies.</li>
+<li>NRPE requires a daemon be runnion on all the clients to service NRPE requests.</li>
+<li>NCSA is not in active development anymore. (no updates since 2013)</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cacti Setup" duration="20">
+        <p>Cacti is performance monitoring tool based on a LAMP stack (Linux/Apache/MySQL/PHP) and RRD (Round Robin Database). It can collect, manage and display graphs of collected data.</p>
+<h2 is-upgraded>Prerequisites</h2>
+<h3 is-upgraded>Cacti Dependencies</h3>
+<ul>
+<li>Apache : A Web server to display network graphs created by PHP and RRDTool.</li>
+<li>MySQL/MariaDB : A Database server to store cacti information. Recent CentOS versions (7.0 including) use MariaDB as default DB for its LAMP stack)</li>
+<li>PHP : A script module to create graphs using RRDTool.</li>
+<li>PHP-SNMP : A PHP extension for SNMP to access data  (Optional and not required for Solace integration, unless using SNMP from Solace)</li>
+<li>NET-SNMP : A SNMP (Simple Network Management Protocol) is used to manage network. (Optional and not required for Solace integration, unless using SNMP from Solace)</li>
+<li>RRDTool : A database tool to manage and retrieve time series data like CPU load, Network Bandwidth etc.</li>
+<li>UnZip : A simple tool for extracting zip files</li>
+</ul>
+<h2 is-upgraded>Installation</h2>
+<p>Installation of Cacti and dependencies is a topic of its own and beyond the scope of this document. There are instructions and materials available that can be readily used. Here are some lnks:</p>
+<ul>
+<li><a href="https://files.cacti.net/docs/pdf/manual.pdf" target="_blank">The Cacti Manual</a></li>
+<li><a href="http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/" target="_blank">http://www.tecmint.com/install-cacti-network-monitoring-on-rhel-centos-6-3-5-8-and-fedora-17-12/</a></li>
+<li><a href="http://www.cacti.net/downloads/docs/html/debugging.html" target="_blank">http://www.cacti.net/downloads/docs/html/debugging.html</a></li>
+</ul>
+<h2 is-upgraded>Post Install Setup</h2>
+<p>This section walks thru the steps to add a sample solace artifiact monitoring to Cacti using web admin. Similar to Nagios, Cacti uses external scripts for gathering the monitoring info. In this example, Queue Depth is used for illustration which can be replaced with any monitoring using right scripts.</p>
+<h3 is-upgraded>Add Custom Data Input method.</h3>
+<p>Select &#34;Script/Command&#39; as Input Type and type in the external script name that would collect the metrics from the Solace Event Broker. Note that &lt;path_cacti&gt; is a predefined variable that can be used. The input arguments for the script need to be both declared on the &#34;Input String&#34; and defined in the &#34;Input Fields&#34; section below. Similarly output expected form the script should be defined in the &#34;Output Fields&#34; section. This is used mostly as a placeholder and Cacti doesn&#39;t do any validation on Output Field.</p>
+<h4 is-upgraded>Data Input</h4>
+<p class="image-container"><img src="img/27cf51ff8e139a84.png"></p>
+<h4 is-upgraded>Input</h4>
+<p class="image-container"><img src="img/200ad248f69825b6.png"></p>
+<h4 is-upgraded>Output</h4>
+<p class="image-container"><img src="img/57c63692c32c46e4.png"></p>
+<h3 is-upgraded>Add Custom Data Template</h3>
+<p>Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (event broker name, vpn name, queue name and credentials).</p>
+<p class="image-container"><img src="img/801d36217d7e5836.png"></p>
+<h3 is-upgraded>Add a custom Graph Template</h3>
+<p>Now create a Graph Template and associate the Data Template defined earlier with the graph template (using Graph Template Items).</p>
+<p class="image-container"><img src="img/190ac62b9b8f5679.png"></p>
+<h3 is-upgraded>Add Solace Event Broker as Device</h3>
+<p>Now add each event broker as a device so graphs for this event broker can all be grouped under here. This will also allow to run host specific services like ping test.</p>
+<p class="image-container"><img src="img/b78a555da4d81b98.png"></p>
+<h4 is-upgraded>Add Data Source List</h4>
+<p>Use &#34;Data Souce List&#34; link above the Device screen and using &#34;Add&#34; link, add the the endpoint stats here. Also shown here is another data source for ping latency for the event broker. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.</p>
+<p class="image-container"><img src="img/f18873014e94518b.png"></p>
+<h4 is-upgraded>Add Graph List</h4>
+<p>Using &#34;Graph List&#34; link above the device screen, add new graph link by clicking &#34;New&#34; link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool</p>
+<p class="image-container"><img src="img/b0b34787d8520514.png"></p>
+<h2 is-upgraded>Verification</h2>
+<h3 is-upgraded>Basic Install</h3>
+<p>Once you have basic Cacti setup up and running, you should be able to access the install and do further configuration thru web admin page at <code>http://<your-server-ip>/cacti</code></p>
+<p>After configuration, you would be able to see basic system metrics for the localhost that would look similar to this</p>
+<p class="image-container"><img src="img/853fe011d801913c.png"></p>
+<h3 is-upgraded>Solace host check</h3>
+<p>Once Solace event broker is added as a device, from he Devices link, you would be able view the event broker with basic health test such as ping status.</p>
+<p class="image-container"><img src="img/4fc37d59360c22b2.png"></p>
+<h3 is-upgraded>Solace VPN Metrics Sample</h3>
+<p>Once VPN artifiact checkings are added, you should be able to view them under Graphs tab. Here is a sample of queue statistics showing queue depth for a single queue on a VPN.</p>
+<p class="image-container"><img src="img/5639e55fdcb6b2cd.png"></p>
+<p>As with any other Cacti graph,  aggrecation over a peroid is  available by clicking on the graph. Here is an example of aggregation of  queue stats over various window period, from hour to year.</p>
+<p class="image-container"><img src="img/832346006beff318.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Additional Topics" duration="20">
+        <h2 is-upgraded>Admin Tasks</h2>
+<h3 is-upgraded>Creating custom Maps</h3>
+<p>Create custom maps for any outputs that need it, for example turn the iface counter values into gauge: Add to /usr/local/nagiosgraph/etc/nagiosgraph/map</p>
+<pre><code>#######################
+# Service type: iface
+#   output:IFACE OK - [Interface:1/6/1,Enabled:yes,Link:yes]
+#   perfdate: rx-pkts=365832598;; rx-bytes=108312525627;; tx-pkts=390410814;; tx-bytes=363571175913;;
+/perfdata:rx-pkts=(\d+);; rx-bytes=(\d+);; tx-pkts=(\d+);; tx-bytes=(\d+);;/
+and push @s, [ &#39;if_stats&#39;,
+                [&#39;tx-pkts&#39;, COUNTER, int $1 ],
+                [&#39;rx-pkts&#39;, COUNTER, int $2 ],
+                [&#39;tx-bytes&#39;, COUNTER, int $3 ],
+                [&#39;rx-bytes&#39;, COUNTER, int $4 ] ];
+</code></pre>
+<h3 is-upgraded>Adding additional event brokers / VPNs</h3>
+<p>Use cfg/samplerouter.cfg as template to create additional event broker, VPN or VPN bridge configuration. Run mk_nagiossolacecfg to generate required solace plugin Config files.</p>
+<p>Alternatively, the files can be edited or added in /etc/nagios/objects dir manually. The corresponding entries need to be added into /etc/nagios/nagios.cfg file.</p>
+<p>Note that the services need to be restarted for the changes to be effective.</p>
+<h3 is-upgraded>Putting Nagios on Verbose mode</h3>
+<p>Change debug level in Nagios config to 2048</p>
+<pre><code># grep ^debug_level  /etc/nagios/nagios.cfg
+debug_level=2048
+</code></pre>
+<p>Now check the debug logs. All commands executed and output will be logged over there.</p>
+<pre><code># tail /var/log/nagios/nagios.debug
+
+[1446670816.003569] [2048.1] [pid=25423] **** BEGIN MACRO PROCESSING ***********
+[1446670816.003572] [2048.1] [pid=25423] Processing: &#39;/usr/bin/perl -w /usr/local/nagios/plugins/queue.pl --router $ARG1$ --user $ARG2$ --pass $ARG3$ --vpn $ARG4$ --queue $ARG5$ --warning $ARG6$ --critical $ARG7$ --checkAvail --quiet&#39;
+[1446670816.003584] [2048.1] [pid=25423]   Done.  Final output: &#39;/usr/bin/perl -w /usr/local/nagios/plugins/queue.pl --router 192.168.56.103:8080 --user admin --pass admin --vpn vpn2 --queue q5 --warning 100 --critical 1000 --checkAvail --quiet&#39;
+[1446670816.003595] [2048.1] [pid=25423] **** END MACRO PROCESSING *************
+</code></pre>
+<h3 is-upgraded>Modifying iptables</h3>
+<p>When you Can&#39;t access http from outside or when telnet to server on port 80 fail, Check Iptables routes:</p>
+<pre><code># iptables -I INPUT 5 -i eth0 -p tcp --dport 80  -m state --state NEW,ESTABLISHED -j ACCEPT
+# iptables -I INPUT 5 -i eth0 -p tcp --dport 443  -m state --state NEW,ESTABLISHED -j ACCEPT
+# iptables-save | tee /etc/sysconfig/iptables
+# service iptables save
+# service iptables restart
+</code></pre>
+<h2 is-upgraded>Troubleshooting</h2>
+<h3 is-upgraded>Nagios not starting up</h3>
+<p>Check Config file for any errors.</p>
+<pre><code># /usr/sbin/nagios -v /etc/nagios/nagios.cfg
+</code></pre>
+<h3 is-upgraded>Can&#39;t connect to HTTP (or other port) from outside</h3>
+<p>When access to port is working form within the box (for localhost) and not form outside, check the iptables.</p>
+<h3 is-upgraded>CGI Error in show.cgi</h3>
+<p>Check http error.log</p>
+<pre><code>[Fri May 02 02:21:12 2014] [error] [client 192.168.150.1] (13)Permission denied: exec of &#39;/usr/local/nagios/sbin/show.cgi&#39; failed, referer: http://192.168.150.137/nagios/cgi-bin//status.cgi?host=all 
+[Fri May 02 02:21:12 2014] [error] [client 192.168.150.1] Premature end of script headers: show.cgi, referer: http://192.168.150.137/nagios/cgi-bin//status.cgi?host=all
+</code></pre>
+<ul>
+<li>Check file and dir permissions. They should be world readable and executable.</li>
+<li>Check SE (Security Enhanced Linux)  Mode</li>
+</ul>
+<pre><code># chmod go+rx /usr/local/nagios/sbin/
+# chmod go+rx /usr/local/nagios/sbin/show.cgi
+# setenforce 0
+
+# service  httpd restart
+# service  nagios  restart
+</code></pre>
+<h3 is-upgraded>CGI Error in Solace graphs</h3>
+<p>Check that the CGI scripts are runnable from command line.</p>
+<p>Check for missing required modules and Perl libraries.</p>
+<pre><code># /usr/local/nagios/plugins/disk.pl -r solace-router:port -u user -p password -v
+DISK OK - Disk 1 [State: up, Enabled: true], Disk 2 [State: up, Enabled: true] RAID [in fully redundant state]
+</code></pre>
+<h3 is-upgraded>Can&#39;t stat command file error</h3>
+<p>If you see error Error: Could not stat() command file ‘/usr/local/nagios/var/rw/nagios.cmd&#39;!</p>
+<pre><code># chcon -R -t httpd_sys_script_rw_t /usr/local/nagios/var/rw
+(change path based on the error message)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup Scripts and Config files" duration="10">
+        <p>This section lists sample config files and setup scripts used in this document. Please check respected product document for most recent syntax for config files.</p>
+<h2 is-upgraded>Install Info</h2>
+<p>Default install paths and files</p>
+<h3 is-upgraded>HTTP (Apache)</h3>
+<ul>
+<li>Config: /etc/httpd/conf/httpd.conf</li>
+<li>Logs: /var/log/httpd/error_log, /var/log/httpd/access_log</li>
+</ul>
+<h3 is-upgraded>Nagios</h3>
+<ul>
+<li>Config file: /etc/nagios/nagios.cfg</li>
+<li>Commands: /etc/nagios/objects/commands.cfg</li>
+<li>Log: /var/log/nagios/nagios.log</li>
+<li>Perfdata log: /var/log/nagios/perfdata.log</li>
+<li>Config Dir: /etc/nagios/objects</li>
+<li>Command file: /var/spool/nagios/cmd/nagios.cmd</li>
+</ul>
+<h3 is-upgraded>RRD</h3>
+<ul>
+<li>Data dir: /var/nagios/rrd</li>
+</ul>
+<h3 is-upgraded>Nagiosgraph</h3>
+<ul>
+<li>Config: /usr/local/nagiosgraph/etc /nagiosgraph.conf</li>
+<li>Apache config: /usr/local/nagiosgraph/etc /nagiosgraph-apache.conf</li>
+<li>Log: /usr/local/nagiosgraph/var/nagiosgraph.log</li>
+</ul>
+<h3 is-upgraded>Nagios Solace</h3>
+<ul>
+<li>Config: /etc/nagios/solace/solace.cfg</li>
+<li>Plugin dir: /usr/local/nagios/plugins</li>
+</ul>
+<h3 is-upgraded>NSCA Daemon and Agent</h3>
+<ul>
+<li>Path: /usr/local/nsca/</li>
+<li>Config (server): /usr/local/nsca/cfg/nsca.cfg</li>
+<li>Config (client): /usr/local/nsca/cfg/nsca_server.cfg, /usr/local/nsca/cfg/nsca_client.cfg</li>
+</ul>
+<h2 is-upgraded>Nagios</h2>
+<p>This section lists minimal files required for Solace Nagios setup. Please contact <a href="http://dev.solace.com/contact-us/" target="_blank">Solace Professional Services</a>  to get a tarball package with the files and required plugin files.</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/setup_nagiossolace.txt" target="_blank">setup_nagiossolace.txt</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/mk_nagiossolace.cfg" target="_blank">mk_nagiossolace.cfg</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/solace.cfg" target="_blank">solace.cfg</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/solace-templaterouter.cfg" target="_blank">solace-templaterouter.cfg</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/samplerouter.cfg" target="_blank">samplerouter.cfg </a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/vmr2.cfg" target="_blank">vmr2.cfg </a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/setup_ncsa" target="_blank">setup_ncsa </a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/send_ngalert.pl" target="_blank">send_ngalert.pl</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/nsca_init" target="_blank">nsca_init</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/nsca_cfg" target="_blank">nsca_cfg</a></li>
+</ul>
+<h2 is-upgraded>NRPE</h2>
+<h3 is-upgraded>Sample server config file</h3>
+<p>Each client host to be monitored with NRPE should have a config file on the server. Here is a sample config file that should be placed on Nagios objects directory (/etc/nagios/objects by default) on the Nagios server.</p>
+<p>This config file does the following checks</p>
+<ul>
+<li>regular host ping check (non NRPE)</li>
+<li>check users (NRPE)</li>
+<li>check load (NRPE)</li>
+</ul>
+<pre><code>cat /etc/nagios/objects/nrpe-test1.cfg 
+
+define host{
+use generic-host
+host_name ubuntu-svr
+alias ubuntu
+address 192.168.1.108
+max_check_attempts 10
+}
+define service{
+use generic-service
+host_name ubuntu-svr
+service_description PING
+check_command check_ping!100.0,20%!500.0,60%
+}
+define service{
+use generic-service
+host_name ubuntu-svr
+service_description Current Load
+check_command check_nrpe!check_load
+}
+define service{
+use generic-service
+host_name ubuntu-svr
+service_description Total Processes
+check_command check_nrpe!check_users
+}
+</code></pre>
+<h3 is-upgraded>Sample Client Config</h3>
+<pre><code># cat /etc/nagios/nrpe.cfg
+log_facility=daemon
+pid_file=/var/run/nagios/nrpe.pid
+server_port=5666
+nrpe_user=nagios
+nrpe_group=nagios
+allowed_hosts=127.0.0.1,192.168.56.201,192.168.1.223
+ 
+dont_blame_nrpe=0
+allow_bash_command_substitution=0
+debug=0
+command_timeout=60
+connection_timeout=300
+command[check_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
+command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[check_hda1]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /dev/hda1
+command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
+command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200 
+include=/etc/nagios/nrpe_local.cfg
+include_dir=/etc/nagios/nrpe.d/
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

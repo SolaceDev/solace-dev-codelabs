@@ -1,0 +1,485 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Integration Guide: Feeding Flink Streaming 2.10 from a Solace Message Bus</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="flink-streaming-2-10"
+                  title="Integration Guide: Feeding Flink Streaming 2.10 from a Solace Message Bus"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/flink-streaming-2-10">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>This document demonstrates how to integrate the Solace Java Message Service (JMS) with Flink Streaming source functions for consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both Flink Streaming and Solace JMS.</p>
+<p>The target audience of this document is developers with knowledge of both Flink and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Flink refer to the referenced documents below.</p>
+<p>This document is divided into the following sections to cover the Solace JMS integration with Flink Streaming:</p>
+<ul>
+<li>Integrating with Flink Streaming</li>
+<li>Working with Solace High Availability</li>
+<li>Debugging Tips</li>
+</ul>
+<h2 is-upgraded>Related Documentation</h2>
+<p>These links contain information related to this guide:</p>
+<ul>
+<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
+<li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
+<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
+<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace Event Broker Configuration</a></li>
+<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
+<li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a></li>
+<li><a href="https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html" target="_blank">Flink SourceFunction Class Documentation</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Get Solace Messaging" duration="10">
+        <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Host</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The event broker Message VPN that this client should connect to. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client username. (See Notes below)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client password. (See Notes below)</p>
+</td></tr>
+</table>
+<p>There are several ways you can get access to Solace messaging and find these required properties.</p>
+<h2 is-upgraded>Option 1: Use Solace Cloud</h2>
+<ul>
+<li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
+<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need: <ul>
+<li>Host:Port (use the JMS URI)</li>
+<li>Message VPN</li>
+<li>Client Username</li>
+<li>Client Password</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
+<h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
+<ul>
+<li>Follow <a href="https://solace.com/downloads/" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
+<li>The messaging connectivity information are the following:<ul>
+<li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
+<li>Message VPN: default</li>
+<li>Client Username: sampleUser (can be any value)</li>
+<li>Client Password: samplePassword (can be any value)</li>
+</ul>
+Note: By default, the Solace software event broker &#34;default&#34; message VPN has authentication disabled.</li>
+</ul>
+<h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
+<ul>
+<li>Contact your Solace PubSub+ appliance administrators and obtain the following: <ul>
+<li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
+<li>The host name or IP address of the appliance hosting your Message-VPN</li>
+<li>A username and password to access the appliance</li>
+</ul>
+</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Integrating with Flink Streaming" duration="30">
+        <p>This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/flink-jms-connector" target="_blank">src/flink-jms-connector</a>.</p>
+<p>The general Flink Streaming support for connectors is documented in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a>. The configuration outlined in this document makes use of a custom SourceFunction to achieve the desired integration with Solace via JMS.</p>
+<p>This integration guide demonstrates how to configure a Flink Streaming application to receive JMS messages using a custom receiver. Accomplishing this requires completion of the following steps.</p>
+<ul>
+<li>Step 1 - Obtain access to Solace event broker and JMS API, see the <a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li>Step 2 - Configuration of the Solace Event Broker.</li>
+<li>Step 3 - Coding a Flink JMS SourceFunction.</li>
+<li>Step 4 - Deploying Flink JMS SourceFunction.</li>
+</ul>
+<h2 is-upgraded>Description of Resources Required</h2>
+<p>This integration guide will demonstrate creation of Solace JMS custom receiver and configuring the receiver to receive messages. This section outlines the resources that are required/created and used in the subsequent sections.</p>
+<h3 is-upgraded>Solace Resources</h3>
+<p>The following Solace Event Broker resources are required.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Event Broker Host</p>
+</td><td colspan="2" rowspan="4"><p>Refer to section <a href="#get-solace-messaging" target="_blank">Get Solace Messaging</a>  for values</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
+</td><td colspan="1" rowspan="1"><p>Q/receiver</p>
+</td><td colspan="1" rowspan="1"><p>Solace destination of persistent messages consumed</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Connection Factory</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/CF/flink</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI Connection factory for controlling Solace JMS connection properties</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/Q/receiver</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 1 – Obtain access to Solace event broker and JMS API</h2>
+<p>The Solace event broker can be obtained one of 2 ways.</p>
+<ol type="1">
+<li>If you are in an organization that is an existing Solace customer, it is likely your organization already has Solace Event Brokers and corporate policies about their use.  You will have to contact your middleware operational team in regards to access to a Solace Event Broker.</li>
+<li>If you are new to Solace or your company does not have development event brokers, you can obtain a trail Solace Virtual Event Broker (VMR) from the <a href="https://solace.com/downloads/" target="_blank">Solace Developer Portal Downloads</a> . For help getting started with your Solace VMR you can refer to <a href="http://dev.solace.com/get-started/start-up-solace-messaging/" target="_blank">Solace VMR Getting Started Guides</a> .</li>
+</ol>
+<p>The Solace JMS jars are required.  They can be obtained on <a href="https://solace.com/downloads/" target="_blank">Solace Developer Portal Downloads</a>  or from <a href="https://mvnrepository.com/artifact/com.solacesystems/sol-jms" target="_blank">Maven Central</a>.</p>
+<h4 is-upgraded>Maven Dependencies</h4>
+<p>The easiest way to integrate Solace and Flink is using the client libraries available via public Maven Repositories, for example:</p>
+<pre><code language="language-xml" class="language-xml">  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+      &lt;artifactId&gt;flink-java&lt;/artifactId&gt;
+      &lt;version&gt;1.1.4&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+      &lt;artifactId&gt;flink-streaming-java_2.10&lt;/artifactId&gt;
+      &lt;version&gt;1.1.4&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;
+      &lt;artifactId&gt;flink-clients_2.10&lt;/artifactId&gt;
+      &lt;version&gt;1.1.4&lt;/version&gt;
+    &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;com.solacesystems&lt;/groupId&gt;
+          &lt;artifactId&gt;sol-jms&lt;/artifactId&gt;
+          &lt;version&gt;10.0.0&lt;/version&gt;
+      &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+</code></pre>
+<p>Or if you downloaded the libraries and are referencing them directly, the following resources are all required:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Common</p>
+</td><td colspan="1" rowspan="1"><p>sol-common-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Solace common utilities library.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace JCSMP</p>
+</td><td colspan="1" rowspan="1"><p>sol-jcsmp-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Underlying Solace wireline support libraries.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace JMS</p>
+</td><td colspan="1" rowspan="1"><p>sol-jms-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Solace JMS 1.1 compliant libraries.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Commons language</p>
+</td><td colspan="1" rowspan="1"><p>commons-lang-2.6.jar</p>
+</td><td colspan="1" rowspan="1"><p>Common language libraries. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Commons logging</p>
+</td><td colspan="1" rowspan="1"><p>commons-logging-1.1.3.jar</p>
+</td><td colspan="1" rowspan="1"><p>Common logging libraries</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Geronimo</p>
+</td><td colspan="1" rowspan="1"><p>geronimo-jms_1.1_spec-1.1.1.jar</p>
+</td><td colspan="1" rowspan="1"><p>Apache Geronimo is an open source server runtime that integrates the best open source projects to create Java/OSGi server runtimes that meet the needs of enterprise developers and system administrators. Our most popular distribution is a fully certified Java EE 6 application server runtime.</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 2 – Configuring the Solace Event Broker</h2>
+<p>The Solace Event Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application.</p>
+<ul>
+<li>A Message VPN, or virtual event broker, to scope the integration on the Solace Event Broker.</li>
+<li>Client connectivity configurations like usernames and profiles</li>
+<li>Guaranteed messaging endpoints for receiving messages.</li>
+<li>Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.</li>
+</ul>
+<p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
+<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm" target="_blank">User Authentication and Authorization</a>.</p>
+<p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
+<p>This section outlines how to create a message-VPN called &#34;Solace_Flink_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
+<pre><code>&gt; home
+&gt; enable
+# configure
+(config)# create message-vpn Solace_Flink_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn Solace_Flink_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Configuring Client Usernames &amp; Profiles</h3>
+<p>This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Event Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.</p>
+<p>The chosen client username of &#34;flink_user&#34; will be required by the Flink application when connecting to the Solace Event Broker.</p>
+<pre><code>(config)# client-profile default message-vpn Solace_Flink_VPN
+(config-client-profile)# message-spool allow-guaranteed-message-receive
+(config-client-profile)# message-spool allow-guaranteed-message-send
+(config-client-profile)# message-spool allow-transacted-sessions
+(config-client-profile)# exit
+(config)#
+(config)# create client-username flink_user message-vpn Solace_Flink_VPN
+(config-client-username)# acl-profile default	
+(config-client-username)# client-profile default
+(config-client-username)# no shutdown
+(config-client-username)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Setting up Guaranteed Messaging Endpoints</h3>
+<p>This integration guide shows receiving messages within the Flink application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is &#34;Q/requests&#34;.</p>
+<pre><code>(config)# message-spool message-vpn Solace_Flink_VPN
+(config-message-spool)# create queue Q/receive
+(config-message-spool-queue)# access-type exclusive
+(config-message-spool-queue)# max-spool-usage 2000
+(config-message-spool-queue)# permission all delete
+(config-message-spool-queue)# no shutdown
+(config-message-spool-queue)# exit
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Setting up Solace JNDI References</h3>
+<p>To enable the JMS clients to connect and look up the Queue destination required by Flink, there are two JNDI objects required on the Solace Event Broker:</p>
+<ul>
+<li>A connection factory: JNDI/CF/flink</li>
+<li>A queue destination: JNDI/Q/receive</li>
+</ul>
+<p>They are configured as follows:</p>
+<pre><code>(config)# jndi message-vpn Solace_Flink_VPN
+(config-jndi)# create connection-factory JNDI/CF/flink
+(config-jndi-connection-factory)# property-list messaging-properties
+(config-jndi-connection-factory-pl)# property default-delivery-mode persistent
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property direct-transport false
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)#
+(config-jndi)# create queue JNDI/Q/receive
+(config-jndi-queue)# property physical-name Q/receive
+(config-jndi-queue)# exit
+(config-jndi)# 
+(config-jndi)# no shutdown
+(config-jndi)# exit
+(config)#
+</code></pre>
+<h2 is-upgraded>Step 3 – Coding a JMS SourceFunction for Flink</h2>
+<p>From <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a> there are details on how to build a custom SourceFunction and a template.  In this section of the document will use this template and build a <code>JMSQueueSource</code>.</p>
+<p>The <code>JMSQueueSource</code> extends <code>org.apache.flink.streaming.api.functions.source.SourceFunction</code>.  This will result in the following methods created:</p>
+<ul>
+<li><code>JMSQueueSource</code> constructor – Synchronously called once as the <code>QueueSource</code> is initially created.</li>
+<li><code>void run()</code> – Asynchronously called once as the SourceFunction is started, which loops accepting messages.</li>
+<li><code>void cancel()</code> – Asynchronously called once as the Receiver is stopped</li>
+</ul>
+<p>The custom <code>SourceFunction</code> also implements <code>ResultTypeQueryable<OUT>;</code> this helps other generic Flink internals operate with the generic <code>OUT</code> type that each specific SourceFunction implementation produces.</p>
+<ul>
+<li><code>TypeInformation<OUT> getProducedType()</code> – invoked by Flink collections to retrieve the <code>TypeInformation<OUT></code> of the custom SourceFunctions generic outputs</li>
+</ul>
+<pre><code language="language-java" class="language-java">public class JMSQueueSource&lt;OUT&gt; implements SourceFunction&lt;OUT&gt;, ResultTypeQueryable&lt;OUT&gt; {
+  public JMSQueueSource ( ) {
+    }
+    @Override
+    public void run() {
+          // TODO Auto-generated 
+    }
+    @Override
+    public void cancel() {
+      // TODO Auto-generated 
+    }
+  @Override
+  public TypeInformation&lt;OUT&gt; getProducedType() {
+      // TODO Auto-generated 
+  }
+}
+</code></pre>
+<p>In the constructor we need to collect information to information needed to connect to Solace and build the JMS environment. To make this completely generic to any JMS implementation, this is passed into the constructor in a completely generic way, compliant with JMS 1.1 and JNDI standards. The vendor-agnostic way to do this in JMS is to use a JNDI naming InitialContext to lookup a JMS ConnectionFactory and all JMS resources used (e.g., queues or topics). The JMS ConnectionFactory is used to create a JMS Connection which is then used to consume JMSMessages from JMS Topics or Queues (types for both are provided in the sample connector library).</p>
+<ul>
+<li><code>jmsEnvironment</code> – The JMS environment properties for the InitialContext; this is used to lookup the connection-factory</li>
+<li><code>cfName</code> – The connection-factory name to retrieve from the JMS InitialContext and use for all connection creation</li>
+<li><code>topicName</code> – Topic string to subscribe to; platform-dependent, will support whatever wildcarding the underlying platform supports</li>
+<li><code>deserializer</code> – A JMS translator instance that knows how to translate specific JMS messages to specific target types</li>
+</ul>
+<pre><code language="language-java" class="language-java">private Hashtable&lt;String, String&gt; _jmsEnv;
+private JMSTranslator&lt;OUT&gt; _deserializer;
+private String _cfName;
+private String _topicName;
+public JMSTopicSource(Hashtable&lt;String,String&gt; jmsEnvironment,
+                          String cfName, String topicName,
+                          JMSTranslator&lt;OUT&gt; deserializer) {
+  _jmsEnv = jmsEnvironment;
+  _cfName = cfName;
+  _topicName = topicName;
+  _deserializer = deserializer;
+}
+</code></pre>
+<ul>
+<li>Next in the run() method we look up the JMS connection factory and queue then connect to receive messages and store them into Flink.</li>
+</ul>
+<pre><code language="language-java" class="language-java">@Override
+public void run() {
+  InitialContext initialContext = null;
+  try {
+    InitialContext jndiContext = new InitialContext(_jmsEnv);
+    ConnectionFactory factory = (ConnectionFactory) jndiContext.lookup(_cfName);
+    Connection connection = factory.createConnection();
+    Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+    MessageConsumer consumer = session.createConsumer(session.createTopic(_topicName));
+    connection.start();
+    while(true) {
+        Message msg = consumer.receive();
+        sourceContext.collect(_deserializer.translate(msg));
+        msg.acknowledge();
+    }
+  } catch (NamingException e) {
+    e.printStackTrace();
+  } catch (JMSException e) {
+    e.printStackTrace();
+  }
+}
+</code></pre>
+<h2 is-upgraded>Step 4 – Coding a JMSTranslator for Your SourceFunction</h2>
+<p>In the example above, we are using a simple <code>JMSTranslator</code> function for JMS <code>TextMessages</code> that is part of the sample project in GitHub: <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/flink-jms-connector" target="_blank">src/flink-jms-connector</a>. Typically, you would implement a custom translator to marshal the contents of the inbound JMS Messages to the type your Flink application expects. While Flink has internal Serializer implementations, we tactically chose to implement serialization separately as it allows us to account for JMS Message properties when translating them into Flink objects.</p>
+<pre><code language="language-java" class="language-java">public class JMSTextTranslator extends JMSTranslator&lt;String&gt; {
+    @Override
+    public String translate(Message msg) throws JMSException {
+        TextMessage txtmsg = (TextMessage) msg;
+        return txtmsg.getText();
+    }
+    @Override
+    public Class&lt;String&gt; outputType() {
+        return String.class;
+    }
+}
+</code></pre>
+<p>Note that the JMSTranslator exposes an outputType() method that returns the Class of output for this translator; this function is exposed by both the <code>JMSTopicSource</code> and <code>JMSQueueSource</code> implementations via the generic ResultTypeQueryable interface implemented for Flink&#39;s generic collections to use:</p>
+<pre><code language="language-java" class="language-java">    @Override
+    public TypeInformation&lt;OUT&gt; getProducedType() {
+        return TypeInformation.of(_deserializer.outputType());
+    }
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Working with Solace High Availability (HA)" duration="5">
+        <p>The <a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a>  section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a Solace Event Broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
+<p>In general the Solace documentation contains the following note regarding reconnection:</p>
+<pre><code>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically
+occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
+</code></pre>
+<p>In the previous section &#34;Setting up Solace JNDI References&#34;, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.</p>
+<pre><code>(config)# jndi message-vpn Solace_Flink_VPN
+(config-jndi)# connection-factory JNDI/CF/flink
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)# exit
+(config)#
+</code></pre>
+<p>Finally ensure that the JNDI Destination you are using points to a Topic not a Queue:</p>
+<pre><code>(config)# jndi message-vpn Solace_Flink_VPN
+(config-jndi)# create topic JNDI/T/recieve
+(config-jndi-queue)# property physical-name Topic/Recieve
+(config-jndi-queue)# exit
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Debugging Tips for Solace JMS API Integration" duration="10">
+        <p>The key component for debugging integration issues with the Solace JMS API is the API logging that can be enabled. How to enable logging in the Solace API is described below.</p>
+<h2 is-upgraded>How to enable Solace JMS API logging</h2>
+<p>Flink was written using Jakarta Commons Logging API (JCL), Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring the Solace JMS API logging is very similar to configuring any other Flink application. The following example shows how to enable debug logging in the Solace JMS API using log4j.</p>
+<p>One note to consider is that since the Solace JMS API has a dependency on the Solace Java API (JCSMP) both of the following logging components should be enabled and tuned when debugging to get full information. For example to set both to debug level:</p>
+<pre><code>log4j.category.com.solacesystems.jms=DEBUG
+log4j.category.com.solacesystems.jcsmp=DEBUG
+</code></pre>
+<p>By default info logs will be written to the consol. This section will focus on using log4j as the logging library and tuning Solace JMS API logs using the log4j properties. Therefore in order to enable Solace JMS API logging, a user must do two things:</p>
+<ul>
+<li>Put Log4j on the classpath.</li>
+<li>Create a log4j.properties configuration file in the root folder of the classpath</li>
+</ul>
+<p>Below is an example Log4j properties file that will enable debug logging within the Solace JMS API.</p>
+<pre><code>log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %t %c{2}:%L - %m%n
+log4j.category.com.solacesystems.jms=DEBUG
+log4j.category.com.solacesystems.jcsmp=DEBUG
+</code></pre>
+<p>With this you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.</p>
+<pre><code>14:35:01,171 DEBUG main client.ClientRequestResponse:75 - Starting request timer (SMP-EstablishP2pSub) (10000 ms)
+14:35:01,171 DEBUG Context_2_ReactorThread client.ClientRequestResponse:83 - Stopping request timer (SMP-EstablishP2pSub)
+14:35:01,173  INFO main jms.SolConnection:151 - Connection created.
+14:35:01,173  INFO main connection.CachingConnectionFactory:298 - Established shared JMS Connection: com.solacesystems.jms.SolConnection@ca3f2d
+14:35:01,180  INFO main jms.SolConnection:327 - Entering start()
+14:35:01,180  INFO main jms.SolConnection:338 - Leaving start() : Connection started.
+14:35:01,180  INFO jmsContainer-1 jms.SolConnection:252 - Entering createSession()
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sample Code Reference" duration="5">
+        <p>A working sample with maven pom build is provided in GitHub with this guide:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/flink-jms-connector" target="_blank">src/flink-jms-connector</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

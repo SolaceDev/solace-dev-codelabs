@@ -1,0 +1,686 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Integration Guide: Red Hat JBoss Fuse v6</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="red-hat-jboss-fuse-v6"
+                  title="Integration Guide: Red Hat JBoss Fuse v6"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/red-hat-jboss-fuse-v6">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>This document demonstrates how to integrate Solace Java Message Service (JMS) with Red Hat JBoss Fuse v6.0 and v6.1 for production and consumption of JMS messages. Red Hat JBoss Fuse supports a variety of different deployment models and dependency injection frameworks. This document describes integration using the OSGi bundle deployment model with the Spring and Blueprint dependency injection frameworks. The goal of this document is to outline best practices for this integration to enable efficient use of both JBoss Fuse and Solace JMS.</p>
+<p>The target audience of this document is developers using JBoss Fuse with knowledge of both JBoss Fuse and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or JBoss Fuse refer to the referenced documents below. This document is divided into the following sections to cover the Solace JMS integration with JBoss Fuse:</p>
+<ul>
+<li>Integrating with JBoss Fuse</li>
+<li>Performance Considerations</li>
+<li>Working with Solace High Availability</li>
+</ul>
+<h2 is-upgraded>Related Documentation</h2>
+<p>These links contain information related to this guide:</p>
+<ul>
+<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
+<li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
+<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
+<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace Event Broker Configuration</a></li>
+<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_fuse/6.0" target="_blank">RedHat JBoss_Fuse Online reference documentation</a></li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.0/html/Deploying_into_the_Container" target="_blank">The Red Hat JBoss Fuse container</a></li>
+<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.0/html/Using_the_JMS_Binding_Component" target="_blank">Using the JMS Binding Component</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Get Solace Messaging" duration="10">
+        <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Host</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The event broker Message VPN that this client should connect to. </p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client username. (See Notes below)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>The client password. (See Notes below)</p>
+</td></tr>
+</table>
+<p>There are several ways you can get access to Solace messaging and find these required properties.</p>
+<h2 is-upgraded>Option 1: Use Solace Cloud</h2>
+<ul>
+<li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
+<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need: <ul>
+<li>Host:Port (use the JMS URI)</li>
+<li>Message VPN</li>
+<li>Client Username</li>
+<li>Client Password</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
+<h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
+<ul>
+<li>Follow <a href="https://solace.com/downloads/" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
+<li>The messaging connectivity information are the following:<ul>
+<li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
+<li>Message VPN: default</li>
+<li>Client Username: sampleUser (can be any value)</li>
+<li>Client Password: samplePassword (can be any value)</li>
+</ul>
+Note: By default, the Solace software event broker &#34;default&#34; message VPN has authentication disabled.</li>
+</ul>
+<h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
+<ul>
+<li>Contact your Solace PubSub+ appliance administrators and obtain the following: <ul>
+<li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
+<li>The host name or IP address of the appliance hosting your Message-VPN</li>
+<li>A username and password to access the appliance</li>
+</ul>
+</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Integrating with JBoss Fuse" duration="40">
+        <p>This integration guide demonstrates how to configure JBoss Fuse to send and receive JMS messages using a shared JMS connection. Accomplishing this requires completion of the following steps:</p>
+<ul>
+<li>Step 1 – Configuration of the Solace Event Broker.</li>
+<li>Step 2 – Configuring JBoss Fuse to connect to the Solace Event Broker.</li>
+<li>Step 3 – Configuring JBoss Fuse to send messages using Solace JMS.</li>
+<li>Step 4 – Configuring JBoss Fuse to receive messages using Solace JMS.</li>
+</ul>
+<h2 is-upgraded>Description of Resources Required</h2>
+<p>This integration guide will demonstrate creation of Solace resources and configuration of JBoss Fuse managed resources. This section outlines the resources that are created and used in the subsequent sections.</p>
+<h3 is-upgraded>Solace Resources</h3>
+<p>The following Solace Event Broker resources are required.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Event Broker Host</p>
+</td><td colspan="2" rowspan="4"><p>Refer to section <a href="#get-solace-messaging" target="_blank">Get Solace Messaging</a>  for values</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Password</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
+</td><td colspan="1" rowspan="1"><p>Q/requests</p>
+</td><td colspan="1" rowspan="1"><p>Solace destination of messages produced and consumed</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Connection Factory</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/CF/fuse</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI Connection factory for controlling Solace JMS connection properties</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/Q/requests</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
+</td></tr>
+</table>
+<h3 is-upgraded>JBoss Fuse Configuration Resources</h3>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JndiTemplate</p>
+</td><td colspan="1" rowspan="1"><p>Solace.JndiTemplate</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JndiObjectFactoryBean</p>
+</td><td colspan="1" rowspan="1"><p>Solace.JndiObjectFactoryBean</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JmsComponent</p>
+</td><td colspan="1" rowspan="1"><p>Solace.JmsComponent</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 1 – Configuring the Solace Event Broker</h2>
+<p>The Solace Event Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within JBoss Fuse:</p>
+<ul>
+<li>A Message VPN, or virtual event broker, to scope the integration on the Solace Event Broker.</li>
+<li>Client connectivity configurations like usernames and profiles</li>
+<li>Guaranteed messaging endpoints for receiving messages.</li>
+<li>Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.</li>
+</ul>
+<p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
+<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm" target="_blank">User Authentication and Authorization</a>.</p>
+<p>This section outlines how to create a message-VPN called &#34;solace_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
+<pre><code>&gt; home
+&gt; enable
+# configure
+(config)# create message-vpn solace_VPN
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn solace_VPN
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Configuring Client Usernames &amp; Profiles</h3>
+<p>This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Event Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.</p>
+<p>The chosen client username of &#34;fuse_user&#34; will be required by JBoss Fuse when connecting to the Solace Event Broker.</p>
+<pre><code>(config)# client-profile default message-vpn Solace_Fuse_VPN
+(config-client-profile)# message-spool allow-guaranteed-message-receive
+(config-client-profile)# message-spool allow-guaranteed-message-send
+(config-client-profile)# message-spool allow-transacted-sessions
+(config-client-profile)# exit
+(config)#
+(config)# create client-username fuse_user message-vpn Solace_Fuse_VPN
+(config-client-username)# acl-profile default    
+(config-client-username)# client-profile default
+(config-client-username)# no shutdown
+(config-client-username)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Setting up Guaranteed Messaging Endpoints</h3>
+<p>This integration guide shows receiving messages within JBoss Fuse from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is &#34;Q/requests&#34;.</p>
+<pre><code>(config)# message-spool message-vpn Solace_Fuse_VPN
+(config-message-spool)# create queue Q/requests
+(config-message-spool-queue)# access-type exclusive
+(config-message-spool-queue)# max-spool-usage 2000
+(config-message-spool-queue)# permission all delete
+(config-message-spool-queue)# no shutdown
+(config-message-spool-queue)# exit
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h2 is-upgraded>Setting up Solace JNDI References</h2>
+<p>To enable the JMS clients to connect and look up the Queue destination required by JBoss Fuse, there are two JNDI objects required on the Solace Event Broker:</p>
+<ul>
+<li>A connection factory: JNDI/CF/fuse</li>
+<li>A queue destination: JNDI/Q/requests</li>
+</ul>
+<p>They are configured as follows:</p>
+<pre><code>(config)# jndi message-vpn Solace_Fuse_VPN
+(config-jndi)# create connection-factory JNDI/CF/fuse
+(config-jndi-connection-factory)# property-list messaging-properties
+(config-jndi-connection-factory-pl)# property default-delivery-mode persistent
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property direct-transport false
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)#
+(config-jndi)# create queue JNDI/Q/requests
+(config-jndi-queue)# property physical-name Q/requests
+(config-jndi-queue)# exit
+(config-jndi)# 
+(config-jndi)# no shutdown
+(config-jndi)# exit
+(config)#
+</code></pre>
+<h2 is-upgraded>Step 2 – JBoss Fuse – Connecting</h2>
+<p>For more details refer to the JBoss Fuse document [JBoss Fuse – JMS] and see the section titled &#34;Configuring the Connection Factory&#34;, sub-section &#34;Using JNDI&#34;. The following is a direct link to the Red Hat documentation related to JNDI setup for the Spring dependency injection framework.</p>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.0/html/using_the_jms_binding_component/esbjmsintro" target="_blank">Using the JMS Binding Component</a></li>
+</ul>
+<p>Using the Blueprint dependency injection framework requires modifications to the root element of the XML code from above reference. The JBoss Fuse document [JBoss Fuse – CONTAINER], section &#34;The Blueprint Container&#34;, subsection &#34;Blueprint Configuration&#34; describes this. The following is a direct link to the Red Hat documentation related to Blueprint configuration.</p>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/deploying_into_apache_karaf/deploysimple-blueprint" target="_blank">DeploySimple-Blueprint-Config</a></li>
+</ul>
+<p>Setting up JBoss Fuse requires two steps to be completed. First, the Solace JMS libraries must be deployed in JBoss Fuse. Then either the correct Spring or Blueprint XML configuration file must be deployed. See the following sections for details.</p>
+<h3 is-upgraded>Install the Solace JMS libraries in JBoss Fuse</h3>
+<p>To install the Solace JMS libraries, copy the required Solace libraries under the JBoss Fuse deploy folder. Following Solace JMS library is required:</p>
+<ul>
+<li><code>sol-jms-<version>.jar</code></li>
+</ul>
+<p>When using Solace JMS version 7.2.1 or earlier, following Solace libraries are additionally required:</p>
+<ul>
+<li><code>sol-common-<version>.jar</code></li>
+<li><code>sol-jcsmp-<version>.jar</code></li>
+</ul>
+<p>The following figure specifies where to deploy 3rd party (Solace) JMS libraries for JBoss Fuse to be able to pick up necessary classes when initiating connection to the Solace JMS provider.</p>
+<p class="image-container"><img src="img/2b8e382d0beffd5.png"></p>
+<p>In this case the directory where the Solace JMS libraries should be copied is $FuseHomeDirectory/deploy.</p>
+<h3 is-upgraded>JBoss Fuse Configuration</h3>
+<p>JBoss Fuse will be configured either through the Spring or the Blueprint dependency injection frameworks. For a comparison and more information about the two frameworks, refer to the JBoss Fuse document [JBoss Fuse – CONTAINER], section &#34;Dependency Injection Frameworks&#34; &#34;, subsection &#34;Spring and Blueprint Frameworks&#34;:</p>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_integration/2020-q2/html/deploying_camel_k_integrations_on_openshift/introduction-to-camel-k" target="_blank">DeployCamel-Frameworks</a></li>
+</ul>
+<h4 is-upgraded>Option 1: JBoss Fuse Configuration using Spring configuration file</h4>
+<p>It is necessary to create and deploy a Spring XML configuration file under the JBoss Fuse deploy folder. The following is a sample Spring configuration showing necessary configuration in order to successfully connect to the Solace Event Broker. The XML configuration file can have any name, e.g.: spring.xml</p>
+<pre><code language="language-xml" class="language-xml">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;beans 
+  xmlns=&#34;http://www.springframework.org/schema/beans&#34;
+  xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+  xmlns:camel=&#34;http://camel.apache.org/schema/spring&#34;
+  xsi:schemaLocation=&#34;
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd&#34;&gt;
+
+  &lt;bean id=&#34;Solace.JndiTemplate&#34; 
+        class=&#34;org.springframework.jndi.JndiTemplate&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;props&gt;
+        &lt;prop key=&#34;java.naming.provider.url&#34;&gt;smf://__IP:PORT__&lt;/prop&gt;
+        &lt;prop key=&#34;java.naming.factory.initial&#34;&gt;
+          com.solacesystems.jndi.SolJNDIInitialContextFactory
+        &lt;/prop&gt;
+        &lt;prop key=&#34;java.naming.security.principal&#34;&gt;fuse_user@Solace_Fuse_VPN&lt;/prop&gt;
+      &lt;/props&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;Solace.JndiObjectFactoryBean&#34;  
+        class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;Solace.JndiTemplate&#34;/&gt;
+    &lt;property name=&#34;jndiName&#34; value=&#34;JNDI/CF/fuse&#34;/&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;Solace.JndiDestinationResolver&#34; 
+        class=&#34;org.springframework.jms.support.destination.JndiDestinationResolver&#34;&gt;
+    &lt;property name=&#34;jndiTemplate&#34; ref=&#34;Solace.JndiTemplate&#34; /&gt;
+    &lt;property name=&#34;cache&#34; value=&#34;true&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id=&#34;Solace.JmsComponent&#34; class=&#34;org.apache.camel.component.jms.JmsComponent&#34;&gt; 
+    &lt;property name=&#34;connectionFactory&#34; ref=&#34;Solace.JndiObjectFactoryBean&#34;/&gt; 
+    &lt;property name=&#34;destinationResolver&#34; ref=&#34;Solace.JndiDestinationResolver&#34; /&gt;
+  &lt;/bean&gt;
+
+  &lt;!-- Configures the Camel Context--&gt;
+    
+  &lt;camelContext xmlns=&#34;http://camel.apache.org/schema/spring&#34;&gt;
+  &lt;/camelContext&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>The following table explains the configuration and its purpose when connecting to the Solace Event Broker.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Bean Id</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace.JndiTemplate</p>
+</td><td colspan="1" rowspan="1"><p>This template outlines general connection details for reaching the Solace JNDI hosted on the Solace Event Broker. The Solace JNDI is used to look up parameters for client connections and for destinations.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace.JndiObjectFactoryBean</p>
+</td><td colspan="1" rowspan="1"><p>This references a specific connection factory within the Solace JNDI that will be used when creating new connections. The value for &#34;jndiName&#34; is the connection factory name as configured in the Solace JNDI. In the previous section this was configured as &#34;JNDI/CF/fuse&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace.JndiDestinationResolver</p>
+</td><td colspan="1" rowspan="1"><p>The JndiDestinationResolver allows destinations to be resolved dynamically using JNDI. Because a JNDI lookup is an expensive request, the JndiDestinationResolver also allows for caching of destinations through the setCache() method. When using this destination resolver with Solace JMS, it is very important to enable destination caching for Solace JMS to work effectively. By default this is enabled in the Spring Framework.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace.JmsComponent</p>
+</td><td colspan="1" rowspan="1"><p>The cached connection factory allows for re-use of the Solace connection when sending messages. For efficient integration within the Spring Framework, it is essential that connection caching be enabled and configured correctly. There are more details on this in Section 4 Performance Considerations including discussion of the sessionCacheSize attribute. It is this connection factory that is used by the producer and consumer clients when connecting.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>camelContext</p>
+</td><td colspan="1" rowspan="1"><p>This will be used in subsequent sections to send and receive messages.</p>
+</td></tr>
+</table>
+<h4 is-upgraded>Option 2: JBoss Fuse Configuration using Blueprint configuration file</h4>
+<p>Similarly to Option 1, it is necessary to create and deploy a Blueprint XML configuration file under the JBoss Fuse deploy folder. The following is a sample Blueprint configuration showing necessary configuration in order to successfully connect to the Solace Event Broker. The XML configuration file can have any name, e.g.: blueprint.xml</p>
+<pre><code language="language-xml" class="language-xml">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;blueprint xmlns=&#34;http://www.osgi.org/xmlns/blueprint/v1.0.0&#34;
+    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;&gt;
+
+
+    &lt;bean id=&#34;Solace.JndiTemplate&#34;
+        class=&#34;org.springframework.jndi.JndiTemplate&#34;&gt;
+        &lt;property name=&#34;environment&#34;&gt;
+          &lt;props&gt;
+             &lt;prop key=&#34;java.naming.provider.url&#34;&gt;smf://__IP:PORT__&lt;/prop&gt;
+             &lt;prop key=&#34;java.naming.factory.initial&#34;&gt;
+               com.solacesystems.jndi.SolJNDIInitialContextFactory
+             &lt;/prop&gt;
+             &lt;prop key=&#34;java.naming.security.principal&#34;&gt;fuse_user@Solace_Fuse_VPN&lt;/prop&gt;
+          &lt;/props&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&#34;Solace.JndiObjectFactoryBean&#34;
+        class=&#34;org.springframework.jndi.JndiObjectFactoryBean&#34; init-method=&#34;afterPropertiesSet&#34;&gt;
+        &lt;property name=&#34;jndiTemplate&#34; ref=&#34;Solace.JndiTemplate&#34;/&gt;
+        &lt;property name=&#34;jndiName&#34; value=&#34;JNDI/CF/fuse&#34;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&#34;Solace.JndiObjectFactoryBeanRef&#34; factory-ref=&#34;Solace.JndiObjectFactoryBean&#34; factory-method=&#34;getObject&#34; /&gt;
+    &lt;bean id=&#34;Solace.JndiDestinationResolver&#34;
+        class=&#34;org.springframework.jms.support.destination.JndiDestinationResolver&#34;&gt;
+        &lt;property name=&#34;jndiTemplate&#34; ref=&#34;Solace.JndiTemplate&#34; /&gt;
+        &lt;property name=&#34;cache&#34; value=&#34;true&#34; /&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&#34;Solace.JmsComponent&#34; class=&#34;org.apache.camel.component.jms.JmsComponent&#34;&gt;
+        &lt;property name=&#34;connectionFactory&#34; ref=&#34;Solace.JndiObjectFactoryBeanRef&#34;/&gt;
+        &lt;property name=&#34;destinationResolver&#34; ref=&#34;Solace.JndiDestinationResolver&#34; /&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures the Camel Context--&gt;
+    
+    &lt;camelContext xmlns=&#34;http://camel.apache.org/schema/blueprint&#34;&gt;
+    &lt;/camelContext&gt;
+
+&lt;/blueprint&gt;
+</code></pre>
+<p>The configuration and its purpose are the same as explained in the above table. The differences in the structure are specific to Blueprint.</p>
+<h2 is-upgraded>Step 3 – JBoss Fuse – Sending Messages to Solace</h2>
+<p>To send messages to Solace, a camel route must be defined. The following modifications to the configuration file created above in Step 2 show an example of simple message sending.</p>
+<p>To the previous XML configuration, add a route element with &#34;to&#34; child which specifies the Solace JMS JNDI name of the destination used for sending.</p>
+<pre><code language="language-xml" class="language-xml">&lt;camelContext xmlns=&#34;http://camel.apache.org/schema/spring&#34;&gt;
+  &lt;route id=&#34;pubtosolace&#34;&gt;
+    &lt;from uri=&#34;timer:simple?period=5000&#34;/&gt;
+    &lt;setBody&gt;
+      &lt;simple&gt;Solace Camel JMS Test&lt;/simple&gt;
+    &lt;/setBody&gt;
+    &lt;to uri=&#34;Solace.JmsComponent:queue:JNDI/Q/requests&#34;/&gt;
+  &lt;/route&gt;
+&lt;/camelContext&gt;
+</code></pre>
+<p>With the above configuration in place JBoss Fuse when started will publish text messages every 5 seconds to Solace queue associated with a JNDI name &#34;JNDI/Q/requests&#34;. The content of the messages will be &#34;Solace Camel JMS Test&#34;.</p>
+<h2 is-upgraded>Step 4 – JBoss Fuse – Receiving Messages from Solace</h2>
+<p>To receive messages from Solace, a camel route must be defined. The following modifications to the XML configuration file created above in Step 2 show an example of simple messages receiving.</p>
+<p>To the previous configuration, add a route element with &#34;from&#34; child which specifies the Solace JMS JNDI name of the queue destination acting as source for the messages.</p>
+<pre><code language="language-xml" class="language-xml">&lt;camelContext xmlns=&#34;http://camel.apache.org/schema/spring&#34;&gt;
+  &lt;route id=&#34;recvFromSolace&#34;&gt;
+    &lt;from uri=&#34;Solace.JmsComponent:queue:JNDI/Q/requests&#34;/&gt;
+    &lt;to uri=&#34;log:SOLACE&#34;/&gt;
+  &lt;/route&gt;
+&lt;/camelContext&gt;
+</code></pre>
+<p>With the above configuration in place JBoss Fuse when started will subscribe to Solace queue associated with a JNDI name &#34;JNDI/Q/requests&#34;. Every message it consumes will be logged to the JBoss Fuse log file with a &#34;SOLACE&#34; tag.</p>
+<h2 is-upgraded>Known JBoss Fuse 6.1 issue and workaround</h2>
+<p>When using JBoss Fuse v6.1, the &#34;felix.threading&#34; configuration in $FuseHomeDirectory/etc/config.properties must be modified as described in:</p>
+<ul>
+<li><a href="https://issues.jboss.org/browse/ENTESB-1567" target="_blank">https://issues.jboss.org/browse/ENTESB-1567</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Performance Considerations" duration="15">
+        <h2 is-upgraded>Caching JMS Connections</h2>
+<p>In JBoss Fuse, the connection object caching is controlled by the CachingConnectionFactory. A CachingConnectionFactory contains a single JMS Connection which is reused across all JmsTemplates. In order to enable session caching within the JMS Connection, the sessionCacheSize parameter must be set to specify the number of JMS Session objects to cache for reuse.</p>
+<p>One behavior worth noting is that as outlined in the JBoss Fuse Spring documentation, if the pool of cached sessions is fully utilized and a further request for a cached Session is made, then the requested Session will be created and disposed on demand. If you couple this behavior with the fact that the default value is 1 for sessionCacheSize it is important to configure this to a value that is applicable to the end application to avoid the undesirable behaviour of create and dispose on each call to send a message during periods of high demand. This value should be set to the maximum concurrency required by the application.</p>
+<p>The following configuration sample illustrates how to set the CachingConnectionFactory cache sizes.</p>
+<pre><code language="language-xml" class="language-xml">&lt;bean id=&#34;Solace.CachedConnectionFactory&#34; class=&#34;org.springframework.jms.connection.CachingConnectionFactory&#34;&gt; 
+  &lt;property name=&#34;targetConnectionFactory&#34; ref=&#34;Solace.JndiObjectFactoryBean&#34; /&gt; 
+  &lt;property name=&#34;sessionCacheSize&#34; value=&#34;10&#34; /&gt; 
+&lt;/bean&gt; 
+</code></pre>
+<p>The XML code listings in the Appendix show how to integrate SolaceCachedConnectionFactory into the appropriate configuration files.</p>
+<h2 is-upgraded>Concurrent Consumers</h2>
+<p>One can specify number of concurrent threads processing exchanges to consume messages from a non-exclusive queue in a round robin fashion. This helps consume messages from a specified queue faster. Set the JMS query option, concurrentConsumers, to create a thread pool of competing consumers. For example, the following route creates a pool of three competing threads that pick messages from the specified queue:</p>
+<pre><code language="language-xml" class="language-xml">&lt;route id=&#34;pubtosolace1&#34;&gt;
+  &lt;from uri=&#34;Solace.JmsComponent:queue:JNDI/Q/requests?concurrentConsumers=5&#34;/&gt;
+  &lt;to uri=&#34;Solace.JmsComponent:queue:JNDI/Q/response&#34;/&gt;
+&lt;/route&gt;
+</code></pre>
+<p>Ideally, the value of the property &#34;sessionCacheSize&#34; should be kept equal to the number of concurrent consumers to get the best performance.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Working with Solace High Availability (HA)" duration="10">
+        <p>The [Solace-JMS-REF] section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a Solace Event Broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
+<p>In general the Solace documentation contains the following note regarding reconnection:</p>
+<pre><code>    Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically
+    occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
+</code></pre>
+<p>In Setting up Solace JNDI References, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.</p>
+<pre><code>(config)# jndi message-vpn Solace_Fuse_VPN
+(config-jndi)# create connection-factory JNDI/CF/fuse
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)# exit
+(config)#
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Debugging Tips for Solace JMS API Integration" duration="5">
+        <p>The key component for debugging integration issues with the Solace JMS API is the API logging that can be enabled. How to enable logging in the Solace API is described below.</p>
+<h2 is-upgraded>How to enable Solace JMS API logging</h2>
+<p>The [JBoss Fuse – CONF], section &#34;Logging&#34; has details on configuring logging for JBoss Fuse. Since the Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring the Solace JMS API logging is very similar to configuring any other JBoss Fuse logging.</p>
+<p>JBoss Fuse default logging level for all packages is INFO. The default logging level for Solace JMS API can be configured by editing $FuseHomeDirectory/etc/org.ops4j.pax.logging.cfg and adding following lines.</p>
+<p>One note to consider is that since the Solace JMS API has a dependency on the Solace Java API (JCSMP) both of the following logging components should be enabled and tuned when debugging to get full information. For example to set both to debug level:</p>
+<pre><code>log4j.category.com.solacesystems.jms=DEBUG
+log4j.category.com.solacesystems.jcsmp=DEBUG
+</code></pre>
+<p>The JBoss Fuse console can also be used to dynamically change the logging level for the Solace JMS API packages:</p>
+<pre><code>JBossFuse:karaf@root&gt; log:set DEBUG com.solacesystems.jms
+JBossFuse:karaf@root&gt; log:set DEBUG com.solacesystems.jcsmp
+</code></pre>
+<p>JBoss Fuse writes all logs into the $FuseHomeDirectory/data/log/fuse.log common log file by default. As outlined in the [JBoss Fuse – CONF], it is possible to reconfigure JBoss Fuse logging so that it writes one log file for each bundle.</p>
+<pre><code>FuseESB:karaf@root&gt; config:edit org.ops4j.pax.logging
+FuseESB:karaf@root&gt; config:propset log4j.rootLogger &#34;INFO, out, sift, osgi:VmLogAppender&#34;
+FuseESB:karaf@root&gt; config:update
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Advanced Topics" duration="30">
+        <h2 is-upgraded>Authentication</h2>
+<p>JMS Client authentication is handled by the Solace Event Broker. The Solace Event Broker supports a variety of authentications schemes as described in [Solace-FG] in the Section &#34;Client Authentication and Authorization&#34;.  The required JMS authentication properties can be set in the JndiTemplate configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of &#34;fuse_user&#34; and password of &#34;fuse_password&#34;.</p>
+<pre><code language="language-xml" class="language-xml">&lt;bean id=&#34;Solace.JndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;props&gt;
+        &lt;prop key=&#34;java.naming.provider.url&#34; value=&#34;smf://___IP:PORT___&#34; /&gt;
+        &lt;prop key=&#34;java.naming.factory.initial&#34;
+               value=&#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34; /&gt;
+        &lt;prop key=&#34;java.naming.security.principal&#34; 
+               value=&#34;fuse_user@Solace_Fuse_VPN&#34; /&gt;
+        &lt;prop key=&#34;java.naming.security.credentials&#34; 
+               value=&#34;fuse_password&#34; /&gt;
+      &lt;/props&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+</code></pre>
+<h2 is-upgraded>Using SSL Communication</h2>
+<p>This section outlines how to update the Solace Event Broker and JBoss Fuse configuration to switch the client connection to using secure connections with the Solace Event Broker. For the purposes of illustration, this section uses a server certificate on the Solace Event Broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-FP] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.</p>
+<p>To change a JBoss Fuse application from using a plain text connection to a secure connection you must do two things:</p>
+<ol type="1">
+<li>The Solace Event Broker configuration must be updated</li>
+<li>The Solace JMS configuration within JBoss Fuse.</li>
+</ol>
+<h3 is-upgraded>Configuring the Solace Event Broker</h3>
+<p>To enable secure connections to the Solace Event Broker, the following configuration must be updated on the Solace Event Broker:</p>
+<ul>
+<li>Server Certificate</li>
+<li>TLS/SSL Service Listen Port</li>
+<li>Enable TLS/SSL over SMF in the Message VPN</li>
+</ul>
+<p>The following sections outline how to configure these items.</p>
+<h4 is-upgraded>Configure the Server Certificate</h4>
+<p>Before, starting, here is some background detail on the server certificate required by the Solace Event Broker. This is from the [Solace-FP] section &#34;Setting a Server Certificate&#34;</p>
+<pre><code>    To enable the exchange of information through TLS/SSL-encrypted SMF service, you must set the TLS/SSL server
+    certificate file that the Solace Event Broker is to use. This server certificate is presented to a client during
+    the TLS/SSL handshakes. A server certificate used by a event broker must be an x509v3 certificate and
+    it must include a private key. The server certificate and key use an RSA algorithm for private key generation,
+    encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
+
+    The single server certificate file set for the event broker can have a maximum chain depth of three (that is,
+    the single certificate file can contain up to three certificates in a chain that can be used for the certificate
+    verification).
+</code></pre>
+<p>To configure the server certificate, first copy the server certificate to the Solace Event Broker. For the purposes of this example, assume the server certificate file is named &#34;mycert.pem&#34;.</p>
+<pre><code># copy sftp://[&lt;username&gt;@]&lt;ip-addr&gt;/&lt;remote-pathname&gt;/mycert.pem /certs
+&lt;username&gt;@&lt;ip-addr&gt;&#39;s password:
+#
+</code></pre>
+<p>Then set the server certificate for the Solace Event Broker.</p>
+<pre><code>(config)# ssl server-certificate mycert.pem
+</code></pre>
+<h4 is-upgraded>Configure TLS/SSL Service Listen Port</h4>
+<p>By default, the Solace Event Broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace Event Broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.</p>
+<pre><code>(config)# service smf
+(config-service-smf)# shutdown
+All SMF and WEB clients will be disconnected.
+Do you want to continue (y/n)? y
+(config-service-smf)# listen-port 55403 ssl
+(config-service-smf)# no shutdown
+(config-service-smf)# exit
+(config)#
+</code></pre>
+<h4 is-upgraded>Enable TLS/SSL within the Message VPN</h4>
+<p>By default within Solace message VPNs both the plain-text and SSL services are enabled. If the Message VPN defaults remain unchanged, then this section can be skipped. However, if within the current application VPN, this service has been disabled, then for secure communication to succeed it should be enabled. The steps below show how to enable SSL within the SMF service to allow secure client connections from the JBoss Fuse.</p>
+<pre><code>(config)# message-vpn Solace_Spring_VPN
+(config-msg-vpn)# service smf
+(config-msg-vpn-service-smf)# ssl
+(config-msg-vpn-service-ssl)# no shutdown
+(config-msg-vpn-service-ssl)# exit
+(config-msg-vpn-service-smf)# exit
+(config-msg-vpn-service)# exit
+(config-msg-vpn)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>JBoss Fuse Configuration</h3>
+<p>The JBoss Fuse configuration requires updating the <code>Solace.JndiTemplate</code> bean in the configuration file in two ways:</p>
+<ul>
+<li>Updating the provider URL to specify the protocol as secure (smfs)</li>
+<li>Adding the required parameters for the secure connection</li>
+</ul>
+<h4 is-upgraded>Updating the provider URL</h4>
+<p>In order to signal to the Solace JMS API that the connection should be a secure connection, the protocol must be updated in the URI scheme. The Solace JMS API has a URI format as follows:</p>
+<pre><code>    &lt;URI Scheme&gt;://[username]:[password]@&lt;IP address&gt;[:port]
+</code></pre>
+<p>Recall from above, originally, the &#34;java.naming.provider.url&#34; was as follows:</p>
+<pre><code language="language-sml" class="language-sml">    &lt;prop key=&#34;java.naming.provider.url&#34; value=&#34;smf://___IP:PORT___&#34; /&gt;
+</code></pre>
+<p>This specified a URI scheme of &#34;smf&#34; which is the plaint-text method of communicating with the Solace Event Broker. This should be updated to &#34;smfs&#34; to switch to secure communication giving you the following configuration:</p>
+<pre><code language="language-xml" class="language-xml">    &lt;prop key=&#34;java.naming.provider.url&#34; value=&#34;smfs://___IP:PORT___&#34; /&gt;
+</code></pre>
+<h4 is-upgraded>Adding SSL Related Configuration</h4>
+<p>Additionally, the Solace JMS API must be able to validate the server certificate of the Solace Event Broker in order to establish a secure connection. To do this, the following trust store parameters need to be provided.</p>
+<p>First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace Event Broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.</p>
+<pre><code language="language-xml" class="language-xml">    &lt;prop key=&#34;Solace_JMS_SSL_TrustStore&#34; value=&#34;___Path_or_URL___&#34; /&gt;
+</code></pre>
+<p>It is also required to provide a trust store password. This password allows the Solace JMS API to validate the integrity of the contents of the trust store. This is done through the following parameter.</p>
+<pre><code language="language-xml" class="language-xml">    &lt;prop key=&#34;Solace_JMS_SSL_TrustStorePassword&#34; value=&#34;___Password___&#34; /&gt;
+</code></pre>
+<p>There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: &#34;jks&#34; for Java Key Store or &#34;pkcs12&#34;. Setting the trust store format is done through the following parameter.</p>
+<pre><code language="language-xml" class="language-xml">    &lt;prop key=&#34;Solace_JMS_SSL_TrustStoreFormat&#34; value=&#34;jks&#34; /&gt;
+</code></pre>
+<p>And finally, the authentication scheme must be selected. Solace JMS supports the following authentication schemes for secure connections:</p>
+<ul>
+<li>AUTHENTICATION_SCHEME_BASIC</li>
+<li>AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE</li>
+</ul>
+<p>This integration example will use basic authentication. So the required parameter is as follows:</p>
+<pre><code language="language-xml" class="language-xml">    &lt;prop key=&#34;Solace_JMS_Authentication_Scheme&#34; value=&#34;AUTHENTICATION_SCHEME_BASIC&#34; /&gt;
+</code></pre>
+<h4 is-upgraded>Example JBoss Fuse Configuration Bean</h4>
+<p>The following example bean outlines all of the required JBoss Fuse configuration changes to the Solace.JndiTemplate where the user should substitute appropriate values for:</p>
+<ul>
+<li><strong><em>IP:PORT</em></strong></li>
+<li><strong><em>Path_or_URL</em></strong></li>
+<li><strong><em>Password</em></strong></li>
+</ul>
+<pre><code language="language-xml" class="language-xml">&lt;bean id=&#34;Solace.JndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;&gt;
+  &lt;property name=&#34;environment&#34;&gt;
+    &lt;props&gt;
+      &lt;prop key=&#34;java.naming.provider.url&#34; value=&#34;smfs://___IP:PORT___&#34;/&gt;
+      &lt;prop key=&#34;java.naming.factory.initial&#34;
+             value=&#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34;/&gt;
+      &lt;prop key=&#34;java.naming.security.principal&#34; value=&#34;fuse_user@Solace_Fuse_VPN&#34;/&gt; 
+      &lt;!-- SSL Related Configuration --&gt;
+      &lt;prop key=&#34;Solace_JMS_Authentication_Scheme&#34; 
+             value=&#34;AUTHENTICATION_SCHEME_BASIC&#34;/&gt;
+      &lt;prop key=&#34;Solace_JMS_SSL_TrustStore&#34; value=&#34;___Path_or_URL___&#34;/&gt;
+      &lt;prop key=&#34;Solace_JMS_SSL_TrustStoreFormat&#34; value=&#34;jks&#34; /&gt;
+      &lt;prop key=&#34;Solace_JMS_SSL_TrustStorePassword&#34; value=&#34;___Password___&#34;/&gt;
+    &lt;/props&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<h2 is-upgraded>Working with the Solace Disaster Recovery Solution</h2>
+<p>The [Solace-FG] section &#34;Data Center Replication&#34; contains a sub-section on &#34;Application Implementation&#34; which details items that need to be considered when working with Solace&#39;s Data Center Replication feature. This integration guide will show how the following items required to have a JBoss Fuse application successfully connect to a backup data center using the Solace Data Center Replication feature:</p>
+<ul>
+<li>Configuring a Host List in the JBoss Fuse configuration file</li>
+<li>Configuring JMS Reconnection Properties within Solace JNDI</li>
+<li>Disaster Recovery Behavior Notes</li>
+</ul>
+<h3 is-upgraded>Configuring a Host List in the JBoss Fuse configuration file</h3>
+<p>As described in [Solace-FG], the host list provides the address of the backup data center. This is configured in the JBoss Fuse configuration file through the java.naming.provider.url which is set within the solace.JndiTemplate bean in the sample configuration as follows:</p>
+<pre><code language="language-xml" class="language-xml">  &lt;bean id=&#34;solaceJndiTemplate&#34; class=&#34;org.springframework.jndi.JndiTemplate&#34;
+    lazy-init=&#34;default&#34; autowire=&#34;default&#34;&gt;
+    &lt;property name=&#34;environment&#34;&gt;
+      &lt;props&gt;
+        &lt;prop key=&#34;java.naming.provider.url&#34; 
+               value=&#34;smf://__IP_active_site:PORT__,smf://__IP_standby_site:PORT__&#34; /&gt;
+        &lt;!-- ... Snip remaining configuration ... --&gt;
+      &lt;/props&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+</code></pre>
+<p>For the <code>java.naming.provider.url</code> both the active site IP address and standby site IP address are provided. When connecting, the Solace JMS connection will first try the active site and if it is unable to successfully connect to the active site, then it will try the standby site. This is discussed in much more detail in the referenced Solace documentation.</p>
+<h3 is-upgraded>Configuring reasonable JMS Reconnection Properties within Solace JNDI</h3>
+<p>In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the &#34;reconnect retries&#34; parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of &#34;-1&#34; to force the Solace JMS API to reconnect indefinitely.</p>
+<p>The reconnect retries is tuned in the Solace Event Broker CLI as follows:</p>
+<pre><code>config)# jndi message-vpn Solace_Spring_VPN
+(config-jndi)# connection-factory JNDI/CF/spring
+(config-jndi-connection-factory)# property-list transport-properties
+(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;-1&#34;
+(config-jndi-connection-factory-pl)# exit
+(config-jndi-connection-factory)# exit
+(config-jndi)# exit
+(config)#
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configuration Reference" duration="2">
+        <p>There are two associated files you can use for reference:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-fuse/spring.xml" target="_blank">spring.xml</a></li>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-fuse/blueprint.xml" target="_blank">blueprint.xml</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
