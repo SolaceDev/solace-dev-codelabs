@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2022-01-06T14:10:45-08:00",
+  "updated": "2021-01-06T14:10:45-08:00",
   "id": "nifi-jms-jndi",
   "duration": 67,
   "title": "Integration Guide: JNDI Connection Factory Provider for Apache NiFi",
