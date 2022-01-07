@@ -565,7 +565,7 @@ public static void main(String[] args) throws JMSException {
 
 The full source code for this example is available in the following source:
 
- * [MessageProducer.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageProducer.java)
+ * [MessageProducer.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solace/integration/spring/MessageProducer.java)
 
 
 ## Sample Application
