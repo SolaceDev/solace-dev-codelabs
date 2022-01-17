@@ -17,7 +17,16 @@ Duration: 0:01:00
 
 In this codelab, I will be showing you how to use and configure the Solace connector on MuleSoft Anypoint Platform to send or receive events.
 
-The MuleSoft Anypoint Platform in an integration platform and acts as a complete solution for API-led connectivity. You can learn more about MuleSoft Anypoint [here](https://videos.mulesoft.com/watch/bakFGgwqNDJzoJFNydiMiH). Alternatively you can checkout the ultimate [MuleSoft developer quick start guide](https://blogs.mulesoft.com/dev-guides/how-to-tutorials/new-developer-quick-start-guides/)
+The MuleSoft Anypoint Platform is an integration platform and acts as a complete solution for API-led connectivity. 
+
+To learn more about Mulesoft Anypoint platform, checkout the following resources:
+
+[MuleSoft Videos - Anypoint Platform](https://videos.mulesoft.com/watch/bakFGgwqNDJzoJFNydiMiH) 
+
+[MuleSoft Developer - Quick Start guide](https://blogs.mulesoft.com/dev-guides/how-to-tutorials/new-developer-quick-start-guides/)  
+
+[Solace PubSub+ Connector - Mule 4, Documentation and Examples](https://github.com/SolaceProducts/pubsubplus-connector-mule-docs)
+
 
 So put your seatbelt on and tag along in the following steps!
 
@@ -91,33 +100,15 @@ Duration: 0:02:00
 - Give your project a name. Note that you can also scaffold a new MuleSoft project from a template using [RAML](https://www.mulesoft.com/resources/api/design-apis-easily-with-RAML)
   ![Anypoint-Studio](img/new_project.png "Anypoint-Studio")
 
-- As per the Solace connector documentation on [solace-iot-team/solace-mule-connector](https://github.com/solace-iot-team/solace-mule-connector) github repo, edit the pom.xml file to add a new dependency and repository
+- Locate and click on the menu item "Search in Exchange" in the top-right pane "Mule Palette", a popup to identify dependencies will appear
+  ![Anypoint-Studio](img/add-dependency-launch.png "Launch Add Dependency")
+  
+- Enter "Solace" in the search box to see the "Solace PubSub+ Connector - Mule 4" listed in the available modules list. Select and click on "Add" button and click on Finish.
+  ![Anypoint-Studio](img/add-dependency.png "Add Dependency")
 
-```
-<dependency>
-	<groupId>com.solace.connector</groupId>
-	<artifactId>solace-mulesoft-connector</artifactId>
-	<version>0.3.3-SNAPSHOT</version>
-	<classifier>mule-plugin</classifier>
-</dependency>
-```
 
-```
-	<repositories>
-	<!-- keep all the mulesoft repositories that are configured here --->
-		<repository>
-			<id>myMavenRepo.read</id>
-			<url>https://mymavenrepo.com/repo/27AIdW4GdyXFzutegEs5/</url>
-		</repository>
-	</repositories>
-```
-
-![pom](img/pom.png "pom")
-
-Positive
-: Note: If you are new to Anypoint Studio, you can switch from `Design` to `Source` view for the file 👇
-
-![pom-source](img/pom-source.png "pom-source")
+- Review the new Solace Connector made available in the palette list.
+  ![Anypoint-Studio](img/solace-connector-in-palette.png "Solace Connector")
 
 - Save the file. Note that when you save the file, the IDE immediately executes a `mvn install` which installs the solace connector
   ![connector-install](img/connector-install.png "connector-install")
@@ -125,38 +116,49 @@ Positive
 Positive
 : The connector is installed and ready to use 💥
 
+## Configure Connection to Solace PubSub+ Broker
+Launch Solace PubSub+ console and select the Broker
+ ![PubSub+ Broker](img/pubsubplus-broker.png)
+
+Select the Broker and open the Connect tab
+ ![PubSub+ Broker](img/pubsubplus-connect.png)
+
+Open the Connect tab and make a note of the parameters
+- Username
+- Password
+- Message VPN and
+- Secured SMF Host
+  
+![PubSub+ Broker](img/pubsubplus-connect-expand.png)
+
+Now, we can configure Solace PubSub+ Connector in the Anypoint Studio.
+
+In order to create a connection to Solace PubSub+ Broker, we need to create a new connector configuration. Select the "Global Configuration" in the flow and select "Solace PubSub+ Connector config" option
+![solace-connector-configration](img/solace-connector-configuration.png "Solace PubSub+ Connection configuration")
+
+In the popup dialog, in the Connection tab enter values for Client Username, Password, Message VPN and Broker Host with the noted values from the previous step.
+![solace-connector-configration](img/connector-solace-config.png "Solace PubSub+ Connection configuration")
+
+Click on "Test Connection" to ensure that the connection to Broker is successful.
+
+
 ## Basic Publisher Flow
 
-Duration: 0:05:00
+Duration: 0:12:00
 
 Now that the connector is installed, go ahead and navigate to `src/main/mule` and double click on the xml file. When you do so, you will see an empty Message Flow canvas
-![mainxml](img/mainxml.png "mainxml")
+![mainxml](img/flow-screen-1.png "mainxml")
 
-Observe in the Main Palette on the right hand side the Solace Connector with all the different operations that you can use
-![solace-palatte](img/solace-palatte.png "solace-palatte")
+Observe in the Main Palette on the right-hand side the Solace Connector and all the different operations that you can use in the flow.
+![solace-palatte](img/solace-connector-in-palette.png "solace-palatte")
 
 Let's go ahead and create a basic flow that publishes events to a predefined topic on the previously created solace broker.
 
-- Drag the publish Palette from the Solace directory into the Message Flow canvas
+Drag the publish Palette from the Solace directory into the Message Flow canvas
 
-![drag-publish](img/drag-publish.png "drag-publish")
+![drag-publish](img/flow-screen-2.png "drag-publish")
 
-- Double click on the Publish object and navigate to the Basic Settings. Click on the green `Add` icon to add a new connection configuration
-
-- Fill in the connection information to configure the Publisher object
-  ![connector-configure2](img/connector-configure2.png "connector-configure2")
-
-Positive
-: You can find the host configuration from the `Connect` tab in your Solace Cloud Account
-
-![connect-tab](img/connect-tab.png "connect-tab")
-
-- Once done, you can test the connection
-  ![connection-success](img/connection-success.png "connection-success")
-
-## Put it all together
-
-Duration: 0:9:00
+Ensure that the "Connector configuration" of "Publish" in the bottom pane is selected with the Solace PubSub+ Connection configuration "Solace_PubSub__Connector_Config" created in the previous step.
 
 Now that you have a publisher object configured, let's test it out! In this step, we will configure a scheduler that will publish messages every second on a predefined topic
 
@@ -174,9 +176,14 @@ Positive
 - Configure the scheduler to trigger every second
   ![scheduler-config](img/scheduler-config.png "scheduler-config")
 
-- Now back to the Publisher object, double click on it to configure the topic publish string and the body of the payload. Under the `Deliver Mode` make sure its set to `Direct`. The Destination name field is the topic; populate it with this topic `solace/mule/flow` and add whatever you want in the Message Body
+- Now back to the Publisher object, double click on it to configure the topic publish string and the body of the payload. 
+  - Under the `Destination`, set
+    `Deliver Mode` to `Direct`,
+    `Type` to `Topic`, and
+    `Name` to `solace/mule/flow`
+  - Set the `Message Body` as "This is the body of the message sent from a mule flow"
 
-![publish-config](img/publish-config.png "publish-config")
+    ![publish-config](img/flow-screen-3.png "publish-config")
 
 - Click on the canvas and save the file!
 
@@ -199,29 +206,31 @@ Positive
 - While the flow is running, navigate back to the Solace Cloud console and observe the messages flowing every second  
   ![subscriber](img/subscriber.gif "subscriber")
 
-And that's it! You can check out more information on [solace-iot-team/solace-mule-connector](https://github.com/solace-iot-team/solace-mule-connector) github repo to see other functionalities with the broker
+And that's it! You can check out demos on [SolaceProducts/pubsubplus-connector-mule-docs](https://github.com/SolaceProducts/pubsubplus-connector-mule-docs) github repo to see other functionalities with the broker.
 
 ## [Optional] Add a subscriber flow
 
 Duration: 0:5:00
 
-Now that you have created a publisher flow and tested it out, let's go ahead and create a `TopicListener` object that will connect to the broker and subscribe to the topic we sent. To do so:
+Now that you have created a publisher flow and tested it, let's go ahead and create a `Direct Topic Subscriber` object that will connect to the broker and subscribe to the topic we sent. To do so:
 
-- Navigate to the Solace-Connector Palette, drag and drop the `TopicListener` object into the canvas
+- Navigate to the Solace-Connector Palette, drag and drop the `Direct Topic Subscriber` object into the canvas
 
-![topic-listener](img/topic-listener.png "topic-listener")
+![Direct Topic Subscriber](img/flow-screen-4.png)
 
-- Double click on the TopicListner object to configure it. Notice how the Connector Configuration settings is auto populated. Change the Subscription value from `Bean Reference` to `Inline`
-  ![topic-listner-config](img/topic-listner-config.png "topic-listner-config")
+- Double click on the `Direct Topic Subscriber` object to configure it. Set 
+  - Ensure that the "Solace_PubSub_Connector_Config" is chosen as the `Connector Configuration`
+  - `Topic(s)` in the `Subscriptions` as "solace/mule/>" and 
+  
+    ![Direct Topic Subscriber](img/flow-screen-5.png)
 
-- Click on the green add icon to add a subscription. Add `solace/mule/>`
-  ![topic-listner-add](img/topic-listner-add.png "topic-listner-add")
 
-- Add a logging shape. Search for `Logger` from the pallette menu and drag it to the TopicListner flow
-  ![add-logger](img/add-logger.png "add-logger")
+- Add a logging shape. Search for `Logger` from the pallette menu and drag it to the Topic Subscriber flow
+
+![add-logger](img/flow-screen-6.png "add-logger")
 
 - Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following
-  ![logger-config](img/logger-config.png "logger-config")
+  ![logger-config](img/flow-screen-7.png "logger-config")
 
 ```
 %dw 2.0
@@ -231,10 +240,13 @@ payload
 ```
 
 - Your full flow should look like this
-  ![full-flow](img/full-flow.png "full-flow")
+  ![full-flow](img/flow-screen-8.png "full-flow")
 
 - Run it! Observe in the logs every second an output of the message will be logged
-  ![log](img/log.png "log")
+  ![log](img/flow-screen-9.png "log")
+
+
+We successfully created a publisher to publish events on a topic to the PubSub+ Broker, and subscribe to the topic as well. This Mule-Solace interaction is enabled using the Solace PubSub+ MuleSoft Connector.
 
 ## Takeaways
 
@@ -245,9 +257,11 @@ Duration: 0:02:00
 ✅ Install the Solace Connector  
 ✅ Configure a publish object  
 ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration
+✅ Configure a subscriber object
+✅ Run the subscriber flow to receive the published events
 
 Positive
-: For more examples on how to use the Solace MuleSoft connector checkout the [solace-iot-team/solace-mule-connector-examples](https://github.com/solace-iot-team/solace-mule-connector-examples) github repository.
+: For more examples on how to use the Solace MuleSoft connector checkout the [SolaceProducts/pubsubplus-connector-mule-docs](https://github.com/SolaceProducts/pubsubplus-connector-mule-docs) github repository.
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the _Report a mistake_ button at the bottom left of this codelab.
 
