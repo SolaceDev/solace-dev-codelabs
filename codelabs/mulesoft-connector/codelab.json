@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2022-01-17T19:33:00+05:30",
+  "updated": "2022-01-18T10:47:33+05:30",
   "id": "mulesoft-connector",
   "duration": 33,
   "title": "Using the MuleSoft Solace Connector to publish events",

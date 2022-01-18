@@ -255,9 +255,9 @@ Duration: 0:02:00
 ✅ We were able to show how to create a new Solace Cloud Account  
 ✅ Install Anypoint Studio  
 ✅ Install the Solace Connector  
-✅ Configure a publish object  
-✅ Use the Solace Cloud TryMe tab to test out our connection and configuration
-✅ Configure a subscriber object
+✅ Configure a publish object   
+✅ Use the Solace Cloud TryMe tab to test out our connection and configuration    
+✅ Configure a subscriber object    
 ✅ Run the subscriber flow to receive the published events
 
 Positive
