@@ -33,7 +33,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [NiFi Documentation](http://nifi.apache.org/docs.html)
 * [NiFi Developer Guide](http://nifi.apache.org/developer-guide.html)

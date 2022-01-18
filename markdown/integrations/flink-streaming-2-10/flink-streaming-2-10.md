@@ -31,7 +31,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html)
 * [Flink SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html)

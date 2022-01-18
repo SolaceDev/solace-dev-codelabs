@@ -37,7 +37,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
-* [Solace Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm)
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
 * [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/docs/)
 * [Connecting Apama Applications to External Components](https://documentation.softwareag.com/onlinehelp/Rohan/Apama/v10-7/apama10-7/10-7_Connecting_Apama_Applications_to_External_Components.pdf)

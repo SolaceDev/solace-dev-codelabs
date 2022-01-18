@@ -29,7 +29,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [RedHat JBoss_Fuse Online reference documentation](https://access.redhat.com/documentation/en-us/red_hat_fuse/6.0)
 * [The Red Hat JBoss Fuse container](https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.0/html/Deploying_into_the_Container)
