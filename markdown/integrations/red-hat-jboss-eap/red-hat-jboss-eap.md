@@ -39,7 +39,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace PubSub+ Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [JBoss Enterprise Application Platform Documentation](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/)
 * [JBoss Enterprise Application Platform 7.0 Security Guide](https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html/how_to_configure_server_security/index)
@@ -182,7 +181,7 @@ The following event broker resources are required for the integration sample in 
     </tr>
     <tr>
       <td>Solace Event Broker Host</td>
-      <td colspan="2" rowspan="4">Refer to section 
+      <td>Refer to section 2 - Get Solace Messaging</td> 
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -278,7 +277,7 @@ The following entities on the Solace event broker need to be configured at a min
 
 The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm).
 
 This section outlines how to create a message-VPN called "solace_VPN" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
 
@@ -1150,7 +1149,7 @@ The integration example illustrated in Connecting to Solace JMS provider of this
 
 JBoss supports configuration of Container-Managed authentication for JCA connection factories.  The JAAS login module ConfiguredIdentityLoginModule can be used to provide EJB Container-supplied sign-on credentials to the Solace event broker. Refer to [JBOSS-SEC] for more details on configuring EJB Security.
 
-The event broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization](https://docs.solace.com/Features/Client-authentication-and-authorization.htm) .  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
+The event broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization](https://docs.solace.com/Configuring-and-Managing/Client-Authentication.htm) .  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
 
 The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)  for further details on the required JMS properties for configuring SSL client certificate authentication.
 
@@ -1633,7 +1632,7 @@ The following table summarizes the values used for the resource adapter"s bean p
     </tr>
     <tr>
         <td>MessageVPN</td>
-        <td></td>
+        <td> </td>
         <td>The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store.</td>
     </tr>
     <tr>
@@ -1711,17 +1710,3 @@ Update the Activation Configuration in the Message Driven Bean source code ("Con
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "<CONFIGURED_REQUEST_QUEUE_JNDI_NAME>") })
 ```
-
-
-## Configuration Reference
-Duration: 0:05:00
-
-There are some associated files you can use for reference:
-*    [ProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/ProducerSB.java)
-*    [XAProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/XAProducerSB.java)
-*    [XAProducerBMTSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/XAProducerBMTSB.java)
-*    [ConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/ConsumerMDB.java)
-*    [XAConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/XAConsumerMDB.java)
-*    [ejb-jar.xml](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/ejb-jar.xml)
-
-

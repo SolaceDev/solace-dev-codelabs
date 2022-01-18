@@ -34,7 +34,6 @@ This document is divided into the following sections:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace PubSub+ Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [WebSphere Application Server Information Library](https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html) 
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112 )
@@ -160,7 +159,7 @@ The following Solace PubSub+ event broker resources are required for the integra
     </tr>
     <tr>
       <td>Solace Event Broker Host</td>
-      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
+      <td>Refer to section 2 - Get Solace Messaging for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -272,7 +271,7 @@ The following entities on the Solace PubSub+ event broker need to be configured 
 
 The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm?Highlight=cli%20user). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
 
 This section outlines how to create a message-VPN called "solace_VPN" on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
 
@@ -929,7 +928,7 @@ You have now deployed the sample application and it is ready to receive messages
 
 ### Testing the sample application
 
-To send a test message you can use the **queueProducerJNDI** sample application from the [Obtaining JMS objects using JNDI](https://dev.solace.com/samples/solace-samples-jms/using-jndi/ ) tutorial. Ensure to adjust in the source code the "CONNECTION_FACTORY_JNDI_NAME" and "QUEUE_JNDI_NAME" to `JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively, as used in this tutorial.
+To send a test message you can use the **queueProducerJNDI** sample application from the [Obtaining JMS objects using JNDI](https://tutorials.solace.dev/jms/using-jndi/) tutorial. Ensure to adjust in the source code the "CONNECTION_FACTORY_JNDI_NAME" and "QUEUE_JNDI_NAME" to `JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively, as used in this tutorial.
 
 Once a message has been sent to the `solace_requests` queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the `solace_replies` queue.
 
@@ -1076,7 +1075,7 @@ The integration example illustrated in this guide uses the authentication inform
 
 WebSphere supports configuration of Container-Managed authentication for J2C resources.  The administrator of an EJB application can configure event broker sign-on credentials using a J2C authentication alias that is assigned to either a J2C activation specification or J2C connection factory.  Solace JCA resource adapter supports authentication using the 'DefaultPrincipalMapping' mapping configuration alias. Refer to [WAS-REF](https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html)  for more details on configuring J2C authentication data aliases.
 
-The event broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization](https://docs.solace.com/Features/Client-authentication-and-authorization.htm) .  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
+The event broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization](https://docs.solace.com/Configuring-and-Managing/Client-Authentication.htm) .  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
 
 The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)  for further details on the required JMS properties for configuring SSL client certificate authentication.
 
@@ -1429,7 +1428,7 @@ This section describes configuration required to have a WebSphere Application Se
 
 #### Configuring a Host List within the WebSphere Application Server
 
-As described in [Solace Feature Guide client configuration](https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration) , the host list provides the address of the backup data center. This is configured within the WebSphere application server through the `ConnectionURL` custom property value (of a respective J2C entity) as follows:
+The host list provides the address of the backup data center. This is configured within the WebSphere application server through the `ConnectionURL` custom property value (of a respective J2C entity) as follows:
 
 ```
 tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
@@ -1518,7 +1517,7 @@ The following table summarizes the values used for the resource adapter"s bean p
     <tr>
         <td>messageVPN</td>
         <td></td>
-        <td>The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store.</td>
+        <td>The associated solace message VPN for Connection Factory or Destination Object is expected to be stored in the external JNDI store.</td>
     </tr>
     <tr>
         <td>UserName</td>

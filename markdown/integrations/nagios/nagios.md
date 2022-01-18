@@ -31,7 +31,6 @@ These documents contain information related to the feature defined in this docum
 
 * [Solace Developer Portal](http://dev.solace.com) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
-* [Solace Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 
 ### Prerequisites
