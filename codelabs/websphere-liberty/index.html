@@ -49,10 +49,9 @@
 <li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
 <li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
-<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace PubSub+ Event Broker Configuration</a></li>
 <li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
-<li><a href="https://www.ibm.com/cloud/websphere-liberty" target="_blank">IBM WebSphere Liberty</a></li>
 <li><a href="https://jcp.org/en/jsr/detail?id=112" target="_blank">Java Connector Architecture v1.5</a></li>
+<li><a href="https://www.ibm.com/cloud/websphere-liberty" target="_blank">IBM WebSphere Liberty</a></li>
 </ul>
 
 
@@ -119,7 +118,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 
       </google-codelab-step>
     
-      <google-codelab-step label="Integrating with the WebSphere Liberty Application Server" duration="10">
+      <google-codelab-step label="Integrating with the WebSphere Liberty Application Server" duration="15">
         <p>Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ event broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.</p>
 <p>In order to illustrate the WebSphere Liberty application server integration, the following sections will highlight the required Liberty configuration changes, and provide sample code for sending and receiving messages using Enterprise Java Beans.</p>
 <p>This EJB sample consists of two enterprise beans, a Message Driven Bean and a Session Bean.  The MDB is configured to receive a message on a <code>requests</code> Queue.  When the MDB receives a message it then calls a method of the Session Bean to send a reply message to a <code>replies</code> Queue.  The EJB sample requires configuration of various J2C entities in WebSphere to support usage of the Solace JCA compliant resource adapter.</p>
@@ -129,7 +128,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <ul>
 <li>Resource: Solace JCA 1.5 resource adapter stand-alone RAR file (sol-jms-ra-%version%.rar)</li>
 <li>Download Options: <ul>
-<li><a href="https://solace.com/downloads/" target="_blank">Solace Downloads</a>  - Under Open APIs and protocols, JMS API</li>
+<li><a href="https://solace.com/downloads/" target="_blank">Solace Downloads</a> - Under Open APIs and protocols, JMS API</li>
 <li>From <code>products.solace.com</code> if you have an enterprise account</li>
 </ul>
 </li>
@@ -195,10 +194,10 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 </td><td colspan="1" rowspan="1"><p>Prefix</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p>Non-JNDI resource</p>
-</td><td colspan="1" rowspan="1"><p>solace_%RESOURCE_NAME%</p>
+</td><td colspan="1" rowspan="1"><p>j2c_%RESOURCE_NAME%</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p>JNDI names</p>
-</td><td colspan="1" rowspan="1"><p>JNDI/Sol/%RESOURCE_NAME%</p>
+</td><td colspan="1" rowspan="1"><p>JNDI/J2C/%RESOURCE_NAME%</p>
 </td></tr>
 </table>
 <h3 is-upgraded>WebSphere Liberty Resources</h3>
@@ -237,28 +236,8 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 <li>Guaranteed messaging endpoints for receiving and sending messages.</li>
 <li>Appropriate JNDI mappings enabling JMS clients to connect to the event broker configuration.</li>
 </ul>
-<p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
-<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm" target="_blank">User Authentication and Authorization</a>.</p>
-<h3 is-upgraded>Creating a Message VPN</h3>
-<p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
-<p>This section outlines how to create a message-VPN called &#34;solace_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
-<pre><code>&gt; home
-&gt; enable
-# configure
-(config)# create message-vpn solace_VPN
-(config-msg-vpn)# authentication
-(config-msg-vpn-auth)# user-class client
-(config-msg-vpn-auth-user-class)# basic auth-type none
-(config-msg-vpn-auth-user-class)# exit
-(config-msg-vpn-auth)# exit
-(config-msg-vpn)# no shutdown
-(config-msg-vpn)# exit
-(config)#
-(config)# message-spool message-vpn solace_VPN
-(config-message-spool)# max-spool-usage 2000
-(config-message-spool)# exit
-(config)#
-</code></pre>
+<p>{% include_relative assets/solaceConfig.md %}</p>
+<p>{% include_relative assets/solaceVpn.md content=&#34;solace_VPN&#34; %}</p>
 <h3 is-upgraded>Configuring Client Usernames &amp; Profiles</h3>
 <p>This section outlines how to update the default client-profile and how to create a client username for connecting to the event broker For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions for the XA-transactions capable Solace JCA Resource Adapter. The chosen client username of &#34;solace_user&#34; will be required by Liberty when connecting to the event broker</p>
 <pre><code>(config)# client-profile default message-vpn solace_VPN
@@ -266,7 +245,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 (config-client-profile)# message-spool allow-guaranteed-message-send
 (config-client-profile)# message-spool allow-guaranteed-endpoint-create
 (config-client-profile)# message-spool allow-transacted-sessions
-(config-client-profile)# exit
+(config-client-profile)# exi
 (config)#
 (config)# create client-username solace_user message-vpn solace_VPN
 (config-client-username)# acl-profile default	
@@ -368,7 +347,7 @@ usr/shared/resources/solace       # location to deploy the Solace JMS Resource A
 <p>The above information is specified across one or more J2C entities depending on your application&#34;s JMS message flow (Inbound, Outbound, or both).  Configuration of a J2C connection factory and J2C administered objects is required for outbound message flow, while configuration of a J2C activation specification is required for inbound message flow.</p>
 <h3 is-upgraded>Extended Properties</h3>
 <p>Extended Properties are custom properties of the Solace Resource Adapter</p>
-<p>The Resource Adapter may include several custom properties for  <a href="https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm" target="_blank">advanced control of the connection</a>  to the Solace event broker. Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple event brokers.</p>
+<p>The Resource Adapter may include several custom properties for  <a href="https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm" target="_blank">advanced control of the connection</a> to the Solace event broker. Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple event brokers.</p>
 <p>Extended Properties are specified as a Semicolon-separated list. Example:</p>
 <pre><code>    &lt;resourceAdapter autoStart=&#34;true&#34; id=&#34;solace&#34; location=&#34;${shared.resource.dir}/solace/sol-jms-ra-%version%.rar&#34;&gt;
         &lt;properties.solace ConnectionURL=&#34;%tcp://IP:Port%&#34; MessageVPN=&#34;%solace_VPN%&#34; Password=&#34;%solace_password%&#34; UserName=&#34;%solace_user%&#34; ExtendedProps=&#34;%Property1%=%Value1%;%Property2%=%Value2%&#34;/&gt;
@@ -492,7 +471,7 @@ usr/shared/resources/solace       # location to deploy the Solace JMS Resource A
 </td><td colspan="1" rowspan="1"><p>The JNDI name of the JMS destination as configured on the event broker.</p>
 </td></tr>
 </table>
-<p> ### Redeploy the resource adapter with the new settings </p>
+<h2 is-upgraded>Redeploy the resource adapter with the new settings</h2>
 <p>Restart WebSphere Liberty for these changes to take effect.</p>
 
 
@@ -645,18 +624,18 @@ cd solace-integration-guides/src/websphere-liberty/EJBSample-WAS/ejbModule/
 <p>The easiest option to send a test message is to use the <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm#Test-Messages" target="_blank">Try-Me! integrated publisher</a> of the PubSub+ Broker Manager. Ensure to provide the correct broker &#34;Web Messaging&#34; connection details and after successful connection, publish to the Queue <code>solace_requests</code>.</p>
 <p class="image-container"><img src="img/9d4c986612314c.png"></p>
 <p>Once a message has been sent to the <code>solace_requests</code> queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the <code>solace_replies</code> queue.</p>
-<p>You can check the messages in the <code>solace_replies</code> queue using the using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a> , Solace&#39;s browser-based administration console.</p>
+<p>You can check the messages in the <code>solace_replies</code> queue using the using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console.</p>
 <p>You can also check how the message has been processed in WebSphere Liberty logs as described in section &#34;Debugging Tips for Solace JMS API Integration&#34;.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Performance Considerations" duration="10">
+      <google-codelab-step label="Performance Considerations" duration="5">
         <p>The Solace JMS Resource Adapter relies on the WebSphere Liberty application server for managing the pool of JMS connections.  Tuning performance for outbound messaging can in part be accomplished by balancing the maximum number of pooled connections available against the number of peak concurrent outbound messaging clients.</p>
 <p>For inbound messaging there are different levers that can be tuned for maximum performance in a given environment.  The &#34;batchSize&#34; custom property of the Solace J2C activation specification defines the maximum number of messages retrieved at a time from a JMS destination for delivery to a server session.  The server session then routes those messages to respective Message Driven Beans.  In addition, the &#34;maxPoolSize&#34; custom property of the Solace J2C AS defines the maximum number of pooled JMS sessions that can be allocated to MDB threads.  Therefore to fine tune performance for inbound messaging, the &#34;batchSize&#34; and &#34;maxPoolSize&#34; must be balanced to the rate of incoming messages.</p>
 <p>Another consideration is the overhead of performing JNDI lookups to the event broker.  Liberty implements JNDI caching by default.  Resources referenced by a Message Driven Bean through resource injection will trigger an initial JNDI lookup and subsequently use the cached information whenever the MDB instance is reused from the MDB pool. Similarly, Session beans that perform JNDI lookups through a JNDI Context will have that information cached in association with that context.  Whenever the Session bean instance is reused from the Session bean pool, any lookups using the same JNDI Context will utilize the JNDI cached information.</p>
-<p><strong>Note</strong>: in order to use the JNDI caching mechanisms within Liberty you must use JMS through a JCA resource adapter and reference JMS end points in your code through JEE resource injection. Please refer to <a href="https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html" target="_blank">WAS-REF</a>  for details on modifying the default behavior of JNDI caching.</p>
-<p>In general, refer to <a href="https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html" target="_blank">WAS-REF</a>  for details on tuning Liberty for messaging performance:</p>
+<p><strong>Note</strong>: in order to use the JNDI caching mechanisms within Liberty you must use JMS through a JCA resource adapter and reference JMS end points in your code through JEE resource injection. Please refer to <a href="https://www.ibm.com/docs/en/was" target="_blank">WAS-REF</a> for details on modifying the default behavior of JNDI caching.</p>
+<p>In general, refer to <a href="https://www.ibm.com/docs/en/was" target="_blank">WAS-REF</a> for details on tuning Liberty for messaging performance:</p>
 <ul>
 <li>WebSphere Application Server &gt; Tuning performance &gt; Messaging resources &gt; Tuning messaging</li>
 </ul>
@@ -665,7 +644,7 @@ cd solace-integration-guides/src/websphere-liberty/EJBSample-WAS/ejbModule/
       </google-codelab-step>
     
       <google-codelab-step label="Working with Solace High Availability (HA)" duration="10">
-        <p>The <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a>  section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
+        <p>The <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a> section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
 <p>In general the Solace documentation contains the following note regarding reconnection:</p>
 <p>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes.</p>
 <p>In &#34;Setting up Solace JNDI References&#34;, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.</p>
@@ -709,15 +688,15 @@ cd solace-integration-guides/src/websphere-liberty/EJBSample-WAS/ejbModule/
       <google-codelab-step label="Advanced Topics" duration="40">
         <h2 is-upgraded>Authentication</h2>
 <p>The integration example illustrated in this guide uses the authentication information specified in the custom properties of the Solace Resource Adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace ‘MessageVPN&#39; information for a connection is always retrieved from the Solace Resource Adapter configured properties, or the configured properties of the respective J2C resource.</p>
-<p>WebSphere Liberty supports configuration of Container-Managed authentication for J2C resources.  The administrator of an EJB application can configure event broker sign-on credentials using a J2C authentication alias that is assigned to either a J2C activation specification or J2C connection factory.  Solace JCA resource adapter supports authentication using the ‘DefaultPrincipalMapping&#39; mapping configuration alias. Refer to <a href="https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html" target="_blank">WAS-REF</a>  for more details on configuring J2C authentication data aliases.</p>
-<p>The event broker supports a variety of client authentications schemes as described in the Solace documentation <a href="https://docs.solace.com/Features/Client-authentication-and-authorization.htm" target="_blank">Client Authentication and Authorization</a> .  The Solace JCA resource adapter supports a subset of these schemes including <code>Basic</code> authentication and ‘SSL Client Certificate&#39; authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.</p>
-<p>The value of the Solace Resource Adapter custom property ‘extendedProps&#39; is used to specify an alternate authentication scheme such as ‘AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE&#39;. The value of the custom property ‘extendedProps&#39; consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the <a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a>  for further details on the required JMS properties for configuring SSL client certificate authentication.</p>
+<p>WebSphere Liberty supports configuration of Container-Managed authentication for J2C resources.  The administrator of an EJB application can configure event broker sign-on credentials using a J2C authentication alias that is assigned to either a J2C activation specification or J2C connection factory.  Solace JCA resource adapter supports authentication using the ‘DefaultPrincipalMapping&#39; mapping configuration alias. Refer to <a href="https://www.ibm.com/docs/en/was" target="_blank">WAS-REF</a> for more details on configuring J2C authentication data aliases.</p>
+<p>The event broker supports a variety of client authentications schemes as described in the Solace documentation <a href="https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm" target="_blank">Client Authentication and Authorization</a>.  The Solace JCA resource adapter supports a subset of these schemes including <code>Basic</code> authentication and ‘SSL Client Certificate&#39; authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.</p>
+<p>The value of the Solace Resource Adapter custom property ‘extendedProps&#39; is used to specify an alternate authentication scheme such as ‘AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE&#39;. The value of the custom property ‘extendedProps&#39; consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the <a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a> for further details on the required JMS properties for configuring SSL client certificate authentication.</p>
 <p>Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default scheme, that scheme could also have been specified using the <code>extendedProps</code> custom property of the resource adapter.</p>
 <ul>
 <li>ExtendedProps - solace_JMS_Authentication_Scheme=AUTHENTICATION_SCHEME_BASIC</li>
 </ul>
 <h2 is-upgraded>Using SSL Communication</h2>
-<p>This section outlines how to update the event broker and WebSphere Liberty configuration to switch the client connection to using secure connections with the event broker. For purposes of illustration, this section uses a server certificate on the event broker and basic client authentication. It&#39;s possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The <a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a>  and <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a>  outline the extra configuration items required to switch from basic authentication to client certificates.</p>
+<p>This section outlines how to update the event broker and WebSphere Liberty configuration to switch the client connection to using secure connections with the event broker. For purposes of illustration, this section uses a server certificate on the event broker and basic client authentication. It&#39;s possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The <a href="https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm" target="_blank">Solace Documentation</a> and <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a> outline the extra configuration items required to switch from basic authentication to client certificates.</p>
 <p>To change WebSphere Liberty from using a plain text connection to a secure connection, the event broker configuration must first be updated, and the Solace JMS configuration within Liberty must be updated as outlined in the next sections.</p>
 <h3 is-upgraded>Configuring the event broker</h3>
 <p>To enable secure connections to the event broker, the following configuration must be updated on the event broker.</p>
@@ -770,7 +749,7 @@ Do you want to continue (y/n)? y
 <p>In order to signal to the Solace JMS API that the connection should be a secure connection, the protocol must be updated in the URI scheme. The Solace JMS API has a URI format as follows:</p>
 <pre><code>&lt;URI Scheme&gt;://[username]:[password]@&lt;IP address&gt;[:port]
 </code></pre>
-<p>Recall from [above]((#configuring-the-ra), originally, the &#34;ConnectionURL&#34; was as follows:</p>
+<p>Recall from the previous section, originally, the &#34;ConnectionURL&#34; was as follows:</p>
 <pre><code>tcp://___IP:PORT___
 </code></pre>
 <p>This specified a URI scheme of &#34;tcp&#34; which is the plaint-text method of communicating with the event broker. This should be updated to &#34;tcps&#34; to switch to secure communication giving you the following configuration:</p>
@@ -804,7 +783,7 @@ Do you want to continue (y/n)? y
 <p>Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.</p>
 <p>In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, the Solace event broker provides XA transaction administration facilities in the event that customers must perform manual failure recovery. For full details refer to the <a href="https://docs.solace.com/Configuring-and-Managing/Performing-Heuristic-Actions.htm" target="_blank">Solace documentation on administering and configuring XA Transaction</a> on the Solace event broker.</p>
 <h3 is-upgraded>Enabling XA Support for JMS Connection Factories</h3>
-<p>For both CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace event broker using the <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>  admin console or the CLI as follows:</p>
+<p>For both CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace event broker using the <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a> admin console or the CLI as follows:</p>
 <pre><code>(config)# jndi message-vpn solace_VPN
 (config-jndi)# connection-factory JNDI/Sol/CF
 (config-jndi-connection-factory)# property-list messaging-properties
@@ -931,7 +910,7 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
 </ul>
 <h4 is-upgraded>Enabling Local Transaction Support for EJBs</h4>
 <p>You can override the use of XA Transactions (the default transactional mode of the Solace JCA Resource Adapter) and force the use of Local Transactions for specific EJBs. <strong>Note</strong>: configuring Local Transactions for an EJB instructs the Transaction Manager in WebSphere to request the use of a Local Transaction from the Solace JCA Resource Adapter; hence, the use of Local Transaction support provided by the event broker.</p>
-<p>The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean &#34;ProducerSB&#34; to use Local Transactions instead of XA Transactions.  Refer to <a href="https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html" target="_blank">WAS-REF</a>  for further details on WebSphere specific EJB deployment descriptor files.</p>
+<p>The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean &#34;ProducerSB&#34; to use Local Transactions instead of XA Transactions.  Refer to <a href="https://www.ibm.com/docs/en/was" target="_blank">WAS-REF</a> for further details on WebSphere specific EJB deployment descriptor files.</p>
 <pre><code language="language-xml" class="language-xml">&lt;ejb-jar-ext xmlns=&#34;http://websphere.ibm.com/xml/ns/javaee&#34;
     xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
     xsi:schemaLocation=&#34;http://websphere.ibm.com/xml/ns/javaee 
@@ -944,15 +923,15 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
 &lt;/ejb-jar-ext&gt;
 </code></pre>
 <h2 is-upgraded>Working with Solace Disaster Recovery</h2>
-<p>This section describes configuration required to have WebSphere Liberty successfully connect to a backup data center using Solace&#39;s <a href="https://docs.solace.com/Features/Data-Center-Replication.htm" target="_blank">Data Center Replication</a>  feature.</p>
+<p>This section describes configuration required to have WebSphere Liberty successfully connect to a backup data center using Solace&#39;s <a href="https://docs.solace.com/Features/Data-Center-Replication.htm" target="_blank">Data Center Replication</a> feature.</p>
 <h3 is-upgraded>Configuring a Host List within WebSphere Liberty</h3>
-<p>As described in <a href="https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration" target="_blank">Solace Feature Guide client configuration</a> , the host list provides the address of the backup data center. This is configured within WebSphere Liberty through the <code>ConnectionURL</code> custom property value (of a respective J2C entity) as follows:</p>
+<p>As described in <a href="https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration" target="_blank">Solace Feature Guide client configuration</a>, the host list provides the address of the backup data center. This is configured within WebSphere Liberty through the <code>ConnectionURL</code> custom property value (of a respective J2C entity) as follows:</p>
 <pre><code>tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
 </code></pre>
 <p>The active site and standby site addresses are provided as a comma-separated list of <code>Connection URIs</code>.  When connecting, the Solace JMS connection will first try the active site, and if it&#39;s unable to successfully connect to the active site, it will try the standby site. This is discussed in much more detail in the referenced Solace documentation</p>
 <h3 is-upgraded>Configuring reasonable JMS Reconnection Properties within Solace JNDI</h3>
 <p>In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. The length of time is application specific depending on individual disaster recovery procedures, and can range from minutes to hours depending on the application. In general it&#39;s best to tune the reconnection by changing the &#34;reconnect retries&#34; parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it&#39;s also possible to use a value of &#34;-1&#34; to force the Solace JMS API to reconnect indefinitely.</p>
-<p>The reconnect retries is tuned for the respective JNDI connection factory on the event broker using the <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>  admin console or the CLI as follows:</p>
+<p>The reconnect retries is tuned for the respective JNDI connection factory on the event broker using the <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a> admin console or the CLI as follows:</p>
 <pre><code>(config)# jndi message-vpn solace_VPN
 (config-jndi)# connection-factory JNDI/Sol/CF
 (config-jndi-connection-factory)# property-list transport-properties
@@ -979,7 +958,7 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
 </td><td colspan="1" rowspan="1"><p>The time interval in seconds to wait between attempts to re-activate the MDB.</p>
 </td></tr>
 </table>
-<h4 is-upgraded>Receiving Messages in a Message Driven Bean</h4>
+<p> ##### Receiving Messages in a Message Driven Bean </p>
 <p>There is no special processing required during a disaster recovery switch-over specifically for applications receiving messages. After successfully reconnecting to the standby site, it&#39;s possible that the application will receive some duplicate messages. The application should apply normal duplicate detection handling for these messages.</p>
 <h4 is-upgraded>Sending Messages from a Session Bean</h4>
 <p>For WebSphere Liberty applications that are sending messages, there is nothing specifically required to reconnect the Solace JMS connection. However, any messages that were in the process of being sent will receive an error from the Solace Resource Adapter.  These messages must be retransmitted as possibly duplicated. The application should catch and handle any of the following exceptions:</p>
