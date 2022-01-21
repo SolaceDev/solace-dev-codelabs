@@ -1120,7 +1120,7 @@ EJB code can use the UserTransaction interface (Bean-Managed) to provision and c
 
 ### Working with the Solace Disaster Recovery Solution
 
-The [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)  section "Data Center Replication" contains a sub-section on "Application Implementation" which details items that need to be considered when working with Solace"s Data Center Replication feature. This integration guide will show how the following items required to have a WebLogic Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
+The [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)  section "Disaster Recovery" contains a sub-section on "Application Implementation" which details items that need to be considered when working with Solace"s Data Center Replication feature. This integration guide will show how the following items required to have a WebLogic Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
 
 #### Configuring a Host List within the WebLogic Application Server
 
