@@ -161,7 +161,7 @@ The following Solace event broker resources are required for the integration sam
     </tr>
     <tr>
       <td>Solace Event Broker Host</td>
-      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
+      <td>Refer to section 2- Get Solace Messaging for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
