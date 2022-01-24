@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-01-06T14:10:45-08:00",
+  "id": "nifi-jms-jndi",
+  "duration": 67,
+  "title": "Integration Guide: JNDI Connection Factory Provider for Apache NiFi",
+  "summary": "Apache NiFi is a software project from the Apache Software Foundation which enables the automation of data flow between systems. It can be described as data logistics. Similar to how parcel services move and track packages, Apache NiFi helps move and track data.",
+  "source": "nifi-jms-jndi.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "nifi",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nifi-jms-jndi",
+  "url": "nifi-jms-jndi"
+}

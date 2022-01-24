@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-01-06T14:45:44-08:00",
+  "id": "red-hat-jboss-fuse-v6",
+  "duration": 117,
+  "title": "Integration Guide: Red Hat JBoss Fuse v6",
+  "summary": "Red Hat JBoss Fuse product is an open source Enterprise Service Bus (ESB) that delivers a robust, cost-effective, and open integration platform that lets enterprises easily connect their disparate applications, services, or devices in real time.",
+  "source": "red-hat-jboss-fuse-v6.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "jboss",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/red-hat-jboss-fuse-v6",
+  "url": "red-hat-jboss-fuse-v6"
+}
