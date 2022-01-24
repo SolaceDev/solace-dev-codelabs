@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/websphere-app-server
 
-# Integration Guide: WebSphere Application Server V8
+# Integration Guide: IBM Websphere
 
 ## Overview
 Duration: 0:05:00
