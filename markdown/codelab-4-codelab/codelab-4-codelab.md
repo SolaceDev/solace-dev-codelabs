@@ -87,6 +87,18 @@ You should now have the _claat_ command available to you.
 $ claat
 ```
 
+
+#### Note if you have Go v1.17+ 
+
+As of Go v1.17+, the go get command for installing executables is deprecated https://go.dev/doc/go-get-install-deprecation
+
+A workaround for isntalling the claat command is the follwing:
+1. Clone the google tools project repo into a google-tools directory `git clone git@github.com:googlecodelabs/tools.git google-tools` 
+2. Navigate to the claat command directory `cd google-tools/claat`  
+3. Build the claat command `go build .`. This will create a `claat` command executable that you can use.  
+4. Now you can update your PATH env variable (this is either done in your .bashrc, .profile, or .zshrc depending on what your shell is). At the end of the file, isert the following line`export PATH=$PATH:$HOME/google-tools/claat`. Note: this assumes you clones the google-tools repo in your $HOME directory. If cloned elsewhere, make sure you use the right path in your path export  
+5. After you do this, you can open up a new terminal window and executing `claat` from the command line should work   
+
 ## Solace Guidelines
 
 Duration: 0:05:00
