@@ -107,7 +107,7 @@ docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000
    * Other Docker options are here: [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
 
 Negative
-: **NOTE:** if you are running on a **Mac**, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the `docker run` command above, with `-p 4444:55555`
+: **NOTE:** if you are running on a **Mac**, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the `docker run` command above, with `-p 55554:55555`
 
 * To run VirtualBox, VMWare, HyperV, and others: check out [solace.com/downloads](https://solace.com/downloads)
 * Lots of other software install options are here:
