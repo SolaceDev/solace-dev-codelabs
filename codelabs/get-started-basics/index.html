@@ -166,16 +166,37 @@
 <h2 is-upgraded>Subscription Wildcards</h2>
 <p>Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:</p>
 <ul>
-<li><code>*</code> single-level wildcard, matches up to the next level <code>/</code>. Can be used with a prefix e.g.: <code>abc*</code></li>
-<li><code>></code> multi-level wildcard, matches one-or-more levels. Must occur at the end of the topic subscription.</li>
+<li><code>*</code> single-level wildcard, 0-or-more chars, matches up to the next level <code>/</code>. Can be used with a prefix e.g.: <code>abc*</code></li>
+<li><code>></code> multi-level wildcard, matches <em>one</em>-or-more levels. Must occur at the end of the topic subscription.</li>
 </ul>
-<p>Some examples of Solace topic subscriptions:</p>
+<p>Some examples of Solace topic subscriptions, and topics that they match:</p>
 <ul>
-<li><code>hello/world/*</code></li>
-<li><code>acme/taxi/rider/></code></li>
-<li><code>city/*/*/alert/></code></li>
-<li><code>mfg/plant*/inv/update/></code></li>
-<li><code>payme/debit/*/bank01/*/ok</code></li>
+<li><code>hello/world/*</code>  <ul>
+<li>✅ <code>hello/world/aaron</code></li>
+<li>❌ <code>hello/world</code></li>
+<li>❌ <code>hello/world/solace/rules</code></li>
+</ul>
+</li>
+<li><code>acme/taxi/rider/></code>  <ul>
+<li>✅ <code>acme/taxi/rider/hail</code></li>
+<li>✅ <code>acme/taxi/rider/dropoff/051.0283/-001.7281</code></li>
+</ul>
+</li>
+<li><code>city/*/*/alert/></code>  <ul>
+<li>✅ <code>city/train/01784/alert/new</code></li>
+<li>❌ <code>city/fire/stn014/alert</code></li>
+</ul>
+</li>
+<li><code>mfg/plant*/inv/update/></code>  <ul>
+<li>✅ <code>mfg/plant/inv/update/all</code></li>
+<li>✅ `mfg/plant42/inv/update/o-rings/med/shortage&#39;</li>
+</ul>
+</li>
+<li><code>payme/debit/*/bank01/*/ok</code>  <ul>
+<li>✅ <code>payme/debit/dep/bank01/acct:12345/ok</code></li>
+<li>❌ <code>payme/debit/qr/bank01/anything/fail</code></li>
+</ul>
+</li>
 </ul>
 <p>You can read more about <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">topic wildcard subscriptions</a> here.</p>
 <aside class="special"><p>Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.</p>

@@ -254,15 +254,26 @@ Each and every message can be published to a unique topic, depending on the even
 
 Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:
 
-* `*` single-level wildcard, matches up to the next level `/`. Can be used with a prefix e.g.: `abc*`
-* `>` multi-level wildcard, matches one-or-more levels. Must occur at the end of the topic subscription.
+* `*` single-level wildcard, 0-or-more chars, matches up to the next level `/`. Can be used with a prefix e.g.: `abc*`
+* `>` multi-level wildcard, matches _one_-or-more levels. Must occur at the end of the topic subscription.
 
-Some examples of Solace topic subscriptions:
+Some examples of Solace topic subscriptions, and topics that they match:
 * `hello/world/*`
+    - ✅ `hello/world/aaron`
+    - ❌ `hello/world` 
+    - ❌ `hello/world/solace/rules`
 * `acme/taxi/rider/>`
+    - ✅ `acme/taxi/rider/hail` 
+    - ✅ `acme/taxi/rider/dropoff/051.0283/-001.7281`
 * `city/*/*/alert/>`
+    - ✅ `city/train/01784/alert/new` 
+    - ❌ `city/fire/stn014/alert`
 * `mfg/plant*/inv/update/>`
+    - ✅ `mfg/plant/inv/update/all` 
+    - ✅ `mfg/plant42/inv/update/o-rings/med/shortage'
 * `payme/debit/*/bank01/*/ok`
+    - ✅ `payme/debit/dep/bank01/acct:12345/ok` 
+    - ❌ `payme/debit/qr/bank01/anything/fail`
 
 You can read more about [topic wildcard subscriptions](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm) here.
 
