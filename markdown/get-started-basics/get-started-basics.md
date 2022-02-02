@@ -254,7 +254,7 @@ Each and every message can be published to a unique topic, depending on the even
 
 Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:
 
-* `*` single-level wildcard, 0-or-more chars, matches up to the next level `/`. Can be used with a prefix e.g.: `abc*`
+* `*` single-level wildcard, 0-or-more chars, matches up to the next level `/`. Can be used with a prefix e.g.: `abc*`, but not a suffix.
 * `>` multi-level wildcard, matches _one_-or-more levels. Must occur at the end of the topic subscription.
 
 Some examples of Solace topic subscriptions, and topics that they match:
@@ -270,7 +270,8 @@ Some examples of Solace topic subscriptions, and topics that they match:
     - ❌ `city/fire/stn014/alert`
 * `mfg/plant*/inv/update/>`
     - ✅ `mfg/plant/inv/update/all` 
-    - ✅ `mfg/plant42/inv/update/o-rings/med/shortage'
+    - ✅ `mfg/plant42/inv/update/o-rings/med/shortage`
+    - ❌ `mfg/123plant/inv/update/boo`
 * `payme/debit/*/bank01/*/ok`
     - ✅ `payme/debit/dep/bank01/acct:12345/ok` 
     - ❌ `payme/debit/qr/bank01/anything/fail`

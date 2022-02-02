@@ -166,7 +166,7 @@
 <h2 is-upgraded>Subscription Wildcards</h2>
 <p>Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:</p>
 <ul>
-<li><code>*</code> single-level wildcard, 0-or-more chars, matches up to the next level <code>/</code>. Can be used with a prefix e.g.: <code>abc*</code></li>
+<li><code>*</code> single-level wildcard, 0-or-more chars, matches up to the next level <code>/</code>. Can be used with a prefix e.g.: <code>abc*</code>, but not a suffix.</li>
 <li><code>></code> multi-level wildcard, matches <em>one</em>-or-more levels. Must occur at the end of the topic subscription.</li>
 </ul>
 <p>Some examples of Solace topic subscriptions, and topics that they match:</p>
@@ -189,7 +189,8 @@
 </li>
 <li><code>mfg/plant*/inv/update/></code>  <ul>
 <li>✅ <code>mfg/plant/inv/update/all</code></li>
-<li>✅ `mfg/plant42/inv/update/o-rings/med/shortage&#39;</li>
+<li>✅ <code>mfg/plant42/inv/update/o-rings/med/shortage</code></li>
+<li>❌ <code>mfg/123plant/inv/update/boo</code></li>
 </ul>
 </li>
 <li><code>payme/debit/*/bank01/*/ok</code>  <ul>
