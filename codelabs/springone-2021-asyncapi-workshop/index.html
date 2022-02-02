@@ -46,7 +46,6 @@
       </google-codelab-step>
     
       <google-codelab-step label="Requirements" duration="1">
-
         <p>🛠 This page covers the setup needed to perform this codelab. 🛠</p>
 <h2 is-upgraded>AsyncAPI Generator Requirements</h2>
 <p>✅ Install instructions available <a href="https://github.com/asyncapi/generator#requirements" target="_blank">here</a></p>
@@ -83,7 +82,6 @@
       </google-codelab-step>
     
       <google-codelab-step label="Spring Cloud Stream" duration="3">
-
         <p class="image-container"><img alt="Cloud Stream Intro" src="img/f4bfccdf4fb492d0.png"></p>
 <p>Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we&#39;ll cover in a bit. The framework is based on Spring Boot and Spring Integration.</p>
 <p>Spring Cloud Stream has three different types of message exchange contracts as pictures below.</p>
@@ -134,7 +132,6 @@
       </google-codelab-step>
     
       <google-codelab-step label="AsyncAPI" duration="3">
-
         <p class="image-container"><img src="img/5f976eae3b11e73e.png"></p>
 <p>AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.</p>
 <p>It is an open source initiative that provides both</p>
@@ -173,7 +170,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="Event Mesh" duration="3">
-
         <p class="image-container"><img src="img/124f1525945a39ad.png"></p>
 <p>An Event Mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices.</p>
 <p>It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.</p>
@@ -204,7 +200,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="API Products" duration="3">
-
         <p>API products are groups of related APIs that fulfil some business functions, often in a bounded content helping others to consume your Business capabilities.</p>
 <h2 is-upgraded>Event-Driven APIs</h2>
 <p>Event-Driven APIs offers a subscription &#34;push&#34; model rather than the request-response model of conventional RESTful APIs. They are implemented using an event gateway for publish/subscribe distribution.</p>
@@ -264,7 +259,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="SmartTown (External View)" duration="3">
-
         <p>Next step in building an Event API product involves bundling of high-value, share-worthy events. The resulting bundle is released as a specification for public consumption. The generated specification is based on a commonly understood standard - like AsyncAPI.</p>
 <p>AsyncAPI also provides tools to generate code (supports popular languages) helping consumers directly go from spec-to-code, leaving the only responsibility of updating the business logic.</p>
 <ul>
@@ -283,7 +277,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="Microservices" duration="3">
-
         <p class="image-container"><img src="img/948c3e9782a067f1.jpg"></p>
 <p>SmartTown EDA implementation is expected to expose the City-based Temperature Alert events for external consumption based on the TemperatureReading events published by the IoT Sensors.</p>
 <p>This would result in two distinct microservices:</p>
@@ -311,7 +304,6 @@ ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-
       </google-codelab-step>
     
       <google-codelab-step label="Workshop - IoT Sensor Data Simulation" duration="8">
-
         <h2 is-upgraded>Clone Git repository</h2>
 <ul>
 <li>Launch Terminal application</li>
@@ -405,7 +397,6 @@ logging:
       
 </code></pre>
 <p>Affect the following changes on the application configuration file:</p>
-
 <ol type="1">
 <li>Goto <a href="https://www.latlong.net" target="_blank">Latlang.net</a> and enter your city name to get latitude and longitude values</li>
 <li>In the yml file  <ul>
@@ -537,7 +528,6 @@ rttown/cloudstream/iot-data-collector$
       </google-codelab-step>
     
       <google-codelab-step label="Workshop - Alert Generator Microservice" duration="10">
-
         <p>We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.</p>
 <h2 is-upgraded>Review API Product URL</h2>
 <p>✅ Open Chrome browser and go to the following url:</p>
@@ -621,7 +611,6 @@ Check out your shiny new generated files at /home/ubuntu/github/smarttown/clouds
 <h3 is-upgraded>Application.java</h3>
 <p>✅ Review the Application.java, specifically the Supplier function.</p>
 <aside class="warning"><p>Add the @Bean annotation before the Function statement <br><code>@Bean<br>public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; processTemperatureReading() {<br></code></p>
-
 </aside>
 <p>Let us review the Function</p>
 <pre><code>@Bean
@@ -701,7 +690,6 @@ public Function&lt;TemperatureReading, Message&lt;OperationalAlert&gt;&gt; proce
 <aside class="special"><p>1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.</p>
 </aside>
 <aside class="special"><p>2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.</p>
-
 </aside>
 <p>✅ Review the application.yml</p>
 <pre><code>spring:
@@ -736,7 +724,6 @@ logging:
 <li>In the yml file  <ul>
 <li>Update the host name (instructor to provide )</li>
 <li>Update the bindings for <em>processTemperatureReading-in-0</em> with the City name you are publishing the TemperatureReading events. Assuming that your city is <em>London<br></em> From: <br><code>destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*</code><br> To: <br><code>destination: SmartTown/Operations/temperatureReading/created/v1/London/*/*<br></code></li>
-
 </ul>
 </li>
 <li>Save the file</li>
@@ -744,8 +731,8 @@ logging:
 
 
       </google-codelab-step>
-        <google-codelab-step label="Workshop - Execution" duration="8">
-
+    
+      <google-codelab-step label="Workshop - Execution" duration="8">
         <h3 is-upgraded>Running the IoT Data Simulation</h3>
 <p>✅ Open a terminal, change directory to iot-data-collector project and run the following maven command.</p>
 <pre><code>cd ~/github/smarttown/cloudstream/iot-data-collector
@@ -1050,6 +1037,7 @@ OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore t
 
 
       </google-codelab-step>
+    
       <google-codelab-step label="Takeaways" duration="1">
         <ul>
 <li>✅ The <a href="solace.com/products/portal" target="_blank">Solace Event Portal</a> is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.</li>
@@ -1058,7 +1046,6 @@ OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore t
 </ul>
 <p class="image-container"><img alt="solly_wave" src="img/9bd2cbed014d29b6.webp"></p>
 <p><strong>Thanks for participating in this codelab!</strong> Let us know what you thought in the <a href="https://solace.community" target="_blank">Solace Community Forum</a> and if you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the <em>Report a mistake</em> button at the bottom left of this codelab.</p>
-
 
 
       </google-codelab-step>

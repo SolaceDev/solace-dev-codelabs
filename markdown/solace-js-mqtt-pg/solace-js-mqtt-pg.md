@@ -1,7 +1,7 @@
 author: Andrew Roberts
 summary: A tech stack tutorial with Solace PubSub+, JavaScript, MQTT, and PostgreSQL
 id: solace-js-mqtt-pg
-tags: iguide
+tags:
 categories: JavaScript,MQTT
 environments: Web
 status: Published
