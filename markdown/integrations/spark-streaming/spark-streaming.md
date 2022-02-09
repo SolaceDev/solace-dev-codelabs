@@ -36,7 +36,6 @@ This document is divided into the following sections:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
-* [Solace PubSub+ Refer to section "Get Solace Messaging Configuration](http://docs.solace.com/Router-Configuration.htm)
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
 * [Spring Framework v4.3 Reference Documentation](https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/html/)
 * [Spring Framework v5.1 Documentation](https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/)
@@ -79,7 +78,7 @@ There are several ways you can get access to Solace messaging and find these req
 
 ### Option 1: Use PubSub+ Cloud
 
-* Follow [these instructions](cloud.solace.com/create-messaging-service/) to quickly spin up a cloud-based Solace messaging service for your applications.
+* Follow [these instructions](http://cloud.solace.com/create-messaging-service/) to quickly spin up a cloud-based Solace messaging service for your applications.
 * The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need:
     * Host:Port (use the JMS URI)
     * Message VPN
@@ -90,7 +89,7 @@ There are several ways you can get access to Solace messaging and find these req
 
 ### Option 2: Start a Solace PubSub+ Software Event Broker
 
-* Follow [these instructions](https://docs.solace.com/Solace-Cloud/Deployment-Considerations/deployment-options.htm) to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.
+* Follow [these instructions](https://solace.com/downloads/) to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.
 * The messaging connectivity information are the following:
     * Host: \<public_ip> (IP address assigned to the software event broker in tutorial instructions)
     * Message VPN: default
@@ -227,7 +226,7 @@ The event broker needs to be configured with the following configuration objects
 
 The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
-For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm).
+For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [CLI User Access Levels](https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm).
 
 
 #### Creating a Message VPN
@@ -314,7 +313,7 @@ The example configuration below uses XML-based container configuration to illust
 
 In Solace JMS, the "java.naming.security.principal" often uses the format <username>@<message-vpn>. This allows specification of the event broker client username ("spring_user") and message-vpn ("Solace_Spring_VPN") created in the previous section. Both of these items are mandatory in order to connect to the event broker.
 
-The "java.naming.security.credentials" is optional and provides the event broker client password for use when authenticating with the event broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the [Authentication section](#authentication).
+The "java.naming.security.credentials" is optional and provides the event broker client password for use when authenticating with the event broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the Authentication section in step 8 - Advanced Topics.
 
 ```xml
   <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
@@ -462,7 +461,7 @@ Note that it is also possible to use the `MessageListenerAdapter` provided by Sp
 
 The full source code for this example is available in the following source:
 
- * [MessageListener.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageListener.java)
+ * [MessageListener.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solace/integration/spring/MessageConsumer.java)
  
 ### Step 4 – Spring Framework – Sending Messages to Solace
 
@@ -560,7 +559,7 @@ Similar to the message consumer, the publishing code could be run using a simple
 
 The full source code for this example is available in the following source:
 
- * [MessageProducer.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solacesystems/integration/spring/MessageProducer.java)
+ * [MessageProducer.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/spring-framework/src/com/solace/integration/spring/MessageProducer.java)
 
 
 ## Sample Application
@@ -845,7 +844,7 @@ Duration: 0:30:00
 
 ### Authentication
 
-JMS Client authentication is handled by the event broker. The event broker supports a variety of authentications schemes as described in [Solace documentation "Client Authentication and Authorization"](https://docs.solace.com/Features/Client-authentication-and-authorization.htm).  The required JMS authentication properties can be set in the `JndiTemplate` configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of "spring_user" and password of "spring_password".
+JMS Client authentication is handled by the event broker. The event broker supports a variety of authentications schemes as described in [Solace Security documentation for Client Authentication and Authorization](https://docs.solace.com/Security/Security-Solace.htm).  The required JMS authentication properties can be set in the `JndiTemplate` configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of "spring_user" and password of "spring_password".
 
 ```xml
 <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
@@ -866,7 +865,7 @@ JMS Client authentication is handled by the event broker. The event broker suppo
 
 ###	Using SSL Communication
 
-This section outlines how to update the event broker and Spring Framework configuration to switch the client connection to using secure connections with the event broker. For the purposes of illustration, this section uses a server certificate on the event broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The Solace documentation [Client Authentication and Authorization](https://docs.solace.com/Features/Client-authentication-and-authorization.htm) and [Solace JNDI and Data Connection Properties](https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm) outline the extra configuration items required to switch from basic authentication to client certificates.
+This section outlines how to update the event broker and Spring Framework configuration to switch the client connection to using secure connections with the event broker. For the purposes of illustration, this section uses a server certificate on the event broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The Solace Security documentation [Client Authentication and Authorization](https://docs.solace.com/Security/Security-Solace.htmm) and [Solace JNDI and Data Connection Properties](https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm) outline the extra configuration items required to switch from basic authentication to client certificates.
 
 To change a Spring application from using a plain text connection to a secure connection, first the event broker configuration must be updated and then the Solace JMS configuration within the Spring Framework must be updated as described in the next sections.
 
@@ -1012,14 +1011,14 @@ The following example bean outlines all of the required Spring Framework configu
 
 ###	Working with Solace Disaster Recovery
 
-Solace's [Data Center Replication documentation](https://docs.solace.com/Features/Data-Center-Replication.htm)  provides details that need to be considered when working with Solace’s Data Center Replication feature. This integration guide will show how the following items are required to have a Spring application successfully connect to a backup data center using the Solace Data Center Replication feature.
+Solace's [Disaster Recovery documentation](https://docs.solace.com/Features/Data-Center-Replication.htm)  provides details that need to be considered when working with Solace’s Data Center Replication feature. This integration guide will show how the following items are required to have a Spring application successfully connect to a backup data center using the Solace Data Center Replication feature.
 
 *	Configuring a Host List within the Spring Framework
 *	Configuring JMS Reconnection Properties within Solace JNDI
 
 ####	Configuring a Host List within the Spring Framework
 
-As described in [Solace Feature Guide client configuration](https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration), the host list provides the address of the backup data center. This is configured within the Spring Framework through the `java.naming.provider.url` which is set within the `solaceJndiTemplate` bean in the sample configuration as follows:
+As described in [Solace Feature Guide client configuration](https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Creating-Client-Sessions.htm), the host list provides the address of the backup data center. This is configured within the Spring Framework through the `java.naming.provider.url` which is set within the `solaceJndiTemplate` bean in the sample configuration as follows:
 
 ```xml
   <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
