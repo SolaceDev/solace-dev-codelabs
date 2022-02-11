@@ -4,7 +4,7 @@ id: springone-2021-asyncapi-workshop
 tags: workshop,springone
 categories: Spring,Java,AsyncAPI
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/springone-2021-asyncapi-workshop
 
 # Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh
