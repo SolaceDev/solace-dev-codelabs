@@ -17,7 +17,7 @@ Sometimes Boomi Atom Processes need to communicate with external services in the
 
 On May 15th 2021, Boomi released the latest version of the Solace connector to support this type of interaction: support for a Request Action in the Solace Connector Shape.
 
-In this codelab, you will learn how to implement the Solace Connector for Boomi Request Action.
+In this codelab, you will learn how to use the Solace Connector for Boomi Request Action.
 
 ![diagram-overview.jpg](img/diagram-overview.jpg)
 
