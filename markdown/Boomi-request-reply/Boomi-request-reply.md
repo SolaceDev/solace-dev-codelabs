@@ -113,7 +113,7 @@ Duration: 0:5:00
 
 ![Try me config](img/TryMePublisherConfig.png)
 
-- You can get these values in the Connect tab of the Solace Cloud Console
+- You can get these values in the "Solace Web Messaging" section of the Connect tab of the Solace Cloud Console
   ![SolaceCloudConnectionDetails](img/SolaceCloudConnection.png)
 - Confirm the "Same as Publisher" checkbox is checked for the Subscriber and connect both the Publisher and Subcriber to the Solace Broker by clicking Connect on each.
   ![PublisherSubscriberConnected.png](img/PublisherSubscriberConnected.png)
