@@ -111,13 +111,13 @@ Duration: 0:5:00
   1. Set the Username
   1. Set the Password
 
-![Try me cnofig](img/TryMePublisherConfig.png)
+![Try me config](img/TryMePublisherConfig.png)
 
 - You can get these values in the Connect tab of the Solace Cloud Console
   ![SolaceCloudConnectionDetails](img/SolaceCloudConnection.png)
 - Confirm the "Same as Publisher" checkbox is checked for the Subscriber and connect both the Publisher and Subcriber to the Solace Broker by clicking Connect on each.
   ![PublisherSubscriberConnected.png](img/PublisherSubscriberConnected.png)
-- Lastly, have the Subscriber start listening on the topic to which we will publih by typing the topic name in and clicking on Subscribe.
+- Lastly, have the Subscriber start listening on the topic to which we will publish by typing the topic name in and clicking on Subscribe.
   ![SubscribedToTopic](img/SubscribedToTopic.png)
 
 ## Test
@@ -147,7 +147,7 @@ Positive
   - Copy and paste the ReplyTo and CorrelationID values into the Publisher and also add some text if you want to confirm that the response payload is also captured. You will need to click on "Show Advanced" in order to include the CorrelationID.
     ![PublishResponse.png](img/PublishResponse.png)
 
-- Use the Boomi Test capability to confirm reciept of the reply and process completion.
+- Use the Boomi Test capability to confirm receipt of the reply and process completion.
   - The Boomi Process should have completed with success.
     ![BoomiProcessComplete.png](img/BoomiProcessComplete.png)
   - And you can check the Source data for the Stop Shape to see what data was returned.
