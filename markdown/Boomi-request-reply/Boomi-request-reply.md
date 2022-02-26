@@ -82,7 +82,7 @@ The first thing we will do is create a simple Process in Boomi that makes a requ
 
 - Drag a Message Shape onto the canvas and give it some sample data
 
-  - I am putting a silly question in, but it does not matter. We are not really processing this data.
+  - I am putting text in the message body to demonstrate sending data in the message body.  However the replier is not going to use this data.
     ![Message Shape - sample data](img/MessageShape-sampleData.png)
 
 - Drag a Solace Connector Shape onto the canvas and configure to send a Request
