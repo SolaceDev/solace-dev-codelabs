@@ -71,7 +71,7 @@ The first thing we will do is create a simple Process in Boomi that makes a requ
 
 ### Create a new Process
 
-- In your Boomi environment, create a new Process. You may call it anything you like, we will be calling ours Boomi Requestor
+- In your Boomi environment, create a new Process. You may call it anything you like.  We will be calling ours Boomi Requestor
 
 ![Boomi Request Process Create](img/CreateBoomiReqReplyProcess.png)
 
