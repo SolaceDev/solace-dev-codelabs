@@ -1,7 +1,7 @@
 author: Sumeet Koshal
 summary: Use Azure function to stream data from Azure messaging services to Solace PubSub+
 id: azure2Solace
-tags: iguide
+tags:
 categories: Azure, C#
 environments: Web
 status: published

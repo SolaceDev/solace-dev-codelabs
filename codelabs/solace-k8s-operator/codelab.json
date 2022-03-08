@@ -10,9 +10,15 @@
   "summary": "How to build a Solace PubSub+ Kubernetes Operator",
   "source": "solace-k8s-operator.md",
   "theme": "",
-  "status": ["draft"],
-  "category": ["kubernetes"],
-  "tags": ["iguide", "web"],
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "kubernetes"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart",
   "url": "solace-k8s-operator"
 }

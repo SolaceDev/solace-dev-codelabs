@@ -1,8 +1,8 @@
 author: Giri Venkatesan
 summary: Building EventAPI Products using Spring Cloud Stream, Event Portal and AsyncAPI 
 id: create-api-products-using-scs-and-ep
-tags: workshop, spring cloud stream, event portal, asyncapi
-categories: Spring,Java,AsyncAPI,Event Portal
+tags: workshop,
+categories: Spring, Java, AsyncAPI, Event Portal
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/create-api-products-using-scs-and-ep
@@ -12,9 +12,21 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## Overview
 Duration: 0:01:00
 
-If your requirement is to build modern, real-time applications using event-driven architecture (EDA), this codelab will walk you through the steps of how to build Event API products, define asynchronous APIs, implement them using Spring Cloud Stream microservices, and globally distribute them across multi-cloud and on-premises environments using an Solace PubSub+ platform.
+If your requirement is to build modern real-time applications using event-driven architecture (EDA), this codelab is for you! 
 
-In this codelab, we will create API Products that helps others to consume Business capabilities of a _SmartTown_ where APIs are a way of life. We will also
+This codelab will walk you through the steps to 
+
+✅  build Event API products,   
+✅  define asynchronous APIs,   
+✅  implement them using Spring Cloud Stream microservices,   
+✅  and globally distribute them across multi-cloud and on-premises environments using an Solace PubSub+ platform.    
+
+In this codelab, we will create API Products to consume business capabilities of a _SmartTown_. The SmartTown implements a microservices architecture for the Heating and Cooling system. More details on this will be covered throughout the codelab.    
+
+![](img/smarttown-eda-design.jpg)
+
+
+We will also
 
 - Learn how to define asynchronous APIs.
 - Use the AsyncAPI Generator template for Spring Cloud Stream.
@@ -29,10 +41,9 @@ Prerequisites
 ## Requirements
 Duration: 0:01:00
 
-
 🛠 This page covers the setup needed to perform this codelab. 🛠
 
-### PubSub+ Event Broker
+### Create a new PubSub+ Event Broker
 
 ✅ You need to sign for a free Solace Cloud Account using [this link](https://console.solace.cloud/login/new-account).
 
@@ -46,15 +57,15 @@ Complete the following steps:
 
 2. __Create an Event Broker Service__ Create an event broker service (or simply a service) using Cluster Manager tool and name the service as `solace-eap`. 
    For more information on accessing the Cloud Console, check out the [documentation](https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm)
-   
-3. __Create a Client Username__ Connect to the broker service and open the Message VPN console to add client username under `Access Control` setting. Create a client username `smarttown` with password `smarttown`. 
 
-Ensure that you have captured the following details on connection information that will be used in this codelab.
+Negative
+: Event Broker Service creation may take anywhere from 2 to 4 minutes to complete the process.
 
-- SMF Host: `tcp://xxxxxx.messaging.solace.cloud:55555`
-- Message VPN: solace-eap
-- Username: `smarttown`
-- Password: `smarttown`
+### Use an existing PubSub+ Event Broker
+
+If you have a PubSub+ Cloud account and an existing Event Broker Service, you can use the existing Message VPN on the Broker Service for this codelab.
+
+1. __Message VPN Name__ Make a note of the Message VPN name - you will be using this name wherever 'solace-eap' is referred as VPN name in this codelab.   
 
 ### AsyncAPI Generator Requirements
 
@@ -73,31 +84,31 @@ Ensure that you have captured the following details on connection information th
   - Other install instructions [here](https://maven.apache.org/install.html)
 - Your favorite Java IDE 💥
 
-### Clone Git Repository
+## Clone Git Repository
+Duration: 0:01:00
 
 A ready to use code of few of the microservices referred in this workshop are available in Git. We will use this codebase and build new code wherever necessary to complete this workshop.
 
 Positive
-: Also, the completed solution is available in a branch (solution) on the same repository.
+: Note: the completed solution is available n the `solution` branch
 
 * Launch Terminal application 
-* Execute the following command 
-  ```
-  cd ~/github
+* Execute the following command   
+  `git clone https://github.com/gvensan/smarttown.git`
 
-  git clone https://github.com/gvensan/smarttown.git
-  ```
-  This would create a directory by name __smarttown__ and checkout the git repository contents.
+Below is the directory structure of the newly cloned **smarttown** folder
   ![](img/workshop-setup-1.jpg)
 
-## PubSub+ Event Portal
-Duration: 0:03:00
+## Introduction to PubSub+ Event Portal
+Duration: 0:02:00
 
 ### Solace PubSub+ Event Portal
 
-The Market’s First API Portal…for Events
+The Solace [PubSub+ Event Portal](https://solace.com/blog/api-portal-for-events/) is a single place where architects and developers can collaboratively catalog, share, create and manage all the events, schemas and applications internal and external to the enterprise.
 
-[PubSub+ Event Portal](https://solace.com/blog/api-portal-for-events/) lets you design your event-driven applications, events, and schemas as interconnected network diagrams your team can go over in design reviews.
+One of the features of the event portal is the **Catalog**, allowing users assess which events have high value over others to consumers (both internal and external). This information is used to build Event API Product.
+
+![](img/event-portal.jpg)
 
 With the PubSub+ Event Portal, you can:
 
@@ -109,31 +120,121 @@ With the PubSub+ Event Portal, you can:
 - Integrate with 3rd-party systems for programmatic interactions
 - Manage and audit changes to events, schemas, and applications
 - Runtime event discovery
-- Understand statistics about events
+- Understand statistics about events    
 
-
-![](img/event-portal.jpg)
-
-### Foundational Elements of PubSub+ Event Portal
+### Elements of PubSub+ Event Portal
 
 ![](img/event-portal-foundation.jpg)
 
 #### Application Domain
-An application domain represents a namespace where applications, events, and schemas can live. Application domains are useful to decompose the enterprise and create organizational boundaries within which teams can work. Within the application domain, you can create a suite of applications, events and schemas that are isolated from other application domains. 
-#### Schema
-In simple terms, a schema represents the contract to describe the payload of an event. Producers and consumers of an event can trust that the event's payload matches the schema definition assigned to that event. Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema. The content is either in JSON or AVRO Schema format, or XSD/DTD format.
-#### Event
-The event represents a business moment or an action that can be communicated with zero or more interested applications. The event is where you define metadata that describes and categorizes the event. An event is produced on a specific topic that must be defined for that event. From a modelling perspective, events reference payload schemas, and events are referenced by applications, thus forming the glue that binds applications together.
-
+An application domain represents a namespace where applications, events, and schemas can live. 
+* Application domains are useful to decompose the enterprise and create organizational boundaries within which teams can work
+*  Within the application domain, you can create a suite of applications, events and schemas that are isolated from other application domains   
+  
 #### Application
-An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, there is no need to create multiple applications for each instance in a cluster.
+An application represents a piece of software that produces and consumes events. 
+* Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. 
+* A single application represents a class of applications that are running the same code base; therefore, there is no need to create multiple applications for each instance in a cluster.
 
-Icons used in Designer:
-![](img/event-portal-icons.jpg)
+#### Event
+The event represents a business moment or an action that can be communicated with zero or more interested applications. 
+* The event is where you define metadata that describes and categorizes the event. An event is produced on a specific topic that must be defined for that event
+* From a modelling perspective, events reference payload schemas, and events are referenced by applications, thus forming the glue that binds applications together           
+
+#### Schema
+In simple terms, a schema represents the contract to describe the payload of an event. 
+* Producers and consumers of an event can trust that the event's payload matches the schema definition assigned to that event
+* Schemas define a type of payload through JSON, AVRO, XML, Binary, or Text. JSON, AVRO, and XML schemas have content that describes each property of the schema
+* The content is either in JSON or AVRO Schema format, or XSD/DTD format        
+
+## Introduction to Spring Cloud Stream
+Duration: 0:03:00
+
+![Cloud Stream Intro](img/spring-cloud-logo.png)
+
+Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we'll cover in a bit. The framework is based on Spring Boot and Spring Integration.
+
+Spring Cloud Stream has three different types of message exchange contracts:
+
+1. **Suppliers** are sources of events
+1. **Sinks** are consumers of events
+1. **Processors** are both consumers and subscribers of events
+
+### Spring Cloud Stream Components
+Spring Cloud Stream introduces three main components that allow developers to utilize messaging in their code:
+
+* __Binder__ - The component that implements communication with a specific message broker. For example, there is a RabbitMQ Binder, a Kafka Binder, and so on. Binders abstracts the messaging API
+* __Binding__ - The interface for sending and receiving messages. This component links the abstract channels in your code with a topic or queue that’s handled by the binder.
+* __Message__ - The data structure used to communicate with the bindings between your code and your message broker. How this data is packaged and communicated over the message broker is determined by the binder.
+
+![Cloud Stream Intro](img/scs-what-is-01.png)
+
+### Message Exchange Contracts Map to Java Functions
+
+As of Spring Cloud Stream v3 the preferred programming model is to use Java Functions to implement your cloud stream apps.
+
+We just mentioned the 3 types of Cloud Stream message exchange contract are "Sources", "Sinks" and "Processors".
+Those map to functions as follows:
+
+- `java.util.function.Supplier` -> Source [Producer/Publisher of Events]
+- `java.util.function.Consumer` -> Sink [Subscriber/Consumer of Events]
+- `java.util.function.Function` -> Processor [ Consumes, Processes, and Produces Events ]
+
+### Binders
+
+Spring Cloud Stream Binders are really what make the framework useful. Binders provide an abstraction layer between your code and the messaging systems over which events are flowing. This allows you to write your code without having to worry about learning messaging APIs! When messages are sent or received from the messaging system they pass through the messaging system specific binder which knows how to communicate with that specific message broker.
+
+As of the creation of this codelab the available Cloud Stream Binders are:
+
+- RabbitMQ
+- Apache Kafka
+- Amazon Kinesis
+- Google PubSub
+- Solace PubSub+
+- Azure Event Hubs
+- Apache RocketMQ
+
+Positive
+: We will be using the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
+
+### Communication Models
+
+Instead of having to learn Messaging APIs, developers just have to understand the communication models that Spring Cloud Stream supports. There are 3 supported models, but support varies per binder.
+
+1. Publish-subscribe: subscribers are independent from each other & receive events in order
+1. Consumer groups: fan-out and load-balancing across multiple consumers
+1. Stateful partitioning support: in-order processing for consistency and performance
+
+### References:
+
+- The Spring Cloud Stream [Reference Guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference)
+- Spring Sample [Github Repository](https://github.com/spring-cloud/spring-cloud-stream-samples)
+- Solace Sample [Github Repository](https://github.com/SolaceSamples/solace-samples-spring)
+- Solace Codelab - [Spring Cloud Stream - Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/)
+- Solace Codelab - [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond)
+- Spring Cloud Stream Binder for Solace PubSub+ - [Spring Cloud Stream Binder for Solace PubSub+ ](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter)
+
+## Spring Cloud Stream - Solace API Connection
+Duration: 0:03:00
+
+Launch the Broker Service from PubSub+ Console and open the connection tab.
+
+![](img/ep-spring-connect-1.jpg)
+
+Click on __Get Started__ button next to the Spring Cloud Stream library
+
+![](img/ep-spring-connect-2.jpg)
+
+Make a note of the following parameters:
+* __Host URI__ 
+* __Username__
+* __Password__
+  
+![](img/ep-spring-connect-3.jpg)
+
 
 ## SmartTown - Event-Driven Design
-
-Duration: 0:04:00
+Duration: 0:03:00
 
 SmartTown uses information and communication technology to improve operational efficiency, share information with the public and provide a better quality of government service and citizen welfare. SmartTown uses internal microservice architecture with functionality exposed through APIs and externally exposed API products while hiding the implementation details.
 
@@ -143,16 +244,15 @@ SmartTown uses information and communication technology to improve operational e
 
 ![](img/smarttown-topology-view.jpg)
 
-Though the SmartTown EDA design shall encompass various aspects of automation and control - we will focus on the Analytics and Operations applications for this workshop.
+We will focus on the Analytics and Operations applications for this workshop.
 
 #### Applications
 
 ![](img/smarttown-domain-view.jpg)
 
-A view that captures the relationship between Applications within the Domain based on their publish/subscribe action on the domain events.
 #### Events
 
-- **TemperatureReading** - An event generated by an Temperature Sensor (IoT Device) with temperature reading and a timestamp
+- **TemperatureReading** - An event generated by a Temperature Sensor (IoT Device) with temperature reading and a timestamp
 - **OperationalAlert** - An event generated when the temperature is found to be out of bounds with an alert type and prioritization level.
 
 ![](img/smarttown-event-view.jpg)
@@ -177,356 +277,49 @@ Positive
 - [PubSub+ Event Portal - Getting started](https://solace.com/resources/pubsub-event-portal/eventportal-get-started-demo-video)
 - [PubSub+ Event Portal - Resources](https://solace.com/resources/pubsub-event-portal)
 
-## Create Application Domain
+## Import Application Domain
+Duration: 0:03:00
 
-We will create an event-driven design for SmartTown functions in the Event Portal using Designer tool. Let us start with defining Application Domain.
+We will create an event-driven design for SmartTown functions in the Event Portal using the PubSub+ Designer. To begin with, we will import an application domain export file that contains required event, schema and application domain definitions - we just need to create application and tie the event with those applications.
 
-###Define Application Domains
-
-We will be creating two application domains:
-1. SmartTown - Analytics and
-2. SmartTown - Operations
-
-✅ Launch Solace PubSub+ Event Portal and open Designer tool
-- Click on __Create__ button next to ___Application Domain___
+✅ Launch Solace PubSub+ Event Portal and open the Designer
+- Click on __Import__ button next to ___Application Domain File___ or right-click on the canvas and choose __Import Application Domain__ option.
 
 ![](img/ep-application-domain-1.png)
 
+✅ On the file open dialog, choose the file ___asyncapi-designer-topology.json___ in __cloudstream__ folder of the cloned repository folder.
 
-✅ Create Application Domain - ___SmartTown - Analytics___
-- Enter __SmartTown - Analytics__ for ___Name___
-- Enter __SmartTown/Analytics__ for ___Topic Domain___
-- Click on __Save__ button
+This import action would create
 
-![](img/ep-application-domain-2.png)
-
-✅ Create Application Domain - ___SmartTown - Operations___
-- Enter __SmartTown - Operations__ for ___Name___
-- Enter __SmartTown/Operations__ for ___Topic Domain___
-- Click on __Save__ button
-
-![](img/ep-application-domain-3.png)
-
-✅ Now, you should be able to see both the domains in the topology view
+* Application domains   
+  * SmartTown - Operations
+  * SmartTown - Analytics
+* Events
+  * TemperatureReading with a topic address of `SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}`
+  * OperationalAlert with a topic address of `SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}`
+* Schemas
+  * TemperatureReading
+  * OperationalAlert
 
 ![](img/ep-application-domain-4.png)
 
-## Create Schema
-
-✅ Create schema under ___Smart - Operations___ Application  
-
-![](img/ep-create-schema-1.png)
-
-✅ Launch create schema page
-
-![](img/ep-create-schema-2.png)
-
-###Create Schema - ___TemperatureReading___
-
-The following section describes the event schema to be used for TemperatureReading Event. It captures the geo-location of the sensor (lat, long), city name, city name and cpu-load attributes.
-
-```
-{
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-      {
-        "m_city": "San Francisco",
-        "m_cpu_temp": 55.6875,
-        "m_cpu_load": 3.0550130208333335,
-        "m_latitude": 13.04302978515625,
-        "m_longitude": 80.27391815185547
-      }
-    ],
-    "required": [
-      "m_city",
-      "m_cpu_temp",
-      "m_cpu_load",
-      "m_latitude",
-      "m_longitude"
-    ],
-    "properties": {
-      "m_city": {
-        "type": "string",
-        "title": "The m_city schema",
-        "description": "An explanation about the purpose of this instance.",
-        "default": "",
-        "examples": [
-          "San Francisco"
-        ]
-      },
-      "m_cpu_temp": {
-        "type": "number",
-        "title": "The m_cpu_temp schema",
-        "description": "An explanation about the purpose of this instance.",
-        "default": 0,
-        "examples": [
-          55.6875
-        ]
-      },
-      "m_cpu_load": {
-        "type": "number",
-        "title": "The m_cpu_load schema",
-        "description": "An explanation about the purpose of this instance.",
-        "default": 0,
-        "examples": [
-          3.0550130208333335
-        ]
-      },
-      "m_latitude": {
-        "type": "number",
-        "title": "The m_latitude schema",
-        "description": "An explanation about the purpose of this instance.",
-        "default": 0,
-        "examples": [
-          13.04302978515625
-        ]
-      },
-      "m_longitude": {
-        "type": "number",
-        "title": "The m_longitude schema",
-        "description": "An explanation about the purpose of this instance.",
-        "default": 0,
-        "examples": [
-          80.27391815185547
-        ]
-      }
-    },
-    "additionalProperties": true
-  }
-```
-
 Positive
-: You can copy the above JSON text and paste it in the __Content__ section of the schema create dialog.
+: Note that the design is still missing applications and the application-event pub/sub association, which we will be defining in the next steps.
 
-In the Create Schema page:
-- Enter __TemperatureReading__ for ___Name___
-- Enable the checkbox for ___Shared___
-- Choose __JSON__ for ___Content Type___
-- Copy the above JSON text and paste it in the __Content__ textfield
-- Click on __Save__ button
-
-![](img/ep-create-schema-3.png)
-
-###Define Schema - ___OperationalAlert___
-
-The following section describes the event schema to be used for OperationalAlert Event. It captures the geo-location of the sensor (lat, long), temperature, city name, attributes.
-
-```
-{
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "type": "object",
-  "title": "The root schema",
-  "description": "The root schema comprises the entire JSON document.",
-  "default": {},
-  "examples": [
-    {
-      "lat": -71.518929,
-      "long": -71.518929,
-      "city": "Hopkinton",
-      "alertType": "HighTemperature",
-      "severity": "Medium",
-      "temperature": 99.3
-    }
-  ],
-  "required": [
-    "lat",
-    "long",
-    "city",
-    "alertType",
-    "severity",
-    "temperature"
-  ],
-  "properties": {
-    "lat": {
-      "type": "number",
-      "title": "The lat schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        -71.518929
-      ]
-    },
-    "long": {
-      "type": "number",
-      "title": "The long schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        -71.518929
-      ]
-    },
-    "city": {
-      "type": "string",
-      "title": "The city schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "Hopkinton"
-      ]
-    },
-    "alertType": {
-      "type": "string",
-      "title": "The alertType schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "HighTemperature"
-      ]
-    },
-    "severity": {
-      "type": "string",
-      "title": "The severity schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "Medium"
-      ]
-    },
-    "temperature": {
-      "type": "number",
-      "title": "The temperature schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        99.3
-      ]
-    }
-  },
-  "additionalProperties": true
-}
-```
-
-Positive
-: You can copy the above JSON text and paste it in the __Content__ section of the schema create dialog.
-
-In the Create Schema page:
-- Enter __OperationalAlert__ for ___Name___
-- Enable the checkbox for ___Shared___
-- Choose __JSON__ for ___Content Type___
-- Copy the above JSON text and paste it in the __Content__ textfield
-- Click on __Save__ button
-
-![](img/ep-create-schema-4.png)
-
-## Create Event
-
-✅ Create event under ___Smart - Operations___ Application Domain 
-
-![](img/ep-create-event-1.png)
-
-✅ Launch create event page
-
-![](img/ep-create-event-2.png)
-
-### Create Event - TemperatureReading
-
-The following section describes how to create an event and set its attributes - name, logical event mesh, topic address and schema.
-
-![](img/ep-create-event-3.png)
-
-In the Create Event page:
-- Enter __TemperatureReading__ for ___Name___
-- Enable the checkbox for ___Shared___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
-- Choose ___Schema___ as selected option for __Value__
-  - In the first dropdown select __TemperatureReading__ 
-  - In the second dropdown select __All Versions__
-  
-✅ Launch ___Set Topic Name___ page
-
-![](img/ep-create-event-4.png)
-
-✅ Set Topic page
-
-![](img/ep-create-event-5.png)
-
-✅ Create level __SmartTown__ of _Literal_ type
-
-![](img/ep-create-event-6.png)
-
-✅ Create level __Operations__ at the path ___SmartTown___ of _Literal_ type
-
-![](img/ep-create-event-7.png)
-
-✅ Create level __temperatureReading__ at the path ___SmartTown___/___Operations___ of _Literal_ type
-
-✅ Create level __created__ at the path ___SmartTown___/___Operations___/___temperatureReading___ of _Literal_ type
-
-✅ Create level __v1__ at the path ___SmartTown___/___Operations___/___temperatureReading___/___created___ of _Literal_ type
-
-✅ Create level __city__ at the path ___SmartTown___/___Operations___/___temperatureReading___/___created___/___v1___ of _Variable_ type
-
-![](img/ep-create-event-8.png)
-
-✅ Create level __latitude__ at the path ___SmartTown___/___Operations___/___temperatureReading___/___created___/___v1___/___city___ of _Variable_ type
-
-✅ Create level __longitude__ at the path ___SmartTown___/___Operations___/___temperatureReading___/___created___/___v1___/___city___/___latitude___ of _Variable_ type
-
-- The final topic name structure
-
-![](img/ep-create-event-9.png)
-
-- Click on __Set and Return to Event__ button
-
-![](img/ep-create-event-10.png)
-
-- Click on __Save__ button
-
-### Create Event - OperationalAlert
-
-The following section describes how to create an event and set its attributes - name, logical event mesh, topic address and schema.
-
-In the Create Event page:
-- Enter __OperationalAlert__ for ___Name___
-- Enable the checkbox for ___Shared___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
-- Choose ___Schema___ as selected option for __Value__
-  - In the first dropdown select __OperationalAlert__ 
-  - In the second dropdown select __All Versions__
-  
-✅ Launch ___Set Topic Name___ page
-
-✅ Create level __SmartTown__ of _Literal_ type
-
-✅ Create level __Operations__ at the path ___SmartTown___ of _Literal_ type
-
-✅ Create level __OperationalAlert__ at the path ___SmartTown___/___Operations___ of _Literal_ type
-
-✅ Create level __created__ at the path ___SmartTown___/___Operations___/___OperationalAlert___ of _Literal_ type
-
-✅ Create level __v1__ at the path ___SmartTown___/___Operations___/___OperationalAlert___/___created___ of _Literal_ type
-
-✅ Create level __AlertPriority__ at the path ___SmartTown___/___Operations___/___OperationalAlert___/___created___/___v1___ of _Variable_ type
-
-✅ Create level __AlertType__ at the path ___SmartTown___/___Operations___/___OperationalAlert___/___created___/___v1___/___AlertPriority___ of _Variable_ type
-
-- The final topic name structure
-
-![](img/ep-create-event-11.png)
-
-- Click on __Set and Return to Event__ button
-
-![](img/ep-create-event-12.png)
-
-- Click on __Save__ button
-### Events List
-
-![](img/ep-create-event-13.png)
-
+✅ Review the elements under each of the Application Domains to get an understanding of what is created by the import and their association.  
 ## Create Application
+Duration: 0:04:00
 
-✅ Create application under ___SmartTown - Operations___
+Let's create the Temperature Sensors and the Eternal Heating/Cooling Controllers Applications. To do so:
+
+✅ Navigate to the ___SmartTown - Operations___ Application Domain 
 ![](img/ep-create-application-1.png)
 
-✅ Launch create application option
+✅ Click on create application option
 
 ![](img/ep-create-application-2.png)
 
-### Create Application - Temperature Sensors	
+### 1️⃣ Temperature Sensors	Application
 
 The following section describes how to create an application and set its attributes - name, application type and event association.
 
@@ -536,21 +329,17 @@ In the Create Application page:
 
 ![](img/ep-create-application-3.png)
 
-✅ Launch ___Manage___ events page
+✅ Click on ___Manage___ events page
 
 ![](img/ep-create-application-4.png)
 
-✅ Set Publish/Subscribe permissions on Events
-
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on the **Pub** icon on the **TemperatureReading** Event indicating the event relationship with the application
 
 ![](img/ep-create-application-5.png)
 
-### Create Application - Heating Cooling Controllers - EXTERNAL	
-
-The following section describes how to create an application and set its attributes - name, application type and event association.
+### 2️⃣ External Heating/Cooling Controllers Application
 
 In the Create Application page:
 - Enter __Heating Cooling Controllers - EXTERNAL__ for ___Name___
@@ -560,22 +349,90 @@ In the Create Application page:
 
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on the __Sub__ icon for the **TemperatureReading** Event 
+- Click on the __Pub__ icon for the **Operational Alert** Event 
 - Click on __Save__ button
 
 ![](img/ep-create-application-6.png)
 
 ### Applications List
 
+When  you click on the Application List tab you will see the following
+
 ![](img/ep-create-application-7.png)
 
+## Introduction to AsyncAPI
+Duration: 0:03:00
+
+![](img/asyncapi-logo.png)
+
+AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.    
+
+It is an open source initiative that provides both 
+* a specification to describe and document your asynchronous applications in a machine-readable format, and 
+* tooling (such as code generators) to make life easier for developers tasked with implementing them.   
+
+### AsyncAPI Document
+
+An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.
+
+The AsyncAPI initiative provides a handy, interactive tool called the [AsyncAPI playground](https://playground.asyncapi.io) to make the document creation easier. 
+
+![AsyncAPI Playground](img/asyncapi-playground.jpg)
+
+Alternatively you can generate this document from EDA tools such as [Event Portal](https://solace.com/products/portal/) of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture. 
+
+Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.
+
+### AsyncAPI Generator
+
+AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.
+
+The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols (nodejs, python, go), but for this workshop we’re going to use the [Spring Cloud Stream template](https://github.com/asyncapi/java-spring-cloud-stream-template).
+
+The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.
+
+```
+Example:
+
+ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
+```
+
+### Coding Business Logic
+
+The generated spring project is a regular Spring Boot application and contains:
+* Generated classes under javaPackage, including POJOs defined from the schemas in the AsyncAPI document 
+* _application.yml_ containing Spring Cloud Stream configuration and binding details
+* _Application.java_ containing implementation of one or more Spring Cloud Stream Functions interfaces asper the AsyncAPI specification
+  * A Supplier function that implements delivery of messages to the channel 
+  * A Producer function that handles messages delivered on the channels
+  * A Function implementation that processes a delivered message and returns a response message       
+
+### AsyncAPI in Event Portal
+
+PubSub+ Event Portal makes adopting and using AsyncAPI simple:
+* __Faster__: you don’t have to edit asyncapi specs by hand
+* __Ensure Consistency__: changes to events and schemas up stream can easily be exported
+* __Flexible__: Export Event API Products for interested developer and/or model your application interface and export it
+
+![](img/ep-eaproduct-3.jpg)
+
+
+
+# References:
+- [AsyncAPI Specification](https://www.asyncapi.com/docs/specifications/v2.2.0)
+- [AsyncAPI Code Generator](https://www.asyncapi.com/generator)
+- [AsyncAPI Code Generator - GitHub](https://github.com/asyncapi/generator#update-the-cli)
+- [AsyncAPI vs OpenAPI](https://solace.com/blog/asyncapi-vs-openapi/)
+- [AsyncAPI Code Generation: Microservices Using Spring Cloud Stream](https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/)
+
+
 ## Event API Product
+Duration: 0:02:00
 
 An Event API Product can be composed of events from either Solace PubSub+ Event Broker or Kafka for external developers' consumption, enabling them to build event-driven applications that can subscribe to and/or publish the specified events.
 
 The events bundled in an Event API Product can be added from one or more application domains, so you can mix and match events. Event API is all about identifying and bundling high-value events for external consumption similar to REST APIs. 
-
-The following diagram demonstrates the co-existence of REST & Events based APIs serving both internal and external applications.
 
 ![](img/ep-eaproduct-1.png)
 
@@ -583,14 +440,15 @@ When it comes to value and exposure, Event-driven applications can combine the c
 
 ![](img/ep-eaproduct-2.png)
 
+
 ### References:
 
 - Getting started with PubSub+ Cloud [Documentation](https://docs.solace.com/Solace-Cloud/ggs_signup.htm)
 - Event API Products [Documentation](https://docs.solace.com/Solace-Cloud/Event-Portal/event-api-products.htm)
 - Understanding the Concept of an Event Portal - An API Portal for Events [Blog](hthttps://solace.com/blog/api-portal-for-events/)
 
-
 ## Create Event API Product
+Duration: 0:04:00
 
 Next step in building an Event API product involves bundling of high-value, share-worthy events. The resulting bundle is released as a specification for public consumption. The generated specification is based on a commonly understood standard - like AsyncAPI. 
 
@@ -606,16 +464,18 @@ AsyncAPI also provides tools to generate code (supports popular languages) helpi
 
 In the Create Event API Product page:
 - Enter __HVAC  Controller__ for ___Name___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
+- Choose __LogicalEventMesh__ for ___Logical Event Mesh___
 - Enter __localhost:55555__ for ___Server URL___
 - Enter __smf__ for ___Server Protocol___
 
-Negative
-: Do not yet click on __Save__ button, we will configure the Events and then save.
-
 ![](img/ep-eapi-product-2.png)
 
-✅ Configure Event settings
+
+Negative
+: Do not yet click on __Save__ button! We will configure the Events and then save.
+
+
+✅ Navigate to the Events tab to configure Event settings
 
 ![](img/ep-eapi-product-3.png)
 
@@ -628,15 +488,15 @@ Negative
 
 ![](img/ep-eapi-product-5.png)
 
-- Mark __TemperatureReading__ with ___Subscribe___ permission 
-- Mark __OperationalAlert__ with ___Publish___ permission
+- Mark __TemperatureReading__ with ___Subscribe___ property 
+- Mark __OperationalAlert__ with ___Publish___ property
 - Click on the __Save__ button
 
 ✅ Event API Product list 
 
 ![](img/ep-eapi-product-6.png)
 
-✅ __HVAC Controller__ Details 
+✅ Click on the __HVAC Controller__ Event API product Details 
 
 ![](img/ep-eapi-product-7.png)
 
@@ -667,57 +527,8 @@ With this, the Event API Product named __HVAC Controller__ is ready and publishe
 
 Interested parties can download the AsyncAPI specification from this public URL and build applications with minimal code using AsyncAPI codegen tools.
 
-## AsyncAPI
-Duration: 0:03:00
-
-![](img/asyncapi-logo.png)
-
-AsyncAPI has emerged as the industry standard for defining asynchronous, event-driven APIs; you can think of it as OpenAPI for the asynchronous world.    
-
-It is an open source initiative that provides both 
-* a specification to describe and document your asynchronous applications in a machine-readable format, and 
-* tooling (such as code generators) to make life easier for developers tasked with implementing them.   
-
-### AsyncAPI Document
-
-An AsyncAPI document that defines the application that you want to develop. This document can be represented as JSON objects conforming to the JSON standards, or an YAML file. You can either manually create the document or use an event portal.
-
-The AsyncAPI initiative provides a handy, interactive tool called the [AsyncAPI playground](https://playground.asyncapi.io) to make the document creation easier. 
-
-![AsyncAPI Playground](img/asyncapi-playground.jpg)
-
-Alternatively you can generate this document from EDA tools such as [Event Portal](https://solace.com/products/portal/) of Solace PubSub+ platform. Typically they are design-time tools allowing architects and developers to collaborate using a GUI to design the event-driven architecture. 
-
-Having a catalog of well-organized channels and events for reuse will also save you both time and headaches while collaborating, instead of having to comb through a bunch of files in various locations.
-
-### AsyncAPI Generator
-
-AsyncAPI Generator is a tool that can generate a skeleton code from the AsyncAPI document, reducing the need to laboriously create boilerplate code saving time and effort.
-
-The AsyncAPI Code Generator supports templates to generate code for a variety of different languages and protocols, but for this workshop we’re going to use the [Spring Cloud Stream template](https://github.com/asyncapi/java-spring-cloud-stream-template).
-
-The Spring Cloud Stream framework provides an easy way to get started with event-driven microservices by providing binders that allow the developer to create their microservices without having to learn messaging APIs.
-
-```
-Example:
-
-ag ~/AsyncApiDocument.yaml https://github.com/asyncapi/java-spring-cloud-stream-template.git
-```
-
-### Coding Business Logic
-
-The generated spring project is a regular Spring Boot Java project with generated classes under the javaPackage and an _application.yml_ file for configuration. It contains:
-* Generated classes under javaPackage include POJOs defined from the schemas in the AsyncAPI document and 
-* _Application.java_ which contains the actual Spring Cloud Functions to handle messages delivered on the channels as defined in the AsyncAPI document where we’ll add our business logic.
-
-### References:
-
-- [AsyncAPI Code Generator](https://www.asyncapi.com/generator)
-- [AsyncAPI Code Generator - GitHub](https://github.com/asyncapi/generator#update-the-cli)
-- [AsyncAPI vs OpenAPI](https://solace.com/blog/asyncapi-vs-openapi/)
-- [AsyncAPI Code Generation: Microservices Using Spring Cloud Stream](https://solace.com/blog/asyncapi-codegen-microservices-using-spring-cloud-stream/)
-
 ## Download AsyncAPI Document
+Duration: 0:02:00
 
 ###Review API Product URL
 
@@ -729,85 +540,12 @@ You can locate the website URL where the EventAPI Product is hosted from the Eve
 
 ![](img/workshop-setup-5.jpg)
 
-You can click on the __Download YAML__ button and download the document from this portal - just you need to move it to the cloudstream folder.
+You can click on the __Download YAML__ button and download the document from this portal. Let's move it to the `cloudstream` directory in the previously cloned github repo. 
 
-Run the following command on a terminal window
+Navigate to the `smarttown/cloudstream` directory and run the following command on a terminal window
 ```
-mv ~/Downloads/asyncapi.yaml ~/github/smarttown/cloudstream/
+mv ~/Downloads/asyncapi.yaml .
 ```
-
-Negative
-: Make sure that the downloaded yml file is moved to the __~/github/smarttown/cloudstream/__ folder.    
-
-## Spring Cloud Stream
-Duration: 0:03:00
-
-![Cloud Stream Intro](img/spring-cloud-logo.png)
-
-Spring Cloud Stream is a framework for creating highly scalable, event-driven microservices connected by pluggable messaging services. Messaging services are pluggable via Binders that we'll cover in a bit. The framework is based on Spring Boot and Spring Integration.
-
-Spring Cloud Stream has three different types of message exchange contracts as pictures below.
-
-1. Suppliers are sources of events
-1. Sinks are consumers of events
-1. Processors are both consumers and subscribers of events
-
-### Message Exchange Contracts Map to Java Functions
-
-As of Spring Cloud Stream v3 the preferred programming model is to use Java Functions to implement your cloud stream apps.
-
-We just mentioned the 3 types of Cloud Stream message exchange contract are "Sources", "Sinks" and "Processors".
-Those map to functions as follows:
-
-- `java.util.function.Supplier` -> Source [Producer/Publisher of Events]
-- `java.util.function.Consumer` -> Sink [Subscriber/Consumer of Events]
-- `java.util.function.Function` -> Processor [ Consumes, Processes, and Produces Events ]
-
-### Binders
-
-Spring Cloud Stream Binders are really what make the framework useful. Binders provide an abstraction layer between your code and the messaging systems over which events are flowing. This allows you to write your code without having to worry about learning messaging APIs! When messages are sent or received from the messaging system they pass through the messaging system specific binder which knows how to communicate with that specific message broker.
-
-As of the creation of this codelab the available Cloud Stream Binders are:
-
-- RabbitMQ
-- Apache Kafka
-- Amazon Kinesis
-- Google PubSub
-- Solace PubSub+
-- Azure Event Hubs
-- Apache RocketMQ
-
-Positive
-: Today we're going to use the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
-
-### Communication Models
-
-Instead of having to learn Messaging APIs, developers just have to understand the communication models that Spring Cloud Stream supports. There are 3 supported models, but support varies per binder.
-
-1. Publish-subscribe: subscribers are independent from each other & receive events in order
-1. Consumer groups: fan-out and load-balancing across multiple consumers
-1. Stateful partitioning support: in-order processing for consistency and performance
-
-### References:
-
-- The Spring Cloud Stream [Reference Guide](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-reference)
-- Spring Sample [Github Repository](https://github.com/spring-cloud/spring-cloud-stream-samples)
-- Solace Sample [Github Repository](https://github.com/SolaceSamples/solace-samples-spring)
-- Solace Codelab - [Spring Cloud Stream - Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/)
-- Solace Codelab - [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond)
-
-## Spring Cloud Stream - API Connection
-
-Launch the Broker Service from PubSub+ Console and open the connection tab.
-
-![](img/ep-spring-connect-1.jpg)
-
-Click on __Get Started__ button next to the Spring Cloud Stream library
-
-![](img/ep-spring-connect-2.jpg)
-
-Make a note of the __Host URI__ from the connection detailsx
-![](img/ep-spring-connect-3.jpg)
 
 ## Create IoT Data Simulator MicroService
 Duration: 0:08:00
@@ -822,7 +560,7 @@ Import the projects under __github/cloudstream/__ directory.
 * Import cloud stream projects from the smarttown folder as 'Existing maven projects' 
 ![](img/workshop-setup-2.jpg)
 
-###Review ___ac-city-iot-simulator___ project
+###Review the ac-city-iot-simulator project
 
 ####TemperatureReading.java
 
@@ -896,11 +634,8 @@ Positive
 ```
 server.port: 8082
 application:
-  # e.g., New York City
   city: New York City      
-  # e.g., 40.713050
   latitude: 40.713050       
-  # e.g., -74.007230 
   longitude: -74.007230      
 spring:
   cloud:
@@ -916,20 +651,19 @@ spring:
           environment:
             solace:
               java:
-                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
-                host: tcps://mrri685heajs1.messaging.solace.cloud:55443  
-                msgVpn: solace-eap
-                clientUsername: smarttown
-                clientPassword: smarttown
+                host: tcps://<your_host>.messaging.solace.cloud:55443  
+                msgVpn: <your_msgVPN>
+                clientUsername: solace-cloud-client
+                clientPassword: <your_password>
 logging:
   level:
     root: info
     org:
-      springframework: info
+      springframework: info      
 ```
 
 Positive
-: Update the __host__ parameter with the Host URI noted in the previous step to connect with your Broker using Spring Cloud Stream client library.
+: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 Affect the following changes on the application configuration file:
 
@@ -938,7 +672,6 @@ Affect the following changes on the application configuration file:
    * Update your city name
    * Update latitude
    * Update longitude
-   * Update the host name (instructor to provide the host name)
 3. Save the file
 
 ####Running IoT Data Simulation
@@ -948,6 +681,9 @@ Affect the following changes on the application configuration file:
 cd ~/github/smarttown/cloudstream/ac-city-iot-simulator
 mvn clean spring-boot:run
 ```
+Alternatively, you can also run `./mvnw clean spring-boot:run`
+
+
 This should run the simulator microservice and publish temperature reading events to the Event Broker.
 
 ```
@@ -971,7 +707,7 @@ TemperatureReading [mCpuLoad=6.26708984375, mCity=New York City, mLatitude=40.71
 ```
 
 ## Create Alert Generator Microservice
-Duration: 0:10:00
+Duration: 0:08:00
 
 Before we proceed, we have to make minor changes to the AsyncAPI yml file. The yml file is located under __~/github/smarttown/cloudstream/__ directory (the last step in ___Download AsyncAPI Document___).
 
@@ -979,24 +715,23 @@ Before we proceed, we have to make minor changes to the AsyncAPI yml file. The y
 
 Let's add a few of the template's configuration options to the download AsyncAPI document.
 
-Add x-scs-function-name: processTemperatureReading under the subscribe operation and the publish operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the subscribe and the publish operation you are saying you want them handled by the same function!
-
-```
-Append the line below 
-
-      x-scs-function-name: processTemperatureReading
+Add `x-scs-function-name: processTemperatureReading` under the `subscribe` operation and the `publish` operation under the two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both the subscribe and the publish operation you are saying you want them handled by the same function!
 
 a) After 
-
+```
 channels:
   SmartTown/Operations/OperationalAlert/created/v1/{AlertPriority}/{AlertType}:
     subscribe:
+```
 
-b) And after
-
+b) And after  
+```
   SmartTown/Operations/temperatureReading/created/v1/{city}/{latitude}/{longitude}:
     publish:
 ```
+
+Negative
+: Careful not to mess up the indentation in your YAML file!
 
 With this change, the channels section of the YAML file will look like this
 ```
@@ -1030,7 +765,7 @@ channels:
           type: "string"
 ```
 
-In the last section of the yml file, in the info section remove the `x-view: "provider"`.  
+Under the `info` section at the bottom of the yml file, remove the `x-view: "provider"`.  
 ```
 info:
   x-generated-time: "2021-09-30 13:15 UTC"
@@ -1054,7 +789,7 @@ info:
 We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.
 
 Positive
-: A file with required changes is made available in the folder by name __reference.yml__ for your reference.      
+: A file with required changes is made available in the folder by name __asyncapi-reference.yml__ for your reference.      
 
 ###Generate code using AsyncAPI Code Generator
 
@@ -1067,10 +802,10 @@ cd ~/github/smarttown/cloudstream
 Run the following command to invoke AsyncAPI code generator utility.
 
 Negative
-: Be sure to update the host URI in the __-p host__ parameter with the host URL noted from the Spring Cloud Stream connection settings in the previous section.     
+: Be sure to update the host URI in the __-p host__, __-p username__, __-p password__, and __-p msgVpn__ parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.     
 
 ``` 
-ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://mrri685heajs7.messaging.solace.cloud:55443 -p username=smarttown -p password=smarttown -p msgVpn=solace-eap asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
+ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://your_host_name.messaging.solace.cloud:55443 -p username=username -p password=password -p msgVpn=msgVPN asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
 ```
 
 This command will take some time (minute or so) and complete with the following message.
@@ -1124,9 +859,9 @@ Let us review the Function
 This Spring Cloud Stream _Function_ contract is a processor that subscribes to __TemperatureReading__ message, and publishes a __OperationalAlert__ message. 
 
 The business logic of what transpires in this function is something we will be coding here. Our goal is to generate Alerts of HighTemperature type with three distinct priority levels:
-* LOW: When temperature > 60 and <= 70
-* MEDIUM: When temperature > 70 and <= 80
-* HIGH: When temperature > 80
+* **LOW**: When temperature > 60 and <= 70
+* **MEDIUM**: When temperature > 70 and <= 80
+* **HIGH**: When temperature > 80
 
 With the updated logic, the Function contract will be
 ```
@@ -1212,10 +947,10 @@ spring:
           environment:
             solace:
               java:
-                host: 'tcps://xxxx.messaging.solace.cloud:55443' # connect to your cloud account and get the Host URI from the Spring Boot Java API service
+                host: 'tcps://mrm28q29kuoha.messaging.solace.cloud:55443'
                 msgVpn: sprint-eap
-                clientUsername: smarttown
-                clientPassword: smarttown
+                clientUsername: solace-cloud-client
+                clientPassword: <your_password>
 logging:
   level:
     root: info
@@ -1224,7 +959,7 @@ logging:
 
 ```
 Positive
-: Update the __host__ parameter with the Host URI noted in the previous section to connect with your Broker using Spring Cloud Stream client library.
+: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ####Running Alert Generator
 
@@ -1305,11 +1040,11 @@ We will extend the workshop to generate an aggregated alert (over a period/durat
 To accomplish that, we would extend the EDA design:
 * Create a Schema `AggregateAlert`
 * Create a Event `AggregateAlert`
-* Create Application `Heating Cooling Controllers - DASHBOARD` and set appropriate permissions
+* Create Application `Heating Cooling Controllers - DASHBOARD` 
 
-###Create Schema - ___AggregateAlert___
+### 1️⃣ Schema: - ___AggregateAlert___ Schema
 
-✅ Create schema __AggregateAlert__ under ___Smart - Analytics___ Application  
+✅ Create schema __AggregateAlert__ under the ___Smart - Analytics___ Application Domain
 
 ![](img/ep-create-schema-11.png)
 
@@ -1317,139 +1052,16 @@ To accomplish that, we would extend the EDA design:
 
 ![](img/ep-create-schema-12.png)
 
-The following section describes the event schema to be used for AggregateAlert Event. It captures the geo-location of the sensor (lat, long), city name, city name, aggregate window duration, sample size and average temperature, timestamp along with the severity and alert type attributes.
-
-```
-{
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "type": "object",
-  "title": "The root schema",
-  "description": "The root schema comprises the entire JSON document.",
-  "default": {},
-  "examples": [
-    {
-      "lat": -71.518929,
-      "long": -71.518929,
-      "city": "Hopkinton",
-      "alertType": "HighTemperature",
-      "severity": "Medium",
-      "temperature": 99.3,
-      "count": 30,
-      "timeStamp": "2021-11-29'T'18:37:22.323333",
-      "duration": 30
-    }
-  ],
-  "required": [
-    "lat",
-    "long",
-    "city",
-    "alertType",
-    "severity",
-    "temperature",
-    "count",
-    "timeStamp",
-    "duration"
-  ],
-  "properties": {
-    "lat": {
-      "type": "number",
-      "title": "The lat schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        -71.518929
-      ]
-    },
-    "long": {
-      "type": "number",
-      "title": "The long schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        -71.518929
-      ]
-    },
-    "city": {
-      "type": "string",
-      "title": "The city schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "Hopkinton"
-      ]
-    },
-    "alertType": {
-      "type": "string",
-      "title": "The alertType schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "HighTemperature"
-      ]
-    },
-    "severity": {
-      "type": "string",
-      "title": "The severity schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
-      "examples": [
-        "Medium"
-      ]
-    },
-    "temperature": {
-      "type": "number",
-      "title": "The temperature schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        99.3
-      ]
-    },
-    "count": {
-      "type": "number",
-      "title": "The count schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        30
-      ]
-    },
-    "timeStamp": {
-      "type": "string",
-      "title": "The timeStamp schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        "2021-11-29'T'18:37:22.323333"
-      ]
-    },
-    "duration": {
-      "type": "number",
-      "title": "The duration schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [
-        30
-      ]
-    }
-  },
-  "additionalProperties": true
-}
-```
-
-Positive
-: You can copy the above JSON text and paste it in the __Content__ section of the schema create dialog.
-
 In the Create Schema page:
 - Enter __AggregateAlert__ for ___Name___
-- Enable the checkbox for ___Shared___
 - Choose __JSON__ for ___Content Type___
-- Copy the above JSON text and paste it in the __Content__ textfield
+- Enable the checkbox for ___Shared___
+- Under the Content section, click on the __Import from file__ link. Choose the file __AggregateAlert-schema.json__ in __~/github/smarttown/cloudstream__ folder
 - Click on __Save__ button
 
 ![](img/ep-create-schema-13.png)
 
-### Create Event - ___AggregateAlert___
+### 2️⃣ Event - ___AggregateAlert___ Event
 
 ✅ Create event under ___Smart - Analytics___ Application Domain 
 
@@ -1467,7 +1079,7 @@ The following section describes how to create an event and set its attributes - 
 In the Create Event page:
 - Enter __AggregateAlert__ for ___Name___
 - Enable the checkbox for ___Shared___
-- Choose __Default Event Mesh__ for ___Logical Event Mesh___
+- Choose __LogicalEventMesh__ for ___Logical Event Mesh___
 - Choose ___Schema___ as selected option for __Value__
   - In the first dropdown select __AggregateAlert__ 
   - In the second dropdown select __All Versions__
@@ -1510,9 +1122,7 @@ In the Create Event page:
 
 - Click on __Save__ button
 
-### Create Application - Heating Cooling Controllers - DASHBOARD	
-
-The following section describes how to create an application and set its attributes - name, application type and event association.
+### 3️⃣ Application - Heating Cooling Controllers - DASHBOARD	
 
 In the Create Application page:
 - Enter __Heating Cooling Controllers - DASHBOARD__ for ___Name___
@@ -1522,7 +1132,8 @@ In the Create Application page:
 
 In the Manage Events page:
 - Identify the Events relevant to the application
-- Click on __Sub__ or __Pub__ icon on the Event row indicating the event relationship with the application (permitted to publish and/or subscribe)
+- Click on __Sub__ for the **OperationalAlert** Event
+- Click on __Pub__ for the **AggregateAlert** Event 
 - Click on __Save__ button
 
 ![](img/ep-create-application-11.png)
@@ -1558,7 +1169,7 @@ spring:
     stream:
       bindings:
         aggregateTemperature-out-0:
-          destination: 'SmartTown/Operations/AggregateAlert/created/v1/*/*/*'
+          destination: 'SmartTown/Analytics/AggregateAlert/created/v1/*/*/*'
         aggregateTemperature-in-0:
           destination: 'SmartTown/Operations/OperationalAlert/created/v1/*/*'
       binders:
@@ -1567,20 +1178,19 @@ spring:
           environment:
             solace:
               java:
-                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
-                host: tcps://mrri685heajs7.messaging.solace.cloud:55443  
+                host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
                 msgVpn: solace-eap
-                clientUsername: smarttown
-                clientPassword: smarttown
+                clientUsername: solace-cloud-client
+                clientPassword: <your_password>
 logging:
   level:
     root: info
     org:
-      springframework: info
+      springframework: error
 ```
 
 Positive
-: Update the __host__ parameter with the Host URI noted in the previous step to connect with your Broker using Spring Cloud Stream client library.
+: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ####Running Alert Aggregator
 
@@ -1608,6 +1218,7 @@ AggregateAlert [count=10, severity=Medium, alertType=HighTemperature, city=Melbo
 ................................
 ```
 ## Alert Dashboard (optional)
+Duration: 0:05:00
 
 ###Review ___ac-city-alert-dashboard___ project
 
@@ -1624,14 +1235,14 @@ The connection details to establish a MQTT client session is retrieved from the 
 ```
   // eclipse test server
   var deets = {
-    host: 'mrri685heajs7.messaging.solace.cloud',
+    host: '<your_host>.messaging.solace.cloud',
     port: 8443,
     ssl: true,
-    username: 'smarttown',
-    password: 'smarttown',
+    username: 'solace-cloud-client',
+    password: '<your_password>',
   }
   
-  var topicName = 'SmartTown/Operations/AggregateAlert/created/v1/+/+/+';
+  var topicName = 'SmartTown/Analytics/AggregateAlert/created/v1/+/+/+';
   var windowSizeSecs = 10000;
 
   // this is for MQTT, it should return a connected or connecting valid Paho client
@@ -1660,7 +1271,7 @@ The connection details to establish a MQTT client session is retrieved from the 
 
 MQTT client connection is established with the Broker.
 Positive
-: Update the __host__ parameter with the Host URI noted in the previous step to connect with your Broker using Spring Cloud Stream client library.
+: Update the __host__, __username__ and __password__ parameters with the Host URI, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ![](img/connect-with-mqtt.png)
 
@@ -1699,9 +1310,29 @@ mvn spring-boot:run
 
 ![](img/ep-alert-dashboard.png)
 
+### Simulating Temperature Readings from multiple SmartTowns
+
+
+Lunch a terminal and run the following commands. 
+
+```
+cd ~/github/smarttown/cloudstream/ac-city-iot-simulator
+```
+
+Run one or more (maybe all) of the following commands to simulate sensor data for different locations. 
+
+```   
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=London --application.latitude=51.507351 --application.longitude=-0.127758 --server.port=8091" &
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city='Sau Paulo' --application.latitude=-23.550520 --application.longitude=-46.633308 --server.port=8092" &
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Melbourne --application.latitude=-37.813629 --application.longitude=144.963058 --server.port=8093" &
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city='SanFrancisco' --application.latitude=37.774929 --application.longitude=-122.419418 --server.port=8094"
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Bangalore --application.latitude=12.971599 --application.longitude=77.594566 --server.port=8095" &
+mvn spring-boot:run -Dspring-boot.run.arguments="--application.city=Singapore --application.latitude=1.290453 --application.longitude=103.852038 --server.port=8096" &
+```
+
+![](img/ep-alert-dashboard-2.png)
 
 ## Takeaways
-
 Duration: 0:01:00
 
 - ✅ The [Solace PubSub+ Event Portal](solace.com/products/portal) is an excellent tool to design and visualize your Event-Driven Architecture, discover what events exist, collaborate with your team and kickstart development via exporting of AsyncAPI documents.
