@@ -1,0 +1,699 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Integration Guide: JNDI Connection Factory Provider for Apache NiFi</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="nifi-jms-jndi"
+                  title="Integration Guide: JNDI Connection Factory Provider for Apache NiFi"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/nifi-jms-jndi">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>This document demonstrates how to integrate the Solace Java Message Service (JMS) with Apache NiFi JMS Processor for JMS message publish and consumption. The goal of this document is to outline best practices for this integration to enable efficient use of both Apache NiFi and Solace JMS.</p>
+<p class="image-container"><img alt="Sequence Diagram" src="img/f29a132a6bb9787b.png"></p>
+<p>The target audience of this document is developers with knowledge of both NiFi and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or NiFi refer to the referenced documents below.</p>
+<p>This document is divided into the following sections to cover the Solace JMS integration with Apache NiFi:</p>
+<ul>
+<li>Integrating Solace with NiFi JMS Processor</li>
+<li>Working with Solace High Availability</li>
+<li>Debugging Tips</li>
+</ul>
+<h2 is-upgraded>Related Documentation</h2>
+<p>These links contain information related to this guide:</p>
+<ul>
+<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
+<li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
+<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
+<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
+<li><a href="http://nifi.apache.org/docs.html" target="_blank">NiFi Documentation</a></li>
+<li><a href="http://nifi.apache.org/developer-guide.html" target="_blank">NiFi Developer Guide</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Integrating Solace with NiFi JMS Processor" duration="40">
+        <p>NiFi JMS Bundle comes with 2 processors, ConsumeJMS and PublishJMS. The 2 out-of-box processors work well with some messaging brokers, i.e. ActiveMQ and etc. However, not all messaging brokers work well with the built-in JMS processors that expect zero-argument connection factory constructors. Solace connection factory and some other JMS connection factories cannot be instantiated with zero argument. There is a current NiFi Jira on <a href="https://issues.apache.org/jira/browse/NIFI-2701" target="_blank">this major bug</a>.</p>
+<p>The alternative is to use the standard JMS JNDI connection factory. Most of JMS brokers do provide JNDI connection factory support. Current NiFi JMS service has a JMS ControllerService, dropping in a new JMS JNDI ControllerService is appropriate for enabling JNDI support.</p>
+<p>By <a href="http://nifi.apache.org/docs/nifi-docs/html/developer-guide.html#controller-services" target="_blank">NiFi definition</a>, a ControllerService provides shared state and functionality across Processors, other ControllerServices, and ReportingTasks within a single JVM. An example use case may include loading a very large dataset into memory. By performing this work in a ControllerService, the data can be loaded once and be exposed to all Processors via this service, rather than requiring many different Processors to load the dataset themselves.</p>
+<p>This is a demostration of an approach for publishing and consuming messages from a Java Messaging Service (JMS) ControllerService in NiFi processors. The full code is freely available on Github as part of this project in <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nifi-jms-jndi" target="_blank">src/nifi-jms-jndi</a>.</p>
+<p>The general NiFi Controller Services is documented in the <a href="http://nifi.apache.org/docs/nifi-docs/html/developer-guide.html#controller-services" target="_blank">NiFi Developer Guide</a>. The developement guide outlined in this document explains how JNDI support is added.</p>
+<p>This integration guide demonstrates how to build a JNDI connection provider and configure NiFi JMS processors to send and receive JMS messages using the new provider. Accomplishing this requires completion of the following steps.</p>
+<ul>
+<li>Step 1 - Obtain access to Solace event broker and JMS API, see the <a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li>Step 2 - Configuration of the Solace Event Broker.</li>
+<li>Step 3 - Developing a Solace JMS application to do message PubSub via JNDI</li>
+<li>Step 4 - Obtain Apache NiFi</li>
+<li>Step 5 - Developing a new NiFi JMS ControllerService to support JNDI</li>
+<li>Step 6 - Deploying NiFi JMS ControllerService</li>
+</ul>
+<h2 is-upgraded>Description of Resources Required</h2>
+<p>This integration guide will demonstrate creation of Solace JMS custom sender and receiver and configuring the sender and receiver to send and receive messages. This section outlines the resources that are required, created and used in the subsequent sections.</p>
+<h3 is-upgraded>Solace Resources</h3>
+<p>The following Solace Event Broker resources are required.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Event Broker IP:Port</p>
+</td><td colspan="1" rowspan="1"><p>__IP:Port__</p>
+</td><td colspan="1" rowspan="1"><p>The IP address and port of the Solace Event Broker message backbone. This is the address client&#39;s use when connecting to the Solace Event Broker to send and receive message. This document uses a value of __IP:PORT__.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"><p>default</p>
+</td><td colspan="1" rowspan="1"><p>A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Client Username</p>
+</td><td colspan="1" rowspan="1"><p>nifi</p>
+</td><td colspan="1" rowspan="1"><p>The client username.</p>
+</td></tr>
+<tr><td colspan="2" rowspan="1"><p>Client Password</p>
+</td><td colspan="1" rowspan="1"></td><td colspan="1" rowspan="1"><p>Optional client password.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
+</td><td colspan="1" rowspan="1"><p>toNifi</p>
+</td><td colspan="1" rowspan="1"><p>Solace destination of persistent messages consumed by NiFi</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
+</td><td colspan="1" rowspan="1"><p>fromNifi</p>
+</td><td colspan="1" rowspan="1"><p>Solace destination of persistent messages published from NiFi</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Connection Factory</p>
+</td><td colspan="1" rowspan="1"><p>/jms/cf/default</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI Connection factory for controlling Solace JMS connection properties</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
+</td><td colspan="1" rowspan="1"><p>/JNDI/Q/toNifi</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
+</td><td colspan="1" rowspan="1"><p>/JNDI/Q/fromNifi</p>
+</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 1 – Obtain access to Solace JMS API</h2>
+<p>The Solace JMS jars are required.  They can be obtained on <a href="https://solace.com/downloads/" target="_blank">Solace Developer Portal Downloads</a>  or from <a href="https://mvnrepository.com/artifact/com.solacesystems/sol-jms" target="_blank">Maven Central</a>.</p>
+<h4 is-upgraded>Solace JMS Dependencies</h4>
+<p>The easiest way to integrate Solace and NiFi is using the client libraries available via public <a href="https://mvnrepository.com/artifact/com.solacesystems/sol-jms" target="_blank">Maven Central</a>. You can download the libraries into a directory and reference them directly, the following resources are all required:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Resource</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace Common</p>
+</td><td colspan="1" rowspan="1"><p>sol-common-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Solace common utilities library.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace JCSMP</p>
+</td><td colspan="1" rowspan="1"><p>sol-jcsmp-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Underlying Solace wireline support libraries.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Solace JMS</p>
+</td><td colspan="1" rowspan="1"><p>sol-jms-VERSION.jar</p>
+</td><td colspan="1" rowspan="1"><p>Solace JMS 1.1 compliant libraries.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Commons language</p>
+</td><td colspan="1" rowspan="1"><p>commons-lang-2.6.jar</p>
+</td><td colspan="1" rowspan="1"><p>Common language libraries.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Commons logging</p>
+</td><td colspan="1" rowspan="1"><p>commons-logging-1.2.jar</p>
+</td><td colspan="1" rowspan="1"><p>Common logging libraries</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Log4j 2 Core</p>
+</td><td colspan="1" rowspan="1"><p>log4j-core-2.8.2.jar</p>
+</td><td colspan="1" rowspan="1"><p>log4j 2 core libraries</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Apache Log4j 2 API</p>
+</td><td colspan="1" rowspan="1"><p>log4j-api-2.8.2.jar</p>
+</td><td colspan="1" rowspan="1"><p>log4j 2 API libraries</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 2 – Configuring the Solace Event Broker</h2>
+<p>The Solace Event Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the NiFi application.</p>
+<ul>
+<li>A Message VPN, or virtual event broker, to scope the integration on the Solace Event Broker.</li>
+<li>Client connectivity configurations like usernames and profiles</li>
+<li>Guaranteed messaging endpoints for receiving messages.</li>
+<li>Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.</li>
+</ul>
+<p>For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace Event Broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a> . Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm" target="_blank">Solace Documentation</a>  section &#34;User Authentication and Authorization&#34;.</p>
+<p>Also note that this configuration can also be easily performed using SolAdmin, Solace&#39;s GUI management tool. This is in fact the recommended approach for configuring a Solace Event Broker. This document uses CLI as the reference to remain concise.</p>
+<h3 is-upgraded>Creating a Message VPN</h3>
+<p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
+<p>This section outlines how to create a message-VPN called &#34;default&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
+<pre><code>&gt; home
+&gt; enable
+# configure
+(config)# create message-vpn default
+(config-msg-vpn)# authentication
+(config-msg-vpn-auth)# user-class client
+(config-msg-vpn-auth-user-class)# basic auth-type none
+(config-msg-vpn-auth-user-class)# exit
+(config-msg-vpn-auth)# exit
+(config-msg-vpn)# no shutdown
+(config-msg-vpn)# exit
+(config)#
+(config)# message-spool message-vpn default
+(config-message-spool)# max-spool-usage 2000
+(config-message-spool)# exit
+(config)#
+</code></pre>
+<h3 is-upgraded>Configuring Client Usernames &amp; Profiles</h3>
+<p>This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Event Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.</p>
+<p>The chosen client username of &#34;nifi&#34; will be required by the NiFi application when connecting to the Solace Event Broker.</p>
+<pre><code>    (config)# client-profile default message-vpn default
+    (config-client-profile)# message-spool allow-guaranteed-message-receive
+    (config-client-profile)# message-spool allow-guaranteed-message-send
+    (config-client-profile)# message-spool allow-transacted-sessions
+    (config-client-profile)# exit
+    (config)#
+    (config)# create client-username nifi message-vpn default
+    (config-client-username)# acl-profile default	
+    (config-client-username)# client-profile default
+    (config-client-username)# no shutdown
+    (config-client-username)# exit
+    (config)#
+</code></pre>
+<h3 is-upgraded>Setting up Guaranteed Messaging Endpoints</h3>
+<p>This integration guide shows publishing messaegs to a queue consumed by NiFi and receiving messages from a queue published by NiFi application. For illustration purposes, this queues are chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen are &#34;toNifi&#34; and &#34;fromNifi&#34;.</p>
+<pre><code>    (config)# message-spool message-vpn default
+    (config-message-spool)# create queue toNifi
+    (config-message-spool-queue)# access-type exclusive
+    (config-message-spool-queue)# max-spool-usage 2000
+    (config-message-spool-queue)# permission all delete
+    (config-message-spool-queue)# no shutdown
+    (config-message-spool-queue)# exit
+    (config-message-spool)# exit
+    (config)#
+    (config)# message-spool message-vpn default
+    (config-message-spool)# create queue fromNifi
+    (config-message-spool-queue)# access-type exclusive
+    (config-message-spool-queue)# max-spool-usage 2000
+    (config-message-spool-queue)# permission all delete
+    (config-message-spool-queue)# no shutdown
+    (config-message-spool-queue)# exit
+    (config-message-spool)# exit
+    (config)#
+</code></pre>
+<h3 is-upgraded>Setting up Solace JNDI References</h3>
+<p>To enable the JMS clients to connect and look up the Queue destination required by Solace application, there are two JNDI objects required on the Solace Event Broker:</p>
+<ul>
+<li>A connection factory: /jms/cf/default</li>
+<li>A queue destination: JNDI/Q/toNifi</li>
+<li>A queue destination: JNDI/Q/fromNifi</li>
+</ul>
+<p>They are configured as follows:</p>
+<pre><code>    (config)# jndi message-vpn default
+    (config-jndi)# create connection-factory /jms/cf/default
+    (config-jndi-connection-factory)# property-list messaging-properties
+    (config-jndi-connection-factory-pl)# property default-delivery-mode persistent
+    (config-jndi-connection-factory-pl)# exit
+    (config-jndi-connection-factory)# property-list transport-properties
+    (config-jndi-connection-factory-pl)# property direct-transport false
+    (config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+    (config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+    (config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+    (config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+    (config-jndi-connection-factory-pl)# exit
+    (config-jndi-connection-factory)# exit
+    (config-jndi)# 
+    (config-jndi)# create queue JNDI/Q/toNifi
+    (config-jndi-queue)# property physical-name toNifi
+    (config-jndi-queue)# exit
+    (config-jndi)# 
+    (config-jndi)# no shutdown
+    (config-jndi)# 
+    (config-jndi)# create queue JNDI/Q/fromNifi
+    (config-jndi-queue)# property physical-name fromNifi
+    (config-jndi-queue)# exit
+    (config-jndi)# 
+    (config-jndi)# no shutdown
+    (config-jndi)# exit
+    (config)#
+</code></pre>
+<h2 is-upgraded>Step 3 – Developing a Solace JMS application to do message PubSub via JNDI</h2>
+<p><strong>URL</strong></p>
+<p>Solace JNDI lookup must have valid username and password in URL using uses the following format: ://[username]:[password]@[:port] The VPN name can be part of the username in the form of &#34;username@vpnname&#34;.</p>
+<p>Where:</p>
+<p>URI Scheme is the uniform resource identifier (URI) scheme used for the JNDI lookup. The valid values are:</p>
+<ul>
+<li><strong><em>smf</em></strong> — use plain-text over SMF for communications between the application and the host. SMF is the default.</li>
+<li><strong><em>smfs</em></strong> — use TLS/ SSL protocols over SMF for secure communications between the application and the host</li>
+</ul>
+<p><strong><em>username</em></strong> is the user name that is required to authenticate a client connecting to the host. A client username can be used by a single or by multiple JMS clients.</p>
+<p><strong><em>password</em></strong> is the username password for the connection when authentication is required.</p>
+<p><strong><em>IP address</em></strong> is the IP address (or hostname) of the host. To specify a prioritized list of hosts that a client can attempt to connect to, list each IP address, in order of importance, separated by a comma.</p>
+<p><strong><em>port</em></strong> is the port number to use to establish the connection. A value is only required when the client needs to use a port other than the automatically‑assigned default port number. The default port number for is 55555 when compression is not in use, or 55003 when compression is in use. The default port for TLS/SSL connections is 55443 (note that compression is not available when TLS/SSL is used).</p>
+<p><strong>Note</strong>: The provided URL parameters are used for both a JNDI connection and a JMS data connection. This is useful when both the JNDI and JMS data connections are for a Solace broker that provides JNDI and JMS service. However, when the JNDI store to be used is hosted on an LDAP server, and the Solace broker is only used for the JMS broker, the specified URL parameters, which are used for the JNDI connection, can be overridden by parameters specified in the Connection Factory when creating a JMS connection.</p>
+<ul>
+<li>Type: String</li>
+<li>Format: smf://username:password@ipaddress:port</li>
+<li>Default: None</li>
+</ul>
+<p><strong>Solace JMS JNDI project</strong></p>
+<ul>
+<li>Look up connection factory by setting up Solace properties. Solace lookup must have valid user name and password to return successfully.</li>
+</ul>
+<pre><code language="language-java" class="language-java">    // The client needs to specify all of the following properties:
+    Properties env = new Properties();
+    env.put(InitialContext.INITIAL_CONTEXT_FACTORY, &#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34;);
+    env.put(InitialContext.PROVIDER_URL, &#34;&lt;URI Scheme&gt;://[username]:[password]@&lt;IP address&gt;[:port]&#34;);
+
+    // InitialContext is used to lookup the JMS administered objects.
+    InitialContext initialContext = new InitialContext(env);
+    
+    // Lookup ConnectionFactory.
+    ConnectionFactory cf = (ConnectionFactory) initialContext.lookup(&#34;/jms/cf/default&#34;);
+</code></pre>
+<ul>
+<li>Look up JNDI queues after establishing Solace connection and session.</li>
+</ul>
+<pre><code language="language-java" class="language-java">    // JMS Connection
+    Connection connection = cf.createConnection();
+    
+    // Create a non-transacted, Auto Ack session.
+    Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+    // Lookup Queue.
+    Queue qPub = (Queue) initialContext.lookup(&#34;/JNDI/Q/toNifi&#34;);
+
+    // Lookup Queue.
+    Queue qSub = (Queue) initialContext.lookup(&#34;/JNDI/Q/fromNifi&#34;);
+</code></pre>
+<ul>
+<li>Put in an anonymous message handler on the message consumer.</li>
+</ul>
+<pre><code language="language-java" class="language-java">    // From the session, create a consumer for the destination.
+    MessageConsumer consumer = session.createConsumer(qSub);
+    /**
+     * Anonymous inner-class for receiving messages *
+     */
+    consumer.setMessageListener(new MessageListener() {
+
+        @Override
+        public void onMessage(Message message) {
+            try {
+                if (message instanceof TextMessage) {
+                    System.out.printf(&#34;TextMessage received: &#39;%s&#39;%n&#34;, ((TextMessage) message).getText());
+                } else {
+                    System.out.println(&#34;Message received.&#34;);
+                }
+                System.out.printf(&#34;Message Dump:%n%s%n&#34;, SolJmsUtility.dumpMessage(message));
+
+                long tmStart = message.getLongProperty(ORIGINATION_TIME);
+                System.out.printf(&#34;appID = %d, latency = %d ms %n&#34;, message.getLongProperty(&#34;appID&#34;), (System.currentTimeMillis() - tmStart));
+
+            } catch (JMSException e) {
+                System.out.println(&#34;Error processing incoming message.&#34;);
+                e.printStackTrace();
+            }
+        }
+    });
+</code></pre>
+<ul>
+<li>Create a text message. Current NiFi version supports TextMessage and BytesMessage types.</li>
+</ul>
+<pre><code language="language-java" class="language-java">    TextMessage message = session.createTextMessage(&#34;Hello world Queues!&#34;);
+</code></pre>
+<ul>
+<li>Send off the persistent messages to a queue destination after filling in some user properties</li>
+</ul>
+<pre><code language="language-java" class="language-java">    long t = System.currentTimeMillis();
+    message.setLongProperty(&#34;appID&#34;, i);
+    message.setLongProperty(ORIGINATION_TIME, t);
+    producer.send(qPub, message, DeliveryMode.PERSISTENT, Message.DEFAULT_PRIORITY, Message.DEFAULT_TIME_TO_LIVE);
+</code></pre>
+<h2 is-upgraded>Step 4 – Obtain Apache NiFi</h2>
+<p>The Apache NiFi can be obtained from the <a href="http://nifi.apache.org/download.html" target="_blank">Apache NiFi Downloads</a>. For help getting started with your Apache NiFi you can refer to <a href="http://nifi.apache.org/docs/nifi-docs/html/getting-started.html" target="_blank">Getting Started in NiFi Documentation</a>.</p>
+<h2 is-upgraded>Step 5 – Developing a new NiFi JMS ControllerService to support JNDI</h2>
+<p>The NiFi ‘nifi-jms-bundle&#39; has 2 built-in processors, ‘ConsumeJMS&#39; and ‘PublishJMS&#39;. There is one built-in JMS connection factory provider that instantiates zero-arugment connection factory objects. Some connection factories cannot be instantiated with zero-arugments. The alternative is to use the standard JMS JNDI connection factory. Most of JMS brokers do support JNDI connection factory.</p>
+<p>The project is based on ‘nifi-jms-bundle&#39; from NiFi tag ‘rel/1.1.2&#39;. ‘nifi-jms-bundle&#39; has 2 sub projects, ‘nifi-jms-cf-service&#39; and ‘nifi-jms-processors&#39;. ‘nifi-jms-cf-service&#39; is referenced by ‘nifi-jms-processors&#39;.</p>
+<h3 is-upgraded>New classes are introduced, current classes are updated</h3>
+<p>Changes are made as following:</p>
+<ol type="1">
+<li>New Classes<ul>
+<li>JNDIConnectionFactoryProvider builds up a new connection factory from JNDI lookup. PROVIDER_URL value is identical to PROVIDER_URL used in the Solace project.<ul>
+<li>nifi-jms-cf-service\src\main\java\org\apache\nifi\jms\cf\JNDIConnectionFactoryProvider.java</li>
+</ul>
+<pre><code language="language-java" class="language-java">      private void createConnectionFactoryInstance(ConfigurationContext context) {
+          String connectionFactoryImplName = getContextValue(context, CONNECTION_FACTORY_IMPL);
+          Properties env = new Properties();
+
+          try {
+              env.put(InitialContext.INITIAL_CONTEXT_FACTORY, connectionFactoryImplName);
+              env.put(InitialContext.PROVIDER_URL, getContextValue(context, BROKER_URI));
+              InitialContext initialContext = new InitialContext(env);
+              this.connectionFactory = (ConnectionFactory) initialContext.lookup(context.getProperty(JNDI_CF_LOOKUP).evaluateAttributeExpressions().getValue());
+          } catch (Exception e) {
+              throw new IllegalStateException(&#34;Failed to load and/or instantiate class &#39;com.solacesystems.jndi.SolJNDIInitialContextFactory&#39;&#34;, e);
+          }
+      }
+
+</code></pre>
+</li>
+<li>The testcase for the new JNDIConnectionFactoryProvider is added. Solace requires to have a VMR or appliance present to perform JNDI lookup. However, ActiveMQ has an embeded broker that is ideal for many testcases - hence JNDI testcases use ActiveMQ VM to run relevant tests.<ul>
+<li>nifi-jms-cf-service\src\test\java\org\apache\nifi\jms\cf\JNDIConnectionFactoryProviderTest.java</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Updated classes<ul>
+<li>A set of JNDI related PropertyDescriptors are added to support JNDI configuration.<ul>
+<li>nifi-jms-cf-service\src\main\java\org\apache\nifi\jms\cf\JMSConnectionFactoryProviderDefinition.java</li>
+</ul>
+</li>
+<li>A new entry ‘org.apache.nifi.jms.cf.JNDIConnectionFactoryProvider&#39; is added to allow NiFi find and bring up the new JNDI connection provider for configuration.<ul>
+<li>nifi-jms-cf-service\src\main\resources\META-INF\services\org.apache.nifi.controller.ControllerService</li>
+</ul>
+</li>
+<li>All these testcases are updated to run equivalent tests over JNDI.<ul>
+<li>nifi-jms-processors\src\test\java\org\apache\nifi\jms\processors\CommonTest.java</li>
+<li>nifi-jms-processors\src\test\java\org\apache\nifi\jms\processors\ConsumeJMSTest.java</li>
+<li>nifi-jms-processors\src\test\java\org\apache\nifi\jms\processors\JMSPublisherConsumerTest.java</li>
+<li>nifi-jms-processors\src\test\java\org\apache\nifi\jms\processors\PublishJMSTest.java</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Step 6 - Deploying NiFi JMS ControllerService</h2>
+<h3 is-upgraded>NiFi build procedures</h3>
+<p>The maven build script is executed from ‘nifi-jms-bundle&#39; directory as following:</p>
+<pre><code>    ~/nifi-jms-bundle $ mvn clean test nifi-nar:nar
+    [INFO] Scanning for projects...
+    [INFO] Inspecting build with total of 5 modules...
+    [INFO] Installing Nexus Staging features:
+    [INFO]   ... total of 5 executions of maven-deploy-plugin replaced with nexus-staging-maven-plugin
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Reactor Build Order:
+    [INFO]
+    [INFO] nifi-jms-bundle
+    [INFO] nifi-jms-cf-service
+    [INFO] nifi-jms-cf-service-nar
+    [INFO] nifi-jms-processors
+    [INFO] nifi-jms-processors-nar
+    [INFO]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Building nifi-jms-bundle 1.1.2
+    [INFO] ------------------------------------------------------------------------
+
+    ...
+
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Reactor Summary:
+    [INFO]
+    [INFO] nifi-jms-bundle .................................... SUCCESS [  0.981 s]
+    [INFO] nifi-jms-cf-service ................................ SUCCESS [  6.345 s]
+    [INFO] nifi-jms-cf-service-nar ............................ SUCCESS [  0.705 s]
+    [INFO] nifi-jms-processors ................................ SUCCESS [  7.412 s]
+    [INFO] nifi-jms-processors-nar ............................ SUCCESS [  1.391 s]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time: 18.709 s
+    [INFO] Finished at: 2017-05-13T17:22:28-04:00
+    [INFO] Final Memory: 27M/1064M
+    [INFO] ------------------------------------------------------------------------
+</code></pre>
+<h3 is-upgraded>NiFi Deployment</h3>
+<p>After build script is finished, copy 2 new NAR files to build target diretories to ~/nifi-1.1.2/lib</p>
+<ul>
+<li>nifi-jms-bundle/nifi-jms-cf-service-nar/target/nifi-jms-cf-service-nar-1.1.2.nar</li>
+<li>nifi-jms-bundle/nifi-jms-processors-nar/target/nifi-jms-processors-nar-1.1.2.nar</li>
+</ul>
+<h3 is-upgraded>NiFi Restart</h3>
+<p>Upon restart, NiFi shall detect 2 new NARs and reload them.</p>
+<pre><code>    2017-05-12 22:00:20,282 INFO [main] org.apache.nifi.NiFi Loaded 121 properties
+    2017-05-12 22:00:20,488 INFO [main] org.apache.nifi.BootstrapListener Started Bootstrap Listener, Listening for incoming requests on port 57824
+    2017-05-12 22:00:20,503 INFO [main] org.apache.nifi.BootstrapListener Successfully initiated communication with Bootstrap
+    2017-05-12 22:00:22,664 INFO [main] org.apache.nifi.nar.NarUnpacker Contents of nar c:\proj\NIFI-1~1.2\.\lib\nifi-jms-cf-service-nar-1.1.2.nar have changed. Reloading.
+    2017-05-12 22:00:22,870 INFO [main] org.apache.nifi.nar.NarUnpacker Contents of nar c:\proj\NIFI-1~1.2\.\lib\nifi-jms-processors-nar-1.1.2.nar have changed. Reloading.
+</code></pre>
+<h3 is-upgraded>NiFi Configuration</h3>
+<p>Up to this point, the latest JNDI connection provider is available in NiFi. By setting up JMS broker specific properties, the JNDI connection factory provider can work with broader set of JMS brokers, i.e. Solace, ActiveMQ and etc.</p>
+<p>To go over the NiFi configurations, following screen clips give brief descriptions on relevant screens.</p>
+<h4 is-upgraded>1. NiFi Canvas is where processors are chosen, configured and wired</h4>
+<p class="image-container"><img src="img/9c1a6e07336d1690.png"></p>
+<h4 is-upgraded>2. Processor details tab allows JNDIConnectionFactoryProvider to be selected, queue to be specified. The user name and password in this screen do not affect to Solace JDNI because Solace JNDI lookup must have valid credentials</h4>
+<p class="image-container"><img src="img/814224804a940f09.png"></p>
+<h4 is-upgraded>3. Controller Service status shows the running status of the component. The controller service must be stopped before configuration changes or deletions. When enabled, all settings and properties are readonly. The ligthening sign means ENABLED</h4>
+<p class="image-container"><img src="img/b3726e4e934e2663.png"></p>
+<h4 is-upgraded>4. Controller Service settings tab shows the ID, type and reference count of the component</h4>
+<p class="image-container"><img src="img/e8066647cf91369d.png"></p>
+<h4 is-upgraded>5. Controller Service properties tab shows JNDI properties</h4>
+<p class="image-container"><img src="img/792bdf0b4253e4c7.png"></p>
+<h3 is-upgraded>Solace build procedures</h3>
+<p>Gradle is used to build the Solace project. Changing directory into ‘solace-jndi&#39; and kicking off the Gradlew script shall start the build.</p>
+<pre><code>    ~/solace-jndi $ ./gradlew build
+    Starting a Gradle Daemon (subsequent builds will be faster)
+    :compileJava
+    :processResources NO-SOURCE
+    :classes
+    :jar
+    :startScripts
+    :distTar
+    :distZip
+    :assemble
+    :compileTestJava NO-SOURCE
+    :processTestResources NO-SOURCE
+    :testClasses UP-TO-DATE
+    :test NO-SOURCE
+    :check UP-TO-DATE
+    :build
+
+    BUILD SUCCESSFUL
+
+    Total time: 7.72 secs
+</code></pre>
+<h3 is-upgraded>Solace application run procedures</h3>
+<p>A custom task is added to ‘build.gradle&#39; to convenience. The <strong>args</strong> must point to Solace broker msg_backbone_ip:port.</p>
+<pre><code language="language-groovy" class="language-groovy">    task(runQueuePubSubJNDI, dependsOn: &#39;classes&#39;, type: JavaExec) {
+        main = &#39;com.solace.sample.QueuePubSubJNDI&#39;
+        classpath = sourceSets.main.runtimeClasspath
+        args &#39;192.168.56.101&#39;
+    }
+
+</code></pre>
+<p>After setting up both Solace broker and NiFi, the project runs and generates logs as below.</p>
+<pre><code>    ~/solace-jndi $ ./gradlew runQueuePubSubJNDI
+    :compileJava UP-TO-DATE
+    :processResources NO-SOURCE
+    :classes UP-TO-DATE
+    :runQueuePubSubJNDI
+    QueuePubSubJNDI initializing...
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connecting to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (host 1 of 1, smfclient 2, attempt 1 of 1, this_host_attempt: 1 of 1)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connected to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (smfclient 2)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel close
+    INFO: Channel Closed (smfclient 2)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connecting to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (host 1 of 1, smfclient 4, attempt 1 of 1, this_host_attempt: 1 of 1)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connected to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (smfclient 4)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connecting to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (host 1 of 1, smfclient 6, attempt 1 of 1, this_host_attempt: 1 of 1)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connected to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (smfclient 6)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel close
+    INFO: Channel Closed (smfclient 6)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connecting to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (host 1 of 1, smfclient 8, attempt 1 of 1, this_host_attempt: 1 of 1)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel call
+    INFO: Connected to host &#39;orig=tcp://192.168.56.101, scheme=tcp://, host=192.168.56.101&#39; (smfclient 8)
+    May 13, 2017 3:22:28 PM com.solacesystems.jcsmp.protocol.impl.TcpClientChannel close
+    INFO: Channel Closed (smfclient 8)
+    May 13, 2017 3:22:29 PM com.solacesystems.jms.SolSession start
+    INFO: SolSession started.
+    Waiting for a message ... (press Ctrl+C) to terminate
+    Connected. About to send message &#39;Hello world Queues!&#39; to queue &#39;toNifi&#39;...
+    Message 1 is sent at 1494703349358
+</code></pre>
+<p><strong>NiFi can receive both TextMessages and BytesMessages, other message types trigger exceptions</strong></p>
+<pre><code language="language-java" class="language-java">    if (message != null) {
+        byte[] messageBody = null;
+        if (message instanceof TextMessage) {
+            messageBody = MessageBodyToBytesConverter.toBytes((TextMessage) message);
+        } else if (message instanceof BytesMessage) {
+            messageBody = MessageBodyToBytesConverter.toBytes((BytesMessage) message);
+        } else {
+            throw new IllegalStateException(&#34;Message type other then TextMessage and BytesMessage are &#34;
+                    + &#34;not supported at the moment&#34;);
+        }
+        Map&lt;String, Object&gt; messageHeaders = extractMessageHeaders(message);
+        Map&lt;String, String&gt; messageProperties = extractMessageProperties(message);
+        response = new JMSResponse(messageBody, messageHeaders, messageProperties);
+        if (logger.isDebugEnabled())
+            logger.debug(&#34;message received : &#34; + message.toString());                        
+    }
+</code></pre>
+<p>The received messages are from NiFi - hence some of the JMS properties are filled in by NiFi and can be quite different from the orginal messages sent from the Solace application. ‘appID&#39; is a user property to identify messages visually. The code also computes latency between publishing and receiving.</p>
+<p><strong>Original text messages after looping back from NiFi are in BytesMessage type</strong></p>
+<pre><code>    Text:	Hello world Queues!
+    JMSDeliveryMode:                        2
+    JMSDestination:                         Queue &#39;toNifi&#39;
+    JMSExpiration:                          0
+    JMSMessageID:                           ID:fe80:0:0:0:0:5efe:c0a8:c301%net10d34e15c13a4215a0:9
+    JMSPriority:                            0
+    JMSTimestamp:                           1494978143660
+    JMSProperties:                          {appID:10,OriginationTime:1494978143660,JMS_Solace_DeliverToOne:false}
+
+    Message 10 is sent at 1494978143660 
+</code></pre>
+<p><strong>As noted, messages published by NiFi are BytesMessages</strong></p>
+<pre><code>    Message received.
+    Message Dump:
+    JMSCorrelationID:                       null
+    JMSDeliveryMode:                        2
+    JMSDestination:                         Queue &#39;fromNifi&#39;
+    JMSExpiration:                          0
+    JMSMessageID:                           ID:192.168.4.175c4e815c12f327e80:59
+    JMSPriority:                            0
+    JMSTimestamp:                           1494978143673
+    JMSType:                                null
+    JMSProperties:                          {JMS_Solace_isXML:null,path:./,filename:390594988551742,JMS_Solace_DeliverToOne:false,appID:10,JMS_Solace_ElidingEligible:false,JMS_Solace_DeadMsgQueueEligible:false,Solace_JMS_Prop_IS_Reply_Message:false,uuid:fb93b3e0-ec07-45b0-a739-31002210971e,OriginationTime:1494978143660,JMS_Solace_DeliverToOne:false,JMS_Solace_DeadMsgQueueEligible:false,JMS_Solace_ElidingEligible:false,Solace_JMS_Prop_IS_Reply_Message:false}
+    Destination:                            Queue &#39;fromNifi&#39;
+    AppMessageType:                         null
+    AppMessageID:                           ID:192.168.4.175c4e815c12f327e80:59
+    CorrelationId:                          null
+    SendTimestamp:                          1494978143673 (Tue May 16 2017 19:42:23)
+    Class Of Service:                       USER_COS_1
+    DeliveryMode:                           PERSISTENT
+    Message Id:                             6631883
+    User Property Map:                      10 entries
+      Key &#39;JMS_Solace_isXML&#39; (String): true
+      Key &#39;path&#39; (String): ./
+      Key &#39;filename&#39; (String): 390594988551742
+      Key &#39;JMS_Solace_DeliverToOne&#39; (String): false
+      Key &#39;appID&#39; (String): 10
+      Key &#39;JMS_Solace_ElidingEligible&#39; (String): false
+      Key &#39;JMS_Solace_DeadMsgQueueEligible&#39; (String): false
+      Key &#39;Solace_JMS_Prop_IS_Reply_Message&#39; (String): false
+      Key &#39;uuid&#39; (String): fb93b3e0-ec07-45b0-a739-31002210971e
+      Key &#39;OriginationTime&#39; (String): 1494978143660
+
+    Binary Attachment:                      len=19
+      48 65 6c 6c 6f 20 77 6f    72 6c 64 20 51 75 65 75    Hello.world.Queu
+      65 73 21                                              es!
+
+
+    appID = 10, latency = 20 ms 
+    Messages sent. Exiting.
+    [INFO ] 2017-05-16 19:42:24.770 [main] TcpClientChannel - Channel Closed (smfclient 4)
+
+    BUILD SUCCESSFUL
+
+    Total time: 3.57 secs
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Working with Solace High Availability (HA)" duration="10">
+        <p>The <a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a>  section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a Solace Event Broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
+<p>In general the Solace documentation contains the following note regarding reconnection:</p>
+<pre><code>    Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically
+    occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
+</code></pre>
+<p>In the previous section &#34;Setting up Solace JNDI References&#34;, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.</p>
+<pre><code>    (config)# jndi message-vpn default
+    (config-jndi)# connection-factory /jms/cf/default
+    (config-jndi-connection-factory)# property-list transport-properties
+    (config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
+    (config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
+    (config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
+    (config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
+    (config-jndi-connection-factory-pl)# exit
+    (config-jndi-connection-factory)# exit
+    (config-jndi)# exit
+    (config)#
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Debugging Tips for Solace JMS API Integration" duration="10">
+        <p>The key component for debugging integration issues with the Solace JMS API is the API logging that can be enabled. How to enable logging in the Solace API is described below. NiFi uses slf4j to provide logging.</p>
+<h2 is-upgraded>How to enable Solace JMS API logging</h2>
+<p>Solace JMS API makes use of the Jakarta Commons Logging API (JCL). The following example shows how to enable debug logging in the Solace JMS API using log4j.</p>
+<p>By default info logs will be written to the console. This section will focus on using log4j as the logging library and tuning Solace JMS API logs using the log4j properties. Therefore in order to enable Solace JMS API logging, a user must do two things:</p>
+<ul>
+<li>Put Log4j on the classpath.</li>
+<li>Create a log4j.properties configuration file in the root folder of the classpath</li>
+</ul>
+<p>Below is an example Log4j properties file that will enable debug logging within the Solace JMS API.</p>
+<pre><code language="language-properties" class="language-properties">log4j.rootLogger=info, stdout
+log4j.appender.Appender1=org.apache.log4j.ConsoleAppender
+log4j.appender.Appender1.layout=org.apache.log4j.PatternLayout
+log4j.appender.Appender1.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+log4j.appender.Appender2=org.apache.log4j.FileAppender
+log4j.appender.Appender2.File=applog.txt
+log4j.appender.Appender2.layout=org.apache.log4j.PatternLayout
+log4j.appender.Appender2.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %5L | %m%n
+</code></pre>
+<p>With Log4j properties file in classpath, you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.</p>
+<pre><code>    [DEBUG] 2017-05-16 15:27:13.418 [main] ClientRequestResponse - Starting request timer (SMP-EstablishP2pSub) (10000 ms)
+    [DEBUG] 2017-05-16 15:27:13.430 [Context_2_ReactorThread] ClientRequestResponse - Stopping request timer (SMP-EstablishP2pSub)
+    [DEBUG] 2017-05-16 15:27:13.432 [main] SolConnection - Connection created.
+    [DEBUG] 2017-05-16 15:27:13.432 [main] SolConnection - Entering createSession()
+    [DEBUG] 2017-05-16 15:27:13.439 [main] SolSession - SolSession created.  Transacted: false  acknowledgeMode: 1   state: Stopped
+    [DEBUG] 2017-05-16 15:27:13.439 [main] SolConnection - Leaving createSession()
+</code></pre>
+<h2 is-upgraded>How to enable NiFi logging</h2>
+<p>NiFi ‘~\NiFi\conf\logback.xml&#39; has configurable setting for tracing and debugging processors. In addition, Data Provenance provides search for data that has been processed.</p>
+<pre><code language="language-xml" class="language-xml">    &lt;!-- valid logging levels: TRACE, DEBUG, INFO, WARN, ERROR --&gt;
+    
+    &lt;logger name=&#34;org.apache.nifi&#34; level=&#34;INFO&#34;/&gt;
+    &lt;logger name=&#34;org.apache.nifi.processors&#34; level=&#34;WARN&#34;/&gt;
+    &lt;logger name=&#34;org.apache.nifi.processors.standard.LogAttribute&#34; level=&#34;DEBUG&#34;/&gt;
+    &lt;logger name=&#34;org.apache.nifi.controller.repository.StandardProcessSession&#34; level=&#34;WARN&#34; /&gt;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sample Code Reference" duration="2">
+        <p>A working sample with maven pom build is provided in GitHub with this guide:</p>
+<ul>
+<li><a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nifi-jms-jndi" target="_blank">src/nifi-jms-jndi</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

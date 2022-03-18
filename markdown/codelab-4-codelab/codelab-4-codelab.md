@@ -19,7 +19,6 @@ We'll be authoring the codelabs using markdown format. This gives us the flexibi
 
 Here is an example image of another Codelab that I created:
 ![image_caption](img/codelabexample.png)
-
 ### Resources
 
 - The markdown for this codelab is located here: [codelab.md](https://raw.githubusercontent.com/SolaceDev/solace-dev-codelabs/master/markdown/codelab-4-codelab/codelab-4-codelab.md)
@@ -88,6 +87,18 @@ You should now have the _claat_ command available to you.
 $ claat
 ```
 
+
+#### Note if you have Go v1.17+ 
+
+As of Go v1.17+, the go get command for installing executables is deprecated https://go.dev/doc/go-get-install-deprecation
+
+A workaround for isntalling the claat command is the follwing:
+1. Clone the google tools project repo into a google-tools directory `git clone git@github.com:googlecodelabs/tools.git google-tools` 
+2. Navigate to the claat command directory `cd google-tools/claat`  
+3. Build the claat command `go build .`. This will create a `claat` command executable that you can use.  
+4. Now you can update your PATH env variable (this is either done in your .bashrc, .profile, or .zshrc depending on what your shell is). At the end of the file, isert the following line`export PATH=$PATH:$HOME/google-tools/claat`. Note: this assumes you clones the google-tools repo in your $HOME directory. If cloned elsewhere, make sure you use the right path in your path export  
+5. After you do this, you can open up a new terminal window and executing `claat` from the command line should work   
+
 ## Solace Guidelines
 
 Duration: 0:05:00
@@ -100,6 +111,13 @@ Duration: 0:05:00
 ✅ Include an "Environment Setup" or "What You'll Need Section" section that sets up the environment, if necessary.  
 ✅ Try to make the codelab fun and engaging using images and/or gifs  
 ✅ Provide code used in a separate public git repo
+
+### Tips 
+💡 To capture a multi-part topic, create smaller sections of the topic and organize the section titles as parts and sub-sections to capture the grouping of content.
+![image_caption](img/multi-part-tip1.jpg)
+
+💡 Attempt to give complete context when specifying properties, configuration etc as much as possible.
+![image_caption](img/multi-part-tip2.jpg)
 
 ### Where to create your codelab
 
@@ -133,13 +151,15 @@ cd solace-dev-codelabs
 git checkout -b add-codelab-<name_of_codelab>
 ```
 
+Positive
+: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br/><br/>`git clone https://github.com/<Your_Github_User>/solace-dev-codelabs.git`
+
 Negative
-: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:  
-`git clone https://github.com/<Your_Github_User>/solace-dev-codelabs.git`
+: Do not forget to checkout the code into a new branch **git checkout -b \<add-codelab-name_of_codelab>**. This would help facilitating a peer review and approve/reject changes without affecting the published content.
 
 Then follow one of the two options in the next two steps: Automated or Manual
 
-## Option A: Create your initial Codelab - Automated
+## Create a new Codelab - Automated [Option A]
 
 Duration: 0:05:00
 
@@ -156,16 +176,19 @@ Duration: 0:05:00
 1. Edit your `<name-of-codelab>.md` file in your text editor of choice
 1. When ready, run the export script as follows `./export.sh`
 
+Negative
+: If you're using Windows make sure to set your text editor to use UNIX line endings!
+
 Positive
 : Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
 
-🚀 Go ahead to the **Step 7** and add your codelabs on the main repo
+🚀 Go ahead to the **Step 8** and add your codelabs on the main repo
 
-## Option B: Create your initial Codelab - Manual
+## Create a new Codelab - Manual [Option B]
 
-Duration: 0:08:00
+Create a folder `<name-of-codelab>` under the `markdown` directory. This is where your markdown file and related artifacts (such as images) will reside.
 
-Create a folder under the `markdown` directory with your codelab as the dir name. This is where your markdown file and related artifacts (such as images) will reside.
+Navigate to the `<name-of-codelab>` directory.
 
 Go ahead and create a markdown file where you'll create the actual codelab.
 Please have your markdown file name match the `id` in the header metadata that you will set in the next subsection.
@@ -308,7 +331,7 @@ $ claat serve
 - Choose the directory that matches your "id" that you put in the headers.
 - Viola! You should have your first codelab!
 
-Repeat the export and serve locally everyt ime you make a new change in the markdown file
+Repeat the export and serve locally every ime you make a new change in the markdown file
 
 Positive
 : When you ran the `claat export` command you created the static web content needed to host your codelab.
@@ -335,6 +358,29 @@ cd markdown/<header-metadata-id>
 # Note the google analytics code used. Keep as is below
 claat export -o ../../codelabs/ <header-metadata-id>.md
 ```
+Positive
+: Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
+
+🚀 Go ahead to **Step 8** and add your codelabs on the main repo
+
+## Modify an existing Codelab
+
+Duration: 0:03:00
+
+### Steps
+
+1. Navigate to the `/markdown/<name-of-codelab>` directory
+2. Compile and start the claat server by running `npm run watch`. Note: This will open a tab in your browser and serve your markdown file
+3. Edit your `<name-of-codelab>.md` file in your text editor of choice
+4. When ready, run the export script as follows `./export.sh`
+
+Negative
+: If you're using Windows make sure to set your text editor to use UNIX line endings!
+
+Positive
+: Exporting your codelab will create the html static files under the `codelabs/<name-of-codelab>` directory
+
+🚀 Go ahead to **Step 8** and add your codelabs on the main repo
 
 ## Add your Codelab to solace.dev/codelabs
 
@@ -358,7 +404,7 @@ Now that your changes have been pushed to a new branch, navigate to your fork `h
 Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the "Pull Request" button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.
 
 Positive
-: We request there needs to be one technical reviewer that verifies the technical steps to make sure they work in your codelab.
+: We recommend a technical review of the codelab to verify the technical steps and make sure they work as mentioned in the codelab.
 
 ### Thank You!
 

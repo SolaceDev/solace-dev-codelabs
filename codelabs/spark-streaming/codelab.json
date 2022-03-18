@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-01-31T15:48:37-08:00",
+  "id": "spark-streaming",
+  "duration": 120,
+  "title": "Integration Guide: Spark Streaming 3.2",
+  "summary": "The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications - on any kind of deployment platform. A key element of Spring is infrastructural support at the application level.",
+  "source": "spark-streaming.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/spark-streaming",
+  "url": "spark-streaming"
+}

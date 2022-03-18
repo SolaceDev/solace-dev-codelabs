@@ -22,7 +22,7 @@ You will learn how to implement the Solace Connector for Boomi Request Action.
 Duration: 0:07:00
 
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messagin).
-1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-getting-started/index.html) Codelab.
+1. Basic knowledge of the Boomi GUI and deployments. A good place to start would be the [Getting Started with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-v2-getting-started/index.html) Codelab.
 
 After you finish the Getting Started with Boomi and Solace codelab, you’ll have the following
 

@@ -100,7 +100,18 @@ You will see the menu at the top
 - **Deploy**: This is where you deploy the packaged process in your Atom for execution
 - **Manage**: This is where you configure your environment and Atoms
 
-#### 2. Configure and deploy your local Atom
+#### 2. Setup Boomi environment
+
+Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to "attach" the atom to. You can read more about Boomi Environments on the [Environment Management Boomi User Guide](https://help.boomi.com/bundle/integration/page/c-atm-Environment_management_1ec94aeb-ffaf-4cec-a3b0-483c2af3967c.html)
+
+Under the Manage menu, navigate to the Atom management and add a new environment
+![env-menu](img/env-menu.png "env-menu")
+
+Give it a name and choose **Test** for the environment classification
+![env-setup](img/env-setup.png "env-setup")
+
+
+#### 3. Configure and deploy your local Atom via the Java Wizard
 
 In this tutorial, we will be setting up a local Atom.
 
@@ -111,7 +122,7 @@ You can either navigate to the links below for more information or follow the st
 
 1. [Windows Machine](https://help.boomi.com/bundle/integration/page/t-atm-Installing_a_local_Atom_on_Windows.html).
 1. [Linux](https://help.boomi.com/bundle/integration/page/int-Atom_installation_checklist_Linux.html).
-1. [MacOS Using Docker](https://github.com/anthonyrabiaza/Boomi-on-Mac)
+1. [MacOs Using Docker](https://github.com/anthonyrabiaza/Boomi-on-Mac).
 
 👉 Navigate to the **Manage** tab and click on **Atom Management**
 
@@ -125,7 +136,24 @@ You can either navigate to the links below for more information or follow the st
 
 ![atom-setup](img/atom-setup.png "atom-setup")
 
+👉 Open terminal and navigate to the location where the atom installer was installed. If you are using Linux or MacOS, make sure to change the mode of the file to make it executable. This is done as follows
+
+```
+cd <path_to_where_the_installer_is_installed>
+chmod +x atom_install64.sh
+```
+
+👉 Run the installer `./atom_install64.sh` and follow the on-screen prompt to install the local atom. Make sure to select the previously created environment. 
+
+Positive
+: Note: you can attach your atom to the environment of choice at a later step from the Boomi cloud UI 
+
+
+#### [Alternative] Configure and deploy your local Atom via Docker
+
 📝 **Notes on Docker installation**
+
+If you have access to the docker version of the atom installer, you can follow the following step. 
 
 The installer is a shell script that you run locally and automatically configure your docker setup
 
@@ -148,25 +176,17 @@ At this point, you can confirm that the Atom has been created and linked to your
 
 ![unattached-atom](img/unattached-atom.png "unattached-atom")
 
-#### 3. Setup Boomi environment
+#### 4. [Optional] Attach the Atom to the environment
 
-Boomi Environments are synonymous to workspaces thats used for testing or production purposes. You need an environment to "attach" the atom to. You can read more about Boomi Environments on the [Environment Management Boomi User Guide](https://help.boomi.com/bundle/integration/page/c-atm-Environment_management.html)
-
-Under the Manage menu, navigate to the Atom management and add a new environment
-![env-menu](img/env-menu.png "env-menu")
-
-Give it a name and choose **Test** for the environment classification
-![env-setup](img/env-setup.png "env-setup")
-
-#### 4. Attach the Atom to the environment
-
-Select your newly created environment and search for your atom to attach it
+If you did not attach the atom directly fro the Wizard installer or you are manually running the atom on a docker image, you can follow the following steps to attach the atom to the newly created Environment. To do so, select your newly created environment and search for your atom to attach it
 ![env-wiz](img/env-wiz.png "env-wiz")
 
 Positive
-: Note: a blue icon next to your newly created Atom means that it has an Online Status
+: Note: a blue icon next to your newly created Atom means that it has an Online Status    
 
-#### 🎉 Voila! Now you have your Solace and Boomi environments setup
+![active-atom](img/active-atom.png "active-atom")
+
+#### 🎉 Viola! Now you have your Solace and Boomi environments setup
 
 ## Design your architecture using Solace PubSub+ Event Portal
 
@@ -278,12 +298,10 @@ Positive
 Back to the Solace Shape configuration, click on the + icon for the **Operation** section to configure the operation parameters as seen in the screenshot below
 
 👉 Assign the Mode to Persistent Transacted  
-👉 Select the Create Queue and Topic Subscription option
+👉 Fill in the destination to the name of the queue. Note: you can either type in a name of a queue that is previously created on the broker or you can have a totally new queue and the connector will automatically deal with the creation of the queue on the broker. Magic. 
 
 ![connectoroperation](img/connectoroperation.png "connectoroperation")
 
-Positive
-: Note: The `Create Queue and Topic Subscription` option means that the Solace connector will create the queue and subscription for you behind the scenes
 
 👉 Click on the Import Button in the Upper Right. Select your atom and the Solace connection that you just created, then click on Next.
 
@@ -371,7 +389,7 @@ Positive
 
 ![tryme](img/tryme.png "tryme")
 
-👉 In the Publisher section, click on the **Connect** button, change the topic to be `taxi/nyc/v1/dropoff/rideX` (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want
+👉 In the Publisher section, click on the **Connect** button, change the topic to be `acme/rideshare/ride/requested/rideX` (since we have our queue subscribing to this topic, remember!) and update the message body to whatever you want
 
 ![publisher-connect](img/publisher-connect.png "publisher-connect")
 
@@ -395,7 +413,7 @@ You will see the process reporting menu with your newly created **NewProcess** p
 You're done!
 
 Positive
-: Note that any publisher that publishes on topic `taxi/nyc/v1/dropoff/>` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
+: Note that any publisher that publishes on topic `acme/rideshare/ride/requested/>` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
 
 ## Takeaways
 
