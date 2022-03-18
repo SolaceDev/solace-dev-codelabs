@@ -341,7 +341,7 @@ Next we should decide what we want the data to look like once we have processed 
       "payment_status": "accepted",
       "invoice_system_id": "PSG-32923",
       "amount_charged": 12.32,
-      "ride_id": 2345234,
+      "ride_id": "545496c5-a334-4344-9662-efde68c0b98a",
       "entity_type": "Driver",
       "driver": {
         "driver_id": 1234132,
@@ -421,11 +421,11 @@ Next we should decide what we want the data to look like once we have processed 
     },
     "ride_id": {
       "$id": "#/properties/ride_id",
-      "type": "integer",
+      "type": "string",
       "title": "The ride_id schema",
       "description": "An explanation about the purpose of this instance.",
-      "default": 0,
-      "examples": [2345234]
+      "default": "",
+      "examples": ["545496c5-a334-4344-9662-efde68c0b98a"]
     },
     "entity_type": {
       "$id": "#/properties/entity_type",
@@ -484,7 +484,7 @@ Next we should decide what we want the data to look like once we have processed 
         },
         "rating": {
           "$id": "#/properties/driver/properties/rating",
-          "type": "integer",
+          "type": "number",
           "title": "The rating schema",
           "description": "An explanation about the purpose of this instance.",
           "default": 0,
@@ -543,7 +543,7 @@ Next we should decide what we want the data to look like once we have processed 
         },
         "rating": {
           "$id": "#/properties/passenger/properties/rating",
-          "type": "integer",
+          "type": "number",
           "title": "The rating schema",
           "description": "An explanation about the purpose of this instance.",
           "default": 0,
