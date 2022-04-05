@@ -17,7 +17,7 @@ Sometimes Boomi Atom Processes need to communicate with external services in the
 
 On May 15th 2021, Boomi released the latest version of the Solace connector to support this type of interaction: support for a Request Action in the Solace Connector Shape.
 
-In this codelab, You will learn how to implement the Solace Connector for Boomi Request Action.
+In this codelab, you will learn how to use the Solace Connector for Boomi Request Action.
 
 ![diagram-overview.jpg](img/diagram-overview.jpg)
 
@@ -71,7 +71,7 @@ The first thing we will do is create a simple Process in Boomi that makes a requ
 
 ### Create a new Process
 
-- In your Boomi environment, create a new Process. You may call it anything you like, we will be calling ours Boomi Requestor
+- In your Boomi environment, create a new Process. You may call it anything you like.  We will be calling ours Boomi Requestor
 
 ![Boomi Request Process Create](img/CreateBoomiReqReplyProcess.png)
 
@@ -82,10 +82,10 @@ The first thing we will do is create a simple Process in Boomi that makes a requ
 
 - Drag a Message Shape onto the canvas and give it some sample data
 
-  - I am putting a silly question in, but it does not matter. We are not really processing this data.
+  - I am putting text in the message body to demonstrate sending data in the message body.  However the replier is not going to use this data.
     ![Message Shape - sample data](img/MessageShape-sampleData.png)
 
-- Drag a Solace Connector Shape onto the canvas and configure to send a Request
+- Drag a Solace Connector Shape onto the canvas and configure it to send a Request
 
   1. Set the Connection to your Solace instance
   1. Configure the operation as below.
@@ -111,13 +111,13 @@ Duration: 0:5:00
   1. Set the Username
   1. Set the Password
 
-![Try me cnofig](img/TryMePublisherConfig.png)
+![Try me config](img/TryMePublisherConfig.png)
 
-- You can get these values in the Connect tab of the Solace Cloud Console
+- You can get these values in the "Solace Web Messaging" section of the Connect tab of the Solace Cloud Console
   ![SolaceCloudConnectionDetails](img/SolaceCloudConnection.png)
 - Confirm the "Same as Publisher" checkbox is checked for the Subscriber and connect both the Publisher and Subcriber to the Solace Broker by clicking Connect on each.
   ![PublisherSubscriberConnected.png](img/PublisherSubscriberConnected.png)
-- Lastly, have the Subscriber start listening on the topic to which we will publih by typing the topic name in and clicking on Subscribe.
+- Lastly, have the Subscriber start listening on the topic to which we will publish by typing the topic name in and clicking on Subscribe.
   ![SubscribedToTopic](img/SubscribedToTopic.png)
 
 ## Test
@@ -147,7 +147,7 @@ Positive
   - Copy and paste the ReplyTo and CorrelationID values into the Publisher and also add some text if you want to confirm that the response payload is also captured. You will need to click on "Show Advanced" in order to include the CorrelationID.
     ![PublishResponse.png](img/PublishResponse.png)
 
-- Use the Boomi Test capability to confirm reciept of the reply and process completion.
+- Use the Boomi Test capability to confirm receipt of the reply and process completion.
   - The Boomi Process should have completed with success.
     ![BoomiProcessComplete.png](img/BoomiProcessComplete.png)
   - And you can check the Source data for the Stop Shape to see what data was returned.

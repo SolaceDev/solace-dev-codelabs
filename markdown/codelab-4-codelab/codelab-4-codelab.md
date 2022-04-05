@@ -72,7 +72,7 @@ $ export PATH=$PATH:$GOROOT/bin
 **Option A: from CLI using go**
 
 ```bash
-$ go get -u -v github.com/googlecodelabs/tools/claat
+$ go install github.com/googlecodelabs/tools/claat@latest
 ```
 
 **Option B: pre-compiled binary**
