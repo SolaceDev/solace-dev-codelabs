@@ -34,7 +34,6 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
-* [Solace PubSub+ Event Broker Configuration](http://docs.solace.com/Router-Configuration.htm)
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
 * [Spark Streaming Custom Receivers Documentation](https://spark.apache.org/docs/latest/streaming-custom-receivers.html)
 * [Spark Receiver Class Documentation](https://spark.apache.org/docs/latest/api/java/org/apache/spark/streaming/receiver/Receiver.html)
@@ -393,7 +392,7 @@ public void onMessage(Message message) {
 
 ### Step 3 – Deploying JMS Receiver
 
-This section will demo the use of the JMS receiver by creating a Java Spark Streaming example program, which counts the words in the input stream from the JMS receiver. For details of how the example works refer to the Java version of the [Spark Streaming Quick Start documentation](https://spark.apache.org/docs/latest/streaming-programming-guide.html#a-quick-example), which demonstrates a similar use case.
+This section will demo the use of the JMS receiver by creating a Java Spark Streaming example program, which counts the words in the input stream from the JMS receiver. For details of how the example works refer to the Java version of the [Spark Streaming Quick Example documentation](https://spark.apache.org/docs/latest/streaming-programming-guide.html#a-quick-example), which demonstrates a similar use case.
 
 Following code snippet shows how `PubSubPlusJMSReceiver` is invoked:
 
@@ -480,13 +479,11 @@ To achieve direct messaging, configure the connection-factory to enable this fea
 ## Working with Solace High Availability (HA)
 Duration: 0:05:00
 
-The [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.
-
-In general the Solace documentation contains the following note regarding reconnection:
+The [Developer Guide for Solace JMS API](https://docs.solace.com/Solace-JMS-API/JMS-Intro.htm) section "Establishing Connections" and "Managing Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.
 
 Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 
-In "Setting up Solace JNDI References", the Solace CLI commands correctly configured the required JNDI properties to reasonable values. Note: the retry parameters re all defaults, these commands are repeated here for completeness. 
+In [Configuring JNDI Objects](https://docs.solace.com/Configuring-and-Managing/Configuring-JNDI-Objects.htm), the Solace CLI commands correctly configured the required JNDI properties to reasonable values. Note: the retry parameters re all defaults, these commands are repeated here for completeness. 
 
 ```
 (config)# jndi message-vpn solace_VPN
