@@ -50,7 +50,6 @@
 <li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
 <li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
-<li><a href="http://docs.solace.com/Router-Configuration.htm" target="_blank">Solace PubSub+ Event Broker Configuration</a></li>
 <li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
 <li><a href="https://spark.apache.org/docs/latest/streaming-custom-receivers.html" target="_blank">Spark Streaming Custom Receivers Documentation</a></li>
 <li><a href="https://spark.apache.org/docs/latest/api/java/org/apache/spark/streaming/receiver/Receiver.html" target="_blank">Spark Receiver Class Documentation</a></li>
@@ -356,7 +355,7 @@ public void onMessage(Message message) {
 }
 </code></pre>
 <h2 is-upgraded>Step 3 – Deploying JMS Receiver</h2>
-<p>This section will demo the use of the JMS receiver by creating a Java Spark Streaming example program, which counts the words in the input stream from the JMS receiver. For details of how the example works refer to the Java version of the <a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html#a-quick-example" target="_blank">Spark Streaming Quick Start documentation</a>, which demonstrates a similar use case.</p>
+<p>This section will demo the use of the JMS receiver by creating a Java Spark Streaming example program, which counts the words in the input stream from the JMS receiver. For details of how the example works refer to the Java version of the <a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html#a-quick-example" target="_blank">Spark Streaming Quick Example documentation</a>, which demonstrates a similar use case.</p>
 <p>Following code snippet shows how <code>PubSubPlusJMSReceiver</code> is invoked:</p>
 <pre><code language="language-Java" class="language-Java">public static void main(String[] args) throws Exception {
   // Create the context with a 1 second batch size
@@ -441,10 +440,9 @@ $SPARK_HOME/bin/spark-submit \
       </google-codelab-step>
     
       <google-codelab-step label="Working with Solace High Availability (HA)" duration="5">
-        <p>The <a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a> section &#34;Establishing Connection and Creating Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
-<p>In general the Solace documentation contains the following note regarding reconnection:</p>
+        <p>The <a href="https://docs.solace.com/Solace-JMS-API/JMS-Intro.htm" target="_blank">Developer Guide for Solace JMS API</a> section &#34;Establishing Connections&#34; and &#34;Managing Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
 <p>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes.</p>
-<p>In &#34;Setting up Solace JNDI References&#34;, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. Note: the retry parameters re all defaults, these commands are repeated here for completeness.</p>
+<p>In <a href="https://docs.solace.com/Configuring-and-Managing/Configuring-JNDI-Objects.htm" target="_blank">Configuring JNDI Objects</a>, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. Note: the retry parameters re all defaults, these commands are repeated here for completeness.</p>
 <pre><code>(config)# jndi message-vpn solace_VPN
 (config-jndi)# create connection-factory JNDI/Sol/CF
 (config-jndi-connection-factory)# property-list transport-properties

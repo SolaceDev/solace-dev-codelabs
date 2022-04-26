@@ -2,7 +2,7 @@ author: Tamimi
 summary: TThis document is an integration guide for using Solace PubSub+ as a JMS provider for an Apache Spark Streaming custom receiver.Apache Spark is a fast and general-purpose cluster computing system. It provides an optimized engine that supports general execution graphs. It also supports a rich set of higher-level tools including Spark SQL for SQL and structured data processing, MLib for machine learning, GraphX for graph processing, and Spark Streaming for high-throughput, fault-tolerant stream processing of live data streams. The Spark Streaming custom receiver is a simple interface that allows third party applications to push data into Spark in an efficient manner.
 id: spark-streaming
 tags: iguide
-categories: Spring, Integration
+categories: Spark, Integration
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/spark-streaming
