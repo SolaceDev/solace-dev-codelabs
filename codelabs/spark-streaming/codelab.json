@@ -5,16 +5,16 @@
   "mainga": "UA-49880327-14",
   "updated": "2022-01-31T15:48:37-08:00",
   "id": "spark-streaming",
-  "duration": 120,
+  "duration": 80,
   "title": "Integration Guide: Spark Streaming 3.2",
-  "summary": "The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications - on any kind of deployment platform. A key element of Spring is infrastructural support at the application level.",
+  "summary": "TThis document is an integration guide for using Solace PubSub+ as a JMS provider for an Apache Spark Streaming custom receiver.Apache Spark is a fast and general-purpose cluster computing system. It provides an optimized engine that supports general execution graphs. It also supports a rich set of higher-level tools including Spark SQL for SQL and structured data processing, MLib for machine learning, GraphX for graph processing, and Spark Streaming for high-throughput, fault-tolerant stream processing of live data streams. The Spark Streaming custom receiver is a simple interface that allows third party applications to push data into Spark in an efficient manner.",
   "source": "spark-streaming.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
-    "spring",
+    "spark",
     "integration"
   ],
   "tags": [
