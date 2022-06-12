@@ -919,7 +919,8 @@ channels:
         $ref: '#/components/messages/RideUpdated'
 ```
 
-Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. Till it gets addressed, it is upon us to remove the `$id` references in the document. You can do that by manually editing the downloaded AsyncAPI document.
+Negative
+: Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. Till it gets addressed, it is upon us to remove the `$id` references in the document. You can do that by manually editing the downloaded AsyncAPI document.
 
 Alternatively, you can download the file and use it.
 ```bash
@@ -942,7 +943,7 @@ Note the different pieces of the command:
 
 ```bash
 
-ag -o ProcessPayment -p binder=solace -p dynamicType=header -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yml @asyncapi/java-spring-cloud-stream-template
+ag -o ProcessPayment -p binder=solace -p dynamicType=header -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files.
