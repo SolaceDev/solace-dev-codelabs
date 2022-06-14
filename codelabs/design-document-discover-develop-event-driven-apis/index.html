@@ -225,7 +225,6 @@
 <li>In the Search Results click on the <strong>RideUpdated</strong> event in order to understand the matching text context.</li>
 <li>We now know that the RideUpdated Schema has a field called <strong>ride_status</strong> that can have a value of <em>dropoff</em>. So how do we get access to that data? Click on the <em>RideUpdated</em> schema and we will find out! <img src="img/f4d8cb3f04b47e93.png"></li>
 <li>We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called <em>RideUpdated</em>. The topic being used leverages the <strong>ride_status</strong> attribute which is pretty sweet! So we can filter on dropoff as a client. <img src="img/9ff5514dcf1c4c56.png"></li>
-<li>Lets navigate to the <em>RideUpdated</em> Event and look at its documentation to ensure its what we would want to trigger our <em>ProcessPayment</em> Application.</li>
 </ol>
 <h2 is-upgraded>Step 2: Design the <em>PaymentCharged</em> Schema</h2>
 <p>Next we should decide what we want the data to look like once we have processed a payment.</p>
@@ -1052,8 +1051,6 @@ InvoiceSystem 0.0.1 is ready!
         <p>You can create event driven applications in a wide variety of different options as shown here: <img alt="APIs and Protocols" src="img/c728c0f6039a73b8.png"></p>
 <h2 is-upgraded>Generate Custom Code</h2>
 <p>Since the AsyncAPI Specification provides a machine-readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the <a href="https://github.com/asyncapi/generator" target="_blank">AsyncAPI Generator</a></p>
-<h2 is-upgraded>Use an Integration Platform</h2>
-<p><a href="https://solace.com/boomi/" target="_blank">Dell Boomi Connector</a></p>
 
 
       </google-codelab-step>

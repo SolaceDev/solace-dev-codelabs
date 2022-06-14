@@ -331,7 +331,10 @@ Positive
    ![](img/ride_status.png)
 1. We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called _RideUpdated_. The topic being used leverages the **ride_status** attribute which is pretty sweet! So we can filter on dropoff as a client.
    ![](img/rideStatusEvent.png)
+
+<!--
 1. Lets navigate to the _RideUpdated_ Event and look at its documentation to ensure its what we would want to trigger our _ProcessPayment_ Application.
+-->
 
 ### Step 2: Design the _PaymentCharged_ Schema
 
@@ -1335,10 +1338,11 @@ You can create event driven applications in a wide variety of different options 
 
 Since the AsyncAPI Specification provides a machine-readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the [AsyncAPI Generator](https://github.com/asyncapi/generator)
 
+<!--
 ### Use an Integration Platform
 
 [Dell Boomi Connector] (https://solace.com/boomi/)
-
+-->
 ## Takeaways
 
 Duration: 0:04:00
