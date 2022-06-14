@@ -23,7 +23,14 @@ PubSub+ Event Portal
 
 - Architect, Design and extend an EDA which includes multiple Applications, Events, and Schemas.
 - Document Applications, Events, and Schemas along with best practices for documentation
-- Use Discovery capability to see what you already have in runtime and audit for changes
+
+<!--
+
+- Use Discovery capability to see what you already have in runtime and audit for changes)
+
+-->
+
+
 - Use the Event Catalog and Designer to Learn, Understand and Ideate
 
 AsyncAPI
@@ -122,7 +129,13 @@ In order to react in a real-time manner the team has decided that we want to pro
 
 1. 🚖 Create and capture this **design** in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its components: Applications, Events, and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.
 2. 🚕 Next up we're going to **document** few applications and events so that they can be understood and reused by others.
-3. 🚕 We will **discover** existing implementation by running a discovery scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented
+
+<!--
+
+3. 🚕 We will **discover** existing implementation by running a discovery scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented)
+
+-->
+
 4. 🚕 Learn, Understand and Reuse some of our events in a new use case
 5. 🚖 Lastly we'll **develop** the _ProcessPayment_ microservice that that receives the stream of _RideUpdated_ events, charges the customer's credit card and generate a _PaymentCharged_ Event.
 
@@ -143,9 +156,13 @@ Before we dive deeper, let's ensure we are all aligned with terminology of the o
 
 An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events, and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group applications into different domains, for ex. we may have a domain for our rideshare apps and services, one for our _back-office apps_ where invoicing and background checks are being processed, and maybe another domains for _analytics_ where we group apps that are responsible for analyzing the successful operation of our rideshare services.
 
+<!--
+
 In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains.
 
 You can further group multiple domains into a _Workspace_, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.
+
+-->
 
 ![Workspace Example](img/workspace_example.png)
 
@@ -153,7 +170,11 @@ You can further group multiple domains into a _Workspace_, which will make it ea
 
 Events are an important part of the Event Portal. Think of an event as a concept of the publish-subscribe (pub/sub) architectural pattern. Topics are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.
 
+<!--
 A Solace topic and an Apache Kafka topic might seem fundamentally the same, but there are quite a few [differences between them](https://solace.com/blog/solace-topics-vs-kafka-topics/). Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.
+-->
+
+A Solace topic and an Apache Kafka topic might seem fundamentally the same, but there are quite a few [differences between them](https://solace.com/blog/solace-topics-vs-kafka-topics/). 
 
 Here are some examples from our use case:
 
@@ -180,6 +201,8 @@ In our use case all events are in JSON Schema format.
 
 An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.
 
+<!---
+
 ### Kafka Specific Objects and Terminology
 
 #### Consumer Groups
@@ -198,13 +221,23 @@ A few examples of Consumers Groups from our NYC Taxi Analytics use case would be
 
 A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.
 
+-->
+
+
 ## Best Practices
 
 Duration: 0:08:00
 
 ### Decomposing the Enterprise
 
-Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes:
+<!-- 
+
+Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes: 
+
+-->
+
+It is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes:
+
 
 1. **Event sharing rules** – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside the application domain
 1. **Provide uniform event topic prefixes** – ensures that the prefix is unique and that topic best practices are followed
@@ -817,9 +850,12 @@ Terms of Use
       ![asyncapi_doc2](img/AppDoc.png)
   5. Click _Save_
 
+<!--
+
 ## Discover Existing EDA Assets
 
 Duration: 0:36:00
+
 
 Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:
 
@@ -835,6 +871,7 @@ Once you have decided on the application domains that are required for your ente
 If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.
 
 [Follow the Solace Docs to Perform Event Discovery](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers)
+-->
 
 ## The AsyncAPI Initiative
 
