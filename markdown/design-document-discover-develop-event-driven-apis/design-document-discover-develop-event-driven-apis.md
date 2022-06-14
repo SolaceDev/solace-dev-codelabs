@@ -922,13 +922,20 @@ Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Eve
 
 ![processPaymentAsyncapi](img/processPaymentAsyncapi.png)
 
+The AsyncAPI document requires modifications to wire up proper channel information so that the publish and subscribe operation can share the same function name. Also, to overcome 
+
+```bash
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
+```
+
+
 Positive
 : The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
 
 Let's add a few of the template's configuration options to the downloaded AsyncAPI document.
 
 - Add `x-scs-function-name: processPayment` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  _subscribe_ and  _publish_ operation you are saying you want them handled by the same function!
-- Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
+- Add `x-scs-destination: test/taxinyc/ProcessPaymentQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.
 
@@ -937,7 +944,7 @@ channels:
   'taxinyc/backoffice/payment/charged/v1/{payment_status}/{driver_id}/{passenger_id}':
     subscribe:
       x-scs-function-name: processPayment
-      x-scs-destination: test/taxinyc/PaymentProcessorQueue
+      x-scs-destination: test/taxinyc/ProcessPaymentQueue
       message:
         $ref: '#/components/messages/PaymentCharged'
   ....
@@ -950,12 +957,11 @@ channels:
 ```
 
 Negative
-: Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. Till it gets addressed, it is upon us to remove the `$id` references in the document. You can do that by manually editing the downloaded AsyncAPI document.
+: Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. For now, we will remove the `$id` references in the document by editing the AsyncAPI document.
 
-Alternatively, you can download the file and use it.
-```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
-```
+To accomplish this, you can use the following command in the terminal.
+`sed -i '/$id:/d' ProcessPayment.yaml`
+
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
 
@@ -1067,7 +1073,7 @@ logging:
 
 Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideUpdated_ events as they're received and create a new PaymentCharged event for each.
 
-Open the _Application.java_ file and modify the `processPayment` method to log the events. When you're done it should look something like the code below.
+Open the _Application.java_ file and modify the `processPayment` method to build and publish _PaymentCharged_ event. Copy the following code block and replace the `processPayment` bean. 
 
 ```java
 @Bean

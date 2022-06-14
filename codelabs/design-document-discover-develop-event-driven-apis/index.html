@@ -729,19 +729,22 @@ N/A
 <h3 is-upgraded>Generate the Code Skeleton</h3>
 <p>Open the <code>NYC Modern Taxi Co - Back Office</code> Application Domain in the Solace Event Portal, right-click on the <em>ProcessPayment</em> application, Choose <em>AsyncAPI</em>, Choose <strong><em>YAML</em></strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="processPaymentAsyncapi" src="img/5531c5325066b12a.png"></p>
+<p>The AsyncAPI document requires modifications to wire up proper channel information so that the publish and subscribe operation can share the same function name. Also, to overcome</p>
+<pre><code language="language-bash" class="language-bash">curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
+</code></pre>
 <aside class="special"><p>The AsyncAPI Java Spring Cloud Stream Generator Template includes many <a href="https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options" target="_blank">Configuration Options</a> that allow you to change what the generated code will look like.</p>
 </aside>
 <p>Let&#39;s add a few of the template&#39;s configuration options to the downloaded AsyncAPI document.</p>
 <ul>
 <li>Add <code>x-scs-function-name: processPayment</code> under the <em>subscribe</em> operation <strong>and</strong> the <em>publish</em> operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  <em>subscribe</em> and  <em>publish</em> operation you are saying you want them handled by the same function!</li>
-<li>Add <code>x-scs-destination: test/taxinyc/PaymentProcessorQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.</li>
+<li>Add <code>x-scs-destination: test/taxinyc/ProcessPaymentQueue</code> under the <em>subscribe</em> operation. By adding this and using the <em>Solace</em> binder you are specifying the durable queue name if you&#39;re using a Consumer Group, or part of the temporary queue name if you&#39;re not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.</li>
 </ul>
 <p>✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.</p>
 <pre><code language="language-yaml" class="language-yaml">channels:
   &#39;taxinyc/backoffice/payment/charged/v1/{payment_status}/{driver_id}/{passenger_id}&#39;:
     subscribe:
       x-scs-function-name: processPayment
-      x-scs-destination: test/taxinyc/PaymentProcessorQueue
+      x-scs-destination: test/taxinyc/ProcessPaymentQueue
       message:
         $ref: &#39;#/components/messages/PaymentCharged&#39;
   ....
@@ -752,11 +755,9 @@ N/A
       message:
         $ref: &#39;#/components/messages/RideUpdated&#39;
 </code></pre>
-<aside class="warning"><p>Note that by default, AsyncAPI document downloaded from the Event Portal contains &#34;id&#34; reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the <code>$id</code> field adversely affects the code generation. Till it gets addressed, it is upon us to remove the <code>$id</code> references in the document. You can do that by manually editing the downloaded AsyncAPI document.</p>
+<aside class="warning"><p>Note that by default, AsyncAPI document downloaded from the Event Portal contains &#34;id&#34; reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the <code>$id</code> field adversely affects the code generation. For now, we will remove the <code>$id</code> references in the document by editing the AsyncAPI document.</p>
 </aside>
-<p>Alternatively, you can download the file and use it.</p>
-<pre><code language="language-bash" class="language-bash">curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
-</code></pre>
+<p>To accomplish this, you can use the following command in the terminal. <code>sed -i &#39;/$id:/d&#39; ProcessPayment.yaml</code></p>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
 <p>Note the different pieces of the command:</p>
 <ul>
@@ -845,7 +846,7 @@ logging:
 </code></pre>
 <h3 is-upgraded>Fill in the Business Logic</h3>
 <p>Obviously in the real world you&#39;d have more complex business logic but for the sake of showing simplicity we&#39;re just going to log the <em>RideUpdated</em> events as they&#39;re received and create a new PaymentCharged event for each.</p>
-<p>Open the <em>Application.java</em> file and modify the <code>processPayment</code> method to log the events. When you&#39;re done it should look something like the code below.</p>
+<p>Open the <em>Application.java</em> file and modify the <code>processPayment</code> method to build and publish <em>PaymentCharged</em> event. Copy the following code block and replace the <code>processPayment</code> bean.</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Function&lt;RideUpdated1, Message&lt;PaymentCharged&gt;&gt; processPayment() {
   return rideUpdated -&gt; {
