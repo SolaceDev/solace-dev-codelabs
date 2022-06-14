@@ -888,7 +888,7 @@ On to developing the _ProcessPayment_ App. As defined during the design sections
 
 #### Generate the Code Skeleton
 
-In the Solace Event Portal right-click on the _ProcessPayment_ application, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
+Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Event Portal, right-click on the _ProcessPayment_ application, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![processPaymentAsyncapi](img/processPaymentAsyncapi.png)
 
@@ -924,7 +924,7 @@ Negative
 
 Alternatively, you can download the file and use it.
 ```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yml
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
 ```
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
@@ -943,7 +943,7 @@ Note the different pieces of the command:
 
 ```bash
 
-ag -o ProcessPayment -p binder=solace -p dynamicType=header -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o ProcessPayment -p binder=solace -p dynamicType=header -p view=provider -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files.
@@ -976,16 +976,14 @@ As of the writing of this codelab, dynamic topics are not supported by the Async
 
 Let us make changes to the _application.yml_ file to reflect this.
 
-* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to *test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted*
+* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted`
   * **Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field; and remember it for later!.** Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic.
 
 * Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-in-0_ to *test/taxinyc/ProcessPaymentQueue*
   * We needed to make this change to avoid using wildcard characters in the destination name.
    
-We need information on **all** taxi drop off events to process payments. Our Taxis are publishing their _RideUpdate_ events to a dynamic topic structure - `taxinyc/ops/ride/updated/v1/{ride_status}/{driver_id}/{passenger_id}/{current_latitude}/{current_longitude}` capturing the dropoff status in the `{ride_status}` variable. For the ProcessPament application, we need only `dropoff` events. We will add this as additional subscription at the binder settings `queueAdditionalSubscriptions` parameter with value set to `taxinyc/ops/ride/updated/v1/dropoff/>`. 
+We need information on **all** taxi dropoff events to process payments. Our Taxis are publishing their _RideUpdate_ events to a dynamic topic structure - `taxinyc/ops/ride/updated/v1/{ride_status}/{driver_id}/{passenger_id}/{current_latitude}/{current_longitude}` capturing the dropoff status in the `{ride_status}` variable. For the ProcessPament application, we need only `dropoff` events. To do so, we'll need to add a new section in our application.yml file. Add the following binder-level setting on the same level of spring.cloud.stream.bindings:  
 
-* Add the binder-level settings to include additional subscription. Add the following block after the spring.cloud.stream.bindings at the same level.
-   
    ```yaml
       solace:
         bindings:
@@ -994,8 +992,7 @@ We need information on **all** taxi drop off events to process payments. Our Tax
               queueAdditionalSubscriptions: "taxinyc/ops/ride/updated/v1/dropoff/>"
   ```
   
-Now we have the ProcessPayment application subscribing to a dynamic topic _taxinyc/ops/ride/updated/v1/dropoff/>_ and publishing to _test/taxinyc/giri/backoffice/payment/charged/v1/accepted_ topic.
-
+Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted` topic.
 
 Positive
 : Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
@@ -1011,7 +1008,7 @@ spring:
     stream:
       bindings:
         processPayment-out-0:
-          destination: 'test/taxinyc/gii/backoffice/payment/charged/v1/accepted'
+          destination: 'test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted'
         processPayment-in-0:
           destination: test/taxinyc/ProcessPaymentQueue
       solace:
@@ -1138,8 +1135,7 @@ Duration: 0:08:00
 On to developing the _InvoiceSystem_ Node.js app that we previously designed. We are going to be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
 
 #### Generate the Code Skeleton
-
-In the Solace Event Portal right-click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
+Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Event Portal, right-click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![invoiceSystemAsyncapi](img/invoiceSystemAsyncapi.webp)
 
@@ -1174,7 +1170,7 @@ servers:
 
 Alternatively, you can download the file and use it.
 ```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem.yml -o InvoiceSystem.yml
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem.yml -o InvoiceSystem.yaml
 ```
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
@@ -1188,7 +1184,7 @@ Note the different pieces of the command:
 - And lastly, the `@asyncapi/nodejs-template` is the AsyncAPI generator template that we are using.
 
 ```bash
-ag InvoiceSystem.yml @asyncapi/nodejs-template -o InvoiceSystem -p server=production
+ag InvoiceSystem.yaml @asyncapi/nodejs-template -o InvoiceSystem -p server=production
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files.
@@ -1206,7 +1202,7 @@ The AsyncAPI Generator generated a nodejs project in the directory specified by 
 
 **A few notes on the project:**
 
-- The `test-taxinyc-YOUR_UNIQUE_NAME-backoffice-payment-charged-v1-accepted.js` in `handlers` directory contains callback function that will receive subscribed messages. This is the place where you can implement your business logic (message processing).
+- The `test-taxinyc-YOUR_UNIQUE_NAME-backoffice-payment-charged-v1-accepted.js` in the `src/api/handlers` directory contains callback function that will receive subscribed messages. This is the place where you can implement your business logic (message processing).
 - The `common.yml` file in the `config` directory contains broker and application details.
 
 #### Add the broker connection and protocol info 
@@ -1253,8 +1249,6 @@ $ npm i
 
 # Start server - Once running you should see PaymentCharged Events are received from the Broker. 
 # The output should look something like the below.
-
-# To enable production settings start the server with "NODE_ENV=production npm start"
 
 $ npm start
 > invoice-system@0.0.1 start /Users/xxxx/gitsolace/work/InvoiceSystem
