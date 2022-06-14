@@ -724,12 +724,7 @@ N/A
       </google-codelab-step>
     
       <google-codelab-step label="Implement ProcessPayment (Java/Spring)" duration="12">
-        <p>Before we proceed with AsyncAPI document download and code generation, let us make note of connection parameters to the Solace Cloud Broker using Spring Cloud Stream.</p>
-<p>Launch the Cloud Console, select the <strong>Message Broker Service</strong> and click on the <strong>Connect</strong> tab.</p>
-<p class="image-container"><img alt="ConectTab" src="img/c7afb6ee6c81b6b2.png"></p>
-<p>Click on the <strong>Spring Cloud Stream</strong> client library, this will open the detailed page with connection parameters (username, password, message VPN and host details).</p>
-<p class="image-container"><img alt="ConectTab" src="img/18f789e892b393ee.png"></p>
-<h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
+        <h2 is-upgraded>Develop the ProcessPayment Microservice</h2>
 <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>ProcessPayment</em> App. As defined during the design sections of this codelab, we determined that this will be a microservice written using Java &amp; Spring. We are going to use the <a href="https://spring.io/projects/spring-cloud-stream" target="_blank">Spring Cloud Stream</a> framework to develop this microservice since it was created for the exact purpose of developing event-driven microservices. We&#39;ll also keep the business logic to a minimum to focus on the process of creating an event-driven microservice with AsyncAPI + Spring Cloud Stream and getting it running!</p>
 <h3 is-upgraded>Generate the Code Skeleton</h3>
 <p>Open the <code>NYC Modern Taxi Co - Back Office</code> Application Domain in the Solace Event Portal, right-click on the <em>ProcessPayment</em> application, Choose <em>AsyncAPI</em>, Choose <strong><em>YAML</em></strong> and click <em>Download</em></p>

@@ -911,16 +911,6 @@ Negative
 
 Duration: 0:12:00
 
-Before we proceed with AsyncAPI document download and code generation, let us make note of connection parameters to the Solace Cloud Broker using Spring Cloud Stream. 
-
-Launch the Cloud Console, select the **Message Broker Service** and click on the **Connect** tab.
-
-![ConectTab](img/spring-connetion-tab.png)
-
-Click on the **Spring Cloud Stream** client library, this will open the detailed page with connection parameters (username, password, message VPN and host details).
-
-![ConectTab](img/spring-connetion-parameters.png)
-
 ### Develop the ProcessPayment Microservice
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
