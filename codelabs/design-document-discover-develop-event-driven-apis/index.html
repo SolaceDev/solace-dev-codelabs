@@ -801,6 +801,7 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 </aside>
 <h3 is-upgraded><em>Updates to </em><em>application.yml</em></h3>
 <p>There are certain updates required to the <em>applicaion.yaml</em> file to reflect destination names and subscriptions. You can use the following block of code and replace the content of <em>application.yml</em> file in the Spring project or manually make changes by following steps in the <em>Changes to application.yml</em> section.</p>
+
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
     function:
@@ -925,6 +926,7 @@ Created PaymentCharged Event:PaymentCharged [ rideId: 056b4e73-60d6-4e90-bd29-02
         <h2 is-upgraded>Develop the InvoiceSystem Node.js App</h2>
 <p>🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 On to developing the <em>InvoiceSystem</em> application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the <a href="https://github.com/asyncapi/Node.js-template" target="_blank">Node.js AsyncAPI Generator Template</a> to bootstrap our app creation. Note that <a href="https://mqtt.org/" target="_blank">MQTT</a> is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and</p>
 <h3 is-upgraded>Download AsyncAPI Document</h3>
+
 <p>Open the <code>NYC Modern Taxi Co - Back Office</code> Application Domain in the Solace Event Portal, right-click on the <em>InvoiceSystem</em>, Choose <em>AsyncAPI</em>, Choose <strong><em>YAML</em></strong> and click <em>Download</em></p>
 <p class="image-container"><img alt="invoiceSystemAsyncapi" src="img/13e740ea64dd6620.webp"></p>
 <h3 is-upgraded><em>Direct Download of updated AsyncAPI document</em></h3>
@@ -957,6 +959,7 @@ Created PaymentCharged Event:PaymentCharged [ rideId: 056b4e73-60d6-4e90-bd29-02
   production:     
     url: &#39;mqtt://taxi.messaging.solace.cloud:8883&#39;
     protocol: mqtt
+
 </code></pre>
 <p>🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.</p>
 <h3 is-upgraded><em>Code Generation</em></h3>
@@ -990,6 +993,7 @@ Check out your shiny new generated files at /private/tmp/codelab/InvoiceSystem.
 <p>Before coding our nodejs app let&#39;s go ahead and put our credentials in place.</p>
 <ul>
 <li>Add <strong>username and password details.</strong></li>
+
 </ul>
 <pre><code language="language-yaml" class="language-yaml">  broker:
     mqtt:

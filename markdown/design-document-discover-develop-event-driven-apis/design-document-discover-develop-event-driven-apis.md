@@ -1020,6 +1020,7 @@ Negative
 
 #### *Updates to _application.yml_*
 
+
 There are certain updates required to the *applicaion.yaml* file to reflect destination names and subscriptions. You can use the following block of code and replace the content of _application.yml_ file in the Spring project or manually make changes by following steps in the *Changes to _application.yml_* section.
 
 ```yaml
@@ -1138,6 +1139,7 @@ public Function<RideUpdated1, Message<PaymentCharged>> processPayment() {
 ```
 
 
+
 Negative
 : After updating the code, ensure that all "Instant cannot be resolved" errors due to missing imports. Or simply insert the following import statements at the top of the file.
 ```
@@ -1189,6 +1191,7 @@ Duration: 0:08:00
 On to developing the _InvoiceSystem_ application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
 
 #### Download AsyncAPI Document
+
 Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Event Portal, right-click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![invoiceSystemAsyncapi](img/invoiceSystemAsyncapi.webp)
@@ -1224,6 +1227,7 @@ Alternatively, you can follow the instruction and make changes to the AsyncAPI d
   messages:
     PaymentCharged:
       name: PaymentCharged
+
 ```
 
 * Add **server configuration** at the end of the yaml file
@@ -1233,6 +1237,7 @@ servers:
   production:     
     url: 'mqtt://taxi.messaging.solace.cloud:8883'
     protocol: mqtt
+
 ```
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
