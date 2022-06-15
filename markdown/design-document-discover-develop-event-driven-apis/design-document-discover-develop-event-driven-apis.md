@@ -23,7 +23,14 @@ PubSub+ Event Portal
 
 - Architect, Design and extend an EDA which includes multiple Applications, Events, and Schemas.
 - Document Applications, Events, and Schemas along with best practices for documentation
-- Use Discovery capability to see what you already have in runtime and audit for changes
+
+<!--
+
+- Use Discovery capability to see what you already have in runtime and audit for changes)
+
+-->
+
+
 - Use the Event Catalog and Designer to Learn, Understand and Ideate
 
 AsyncAPI
@@ -36,7 +43,7 @@ Positive
 
 ## What you need: Prerequisites
 
-Duration: 0:08:00
+Duration: 0:02:00
 
 🛠 This page covers the setup needed to perform this codelab. 🛠
 
@@ -78,7 +85,8 @@ We'll install the generator itself later 👍
 
 ✅ Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissions to publish to `test/taxinyc/>`
 
-### Prepare PubSub+ Event Portal
+## Prepare PubSub+ Event Portal
+Duration: 0:06:00
 
 #### Sign-up for Solace Cloud
 
@@ -122,7 +130,13 @@ In order to react in a real-time manner the team has decided that we want to pro
 
 1. 🚖 Create and capture this **design** in the PubSub+ Event Portal where we can define our Event-Driven Architecture, including its components: Applications, Events, and Schemas. This will allow us to define the details needed to implement, visualize and extend the architecture as it evolves, and share/collaborate with our entire engineering team as we continue to innovate.
 2. 🚕 Next up we're going to **document** few applications and events so that they can be understood and reused by others.
-3. 🚕 We will **discover** existing implementation by running a discovery scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented
+
+<!--
+
+3. 🚕 We will **discover** existing implementation by running a discovery scan of a Kafka Cluster to reverse engineer what another team at NYC Taxi already has implemented)
+
+-->
+
 4. 🚕 Learn, Understand and Reuse some of our events in a new use case
 5. 🚖 Lastly we'll **develop** the _ProcessPayment_ microservice that that receives the stream of _RideUpdated_ events, charges the customer's credit card and generate a _PaymentCharged_ Event.
 
@@ -143,9 +157,13 @@ Before we dive deeper, let's ensure we are all aligned with terminology of the o
 
 An application domain represents a namespace where applications, events, and schemas can live. Within this namespace, you can create a suite of applications, events, and schemas that are independent of other application domains. In our NYC Taxi use case we introduced earlier, we may group applications into different domains, for ex. we may have a domain for our rideshare apps and services, one for our _back-office apps_ where invoicing and background checks are being processed, and maybe another domains for _analytics_ where we group apps that are responsible for analyzing the successful operation of our rideshare services.
 
+<!--
+
 In the Event Portal you will associate all objects like Consumer Groups, Topics, Schema, etc, to one or more Application Domains.
 
 You can further group multiple domains into a _Workspace_, which will make it easier to review our Discovery scan. So our Analytics, Operations, and Back-Office Application Domain in the NYC taxi example could be part of a single Workspace.
+
+-->
 
 ![Workspace Example](img/workspace_example.png)
 
@@ -153,7 +171,11 @@ You can further group multiple domains into a _Workspace_, which will make it ea
 
 Events are an important part of the Event Portal. Think of an event as a concept of the publish-subscribe (pub/sub) architectural pattern. Topics are used to route data or events (in the form of messages) between distributed applications, often using a message broker or an event broker.
 
+<!--
 A Solace topic and an Apache Kafka topic might seem fundamentally the same, but there are quite a few [differences between them](https://solace.com/blog/solace-topics-vs-kafka-topics/). Later in this CodeLab, when you run a discovery scan against a Kafka cluster the Topic Scheme for events discovered will be Kafka format.
+-->
+
+A Solace topic and an Apache Kafka topic might seem fundamentally the same, but there are quite a few [differences between them](https://solace.com/blog/solace-topics-vs-kafka-topics/). 
 
 Here are some examples from our use case:
 
@@ -180,6 +202,8 @@ In our use case all events are in JSON Schema format.
 
 An application represents a piece of software that produces and consumes events. Applications connect to the event broker in an event-driven architecture and communicate with other applications via events. A single application represents a class of applications that are running the same code base; therefore, a Kafka consumer group can be associated with an Application object in the Event Portal.
 
+<!---
+
 ### Kafka Specific Objects and Terminology
 
 #### Consumer Groups
@@ -198,13 +222,23 @@ A few examples of Consumers Groups from our NYC Taxi Analytics use case would be
 
 A connector is used in Kafka for connecting Kafka brokers with external systems to stream data into or out of Apache Kafka. In the Event Portal, a Kafka Connector is an application class you select to configure associated published and/or subscribed events and a set of Kafka-native attributes like Connector Type, Class, Cluster ID, and Maximum Task.
 
+-->
+
+
 ## Best Practices
 
 Duration: 0:08:00
 
 ### Decomposing the Enterprise
 
-Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes:
+<!-- 
+
+Whether you perform discovery manually or using our agent, it is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes: 
+
+-->
+
+It is important to consider how your enterprise is organized so that it can be decomposed using the Application Domain construct. An Application Domain provides the ability to organize and decompose an enterprise into logical groupings. These groupings could be based on-line of business, related functional capabilities or based on team dynamics. The benefits of doing this includes:
+
 
 1. **Event sharing rules** – decide which events should be shared with other application domains and those which are for internal application domain usage only. This has implications both from a security perspective, but also which events need to be managed more tightly as they affect others outside the application domain
 1. **Provide uniform event topic prefixes** – ensures that the prefix is unique and that topic best practices are followed
@@ -298,7 +332,10 @@ Positive
    ![](img/ride_status.png)
 1. We now see the metadata about the RideUpdated schema and at the bottom we can see there is an Event that references this schema called _RideUpdated_. The topic being used leverages the **ride_status** attribute which is pretty sweet! So we can filter on dropoff as a client.
    ![](img/rideStatusEvent.png)
+
+<!--
 1. Lets navigate to the _RideUpdated_ Event and look at its documentation to ensure its what we would want to trigger our _ProcessPayment_ Application.
+-->
 
 ### Step 2: Design the _PaymentCharged_ Schema
 
@@ -817,9 +854,12 @@ Terms of Use
       ![asyncapi_doc2](img/AppDoc.png)
   5. Click _Save_
 
+<!--
+
 ## Discover Existing EDA Assets
 
 Duration: 0:36:00
+
 
 Most organizations already leverage event driven architecture (EDA) and have one or more event brokers. Today the Solace PubSub+ Event Portal supports the ability to scan, catalog and reverse engineer the following Event Brokers:
 
@@ -835,6 +875,7 @@ Once you have decided on the application domains that are required for your ente
 If you have an event broker type/configuration that is supported by the discovery agent then an automated discovery process not only provides a faster path to managing and governing your existing EDA assets, it also ensures that the data is valid and up to date.
 
 [Follow the Solace Docs to Perform Event Discovery](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers)
+-->
 
 ## The AsyncAPI Initiative
 
@@ -871,16 +912,6 @@ Negative
 
 Duration: 0:12:00
 
-Before we proceed with AsyncAPI document download and code generation, let us make note of connection parameters to the Solace Cloud Broker using Spring Cloud Stream. 
-
-Launch the Cloud Console, select the **Message Broker Service** and click on the **Connect** tab.
-
-![ConectTab](img/spring-connetion-tab.png)
-
-Click on the **Spring Cloud Stream** client library, this will open the detailed page with connection parameters (username, password, message VPN and host details).
-
-![ConectTab](img/spring-connetion-parameters.png)
-
 ### Develop the ProcessPayment Microservice
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
@@ -895,10 +926,25 @@ Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Eve
 Positive
 : The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
 
+
+#### *Direct Download of updated AsyncAPI document*
+
+If you want a pre-populated file with changes and additions, you can download using the following command. 
+
+```bash
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
+```
+
+After downloading, directly go to *Code Generation* step.
+
+#### *Manual updates to AsyncAPI document*
+
+Alternatively, you can follow the instruction and make changes to the AsyncAPI document.
+
 Let's add a few of the template's configuration options to the downloaded AsyncAPI document.
 
-- Add `x-scs-function-name: processPayment` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  _subscribe_ and  _publish_ operation you are saying you want them handled by the same function!
-- Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
+- Add `x-scs-function-name: processPayment` immediately after the **subscribe** operation and the **publish** operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  _subscribe_ and  _publish_ operation you are saying you want them handled by the same function!
+- Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` immediately after the **subscribe** operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.
 
@@ -920,12 +966,11 @@ channels:
 ```
 
 Negative
-: Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. Till it gets addressed, it is upon us to remove the `$id` references in the document. You can do that by manually editing the downloaded AsyncAPI document.
+: To work-around an issue in the AsncAPI code generator, the `$id` fields need to be removed. You can use the following command in the terminal to accomplish this.   
+`sed -i '/$id:/d' ProcessPayment.yaml`
 
-Alternatively, you can download the file and use it.
-```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
-```
+
+#### *Code Generation*
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
 
@@ -943,7 +988,7 @@ Note the different pieces of the command:
 
 ```bash
 
-ag -o ProcessPayment -p binder=solace -p dynamicType=header -p view=provider -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o ProcessPayment -p binder=solace -p dynamicType=header -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files.
@@ -970,35 +1015,13 @@ A few notes on the project:
 - The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.
 - The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder.
 
-#### Changes to _application.yml_
+Negative
+: You can use a Java IDE like Eclipse or Spring Tool Suite to work with the generated Spring Boot application. Alternatively, you can also use a simple text editor like Visual Source Code or other text editors to make changes to the files.
 
-As of the writing of this codelab, dynamic topics are not supported by the AsyncAPI Code Generator. Hence, all the destinations on the cloud stream settings have to be updated with a literal string without any wildcard characters.
-
-Let us make changes to the _application.yml_ file to reflect this.
-
-* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted`
-  * **Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field; and remember it for later!.** Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic.
-
-* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-in-0_ to *test/taxinyc/ProcessPaymentQueue*
-  * We needed to make this change to avoid using wildcard characters in the destination name.
-   
-We need information on **all** taxi dropoff events to process payments. Our Taxis are publishing their _RideUpdate_ events to a dynamic topic structure - `taxinyc/ops/ride/updated/v1/{ride_status}/{driver_id}/{passenger_id}/{current_latitude}/{current_longitude}` capturing the dropoff status in the `{ride_status}` variable. For the ProcessPament application, we need only `dropoff` events. To do so, we'll need to add a new section in our application.yml file. Add the following binder-level setting on the same level of spring.cloud.stream.bindings:  
-
-   ```yaml
-      solace:
-        bindings:
-          processPayment-in-0:
-            consumer:
-              queueAdditionalSubscriptions: "taxinyc/ops/ride/updated/v1/dropoff/>"
-  ```
-  
-Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted` topic.
-
-Positive
-: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+#### *Updates to _application.yml_*
 
 
-✅ After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
+There are certain updates required to the *applicaion.yaml* file to reflect destination names and subscriptions. You can use the following block of code and replace the content of _application.yml_ file in the Spring project or manually make changes by following steps in the *Changes to _application.yml_* section.
 
 ```yaml
 spring:
@@ -1010,7 +1033,7 @@ spring:
         processPayment-out-0:
           destination: 'test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted'
         processPayment-in-0:
-          destination: test/taxinyc/ProcessPaymentQueue
+          destination: test/taxinyc/PaymentProcessorQueue
       solace:
         bindings:
           processPayment-in-0:
@@ -1033,11 +1056,40 @@ logging:
       springframework: info
 ```
 
-#### Fill in the Business Logic
+After updating the file, directly go to *Implement the Business Logic* step.
+
+#### *Changes to _application.yml_*
+
+If you choose to make manual changes, please follow the instructions here.
+
+Dynamic topics (topics with variables enclosed by {,} characters) is not supported by the AsyncAPI Code Generator in cloud stream bindings.
+
+Let us make the following changes to the _application.yml_ file.
+
+* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted`
+
+**Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field; and remember it for later!.** Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic.
+   
+* We need information on **all** taxi dropoff events to process payments. We need to add additional queue subsription at the binder level. Insert the following block immediately after the spring.cloud.stream.bindings.
+
+  ```yaml
+      solace:
+        bindings:
+          processPayment-in-0:
+            consumer:
+              queueAdditionalSubscriptions: "taxinyc/ops/ride/updated/v1/dropoff/>"
+  ```
+  
+Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted` topic.
+
+Positive
+: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+
+#### Implement the Business Logic
 
 Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideUpdated_ events as they're received and create a new PaymentCharged event for each.
 
-Open the _Application.java_ file and modify the `processPayment` method to log the events. When you're done it should look something like the code below.
+Open the _Application.java_ file and modify the `processPayment` method to build and publish _PaymentCharged_ event. Copy the following code block and replace the `processPayment` bean. Upon receiving a _RideUpdated_ message, thie bean function constructs a _PaymentCharged_ message and publishes to the unique topic (distinguished by your unique name).
 
 ```java
 @Bean
@@ -1100,7 +1152,9 @@ import org.apache.commons.lang.math.RandomUtils;
 
 That's it! The app development is complete.
 
-🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀
+<!-- 
+🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀 
+-->
 
 ### Run the app!
 
@@ -1108,7 +1162,9 @@ Now that our app has been developed let's run it!
 
 If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 
-Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command.
+Or run it from the terminal by navigating to the directory with the pom and running the following command in the terminal.
+
+`mvn clean spring-boot:run`
 
 Negative
 : If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
@@ -1132,16 +1188,30 @@ Duration: 0:08:00
 ### Develop the InvoiceSystem Node.js App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _InvoiceSystem_ Node.js app that we previously designed. We are going to be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
+On to developing the _InvoiceSystem_ application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
 
-#### Generate the Code Skeleton
+#### Download AsyncAPI Document
+
 Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Event Portal, right-click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![invoiceSystemAsyncapi](img/invoiceSystemAsyncapi.webp)
 
-Let's add a few of the template's configuration options to the downloaded AsyncAPI document.
 
-* Update the channel configuration to a static topic name on which the process payment message is published by the ProcessPayment application we built in the previous section. Also, add the operationId to the publish operation.     
+#### *Direct Download of updated AsyncAPI document*
+
+If you want a pre-populated file with changes and additions, you can download using the following command. 
+
+```bash
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem/asyncapi.yaml -o InvoiceSystem.yaml
+```
+
+After downloading, directly go to *Code Generation* step.
+
+#### *Manual updates to AsyncAPI document*
+
+Alternatively, you can follow the instruction and make changes to the AsyncAPI document.
+
+* Update the **channel configuration to a static topic name** on which the process payment message is published by the ProcessPayment application we built in the previous section. Also, **add operationId to the publish** operation.     
 
 ```yaml
     channels:
@@ -1151,29 +1221,28 @@ Let's add a few of the template's configuration options to the downloaded AsyncA
 ```
 **Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field in the following line of code:**
 
-* Add server configuration at the end of the yaml file
+* Add the **`name` parameter next to the `PaymentCharged` message**.
+
+```yaml
+  messages:
+    PaymentCharged:
+      name: PaymentCharged
+
+```
+
+* Add **server configuration** at the end of the yaml file
 
 ```yaml
 servers:    
   production:     
     url: 'mqtt://taxi.messaging.solace.cloud:8883'
     protocol: mqtt
-```
 
-* Add the `name` parameter next to the `PaymentCharged` message.
-
-```yaml
-  messages:
-    PaymentCharged:
-      name: PaymentCharged
-```
-
-Alternatively, you can download the file and use it.
-```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem.yml -o InvoiceSystem.yaml
 ```
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
+
+#### *Code Generation*
 
 Note the different pieces of the command:
 
@@ -1209,11 +1278,11 @@ The AsyncAPI Generator generated a nodejs project in the directory specified by 
 
 In the **common.yml** in the _config_ directory:
 
-* Update the protocol to mqtts from mqtt in both `url` and `protocol` fields.
+* Update the **protocol to mqtts from mqtt in both `url` and `protocol` fields.**
 
 Before coding our nodejs app let's go ahead and put our credentials in place.     
 
-* Add username and password details.
+* Add **username and password details.**
 
 ```yaml
   broker:
@@ -1298,10 +1367,11 @@ You can create event driven applications in a wide variety of different options 
 
 Since the AsyncAPI Specification provides a machine-readable way to define your Asynchronous applications it allows for the creation of custom code generators. The easiest way to likely do this is to leverage the tooling that the AsyncAPI Initiative has already put in place and create a new template for the [AsyncAPI Generator](https://github.com/asyncapi/generator)
 
+<!--
 ### Use an Integration Platform
 
 [Dell Boomi Connector] (https://solace.com/boomi/)
-
+-->
 ## Takeaways
 
 Duration: 0:04:00
