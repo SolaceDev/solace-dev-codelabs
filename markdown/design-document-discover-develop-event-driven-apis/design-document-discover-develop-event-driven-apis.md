@@ -988,7 +988,7 @@ Note the different pieces of the command:
 
 ```bash
 
-ag -o ProcessPayment -p binder=solace -p dynamicType=header -p view=provider -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
+ag -o ProcessPayment -p binder=solace -p dynamicType=header -p artifactId=ProcessPayment -p groupId=org.taxi.nyc -p javaPackage=org.taxi.nyc -p host=taxi.messaging.solace.cloud:55555 -p username=public-taxi-user -p password=iliketaxis -p msgVpn=nyc-modern-taxi ProcessPayment.yaml @asyncapi/java-spring-cloud-stream-template
 ```
 
 ✅ After running the command you should see output that ends with where you can find your generated files.
