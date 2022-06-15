@@ -43,7 +43,7 @@ Positive
 
 ## What you need: Prerequisites
 
-Duration: 0:08:00
+Duration: 0:02:00
 
 🛠 This page covers the setup needed to perform this codelab. 🛠
 
@@ -85,7 +85,8 @@ We'll install the generator itself later 👍
 
 ✅ Note that this client-username has permissions to subscribe to `taxinyc/>` and `test/taxinyc/>` and permissions to publish to `test/taxinyc/>`
 
-### Prepare PubSub+ Event Portal
+## Prepare PubSub+ Event Portal
+Duration: 0:06:00
 
 #### Sign-up for Solace Cloud
 
@@ -922,20 +923,28 @@ Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Eve
 
 ![processPaymentAsyncapi](img/processPaymentAsyncapi.png)
 
-The AsyncAPI document requires modifications to wire up proper channel information so that the publish and subscribe operation can share the same function name. Also, to overcome 
+Positive
+: The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
+
+
+#### *Direct Download of updated AsyncAPI document*
+
+If you want a pre-populated file with changes and additions, you can download using the following command. 
 
 ```bash
 curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/ProcessPayment.yml -o ProcessPayment.yaml
 ```
 
+After downloading, directly go to *Code Generation* step.
 
-Positive
-: The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
+#### *Manual updates to AsyncAPI document*
+
+Alternatively, you can follow the instruction and make changes to the AsyncAPI document.
 
 Let's add a few of the template's configuration options to the downloaded AsyncAPI document.
 
-- Add `x-scs-function-name: processPayment` under the _subscribe_ operation **and** the _publish_ operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  _subscribe_ and  _publish_ operation you are saying you want them handled by the same function!
-- Add `x-scs-destination: test/taxinyc/ProcessPaymentQueue` under the _subscribe_ operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
+- Add `x-scs-function-name: processPayment` immediately after the **subscribe** operation and the **publish** operation under our two channels. By adding this you are telling the generator the name of the function you would like to handle events being exchanged and by adding the same function-name for both  _subscribe_ and  _publish_ operation you are saying you want them handled by the same function!
+- Add `x-scs-destination: test/taxinyc/PaymentProcessorQueue` immediately after the **subscribe** operation. By adding this and using the _Solace_ binder you are specifying the durable queue name if you're using a Consumer Group, or part of the temporary queue name if you're not. This will also add a topic subscription matching the channel specified in the AsyncAPI document to the queue.
 
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.
 
@@ -944,7 +953,7 @@ channels:
   'taxinyc/backoffice/payment/charged/v1/{payment_status}/{driver_id}/{passenger_id}':
     subscribe:
       x-scs-function-name: processPayment
-      x-scs-destination: test/taxinyc/ProcessPaymentQueue
+      x-scs-destination: test/taxinyc/PaymentProcessorQueue
       message:
         $ref: '#/components/messages/PaymentCharged'
   ....
@@ -957,11 +966,11 @@ channels:
 ```
 
 Negative
-: Note that by default, AsyncAPI document downloaded from the Event Portal contains "id" reference for each event, schema, and field references in the document. Due to an open bug in the code generator, the `$id` field adversely affects the code generation. For now, we will remove the `$id` references in the document by editing the AsyncAPI document.
-
-To accomplish this, you can use the following command in the terminal.
+: To work-around an issue in the AsncAPI code generator, the `$id` fields need to be removed. You can use the following command in the terminal to accomplish this.   
 `sed -i '/$id:/d' ProcessPayment.yaml`
 
+
+#### *Code Generation*
 
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
 
@@ -1006,35 +1015,12 @@ A few notes on the project:
 - The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.
 - The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder.
 
-#### Changes to _application.yml_
+Negative
+: You can use a Java IDE like Eclipse or Spring Tool Suite to work with the generated Spring Boot application. Alternatively, you can also use a simple text editor like Visual Source Code or other text editors to make changes to the files.
 
-As of the writing of this codelab, dynamic topics are not supported by the AsyncAPI Code Generator. Hence, all the destinations on the cloud stream settings have to be updated with a literal string without any wildcard characters.
+#### *Updates to _application.yml_*
 
-Let us make changes to the _application.yml_ file to reflect this.
-
-* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted`
-  * **Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field; and remember it for later!.** Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic.
-
-* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-in-0_ to *test/taxinyc/ProcessPaymentQueue*
-  * We needed to make this change to avoid using wildcard characters in the destination name.
-   
-We need information on **all** taxi dropoff events to process payments. Our Taxis are publishing their _RideUpdate_ events to a dynamic topic structure - `taxinyc/ops/ride/updated/v1/{ride_status}/{driver_id}/{passenger_id}/{current_latitude}/{current_longitude}` capturing the dropoff status in the `{ride_status}` variable. For the ProcessPament application, we need only `dropoff` events. To do so, we'll need to add a new section in our application.yml file. Add the following binder-level setting on the same level of spring.cloud.stream.bindings:  
-
-   ```yaml
-      solace:
-        bindings:
-          processPayment-in-0:
-            consumer:
-              queueAdditionalSubscriptions: "taxinyc/ops/ride/updated/v1/dropoff/>"
-  ```
-  
-Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted` topic.
-
-Positive
-: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
-
-
-✅ After updating the `spring.cloud.stream` portion of your _application.yml_ file should look something like this:
+There are certain updates required to the *applicaion.yaml* file to reflect destination names and subscriptions. You can use the following block of code and replace the content of _application.yml_ file in the Spring project or manually make changes by following steps in the *Changes to _application.yml_* section.
 
 ```yaml
 spring:
@@ -1046,7 +1032,7 @@ spring:
         processPayment-out-0:
           destination: 'test/taxinyc/YOUR_NAME/backoffice/payment/charged/v1/accepted'
         processPayment-in-0:
-          destination: test/taxinyc/ProcessPaymentQueue
+          destination: test/taxinyc/PaymentProcessorQueue
       solace:
         bindings:
           processPayment-in-0:
@@ -1069,11 +1055,40 @@ logging:
       springframework: info
 ```
 
-#### Fill in the Business Logic
+After updating the file, directly go to *Implement the Business Logic* step.
+
+#### *Changes to _application.yml_*
+
+If you choose to make manual changes, please follow the instructions here.
+
+Dynamic topics (topics with variables enclosed by {,} characters) is not supported by the AsyncAPI Code Generator in cloud stream bindings.
+
+Let us make the following changes to the _application.yml_ file.
+
+* Update the _destination_ field in _spring.cloud.stream.bindings.processPayment-out-0_ to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted`
+
+**Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field; and remember it for later!.** Because there are potentially multiple people using a shared broker participating in this codelab at the same time we need to make sure we publish to a unique topic.
+   
+* We need information on **all** taxi dropoff events to process payments. We need to add additional queue subsription at the binder level. Insert the following block immediately after the spring.cloud.stream.bindings.
+
+  ```yaml
+      solace:
+        bindings:
+          processPayment-in-0:
+            consumer:
+              queueAdditionalSubscriptions: "taxinyc/ops/ride/updated/v1/dropoff/>"
+  ```
+  
+Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted` topic.
+
+Positive
+: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+
+#### Implement the Business Logic
 
 Obviously in the real world you'd have more complex business logic but for the sake of showing simplicity we're just going to log the _RideUpdated_ events as they're received and create a new PaymentCharged event for each.
 
-Open the _Application.java_ file and modify the `processPayment` method to build and publish _PaymentCharged_ event. Copy the following code block and replace the `processPayment` bean. 
+Open the _Application.java_ file and modify the `processPayment` method to build and publish _PaymentCharged_ event. Copy the following code block and replace the `processPayment` bean. Upon receiving a _RideUpdated_ message, thie bean function constructs a _PaymentCharged_ message and publishes to the unique topic (distinguished by your unique name).
 
 ```java
 @Bean
@@ -1123,7 +1138,6 @@ public Function<RideUpdated1, Message<PaymentCharged>> processPayment() {
 ```
 
 
-
 Negative
 : After updating the code, ensure that all "Instant cannot be resolved" errors due to missing imports. Or simply insert the following import statements at the top of the file.
 ```
@@ -1136,7 +1150,9 @@ import org.apache.commons.lang.math.RandomUtils;
 
 That's it! The app development is complete.
 
-🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀
+<!-- 
+🚀🚀🚀 Was that simple enough for you!? 🚀🚀🚀 
+-->
 
 ### Run the app!
 
@@ -1144,7 +1160,9 @@ Now that our app has been developed let's run it!
 
 If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 
-Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command.
+Or run it from the terminal by navigating to the directory with the pom and running the following command in the terminal.
+
+`mvn clean spring-boot:run`
 
 Negative
 : If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
@@ -1168,16 +1186,29 @@ Duration: 0:08:00
 ### Develop the InvoiceSystem Node.js App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _InvoiceSystem_ Node.js app that we previously designed. We are going to be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
+On to developing the _InvoiceSystem_ application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
 
-#### Generate the Code Skeleton
+#### Download AsyncAPI Document
 Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Event Portal, right-click on the _InvoiceSystem_, Choose _AsyncAPI_, Choose _**YAML**_ and click _Download_
 
 ![invoiceSystemAsyncapi](img/invoiceSystemAsyncapi.webp)
 
-Let's add a few of the template's configuration options to the downloaded AsyncAPI document.
 
-* Update the channel configuration to a static topic name on which the process payment message is published by the ProcessPayment application we built in the previous section. Also, add the operationId to the publish operation.     
+#### *Direct Download of updated AsyncAPI document*
+
+If you want a pre-populated file with changes and additions, you can download using the following command. 
+
+```bash
+curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem/asyncapi.yaml -o InvoiceSystem.yaml
+```
+
+After downloading, directly go to *Code Generation* step.
+
+#### *Manual updates to AsyncAPI document*
+
+Alternatively, you can follow the instruction and make changes to the AsyncAPI document.
+
+* Update the **channel configuration to a static topic name** on which the process payment message is published by the ProcessPayment application we built in the previous section. Also, **add operationId to the publish** operation.     
 
 ```yaml
     channels:
@@ -1187,7 +1218,15 @@ Let's add a few of the template's configuration options to the downloaded AsyncA
 ```
 **Be sure to replace YOUR_UNIQUE_NAME with your name or some unique field in the following line of code:**
 
-* Add server configuration at the end of the yaml file
+* Add the **`name` parameter next to the `PaymentCharged` message**.
+
+```yaml
+  messages:
+    PaymentCharged:
+      name: PaymentCharged
+```
+
+* Add **server configuration** at the end of the yaml file
 
 ```yaml
 servers:    
@@ -1196,20 +1235,9 @@ servers:
     protocol: mqtt
 ```
 
-* Add the `name` parameter next to the `PaymentCharged` message.
-
-```yaml
-  messages:
-    PaymentCharged:
-      name: PaymentCharged
-```
-
-Alternatively, you can download the file and use it.
-```bash
-curl -k -XGET https://raw.githubusercontent.com/Mrc0113/ep-design-workshop/main/InvoiceSystem.yml -o InvoiceSystem.yaml
-```
-
 🚀 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
+
+#### *Code Generation*
 
 Note the different pieces of the command:
 
@@ -1245,11 +1273,11 @@ The AsyncAPI Generator generated a nodejs project in the directory specified by 
 
 In the **common.yml** in the _config_ directory:
 
-* Update the protocol to mqtts from mqtt in both `url` and `protocol` fields.
+* Update the **protocol to mqtts from mqtt in both `url` and `protocol` fields.**
 
 Before coding our nodejs app let's go ahead and put our credentials in place.     
 
-* Add username and password details.
+* Add **username and password details.**
 
 ```yaml
   broker:
