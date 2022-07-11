@@ -63,26 +63,26 @@
 <li>solace_config_keys.env</li>
 </ul>
 <p>Please download and untar the following package: <a href="#" target="_blank">tracing-ea.tar.gz</a></p>
-<pre><code>[pl89@dev ~]$ tar -xf tracing-ea.tar.gz
+<pre>[pl89@dev ~]$ tar -xf tracing-ea.tar.gz
 [pl89@dev ~]$ cd tracing-ea
 
-</code></pre>
+</pre>
 <h2 is-upgraded>Loading the downloaded docker images</h2>
-<pre><code>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.255-docker.tar.gz
+<pre>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.255-docker.tar.gz
 dff9f8de74c0: Loading layer [==================================================&gt;]   94.8MB/94.8MB
 e34e3bdec276: Loading layer [==================================================&gt;]  20.48kB/20.48kB
 4d49d1fd7e1b: Loading layer [==================================================&gt;]  430.3MB/430.3MB
 aa3e326e5274: Loading layer [==================================================&gt;]  549.9MB/549.9MB
 Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.255
-</code></pre>
-<pre><code>[pl89@dev tracing-ea] $ docker load --input opentelemetry-collector-contrib-docker.tar.gz
+</pre>
+<pre>[pl89@dev tracing-ea] $ docker load --input opentelemetry-collector-contrib-docker.tar.gz
 c37eef912a4b: Loading layer [==================================================&gt;]  206.3kB/206.3kB
 bccb08811007: Loading layer [==================================================&gt;]    207MB/207MB
 Loaded image: otelcontribcol:latest
-</code></pre>
+</pre>
 <h2 is-upgraded>Creating and launching the containers</h2>
 <p>The following command will launch all containers necessary for the EA.</p>
-<pre><code>[pl89@dev tracing-ea]$ docker compose up -d
+<pre>[pl89@dev tracing-ea]$ docker compose up -d
 [+] Running 6/6
  ⠿ jaeger-all-in-one Pulled                                                                                                                                                       3.2s
    ⠿ 8663204ce13b Pull complete                                                                                                                                                   0.5s
@@ -95,7 +95,7 @@ Loaded image: otelcontribcol:latest
  ⠿ Container tracing-ea-jaeger-all-in-one-1  Started                                                                                                                              0.6s
  ⠿ Container tracing-ea-solbroker-1          Started                                                                                                                              0.7s
  ⠿ Container tracing-ea-otel-collector-1     Started                                                                                                                              1.6s
-</code></pre>
+</pre>
 
 
       </google-codelab-step>
@@ -104,15 +104,15 @@ Loaded image: otelcontribcol:latest
         <p>To improve the users&#39; exposure to the distributed tracing feature, the broker comes with minimal configuration. Here are the step by step instructions to configure your broker. Please note that for simplicity&#39;s sake, these steps will not go through configuring any TLS settings and most data will be exchanged in a non-secure manner.</p>
 <h2 is-upgraded>Accessing CLI</h2>
 <p>First, you must access your container, do so by typing the following command.</p>
-<pre><code>[pl89@dev tracing-ea]$ docker exec -it tracing-ea-solbroker-1 /bin/bash
+<pre>[pl89@dev tracing-ea]$ docker exec -it tracing-ea-solbroker-1 /bin/bash
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
 you are agreeing to the license terms and conditions
 located at http://www.solace.com/license-software
-</code></pre>
+</pre>
 <p>Once inside the container, simply type <code>cli</code>. Note: If you are flying through the steps too quickly, you may need to give the broker a few seconds to fully initialize itself after running the <code>docker compose</code> command from the previous section before being able to access <code>cli</code> successfully.</p>
-<pre><code>[appuser@solbroker sw]$ cli
+<pre>[appuser@solbroker sw]$ cli
 
 Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.255
 
@@ -129,68 +129,68 @@ https://solace.com/contact-us/
 Operating Mode: Message Routing Node
 
 solbroker&gt;
-</code></pre>
+</pre>
 <h2 is-upgraded>Configuring the Message VPN</h2>
 <p>Minimal configuration is necessary on the Message VPN, the following commands will suffice.</p>
-<pre><code>solbroker&gt; enable
+<pre>solbroker&gt; enable
 solbroker# configure
 solbroker(configure)# message-vpn default
 solbroker(configure/message-vpn)# authentication basic auth-type internal
 solbroker(configure/message-vpn)# end
-</code></pre>
+</pre>
 <h2 is-upgraded>Configuring the default Client Username</h2>
 <p>This Client Username will later be used for publishing messages to the broker.</p>
-<pre><code>solbroker# configure
+<pre>solbroker# configure
 solbroker(configure)# client-username default message-vpn default
 solbroker(configure/client-username)# password default
 solbroker(configure/client-username)# end
-</code></pre>
+</pre>
 <h2 is-upgraded>Configuring the default Client Profile</h2>
 <p>This Client Profile is used by the Client Username configured above.</p>
-<pre><code>solbroker# configure
+<pre>solbroker# configure
 solbroker(configure)# client-profile default message-vpn default
 solbroker(configure/client-profile)# message-spool reject-msg-to-sender-on-no-subscription-match
 solbroker(configure/client-profile)# end
-</code></pre>
+</pre>
 <h2 is-upgraded>Configuring the Telemetry Profile</h2>
 <p>The Telemetry Profile defines what published messages should be traced as well as who should be allowed to consume those trace messages.</p>
 <p>First, start by create the Telemetry Profile.</p>
-<pre><code>solbroker# configure
+<pre>solbroker# configure
 solbroker(configure)# message-vpn default
 solbroker(configure/message-vpn)# create telemetry-profile trace
-</code></pre>
+</pre>
 <p>Then, for the sake of this EA, open up and enable the receiver.</p>
-<pre><code>solbroker(configure/message-vpn/telemetry-profile)# receiver acl connect default-action allow
+<pre>solbroker(configure/message-vpn/telemetry-profile)# receiver acl connect default-action allow
 solbroker(configure/message-vpn/telemetry-profile)# no receiver shutdown
-</code></pre>
+</pre>
 <p>Finally, let&#39;s create a filter that will attract all topic messages (using the <code>></code> subscription).</p>
-<pre><code>solbroker(configure/message-vpn/telemetry-profile)# trace
+<pre>solbroker(configure/message-vpn/telemetry-profile)# trace
 solbroker(...e/message-vpn/telemetry-profile/trace)# no shutdown
 solbroker(configure/message-vpn/telemetry-profile)# create filter default
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# no shutdown
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription smf &#34;&gt;&#34;
 solbroker(...try-profile/trace/filter/subscription)# end
-</code></pre>
+</pre>
 <p>When creating a Telemetry Profile, a <code>#telemetry-<telemetry-profile-name></code> queue is created. In this example, the queue name would be <code>#telemetry-trace</code> because we used <code>trace</code> as the profile name when creating the telemetry profile. When generated, trace messages will be added to this queue for consumption.</p>
 <p>Also worth mentioning, creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Same as for the telemetry queue, the name of these profiles will take on the format of <code>#telemetry-<telemetry-profile-name></code>. These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages.</p>
 <p>Create the Client Username used by the OpenTelemetry Collector.</p>
-<pre><code>solbroker# configure
+<pre>solbroker# configure
 solbroker(configure)# create client-username trace message-vpn default
 solbroker(configure/client-username)# password trace
 solbroker(configure/client-username)# client-profile #telemetry-trace
 solbroker(configure/client-username)# acl-profile #telemetry-trace
 solbroker(configure/client-username)# no shutdown
 solbroker(configure/client-username)# end
-</code></pre>
+</pre>
 <p>We need to create a new Client Username for binding to the #telemetry  queue because a Client Username can only be used to bind to a telemetry queue if it uses both the #telemetry Client Profile and #telemetry ACL Profile. Additionally, the #telemetry Client Profile does not allow the Client to publish persistent messages.</p>
 <p>Create a queue for attracting some published messages.</p>
-<pre><code>solbroker# configure
+<pre>solbroker# configure
 solbroker(configure)# message-spool message-vpn default
 solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
 solbroker(configure/message-spool/queue)# subscription topic t
 solbroker(configure/message-spool/queue)# no shutdown
-</code></pre>
+</pre>
 
 
       </google-codelab-step>
@@ -198,7 +198,7 @@ solbroker(configure/message-spool/queue)# no shutdown
       <google-codelab-step label="Verifying your broker configuration" duration="0">
         <h2 is-upgraded>Verifying your telemetry queue</h2>
 <p>As previously mentioned, a special #telemetry queue should have been created when the Telemetry Profile was created. Now that all configuration has been applied to the broker, you should see a Bind Count of &#34;1&#34; on your #telemetry queue. The client bound to queue is the Solace Receiver Module part of the OpenTelemetry Collector application which was launched in an earlier step.</p>
-<pre><code>solbroker# show queue #telemetry-trace
+<pre>solbroker# show queue #telemetry-trace
 
 Flags Legend:
 I - Ingress Admin State (U=Up, D=Down)
@@ -214,7 +214,7 @@ Message VPN                   Spooled  Usage(MB)   HWM (MB) Count I E A S R D P
 ------------------------- ----------- ---------- ---------- ----- -------------
 #telemetry-trace
 default                             0       0.00       0.00     1 D U N N P D N
-</code></pre>
+</pre>
 
 
       </google-codelab-step>
@@ -222,13 +222,13 @@ default                             0       0.00       0.00     1 D U N N P D N
       <google-codelab-step label="Accessing Jaeger and producing trace messages" duration="0">
         <h2 is-upgraded>Publishing messages using sdkperf</h2>
 <p>Before we get started, please download and untar the following sdkperf-jcsmp package: <a href="#" target="_blank">sdkperf-jcsmp-8.4.7.13.tar.gz</a></p>
-<pre><code>[pl89@dev ~]$ tar -xf sdkperf-jcsmp-8.4.7.13.tar.gz
+<pre>[pl89@dev ~]$ tar -xf sdkperf-jcsmp-8.4.7.13.tar.gz
 [pl89@dev ~]$ cd sdkperf-jcsmp-8.4.7.13
-</code></pre>
+</pre>
 <p>To start things off slowly, run the following sdkperf to publish a message to your broker. Don&#39;t forget to replace the IP address in the command to your system&#39;s IP address.</p>
 <p>If Docker is running on the same system from which you are launching sdkperf, you can use the following <code>-cip</code> value: <code>-cip=0.0.0.0:55557</code>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>-cip=192.168.123.45:55557</code>.</p>
-<pre><code>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1
-</code></pre>
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1
+</pre>
 <h2 is-upgraded>Jaeger UI</h2>
 <p>As part of an earlier step, Jaeger UI was launched. It can be accessed using your favourite browser.</p>
 <p>If Docker is running on the same system your browser is running on, you can access Jaeger UI using the following URI: http://0.0.0.0:16686/. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>http://192.168.3.166:16686/</code>.</p>
@@ -246,15 +246,19 @@ default                             0       0.00       0.00     1 D U N N P D N
 <ol type="1">
 <li>{myKey,myValue1}</li>
 <li>{myKey,myValue2}</li>
-<li>{myKey,myValue3} <br><code>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1<br>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2<br>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3<br></code></li>
+<li>{myKey,myValue3}</li>
 </ol>
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
+</pre>
 <h2 is-upgraded>Verifying the impact on Jaeger UI</h2>
 <p>If you look at the details for the third message published, noticed how it has a tag with the user property provided by the publisher. <img alt="Jaeger4" src="img/95aee1dafeeb507c.png"></p>
 <p>That value can be used for searching traces. <img alt="Jaeger5" src="img/5c8a4a806e1e255f.png"> This request should find the third message published. Try it for yourself!</p>
 <h2 is-upgraded>Using Jaeger to debug problems</h2>
 <p>In an earlier section, we created a queue which had a subscription to topic <code>t</code>. Let&#39;s try publishing a message to the topic <code>t2</code>, a topic for which no client end endpoint is subscribed.</p>
-<pre><code>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t2 -mt=persistent -mn=1 -ped=0
-</code></pre>
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t2 -mt=persistent -mn=1 -ped=0
+</pre>
 <p>The message is considered as errored because it was discarded. <img alt="Jaeger6" src="img/4f246ed5480e8014.png"></p>
 <p>If you select the message and expand its detailed view, you will see that the message published had <code>No Subscription Match</code>. <img alt="Jaeger7" src="img/d59ae475a3e8e8dd.png"></p>
 <p>That information can be used to perform any corrective actions, e.g.:</p>
@@ -269,9 +273,9 @@ default                             0       0.00       0.00     1 D U N N P D N
       <google-codelab-step label="Clean-up" duration="0">
         <h2 is-upgraded>Removing created Docker containers</h2>
 <p>To tear down docker containers created in an earlier step, run the following command:</p>
-<pre><code>[pl89@dev ~] $ tracing-ea
+<pre>[pl89@dev ~] $ tracing-ea
 [pl89@dev tracing-ea] $ docker compose down
-</code></pre>
+</pre>
 <p> Thanks for participating in this codelab! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 
