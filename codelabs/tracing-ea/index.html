@@ -174,7 +174,7 @@ solbroker(configure/message-vpn/telemetry-profile)# no receiver shutdown
 solbroker(...e/message-vpn/telemetry-profile/trace)# no shutdown
 solbroker(configure/message-vpn/telemetry-profile)# create filter default
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# no shutdown
-solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription smf &#34;&gt;&#34;
+solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription &#34;&gt;&#34;
 solbroker(...try-profile/trace/filter/subscription)# end
 </pre>
 <p>When creating a Telemetry Profile, a Telemetry Queue is created. In this example, the queue name would be <code>#telemetry-trace</code> because we used <code>trace</code> as the profile name when creating the Telemetry Profile. When generated, trace messages will be added to this queue for consumption.</p>

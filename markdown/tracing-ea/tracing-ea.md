@@ -207,7 +207,7 @@ solbroker(configure/message-vpn/telemetry-profile)# trace
 solbroker(...e/message-vpn/telemetry-profile/trace)# no shutdown
 solbroker(configure/message-vpn/telemetry-profile)# create filter default
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# no shutdown
-solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription smf ">"
+solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription ">"
 solbroker(...try-profile/trace/filter/subscription)# end
 ```
 
