@@ -2,9 +2,9 @@ author: pl89
 summary:
 id: tracing-ea
 tags:
-categories:
+categories: Solace, Opentelemetry
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/tracing-ea
 
 # Distributed Tracing EA
