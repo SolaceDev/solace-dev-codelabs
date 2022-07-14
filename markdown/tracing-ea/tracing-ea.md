@@ -66,7 +66,7 @@ The tracing-ea package contains the following items:
 * .env
 
 To gain access to the needed packages you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request.
-Once access has been granted, you will be able to download the following package from the Solace product download site: [tracing-ea.tar.gz](https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/)
+Once you have received an invitation to participate in the EA from your SE, you will be able to download the following package from the Solace product download site: [tracing-ea.tar.gz](https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/)
 
 
 ```console
@@ -77,12 +77,12 @@ Once access has been granted, you will be able to download the following package
 ###  Loading the downloaded Docker images
 
 ```console
-[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.260-docker.tar.gz
+[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.261-docker.tar.gz
 dff9f8de74c0: Loading layer [==================================================>]   94.8MB/94.8MB
 e34e3bdec276: Loading layer [==================================================>]  20.48kB/20.48kB
 4d49d1fd7e1b: Loading layer [==================================================>]  430.3MB/430.3MB
 aa3e326e5274: Loading layer [==================================================>]  549.9MB/549.9MB
-Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.260
+Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.261
 ```
 
 ```console
@@ -136,7 +136,7 @@ Note: If you are flying through the steps too quickly, you may need to give the 
 ```console
 [appuser@solbroker sw]$ cli
 
-Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.260
+Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.261
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product

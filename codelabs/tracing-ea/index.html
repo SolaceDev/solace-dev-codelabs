@@ -69,17 +69,17 @@
 <li>solace_config_keys.env</li>
 <li>.env</li>
 </ul>
-<p>To gain access to the needed packages you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request. Once access has been granted, you will be able to download the following package from the Solace product download site: <a href="https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/" target="_blank">tracing-ea.tar.gz</a></p>
+<p>To gain access to the needed packages you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request. Once you have received an invitation to participate in the EA from your SE, you will be able to download the following package from the Solace product download site: <a href="https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/" target="_blank">tracing-ea.tar.gz</a></p>
 <pre>[pl89@dev ~]$ tar -xf tracing-ea.tar.gz
 [pl89@dev ~]$ cd tracing-ea
 </pre>
 <h2 is-upgraded>Loading the downloaded Docker images</h2>
-<pre>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.260-docker.tar.gz
+<pre>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.261-docker.tar.gz
 dff9f8de74c0: Loading layer [==================================================&gt;]   94.8MB/94.8MB
 e34e3bdec276: Loading layer [==================================================&gt;]  20.48kB/20.48kB
 4d49d1fd7e1b: Loading layer [==================================================&gt;]  430.3MB/430.3MB
 aa3e326e5274: Loading layer [==================================================&gt;]  549.9MB/549.9MB
-Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.260
+Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.261
 </pre>
 <pre>[pl89@dev tracing-ea] $ docker load --input opentelemetry-collector-contrib-docker.tar.gz
 c37eef912a4b: Loading layer [==================================================&gt;]  206.3kB/206.3kB
@@ -120,7 +120,7 @@ located at http://www.solace.com/license-software
 <p>Once inside the container, simply type <code>cli</code>. Note: If you are flying through the steps too quickly, you may need to give the broker a few seconds to fully initialize itself after running the <code>docker compose</code> command from the previous section before being able to access <code>cli</code> successfully.</p>
 <pre>[appuser@solbroker sw]$ cli
 
-Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.260
+Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.261
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
