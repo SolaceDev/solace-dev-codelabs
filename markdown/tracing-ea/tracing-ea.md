@@ -230,13 +230,13 @@ solbroker(configure/client-username)# end
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
 
 
-Create a queue for attracting messages published to topic `solace/trace`.
+Create a queue for attracting messages published to topic `solace/tracing`.
 ```console
 solbroker# configure
 solbroker(configure)# message-spool message-vpn default
 solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
-solbroker(configure/message-spool/queue)# subscription topic solace/trace
+solbroker(configure/message-spool/queue)# subscription topic solace/tracing
 solbroker(configure/message-spool/queue)# no shutdown
 ```
 
