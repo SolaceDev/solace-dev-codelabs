@@ -33,7 +33,7 @@
 <li>Launching and configuring a PubSub+ Event Broker: Software</li>
 <li>Launching the OpenTelemetry Collector configured to use Solace modules</li>
 <li>Launching Jaeger which offers a user interface to view traced events</li>
-<li>Publishing messages to your broker to generate trace events </li>
+<li>Publishing messages to your broker to generate trace events</li>
 </ul>
 <p>Upon successful completion of this Code Labs, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, Open Telemetry receivers, and telemetry analysis tools. Please note that as an EA release there are some restrictions.</p>
 <h2 is-upgraded>Limitations and caveats</h2>
@@ -189,12 +189,12 @@ solbroker(configure/client-username)# no shutdown
 solbroker(configure/client-username)# end
 </pre>
 <p>We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.</p>
-<p>Create a queue for attracting messages published to topic <code>t</code>.</p>
+<p>Create a queue for attracting messages published to topic <code>solace/trace</code>.</p>
 <pre>solbroker# configure
 solbroker(configure)# message-spool message-vpn default
 solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
-solbroker(configure/message-spool/queue)# subscription topic t
+solbroker(configure/message-spool/queue)# subscription topic solace/trace
 solbroker(configure/message-spool/queue)# no shutdown
 </pre>
 
@@ -233,7 +233,7 @@ default                             0       0.00       0.00     1 D U N N P D N
 </pre>
 <p>To start things off, run the following sdkperf command to publish a message to your broker. Don&#39;t forget to replace the IP address in the command to your system&#39;s IP address.</p>
 <p>If Docker is running on the same system from which you are launching sdkperf, you can use the following <code>-cip</code> value: <code>-cip=0.0.0.0:55557</code>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>-cip=192.168.123.45:55557</code>.</p>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
 </pre>
 <h2 is-upgraded>Jaeger UI</h2>
 <p>As part of an earlier step, the Jaeger UI was launched. It can be accessed using your favourite browser.</p>
@@ -254,24 +254,26 @@ default                             0       0.00       0.00     1 D U N N P D N
 <li>{myKey,myValue2}</li>
 <li>{myKey,myValue3}</li>
 </ol>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
 </pre>
 <h2 is-upgraded>Verifying the impact on the Jaeger UI</h2>
 <p>If you look at the details for the third message published, notice how it has a tag with the user property provided by the publisher. <img alt="Jaeger4" src="img/95aee1dafeeb507c.png"></p>
 <p>That value can be used for searching traces. On the Search page, search for the following tag: <code>messaging.solace.user_properties.myKey=myValue3</code> This request should find the third message published.</p>
 <p class="image-container"><img alt="Jaeger5" src="img/5c8a4a806e1e255f.png"></p>
 <h2 is-upgraded>Using Jaeger to debug problems</h2>
-<p>In an earlier section, we created a queue which had a subscription to topic <code>t</code>. Let&#39;s try publishing a message to the topic <code>t2</code>, a topic for which no client or endpoint is subscribed.</p>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t2 -mt=persistent -mn=1 -ped=0
+<p>In an earlier section, we created a queue which had a subscription to topic <code>solace/tracing</code>. Let&#39;s try publishing a message to the topic <code>solace/tracing2</code>, a topic for which no client or endpoint is subscribed.</p>
+<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
 </pre>
-<p>The message is considered as errored because it was discarded by the broker. <img alt="Jaeger6" src="img/4f246ed5480e8014.png"></p>
+<p>Notice the message from sdkperf <code>No Subscription Match - Topic 'solace/tracing2'</code>. The message is considered as errored because it was discarded by the broker.</p>
+<p>From the Jaeger UI, search for the following tag <code>error=true</code></p>
+<p class="image-container"><img alt="Jaeger6" src="img/4f246ed5480e8014.png"></p>
 <p>If you select the message and expand its detailed view, you will see that the message published had <code>No Subscription Match</code>. <img alt="Jaeger7" src="img/d59ae475a3e8e8dd.png"></p>
 <p>This information can be used to perform any corrective actions, e.g.:</p>
 <ul>
 <li>Fix the publisher and have it publish to the intended topic</li>
-<li>Update the broker configuration and have your queue also subscribe to topic <code>t2</code></li>
+<li>Update the broker configuration and have your queue also subscribe to topic <code>solace/tracing2</code></li>
 </ul>
 
 
@@ -289,7 +291,7 @@ default                             0       0.00       0.00     1 D U N N P D N
 <p>To view the list of Docker images, you can run the following command:</p>
 <pre>[pl89@dev tracing-ea]$ docker image ls
 </pre>
-<p> Thanks for participating in this Code Labs! If you have found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button found at the bottom left.</p>
+<p>Thanks for participating in this Code Labs! If you have found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button found at the bottom left.</p>
 
 
       </google-codelab-step>
