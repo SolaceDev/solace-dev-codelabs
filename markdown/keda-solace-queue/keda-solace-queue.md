@@ -19,7 +19,7 @@ The purpose of this CodeLab is to provide an introduction to the **Solace PubSub
 [KEDA](https://keda.sh) is a [CNCF](https://www.cncf.io) sandbox project (current as of this writing). KEDA expands the capability of the native [Kubernetes Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). It does this by providing an interface for HPA to retrieve custom metric values that can be used for scaling.
 
 ### What is the Solace Scaler?
-The [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.7/scalers/solace-pub-sub/) defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current ***Message Count*** and ***Message Spool Usage***. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.
+The [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.8/scalers/solace-pub-sub/) defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current ***Message Count*** and ***Message Spool Usage***. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.
 
 Consider the following diagram. A Solace PubSub+ Event Broker hosts a set of queues. The messages from each queue are being consumed by a microservice deployed to a Kubernetes cluster. KEDA uses the Solace Scaler to interface with the PubSub+ Broker via the SEMP API to obtain metrics related to the queue. In this example, we are interested in _Message Count_. Based on the Message Count retrieved for each queue, KEDA and the Horizontal Pod Autoscaler maintain the appropriate number of desired replicas. 
 
@@ -95,7 +95,7 @@ Duration: 0:15:00
 
 ![](img/keda-icon.png)
 
-You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the [KEDA Web site](https://keda.sh/docs/2.7/deploy/). We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.
+You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the [KEDA Web site](https://keda.sh/docs/2.8/deploy/). We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.
 
 Negative
 : If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br>_It may be necessary to update the installation OR to uninstall keda and then re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4_.
@@ -306,7 +306,7 @@ Negative
 : **AT LEAST** one of **messageCountTarget** or **messageSpoolUsageTarget** is required. If both values are present, the metric value resulting in the higher desired replicas will be used. (Standard KEDA/HPA behavior)
 
 Positive
-: You can find more information about the [Solace Event Queue Trigger](https://keda.sh/docs/2.7/scalers/solace-pub-sub/) on the KEDA web site.
+: You can find more information about the [Solace Event Queue Trigger](https://keda.sh/docs/2.8/scalers/solace-pub-sub/) on the KEDA web site.
 
 ### Metric Target Values
 Target values, `messageCountTarget` and `messageSpoolUsageTarget` for the Solace Queue Scaler, represent the _maximum_ value desired per replica for the metric. From the Kubernetes HPA Documentation, the computation is expressed as:
@@ -338,7 +338,7 @@ spec:
 ```
 
 Positive
-:  **TriggerAuthentication** You can find more information about **TriggerAuthentication** records on the KEDA Web site: [KEDA Authentication](https://keda.sh/docs/2.7/concepts/authentication/)
+:  **TriggerAuthentication** You can find more information about **TriggerAuthentication** records on the KEDA Web site: [KEDA Authentication](https://keda.sh/docs/2.8/concepts/authentication/)
 
 ## Create ScaledObject with Solace Queue Trigger
 
@@ -673,7 +673,7 @@ In the course of this CodeLab you learned how to install KEDA. And you learned h
 ### References
 
 - [KEDA Web Site](https://keda.sh)
-- [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.7/scalers/solace-pub-sub/)
+- [Solace PubSub+ Event Broker Queue Scaler](https://keda.sh/docs/2.8/scalers/solace-pub-sub/)
 - [KEDA GitHub Project](https://githhub.com/kedacore/keda)
 - [Kubernetes Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 
