@@ -32,7 +32,7 @@
 <h2 is-upgraded>What is KEDA?</h2>
 <p><a href="https://keda.sh" target="_blank">KEDA</a> is a <a href="https://www.cncf.io" target="_blank">CNCF</a> sandbox project (current as of this writing). KEDA expands the capability of the native <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">Kubernetes Horizontal Pod Autoscaler</a>. It does this by providing an interface for HPA to retrieve custom metric values that can be used for scaling.</p>
 <h2 is-upgraded>What is the Solace Scaler?</h2>
-<p>The <a href="https://keda.sh/docs/2.7/scalers/solace-pub-sub/" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a> defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current <strong><em>Message Count</em></strong> and <strong><em>Message Spool Usage</em></strong>. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.</p>
+<p>The <a href="https://keda.sh/docs/2.8/scalers/solace-pub-sub/" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a> defines an interface that allows KEDA to scale applications based on Solace Queues, specifically the current <strong><em>Message Count</em></strong> and <strong><em>Message Spool Usage</em></strong>. Based on the observed values of these metrics, KEDA and HPA can scale target Deployments, Jobs, and Stateful Sets in response to fluctuating demand. The Solace Scaler itself is merged into the KEDA project and is therefore available when KEDA is installed.</p>
 <p>Consider the following diagram. A Solace PubSub+ Event Broker hosts a set of queues. The messages from each queue are being consumed by a microservice deployed to a Kubernetes cluster. KEDA uses the Solace Scaler to interface with the PubSub+ Broker via the SEMP API to obtain metrics related to the queue. In this example, we are interested in <em>Message Count</em>. Based on the Message Count retrieved for each queue, KEDA and the Horizontal Pod Autoscaler maintain the appropriate number of desired replicas.</p>
 <p class="image-container"><img alt="KEDA-Solace PubSub+" src="img/387edeeef3344bf8.jpeg"></p>
 <h2 is-upgraded>The Goal</h2>
@@ -112,7 +112,7 @@
     
       <google-codelab-step label="Install KEDA" duration="15">
         <p class="image-container"><img src="img/218cce86b2d8dd75.png"></p>
-<p>You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the <a href="https://keda.sh/docs/2.7/deploy/" target="_blank">KEDA Web site</a>. We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.</p>
+<p>You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the <a href="https://keda.sh/docs/2.8/deploy/" target="_blank">KEDA Web site</a>. We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.</p>
 <p>Negative : If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br><em>It may be necessary to update the installation OR to uninstall keda and then re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4</em>.</p>
 <h2 is-upgraded>Add Helm repo (if not already added)</h2>
 <pre><code language="language-bash" class="language-bash">helm repo add kedacore https://kedacore.github.io/charts
@@ -301,7 +301,7 @@ spec:
 </td></tr>
 </table>
 <p>Negative : <strong>AT LEAST</strong> one of <strong>messageCountTarget</strong> or <strong>messageSpoolUsageTarget</strong> is required. If both values are present, the metric value resulting in the higher desired replicas will be used. (Standard KEDA/HPA behavior)</p>
-<p>Positive : You can find more information about the <a href="https://keda.sh/docs/2.7/scalers/solace-pub-sub/" target="_blank">Solace Event Queue Trigger</a> on the KEDA web site.</p>
+<p>Positive : You can find more information about the <a href="https://keda.sh/docs/2.8/scalers/solace-pub-sub/" target="_blank">Solace Event Queue Trigger</a> on the KEDA web site.</p>
 <h2 is-upgraded>Metric Target Values</h2>
 <p>Target values, <code>messageCountTarget</code> and <code>messageSpoolUsageTarget</code> for the Solace Queue Scaler, represent the <em>maximum</em> value desired per replica for the metric. From the Kubernetes HPA Documentation, the computation is expressed as:</p>
 <pre><code>desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
@@ -328,7 +328,7 @@ spec:
       name:        kedalab-solace-secret
       key:         SEMP_PASSWORD
 </code></pre>
-<p>Positive :  <strong>TriggerAuthentication</strong> You can find more information about <strong>TriggerAuthentication</strong> records on the KEDA Web site: <a href="https://keda.sh/docs/2.7/concepts/authentication/" target="_blank">KEDA Authentication</a></p>
+<p>Positive :  <strong>TriggerAuthentication</strong> You can find more information about <strong>TriggerAuthentication</strong> records on the KEDA Web site: <a href="https://keda.sh/docs/2.8/concepts/authentication/" target="_blank">KEDA Authentication</a></p>
 
 
       </google-codelab-step>
@@ -573,7 +573,7 @@ kubectl delete namespace keda
 <h2 is-upgraded>References</h2>
 <ul>
 <li><a href="https://keda.sh" target="_blank">KEDA Web Site</a></li>
-<li><a href="https://keda.sh/docs/2.7/scalers/solace-pub-sub/" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a></li>
+<li><a href="https://keda.sh/docs/2.8/scalers/solace-pub-sub/" target="_blank">Solace PubSub+ Event Broker Queue Scaler</a></li>
 <li><a href="https://githhub.com/kedacore/keda" target="_blank">KEDA GitHub Project</a></li>
 <li><a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">Kubernetes Horizontal Pod Autoscaler</a></li>
 </ul>
