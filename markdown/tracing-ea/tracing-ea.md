@@ -366,7 +366,7 @@ This information can be used to perform any corrective actions, e.g.:
 
 To tear down Docker containers created in an earlier step, run the following command:
 ```console
-[pl89@dev ~] $ tracing-ea
+[pl89@dev ~] $ cd tracing-ea
 [pl89@dev tracing-ea] $ docker compose down
 ```
 
