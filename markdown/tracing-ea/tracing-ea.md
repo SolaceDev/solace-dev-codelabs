@@ -112,6 +112,8 @@ The following command will launch all containers necessary for the EA.
  ⠿ Container tracing-ea-otel-collector-1     Started                                                                                                                              1.6s
 ```
 
+Positive: Please be attentive to the previous command as to not confuse it with docker-compose and also make sure to use a recent version. Both `docker compose` and `docker-compose` may be available on your system and could differ in version.
+
 ## Configuring the PubSub+ Event Broker: Software
 
 To improve the user's exposure to the distributed tracing feature, the broker comes with minimal configuration. Here are the step-by-step instructions to configure your broker.
@@ -228,6 +230,7 @@ solbroker(configure/client-username)# end
 ```
 
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
+
 
 
 Create a queue for attracting messages published to topic `solace/tracing`.
@@ -366,7 +369,7 @@ This information can be used to perform any corrective actions, e.g.:
 
 To tear down Docker containers created in an earlier step, run the following command:
 ```console
-[pl89@dev ~] $ tracing-ea
+[pl89@dev ~] $ cd tracing-ea
 [pl89@dev tracing-ea] $ docker compose down
 ```
 
