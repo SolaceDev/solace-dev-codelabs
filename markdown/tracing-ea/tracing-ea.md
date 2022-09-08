@@ -230,13 +230,14 @@ solbroker(configure/client-username)# end
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
 
 
-Create a queue for attracting messages published to topic `t`.
+
+Create a queue for attracting messages published to topic `solace/tracing`.
 ```console
 solbroker# configure
 solbroker(configure)# message-spool message-vpn default
 solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
-solbroker(configure/message-spool/queue)# subscription topic t
+solbroker(configure/message-spool/queue)# subscription topic solace/tracing
 solbroker(configure/message-spool/queue)# no shutdown
 ```
 
@@ -286,7 +287,7 @@ If Docker is running on the same system from which you are launching sdkperf, yo
 If Docker is running on another system in your network, simply replace `0.0.0.0` to the system's IP, e.g. `-cip=192.168.123.45:55557`.
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
 ```
 
 ### Jaeger UI
@@ -320,9 +321,9 @@ Let's publish three messages with user properties so that we can search for them
 3. {myKey,myValue3} 
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
 ```
 
 
@@ -340,13 +341,16 @@ This request should find the third message published.
 
 ### Using Jaeger to debug problems
 
-In an earlier section, we created a queue which had a subscription to topic `t`. Let's try publishing a message to the topic `t2`, a topic for which no client or endpoint is subscribed.
+In an earlier section, we created a queue which had a subscription to topic `solace/tracing`. Let's try publishing a message to the topic `solace/tracing2`, a topic for which no client or endpoint is subscribed.
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=t2 -mt=persistent -mn=1 -ped=0
+[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
 ```
 
-The message is considered as errored because it was discarded by the broker.
+Notice the message from sdkperf `No Subscription Match - Topic 'solace/tracing2'`. The message is considered as errored because it was discarded by the broker.
+
+From the Jaeger UI, search for the following tag `error=true`
+
 ![Jaeger6](img/jaeger6.png)
 
 If you select the message and expand its detailed view, you will see that the message published had `No Subscription Match`.
@@ -354,7 +358,7 @@ If you select the message and expand its detailed view, you will see that the me
 
 This information can be used to perform any corrective actions, e.g.:
 * Fix the publisher and have it publish to the intended topic
-* Update the broker configuration and have your queue also subscribe to topic `t2`
+* Update the broker configuration and have your queue also subscribe to topic `solace/tracing2`
 
 
 ## Clean-up
@@ -363,7 +367,7 @@ This information can be used to perform any corrective actions, e.g.:
 
 To tear down Docker containers created in an earlier step, run the following command:
 ```console
-[pl89@dev ~] $ tracing-ea
+[pl89@dev ~] $ cd tracing-ea
 [pl89@dev tracing-ea] $ docker compose down
 ```
 
