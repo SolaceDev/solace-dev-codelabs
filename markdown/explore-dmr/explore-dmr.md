@@ -100,7 +100,7 @@ In this post will lay the groundwork for a Solace Event Mesh by setting up a Dyn
 ![DMR Exploration Topics](img/DMR_Exploration.png)
 
 ## Setting up DMR with the Solace Broker WebUI
-Duration: 0:05:00
+Duration: 0:12:00
 
 **What is a Solace Event Mesh Powered by DMR**
 
@@ -182,7 +182,7 @@ In the prevous steps we have provisioned a cluster on each broker to prepare the
 
 
 ## Exploration DMR with “Try Me” tab
-Duration: 0:01:00
+Duration: 0:02:00
 
 The Solace Try Me Tab is small CodePen application which was created to provide a simple way of publishing and subscribing to Solace topics and queues.  The application produces and consumes WebSocket (WS) events to Solace PubSub+ brokers over a network.  Thus is it not required that the Try Me tool be used to connect to a local broker, however the tooling is setup to make connecting to the "local" Solace Broker effortless. Using the Try Me tool you can explore the following Solace features:
 * Publish Direct Messages
@@ -200,6 +200,7 @@ The Solace Try Me Tab is small CodePen application which was created to provide 
 <br>🆘!!!Maybe here I should include some topic architecture for 2 brokers that will allow you to see the DMR Event Mesh in action?
 
 ## Setting up and running "Try Me"
+Duration 00:10:00
 
 **Option A: For your local (on-premise) broker**
 
@@ -285,7 +286,7 @@ Do not forget about our Solace wild cards here
 Now that we have created publishers and subscribers via the “Try Me” tabs on our different DMR linked (Event Mesh) brokers we can start publishing events and watch them flow between brokers.  Experiment with “Try Me” subscriptions to only local topics, remote topics and combinations of both to get a better understanding of how Solace is Dynamically Routing messages between brokers.
 
 ## Exploration DMR with SDKPerf tool
-Duration: 0:05:00
+Duration: 0:02:00
 
 Obtain the SDKPerf Solace Performance testing tool from our downloads page here: [https://solace.com/downloads/](https://solace.com/downloads/) at the bottom of the page.  You can select from your desired flavor or the testing tool.  
 
@@ -298,7 +299,7 @@ And additional command line argument options here: [https://docs.solace.com/API/
 💡 I will be using the Solace SDKPerf_java tool on a unix based system for this example.  All of the flavors behave similarly with different underlying protocols. 
 
 ## Running SDKPerf
-Duration: 0:05:00
+Duration: 0:10:00
 
 Navigate to the unpacked directory of your recently downloaded SDKPerf tool in the terminal of your choice.  When you list the contents of the directory you should see some libraries and in the case of the java tool: sdkperf_java.sh and sdkperf_java.bat.  We will use these scripts to execute the tool. 
 
@@ -348,7 +349,7 @@ List of common SDKPerf flags
 ![Untitled](img/Untitled_18.png)
 
 ## Conclusion
-Duration: 0:05:00
+Duration: 0:02:00
 
 ✅ < Setup a DMR link between two Solace Brokers >   
 ✅ < Publish and Subscribe to DMR enabled topics with Try Me >   
