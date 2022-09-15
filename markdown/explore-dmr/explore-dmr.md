@@ -133,6 +133,21 @@ The Solace Try Me Tab is small CodePen application which was created to provide 
 **In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
 
 
+The Solace Try Me Tab is small CodePen application which was created to provide a simple way of publishing and subscribing to Solace topics and queues.  The application produces and consumes WebSocket (WS) events to Solace PubSub+ brokers over a network.  Thus is it not required that the Try Me tool be used to connect to a local broker, however the tooling is setup to make connecting to the "local" Solace Broker effortless. Using the Try Me tool you can explore the following Solace features:
+* Publish Direct Messages
+* Publish Persistent Messages
+* Publish to topics
+* Publish directly to queues
+* Subscribe to Solace topics
+* Subscribe to Solace queues
+* Subscribe to Solace topics using Solace wild cards
+* Experience Solace Broker translate different message protocols (requires the use of Try Me and an additional publisher or subscriber).
+
+<br>
+
+**In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
+<br>🆘!!!Maybe here I should include some topic architecture for 2 brokers that will allow you to see the DMR Event Mesh in action?
+
 ## Setting up and running "Try Me"
 Duration: 0:10:00
 
