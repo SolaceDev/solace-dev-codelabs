@@ -110,7 +110,7 @@ Select Cluster from the left Solace menu then select Create New Cluster
     <br>⚠️ If you encounter an error please review a DMR troubleshooting steps to determine how to correct the error and build a successful DMR Link between brokers
     ![Successful DMR Link](img/successfulLink.png)
 
-**❗️❗️♻️ At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>⚠️Note that events will traverse N brokers to reach a desired broker so you do not have to form a direct DMR Link between each and every broker in your Event Mesh**
+**❗️❗️♻️ At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>⚠️Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh**
 
 ### Conclusion
 In the prevous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR Link between the brokers to form the Event Mesh.  Events will no be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link. 
