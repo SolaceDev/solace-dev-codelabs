@@ -1,0 +1,38 @@
+# Class exercises - configuration for single class
+---
+classes:
+  - exercises:
+      # `file` is relative to .strigo directory
+      - file: "../markdown/Boomi-request-reply/Boomi-request-reply.md"
+        title: "Boomi Request Reply"
+      - file: "../markdown/boomi-salesforce-codelab/boomi-salesforce-codelab.md"
+        title: "boomi with salesforce"
+      - file: "../markdown/boomi-v2-getting-started/boomi-v2-getting-started.md"
+        title: "Boomi Getting Started"
+
+# Class exercises - configuration for multiple classes
+# ---
+# classes:
+#   # `class_id` may be omitted if there is only one class in this file
+#   - class_id: "<your_class_id>"
+#     exercises:
+#       # `file` is relative to .strigo directory
+#       - file: "../hello-world/hello.md"
+#         title: "Hello!"
+#       - file: "../hello-world/world.md"
+#         title: "World!"
+#   - class_id: "<your_class_id>"
+#     exercises:
+#       - file: "../markup-syntaxes/markdown.md"
+#         title: "Markdown!"
+#         # `syntax` is optional
+#         # can be "md" | "rst"
+#         # uses file extension as fallback
+#         syntax: "md"
+#       - file: "../markup-syntaxes/restructured.rst"
+#         title: "Restructed"
+#         syntax: "rst"
+#   - class_id: "<your_class_id>"
+#     exercises:
+#       - file: "../relative-images/md-with-relative-imgs.md"
+#         title: "Relative images"
