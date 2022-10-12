@@ -825,7 +825,17 @@ spring:
               java.lang.IllegalStateException: true
 ```
 
-**Consumer Error Channels**
+
+####Consumer Error Channels
+
+Negative
+: It is highly recommended to upgrade the Spring Cloud Stream version to 3.2.5 (or higher) to take advantage of binding-specific error handling functionality. 
+
+**Spring Cloud Stream pre-v3.2.5**
+
+If you are using Spring Cloud Stream version prior to 3.2.5, continue reading. Otherwise, continue to the next section **Spring Cloud Stream v3.2.5 or higher**. The error channel specification follows the convention of `@ServiceActivator`, an annotation-based approach for specifying global and destination-specific error handlers. 
+
+
 After the Retries have been exhausted the Cloud Stream framework will next send an `ErrorMessage` to a binding specific error channel, which is formatted as `<destination>.<group>.errors`. You can configure a `@ServiceActivator` to listen on that Spring Integration channel to try to handle the Exception. If you do not register a listener then the framework will pass the `ErrorMessage` along to the global `errorChannel` Spring Integration Channel where a different `@ServiceActivator` can listen. However, if listening on this global errorChannel do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it's own error handling. This global errorChannel is moreso useful for logging or publishing an alert elsewhere. 
 
 Here is an example `@ServiceActivator` listening to the binding specific error channel. Note that `inputChannel` name is derived from the yaml above that defines the destination as `a/b/>` and the group as `clientAck`. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler. 
@@ -844,6 +854,65 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
     logger.info("Global errorChannel received msg. NO BUSINESS LOGIC HERE! Notify ONLY!" + message.toString());
 }
 ```
+
+**Spring Cloud Stream v3.2.5 or higher**
+
+If your Maven BOM in the pom file does not include Spring Cloud Stream v3.2.5 (or higher) jar file, you can explicity add it to the dependencies section.
+
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-stream</artifactId>
+    <version>3.2.5</version>
+</dependency>
+```
+
+After the Retries have been exhausted the Cloud Stream framework will next send an `ErrorMessage` to a binding specific error channel, as specified by **`<spring>.<cloud>.<stream>.<bindings>.<binding_name>.error-handler-definition`**. You can configure a `@Bean` function to handle the Exception. If you do not register a function then the framework will pass the `ErrorMessage` along to the global `errorChannel`, a different `@Bean` function assigned to handle the error message. This can be specified as **`<spring>.<cloud>.<stream>.<default>.error-handler-definition`**. Do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it's own error handling. This global errorChannel is more so useful for logging or publishing an alert elsewhere. 
+
+Here is an example of registering binding-specific and global error handlers in the configuration.
+
+```
+spring:
+  cloud:
+    function:
+      definition: myFunction
+    stream:
+      default:
+        error-handler-definition: handleGlobalError
+      bindings:
+        myFunction-in-0:       
+          destination: 'a/b/>'
+          group: clientAck
+          error-handler-definition: handleBindingError
+          consumer:
+            max-attempts: 2
+            back-off-initial-interval: 1
+            back-off-multiplier: 3
+            default-retryable: true
+            retryable-exceptions:
+              java.lang.IllegalStateException: true
+```
+
+Here is an example of binding-specific error handler function. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler. **[NOTE: This point is questionable]**
+
+``` java
+@Bean
+public void handleError(ErrorMessage message) {
+    logger.info("Binding Specific Error Handler executing business logic for: " + message.toString());
+    logger.info("Exception is here: " + message.getPayload());
+}
+```
+
+And here is an example of a global error channel, an error handling function that will be invoked to handle errors from all channels that do not have binding-specific error handlers.
+
+``` java
+@Bean
+public void handleNotificationErrorChannel(ErrorMessage message) {
+    logger.info("Global errorChannel received msg. NO BUSINESS LOGIC HERE! Notify ONLY!" + message.toString());
+}
+```
+
+**Testing Error Handler functions**
 
 🛠 You can easily test this out be changing your `myFunction` to throw a RuntimeException like below:
 ``` java
