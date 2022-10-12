@@ -724,7 +724,7 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
             retryable-exceptions:
               java.lang.IllegalStateException: true
 </code></pre>
-<p>Here is an example of binding-specific error handler function. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler. <strong>[NOTE: This point is questionable]</strong></p>
+<p>Here is an example of binding-specific error handler function. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler.</p>
 <pre><code language="language-java" class="language-java">@Bean
 public void handleError(ErrorMessage message) {
     logger.info(&#34;Binding Specific Error Handler executing business logic for: &#34; + message.toString());
