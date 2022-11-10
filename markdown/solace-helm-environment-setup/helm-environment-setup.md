@@ -132,7 +132,7 @@ $ sudo mv linux-amd64/helm /usr/local/bin/helm
 
 ### Step 3.2: Install Helm Repos
 
-Finally install the Helm repos:
+Finally install the Helm repos, both the Helm "stable" repo and the solacecharts repo with its PubSub chart:
 
 ```bash
 $ helm repo add stable https://charts.helm.sh/stable
