@@ -49,7 +49,8 @@ fi
 
 # Create a new directory for the codelba 
 mkdir markdown/$CODELAB_NAME
-rsync -a --exclude=markdown-iguide.template ../template/* $CODELAB_NAME/
+cp -r markdown/template/* markdown/$CODELAB_NAME/
+rm markdown/$CODELAB_NAME/markdown-iguide.template
 
 # rename markdown template file 
 mv markdown/$CODELAB_NAME/markdown.template $codelab_markdown_filename
