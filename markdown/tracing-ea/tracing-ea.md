@@ -17,6 +17,7 @@ Following these steps will take you through:
 * Launching the OpenTelemetry Collector configured to use Solace modules
 * Launching Jaeger which offers a user interface to view traced events
 * Publishing messages to your broker to generate trace events
+* Launching an application that will generate spans that are sent directly to the collector
 
 Upon successful completion of this Code Labs, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s).
 This can include other message sources, Open Telemetry receivers, and telemetry analysis tools.
@@ -29,13 +30,11 @@ This being an EA, many scenarios have yet to be developed and/or verified and th
 The areas or feature interactions to avoid include but are not limited to:
 * Direct Messaging
 * HA (High Availability) / Redundancy
-* Transactions (local, XA)
+* XA Transactions
 * Replication
-* Replay
 * DMR (Dynamic Message Routing)
 * Upgrades to/from this EA version of the broker - the broker must be removed upon completion of your EA testing
-* Appliances and PubSub+ Cloud are not supported at this time
-* PubSub+ Manager does not support Distributed Tracing
+* Appliances are not supported at this time
 
 
 This package MUST NOT be used in production.
@@ -64,8 +63,14 @@ The tracing-ea package contains the following items:
 * otel-collector-config.yaml
 * solace_config_keys.env
 * .env
+* sdkperf-jcsmp-100.0jms_context_propagation.0.43
+* sdkperf-jms-100.0jms_context_propagation.0.43
+* sol-jcsmp-10.16.1-jms_context_propagation.42811.zip
+* sol-jms-10.16.1-jms_context_propagation.42811.zip
+* solace-opentelemetry-jcsmp-integration-1.0-main-3d931b527f5137dc343e91681833df14c148ca09.jar
+* solace-opentelemetry-jms-integration-1.0-main-b731385d5a8c542766f390c5c29eb58ef5588456.jar
 
-To gain access to the needed packages you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request.
+To gain access to the needed package you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request.
 Once you have received an invitation to participate in the EA from your SE, you will be able to download the following package from the Solace product download site: [tracing-ea.tar.gz](https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/)
 
 
@@ -77,18 +82,18 @@ Once you have received an invitation to participate in the EA from your SE, you 
 ###  Loading the downloaded Docker images
 
 ```console
-[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.261-docker.tar.gz
-dff9f8de74c0: Loading layer [==================================================>]   94.8MB/94.8MB
-e34e3bdec276: Loading layer [==================================================>]  20.48kB/20.48kB
-4d49d1fd7e1b: Loading layer [==================================================>]  430.3MB/430.3MB
-aa3e326e5274: Loading layer [==================================================>]  549.9MB/549.9MB
-Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.261
+[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0tracing_context_prop.0.45-docker.tar.gz
+b90f5dd3a865: Loading layer [==================================================>]  95.24MB/95.24MB
+2ff571c5cd34: Loading layer [==================================================>]  431.7MB/431.7MB
+5f70bf18a086: Loading layer [==================================================>]  1.024kB/1.024kB
+e93fa96a256d: Loading layer [==================================================>]  681.4MB/681.4MB
+Loaded image: solace-pubsub-standard:100.0tracing_context_prop.0.45
 ```
 
 ```console
 [pl89@dev tracing-ea] $ docker load --input opentelemetry-collector-contrib-docker.tar.gz
-c37eef912a4b: Loading layer [==================================================>]  206.3kB/206.3kB
-bccb08811007: Loading layer [==================================================>]    207MB/207MB
+215ca07895b4: Loading layer [==================================================>]  217.6kB/217.6kB
+3670080ba8c8: Loading layer [==================================================>]  262.7MB/262.7MB
 Loaded image: otelcontribcol:latest
 ```
 
@@ -138,7 +143,7 @@ Note: If you are flying through the steps too quickly, you may need to give the 
 ```console
 [appuser@solbroker sw]$ cli
 
-Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.261
+Solace PubSub+ Standard Version 100.0tracing_context_prop.0.45
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
@@ -232,7 +237,6 @@ solbroker(configure/client-username)# end
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
 
 
-
 Create a queue for attracting messages published to topic `solace/tracing`.
 ```console
 solbroker# configure
@@ -275,21 +279,14 @@ default                             0       0.00       0.00     1 D U N N P D N
 
 ### Publishing messages using sdkperf
 
-Before we get started, please download and untar the following sdkperf-jcsmp package: [sdkperf-jcsmp-8.4.7.13.tar.gz](https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/sdkperf-jcsmp-8.4.7.13.tar.gz)
-
-```console
-[pl89@dev ~]$ tar -xf sdkperf-jcsmp-8.4.7.13.tar.gz
-[pl89@dev ~]$ cd sdkperf-jcsmp-8.4.7.13
-```
-
-
 To start things off, run the following sdkperf command to publish a message to your broker. Don't forget to replace the IP address in the command to your system's IP address.
 
 If Docker is running on the same system from which you are launching sdkperf, you can use the following `-cip` value: `-cip=0.0.0.0:55557`.
 If Docker is running on another system in your network, simply replace `0.0.0.0` to the system's IP, e.g. `-cip=192.168.123.45:55557`.
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
+[pl89@dev tracing-ea]$ cd sdkperf-jcsmp-100.0jms_context_propagation.0.43/
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
 ```
 
 ### Jaeger UI
@@ -323,9 +320,9 @@ Let's publish three messages with user properties so that we can search for them
 3. {myKey,myValue3} 
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
 ```
 
 
@@ -346,7 +343,7 @@ This request should find the third message published.
 In an earlier section, we created a queue which had a subscription to topic `solace/tracing`. Let's try publishing a message to the topic `solace/tracing2`, a topic for which no client or endpoint is subscribed.
 
 ```console
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
 ```
 
 Notice the message from sdkperf `No Subscription Match - Topic 'solace/tracing2'`. The message is considered as errored because it was discarded by the broker.
@@ -361,6 +358,55 @@ If you select the message and expand its detailed view, you will see that the me
 This information can be used to perform any corrective actions, e.g.:
 * Fix the publisher and have it publish to the intended topic
 * Update the broker configuration and have your queue also subscribe to topic `solace/tracing2`
+
+
+## Adding context to messages published (automatic instrumentation)
+
+### Clean-up from previous sections
+
+If there are messages on your queue from previous sections, let's take a moment to delete them.
+```console
+solbroker(admin)# message-spool message-vpn default
+solbroker(admin/message-spool)# delete-messages queue q
+This will delete all spooled messages in q
+Do you want to continue (y/n)? y
+```
+
+
+### Using sdkperf-jms with context auto-instrumentation
+
+
+This command will launch sdkperf-jms and publish a message as well as push additional context information to the collector.
+Be sure to update this argument's IP to point to your collector: `-Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317`
+
+```console
+[pl89@dev3-166 tracing-ea]$ cd sdkperf-jms-100.0jms_context_propagation.0.43/
+[pl89@dev3-166 sdkperf-jms-100.0jms_context_propagation.0.43]$ export SOLACE_VM_ARGS="-javaagent:`pwd`/lib/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=`pwd`/lib/solace-opentelemetry-jms-integration-1.0-SNAPSHOT.jar -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.javaagent.debug=false -Dotel.propagators=solace_jms_tracecontext -Dotel.resource.attributes=service.name=sdkperf_jms -Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317 -Dotel.bsp.schedule.delay=500 -Dotel.bsp.max.queue.size=1000 -Dotel.bsp.max.export.batch.size=5 -Dotel.bsp.export.timeout=10000"; ./sdkperf_jms.sh -cip=192.168.3.166:55557 -ptl=solace/tracing -mn=1 -msa=100 -mt=persistent -cu=default -cp=default
+```
+This command will launch sdkperf-jms to consume the message that was just published as well as provide additional context information directly to the collector about this message being consumed.
+```console
+[pl89@dev3-166 tracing-ea]$ cd sdkperf-jms-100.0jms_context_propagation.0.43/
+[pl89@dev3-166 sdkperf-jms-100.0jms_context_propagation.0.43]$ export SOLACE_VM_ARGS="-javaagent:`pwd`/lib/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=`pwd`/lib/solace-opentelemetry-jms-integration-1.0-SNAPSHOT.jar -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.javaagent.debug=false -Dotel.propagators=solace_jms_tracecontext -Dotel.resource.attributes=service.name=sdkperf_jms -Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317 -Dotel.bsp.schedule.delay=500 -Dotel.bsp.max.queue.size=1000 -Dotel.bsp.max.export.batch.size=5 -Dotel.bsp.export.timeout=10000"; ./sdkperf_jms.sh -cip=192.168.3.166:55557 -sql=q -md -cu=default -cp=default
+```
+To have sdkperf-jms exit, simply send the ctrl+c command.
+
+### Verify trace generated in Jaeger
+
+A new trace should have been generated, notice how it has 3 spans.
+![Jaeger8](img/jaeger8.png)
+
+Opening up the newly generated trace will allow you to easily follow the sequence of events.
+![Jaeger9](img/jaeger9.png)
+
+The first span was generated by the publisher when the message was published.
+The second span was generated by the PubSub+ Broker when the message was received.
+The third span was generated by the consumer when the message was received.
+
+### Clean-up
+To avoid any problems when using sdkperf in the future, unset the environment variable set in the previous step.
+```console
+[pl89@dev3-166 tracing-ea]$ unset SOLACE_VM_ARGS
+```
 
 
 ## Clean-up

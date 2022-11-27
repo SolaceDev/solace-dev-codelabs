@@ -34,6 +34,7 @@
 <li>Launching the OpenTelemetry Collector configured to use Solace modules</li>
 <li>Launching Jaeger which offers a user interface to view traced events</li>
 <li>Publishing messages to your broker to generate trace events</li>
+<li>Launching an application that will generate spans that are sent directly to the collector</li>
 </ul>
 <p>Upon successful completion of this Code Labs, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, Open Telemetry receivers, and telemetry analysis tools. Please note that as an EA release there are some restrictions.</p>
 <h2 is-upgraded>Limitations and caveats</h2>
@@ -41,13 +42,11 @@
 <ul>
 <li>Direct Messaging</li>
 <li>HA (High Availability) / Redundancy</li>
-<li>Transactions (local, XA)</li>
+<li>XA Transactions</li>
 <li>Replication</li>
-<li>Replay</li>
 <li>DMR (Dynamic Message Routing)</li>
 <li>Upgrades to/from this EA version of the broker - the broker must be removed upon completion of your EA testing</li>
-<li>Appliances and PubSub+ Cloud are not supported at this time</li>
-<li>PubSub+ Manager does not support Distributed Tracing</li>
+<li>Appliances are not supported at this time</li>
 </ul>
 <p>This package MUST NOT be used in production. Any parts of the products used are subject to change before being made Generally Available in the future. Additionally, for a better experience, one should avoid publishing a large number of messages to the broker as part of this demo.</p>
 <p>Please contact your SE for support for this EA. Please provide your feedback to your CSA.</p>
@@ -68,22 +67,28 @@
 <li>otel-collector-config.yaml</li>
 <li>solace_config_keys.env</li>
 <li>.env</li>
+<li>sdkperf-jcsmp-100.0jms_context_propagation.0.43</li>
+<li>sdkperf-jms-100.0jms_context_propagation.0.43</li>
+<li>sol-jcsmp-10.16.1-jms_context_propagation.42811.zip</li>
+<li>sol-jms-10.16.1-jms_context_propagation.42811.zip</li>
+<li>solace-opentelemetry-jcsmp-integration-1.0-main-3d931b527f5137dc343e91681833df14c148ca09.jar</li>
+<li>solace-opentelemetry-jms-integration-1.0-main-b731385d5a8c542766f390c5c29eb58ef5588456.jar</li>
 </ul>
-<p>To gain access to the needed packages you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request. Once you have received an invitation to participate in the EA from your SE, you will be able to download the following package from the Solace product download site: <a href="https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/" target="_blank">tracing-ea.tar.gz</a></p>
+<p>To gain access to the needed package you will need to contact your Solace CSA, who has valuable information about Distributed Tracing and can help guide your request. Once you have received an invitation to participate in the EA from your SE, you will be able to download the following package from the Solace product download site: <a href="https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/" target="_blank">tracing-ea.tar.gz</a></p>
 <pre>[pl89@dev ~]$ tar -xf tracing-ea.tar.gz
 [pl89@dev ~]$ cd tracing-ea
 </pre>
 <h2 is-upgraded>Loading the downloaded Docker images</h2>
-<pre>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0distributed_tracing_1_1.0.261-docker.tar.gz
-dff9f8de74c0: Loading layer [==================================================&gt;]   94.8MB/94.8MB
-e34e3bdec276: Loading layer [==================================================&gt;]  20.48kB/20.48kB
-4d49d1fd7e1b: Loading layer [==================================================&gt;]  430.3MB/430.3MB
-aa3e326e5274: Loading layer [==================================================&gt;]  549.9MB/549.9MB
-Loaded image: solace-pubsub-standard:100.0distributed_tracing_1_1.0.261
+<pre>[pl89@dev tracing-ea] $ docker load --input solace-pubsub-standard-100.0tracing_context_prop.0.45-docker.tar.gz
+b90f5dd3a865: Loading layer [==================================================&gt;]  95.24MB/95.24MB
+2ff571c5cd34: Loading layer [==================================================&gt;]  431.7MB/431.7MB
+5f70bf18a086: Loading layer [==================================================&gt;]  1.024kB/1.024kB
+e93fa96a256d: Loading layer [==================================================&gt;]  681.4MB/681.4MB
+Loaded image: solace-pubsub-standard:100.0tracing_context_prop.0.45
 </pre>
 <pre>[pl89@dev tracing-ea] $ docker load --input opentelemetry-collector-contrib-docker.tar.gz
-c37eef912a4b: Loading layer [==================================================&gt;]  206.3kB/206.3kB
-bccb08811007: Loading layer [==================================================&gt;]    207MB/207MB
+215ca07895b4: Loading layer [==================================================&gt;]  217.6kB/217.6kB
+3670080ba8c8: Loading layer [==================================================&gt;]  262.7MB/262.7MB
 Loaded image: otelcontribcol:latest
 </pre>
 <h2 is-upgraded>Creating and launching the containers</h2>
@@ -121,7 +126,7 @@ located at http://www.solace.com/license-software
 <p>Once inside the container, simply type <code>cli</code>. Note: If you are flying through the steps too quickly, you may need to give the broker a few seconds to fully initialize itself after running the <code>docker compose</code> command from the previous section before being able to access <code>cli</code> successfully.</p>
 <pre>[appuser@solbroker sw]$ cli
 
-Solace PubSub+ Standard Version 100.0distributed_tracing_1_1.0.261
+Solace PubSub+ Standard Version 100.0tracing_context_prop.0.45
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
@@ -228,13 +233,10 @@ default                             0       0.00       0.00     1 D U N N P D N
     
       <google-codelab-step label="Accessing Jaeger and producing trace messages" duration="0">
         <h2 is-upgraded>Publishing messages using sdkperf</h2>
-<p>Before we get started, please download and untar the following sdkperf-jcsmp package: <a href="https://filedrop.solace.com/support/bucket/Distributed_Tracing_EA/sdkperf-jcsmp-8.4.7.13.tar.gz" target="_blank">sdkperf-jcsmp-8.4.7.13.tar.gz</a></p>
-<pre>[pl89@dev ~]$ tar -xf sdkperf-jcsmp-8.4.7.13.tar.gz
-[pl89@dev ~]$ cd sdkperf-jcsmp-8.4.7.13
-</pre>
 <p>To start things off, run the following sdkperf command to publish a message to your broker. Don&#39;t forget to replace the IP address in the command to your system&#39;s IP address.</p>
 <p>If Docker is running on the same system from which you are launching sdkperf, you can use the following <code>-cip</code> value: <code>-cip=0.0.0.0:55557</code>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>-cip=192.168.123.45:55557</code>.</p>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
+<pre>[pl89@dev tracing-ea]$ cd sdkperf-jcsmp-100.0jms_context_propagation.0.43/
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1
 </pre>
 <h2 is-upgraded>Jaeger UI</h2>
 <p>As part of an earlier step, the Jaeger UI was launched. It can be accessed using your favourite browser.</p>
@@ -255,9 +257,9 @@ default                             0       0.00       0.00     1 D U N N P D N
 <li>{myKey,myValue2}</li>
 <li>{myKey,myValue3}</li>
 </ol>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
-[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
+<pre>[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue1
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue2
+[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing -mt=persistent -mn=1 -ped=0 -cpl=String,myKey,myValue3
 </pre>
 <h2 is-upgraded>Verifying the impact on the Jaeger UI</h2>
 <p>If you look at the details for the third message published, notice how it has a tag with the user property provided by the publisher. <img alt="Jaeger4" src="img/95aee1dafeeb507c.png"></p>
@@ -265,7 +267,7 @@ default                             0       0.00       0.00     1 D U N N P D N
 <p class="image-container"><img alt="Jaeger5" src="img/5c8a4a806e1e255f.png"></p>
 <h2 is-upgraded>Using Jaeger to debug problems</h2>
 <p>In an earlier section, we created a queue which had a subscription to topic <code>solace/tracing</code>. Let&#39;s try publishing a message to the topic <code>solace/tracing2</code>, a topic for which no client or endpoint is subscribed.</p>
-<pre>[pl89@dev sdkperf-jcsmp-8.4.7.13]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
+<pre>[pl89@dev sdkperf-jcsmp-100.0jms_context_propagation.0.43]$ ./sdkperf_java.sh -cip=192.168.3.166:55557 -cu=default -cp=default -ptl=solace/tracing2 -mt=persistent -mn=1 -ped=0
 </pre>
 <p>Notice the message from sdkperf <code>No Subscription Match - Topic 'solace/tracing2'</code>. The message is considered as errored because it was discarded by the broker.</p>
 <p>From the Jaeger UI, search for the following tag <code>error=true</code></p>
@@ -276,6 +278,36 @@ default                             0       0.00       0.00     1 D U N N P D N
 <li>Fix the publisher and have it publish to the intended topic</li>
 <li>Update the broker configuration and have your queue also subscribe to topic <code>solace/tracing2</code></li>
 </ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding context to messages published (automatic instrumentation)" duration="0">
+        <h2 is-upgraded>Clean-up from previous sections</h2>
+<p>If there are messages on your queue from previous sections, let&#39;s take a moment to delete them.</p>
+<pre>solbroker(admin)# message-spool message-vpn default
+solbroker(admin/message-spool)# delete-messages queue q
+This will delete all spooled messages in q
+Do you want to continue (y/n)? y
+</pre>
+<h2 is-upgraded>Using sdkperf-jms with context auto-instrumentation</h2>
+<p>This command will launch sdkperf-jms and publish a message as well as push additional context information to the collector. Be sure to update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317</code></p>
+<pre>[pl89@dev3-166 tracing-ea]$ cd sdkperf-jms-100.0jms_context_propagation.0.43/
+[pl89@dev3-166 sdkperf-jms-100.0jms_context_propagation.0.43]$ export SOLACE_VM_ARGS=&#34;-javaagent:`pwd`/lib/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=`pwd`/lib/solace-opentelemetry-jms-integration-1.0-SNAPSHOT.jar -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.javaagent.debug=false -Dotel.propagators=solace_jms_tracecontext -Dotel.resource.attributes=service.name=sdkperf_jms -Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317 -Dotel.bsp.schedule.delay=500 -Dotel.bsp.max.queue.size=1000 -Dotel.bsp.max.export.batch.size=5 -Dotel.bsp.export.timeout=10000&#34;; ./sdkperf_jms.sh -cip=192.168.3.166:55557 -ptl=solace/tracing -mn=1 -msa=100 -mt=persistent -cu=default -cp=default
+</pre>
+<p>This command will launch sdkperf-jms to consume the message that was just published as well as provide additional context information directly to the collector about this message being consumed.</p>
+<pre>[pl89@dev3-166 tracing-ea]$ cd sdkperf-jms-100.0jms_context_propagation.0.43/
+[pl89@dev3-166 sdkperf-jms-100.0jms_context_propagation.0.43]$ export SOLACE_VM_ARGS=&#34;-javaagent:`pwd`/lib/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=`pwd`/lib/solace-opentelemetry-jms-integration-1.0-SNAPSHOT.jar -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.javaagent.debug=false -Dotel.propagators=solace_jms_tracecontext -Dotel.resource.attributes=service.name=sdkperf_jms -Dotel.exporter.otlp.endpoint=http://192.168.3.166:4317 -Dotel.bsp.schedule.delay=500 -Dotel.bsp.max.queue.size=1000 -Dotel.bsp.max.export.batch.size=5 -Dotel.bsp.export.timeout=10000&#34;; ./sdkperf_jms.sh -cip=192.168.3.166:55557 -sql=q -md -cu=default -cp=default
+</pre>
+<p>To have sdkperf-jms exit, simply send the ctrl+c command.</p>
+<h2 is-upgraded>Verify trace generated in Jaeger</h2>
+<p>A new trace should have been generated, notice how it has 3 spans. <img alt="Jaeger8" src="img/1e741b2c2af2b14d.png"></p>
+<p>Opening up the newly generated trace will allow you to easily follow the sequence of events. <img alt="Jaeger9" src="img/6b3299aa053ae92.png"></p>
+<p>The first span was generated by the publisher when the message was published. The second span was generated by the PubSub+ Broker when the message was received. The third span was generated by the consumer when the message was received.</p>
+<h2 is-upgraded>Clean-up</h2>
+<p>To avoid any problems when using sdkperf in the future, unset the environment variable set in the previous step.</p>
+<pre>[pl89@dev3-166 tracing-ea]$ unset SOLACE_VM_ARGS
+</pre>
 
 
       </google-codelab-step>
