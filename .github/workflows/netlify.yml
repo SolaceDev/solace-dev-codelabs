@@ -17,7 +17,10 @@ jobs:
         with:
           node-version: 12.16.2
       - name: Checkout PR
-        run: cd site/solace-dev-codelabs && git fetch origin pull/${{ github.event.pull_request.number }}/head:temp && git checkout temp
+        env:
+          GH_TOKEN: ${{ github.token }}
+        #run: cd site/solace-dev-codelabs && git fetch origin pull/${{ github.event.pull_request.number }}/head:temp && git checkout temp
+        run: cd site/solace-dev-codelabs && gh pr checkout ${{ github.event.pull_request.number }}
       - name: build site
         run: cd site && npm i && npm run dist
       - name: Netlify Deploy

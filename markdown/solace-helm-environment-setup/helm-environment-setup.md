@@ -130,7 +130,7 @@ $ sudo mv linux-amd64/helm /usr/local/bin/helm
 
 ![Helm Install](./img/Step-3-1-Helm-Setup.png)
 
-### Step 3.2: Install Help Repos
+### Step 3.2: Install Helm Repos
 
 Finally install the Helm repos:
 
