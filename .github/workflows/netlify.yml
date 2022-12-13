@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: 12.16.2
       - name: Checkout PR
+        env:
+          GH_TOKEN: ${{ github.token }}
         #run: cd site/solace-dev-codelabs && git fetch origin pull/${{ github.event.pull_request.number }}/head:temp && git checkout temp
         run: cd site/solace-dev-codelabs && gh pr checkout ${{ github.event.pull_request.number }}
       - name: build site
