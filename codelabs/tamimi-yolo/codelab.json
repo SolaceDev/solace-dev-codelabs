@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-12-13T09:16:09-08:00",
+  "id": "tamimi-yolo",
+  "duration": 19,
+  "title": "Title of codelab goes here",
+  "summary": "",
+  "source": "tamimi-yolo.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/tamimi-yolo",
+  "url": "tamimi-yolo"
+}
