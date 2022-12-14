@@ -62,13 +62,13 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 <h2 is-upgraded>Downloading the tracing-codelab package</h2>
 <p>The tracing-codelab package contains/require the following items:</p>
 <ul>
-<li>docker-compose.yaml (Docker images will be downloaded by Docker environment upon first launch from a Docker hub):</li>
-<li>Docker image of the Solace PubSub+ Event Broker <ul>
+<li>docker-compose.yaml (Docker images will be downloaded by Docker environment upon first launch from a Docker hub): <ul>
+<li>Docker image of the Solace PubSub+ Event Broker</li>
 <li>Docker image of the <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib" target="_blank">OpenTelemetry Collector Contrib</a> packaged with a Solace receiver modules</li>
 <li>Docker Image for the Jaeger all in one</li>
-<li>otel-collector-config.yaml</li>
 </ul>
 </li>
+<li>otel-collector-config.yaml</li>
 <li>solace_config_keys.env</li>
 <li>.env (file with environment variables used in a docker compose files) *solace-publisher.jar (command line Solace jms application for publishing of messages)</li>
 <li>solace-queue-receiver.jar (command line Solace jms application for receiving of messages from a JMS Queue)</li>
