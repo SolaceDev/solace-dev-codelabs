@@ -56,10 +56,10 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 ### Downloading the tracing-codelab package
 The tracing-codelab package contains/require the following items:
 * docker-compose.yaml (Docker images will be downloaded by Docker environment upon first launch from a Docker hub):
-* Docker image of the Solace PubSub+ Event Broker
+  * Docker image of the Solace PubSub+ Event Broker
   * Docker image of the [OpenTelemetry Collector Contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib) packaged with a Solace receiver modules
   * Docker Image for the Jaeger all in one
-  * otel-collector-config.yaml
+* otel-collector-config.yaml
 * solace_config_keys.env
 * .env (file with environment variables used in a docker compose files)
 *solace-publisher.jar (command line Solace jms application for publishing of messages)
