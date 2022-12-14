@@ -64,7 +64,7 @@ The tracing-codelab package contains/require the following items:
 * .env (file with environment variables used in a docker compose files)
 *solace-publisher.jar (command line Solace jms application for publishing of messages)
 * solace-queue-receiver.jar (command line Solace jms application for receiving of messages from a JMS Queue)
-* opentelemetry-javaagent-all.jar (OpenTelemetry Java Instrumentation API)[MISSING LINK]() 
+* opentelemetry-javaagent-all.jar [OpenTelemetry Java Instrumentation API](https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent) 
 * solace-opentelemetry-jms-integration.jar (Solace PubSub+ OpenTelemetry Integration API for JMS) [MISSING LINK]()
 
 You will be able to download the following package from the Solace product download site: [MISISNG LINK]() 
