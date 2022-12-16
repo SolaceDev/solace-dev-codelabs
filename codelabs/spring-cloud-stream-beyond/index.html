@@ -9,7 +9,7 @@
   <title>Spring Cloud Stream - Beyond the Basics</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements-tmp/codelab-elements.css">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
     .success {
       color: #1e8e3e;
@@ -46,8 +46,7 @@
 <li>Spring Sample <a href="https://github.com/spring-cloud/spring-cloud-stream-samples" target="_blank">Github Repository</a></li>
 <li>Solace Sample <a href="https://github.com/SolaceSamples/solace-samples-spring" target="_blank">Github Repository</a></li>
 </ul>
-<aside class="special"><p>👉 <strong>Have Questions? Ask them in the </strong><a href="https://solace.community" target="_blank"><strong>Solace Community</strong></a> 👈</p>
-</aside>
+<p>Positive : 👉 <strong>Have Questions? Ask them in the </strong><a href="https://solace.community" target="_blank"><strong>Solace Community</strong></a> 👈</p>
 
 
       </google-codelab-step>
@@ -58,11 +57,9 @@
 <p>✅ Spring Cloud Stream just requires Java and Maven to use 🚀</p>
 <ul>
 <li>Java 1.8+ (Check version using <code>java -version</code>)</li>
-<li>Maven 3.3+ (Check version using <code>mvn -version</code>)  <ul>
+<li>Maven 3.3+ (Check version using <code>mvn -version</code>)</li>
 <li>On mac you can <code>brew install maven</code></li>
 <li>Other install instructions <a href="https://maven.apache.org/install.html" target="_blank">here</a></li>
-</ul>
-</li>
 <li>Your favorite Java IDE 💥</li>
 </ul>
 <h2 is-upgraded>Create your Messaging Service</h2>
@@ -115,19 +112,24 @@
 <p>Before we jump into choosing our consumption model, which is done via configuration, let&#39;s create a quick <code>Consumer</code> app that we can use.</p>
 <ol type="1">
 <li>Open the <code>DemoApplication.java</code> file in your microservice.</li>
-<li>Write a quick <code>Consumer</code> function that receives a <code>Stringjava<br>@Bean<br>public Consumer&lt;String&gt; myConsumer(){<br>return v -&gt; {<br>	System.out.println(&#34;Received: &#34; + v);<br>};<br>}</code><br><br></li>
+<li>Write a quick <code>Consumer</code> function that receives a <code>String</code></li>
 </ol>
-<aside class="special"><p>If you are using eclipse you can use <code>ctrl + shift + o</code> on Windows or <code>cmd + shift + o</code> on Mac to include imports. You want to choose the <code>java.util.function.Consumer</code> if given multiple options.</p>
-</aside>
+<pre><code language="language-java" class="language-java">@Bean
+public Consumer&lt;String&gt; myConsumer(){
+	return v -&gt; {
+		System.out.println(&#34;Received: &#34; + v);
+	};
+}
+</code></pre>
+<p>Positive : If you are using eclipse you can use <code>ctrl + shift + o</code> on Windows or <code>cmd + shift + o</code> on Mac to include imports. You want to choose the <code>java.util.function.Consumer</code> if given multiple options.</p>
 <p>Now that we have a function we&#39;ll look at the different options to configure the <em>binding</em> which tells the binder how to connect your function to the underlying message broker.</p>
 <p>When using Spring Cloud Stream with the Solace Binder you can decide between 3 options:</p>
 <ol type="1">
 <li>Publish-Subscribe (Non-Durable): My events must be processed in order so I want them processed by one microservice AND I only care about receiving events when my microservice is connected.</li>
 <li>Publish-Subscribe (Durable): My events must be processed in order so I want them processed by one microservice AND I want events saved when my microservice is disconnected.</li>
-<li>Consumer Groups: I need to be able to scale my microservices up/down in order to process my events and order isn&#39;t important.<br></li>
+<li>Consumer Groups: I need to be able to scale my microservices up/down in order to process my events and order isn&#39;t important.</li>
 </ol>
-<aside class="special"><p>💥 Note that sometimes order <strong>and</strong> scaling matters! This is also possible by using dynamic topics and wildcard subscriptions that we&#39;ll cover in an upcoming section. Learn more about Solace topics in <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">this video</a>.</p>
-</aside>
+<p>Positive : 💥 Note that sometimes order <strong>and</strong> scaling matters! This is also possible by using dynamic topics and wildcard subscriptions that we&#39;ll cover in an upcoming section. Learn more about Solace topics in <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">this video</a>.</p>
 <h2 is-upgraded>Publish-Subscribe (Non-Durable)</h2>
 <p>There are many use cases where you need to process events in order as they are published to a defined topic. In order to do this with Spring Cloud Stream you would create your <code>Function</code> or <code>Consumer</code> function and configure the input binding for it to receive messages from a specific destination. There are two ways to do this with the Solace binder. The standard way, with no Solace specific configurations, is non-durable and we&#39;ll start there.</p>
 <p>👀 Under the covers this option will use a Non-Durable Anonymous Queue on the broker to hold the messages for the consuming microservice. Let&#39;s check it out! This option will deliver events in order to your microservice while it remains up and running. To do this we just to specify a <code>destination</code>, but NO <code>group</code> on your input binding.</p>
@@ -149,34 +151,26 @@
 <p>🛠 <strong>Let&#39;s test this out using the &#34;Try-Me&#34; tab in the PubSub+ Manager.</strong></p>
 <ol type="1">
 <li>Get to the &#34;Try-Me&#34; tab!</li>
-<li>If using Docker, Software or Hardware PubSub+ Event Brokers  <ol type="1">
+<li>If using Docker, Software or Hardware PubSub+ Event Brokers</li>
 <li>Navigate to PubSub+ Manager, <code>localhost:8080</code> by default when using Software but otherwise get from your Admin</li>
 <li>Default username and password is <code>admin</code> and <code>admin</code></li>
 <li>Choose your Messaging VPN, by default it would be <code>default</code></li>
-</ol>
-</li>
-<li>If using Solace PubSub+ Cloud  <ol type="1">
+<li>If using Solace PubSub+ Cloud</li>
 <li>Navigate to the Solace PubSub+ Cloud Console</li>
 <li>Choose &#34;Cluster Manager&#34; -&gt; and click the messaging service you created earlier</li>
 <li>Click the &#34;Open PubSub+ Broker Manager&#34; link at the top right</li>
-</ol>
-</li>
 <li>Click the &#34;Try-Me!&#34; option on the left menu</li>
-<li>Click &#34;Connect&#34; on the &#34;Publisher&#34; side  <ol type="1">
+<li>Click &#34;Connect&#34; on the &#34;Publisher&#34; side</li>
 <li>If it doesn&#39;t automatically connect use the credentials we got during Step 2.</li>
-</ol>
-</li>
 <li>Type in the <code>spring/cloud/stream</code> topic</li>
 <li>Change the &#34;Message&#34; to whatever you&#39;d like and click &#34;Send&#34;</li>
 </ol>
-<aside class="special"><p>💥 Note that you&#39;ll see that the messages arrive in the order that you send them.</p>
-</aside>
+<p>Positive : 💥 Note that you&#39;ll see that the messages arrive in the order that you send them.</p>
 <p class="image-container"><img alt="TryMeSCS" src="img/6b6cce25f0d23f9.webp"></p>
 <p>This option is great when we don&#39;t need to store messages/events when the app is offline, but what if we do!?</p>
 <h2 is-upgraded>Publish-Subscribe (Durable)</h2>
 <p>Sometimes it isn&#39;t enough to be able to deliver messages/events only while the app remains connected to the broker; there are many scenarios where you want messages stored while the app is offline while still maintaining order. In this case the Solace Binder allows you to follow the Publish-Subscribe pattern and consume from an Exclusive Durable Queue that will do just that.</p>
-<aside class="special"><p>💥 As a bonus, this configuration also allows you to create a Primary/Secondary type of configuration where you can have multiple microservices ready to process the events and if the Primary disconnects the Secondary will take over.</p>
-</aside>
+<p>Positive : 💥 As a bonus, this configuration also allows you to create a Primary/Secondary type of configuration where you can have multiple microservices ready to process the events and if the Primary disconnects the Secondary will take over.</p>
 <p>In order to modify the input binding to create an Exclusive Durable Queue we need to add a <code>group</code> to our binding and also set the Solace specific property <code>queueAccessType</code> to use an exclusive queue. We do that with the configuration below.</p>
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
@@ -287,8 +281,8 @@ public class DemoApplication {
       <google-codelab-step label="Message Headers" duration="10">
         <p>By default when coding your Spring Cloud Stream microservice you are writing Spring Cloud Function beans that can be re-used for multiple purposes and can leverage the framework&#39;s <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management" target="_blank">Content Type Negotiation</a> to pass your POJOs directly into the function while decoupling your business logic from the specific runtime target and triggering mechanism (web endpoint, stream processor, task). This is convenient, but sometimes when creating a function for a stream processor our business logic requires the use of metadata in the message headers that we need access to on the Consuming side or need to set on the Publishing side.</p>
 <h2 is-upgraded>Consumer - Accessing Headers</h2>
-<p>We&#39;ll start with the consuming side. In order to get access to the headers you&#39;ll need to set the input argument to a <code>Message&lt;?&gt;</code> type. Once you have the Spring Message object you can retrieve a map of the headers using the <code>getHeaders()</code> method. Note that because the input argument is now a <code>Message&lt;?&gt;</code> you would now use the <code>getPayload()</code> method to get the actual payload itself.</p>
-<p>For example, if we modify the <code>Consumer</code> from the previous section to take in a <code>Message&lt;String&gt;</code> we can now access the headers as seen below.</p>
+<p>We&#39;ll start with the consuming side. In order to get access to the headers you&#39;ll need to set the input argument to a <code>Message<?></code> type. Once you have the Spring Message object you can retrieve a map of the headers using the <code>getHeaders()</code> method. Note that because the input argument is now a <code>Message<?></code> you would now use the <code>getPayload()</code> method to get the actual payload itself.</p>
+<p>For example, if we modify the <code>Consumer</code> from the previous section to take in a <code>Message<String></code> we can now access the headers as seen below.</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
       return v -&gt; {
@@ -307,10 +301,9 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
       };
 }
 </code></pre>
-<aside class="special"><p>💡 Note that we&#39;re currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers.</p>
-</aside>
+<p>Positive : 💡 Note that we&#39;re currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers.</p>
 <h2 is-upgraded>Publishing - Setting Headers</h2>
-<p>On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a <code>Message&lt;?&gt;</code> object. Note that if you don&#39;t return a <code>Message&lt;?&gt;</code> object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by <em>SpringIntegrationProperties.messageHandlerNotPropagatedHeaders</em> or the Solace Binder <code>headerExclusions</code> producer property</p>
+<p>On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a <code>Message<?></code> object. Note that if you don&#39;t return a <code>Message<?></code> object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by <em>SpringIntegrationProperties.messageHandlerNotPropagatedHeaders</em> or the Solace Binder <code>headerExclusions</code> producer property</p>
 <p>For example, the code below sets a header named &#34;Key&#34; to the value &#34;Value&#34; on an outbound message.</p>
 <pre><code language="language-java" class="language-java">@Bean
 Supplier&lt;Message&lt;String&gt;&gt; mySupplier(){
@@ -347,8 +340,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
   };
 }
 </code></pre>
-<aside class="special"><p>When using the Solace binder you can also set SolaceHeaders with &#34;Write&#34; access as defined <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#solace-headers" target="_blank">here</a></p>
-</aside>
+<p>Positive : When using the Solace binder you can also set SolaceHeaders with &#34;Write&#34; access as defined <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#solace-headers" target="_blank">here</a></p>
 <p>Note the Solace Binder offers two producer properties that may come in handy for publishing apps that want to set headers:</p>
 <ol type="1">
 <li>The <code>spring.cloud.stream.solace.bindings.BINDING_NAME.producer.headerExclusions</code> property allows you to exclude headers from the published message.</li>
@@ -376,12 +368,11 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
             concurrency: 5
 </code></pre>
 <p>Now go ahead and use the &#34;Try-Me&#34; tab to send a few test messages that match the pattern. Maybe publish to <code>spring/cloud/stream/5</code> and <code>spring/boot/stream/anything</code>. You should see that the application receives the messages!</p>
-<aside class="special"><p>Learn more about why you&#39;d want to use Hierarchical Topics and Wildcard Subscriptions in the <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">All About Solace Topics</a> video! You can also learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a>.</p>
-</aside>
+<p>Positive : Learn more about why you&#39;d want to use Hierarchical Topics and Wildcard Subscriptions in the <a href="https://www.youtube.com/watch?v=PP1nNlgERQI&ab_channel=Solace" target="_blank">All About Solace Topics</a> video! You can also learn more about Solace wildcards in the <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">docs</a>.</p>
 <p>If you were to navigate to the queue in the PubSub+ Manager you&#39;ll see that the created queue substituted the wildcards with underscores in the queue name as they are invalid characters in a queue name, but applied the proper topic subscription to the queue.<br><img alt="Wildcard Queue 1" src="img/33ea9137729e70e9.webp"></p>
 <h2 is-upgraded>Wildcards in queueAdditionalSubscrptions</h2>
 <p>The second place you can add topic subscriptions and also use wildcards when using the Solace binder is using the <code>queueAdditionalSubscriptions</code> consumer property. This property is available under <code>spring.cloud.stream.solace.bindings.BINDING_NAME.consumer.queueAdditionalSubscriptions</code> and allows for 1 to many extra topic subscriptions to be added.</p>
-<p>For example, if we wanted to add <code>pub/*/plus</code> and <code>a/b/&gt;</code> subscriptions to our app we could add those subscriptions to the queue by doing the following:</p>
+<p>For example, if we wanted to add <code>pub/*/plus</code> and <code>a/b/></code> subscriptions to our app we could add those subscriptions to the queue by doing the following:</p>
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
     function:
@@ -414,8 +405,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer() {
 <li>Using <code>StreamBridge</code></li>
 <li>Using the <code>BinderHeaders.TARGET_DESTINATION</code> header</li>
 </ol>
-<aside class="warning"><p>If you&#39;re using the reactive programming style you can use the <code>EmitterProcessor</code> for dynamic publishing but we won&#39;t be covering that in this codelab.</p>
-</aside>
+<p>Negative : If you&#39;re using the reactive programming style you can use the <code>EmitterProcessor</code> for dynamic publishing but we won&#39;t be covering that in this codelab.</p>
 <h2 is-upgraded>StreamBridge</h2>
 <p>The first option for dynamic publishing is using <code>StreamBridge</code>. Note that this option is processed at the framework level and will work with any Cloud Stream binder that you choose to use. <code>StreamBridge</code> will cache a channel within Spring for each destination that you publish to. This options is solid if you&#39;re going to be publishing to a small number of destinations as the channel will remain in cache and you can lookup the channel for monitoring/metrics if you desire. Note that the number of channels cached is configurable via <code>spring.cloud.stream.dynamic-destination-cache-size</code>.</p>
 <p>Let&#39;s update our <code>myConsumer</code> function to publish to dynamic topics.</p>
@@ -436,14 +426,13 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
     };
 }
 </code></pre>
-<aside class="special"><p>Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handy to send alerts during processing.</p>
-</aside>
+<p>Positive : Note that StreamBridge does not send the output of the function as message, but rather can be used to send a message whenever needed during processing. This can come in handy to send alerts during processing.</p>
 <p>🛠 To test this out go ahead and open up the &#34;Try-Me&#34; tab. On the <em>Subscriber</em> side subscribe to &#34;solace/cid/&gt;&#34;. On the <em>Publisher</em> side, click &#34;Show Advanced&#34;, set a &#34;Correlation ID&#34; of 1 and send a message to the <code>a/b/c</code> topic. Change the &#34;Correlation ID&#34; value to 2 and send again. You should now see that the app is publishing to dynamic topics and your <em>Subscriber</em> is consuming them.</p>
 <p>You should see something like the image below: <img alt="Dynamic Publish 1" src="img/28752f0328bbd677.webp"></p>
 <p>✅ Now you know how to use StreamBridge to publish to dynamic topics!</p>
 <h2 is-upgraded>BinderHeaders.TARGET_DESTINATION</h2>
 <p>The second way to publish to a dynamic destination is to use the <code>BinderHeaders.TARGET_DESTINATION</code> header. Note that this option will only work with binders that explicity support the feature, including Solace. When setting this header the framework is actually delegating the dynamic publishing to the Binder itself and therefore may result in better performance than the StreamBridge option depending on the binder&#39;s implementation. 🚀 If using the Solace binder this dynamic publishing option results in lower latencies as the Binder doesn&#39;t create/cache Spring Integration channels.</p>
-<p>Different than when using StreamBridge, when using the <code>BinderHeaders.TARGET_DESTINATION</code> option you would actually use a <code>Function</code> or <code>Supplier</code> and return a <code>Message&lt;?&gt;</code> with the header set to the destination you&#39;d like the message to be published to. If the <code>BinderHeaders.TARGET_DESTINATION</code> header is set it will override the default <code>destination</code> that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired.</p>
+<p>Different than when using StreamBridge, when using the <code>BinderHeaders.TARGET_DESTINATION</code> option you would actually use a <code>Function</code> or <code>Supplier</code> and return a <code>Message<?></code> with the header set to the destination you&#39;d like the message to be published to. If the <code>BinderHeaders.TARGET_DESTINATION</code> header is set it will override the default <code>destination</code> that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired.</p>
 <p>Let&#39;s create a <code>myFunction</code> Function that will perform the same processing that we just implemented with <code>StreamBridge</code>.<br> Your code will look something like this:</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction() {
@@ -483,9 +472,9 @@ public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction()
       </google-codelab-step>
     
       <google-codelab-step label="Batch Publishing" duration="7">
-        <p>Sometimes when following the <code>Supplier</code> or the <code>Function</code> pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you&#39;d like, but there is also another option. That options is to return a <code>Collection&lt;Message&lt;?&gt;&gt;</code> object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it&#39;s own message.</p>
+        <p>Sometimes when following the <code>Supplier</code> or the <code>Function</code> pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you&#39;d like, but there is also another option. That options is to return a <code>Collection<Message<?>></code> object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it&#39;s own message.</p>
 <h2 is-upgraded>Batch Publish to Default Binding Destination</h2>
-<p>👀 Let&#39;s check it out! Go ahead and <strong>comment out your previous code</strong> and create a <code>myFunction</code> function that takes in a String and returns a <code>Collection&lt;Message&lt;String&gt;&gt;</code>. It should look something like this:</p>
+<p>👀 Let&#39;s check it out! Go ahead and <strong>comment out your previous code</strong> and create a <code>myFunction</code> function that takes in a String and returns a <code>Collection<Message<String>></code>. It should look something like this:</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunction() {
     return v -&gt; {
@@ -539,7 +528,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
     };
 }
 </code></pre>
-<p>🛠 Add a topic subscription of <code>some/other/topic/&gt;</code> to your &#34;Try-Me&#34; <strong>Subscriber</strong>, resend a message to <code>a/b/c</code> and checkout what your <strong>Subscriber</strong> receives.</p>
+<p>🛠 Add a topic subscription of <code>some/other/topic/></code> to your &#34;Try-Me&#34; <strong>Subscriber</strong>, resend a message to <code>a/b/c</code> and checkout what your <strong>Subscriber</strong> receives.</p>
 <p>You&#39;ll note that you received 1 message on the default binding destination of <code>my/default/topic</code> and the other 3 messages went to <code>some/other/topic/X</code> where X is a number as defined in the code.</p>
 <p class="image-container"><img alt="Batch Publish 2" src="img/685fcd89b80d6409.webp"></p>
 
@@ -553,7 +542,7 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
 <li>Disable auto-acknowledgement in the acknowledgment callback header</li>
 <li>Acknowledge the message!</li>
 </ol>
-<p>Since we&#39;re dealing with acknowledgements we know we&#39;re essentially dealing with a message/event broker and we&#39;ll need to receive the <code>Message&lt;?&gt;</code> object itself. Once we have the <code>Message&lt;?&gt;</code> object we can access the <code>AcknowledgementCallback</code> in the header and disable auto ack as follows:</p>
+<p>Since we&#39;re dealing with acknowledgements we know we&#39;re essentially dealing with a message/event broker and we&#39;ll need to receive the <code>Message<?></code> object itself. Once we have the <code>Message<?></code> object we can access the <code>AcknowledgementCallback</code> in the header and disable auto ack as follows:</p>
 <pre><code language="language-java" class="language-java">// Disable Auto-Ack
 AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v); 
 ackCallback.noAutoAck(); 
@@ -561,11 +550,10 @@ ackCallback.noAutoAck();
 <p>Now that we&#39;ve disabled auto ack we are in charge of handling the Acknowledgement and can choose from 3 options using Spring&#39;s <code>AckUtils</code>. When using Manual Acknowledgements make sure you ALWAYS acknowledge the message! We&#39;ll talk more about when you <em>should</em> use these options in the <strong>Consumer Error Handling</strong> section of this codelab.</p>
 <ol type="1">
 <li>ACCEPT</li>
-<li>REJECT<br></li>
+<li>REJECT</li>
 <li>REQUEUE</li>
 </ol>
-<aside class="warning"><p>Note that the Acknowledgement options of ACCEPT, REJECT, REQUEUE may differ depending on the functionality of the underlying message/event broker so be sure to reference the docs for the binder that you&#39;re using.</p>
-</aside>
+<p>Negative : Note that the Acknowledgement options of ACCEPT, REJECT, REQUEUE may differ depending on the functionality of the underlying message/event broker so be sure to reference the docs for the binder that you&#39;re using.</p>
 <p>When using the Solace binder and handing your events in multiple threads you&#39;ll also want to ensure that you catch the <code>SolaceAcknowledgementException</code> which may get thrown in a REQUEUE scenarios.</p>
 <pre><code language="language-java" class="language-java">// Acknowledge the Message!
 try {
@@ -577,13 +565,12 @@ try {
 }
 </code></pre>
 <p>If using the Solace Binder you can learn how it handles the different AckUtils Status options in the <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#manual-message-acknowledgment" target="_blank">Manual Message Acknowledgement binder docs</a>. Refer to the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/acks/AckUtils.html" target="_blank">AckUtils documentation</a> and <a href="https://javadoc.io/doc/org.springframework.integration/spring-integration-core/latest/org/springframework/integration/acks/AcknowledgmentCallback.html" target="_blank">AcknowledgmentCallback documentation</a> for more info on these objects at the Spring level.</p>
-<aside class="special"><p>Two of the most common uses of Manual Acknowledgements are to:  </p>
+<p>Positive : Two of the most common uses of Manual Acknowledgements are to:</p>
 <ol type="1">
 <li>Implement the Reactor Pattern and handle messages in separate threads while keeping the number of connections/sessions/flows to the event broker to a minimum.</li>
-<li>Be able to handle many messages when dealing with high throughput. This is common when inserting into a down stream datastore and not wanting to do an insert/update for each and every message.<br></li>
+<li>Be able to handle many messages when dealing with high throughput. This is common when inserting into a down stream datastore and not wanting to do an insert/update for each and every message.</li>
 </ol>
-</aside>
-<p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message&lt;String&gt;</code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
+<p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message<String></code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
 <p>1️⃣  First off let&#39;s go ahead and change our application configuration to create a fresh queue and set <code>queueMaxMsgRedelivery</code> so we don&#39;t get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to <code>clientAck</code> and the group is used as part of the queue naming convention.</p>
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
@@ -655,8 +642,7 @@ public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
 <h2 is-upgraded>Provided by the Framework</h2>
 <p><strong>Retries</strong> The <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-overview-error-handling" target="_blank">Error Handling</a> section in the Spring Cloud Stream reference guide goes into more detail around the available options, but in general for developers using imperative functions the framework provides retrying of exceptions using the <a href="https://github.com/spring-projects/spring-retry" target="_blank">Spring Retry</a> library and developers creating reactive functions can take advantage of <code>retryBackoff</code> capabilities in project reactor.</p>
 <p>The framework provides reasonable defaults, but when using the the <code>SpringRetry</code> library you can configure the <code>RetryTemplate</code> to configure options such the number of retry events, the backoff interval and even which exceptions to retry or not retry. If you need custom retry logic you can also provide your own instance of the <code>RetryTemplate</code> for use. It is important to note that these retries take place inside of the microservice itself and the message is not being sent back to the underlying message system.</p>
-<aside class="warning"><p>When using reactive functions (such as if you&#39;re using <code>Flux</code> or <code>Mono</code>) the framework connects the <code>Flux</code> or <code>Mono</code> into your Function and that&#39;s it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable per your requirements.</p>
-</aside>
+<p>Negative : When using reactive functions (such as if you&#39;re using <code>Flux</code> or <code>Mono</code>) the framework connects the <code>Flux</code> or <code>Mono</code> into your Function and that&#39;s it. The messages are acknowledged immediately after they are handed to the function and does not wait for success/failure. This may result in the loss of messages if your app were to crash and is why I would not use reactive functions with Spring Cloud Stream if message loss is not acceptable per your requirements.</p>
 <p>Configuring the <code>RetryTemplate</code> on an input binding would look something like this:</p>
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
@@ -675,13 +661,12 @@ public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
             retryable-exceptions:
               java.lang.IllegalStateException: true
 </code></pre>
-<h3 is-upgraded>Consumer Error Channels</h3>
-<aside class="warning"><p>It is highly recommended to upgrade the Spring Cloud Stream version to 3.2.5 (or higher) to take advantage of binding-specific error handling functionality.</p>
-</aside>
+<p>####Consumer Error Channels</p>
+<p>Negative : It is highly recommended to upgrade the Spring Cloud Stream version to 3.2.5 (or higher) to take advantage of binding-specific error handling functionality.</p>
 <p><strong>Spring Cloud Stream pre-v3.2.5</strong></p>
 <p>If you are using Spring Cloud Stream version prior to 3.2.5, continue reading. Otherwise, continue to the next section <strong>Spring Cloud Stream v3.2.5 or higher</strong>. The error channel specification follows the convention of <code>@ServiceActivator</code>, an annotation-based approach for specifying global and destination-specific error handlers.</p>
-<p>After the Retries have been exhausted the Cloud Stream framework will next send an <code>ErrorMessage</code> to a binding specific error channel, which is formatted as <code>&lt;destination&gt;.&lt;group&gt;.errors</code>. You can configure a <code>@ServiceActivator</code> to listen on that Spring Integration channel to try to handle the Exception. If you do not register a listener then the framework will pass the <code>ErrorMessage</code> along to the global <code>errorChannel</code> Spring Integration Channel where a different <code>@ServiceActivator</code> can listen. However, if listening on this global errorChannel do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it&#39;s own error handling. This global errorChannel is moreso useful for logging or publishing an alert elsewhere.</p>
-<p>Here is an example <code>@ServiceActivator</code> listening to the binding specific error channel. Note that <code>inputChannel</code> name is derived from the yaml above that defines the destination as <code>a/b/&gt;</code> and the group as <code>clientAck</code>. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler.</p>
+<p>After the Retries have been exhausted the Cloud Stream framework will next send an <code>ErrorMessage</code> to a binding specific error channel, which is formatted as <code><destination>.<group>.errors</code>. You can configure a <code>@ServiceActivator</code> to listen on that Spring Integration channel to try to handle the Exception. If you do not register a listener then the framework will pass the <code>ErrorMessage</code> along to the global <code>errorChannel</code> Spring Integration Channel where a different <code>@ServiceActivator</code> can listen. However, if listening on this global errorChannel do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it&#39;s own error handling. This global errorChannel is moreso useful for logging or publishing an alert elsewhere.</p>
+<p>Here is an example <code>@ServiceActivator</code> listening to the binding specific error channel. Note that <code>inputChannel</code> name is derived from the yaml above that defines the destination as <code>a/b/></code> and the group as <code>clientAck</code>. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler.</p>
 <pre><code language="language-java" class="language-java">@ServiceActivator(inputChannel = &#34;a/b/&gt;.clientAck.errors&#34;) 
 public void handleError(ErrorMessage message) {
     logger.info(&#34;Binding Specific Error Handler executing business logic for: &#34; + message.toString());
@@ -702,7 +687,7 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
     &lt;version&gt;3.2.5&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
-<p>After the Retries have been exhausted the Cloud Stream framework will next send an <code>ErrorMessage</code> to a binding specific error channel, as specified by <code>&lt;spring&gt;.&lt;cloud&gt;.&lt;stream&gt;.&lt;bindings&gt;.&lt;binding_name&gt;.error-handler-definition</code>. You can configure a <code>@Bean</code> function to handle the Exception. If you do not register a function then the framework will pass the <code>ErrorMessage</code> along to the global <code>errorChannel</code>, a different <code>@Bean</code> function assigned to handle the error message. This can be specified as <code>&lt;spring&gt;.&lt;cloud&gt;.&lt;stream&gt;.&lt;default&gt;.error-handler-definition</code>. Do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it&#39;s own error handling. This global errorChannel is more so useful for logging or publishing an alert elsewhere.</p>
+<p>After the Retries have been exhausted the Cloud Stream framework will next send an <code>ErrorMessage</code> to a binding specific error channel, as specified by <strong><code><spring>.<cloud>.<stream>.<bindings>.<binding_name>.error-handler-definition</code></strong>. You can configure a <code>@Bean</code> function to handle the Exception. If you do not register a function then the framework will pass the <code>ErrorMessage</code> along to the global <code>errorChannel</code>, a different <code>@Bean</code> function assigned to handle the error message. This can be specified as <strong><code><spring>.<cloud>.<stream>.<default>.error-handler-definition</code></strong>. Do not try to handle the message itself as the binder will already have been notified that the message has failed and will be implementing it&#39;s own error handling. This global errorChannel is more so useful for logging or publishing an alert elsewhere.</p>
 <p>Here is an example of registering binding-specific and global error handlers in the configuration.</p>
 <pre><code>spring:
   cloud:
@@ -801,7 +786,7 @@ public Function&lt;String, String&gt; myFunction() {
 </code></pre>
 <p>✅ If we start our app with the configuration above we&#39;ll see that an error queue named <code>scst/error/wk/clientAck/plain/a/b/_</code> is created. You can see it in PubSub+ Manager.</p>
 <p class="image-container"><img alt="Error Queue" src="img/ea6b2f21e7d8b6ac.webp"></p>
-<p>🛠 The easiest way to test these options out are to have your function <code>throw new RuntimeException(&#34;Oh no!!&#34;)</code> and use the &#34;Try-Me&#34; tab to send test messages 👍</p>
+<p>🛠 The easiest way to test these options out are to have your function <code>throw new RuntimeException("Oh no!!")</code> and use the &#34;Try-Me&#34; tab to send test messages 👍</p>
 <pre><code language="language-java" class="language-java">public Function&lt;Message&lt;String&gt;, String&gt; myFunction() {
     return v -&gt; {
         logger.info(&#34;Received: &#34; + v);
@@ -820,20 +805,22 @@ public Function&lt;String, String&gt; myFunction() {
 <h2 is-upgraded>Guidance</h2>
 <p>Okay so we have all of these options, how do we choose what to do when handling errors? It of course all goes back to your requirements.</p>
 <ol type="1">
-<li>In general, keep it simple when possible!  <ul>
-<li>Handle your exceptions and don&#39;t throw them when possible.<br></li>
+<li>In general, keep it simple when possible!</li>
+</ol>
+<ul>
+<li>Handle your exceptions and don&#39;t throw them when possible.</li>
 <li>Think about how your function might fail and configure the <code>RetryTemplate</code> (Would Retrying really help?) and binding specific error channel appropriately.</li>
 <li>Do you want messages that do throw exceptions to end up on another queue? (use <code>autoBindErrorQueue</code>)</li>
 </ul>
-</li>
-<li>If you need more control and are fine writing more messaging specific code then I would make use of both the internal framework and binder error handling options in conjunction with <strong>Client/Manual Acknowledgements</strong> that we covered in a previous section. Then do something like the following:  <ul>
+<ol type="1">
+<li>If you need more control and are fine writing more messaging specific code then I would make use of both the internal framework and binder error handling options in conjunction with <strong>Client/Manual Acknowledgements</strong> that we covered in a previous section. Then do something like the following:</li>
+</ol>
+<ul>
 <li>Handle your exceptions and don&#39;t throw them</li>
 <li>Think about how your function might fail and configure the <code>RetryTemplate</code> (Would Retrying really help?) and binding specific error channel appropriately.</li>
 <li>Use the Client/Manual Ack to <code>REQUEUE</code> messages that end in an error scenario that may be successful if retried, even if by another instance in the Consumer Group. For example, maybe an infrastructure issue where your microservice couldn&#39;t get a response from a downstream service.</li>
-<li>Identify your failure scenarios that wouldn&#39;t work if retried and consider if you want to send them all to one queue for further processing or to several destinations. If one queue then use the <code>autoBindErrorQueue</code> option and use the Client/Manual Ack to <code>REJECT</code> the message and let the binder handle it for you. However, if you prefer to send to several destinations for error processing then use <code>StreamBridge</code> as covered in the <strong>Dynamic Publishing</strong> section to publish where you&#39;d like. After publishing be sure to use the Client/Manual Ack to <code>ACCEPT</code> the message.<br></li>
+<li>Identify your failure scenarios that wouldn&#39;t work if retried and consider if you want to send them all to one queue for further processing or to several destinations. If one queue then use the <code>autoBindErrorQueue</code> option and use the Client/Manual Ack to <code>REJECT</code> the message and let the binder handle it for you. However, if you prefer to send to several destinations for error processing then use <code>StreamBridge</code> as covered in the <strong>Dynamic Publishing</strong> section to publish where you&#39;d like. After publishing be sure to use the Client/Manual Ack to <code>ACCEPT</code> the message.</li>
 </ul>
-</li>
-</ol>
 <p>✅ Now that we know about exception handling options on the Consumer side we&#39;ll cover Publisher error handling in the next section!</p>
 
 
@@ -846,8 +833,7 @@ public Function&lt;String, String&gt; myFunction() {
 <li>Producer Error Channels</li>
 <li>Publisher Confirmation</li>
 </ol>
-<aside class="special"><p>If you&#39;re using the Solace Binder, definitely take a read through the Solace Binders docs for <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#failed-producer-message-error-handling" target="_blank">Failed Producer Error Handling.</a></p>
-</aside>
+<p>Positive : If you&#39;re using the Solace Binder, definitely take a read through the Solace Binders docs for <a href="https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter#failed-producer-message-error-handling" target="_blank">Failed Producer Error Handling.</a></p>
 <h2 is-upgraded>Producer Error Channels</h2>
 <p>Producer Error Channels allow you to remain asynchronous and have a callback triggered when a send/publishing failure occurs. This can be enabled by setting the <code>errorChannelEnabled</code> producer property to true. Note that this functionality is disabled by default.</p>
 <p>✅ Let&#39;s continue using our <code>myFunction</code> function and configure the outbound side to enable the publisher error channel.</p>
@@ -923,8 +909,7 @@ public Consumer&lt;String&gt; myConsumer(StreamBridge sb) {
           destination: &#39;a/b/&gt;&#39;
 </code></pre>
 <p>🛠 Go ahead and use the &#34;Try-Me&#34; tool to send a message to the <code>a/b/c</code> topic with a payload of &#34;Hello World&#34;. You&#39;ll see the app processes the message and Publishing succceeds. If you then change the payload of the message to &#34;fail&#34; you&#39;ll see that the Publish to the <code>my/default/topic</code> fails and &#34;Publish Failed&#34; is logged. This allows the developer to execute error handling prior to exiting the funtion.</p>
-<aside class="warning"><p>⚠️  Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.</p>
-</aside>
+<p>Negative : ⚠️  Keep in mind that waiting for the broker to acknowledge the message was received can be time consuming, especially if going across a wide area network, so this option should be used with caution.</p>
 <p>🚨 <strong>Just a Reminder - Go ahead and remove that ACL Profile Exception before you forget and get weird exceptions later</strong></p>
 
 
@@ -934,18 +919,43 @@ public Consumer&lt;String&gt; myConsumer(StreamBridge sb) {
         <p>This section will (might 😝) be expanded in the future, for now these are the things to keep in mind:</p>
 <ol type="1">
 <li>Write your code using Spring Cloud Function and keep your functions simple. Test your functions with unit tests that do not require the underlying message broker.</li>
-<li>Spring Cloud Stream does offer a test binder which is automatically included if you generate your microservice from <a href="https://start.spring.io" target="_blank">start.spring.io</a>. Check out the <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_testing" target="_blank">Testing</a> section of the Spring Cloud Stream reference guide for guidance on how to use it. This can be used to test simple binding configurations. <code>xml<br>&lt;dependency&gt;<br>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;<br>&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;<br>&lt;scope&gt;test&lt;/scope&gt;<br>&lt;/dependency&gt;<br>&lt;dependency&gt;<br>&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;<br>&lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;<br>&lt;scope&gt;test&lt;/scope&gt;<br>&lt;classifier&gt;test-binder&lt;/classifier&gt;<br>&lt;type&gt;test-jar&lt;/type&gt;<br>&lt;/dependency&gt;</code><br> 1. Keep in mind that the test binder will not be able to simulate the topic to queue mappings that occur with the Solace Binder &amp; Solace PubSub+ Event Broker. Because of this you will want to run integration tests in a &#34;real environment&#34; that has an actual PubSub+ Event Broker. This is usually done by spinning up an Event Broker in a docker container or in <a href="https://console.solace.cloud/?utm_source=devrel" target="_blank">PubSub+ Cloud</a> using the REST API. ## Takeaways &amp; Next Steps Duration: 0:03:00 Hopefully you learned quite a bit about the use of Spring Cloud Stream to create event-driven microservices, especially when it comes to using it with the Solace binder and Solace PubSub+ Event Brokers.<br> For next steps I would recommend: ✅ Checking out the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">AsyncAPI Code Generator Template for Spring Cloud Stream</a>. This template allows you to start with a design and generate a Spring Cloud Stream microservice that is pre-configured with the input and output bindings necessary for your microservice to be wired up to the underlying messaging system. Don&#39;t want to read? Here is a <a href="https://youtu.be/QEDL6AqsaJc" target="_blank">YouTube video</a> covering AsyncAPI code gen with Spring Cloud Stream! ✅ Learn about Solace Event Broker&#39;s Multi-protocol capabilties that allow your Spring Cloud Stream apps to exchange events/messages with other Spring and non-Spring apps. <a href="https://youtu.be/FHoyGgP2TZM" target="_blank">YouTube Video!</a> ✅ Learning about the <a href="https://console.solace.cloud/login/new-account?utm_source=devrel" target="_blank">Solace Event Portal</a> which allows you to design your EDA and export AsyncAPI documents to help kickstart code generation. <img alt="Soly Image Caption" src="img/44f356558033e250.gif"> Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</li>
+<li>Spring Cloud Stream does offer a test binder which is automatically included if you generate your microservice from <a href="https://start.spring.io" target="_blank">start.spring.io</a>. Check out the <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_testing" target="_blank">Testing</a> section of the Spring Cloud Stream reference guide for guidance on how to use it. This can be used to test simple binding configurations.</li>
 </ol>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-stream&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+    &lt;classifier&gt;test-binder&lt;/classifier&gt;
+    &lt;type&gt;test-jar&lt;/type&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ol type="1">
+<li>Keep in mind that the test binder will not be able to simulate the topic to queue mappings that occur with the Solace Binder &amp; Solace PubSub+ Event Broker. Because of this you will want to run integration tests in a &#34;real environment&#34; that has an actual PubSub+ Event Broker. This is usually done by spinning up an Event Broker in a docker container or in <a href="https://console.solace.cloud/?utm_source=devrel" target="_blank">PubSub+ Cloud</a> using the REST API.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways &amp; Next Steps" duration="3">
+        <p>Hopefully you learned quite a bit about the use of Spring Cloud Stream to create event-driven microservices, especially when it comes to using it with the Solace binder and Solace PubSub+ Event Brokers.</p>
+<p>For next steps I would recommend: ✅ Checking out the <a href="https://github.com/asyncapi/java-spring-cloud-stream-template" target="_blank">AsyncAPI Code Generator Template for Spring Cloud Stream</a>. This template allows you to start with a design and generate a Spring Cloud Stream microservice that is pre-configured with the input and output bindings necessary for your microservice to be wired up to the underlying messaging system. Don&#39;t want to read? Here is a <a href="https://youtu.be/QEDL6AqsaJc" target="_blank">YouTube video</a> covering AsyncAPI code gen with Spring Cloud Stream! ✅ Learn about Solace Event Broker&#39;s Multi-protocol capabilties that allow your Spring Cloud Stream apps to exchange events/messages with other Spring and non-Spring apps. <a href="https://youtu.be/FHoyGgP2TZM" target="_blank">YouTube Video!</a> ✅ Learning about the <a href="https://console.solace.cloud/login/new-account?utm_source=devrel" target="_blank">Solace Event Portal</a> which allows you to design your EDA and export AsyncAPI documents to help kickstart code generation.</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 
       </google-codelab-step>
     
   </google-codelab>
 
-  <script src="https://storage.googleapis.com/codelab-elements-tmp/native-shim.js"></script>
-  <script src="https://storage.googleapis.com/codelab-elements-tmp/custom-elements.min.js"></script>
-  <script src="https://storage.googleapis.com/codelab-elements-tmp/prettify.js"></script>
-  <script src="https://storage.googleapis.com/codelab-elements-tmp/codelab-elements.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
