@@ -15,12 +15,12 @@ This CodeLabs will take you through the basics of the new distributed tracing fe
 * Launching the OpenTelemetry Collector configured to use Solace modules
 * Launching Jaeger which offers a user interface to view traced events
 * Publishing and receiving messages to/from your broker to generate broker trace events
-* Use auto-instrumented JMS application that will generate end to end linked traces (publisher – broker – receiver traces)
+* Using auto-instrumented JMS application that will generate end to end linked traces (publisher – broker – receiver traces)
   
 Upon successful completion of this Code Labs, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, Open Telemetry exporters, and telemetry analysis tools. Please note that as a Demo feature using a standard broker edition release there are some restrictions.
 
 ### Limitations and caveats
-For this release, trace events will be generated for published messages (guaranteed and promoted direct) upon broker receipt and when the message is enqueued by the broker. This release does support context propagation to bind telemetry for the same message from multiple sources.
+For this release, trace events will be generated for published messages (guaranteed and promoted direct) upon broker receipt and when the message is enqueued by the broker. This release supports context propagation to link traces for the same message from multiple sources.
 
 This codelabs project is provided for demonstration purposes only. The sample applications included herein (solace-publisher and solace-queue-receiver), the configuration, and the setup scripts are not intended for general use, nor do they contain necessary certificates, or configuration for a secure session connection. As such they should only be used in a local environment for feature demonstration purposes only.
 Please contact your SE for support. 
@@ -32,7 +32,7 @@ Please contact your SE for support.
 ## What you need: Prerequisites
 
 ### Docker
-This CodeLabs relies on the use of Docker If you do not already have Docker installed, you will first need to do that. Docker Desktop can be installed  for ease of use. At least 4 GiB and 2 cores should be made available for Docker. If more physical resources are available, providing more may improve your experience (e.g. 8 GiB and 4 cores).
+This CodeLabs relies on the use of Docker. If you do not already have Docker installed, you will first need to do that. Docker Desktop can be installed  for ease of use. At least 4 GiB and 2 cores should be made available for Docker. If more physical resources are available, providing more may improve your experience (e.g. 8 GiB and 4 cores).
 
 ### Java
 
@@ -41,13 +41,13 @@ This CodeLabs relies on the features found in modern Java JRE version (Open JDK 
 To validate that Java is correctly installed on your system type following commands in your console:
 
 ```console
-[pl89@dev ~]$ java -version
+[solace@dev ~]$ java -version
 ```
 
 If Java is correctly installed on our machine this will be printed indicating a vendor and the version of the Java installed on your machine.
 
 ```console
-[pl89@dev ~]$ java -version
+[solace@dev ~]$ java -version
 openjdk version "16" 2021-03-16
 OpenJDK Runtime Environment (build 16+36-2231)
 OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
@@ -64,7 +64,7 @@ The tracing-codelab package contains/require the following items:
 * .env (file with environment variables used in a docker compose files)
 * solace-publisher.jar (command line Solace jms application for publishing of messages)
 * solace-queue-receiver.jar (command line Solace jms application for receiving of messages from a JMS Queue)
-* opentelemetry-javaagent-all-\<version\>.jar [OpenTelemetry Java Instrumentation API](https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent) 
+* opentelemetry-javaagent-all-\<version\>.jar OpenTelemetry Java Instrumentation API 
 * solace-opentelemetry-jms-integration-\<version\>.jar [Solace PubSub+ OpenTelemetry Integration API for JMS](https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar)
 
 You will be able to download the following package from the Solace product download site: [MISISNG LINK]() 
@@ -72,8 +72,8 @@ You will be able to download the following package from the Solace product downl
 When extracting from this archive, it is mandatory that there are no SPACES in the full path to the working directory.
 
 ```console
-[pl89@dev ~]$ tar -xf tracing-codelab.tar.gz
-[pl89@dev ~]$ cd tracing-codelab
+[solace@dev ~]$ tar -xf tracing-codelab.tar.gz
+[solace@dev ~]$ cd tracing-codelab
 ```
 
 ###  Creating and launching the containers
@@ -81,7 +81,7 @@ When extracting from this archive, it is mandatory that there are no SPACES in t
 The following command will download and launch all containers necessary for the codelab (Internet access will be required to download images from Docker hub).
 
 ```console
-[pl89@dev tracing-codelab]$ docker compose up -d
+[solace@dev tracing-codelab]$ docker compose up -d
 
 ...
 ⠿ otel-collector Pulled                                                                     32.3s
@@ -120,7 +120,7 @@ Please note that for simplicity's sake these steps will not go through configuri
 First you must access your container; do so by typing the following command.
 
 ```console
-[pl89@dev tracing-ea]$ docker exec -it tracing-ea-solbroker-1 /bin/bash
+[solace@dev tracing-codelab]$ docker exec -it tracing-codelab-solbroker-1 /bin/bash
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
@@ -134,7 +134,7 @@ Note: If you are flying through the steps too quickly, you may need to give the 
 ```console
 [appuser@solbroker sw]$ cli
 
-Solace PubSub+ Standard Version 100.0tracing_context_prop.0.45
+Solace PubSub+ Standard Version 10.2.xxx
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
@@ -275,7 +275,7 @@ As you follow the steps in this codelab don’t forget to replace the IP address
 If Docker is running on the same system (which is expected) where you are running solace-publisher, you can use the following command:
 
 ```console
-[pl89@dev tracing-codelab]$ 
+[solace@dev tracing-codelab]$ 
 java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
 ```
 
@@ -357,23 +357,23 @@ Do you want to continue (y/n)? y
 
 This command will launch the solace-publisher application and publish a message as well as push additional context information to the collector. Be sure to update this argument's IP to point to your collector: `-Dotel.exporter.otlp.endpoint=http://localhost:4317`
 
-Be sure to replace <absolute_path_to_the_jar_file> with an absolute path to the jarfile `opentelemetry-javaagent-all.jar` on your machine. There are 2 places in the command where this needs to be done.
+Be sure to replace <absolute_path_to_the_jar_file> with an absolute path to the `tracing-codelab` folder on your machine. There are 2 places in the command where this needs to be done.
 
 ```console
-[pl89@dev3-166 tracing-codelab]$ 
-java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=“service.name=SolaceJMSPublisher” -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.ja
+[solace@dev tracing-codelab]$ 
+java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=“service.name=SolaceJMSPublisher” -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.ja
 ```
 
 The following command will launch solace-queue-receiver application to consume the message that was just published as well as provide additional context information directly to the collector about this message being consumed.
 
-Be sure also here to replace <absolute_path_to_the_jar_file> with an absolute path to the jarfile `opentelemetry-javaagent-all.jar` on your machine. There are 2 places in the command where this needs to be done.
+Be sure also here to replace <absolute_path_to_the_jar_file> with an absolute path to the `tracing-codelab` folder on your machine. There are 2 places in the command where this needs to be done.
 
 ```console
-[pl89@dev3-166 tracing-codelab]$ 
-java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all.jar -Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes="service.name=SolaceJMSQueueSubscriber" -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.queue=q -Dsolace.topic=solace/tracing -jar solace-queue-receiver.jar
+[solace@dev tracing-codelab]$ 
+java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes="service.name=SolaceJMSQueueSubscriber" -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.queue=q -Dsolace.topic=solace/tracing -jar solace-queue-receiver.jar
 ```
 
-When you are done testing and wish to end the solace-queue-receiver applicaiton, simply send ctrl+c from the keyboard..
+When you are done testing and wish to end the solace-queue-receiver applicaiton, simply send ctrl+c from the keyboard.
 
 ### Verify trace generated in Jaeger
 
@@ -390,12 +390,6 @@ The second span was generated by the PubSub+ Broker when the message was receive
 
 The third span was generated by the consumer when the message was received.
 
-### Clean-up
-To avoid any problems when using sdkperf in the future, unset the environment variable set in the previous step.
-```console
-[pl89@dev3-166 tracing-codelab]$ unset SOLACE_VM_ARGS
-```
-
 
 ## Clean-up
 
@@ -403,18 +397,18 @@ To avoid any problems when using sdkperf in the future, unset the environment va
 
 To tear down Docker containers created in an earlier step, run the following command:
 ```console
-[pl89@dev ~] $ cd tracing-ea
-[pl89@dev tracing-codelab] $ docker compose down
+[solace@dev ~] $ cd tracing-codelab
+[solace@dev tracing-codelab] $ docker compose down
 ```
 
 To remove Docker images created:
 ```console
-[pl89@dev tracing-codelab] $ docker image rm <image id>
+[solace@dev tracing-codelab] $ docker image rm <image id>
 ```
 
 To view the list of Docker images, you can run the following command:
 ```console
-[pl89@dev tracing-codelab]$ docker image ls
+[solace@dev tracing-codelab]$ docker image ls
 ```
 
 Thanks for participating in this Code Labs! If you have found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button found at the bottom left.
