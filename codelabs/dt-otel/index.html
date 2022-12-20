@@ -53,7 +53,7 @@
 <p>To validate that Java is correctly installed on your system type following commands in your console:</p>
 <pre>[solace@dev ~]$ java -version
 </pre>
-<p>If Java is correctly installed on our machine this will be printed indicating a vendor and the version of the Java installed on your machine.</p>
+<p>If Java is correctly installed on your machine this will be printed indicating a vendor and the version of the Java installed on your machine.</p>
 <pre>[solace@dev ~]$ java -version
 openjdk version &#34;16&#34; 2021-03-16
 OpenJDK Runtime Environment (build 16+36-2231)
@@ -204,6 +204,7 @@ solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
 solbroker(configure/message-spool/queue)# subscription topic solace/tracing
 solbroker(configure/message-spool/queue)# no shutdown
+solbroker(configure/message-spool/queue)# end
 </pre>
 
 
@@ -242,7 +243,7 @@ java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -D
 </pre>
 <h2 is-upgraded>Jaeger UI</h2>
 <p>As part of an earlier step, the Jaeger UI was launched. It can be accessed using your favourite browser.</p>
-<p>If Docker is running on the same system your browser is running on, you can access the Jaeger UI using the following URI: <a href="http://0.0.0.0:16686/" target="_blank">http://0.0.0.0:16686/</a>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>http://192.168.3.166:16686/</code>.</p>
+<p>If Docker is running on the same system your browser is running on, you can access the Jaeger UI using the following URI: <a href="http://0.0.0.0:16686/" target="_blank">http://0.0.0.0:16686/</a> or <a href="http://localhost:16686/" target="_blank">http://localhost:16686/</a>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>http://192.168.3.166:16686/</code>.</p>
 <h2 is-upgraded>Verify published messages are traced in the Jaeger UI</h2>
 <p>After the OpenTelemetry Collector has received a message, you should be able to see the solbroker trace. Once the right service has been selected, select &#34;Find Traces&#34; button. <img alt="Jaeger1" src="img/5ab3ad7b433530f0.png"></p>
 <p>You should now see a trace for the message published using solace-publisher from the previous step. <img alt="Jaeger2" src="img/1e9819015b047b8b.png"></p>
@@ -285,7 +286,9 @@ java -Dsolace.user-properties=&#34;myKey=myValue3&#34; -Dsolace.host=localhost:5
       <google-codelab-step label="Adding context to messages published (JMS automatic instrumentation)" duration="0">
         <h2 is-upgraded>Clean-up from previous sections</h2>
 <p>If there are messages on your queue from previous sections, let&#39;s take a moment to delete them.</p>
-<pre>solbroker(admin)# message-spool message-vpn default
+<pre>solbroker&gt; enable
+solbroker# admin
+solbroker(admin)# message-spool message-vpn default
 solbroker(admin/message-spool)# delete-messages queue q
 This will delete all spooled messages in q
 Do you want to continue (y/n)? y
@@ -294,7 +297,7 @@ Do you want to continue (y/n)? y
 <p>This command will launch the solace-publisher application and publish a message as well as push additional context information to the collector. Be sure to update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></p>
 <p>Be sure to replace &lt;absolute_path_to_the_jar_file&gt; with an absolute path to the <code>tracing-codelab</code> folder on your machine. There are 2 places in the command where this needs to be done.</p>
 <pre>[solace@dev tracing-codelab]$ 
-java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSPublisher&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.ja
+java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSPublisher&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
 </pre>
 <p>The following command will launch solace-queue-receiver application to consume the message that was just published as well as provide additional context information directly to the collector about this message being consumed.</p>
 <p>Be sure also here to replace &lt;absolute_path_to_the_jar_file&gt; with an absolute path to the <code>tracing-codelab</code> folder on your machine. There are 2 places in the command where this needs to be done.</p>
