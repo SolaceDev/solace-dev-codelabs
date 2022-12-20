@@ -66,6 +66,7 @@ The tracing-codelab package contains/require the following items:
 * solace-queue-receiver.jar (command line Solace jms application for receiving of messages from a JMS Queue)
 * opentelemetry-javaagent-all-\<version\>.jar OpenTelemetry Java Instrumentation API 
 * solace-opentelemetry-jms-integration-\<version\>.jar [Solace PubSub+ OpenTelemetry Integration API for JMS](https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar)
+* jms-auto-instrumentation-sampler-sources.jar (Source code for the Solace jms application for publishing and receiving messages) 
 
 You will be able to download the following package from the Solace product download site: [MISISNG LINK]() 
 
