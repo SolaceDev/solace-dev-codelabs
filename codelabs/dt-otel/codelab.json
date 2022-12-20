@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2022-12-20T10:18:33Z",
+  "updated": "2022-12-20T15:07:02Z",
   "id": "dt-otel",
   "duration": 0,
   "title": "Getting Started with Solace Distributed Tracing and Context Propagation",
