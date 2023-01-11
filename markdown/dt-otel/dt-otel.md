@@ -73,7 +73,7 @@ You will be able to download the following package from the Solace product [down
 When extracting from this archive, it is mandatory that there are no SPACES in the full path to the working directory.
 
 ```console
-[solace@dev ~]$ tar -xf tracing-codelab.tar.gz
+[solace@dev ~]$ unzip tracing-codelab-1.0.zip
 [solace@dev ~]$ cd tracing-codelab
 ```
 
