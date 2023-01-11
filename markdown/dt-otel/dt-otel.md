@@ -68,7 +68,7 @@ The tracing-codelab package contains/require the following items:
 * solace-opentelemetry-jms-integration-\<version\>.jar [Solace PubSub+ OpenTelemetry Integration API for JMS](https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar)
 * jms-auto-instrumentation-sampler-sources.jar (Source code for the Solace jms application for publishing and receiving messages) 
 
-You will be able to download the following package from the Solace product download site: [MISISNG LINK]() 
+You will be able to download the following package from the Solace product [download site](https://products.solace.com/download/COMMUNITY_CODELABS_TRACING) 
 
 When extracting from this archive, it is mandatory that there are no SPACES in the full path to the working directory.
 
