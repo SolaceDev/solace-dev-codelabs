@@ -27,8 +27,3 @@ jobs:
           git commit -m "update submodule from github actions"
           git remote add upstream git@github.com:SolaceDev/solace-dev-codelabs-site.git
           git push upstream master
-      # - name: Push the changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{secrets.API_TOKEN}}
-      #     repository: SolaceDev/solace-dev-codelabs-site
