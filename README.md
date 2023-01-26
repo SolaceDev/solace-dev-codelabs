@@ -1,6 +1,6 @@
 ![Update Codelabs Site Repo](https://github.com/SolaceDev/solace-dev-codelabs/workflows/Update%20Codelabs%20Site%20Repo/badge.svg)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e66602c6-9a94-4095-a7c4-4e37ff2cdd41/deploy-status)](https://app.netlify.com/sites/focused-beaver-3cc79d/deploys)
-![Broken Links Checker](https://github.com/SolaceDev/solace-dev-codelabs/workflows/Broken%20Links%20Checker/badge.svg)
+[![Weekly link checker](https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml/badge.svg)](https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml)
 
 
 # Solace Codelabs

@@ -1,8 +1,5 @@
 name: Weekly link checker
 on:
-  push:
-    branches:
-    - master
   schedule:
     # Run at midnight every sunday
     - cron: "0 0 * * 0"
@@ -15,7 +12,7 @@ jobs:
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: "yes"
-          config-file: ".github/workflows/brokenlinks-config.json"
+          config-file: ".github/brokenlinks-config.json"
 
       - name: Create Issue
         if: failure()
