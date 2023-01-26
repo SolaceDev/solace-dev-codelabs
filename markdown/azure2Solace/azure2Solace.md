@@ -17,6 +17,7 @@ Solace is an industry leader and its PubSub+ event brokers makes such an Event M
 
 This codelab specifically talks about how you can easily stream data from Azure messaging service "ServiceBus" to Solace using Azure function.
 
+You will find the Azure function code [here](https://github.com/solacesyoloe/azure2Solace).
 You will find the Azure function code [here](https://github.com/solacese/azure2Solace).
 
 To learn how to stream data from Solace PubSub+ broker to Azure messaging services, click [here](https://docs.solace.com/Configuring-and-Managing/OAuth-Authentication-Azure-Event-Hub.htm).
