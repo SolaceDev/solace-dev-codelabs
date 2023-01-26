@@ -1,10 +1,7 @@
-name: Broken Links Checker
+name: Check links for modified files in PR
 on:
-  push:
-    branches: [master]
-  schedule:
-    # Run at midnight every sunday
-    - cron: "0 0 * * 0"
+  pull_request: 
+    branches: [ master ]
 
 jobs:
   Broken_Link_Checker:
@@ -16,3 +13,4 @@ jobs:
           folder-path: "markdown"
           use-quiet-mode: "yes"
           config-file: ".github/workflows/brokenlinks-config.json"
+          check-modified-files-only: "yes"
