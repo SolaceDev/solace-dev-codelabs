@@ -1,8 +1,5 @@
 name: Weekly link checker
 on:
-  push:
-      branches:
-      - master
   schedule:
     # Run at midnight every sunday
     - cron: "0 0 * * 0"
