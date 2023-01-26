@@ -1188,7 +1188,7 @@ Duration: 0:08:00
 ### Develop the InvoiceSystem Node.js App
 
 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕 🚖 🚕
-On to developing the _InvoiceSystem_ application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/Node.js-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
+On to developing the _InvoiceSystem_ application. We will be using the Node.js service that uses Hermes package to communicate with our event broker over MQTT. To do this we will leverage the [Node.js AsyncAPI Generator Template](https://github.com/asyncapi/nodejs-template) to bootstrap our app creation. Note that [MQTT](https://mqtt.org/) is an open standard messaging protocol very popular in Internet of Things (IoT) world and is designed to be extremely lightweight and
 
 #### Download AsyncAPI Document
 
