@@ -1,26 +1,27 @@
-name: codelabs.solace.dev link checker
+name: Weekly link checker
 on:
   push:
-    branches: [master]
+    branches:
+    - master
   schedule:
     # Run at midnight every sunday
     - cron: "0 0 * * 0"
 
 jobs:
-  linkChecker:
+  weekly_broken_Link_Checker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Link Checker
-        uses: lycheeverse/lychee-action@v1.0.7
-        id: lychee
+      - uses: actions/checkout@master
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
-          args: https://codelabs.solace.dev/
-      - name: Create Issue From File
-        uses: peter-evans/create-issue-from-file@v2
+          use-quiet-mode: "yes"
+          config-file: ".github/workflows/brokenlinks-config.json"
+
+      - name: Create Issue
+        if: failure()
+        uses: JasonEtco/create-an-issue@v2.9.1
+        env: 
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          title: Link Checker Report
-          content-filepath: ./lychee/out.md
-          labels: report, automated issue
-      - name: Fail if there were link errors
-        run: exit ${{ steps.lychee.outputs.exit_code }}
+          filename: .github/action-issue-template.md
+          assignees: tamimigithub
