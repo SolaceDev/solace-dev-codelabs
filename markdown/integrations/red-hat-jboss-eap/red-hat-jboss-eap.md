@@ -40,7 +40,7 @@ These links contain information related to this guide:
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
-* [JBoss Enterprise Application Platform Documentation](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/)
+* [JBoss Enterprise Application Platform Documentation](https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform)
 * [JBoss Enterprise Application Platform 7.0 Security Guide](https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html/how_to_configure_server_security/index)
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112 )
 
