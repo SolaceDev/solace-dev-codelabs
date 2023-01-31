@@ -4,6 +4,9 @@
       "pattern": "/solace-dev-samples/"
     },
     {
+      "pattern": "/solace-dev-codelabs/"
+    },
+    {
       "pattern": "/solacevmr:8080/"
     }
   ],
