@@ -17,15 +17,15 @@ Duration: 0:05:00
 1. 2+ Solace PubSub+ Brokers deployed in environments where they are visable to eachother over a network. 
 2. Access to the Solace Broker WebUI for all Brokers via administrator credentials. 
 
-<br>**⚠️ A note on security: The brokers must be secured with a TLS certificate. If you are using a Solace PubSub+ Docker image please check out [my blog on quickly securing the broker with a self-signed TLS certificate.](SomeblogIhaveNotWrittenYet)**
+<br>**⚠️ A note on security: The brokers must be secured with a TLS certificate.
 
 If you do not meet both of these requirements please use the following resources to setup and configure Solace PubSub+ Brokers.
 * [Solace Broker CodeLab](https://codelabs.solace.dev/codelabs/get-started-basics/index.html)
 * [Solace Cloud Trial](https://console.solace.cloud/login/new-account)
-* [Solace PubSub+ Standard Docker](https://hub.docker.com/r/solace/solace-pubsub-standard)
+* [Solace PubSub+ Getting Started](https://solace.com/products/event-broker/software/getting-started/)
 <br>
 
-In this post will lay the groundwork for a Solace Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propogatted across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
+This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propogatted across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
 
 ### Learning Objectives:
 ⬜ Setup a DMR link between two Solace Brokers <br>
@@ -113,7 +113,7 @@ Select Cluster from the left Solace menu then select Create New Cluster
 **❗️❗️♻️ At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>⚠️Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh**
 
 ### Conclusion
-In the prevous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR Link between the brokers to form the Event Mesh.  Events will no be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link. 
+In the prevous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR link between the brokers to form the Event Mesh.  Events will now be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link. 
 
 
 
@@ -134,40 +134,39 @@ The Solace Try Me Tab is small CodePen application which was created to provide 
 <br>
 
 **In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
-<br>🆘!!!Maybe here I should include some topic architecture for 2 brokers that will allow you to see the DMR Event Mesh in action?
 
 ## Setting up and running "Try Me"
-Duration 00:10:00
+Duration 0:10:00
 
 **Option A: For your local (on-premise) broker**
 
 1. Navigate to your on-premise broker WebUI and Login
     
-    ![Untitled](img/Untitled.png)
+    ![onpremise broker webUI](img/Untitled.png)
     
 2. Select the Message VPN you wish to use
     
-    ![Untitled](img/Untitled_1.png)
+    ![onpremise message vpn](img/Untitled_1.png)
     
 3. Select“Try Me” tab on the left side bar menu inside of the WebUI
     
-    ![Untitled](img/Untitled_2.png)
+    ![onpremise try me](img/Untitled_2.png)
     
 4. Populate with your on-premise broker details into the Publisher side, unless you are running the broker on your local machine you will likely have to change the “Broker URL”, “Client Username” and “Client Password”. You may also have to change the “Message VPN” depending on your setup. 
     
-    ![Untitled](img/Untitled_3.png)
+    ![onpremise publisher populate](img/Untitled_3.png)
     
 5. Select the “Connect” button on the Publisher side of “Try Me”.
     
-    ![Untitled](img/Untitled_4.png)
+    ![onpremise publisher connect](img/Untitled_4.png)
     
 6. Select the “Connect” button on the Subscriber side of “Try Me” as well.  The connection details will carry over from the Publisher side unless you expand the drop down menu, uncheck the “Same as Publisher” option and modify them.
     
-    ![Untitled](img/Untitled_5.png)
+    ![onpremise subscriber connect](img/Untitled_5.png)
     
 7.  Now we can customize our Publish topic, Delivery Mode and Message Content and Publish messages directly to our local (on-premise) broker. 
     
-    ![Untitled](img/Untitled_6.png)
+    ![onpremise topics](img/Untitled_6.png)
     
 8. We can also subscribe to any topics that we would like on the right side by changing the subscribe field and pressing “Subscribe”. The topic can be one that is published to our local broker or published to any other broker in the DMR(Event Mesh) that your user has access to.
 Do not forget about our Solace wild cards here 
@@ -184,37 +183,38 @@ Do not forget about our Solace wild cards here
 
 1. Log into Solace Cloud
     
-    ![Untitled](img/Untitled_8.png)
+    ![cloud login](img/Untitled_8.png)
     
 2. Select the Service you would like to test. Remember that the service must already be DMR linked to the other services you want to experiment with.
     
-    ![Untitled](img/Untitled_9.png)
+    ![cloud service select](img/Untitled_9.png)
     
 3. Navigate to the “Try Me!” Tab along the top of the services web page
     
-    ![Untitled](img/Untitled_10.png)
+    ![cloud try me](img/Untitled_10.png)
     
 4. On Solace Cloud the Service connection details should already be correctly populated and you can simply click “Connect” on the Publisher side.  However if that does not work you can select “show advanced settings” to manually configure “Broker URL” “Client Username” “Client Password” and “Message VPN”
     
-    ![Untitled](img/Untitled_11.png)
+    ![cloud publisher connect](img/Untitled_11.png)
     
 5. On the Subscriber side you can also simply select “Connect”. However if that does not work you can select “show advanced settings” to manually configure “Broker URL” “Client Username” “Client Password” and “Message VPN”
     
-    ![Untitled](img/Untitled_12.png)
+    ![cloud subscriber connect](img/Untitled_12.png)
     
 6. Now we will specify a unique publish topic on the Publisher side of the “Try Me!” tab and begin publishing events to our cloud broker
     
-    ![Untitled](img/Untitled_13.png)
+    ![cloud tryme topics](img/Untitled_13.png)
     
 7. We can also subscribe to any topics that we would like on the right side by changing the subscribe field and pressing “Subscribe”. The topic can be one that is published to our local broker or published to any other broker in the DMR(Event Mesh) that your user has access to.
 Do not forget about our Solace wild cards here 
+![Solace Wild Cards](https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm)
 <br>
     `* is a single level wild card: sample/topic/with/a/*/wildcard`
 <br>
     `> is a multi level wild card: sample/topic/>`
 
     
-    ![Untitled](img/Untitled_14.png)
+![cloud add subscriptions](img/Untitled_14.png)
     
 💡 Note: in this screen grab you can see that we are subscribed to a topic that is being published to a topic on a different Solace Broker which is in a DMR link (Event Mesh) with this broker. Thus requiring that DMR route the event from that other broker to this cloud broker when events are published. 
 
@@ -259,7 +259,7 @@ List of common SDKPerf flags
 ./sdkperf_java.sh -cip=localhost:55554 -cu=admin@default -cp=admin -ptl=sample/broker/a -mn=100 -mr=1
 ```
 
-![Untitled](img/Untitled_15.png)
+![sdkperf publisher](img/Untitled_15.png)
 
 ### Create SDKPerf Publisher to Broker B on topic sample/broker/b
 
@@ -267,7 +267,7 @@ List of common SDKPerf flags
 ./sdkperf_java.sh -cip=mr-6d275srp5ae.messaging.solace.cloud:55555 -cu=solace-cloud-client@jamiesontest -cp=vkkveu1ublk5ekl4mffh7uvmf -ptl=sample/broker/b -mn=100 -mr=1
 ```
 
-![Untitled](img/Untitled_16.png)
+![sdkperf publisher 2](img/Untitled_16.png)
 
 ### Create SDKPerf Subscriber to Broker A on topic sample/broker/b
 
@@ -275,7 +275,7 @@ List of common SDKPerf flags
 ./sdkperf_java.sh -cip=localhost:55554 -cu=admin@default -cp=admin -stl=sample/broker/b
 ```
 
-![Untitled](img/Untitled_17.png)
+![sdkperf subscriber](img/Untitled_17.png)
 
 ### Create SDKPerf Subscriber to Broker B on topic sample/broker/a
 
@@ -283,7 +283,7 @@ List of common SDKPerf flags
 ./sdkperf_java.sh -cip=mr-6d275srp5ae.messaging.solace.cloud:55555 -cu=solace-cloud-client@jamiesontest -cp=vkkveu1ublk5ekl4mffh7uvmf -stl=sample/broker/a
 ```
 
-![Untitled](img/Untitled_18.png)
+![sdkperf subscriber 2](img/Untitled_18.png)
 
 ## Conclusion
 Duration: 0:02:00
