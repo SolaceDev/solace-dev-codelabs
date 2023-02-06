@@ -1,10 +1,10 @@
 author: Jesse Menning
 summary:
 id: ep2-workshop-versioning-airline
-tags:event-portal
-categories:
+tags: workshop
+categories: Solace, Event Portal
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep2-workshop-versioning-airline
 
 # Solace PubSub+ Event Portal Training for Airlines
