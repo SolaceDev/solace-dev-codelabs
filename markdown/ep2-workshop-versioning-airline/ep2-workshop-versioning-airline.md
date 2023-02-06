@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep2-workshop-versioning-airline
 
-# Solace PubSub+ Event Portal Training for Emirates
+# Solace PubSub+ Event Portal Training for Airlines
 
 ## What you'll learn: Overview
 
