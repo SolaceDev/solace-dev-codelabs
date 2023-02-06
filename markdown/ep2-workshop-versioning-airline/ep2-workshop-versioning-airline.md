@@ -1,6 +1,6 @@
 author: Jesse Menning
 summary:
-id: ep2-workshop-versioning-airline
+id: ep-workshop-airline
 tags: workshop
 categories: Solace, Event Portal
 environments: Web

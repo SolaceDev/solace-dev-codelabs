@@ -3,8 +3,8 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2023-02-06T16:18:20-05:00",
-  "id": "ep2-workshop-versioning-airline",
+  "updated": "2023-02-06T16:27:42-05:00",
+  "id": "ep-workshop-airline",
   "duration": 15,
   "title": "Solace PubSub+ Event Portal Training for Airlines",
   "summary": "",
@@ -22,5 +22,5 @@
     "workshop"
   ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep2-workshop-versioning-airline",
-  "url": "ep2-workshop-versioning-airline"
+  "url": "ep-workshop-airline"
 }
