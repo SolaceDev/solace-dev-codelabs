@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-02-06T15:17:23-05:00",
+  "id": "ep2-workshop-versioning-airline",
+  "duration": 15,
+  "title": "Solace PubSub+ Event Portal Training for Emirates",
+  "summary": "",
+  "source": "ep2-workshop-versioning-airline.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "event-portal",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep2-workshop-versioning-airline",
+  "url": "ep2-workshop-versioning-airline"
+}
