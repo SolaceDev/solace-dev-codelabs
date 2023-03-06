@@ -154,7 +154,19 @@ solbroker>
 
 ### Configuring the Message VPN
 
-Minimal configuration is necessary on the Message VPN. The following commands will suffice.
+The following minimal configuration is **necessary** on the Message VPN. 
+
+<aside class="negative">
+⚠️ If these steps aren't followed, your OpenTelemetry Collector logs will show 
+
+```console
+"error": "no supported auth mechanism ([ANONYMOUS])"}.
+```
+This _very clear_ 🙄 message is the Collector warning you that you're trying to connect to an unsecured resource (i.e. the broker).
+</aside>
+
+The following commands will suffice.
+
 ```console
 solbroker> enable
 solbroker# configure
