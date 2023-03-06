@@ -146,7 +146,13 @@ Operating Mode: Message Routing Node
 solbroker&gt;
 </pre>
 <h2 is-upgraded>Configuring the Message VPN</h2>
-<p>Minimal configuration is necessary on the Message VPN. The following commands will suffice.</p>
+<p>The following minimal configuration is <strong>necessary</strong> on the Message VPN.</p>
+<aside class="warning"><p> ⚠️ If these steps aren&#39;t followed, your OpenTelemetry Collector logs will show  </p>
+<pre>&#34;error&#34;: &#34;no supported auth mechanism ([ANONYMOUS])&#34;}.
+</pre>
+<p>This message is the Collector warning you that you&#39;re trying to connect to an unsecured resource (i.e. the broker).</p>
+</aside>
+<p>The following commands will suffice.</p>
 <pre>solbroker&gt; enable
 solbroker# configure
 solbroker(configure)# message-vpn default
