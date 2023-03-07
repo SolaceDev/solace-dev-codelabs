@@ -17,7 +17,7 @@ Duration: 0:05:00
 1. 2+ Solace PubSub+ Brokers deployed in environments where they are visable to eachother over a network. 
 2. Access to the Solace Broker WebUI for all Brokers via administrator credentials. 
 
-<br>**⚠️ A note on security: The brokers must be secured with a TLS certificate.
+<br>** A note on security: The brokers must be secured with a TLS certificate.
 
 If you do not meet both of these requirements please use the following resources to setup and configure Solace PubSub+ Brokers.
 * [Solace Broker CodeLab](https://codelabs.solace.dev/codelabs/get-started-basics/index.html)
@@ -25,12 +25,12 @@ If you do not meet both of these requirements please use the following resources
 * [Solace PubSub+ Getting Started](https://solace.com/products/event-broker/software/getting-started/)
 <br>
 
-This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propogatted across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
+This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propogated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
 
 ### Learning Objectives:
-⬜ Setup a DMR link between two Solace Brokers <br>
-⬜ Publish and Subscribe to DMR enabled topics with Try Me <br>
-⬜ Publish and Subscribe to DMR enabled topics with SDKPerf 
+ Setup a DMR link between two Solace Brokers <br>
+ Publish and Subscribe to DMR enabled topics with Try Me <br>
+ Publish and Subscribe to DMR enabled topics with SDKPerf 
 <br><br>
 
 ### Resulting Architecture:
@@ -107,16 +107,13 @@ Select Cluster from the left Solace menu then select Create New Cluster
 
 12. Successful DMR Link:
     After communication tests we will have a successful DMR Link.  
-    <br>⚠️ If you encounter an error please review a DMR troubleshooting steps to determine how to correct the error and build a successful DMR Link between brokers
+    <br> If you encounter an error please review a DMR troubleshooting steps to determine how to correct the error and build a successful DMR Link between brokers
     ![Successful DMR Link](img/successfulLink.png)
 
-**❗️❗️♻️ At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>⚠️Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh**
+**❗️❗️ At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh**
 
 ### Conclusion
-In the prevous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR link between the brokers to form the Event Mesh.  Events will now be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link. 
-
-
-
+In the previous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR link between the brokers to form the Event Mesh.  Events will now be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link. 
 
 ## Exploration DMR with “Try Me” tab
 Duration: 0:02:00
@@ -134,6 +131,7 @@ The Solace Try Me Tab is small CodePen application which was created to provide 
 <br>
 
 **In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
+
 
 ## Setting up and running "Try Me"
 Duration 0:10:00
@@ -177,7 +175,6 @@ Do not forget about our Solace wild cards here
    
     
     ![Untitled](img/Untitled_7.png)
-    
 
 **Option B: For your Solace Cloud Brokers**
 
@@ -206,8 +203,8 @@ Do not forget about our Solace wild cards here
     ![cloud tryme topics](img/Untitled_13.png)
     
 7. We can also subscribe to any topics that we would like on the right side by changing the subscribe field and pressing “Subscribe”. The topic can be one that is published to our local broker or published to any other broker in the DMR(Event Mesh) that your user has access to.
-Do not forget about our Solace wild cards here 
-![Solace Wild Cards](https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm)
+Do not forget about our Solace wild cards here: [Solace Wild Cards](https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm)
+
 <br>
     `* is a single level wild card: sample/topic/with/a/*/wildcard`
 <br>
@@ -215,6 +212,7 @@ Do not forget about our Solace wild cards here
 
     
 ![cloud add subscriptions](img/Untitled_14.png)
+
     
 💡 Note: in this screen grab you can see that we are subscribed to a topic that is being published to a topic on a different Solace Broker which is in a DMR link (Event Mesh) with this broker. Thus requiring that DMR route the event from that other broker to this cloud broker when events are published. 
 
