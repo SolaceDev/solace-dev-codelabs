@@ -226,6 +226,7 @@ Do not forget about our [Solace wild](https://docs.solace.com/Messaging/Wildcard
 
     
 ![cloud add subscriptions](img/Untitled_14.png)
+
     
 <aside class=“positive”>💡 In this screen grab you can see that we are subscribed to a topic that is being published to a topic on a different Solace Broker which is in a DMR link (Event Mesh) with this broker. Thus requiring that DMR route the event from that other broker to this cloud broker when events are published.</aside> 
 
