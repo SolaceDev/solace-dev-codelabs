@@ -93,7 +93,7 @@ There’s no better tool for beating analysis paralysis than the Solace PubSub+ 
 
 **🏃Steps to get started:**
 
-If you do not already have access to a Solace PubSub+ Event Broker and have never set up a Solace PubSub+ Event Broker: Cloud messaging service before, follow the setup instructions here: [Creating Your First Messaging Service — 1.0 documentation](https://solace.com/cloud-learning/group_getting_started/ggs_signup.html).
+If you do not already have access to a Solace PubSub+ Event Broker and have never set up a Solace PubSub+ Event Broker: Cloud messaging service before, follow the setup instructions here: [Creating Your First Messaging Service — 1.0 documentation](https://www.solace.dev/).
 
 ## Build a Basic Node.js MQTT Producer
 
