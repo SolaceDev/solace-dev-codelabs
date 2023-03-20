@@ -48,7 +48,7 @@
 <h2 is-upgraded>Related Documentation</h2>
 <p>These links contain information related to this guide:</p>
 <ul>
-<li><a href="http://dev.solace.com" target="_blank">Solace Developer Portal</a></li>
+<li><a href="http://solace.dev" target="_blank">Solace Developer Portal</a></li>
 <li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
 <li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
@@ -868,7 +868,7 @@ cd solace-integration-guides/src/jboss-eap/EJBSample/ejbModule/
 </ol>
 <p>You have now deployed the sample application and it is ready to receive messages from the <code>solace_requests</code> queue on the event broker.</p>
 <h2 is-upgraded>Testing the sample application</h2>
-<p>To send a test message you can use the <strong>queueProducerJNDI</strong> sample application from the <a href="https://dev.solace.com/samples/solace-samples-jms/using-jndi/" target="_blank">Obtaining JMS objects using JNDI</a> tutorial. Ensure to adjust in the source code the &#34;CONNECTION_FACTORY_JNDI_NAME&#34; and &#34;QUEUE_JNDI_NAME&#34; to <code>JNDI/Sol/CF</code> and <code>JNDI/Sol/Q/requests</code> respectively, as used in this tutorial.</p>
+<p>To send a test message you can use the <strong>queueProducerJNDI </strong><a href="https://github.com/SolaceSamples/solace-samples-jms/blob/master/src/main/java/com/solace/samples/QueueProducerJNDI.java" target="_blank">sample application</a> from the <a href="https://tutorials.solace.dev/jms/using-jndi/" target="_blank">Obtaining JMS objects using JNDI</a> tutorial. Ensure to adjust in the source code the &#34;CONNECTION_FACTORY_JNDI_NAME&#34; and &#34;QUEUE_JNDI_NAME&#34; to <code>JNDI/Sol/CF</code> and <code>JNDI/Sol/Q/requests</code> respectively, as used in this tutorial.</p>
 <p>Once a message has been sent to the <code>solace_requests</code> queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the <code>solace_replies</code> queue.</p>
 <p>You can check the messages in the <code>solace_replies</code> queue using the using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a> , Solace&#39;s browser-based administration console.</p>
 <p>You can also check how the message has been processed in JBoss logs as described in section Debugging Tips.</p>

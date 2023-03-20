@@ -33,7 +33,7 @@ This document is divided into the following sections to cover the Solace JMS int
 
 These links contain information related to this guide:
 
-* [Solace Developer Portal](http://dev.solace.com)
+* [Solace Developer Portal](http://solace.dev)
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
@@ -117,7 +117,7 @@ The general Apama Streaming Analytics support for connectors is documented in th
 
 This integration guide demonstrates how to configure a Apama Streaming Analytics application to receive JMS messages using a set of custom message-to-event configurations. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://dev.solace.com)
+* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://solace.dev)
 * Step 2 - Configuration of the Solace Event Broker.
 * Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](http://www.apamacommunity.com/downloads/)
 * Step 4 – Coding Solace message producer

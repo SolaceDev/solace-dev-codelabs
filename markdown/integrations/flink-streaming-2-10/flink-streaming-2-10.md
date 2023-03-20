@@ -27,7 +27,7 @@ This document is divided into the following sections to cover the Solace JMS int
 
 These links contain information related to this guide:
 
-* [Solace Developer Portal](http://dev.solace.com) 
+* [Solace Developer Portal](http://solace.dev) 
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
@@ -112,7 +112,7 @@ The general Flink Streaming support for connectors is documented in the [Flink S
 
 This integration guide demonstrates how to configure a Flink Streaming application to receive JMS messages using a custom receiver. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://dev.solace.com) 
+* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://solace.dev) 
 * Step 2 - Configuration of the Solace Event Broker.
 * Step 3 - Coding a Flink JMS SourceFunction.
 * Step 4 - Deploying Flink JMS SourceFunction.
@@ -166,7 +166,7 @@ The following Solace Event Broker resources are required.
 
 The Solace event broker can be obtained one of 2 ways.     
 1.	If you are in an organization that is an existing Solace customer, it is likely your organization already has Solace Event Brokers and corporate policies about their use.  You will have to contact your middleware operational team in regards to access to a Solace Event Broker.
-2.	If you are new to Solace or your company does not have development event brokers, you can obtain a trail Solace Virtual Event Broker (VMR) from the [Solace Developer Portal Downloads](https://solace.com/downloads/) . For help getting started with your Solace VMR you can refer to [Solace VMR Getting Started Guides](http://dev.solace.com/get-started/start-up-solace-messaging/) .
+2.	If you are new to Solace or your company does not have development event brokers, you can obtain a trail Solace Virtual Event Broker (VMR) from the [Solace Developer Portal Downloads](https://solace.com/downloads/) . For help getting started with your Solace VMR you can refer to [Solace VMR Getting Started Guides](http://solace.dev) .
 
 The Solace JMS jars are required.  They can be obtained on [Solace Developer Portal Downloads](https://solace.com/downloads/)  or from [Maven Central](https://mvnrepository.com/artifact/com.solacesystems/sol-jms).
 

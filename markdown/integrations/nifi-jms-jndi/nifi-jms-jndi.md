@@ -29,7 +29,7 @@ This document is divided into the following sections to cover the Solace JMS int
 
 These links contain information related to this guide:
 
-* [Solace Developer Portal](http://dev.solace.com) 
+* [Solace Developer Portal](http://solace.dev) 
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
@@ -52,7 +52,7 @@ The general NiFi Controller Services is documented in the [NiFi Developer Guide]
 
 This integration guide demonstrates how to build a JNDI connection provider and configure NiFi JMS processors to send and receive JMS messages using the new provider. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://dev.solace.com) 
+* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://solace.dev) 
 * Step 2 - Configuration of the Solace Event Broker.
 * Step 3 - Developing a Solace JMS application to do message PubSub via JNDI
 * Step 4 - Obtain Apache NiFi

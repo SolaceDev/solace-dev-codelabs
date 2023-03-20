@@ -29,7 +29,7 @@ This document is primarily intended for Solace administrators and operations tea
 
 These documents contain information related to the feature defined in this document:
 
-* [Solace Developer Portal](http://dev.solace.com) 
+* [Solace Developer Portal](http://solace.dev) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 
@@ -790,7 +790,7 @@ Default install paths and files
 
 ### Nagios
 
-This section lists minimal files required for Solace Nagios setup. Please contact [Solace Professional Services](http://dev.solace.com/contact-us/)  to get a tarball package with the files and required plugin files. 
+This section lists minimal files required for Solace Nagios setup. Please contact [Solace Professional Services](https://solace.com/contact-us/)  to get a tarball package with the files and required plugin files. 
 
 * [setup_nagiossolace.txt](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/setup_nagiossolace.txt)
 * [mk_nagiossolace.cfg](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/mk_nagiossolace.cfg)

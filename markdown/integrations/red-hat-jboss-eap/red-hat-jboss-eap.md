@@ -35,7 +35,7 @@ This document is divided into the following sections to cover the Solace JMS int
 
 These links contain information related to this guide:
 
-* [Solace Developer Portal](http://dev.solace.com) 
+* [Solace Developer Portal](http://solace.dev) 
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm) 
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
@@ -1045,7 +1045,7 @@ You have now deployed the sample application and it is ready to receive messages
 
 ### Testing the sample application
 
-To send a test message you can use the **queueProducerJNDI** sample application from the [Obtaining JMS objects using JNDI](https://dev.solace.com/samples/solace-samples-jms/using-jndi/ ) tutorial. Ensure to adjust in the source code the "CONNECTION_FACTORY_JNDI_NAME" and "QUEUE_JNDI_NAME" to `JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively, as used in this tutorial.
+To send a test message you can use the **queueProducerJNDI** [sample application](https://github.com/SolaceSamples/solace-samples-jms/blob/master/src/main/java/com/solace/samples/QueueProducerJNDI.java) from the [Obtaining JMS objects using JNDI](https://tutorials.solace.dev/jms/using-jndi/) tutorial. Ensure to adjust in the source code the "CONNECTION_FACTORY_JNDI_NAME" and "QUEUE_JNDI_NAME" to `JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively, as used in this tutorial.
 
 Once a message has been sent to the `solace_requests` queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the `solace_replies` queue.
 

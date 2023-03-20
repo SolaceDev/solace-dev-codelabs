@@ -30,7 +30,7 @@ This document is divided into the following sections to cover the Solace JMS int
 
 These links contain information related to this guide:
 
-* [Solace Developer Portal](http://dev.solace.com)
+* [Solace Developer Portal](http://solace.dev)
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)

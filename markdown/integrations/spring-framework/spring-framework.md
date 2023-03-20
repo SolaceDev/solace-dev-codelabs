@@ -20,7 +20,7 @@ The target audience of this document is developers using the Spring Framework wi
 
 ### Related Documentation
 
-* [Solace Developer Portal](http://dev.solace.com)
+* [Solace Developer Portal](http://solace.dev)
 * [Solace Messaging API for JMS](http://docs.solace.com/Solace-JMS-API/JMS-home.htm)
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
