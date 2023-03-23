@@ -10,6 +10,21 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 # DMR (Event Mesh) Exploration Procedures
 
+## Background
+Duration: 0:01:00
+
+This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
+
+### Learning Objectives:
+ ⬜️ Setup a DMR link between two Solace Brokers  
+ ⬜️ Publish and Subscribe to DMR enabled topics with Try Me  
+ ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf 
+<br><br>
+
+### Resulting Architecture:
+![DMR Exploration Topics](img/DMR_Exploration.png)
+
+
 ## Objectives
 Duration: 0:05:00
 
@@ -25,16 +40,6 @@ If you do not meet both of these requirements please use the following resources
 * [Solace PubSub+ Getting Started](https://solace.com/products/event-broker/software/getting-started/)
 <br>
 
-This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
-
-### Learning Objectives:
- ⬜️ Setup a DMR link between two Solace Brokers  
- ⬜️ Publish and Subscribe to DMR enabled topics with Try Me  
- ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf 
-<br><br>
-
-### Resulting Architecture:
-![DMR Exploration Topics](img/DMR_Exploration.png)
 
 ## Setting up DMR with the Solace Broker WebUI
 Duration: 0:18:00
