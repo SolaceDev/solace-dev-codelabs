@@ -109,7 +109,7 @@ In this section you're going to build the Node.js MQTT producer application:
 
 - [GitHub repo - producer](https:/github.com/solacese/solace-js-mqtt-postgres-blog/tree/master/mqtt-producer)
 
-JavaScript is becoming a lingua franca for newly minted programmers coming out of university programs, and the ecosystem is full of innovative libraries that solve many categories of problems. The language is becoming increasingly expressive thanks to [ECMAScript](https://www.ecma-international.org/publications/standards/Ecma-262.htm) and today's ESNext (the latest version of the ECMAScript specification), and build tools are becoming easier and easier to use thanks to [Babel](https://babeljs.io/) and low touch bundlers like [Parcel](https://parceljs.org/).
+JavaScript is becoming a lingua franca for newly minted programmers coming out of university programs, and the ecosystem is full of innovative libraries that solve many categories of problems. The language is becoming increasingly expressive thanks to [ECMAScript](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/) and today's ESNext (the latest version of the ECMAScript specification), and build tools are becoming easier and easier to use thanks to [Babel](https://babeljs.io/) and low touch bundlers like [Parcel](https://parceljs.org/).
 
 JavaScript paired with MQTT provides a versatile foundation for systems programming, event-driven microservices, event-driven frontends, and more.
 
