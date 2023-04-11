@@ -129,6 +129,8 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 ```
+Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead `https://github.com/SolaceDev/pubsubplus-kubernetes-operator.git`
+
 
 ![Operator Setup Verification](img/Operator_Img3.png)
 
@@ -223,7 +225,7 @@ Duration: 0:01:00
 
 
 This codelab shows how the operator makes an event broker deployment easy by simply applying the yaml file. We have deployed a dev instance of the Pubsub+ Event Broker using the Operator in a Kubernetes cluster, where, Kind is used to run Kubernetes locally on a mac machine. \
-Checkout [Kubernetes Operator - Quickstart](https://github.com/SolaceDev/pubsubplus-kubernetes-operator) for more deployment options.
+Checkout [Kubernetes Operator - Quickstart](https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart) for more deployment options.
 <!--✅ < Fill IN TAKEAWAY 1>   
 ✅ < Fill IN TAKEAWAY 2>   
 ✅ < Fill IN TAKEAWAY 3>   -->

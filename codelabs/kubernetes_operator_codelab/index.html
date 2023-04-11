@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Title of codelab goes here</title>
+  <title>How to deploy Solace Pubsub&#43; Event Broker with Pubsub&#43; Event Broker Operator in Kubernetes</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -23,62 +23,156 @@
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
   <google-codelab codelab-gaid=""
                   id="kubernetes_operator_codelab"
-                  title="Title of codelab goes here"
+                  title="How to deploy Solace Pubsub&#43; Event Broker with Pubsub&#43; Event Broker Operator in Kubernetes"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kubernetes_operator_codelab">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Hello and Welcome! If you are wondering how to use our Operator , then you are in the right place! This codelab will show how to: Setup a kubernetes environment using Kind on a mac computer Setup the Solace Pubsub+ Event Broker Broker Deploy a dev instance of Solace Pubsub+ Event Broker using the Operator Test the Pubsub+ Event Broker deployment via Pubsub+ Manager</p>
-<h2 is-upgraded>Info Boxes</h2>
-<p>Plain Text followed by green &amp; yellow info boxes</p>
-<p>Negative : This will appear in a yellow info box.</p>
-<p>Positive : This will appear in a green info box.</p>
-<h2 is-upgraded>Bullets</h2>
-<p>Plain Text followed by bullets</p>
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p>Hello and Welcome! If you are wondering how to use our Operator , then you are in the right place!</p>
+<p>This codelab will show how to:</p>
 <ul>
-<li>Hello</li>
-<li>CodeLab</li>
-<li>World</li>
+<li>Setup a kubernetes environment with Kind</li>
+<li>Install the Solace Pubsub+ Event Broker Operator in kubernetes</li>
+<li>Deploy a dev instance of Solace Pubsub+ Event Broker using the Operator</li>
+<li>Test the Pubsub+ Event Broker deployement and login to Pubsub+ Manager</li>
 </ul>
-<h2 is-upgraded>Numbered List</h2>
-<ol type="1">
-<li>List</li>
-<li>Using</li>
-<li>Numbers</li>
-</ol>
-<h2 is-upgraded>Add an Image or a GIF</h2>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p class="image-container"><img alt="Pubsub+ Operator" src="img/57bbe6adb4746450.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
-        <p>Enter environment setup &amp; prerequisites here</p>
-<h2 is-upgraded>Add a Link</h2>
-<p>Add a link! <a href="https://www.google.com" target="_blank">Example of a Link</a></p>
-<h2 is-upgraded>Embed an iframe</h2>
-<iframe class="embedded-iframe" src="https://codepen.io/tzoght/embed/yRNZaP"></iframe>
+      <google-codelab-step label="Prerequisites" duration="5">
+        <p>Before we setup the kubernetes environment in Kind, we need to make sure the below installations are complete and successful.</p>
+<ul>
+<li>Install <a href="https://docs.docker.com/desktop/install/mac-install/" target="_blank">Docker Desktop</a> on macOS. For other OS options you can visit <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a>.</li>
+<li>Install Kubernetes command-line tool <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/" target="_blank">kubectl</a> on macOS. For other OS options you can visit:<br><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/" target="_blank">kubectl for Linux</a><br><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/" target="_blank">kubectl for Windows</a></li>
+</ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 1" duration="0">
-        
+      <google-codelab-step label="Environment Setup" duration="3">
+        <p>Below steps will help you create a kubernetes cluster in Kind and setup the environment for installing the Pubsub+ Event Broker Operator.</p>
+<h2 is-upgraded>1. Install Kind On macOS</h2>
+<h3 is-upgraded>Option A: Installing via Homebrew</h3>
+<pre><code language="language-bash" class="language-bash">brew install kind
+</code></pre>
+<h3 is-upgraded>Option B: Installing from Release Binaries</h3>
+<pre><code language="language-bash" class="language-bash"># for Intel Macs
+[ $(uname -m) = x86_64 ]&amp;&amp; curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.18.0/kind-darwin-amd64
+# for M1 / ARM Macs
+[ $(uname -m) = arm64 ] &amp;&amp; curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.18.0/kind-darwin-arm64
+chmod +x ./kind
+mv ./kind /some-dir-in-your-PATH/kind
+</code></pre>
+<p>For other install options visit <a href="https://kind.sigs.k8s.io/docs/user/quick-start/" target="_blank">Kind Installation</a>.</p>
+<h2 is-upgraded>2. Create Kubernetes Cluster using Kind</h2>
+<pre><code language="language-bash" class="language-bash">kind create cluster
+</code></pre>
+<h2 is-upgraded>3. Verify that the Kubernetes Environment is ready</h2>
+<pre><code language="language-bash" class="language-bash"># This command returns the list of worker nodes and their status
+kubectl get nodes
+</code></pre>
+<p class="image-container"><img alt="Environment Setup Verification" src="img/aa74b65b95c938c1.png"></p>
+<h2 is-upgraded>Next Step is to install the Operator</h2>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 2" duration="0">
-        
+      <google-codelab-step label="Install Solace Pubsub&#43; Event Broker Operator" duration="5">
+        <p>You can install the Operator in two ways:</p>
+<h3 is-upgraded>Option A: Operator Hub and OLM install</h3>
+<p>Follow the steps from <a href="https://operatorhub.io/operator/pubsubplus-eventbroker-operator" target="_blank">OperatorHub</a> to first setup OLM, then to install the PubSub+ Event Broker Operator. Click on the Install button to see the detailed instructions.</p>
+<h3 is-upgraded>Option B: Direct Install</h3>
+<p>Today, you will learn to do the direct install.</p>
+<pre><code language="language-bash" class="language-bash"># clone the directory
+git clone git@github.com:SolaceDev/pubsubplus-kubernetes-operator.git
+
+# cd to the pubsubplus-kubernetes-operator/deploy folder and apply deploy.yaml
+# Manifest creates a namespace and all K8s resources for the Operator deployment
+kubectl apply -f deploy.yaml
+
+# Wait for deployment to complete
+kubectl get pods -n pubsubplus-operator-system --watch
+</code></pre>
+<p>Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead <code>https://github.com/SolaceDev/pubsubplus-kubernetes-operator.git</code></p>
+<p class="image-container"><img alt="Operator Setup Verification" src="img/318dd5cd01408e65.png"></p>
+<h2 is-upgraded>Next Step is to install the Event Broker</h2>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Custom Step 3" duration="0">
-        
+      <google-codelab-step label="Install Solace Pubsub&#43; Event Broker" duration="0">
+        <p>We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator.</p>
+<h2 is-upgraded>Minimum-footprint Deployment for Developers</h2>
+<pre><code language="language-bash" class="language-bash"># This command returns the list of worker nodes and their status
+# Create deployment manifest
+
+echo &#34;
+apiVersion: pubsubplus.solace.com/v1beta1
+kind: PubSubPlusEventBroker
+metadata:
+  name: dev-example
+spec:
+  developer: true&#34; &gt; developer.yaml
+
+# Then apply it
+kubectl apply -f developer.yaml
+
+# Wait for broker deployment pods to be ready
+kubectl get pods --show-labels --watch
+
+# Check service-ready
+kubectl wait --for=condition=ServiceReady eventbroker dev-example
+</code></pre>
+<p class="image-container"><img alt="Broker Setup Verification" src="img/43b7096b1c362f0b.png"></p>
+<h2 is-upgraded>Next Step is to test the deployment</h2>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+      <google-codelab-step label="Test Solace Pusbub&#43; Event Broker Deployment" duration="5">
+        <p>In this section we are going to check the event broker deployment status, get information about the service name and type to access the broker services, and obtain the secret that contains the credentials to be used for admin access.</p>
+<h2 is-upgraded>1. Check the Event Broker Status</h2>
+<pre><code language="language-bash" class="language-bash">kubectl describe eventbroker dev-example
+</code></pre>
+<h2 is-upgraded>2. Obtain the management admin password</h2>
+<pre><code language="language-bash" class="language-bash">ADMIN_SECRET_NAME=$(kubectl get eventbroker dev-example -o jsonpath=&#39;{.status.broker.adminCredentialsSecret}&#39;)
+
+# This command returns the management &#34;admin&#34; user&#39;s password
+kubectl get secret $ADMIN_SECRET_NAME -o jsonpath=&#39;{.data.username_admin_password}&#39; | base64 -d
+</code></pre>
+<h2 is-upgraded>3. Obtain the IP address to access the broker services</h2>
+<pre><code language="language-bash" class="language-bash">BROKER_SERVICE_NAME=$(kubectl get eventbroker dev-example -o jsonpath=&#39;{.status.broker.serviceName}&#39;)
+
+# This command returns the broker service&#39;s external IP address
+kubectl get svc $BROKER_SERVICE_NAME -o jsonpath=&#39;{.status.loadBalancer.ingress}&#39;
+</code></pre>
+<h2 is-upgraded>4. Access the PubSub+ Broker Manager</h2>
+<ul>
+<li>In your browser, navigate to the IP address you obtained, using port 8080</li>
+</ul>
+<pre><code language="language-bash" class="language-bash">http://&lt;ip-address&gt;:8080
+</code></pre>
+<p>Note: If you did not get the external ip address of broker service in step 3 that means there is no external load balancer created. As a workaround, you can run port forwarding in the background.</p>
+<pre><code language="language-bash" class="language-bash"># Run port forwarding for SEMP
+kubectl port-forward svc/$BROKER_SERVICE_NAME 8080:8080
+
+# Now you can access to localhost at port 8080 and login to Pubsub+ Manager
+http://localhost:8080
+</code></pre>
+<ul>
+<li>Login as user <code>admin</code> with the management admin password you obtained.</li>
+<li>Use the Broker Manager <a href="https://docs.solace.com/Admin/Broker-Manager/PubSub-Manager-Overview.htm?Highlight=manager#Test-Messages" target="_blank">built-in Try-Me</a> tool to test messaging.</li>
+</ul>
+<p class="image-container"><img alt="Pubsub+Manager Login1" src="img/bd5d5cee6e1aa6c.png"></p>
+<p class="image-container"><img alt="Pubsub+Manager Login2" src="img/d6efa42447f59961.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="1">
+        <p>This codelab shows how the operator makes an event broker deployment easy by simply applying the yaml file. We have deployed a dev instance of the Pubsub+ Event Broker using the Operator in a Kubernetes cluster, where, Kind is used to run Kubernetes locally on a mac machine.<br> Checkout <a href="https://github.com/SolaceProducts/pubsubplus-kubernetes-quickstart" target="_blank">Kubernetes Operator - Quickstart</a> for more deployment options.</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
