@@ -140,6 +140,10 @@ All of the commands and capabilities within the PubSub+ Manager can also be acco
 - [SEMPv2 Swagger Reference Documentation](https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html)
 - [SEMP User Guide](https://docs.solace.com/SEMP/Using-SEMP.htm)
 
+<aside class="positive">
+All API commands in the CodeLab assume that the software broker is running in locally in docker and that the commands are executed using the default Admin credentials
+</aside>
+
 
 ### Command Line Interface (CLI)
 
@@ -184,8 +188,16 @@ Select Internal database from the Type input field and click Apply:
 
 ![alt-text-here](img/pubsub-manager-3.png)
 
-[//]: # (TODO:)
 ### API
+```console
+curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+    "authenticationBasicType": "internal"
+}'
+```
 
 ### CLI
 
@@ -246,8 +258,16 @@ Change the default username password to _default_ and click Apply:
 
 ![alt-text-here](img/pubsub-manager-5.png)
 
-[//]: # (TODO)
 ### API
+```console
+curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/default' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "password": "default"
+}'
+```
 
 ### CLI
 
@@ -271,9 +291,18 @@ Remaining in the default message VPN, navigate to Access Control -> Client Profi
 
 ![alt-text-here](img/pubsub-manager-6.png)
 
-[//]: # (TODO)
 ### API
-
+```console
+curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientProfiles/default' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "allowGuaranteedMsgReceiveEnabled": true,
+  "allowGuaranteedMsgSendEnabled": true,
+  "rejectMsgToSenderOnNoSubscriptionMatchEnabled": true
+}'
+```
 ### CLI
 
 ```console
@@ -326,10 +355,48 @@ Add the '>' subscription
 
 ![alt-text-here](img/pubsub-manager-14.png)
 
-
-[//]: # (TODO)
 ### API
-
+First, start by creating the Telemetry Profile and enabling the receiver.
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "msgVpnName": "default",
+  "receiverAclConnectDefaultAction": "allow",
+  "receiverEnabled": true,
+  "telemetryProfileName": "trace",
+  "traceEnabled": true
+}'
+```
+Next, let's create a filter that will attract all topic messages (using the `>` subscription).
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "enabled": true,
+  "msgVpnName": "default",
+  "telemetryProfileName": "trace",
+  "traceFilterName": "default"
+}'
+```
+Add the subscription to the new filter
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters/default/subscriptions' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "msgVpnName": "default",
+  "subscription": ">",
+  "subscriptionSyntax": "smf",
+  "telemetryProfileName": "trace",
+  "traceFilterName": "default"
+}'
+```
 ### CLI
 First, start by creating the Telemetry Profile.
 ```console
@@ -371,9 +438,21 @@ Create the new client username with a name of _trace_. Apply the following setti
 
 ![alt-text-here](img/pubsub-manager-16.png)
 
-[//]: # (TODO)
 ### API
-
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "aclProfileName": "#telemetry-trace",
+  "clientProfileName": "#telemetry-trace",
+  "clientUsername": "trace",
+  "enabled": true,
+  "msgVpnName": "default",
+  "password": "trace"
+}'
+```
 ### CLI
 ```console
 solbroker# configure
@@ -402,9 +481,34 @@ Navigate to the Subscriptions tab for the new queue and select '+ Subscription' 
 
 ![alt-text-here](img/pubsub-manager-19.png)
 
-[//]: # (TODO)
 ### API
-
+Create the queue
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/queues' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+        "msgVpnName": "default",
+        "egressEnabled": true,
+        "ingressEnabled":true,
+        "permission": "delete",
+        "queueName": "q"
+        
+    }'
+```
+Add the topic subscription
+```console
+curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q/subscriptions' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+  "msgVpnName": "default",
+  "queueName": "q",
+  "subscriptionTopic": "solace/tracing"
+}'
+```
 ### CLI
 ```console
 solbroker# configure
@@ -432,8 +536,16 @@ From Queues, select the _#telemetry-trace_ queue and confirm the following setti
 
 ![alt-text-here](img/pubsub-manager-20.png)
 
-[//]: # (TODO)
 #### API
+Fetch the #telemetry-trace data form the monitor API and confirm the following settings:
+  1. Current Consumers: 1
+  2. Access Type: Non-Exclusive
+  3. Durable: Yes
+```console
+curl --location 'http://localhost:8080/SEMP/v2/monitor/msgVpns/default/queues/%23telemetry-trace' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+```
 
 #### CLI
 Now that all configuration has been applied to the broker, you should see a Bind Count of "1" on your Telemetry Queue.
@@ -546,8 +658,15 @@ Login to the PubSub+ Manager console and select the default message VPN. Navigat
 
 Next, select Action -> Delete Messages and confirm.
 
-[//]: # (TODO)
 #### API
+Use the Action API to delete all spooled messages from the 'q' queue
+```console
+curl --location --request PUT 'http://localhost:8080/SEMP/v2/action/msgVpns/default/queues/q/deleteMsgs' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{}'
+```
 
 #### CLI
 ```console
