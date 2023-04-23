@@ -10,7 +10,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 # Title of codelab goes here
 Testing codelab
 
-## What you'll learn: Overview
+<!-- ## What you'll learn: Overview
 
 Duration: 0:05:00
 
@@ -52,7 +52,7 @@ Add a link!
 
 ### Embed an iframe
 
-![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
+![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher") -->
 
 ## Step 1
 Duration: 0:03:00
@@ -129,7 +129,7 @@ Duration: 0:03:00
 
 Step 15 content goes here
 
-## Takeaways
+<!-- ## Takeaways
 
 Duration: 0:07:00
 
@@ -137,6 +137,6 @@ Duration: 0:07:00
 ✅ < Fill IN TAKEAWAY 2>   
 ✅ < Fill IN TAKEAWAY 3>   
 
-![Soly Image Caption](img/soly.gif)
+![Soly Image Caption](img/soly.gif) -->
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom
