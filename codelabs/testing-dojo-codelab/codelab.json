@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-04-23T17:04:32-05:00",
+  "id": "testing-dojo-codelab",
+  "duration": 64,
+  "title": "Title of codelab goes here",
+  "summary": "Dojo codelab para testing",
+  "source": "testing-dojo-codelab.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/testing-dojo-codelab",
+  "url": "testing-dojo-codelab"
+}
