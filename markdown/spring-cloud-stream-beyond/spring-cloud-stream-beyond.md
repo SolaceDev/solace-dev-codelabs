@@ -431,7 +431,7 @@ Note the Solace Binder offers two producer properties that may come in handy for
 ## Wildcard Subscriptions
 Duration: 0:10:00
 
-Since we're using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we're in luck! There are 2 different options for configuring your topic subscriptions on consuming funcitons. Both options are configured in the Spring application properties. 
+Since we're using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we're in luck! There are 2 different options for configuring your topic subscriptions on consuming functions. Both options are configured in the Spring application properties. 
 
 ### Wildcards in the destination
 The first way to do it is in the `destination` property itself. The Solace binder uses the `destination` property to both name the queue that the app will bind to, but also as a topic subscription on the queue. 
@@ -460,7 +460,7 @@ If you were to navigate to the queue in the PubSub+ Manager you'll see that the 
 ![Wildcard Queue 1](img/wildcardQueue1.webp)
 
 
-### Wildcards in queueAdditionalSubscrptions
+### Wildcards in queueAdditionalSubscriptions
 The second place you can add topic subscriptions and also use wildcards when using the Solace binder is using the `queueAdditionalSubscriptions` consumer property. 
 This property is available under `spring.cloud.stream.solace.bindings.BINDING_NAME.consumer.queueAdditionalSubscriptions` and allows for 1 to many extra topic subscriptions to be added. 
 
