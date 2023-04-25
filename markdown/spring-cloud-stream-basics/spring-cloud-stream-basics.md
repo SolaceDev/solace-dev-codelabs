@@ -361,7 +361,7 @@ public Function<String, String> reverse(){
 }
 ```
 
-Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
+Now that we have two functions Spring Cloud Stream won't just assume what bindings we want to be created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
 
 **Option 1: application.properties**
 ```
