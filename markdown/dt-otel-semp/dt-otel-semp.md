@@ -1,11 +1,11 @@
-author: Mikhail Gevantmakher
-summary: This Codelab will walk you through how to get started using Solace Distributed Tracing with Context Propagation
-id: dt-otel
+author: Hank Spencer
+summary: This Codelab will walk you through how to get started using Solace Distributed Tracing with Context Propagation via the SEMP API V2
+id: dt-otel-semp
 tags: 
 categories: Solace, Opentelemetry
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/dt-otel
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/dt-otel-semp
 
 # Getting Started with Solace Distributed Tracing and Context Propagation
 
@@ -111,29 +111,13 @@ The `.env` file contains several environment variables that are used within the 
 * Open Telemetry contribution repository collector docker image tag and version `otel/opentelemetry-collector-contrib:0.67.0`
 * Solace PubSub+ broker docker image tag and version `solace/solace-pubsub-standard:10.2`
 
-## Three Options for Config Management
-Duration: 0:03:00
-
-You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.
-
-Each section of this CodeLab that performs a configuration step on the Solace broker will include all three options.
-
-Negative
-: **Note:** do _not_ perform all 3 configuration options, just choose 1 for each section.
+## Options for Config Management
+You can (generally) configure the Solace PubSub+ broker using three different methods; this codelab uses the SEMP API V2 for configuration. Additional codelabs are available for broker
+management via the UI and the CLI.
 
 For any configuration management, you will need a username/password with either admin or read/write level privileges.
 
-### PubSub+ Manager GUI
-
-The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on "Manage Service" in the top right. (It is a replacement for SolAdmin, if you know that that is).
-
-Positive
-: **Tip:** throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a "Tip" will show on the right-hand side of the screen describing the object. Built-in help!
-
-![alt-text-here](img/tips.png)
-
-
-### SEMP Management API
+### SEMP Management API V2
 
 All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful **Solace Element Management Protocol** (SEMP) API. For more information on the SEMP API, please consult the following links:
 
@@ -143,21 +127,6 @@ All of the commands and capabilities within the PubSub+ Manager can also be acco
 <aside class="positive">
 All API commands in the CodeLab assume that the software broker is running in locally in docker and that the commands are executed using the default Admin credentials
 </aside>
-
-
-### Command Line Interface (CLI)
-
-The Solace **Command Line Interface** (CLI) can be reached by one of the following methods (as appropriate):
-
-- Software broker, SSH to port 2222, and login with the admin username/password
-- Software broker running as Docker container: `sudo docker exec -it <container-name> cli`
-- Software broker running as machine image: login to the machine image, then: `solacectl cli`
-- Hardware appliance: login to port 22 of the management VRF
-
-Note that `show` commands can be run anywhere in CLI, from any "level".  But configuration commands must be executed in a specific order.
-
-- [Solace CLI Reference Documentation](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
-- [Get Started with CLI (blog)](https://solace.com/blog/getting-started-solos-cli/)
 
 ## Message VPN Configuration
 
@@ -175,20 +144,7 @@ The following minimal configuration is **necessary** on the Message VPN.
 This message is the Collector warning you that you're trying to connect to an unsecured resource (i.e. the broker).
 </aside>
 
-### PubSub+ Manager
-Login to the PubSub+ GUI Manager, then select the default Message VPN:
-
-![alt-text-here](img/pubsub-manager-1.png)
-
-Select Access Control -> Client Authentication -> Settings. Double-click the Basic Authentication Type field or click the edit icon on the right:
-
-![alt-text-here](img/pubsub-manager-2.png)
-
-Select Internal database from the Type input field and click Apply:
-
-![alt-text-here](img/pubsub-manager-3.png)
-
-### API
+### SEMP API V2
 ```console
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default' \
 --header 'Content-Type: application/json' \
@@ -199,66 +155,11 @@ curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/de
 }'
 ```
 
-### CLI
-
-First you must access your container; do so by typing the following command.
-
-```console
-[solace@dev tracing-codelab]$ docker exec -it tracing-codelab-solbroker-1 /bin/bash
-
-This Solace product is proprietary software of
-Solace Corporation. By accessing this Solace product
-you are agreeing to the license terms and conditions
-located at http://www.solace.com/license-software
-```
-
-Once inside the container, simply type `cli`.
-Note: If you are flying through the steps too quickly, you may need to give the broker a few seconds to fully initialize itself after running the `docker compose` command from the previous section before being able to access `cli` successfully.
-
-```console
-[appuser@solbroker sw]$ cli
-
-Solace PubSub+ Standard Version 10.2.xxx
-
-This Solace product is proprietary software of
-Solace Corporation. By accessing this Solace product
-you are agreeing to the license terms and conditions
-located at http://www.solace.com/license-software
-
-Copyright 2004-2022 Solace Corporation. All rights reserved.
-
-To purchase product support, please contact Solace at:
-https://solace.com/contact-us/
-
-Operating Mode: Message Routing Node
-
-solbroker>
-```
-
-The following commands will suffice.
-
-```console
-solbroker> enable
-solbroker# configure
-solbroker(configure)# message-vpn default
-solbroker(configure/message-vpn)# authentication basic auth-type internal
-solbroker(configure/message-vpn)# end
-```
 ## Default Client Username Configuration
 
 This Client Username will be used later for publishing messages to the broker.
 
-### PubSub+ Manager
-
-From the Access Control menu, select the 1) Client Usernames menu, 2.) select the default username from the list and 3.) select Edit from the Action menu:
-
-![alt-text-here](img/pubsub-manager-4.png)
-
-Change the default username password to _default_ and click Apply:
-
-![alt-text-here](img/pubsub-manager-5.png)
-
-### API
+### SEMP API V2
 ```console
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/default' \
 --header 'Content-Type: application/json' \
@@ -268,31 +169,11 @@ curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/de
   "password": "default"
 }'
 ```
-
-### CLI
-
-```console
-solbroker# configure
-solbroker(configure)# client-username default message-vpn default
-solbroker(configure/client-username)# password default
-solbroker(configure/client-username)# end
-```
-
 ## Default Client Profile Configuration
 
 This Client Profile is used by the Client Username configured above.
 
-### PubSub+ Manager
-
-Remaining in the default message VPN, navigate to Access Control -> Client Profiles. Apply the following settings to the default Client Profile: 
-  1. Confirm that _Send Guaranteed Messages_ is enabled. Enable if disabled.
-  2. Confirm that _Receive Guaranteed Messages_ is enabled. Enable if disabled.
-  3. Enable the _Reject Messages to Sender On NO Subscription Match Discard_ setting. 
-     - This setting allows us to illustrate specific error behavior on the broker in a later step.
-
-![alt-text-here](img/pubsub-manager-6.png)
-
-### API
+### SEMP API V2
 ```console
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientProfiles/default' \
 --header 'Content-Type: application/json' \
@@ -304,15 +185,6 @@ curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/de
   "rejectMsgToSenderOnNoSubscriptionMatchEnabled": true
 }'
 ```
-### CLI
-
-```console
-solbroker# configure
-solbroker(configure)# client-profile default message-vpn default
-solbroker(configure/client-profile)# message-spool reject-msg-to-sender-on-no-subscription-match
-solbroker(configure/client-profile)# end
-```
-
 ## Telemetry Profile Configuration
 
 The Telemetry Profile defines which published messages should be traced as well as who should be allowed to consume those trace messages.
@@ -346,39 +218,7 @@ receivers:
 
 First, start by creating the Telemetry Profile.
 
-### PubSub+ Manager
-
-Within the default message VPN, navigate to Telemetry and select _Create Telemetry Profile_
-
-![alt-text-here](img/pubsub-manager-7.png)
-
-Name the profile _trace_ and click Apply. We'll come back to this page later to update additional settings.
-
-![alt-text-here](img/pubsub-manager-8.png)
-
-Next, we need to enable the receiver. From the trace Telemetry Profile page, select _Receiver Connect ACLs_ and update the _Client Connect Default Action_ to _Allow_
-  _Tip: Double-click the input to enable edit mode_
-
-![alt-text-here](img/pubsub-manager-9.png)
-
-![alt-text-here](img/pubsub-manager-10.png)
-
-After applying the ACL, edit the trace Telemetry Profile page to enable the _Reciever_ and _Trace_ settings.
-
-![alt-text-here](img/pubsub-manager-11.png)
-
-Finally, let's create a Trace Filter and add a subscription that will attract all topic messages (using the `>` subscription)
-
-Create the filter with name _default_. Be sure to enable before clicking Apply.
-![alt-text-here](img/pubsub-manager-12.png)
-
-Add the '>' subscription
-
-![alt-text-here](img/pubsub-manager-13.png)
-
-![alt-text-here](img/pubsub-manager-14.png)
-
-### API
+### SEMP API V2
 First, start by creating the Telemetry Profile and enabling the receiver.
 ```console
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles' \
@@ -420,30 +260,6 @@ curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryP
   "traceFilterName": "default"
 }'
 ```
-### CLI
-First, start by creating the Telemetry Profile.
-```console
-solbroker# configure
-solbroker(configure)# message-vpn default
-solbroker(configure/message-vpn)# create telemetry-profile trace
-```
-
-Next, open up and enable the receiver.
-```console
-solbroker(configure/message-vpn/telemetry-profile)# receiver acl connect default-action allow
-solbroker(configure/message-vpn/telemetry-profile)# no receiver shutdown
-```
-
-Finally, let's create a filter that will attract all topic messages (using the `>` subscription).
-```console
-solbroker(configure/message-vpn/telemetry-profile)# trace
-solbroker(...e/message-vpn/telemetry-profile/trace)# no shutdown
-solbroker(configure/message-vpn/telemetry-profile)# create filter default
-solbroker(...ge-vpn/telemetry-profile/trace/filter)# no shutdown
-solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription ">"
-solbroker(...try-profile/trace/filter/subscription)# end
-```
-
 ## OpenTelemetry Collector Client Username Configuration
 
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
@@ -468,20 +284,7 @@ receivers:
       insecure_skip_verify: true
 ```
 
-### PubSub+ Manager
-
-Within the default message VPN. Navigate to Access Control -> Client Usernames and add a new Client Username.
-
-![alt-text-here](img/pubsub-manager-15.png)
-
-Create the new client username with a name of _trace_. Apply the following settings to the trace client username:
-  1. Enable the client username
-  2. Change the password to _trace_
-  3. Assign _#telemetry-trace_ for both the Client Profile and ACL Profile
-
-![alt-text-here](img/pubsub-manager-16.png)
-
-### API
+### SEMP API V2
 ```console
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames' \
 --header 'Content-Type: application/json' \
@@ -496,35 +299,10 @@ curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUser
   "password": "trace"
 }'
 ```
-### CLI
-```console
-solbroker# configure
-solbroker(configure)# create client-username trace message-vpn default
-solbroker(configure/client-username)# password trace
-solbroker(configure/client-username)# client-profile #telemetry-trace
-solbroker(configure/client-username)# acl-profile #telemetry-trace
-solbroker(configure/client-username)# no shutdown
-solbroker(configure/client-username)# end
-```
-
 ## Messaging Queue Configuration
 Finally, create a queue for attracting messages for our producers and consumers. Add a topic subscription of `solace/tracing` to the queue.
 
-### PubSub+ Manager
-
-Within the default message VPN. Navigate to _Queues_ to create a queue named 'q' with the specified topic subscription.
-
-![alt-text-here](img/pubsub-manager-17.png)
-
-After naming the queue, update the Non-Owner Permission to _Delete_
-
-![alt-text-here](img/pubsub-manager-18.png)
-
-Navigate to the Subscriptions tab for the new queue and select '+ Subscription' to add the 'solace/tracing' topic subscription.
-
-![alt-text-here](img/pubsub-manager-19.png)
-
-### API
+### SEMP API V2
 Create the queue
 ```console
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/queues' \
@@ -552,17 +330,6 @@ curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q/s
   "subscriptionTopic": "solace/tracing"
 }'
 ```
-### CLI
-```console
-solbroker# configure
-solbroker(configure)# message-spool message-vpn default
-solbroker(configure/message-spool)# create queue q
-solbroker(configure/message-spool/queue)# permission all delete
-solbroker(configure/message-spool/queue)# subscription topic solace/tracing
-solbroker(configure/message-spool/queue)# no shutdown
-solbroker(configure/message-spool/queue)# end
-```
-
 ## Verifying your broker configuration
 
 ### Verifying your telemetry queue
@@ -570,16 +337,7 @@ solbroker(configure/message-spool/queue)# end
 As previously mentioned, a special Telemetry Queue should have been created when the Telemetry Profile was created. 
 The client bound to the Telemetry Queue is the Solace Receiver Module, part of the OpenTelemetry Collector application that was launched in an earlier step.
 
-#### PubSub+ Manager
-
-From Queues, select the _#telemetry-trace_ queue and confirm the following settings:
-  1. Current Consumers: 1
-  2. Access Type: Non-Exclusive
-  3. Durable: Yes 
-
-![alt-text-here](img/pubsub-manager-20.png)
-
-#### API
+#### SEMP API V2
 Fetch the #telemetry-trace data form the monitor API and confirm the following settings:
   1. Current Consumers: 1
   2. Access Type: Non-Exclusive
@@ -589,28 +347,6 @@ curl --location 'http://localhost:8080/SEMP/v2/monitor/msgVpns/default/queues/%2
 --header 'Accept: application/json' \
 --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
 ```
-
-#### CLI
-Now that all configuration has been applied to the broker, you should see a Bind Count of "1" on your Telemetry Queue.
-```console
-solbroker# show queue #telemetry-trace
-
-Flags Legend:
-I - Ingress Admin State (U=Up, D=Down)
-E - Egress  Admin State (U=Up, D=Down)
-A - Access-Type         (E=Exclusive, N=Non-Exclusive)
-S - Selector            (Y=Yes, N=No)
-R - Redundancy          (P=Primary, B=Backup)
-D - Durability          (D=Durable, N=Non-Durable)
-P - Priority            (Y=Yes, N=No)
-
-Queue Name                   Messages      Spool             Bind Status
-Message VPN                   Spooled  Usage(MB)   HWM (MB) Count I E A S R D P
-------------------------- ----------- ---------- ---------- ----- -------------
-#telemetry-trace
-default                             0       0.00       0.00     1 D U N N P D N
-```
-
 ## Producing trace messages and accessing trace span in Jaeger
 
 ### Publishing messages using a simple jms application
@@ -693,15 +429,7 @@ This information can be used to perform any corrective actions, e.g.:
 ### Clean-up from previous sections
 If there are messages on your queue from previous sections, let's take a moment to delete them.
 
-#### PubSub+ Manager
-
-Login to the PubSub+ Manager console and select the default message VPN. Navigate to Queues and select the 'q' queue we created earlier. From here navigate to the Messages Queued tab and select all messages.
-
-![alt-text-here](img/pubsub-manager-21.png)
-
-Next, select Action -> Delete Messages and confirm.
-
-#### API
+#### SEMP API V2
 Use the Action API to delete all spooled messages from the 'q' queue
 ```console
 curl --location --request PUT 'http://localhost:8080/SEMP/v2/action/msgVpns/default/queues/q/deleteMsgs' \
@@ -709,16 +437,6 @@ curl --location --request PUT 'http://localhost:8080/SEMP/v2/action/msgVpns/defa
 --header 'Accept: application/json' \
 --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
 --data '{}'
-```
-
-#### CLI
-```console
-solbroker> enable
-solbroker# admin
-solbroker(admin)# message-spool message-vpn default
-solbroker(admin/message-spool)# delete-messages queue q
-This will delete all spooled messages in q
-Do you want to continue (y/n)? y
 ```
 
 ### Using solace-publisher app with auto-instrumentation
