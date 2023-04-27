@@ -188,8 +188,8 @@ Select Internal database from the Type input field and click Apply:
 
 ![alt-text-here](img/pubsub-manager-3.png)
 
-### API
-```console
+### SEMP API
+```bash
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -258,8 +258,8 @@ Change the default username password to _default_ and click Apply:
 
 ![alt-text-here](img/pubsub-manager-5.png)
 
-### API
-```console
+### SEMP API
+```bash
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/default' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -292,8 +292,8 @@ Remaining in the default message VPN, navigate to Access Control -> Client Profi
 
 ![alt-text-here](img/pubsub-manager-6.png)
 
-### API
-```console
+### SEMP API
+```bash
 curl --location --request PATCH 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientProfiles/default' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -378,9 +378,9 @@ Add the '>' subscription
 
 ![alt-text-here](img/pubsub-manager-14.png)
 
-### API
+### SEMP API
 First, start by creating the Telemetry Profile and enabling the receiver.
-```console
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -481,8 +481,8 @@ Create the new client username with a name of _trace_. Apply the following setti
 
 ![alt-text-here](img/pubsub-manager-16.png)
 
-### API
-```console
+### SEMP API
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -524,9 +524,9 @@ Navigate to the Subscriptions tab for the new queue and select '+ Subscription' 
 
 ![alt-text-here](img/pubsub-manager-19.png)
 
-### API
+### SEMP API
 Create the queue
-```console
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/queues' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -579,12 +579,12 @@ From Queues, select the _#telemetry-trace_ queue and confirm the following setti
 
 ![alt-text-here](img/pubsub-manager-20.png)
 
-#### API
+#### SEMP API
 Fetch the #telemetry-trace data form the monitor API and confirm the following settings:
   1. Current Consumers: 1
   2. Access Type: Non-Exclusive
   3. Durable: Yes
-```console
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/monitor/msgVpns/default/queues/%23telemetry-trace' \
 --header 'Accept: application/json' \
 --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
@@ -701,9 +701,9 @@ Login to the PubSub+ Manager console and select the default message VPN. Navigat
 
 Next, select Action -> Delete Messages and confirm.
 
-#### API
+#### SEMP API
 Use the Action API to delete all spooled messages from the 'q' queue
-```console
+```bash
 curl --location --request PUT 'http://localhost:8080/SEMP/v2/action/msgVpns/default/queues/q/deleteMsgs' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
