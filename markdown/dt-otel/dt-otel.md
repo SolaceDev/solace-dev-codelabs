@@ -287,7 +287,8 @@ This Client Profile is used by the Client Username configured above.
 Remaining in the default message VPN, navigate to Access Control -> Client Profiles. Apply the following settings to the default Client Profile: 
   1. Confirm that _Send Guaranteed Messages_ is enabled. Enable if disabled.
   2. Confirm that _Receive Guaranteed Messages_ is enabled. Enable if disabled.
-  3. Enable the _Reject Messages to Sender On NO Subscription Match Discard_ setting.
+  3. Enable the _Reject Messages to Sender On NO Subscription Match Discard_ setting. 
+     - This setting allows us to illustrate specific error behavior on the broker in a later step.
 
 ![alt-text-here](img/pubsub-manager-6.png)
 
@@ -316,10 +317,32 @@ solbroker(configure/client-profile)# end
 
 The Telemetry Profile defines which published messages should be traced as well as who should be allowed to consume those trace messages.
 
-When creating a Telemetry Profile, a Telemetry Queue is created. In this example, the queue name would be `#telemetry-trace` because we used `trace` as the profile name when creating the Telemetry Profile. When generated, trace messages will be added to this queue for consumption.
+When creating a Telemetry Profile, a Telemetry Queue is created. In this example, the queue name would be `#telemetry-trace` because we use `trace` as the profile name when creating the Telemetry Profile. 
+When generated, trace messages will be added to this queue for consumption.
 
-Also worth mentioning, creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of `#telemetry-<telemetry-profile-name>`.
+Creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of `#telemetry-&#60;telemetry-profile-name&#62;`.
 These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages.
+
+Below is a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Notice how the username, password, and queue name all match the settings configured on the broker.
+Be sure to update the collector configuration should any of the Telemetry Profile config change on the broker.
+```yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+  solace:
+    broker: [solbroker:5672]
+    max_unacknowledged: 500
+    auth:
+      sasl_plain:
+        username: trace
+        password: trace
+    queue: queue://#telemetry-trace
+    tls:
+      insecure: true
+      insecure_skip_verify: true
+```
 
 First, start by creating the Telemetry Profile.
 
@@ -344,7 +367,7 @@ After applying the ACL, edit the trace Telemetry Profile page to enable the _Rec
 
 ![alt-text-here](img/pubsub-manager-11.png)
 
-Finally, let's create a Trace Filter and add a subscription that will attract all topic messages (using the '>' subscription)
+Finally, let's create a Trace Filter and add a subscription that will attract all topic messages (using the `>` subscription)
 
 Create the filter with name _default_. Be sure to enable before clicking Apply.
 ![alt-text-here](img/pubsub-manager-12.png)
@@ -424,6 +447,26 @@ solbroker(...try-profile/trace/filter/subscription)# end
 ## OpenTelemetry Collector Client Username Configuration
 
 We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.
+
+Again we reference a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Note that the username and password in the configuration must match the credentials configured for the Client Username on the broker in the following steps.
+```yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+  solace:
+    broker: [solbroker:5672]
+    max_unacknowledged: 500
+    auth:
+      sasl_plain:
+        username: trace
+        password: trace
+    queue: queue://#telemetry-trace
+    tls:
+      insecure: true
+      insecure_skip_verify: true
+```
 
 ### PubSub+ Manager
 
@@ -645,7 +688,7 @@ This information can be used to perform any corrective actions, e.g.:
 * Update the broker configuration and have your queue also subscribe to topic `solace/tracing2`
 
 
-## Adding context to messages published (JMS automatic instrumentation)
+## Enabling Context Propagation in Published Messages
 
 ### Clean-up from previous sections
 If there are messages on your queue from previous sections, let's take a moment to delete them.
