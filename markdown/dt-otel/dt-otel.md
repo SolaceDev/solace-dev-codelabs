@@ -2,7 +2,7 @@ author: Mikhail Gevantmakher
 summary: This Codelab will walk you through how to get started using Solace Distributed Tracing with Context Propagation
 id: dt-otel
 tags: 
-categories: Solace, Opentelemetry
+categories: Opentelemetry, Solace
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/dt-otel

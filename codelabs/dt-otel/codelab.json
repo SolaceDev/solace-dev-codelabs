@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2023-04-28T10:54:14-07:00",
+  "updated": "2023-04-28T15:42:48-07:00",
   "id": "dt-otel",
   "duration": 45,
   "title": "Getting Started with Solace Distributed Tracing and Context Propagation",
@@ -14,8 +14,8 @@
     "published"
   ],
   "category": [
-    "solace",
-    "opentelemetry"
+    "opentelemetry",
+    "solace"
   ],
   "tags": [
     "web"

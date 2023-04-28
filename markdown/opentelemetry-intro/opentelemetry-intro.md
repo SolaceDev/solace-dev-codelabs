@@ -7,14 +7,15 @@ environments: Web
 status: Draft
 feedback link: https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro
 
-# Using OpenTelemetry to find your event in a haystack
+# Introduction to OpenTelemetry using Python
 
 ## What you'll learn: Overview
 
 Duration: 0:05:00
 
-Positive
-: If you'd like to learn more about OpenTelemetry architecture, but don't care about hands-on stuff, you can find it in my blog post [What is distributed tracing and how does OpenTelemetry work for event-driven integration?](https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/)
+<aside class="positive">
+If you'd like to learn more about OpenTelemetry architecture, but don't care about hands-on stuff, you can find it in my blog post [What is distributed tracing and how does OpenTelemetry work for event-driven integration?](https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/)
+</aside>
 
 No business likes an angry user. That goes double if the user is a taxi driver. The language can be...intense.
 
@@ -45,8 +46,10 @@ Duration: 0:07:00
 1. [Download Python](https://www.python.org/downloads/) for free in the OS of your choosing
 1. [Download the sample code](https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro) Or use git commands to grab it from [GitHub](https://github.com/jmenning-solace/nycmoderntaxi.git).
 
-Negative
-: It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. [Read more about the Python API.](https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga).
+<aside class="negative">
+It's important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. [Read more about the Python API.](https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga).
+</aside>
+
 
 ## Use Case Overview 🚕
 
@@ -111,8 +114,10 @@ Duration: 0:05:00
 
 Jaeger collects and visualizes the spans created by your microservices. It has several different components such as an underlying database, a GUI and a span collector, but fortunately it has an all-in-one distribution that makes setup easy.
 
-Negative
-: If you don't have a tool that opens .gz files, you can download one. [7-Zip](https://www.7-zip.org/download.html) is a good free option
+<aside class="negative">
+If you don't have a tool that opens .gz files, you can download one. [7-Zip](https://www.7-zip.org/download.html) is a good free option
+</aside>
+
 
 ### Steps to install
 
@@ -122,8 +127,10 @@ Negative
 1. Using a web browser, navigate to `http://localhost:16686/`
 1. You should be greeted by a picture of a...chipmunk? Gopher? Not really sure.
 
-Negative
-: You'll need to keep the terminal window running Jaeger open. If you close it, you'll lose the traces you've collected.
+<aside class="negative">
+You'll need to keep the terminal window running Jaeger open. If you close it, you'll lose the traces you've collected.
+</aside>
+
 
 ✔️ You've created the second part of the solution!
 ![check2](img/check2.png)
@@ -139,8 +146,10 @@ Python is a great language for prototyping applications. It's easy to get up and
 1. Open the Python installer that you downloaded in the prerequisites.
 1. You'll be guided through the install process.
 
-Positive
-: Be sure to include Python in your PATH variable as per the download instructions
+<aside class="positive">
+Be sure to include Python in your PATH variable as per the download instructions
+</aside>
+
 
 Once it's complete, you should have a program called IDLE (Integrated Development and Learning Environment).
 ![IDLE](img/idle.png "IDLE")
@@ -151,8 +160,9 @@ That's what you'll use to modify and run the Python scripts.
 
 Duration: 0:10:00
 
-Positive
-: This CodeLab focuses on OpenTelemetry, so it won't actually implement the Salesforce events. If that's your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/). Likewise, this CodeLab doesn't get into the nitty gritty of the Python API. If you want to know more about those capabilities, there will be a CodeLab soon.
+<aside class="positive">
+This CodeLab focuses on OpenTelemetry, so it won't actually implement the Salesforce events. If that's your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/). Likewise, this CodeLab doesn't get into the nitty gritty of the Python API. If you want to know more about those capabilities, there will be a CodeLab soon.
+</aside>
 
 1.  If you haven't already, unzip the CodeLabs code into a convenient directory
 1.  Open a terminal window and navigate to the downloaded github repo
@@ -265,8 +275,9 @@ Now that "Salesforce" is publishing an event to Solace, you need to get the "RES
 
 🔁 Repeat this process with `solace_telemetry_consumer_REST.py`, so you have two consumers running at the same time.
 
-Negative
-: Don't forget to activate your Python virtual env in the new terminal you open!
+<aside class="negative">
+Don't forget to activate your Python virtual env in the new terminal you open!
+</aside>
 
 ✔️ You've created the entire solution!
 ![check5](img/check5.png)
