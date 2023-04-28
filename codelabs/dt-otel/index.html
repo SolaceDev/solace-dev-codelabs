@@ -277,7 +277,7 @@ solbroker(configure/client-profile)# end
       <google-codelab-step label="Telemetry Profile Configuration" duration="0">
         <p>The Telemetry Profile defines which published messages should be traced as well as who should be allowed to consume those trace messages.</p>
 <p>When creating a Telemetry Profile, a Telemetry Queue is created. In this example, the queue name would be <code>#telemetry-trace</code> because we use <code>trace</code> as the profile name when creating the Telemetry Profile. When generated, trace messages will be added to this queue for consumption.</p>
-<p>Creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of <code>#telemetry-&#60;telemetry-profile-name&#62;</code>. These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages.</p>
+<p>Creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of <code>#telemetry-&#60;telemetry-profile-name&#62;</code>. These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages. In our demo, the <code>Client</code> is the Solace Receiver on OpenTelemetery collector. More on that to come in upcoming steps</p>
 <p>Below is a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Notice how the username, password, and queue name all match the settings configured on the broker. Be sure to update the collector configuration should any of the Telemetry Profile config change on the broker.</p>
 <pre><code language="language-yaml" class="language-yaml">receivers:
   otlp:
@@ -308,8 +308,9 @@ solbroker(configure/client-profile)# end
 <p>After applying the ACL, edit the trace Telemetry Profile page to enable the <em>Reciever</em> and <em>Trace</em> settings.</p>
 <p class="image-container"><img alt="alt-text-here" src="img/e98421faaa3fbaf6.png"></p>
 <p>Finally, let&#39;s create a Trace Filter and add a subscription that will attract all topic messages (using the <code>></code> subscription)</p>
-<p>Create the filter with name <em>default</em>. Be sure to enable before clicking Apply. <img alt="alt-text-here" src="img/e592cc9bcc6f28a.png"></p>
-<p>Add the ‘&gt;&#39; subscription</p>
+<p>Create the filter with name <em>default</em>. Be sure to enable before clicking Apply.</p>
+<p class="image-container"><img alt="alt-text-here" src="img/e592cc9bcc6f28a.png"></p>
+<p>Add the <code>></code> subscription</p>
 <p class="image-container"><img alt="alt-text-here" src="img/e41ee0f137f0066.png"></p>
 <p class="image-container"><img alt="alt-text-here" src="img/6ec02abfd7f272f0.png"></p>
 <h2 is-upgraded>SEMP API</h2>
@@ -327,7 +328,7 @@ solbroker(configure/client-profile)# end
 }&#39;
 </code></pre>
 <p>Next, let&#39;s create a filter that will attract all topic messages (using the <code>></code> subscription).</p>
-<pre>curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters&#39; \
+<pre><code language="language-bash" class="language-bash">curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters&#39; \
 --header &#39;Content-Type: application/json&#39; \
 --header &#39;Accept: application/json&#39; \
 --header &#39;Authorization: Basic YWRtaW46YWRtaW4=&#39; \
@@ -337,9 +338,9 @@ solbroker(configure/client-profile)# end
   &#34;telemetryProfileName&#34;: &#34;trace&#34;,
   &#34;traceFilterName&#34;: &#34;default&#34;
 }&#39;
-</pre>
+</code></pre>
 <p>Add the subscription to the new filter</p>
-<pre>curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters/default/subscriptions&#39; \
+<pre><code language="language-bash" class="language-bash">curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters/default/subscriptions&#39; \
 --header &#39;Content-Type: application/json&#39; \
 --header &#39;Accept: application/json&#39; \
 --header &#39;Authorization: Basic YWRtaW46YWRtaW4=&#39; \
@@ -350,7 +351,7 @@ solbroker(configure/client-profile)# end
   &#34;telemetryProfileName&#34;: &#34;trace&#34;,
   &#34;traceFilterName&#34;: &#34;default&#34;
 }&#39;
-</pre>
+</code></pre>
 <h2 is-upgraded>CLI</h2>
 <p>First, start by creating the Telemetry Profile.</p>
 <pre>solbroker# configure
@@ -437,7 +438,7 @@ solbroker(configure/client-username)# end
 <p class="image-container"><img alt="alt-text-here" src="img/6198291fca96ee83.png"></p>
 <p>After naming the queue, update the Non-Owner Permission to <em>Delete</em></p>
 <p class="image-container"><img alt="alt-text-here" src="img/bbca81b5454a9705.png"></p>
-<p>Navigate to the Subscriptions tab for the new queue and select ‘+ Subscription&#39; to add the ‘solace/tracing&#39; topic subscription.</p>
+<p>Navigate to the Subscriptions tab for the new queue and select ‘+ Subscription&#39; to add the <code>solace/tracing</code> topic subscription.</p>
 <p class="image-container"><img alt="alt-text-here" src="img/a5dc515e7d9308a4.png"></p>
 <h2 is-upgraded>SEMP API</h2>
 <p>Create the queue</p>

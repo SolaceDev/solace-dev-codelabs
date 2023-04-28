@@ -322,6 +322,7 @@ When generated, trace messages will be added to this queue for consumption.
 
 Creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of `#telemetry-&#60;telemetry-profile-name&#62;`.
 These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages.
+In our demo, the `Client` is the Solace Receiver on OpenTelemetery collector. More on that to come in upcoming steps
 
 Below is a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Notice how the username, password, and queue name all match the settings configured on the broker.
 Be sure to update the collector configuration should any of the Telemetry Profile config change on the broker.
@@ -370,9 +371,11 @@ After applying the ACL, edit the trace Telemetry Profile page to enable the _Rec
 Finally, let's create a Trace Filter and add a subscription that will attract all topic messages (using the `>` subscription)
 
 Create the filter with name _default_. Be sure to enable before clicking Apply.
+
+
 ![alt-text-here](img/pubsub-manager-12.png)
 
-Add the '>' subscription
+Add the `>` subscription
 
 ![alt-text-here](img/pubsub-manager-13.png)
 
@@ -394,7 +397,7 @@ curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryP
 }'
 ```
 Next, let's create a filter that will attract all topic messages (using the `>` subscription).
-```console
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -407,7 +410,7 @@ curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryP
 }'
 ```
 Add the subscription to the new filter
-```console
+```bash
 curl --location 'http://localhost:8080/SEMP/v2/config/msgVpns/default/telemetryProfiles/trace/traceFilters/default/subscriptions' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -520,7 +523,7 @@ After naming the queue, update the Non-Owner Permission to _Delete_
 
 ![alt-text-here](img/pubsub-manager-18.png)
 
-Navigate to the Subscriptions tab for the new queue and select '+ Subscription' to add the 'solace/tracing' topic subscription.
+Navigate to the Subscriptions tab for the new queue and select '+ Subscription' to add the `solace/tracing` topic subscription.
 
 ![alt-text-here](img/pubsub-manager-19.png)
 
