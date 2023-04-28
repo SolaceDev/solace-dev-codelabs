@@ -28,7 +28,7 @@
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/dt-otel">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
-        <p>This CodeLabs will take you through the basics of the new distributed tracing feature. Following these steps will take you through:</p>
+        <p>This codelab will take you through the basics of Soalce&#39;s PubSub+ Distributed Tracing feature. Following these steps will take you through:</p>
 <ul>
 <li>Launching and configuring a PubSub+ Event Broker Software</li>
 <li>Launching the OpenTelemetry Collector configured to use Solace modules</li>
@@ -36,10 +36,10 @@
 <li>Publishing and receiving messages to/from your broker to generate broker trace events</li>
 <li>Using auto-instrumented JMS application that will generate end to end linked traces (publisher – broker – receiver traces)</li>
 </ul>
-<p>Upon successful completion of this Code Labs, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, Open Telemetry exporters, and telemetry analysis tools. Please note that as a Demo feature using a standard broker edition release there are some restrictions.</p>
+<p>Upon successful completion of this codelab, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, OpenTelemetry exporters, and telemetry analysis tools.</p>
 <h2 is-upgraded>Limitations and caveats</h2>
 <p>For this release, trace events will be generated for published messages (guaranteed and promoted direct) upon broker receipt and when the message is enqueued by the broker. This release supports context propagation to link traces for the same message from multiple sources.</p>
-<p>This codelabs project is provided for demonstration purposes only. The sample applications included herein (solace-publisher and solace-queue-receiver), the configuration, and the setup scripts are not intended for general use, nor do they contain necessary certificates, or configuration for a secure session connection. As such they should only be used in a local environment for feature demonstration purposes only. Please contact your SE for support.</p>
+<p>This codelabs project is provided for demonstration purposes only. The sample applications included herein (<code>solace-publisher</code> and <code>solace-queue-receiver</code>), the configuration, and the setup scripts are not intended for general use, nor do they contain necessary certificates, or configuration for a secure session connection. As such they should only be used in a local environment for feature demonstration purposes only. Please contact your SE for support.</p>
 <p class="image-container"><img alt="Solace" src="img/caf2745a1dd11fa8.png"></p>
 
 
@@ -47,44 +47,44 @@
     
       <google-codelab-step label="What you need: Prerequisites" duration="0">
         <h2 is-upgraded>Docker</h2>
-<p>This CodeLabs relies on the use of Docker. If you do not already have Docker installed, you will first need to do that. Docker Desktop can be installed  for ease of use. At least 4 GiB and 2 cores should be made available for Docker. If more physical resources are available, providing more may improve your experience (e.g. 8 GiB and 4 cores).</p>
+<p>This codelab relies on the use of Docker. If you do not already have Docker installed, you will first need to do that. <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop</a> can be installed  for ease of use. At least 4 GiB and 2 cores should be made available for Docker. If more physical resources are available, providing more may improve your experience (e.g. 8 GiB and 4 cores).</p>
 <h2 is-upgraded>Java</h2>
-<p>This CodeLabs relies on the features found in modern Java JRE version (Open JDK or Oracle JDK when appropriate license is available by user). For this demo you must have Java 16 or higher.</p>
+<p>This codelab relies on the features found in modern Java JRE version (Open JDK or Oracle JDK when appropriate license is available by user). For this demo you must have Java 16 or higher.</p>
 <p>To validate that Java is correctly installed on your system type following commands in your console:</p>
-<pre>[solace@dev ~]$ java -version
-</pre>
+<pre><code language="language-bash" class="language-bash">[solace@dev ~]$ java -version
+</code></pre>
 <p>If Java is correctly installed on your machine this will be printed indicating a vendor and the version of the Java installed on your machine.</p>
-<pre>[solace@dev ~]$ java -version
+<pre><code language="language-bash" class="language-bash">[solace@dev ~]$ java -version
 openjdk version &#34;16&#34; 2021-03-16
 OpenJDK Runtime Environment (build 16+36-2231)
 OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
-</pre>
+</code></pre>
 <h2 is-upgraded>Downloading the tracing-codelab package</h2>
 <p>The tracing-codelab package contains/require the following items:</p>
 <ul>
-<li>docker-compose.yaml (Docker images will be downloaded by Docker environment upon first launch from a Docker hub): <ul>
+<li><code>docker-compose.yaml</code> containing the following: <ul>
 <li>Docker image of the Solace PubSub+ Event Broker</li>
 <li>Docker image of the <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib" target="_blank">OpenTelemetry Collector Contrib</a> packaged with a Solace receiver modules</li>
 <li>Docker Image for the Jaeger all in one</li>
 </ul>
 </li>
-<li>otel-collector-config.yaml</li>
-<li>solace_config_keys.env</li>
-<li>.env (file with environment variables used in a docker compose files)</li>
-<li>solace-publisher.jar (command line Solace jms application for publishing of messages)</li>
-<li>solace-queue-receiver.jar (command line Solace jms application for receiving of messages from a JMS Queue)</li>
-<li>opentelemetry-javaagent-all-&lt;version&gt;.jar OpenTelemetry Java Instrumentation API</li>
-<li>solace-opentelemetry-jms-integration-&lt;version&gt;.jar <a href="https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar" target="_blank">Solace PubSub+ OpenTelemetry Integration API for JMS</a></li>
-<li>jms-auto-instrumentation-sampler-sources.jar (Source code for the Solace jms application for publishing and receiving messages)</li>
+<li><code>otel-collector-config.yaml</code></li>
+<li><code>solace_config_keys.env</code></li>
+<li><code>.env</code> (file with environment variables used in a docker compose files)</li>
+<li><code>solace-publisher.jar</code> (command line Solace jms application for publishing of messages)</li>
+<li><code>solace-queue-receiver.jar</code> (command line Solace jms application for receiving of messages from a JMS Queue)</li>
+<li><code>opentelemetry-javaagent-all-{version}.jar</code> OpenTelemetry Java Instrumentation API</li>
+<li><code>solace-opentelemetry-jms-integration-{version}.jar</code> <a href="https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar" target="_blank">Solace PubSub+ OpenTelemetry Integration API for JMS</a></li>
+<li><code>jms-auto-instrumentation-sampler-sources.jar</code> (Source code for the Solace jms application for publishing and receiving messages)</li>
 </ul>
 <p>You will be able to download the following package from the Solace product <a href="https://products.solace.com/download/COMMUNITY_CODELABS_TRACING" target="_blank">download site</a></p>
 <p>When extracting from this archive, it is mandatory that there are no SPACES in the full path to the working directory.</p>
-<pre>[solace@dev ~]$ unzip tracing-codelab-1.0.zip
+<pre><code language="language-bash" class="language-bash">[solace@dev ~]$ unzip tracing-codelab-1.0.zip
 [solace@dev ~]$ cd tracing-codelab
-</pre>
+</code></pre>
 <h2 is-upgraded>Creating and launching the containers</h2>
 <p>The following command will download and launch all containers necessary for the codelab (Internet access will be required to download images from Docker hub).</p>
-<pre>[solace@dev tracing-codelab]$ docker compose up -d
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ docker compose up -d
 
 ...
 ⠿ otel-collector Pulled                                                                     32.3s
@@ -102,13 +102,14 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
  ⠿ Container tracing-codelab-jaeger-all-in-one-1  Started                                     1.5s
  ⠿ Container tracing-codelab-solbroker-1          Started                                     1.6s
  ⠿ Container tracing-codelab-otel-collector-1     Started   
-</pre>
-<p><em>NOTE:</em> Be aware  the command demonstrated above is <code>docker compose</code> and not  <code>docker-compose</code>. Make sure to use a recent version. Both <code>docker compose</code> and <code>docker-compose</code> may be available on your system and could differ in version.</p>
+</code></pre>
+<aside class="warning"><p> Be aware  the command demonstrated above is `docker compose` and not  `docker-compose`. Make sure to use a recent version. Both `docker compose` and `docker-compose` may be available on your system and could differ in version. </p>
+</aside>
 <h2 is-upgraded>Few notes to the code lab configuration</h2>
 <p>The <code>.env</code> file contains several environment variables that are used within the <code>docker-compose.yaml</code> file and may need to be changed by user depends on the runtime environment:</p>
 <ul>
 <li>Solace Pub Sub Plus broker port <code>55557</code></li>
-<li>Open Telemetry contribution repository collector docker image tag and version <code>otel/opentelemetry-collector-contrib:0.67.0</code></li>
+<li>OpenTelemetry contribution repository collector docker image tag and version <code>otel/opentelemetry-collector-contrib:0.67.0</code></li>
 <li>Solace PubSub+ broker docker image tag and version <code>solace/solace-pubsub-standard:10.2</code></li>
 </ul>
 
@@ -117,22 +118,22 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
     
       <google-codelab-step label="Three Options for Config Management" duration="3">
         <p>You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.</p>
-<p>Each section of this CodeLab that performs a configuration step on the Solace broker will include all three options.</p>
-<aside class="warning"><p> **Note:** do _not_ perform all 3 configuration options, just choose 1 for each section. </p>
+<p>Each section of this codelab that performs a configuration step on the Solace broker will include all three options.</p>
+<aside class="warning"><p> Note: do not perform all 3 configuration options, just choose 1 for each section. </p>
 </aside>
 <p> For any configuration management, you will need a username/password with either admin or read/write level privileges. </p>
 <h2 is-upgraded>A. PubSub+ Manager GUI</h2>
-<p>The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on &#34;Manage Service&#34; in the top right. (It is a replacement for SolAdmin, if you know that that is).</p>
-<aside class="special"><p> **Tip:** throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help! </p>
+<p>The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on &#34;Manage Service&#34; in the top right.</p>
+<aside class="special"><p> Tip: throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help! </p>
 </aside>
-<p> ![alt-text-here](img/tips.png) </p>
+<p class="image-container"><img alt="alt-text-here" src="img/c1f978145c610f80.png"></p>
 <h2 is-upgraded>B. SEMP Management API</h2>
 <p>All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful <strong>Solace Element Management Protocol</strong> (SEMP) API. For more information on the SEMP API, please consult the following links:</p>
 <ul>
 <li><a href="https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html" target="_blank">SEMPv2 Swagger Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/SEMP/Using-SEMP.htm" target="_blank">SEMP User Guide</a></li>
 </ul>
-<aside class="special"><p> All API commands in the CodeLab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials </p>
+<aside class="special"><p> All API commands in the codelab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials </p>
 </aside>
 <h2 is-upgraded>C. Command Line Interface (CLI)</h2>
 <p>The Solace <strong>Command Line Interface</strong> (CLI) can be reached by one of the following methods (as appropriate):</p>
@@ -151,12 +152,12 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 
       </google-codelab-step>
     
-      <google-codelab-step label="Message VPN Configuration" duration="0">
+      <google-codelab-step label="Message VPN Configuration" duration="3">
         <p>To improve the user&#39;s exposure to the distributed tracing feature, the broker comes with minimal configuration. Here are the step-by-step instructions to configure your broker. Please note that for simplicity&#39;s sake these steps will not go through configuring any TLS settings and as a result, most data will be exchanged in a non-secure manner.</p>
 <p>The following minimal configuration is <strong>necessary</strong> on the Message VPN.</p>
 <aside class="warning"><p> ⚠️ If these steps aren&#39;t followed, your OpenTelemetry Collector logs will show  </p>
-<pre>&#34;error&#34;: &#34;no supported auth mechanism ([ANONYMOUS])&#34;}.
-</pre>
+<pre><code language="language-bash" class="language-bash">&#34;error&#34;: &#34;no supported auth mechanism ([ANONYMOUS])&#34;.
+</code></pre>
 <p>This message is the Collector warning you that you&#39;re trying to connect to an unsecured resource (i.e. the broker).</p>
 </aside>
 <h2 is-upgraded>PubSub+ Manager</h2>
@@ -177,15 +178,15 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 </code></pre>
 <h2 is-upgraded>CLI</h2>
 <p>First you must access your container; do so by typing the following command.</p>
-<pre>[solace@dev tracing-codelab]$ docker exec -it tracing-codelab-solbroker-1 /bin/bash
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ docker exec -it tracing-codelab-solbroker-1 /bin/bash
 
 This Solace product is proprietary software of
 Solace Corporation. By accessing this Solace product
 you are agreeing to the license terms and conditions
 located at http://www.solace.com/license-software
-</pre>
+</code></pre>
 <p>Once inside the container, simply type <code>cli</code>. Note: If you are flying through the steps too quickly, you may need to give the broker a few seconds to fully initialize itself after running the <code>docker compose</code> command from the previous section before being able to access <code>cli</code> successfully.</p>
-<pre>[appuser@solbroker sw]$ cli
+<pre><code language="language-bash" class="language-bash">[appuser@solbroker sw]$ cli
 
 Solace PubSub+ Standard Version 10.2.xxx
 
@@ -202,19 +203,19 @@ https://solace.com/contact-us/
 Operating Mode: Message Routing Node
 
 solbroker&gt;
-</pre>
+</code></pre>
 <p>The following commands will suffice.</p>
-<pre>solbroker&gt; enable
+<pre><code language="language-bash" class="language-bash">solbroker&gt; enable
 solbroker# configure
 solbroker(configure)# message-vpn default
 solbroker(configure/message-vpn)# authentication basic auth-type internal
 solbroker(configure/message-vpn)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Default Client Username Configuration" duration="0">
+      <google-codelab-step label="Default Client Username Configuration" duration="2">
         <p>This Client Username will be used later for publishing messages to the broker.</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>From the Access Control menu, select the 1) Client Usernames menu, 2.) select the default username from the list and 3.) select Edit from the Action menu:</p>
@@ -231,16 +232,16 @@ solbroker(configure/message-vpn)# end
 }&#39;
 </code></pre>
 <h2 is-upgraded>CLI</h2>
-<pre>solbroker# configure
+<pre><code language="language-bash" class="language-bash">solbroker# configure
 solbroker(configure)# client-username default message-vpn default
 solbroker(configure/client-username)# password default
 solbroker(configure/client-username)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Default Client Profile Configuration" duration="0">
+      <google-codelab-step label="Default Client Profile Configuration" duration="2">
         <p>This Client Profile is used by the Client Username configured above.</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Remaining in the default message VPN, navigate to Access Control -&gt; Client Profiles. Apply the following settings to the default Client Profile:</p>
@@ -265,20 +266,20 @@ solbroker(configure/client-username)# end
 }&#39;
 </code></pre>
 <h2 is-upgraded>CLI</h2>
-<pre>solbroker# configure
+<pre><code language="language-bash" class="language-bash">solbroker# configure
 solbroker(configure)# client-profile default message-vpn default
 solbroker(configure/client-profile)# message-spool reject-msg-to-sender-on-no-subscription-match
 solbroker(configure/client-profile)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Telemetry Profile Configuration" duration="0">
+      <google-codelab-step label="Telemetry Profile Configuration" duration="3">
         <p>The Telemetry Profile defines which published messages should be traced as well as who should be allowed to consume those trace messages.</p>
 <p>When creating a Telemetry Profile, a Telemetry Queue is created. In this example, the queue name would be <code>#telemetry-trace</code> because we use <code>trace</code> as the profile name when creating the Telemetry Profile. When generated, trace messages will be added to this queue for consumption.</p>
 <p>Creating a Telemetry Profile will also cause the broker to create a Client Profile as well as an ACL Profile. Just like the Telemetry Queue, the names of these profiles will take on the format of <code>#telemetry-&#60;telemetry-profile-name&#62;</code>. These profiles must be used by the Client Username or else the Client will not be able to bind to the Telemetry Queue to consume trace messages. In our demo, the <code>Client</code> is the Solace Receiver on OpenTelemetery collector. More on that to come in upcoming steps</p>
-<p>Below is a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Notice how the username, password, and queue name all match the settings configured on the broker. Be sure to update the collector configuration should any of the Telemetry Profile config change on the broker.</p>
+<p>Below is a snippet from the OpenTelemetry Collector configuration included in the tracing-codelab downloaded earlier. Notice how the username, password, and queue name all match the settings configured on the broker. Be sure to update the collector configuration should any of the Telemetry Profile config change on the broker.</p>
 <pre><code language="language-yaml" class="language-yaml">receivers:
   otlp:
     protocols:
@@ -354,29 +355,29 @@ solbroker(configure/client-profile)# end
 </code></pre>
 <h2 is-upgraded>CLI</h2>
 <p>First, start by creating the Telemetry Profile.</p>
-<pre>solbroker# configure
+<pre><code language="language-bash" class="language-bash">solbroker# configure
 solbroker(configure)# message-vpn default
 solbroker(configure/message-vpn)# create telemetry-profile trace
-</pre>
+</code></pre>
 <p>Next, open up and enable the receiver.</p>
-<pre>solbroker(configure/message-vpn/telemetry-profile)# receiver acl connect default-action allow
+<pre><code language="language-bash" class="language-bash">solbroker(configure/message-vpn/telemetry-profile)# receiver acl connect default-action allow
 solbroker(configure/message-vpn/telemetry-profile)# no receiver shutdown
-</pre>
+</code></pre>
 <p>Finally, let&#39;s create a filter that will attract all topic messages (using the <code>></code> subscription).</p>
-<pre>solbroker(configure/message-vpn/telemetry-profile)# trace
+<pre><code language="language-bash" class="language-bash">solbroker(configure/message-vpn/telemetry-profile)# trace
 solbroker(...e/message-vpn/telemetry-profile/trace)# no shutdown
 solbroker(configure/message-vpn/telemetry-profile)# create filter default
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# no shutdown
 solbroker(...ge-vpn/telemetry-profile/trace/filter)# create subscription &#34;&gt;&#34;
 solbroker(...try-profile/trace/filter/subscription)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="OpenTelemetry Collector Client Username Configuration" duration="0">
+      <google-codelab-step label="OpenTelemetry Collector Client Username Configuration" duration="3">
         <p>We need to create a new Client Username for binding to the Telemetry Queue because a Client Username can only be used to bind to a Telemetry Queue if it uses both the Telemetry Client Profile and Telemetry ACL Profile. Additionally, the Telemetry Client Profile does not allow the Client to publish persistent messages.</p>
-<p>Again we reference a snippet from the Open Telemetry Collector configuration included in the tracing-codelab downloaded earlier. Note that the username and password in the configuration must match the credentials configured for the Client Username on the broker in the following steps.</p>
+<p>Again we reference a snippet from the OpenTelemetry Collector configuration included in the tracing-codelab downloaded earlier. Note that the username and password in the configuration must match the credentials configured for the Client Username on the broker in the following steps.</p>
 <pre><code language="language-yaml" class="language-yaml">receivers:
   otlp:
     protocols:
@@ -419,19 +420,19 @@ solbroker(...try-profile/trace/filter/subscription)# end
 }&#39;
 </code></pre>
 <h2 is-upgraded>CLI</h2>
-<pre>solbroker# configure
+<pre><code language="language-bash" class="language-bash">solbroker# configure
 solbroker(configure)# create client-username trace message-vpn default
 solbroker(configure/client-username)# password trace
 solbroker(configure/client-username)# client-profile #telemetry-trace
 solbroker(configure/client-username)# acl-profile #telemetry-trace
 solbroker(configure/client-username)# no shutdown
 solbroker(configure/client-username)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Messaging Queue Configuration" duration="0">
+      <google-codelab-step label="Messaging Queue Configuration" duration="3">
         <p>Finally, create a queue for attracting messages for our producers and consumers. Add a topic subscription of <code>solace/tracing</code> to the queue.</p>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Within the default message VPN. Navigate to <em>Queues</em> to create a queue named ‘q&#39; with the specified topic subscription.</p>
@@ -456,7 +457,7 @@ solbroker(configure/client-username)# end
     }&#39;
 </code></pre>
 <p>Add the topic subscription</p>
-<pre>curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q/subscriptions&#39; \
+<pre><code language="language-bash" class="language-bash">curl --location &#39;http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/q/subscriptions&#39; \
 --header &#39;Content-Type: application/json&#39; \
 --header &#39;Accept: application/json&#39; \
 --header &#39;Authorization: Basic YWRtaW46YWRtaW4=&#39; \
@@ -465,21 +466,21 @@ solbroker(configure/client-username)# end
   &#34;queueName&#34;: &#34;q&#34;,
   &#34;subscriptionTopic&#34;: &#34;solace/tracing&#34;
 }&#39;
-</pre>
+</code></pre>
 <h2 is-upgraded>CLI</h2>
-<pre>solbroker# configure
+<pre><code language="language-bash" class="language-bash">solbroker# configure
 solbroker(configure)# message-spool message-vpn default
 solbroker(configure/message-spool)# create queue q
 solbroker(configure/message-spool/queue)# permission all delete
 solbroker(configure/message-spool/queue)# subscription topic solace/tracing
 solbroker(configure/message-spool/queue)# no shutdown
 solbroker(configure/message-spool/queue)# end
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Verifying your broker configuration" duration="0">
+      <google-codelab-step label="Verifying your broker configuration" duration="2">
         <h2 is-upgraded>Verifying your telemetry queue</h2>
 <p>As previously mentioned, a special Telemetry Queue should have been created when the Telemetry Profile was created. The client bound to the Telemetry Queue is the Solace Receiver Module, part of the OpenTelemetry Collector application that was launched in an earlier step.</p>
 <h3 is-upgraded>PubSub+ Manager</h3>
@@ -503,7 +504,7 @@ solbroker(configure/message-spool/queue)# end
 </code></pre>
 <h3 is-upgraded>CLI</h3>
 <p>Now that all configuration has been applied to the broker, you should see a Bind Count of &#34;1&#34; on your Telemetry Queue.</p>
-<pre>solbroker# show queue #telemetry-trace
+<pre><code language="language-bash" class="language-bash">solbroker# show queue #telemetry-trace
 
 Flags Legend:
 I - Ingress Admin State (U=Up, D=Down)
@@ -519,18 +520,18 @@ Message VPN                   Spooled  Usage(MB)   HWM (MB) Count I E A S R D P
 ------------------------- ----------- ---------- ---------- ----- -------------
 #telemetry-trace
 default                             0       0.00       0.00     1 D U N N P D N
-</pre>
+</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Producing trace messages and accessing trace span in Jaeger" duration="0">
+      <google-codelab-step label="Producing trace messages and accessing trace span in Jaeger" duration="7">
         <h2 is-upgraded>Publishing messages using a simple jms application</h2>
 <p>We have provided a simple JMS publishing application in <code>solace-publisher.jar</code>.<br> As you follow the steps in this codelab don&#39;t forget to replace the IP address in the command with your system&#39;s IP address if docker compose is not running on a same host.</p>
 <p>If Docker is running on the same system (which is expected) where you are running solace-publisher, you can use the following command:</p>
-<pre>[solace@dev tracing-codelab]$ 
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ 
 java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
-</pre>
+</code></pre>
 <h2 is-upgraded>Jaeger UI</h2>
 <p>As part of an earlier step, the Jaeger UI was launched. It can be accessed using your favourite browser.</p>
 <p>If Docker is running on the same system your browser is running on, you can access the Jaeger UI using the following URI: <a href="http://0.0.0.0:16686/" target="_blank">http://0.0.0.0:16686/</a> or <a href="http://localhost:16686/" target="_blank">http://localhost:16686/</a>. If Docker is running on another system in your network, simply replace <code>0.0.0.0</code> to the system&#39;s IP, e.g. <code>http://192.168.3.166:16686/</code>.</p>
@@ -542,7 +543,7 @@ java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -D
 
       </google-codelab-step>
     
-      <google-codelab-step label="Jaeger UI - Searching for traces" duration="0">
+      <google-codelab-step label="Jaeger UI - Searching for traces" duration="5">
         <h2 is-upgraded>Publishing more interesting messages</h2>
 <p>Let&#39;s publish three messages with user properties so that we can search for them on Jaeger. The messages will contain the following {key,value} pairs.</p>
 <ol type="1">
@@ -550,17 +551,17 @@ java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -D
 <li>{myKey,myValue2}</li>
 <li>{myKey,myValue3}</li>
 </ol>
-<pre>java -Dsolace.user-properties=&#34;myKey=myValue1&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
+<pre><code language="language-bash" class="language-bash">java -Dsolace.user-properties=&#34;myKey=myValue1&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
 java -Dsolace.user-properties=&#34;myKey=myValue2&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
 java -Dsolace.user-properties=&#34;myKey=myValue3&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
-</pre>
+</code></pre>
 <h2 is-upgraded>Verifying traced messages in the Jaeger UI</h2>
 <p>If you look at the details for the third message published, notice how it has a tag with the user property provided by the publisher. <img alt="Jaeger4" src="img/95aee1dafeeb507c.png"></p>
 <p>That value can be used for searching traces. On the Search page, search for the following tag: <code>messaging.solace.user_properties.myKey=myValue3</code> This request should find the third message published. <img alt="Jaeger5" src="img/5c8a4a806e1e255f.png"></p>
 <h2 is-upgraded>Using Jaeger to debug problems</h2>
 <p>In an earlier section, we created a queue which had a subscription to topic <code>solace/tracing</code>. Let&#39;s try publishing a message to the topic <code>solace/tracing2</code>, a topic for which no client or endpoint is subscribed.</p>
-<pre>java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing2 -jar solace-publisher.jar
-</pre>
+<pre><code language="language-bash" class="language-bash">java -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing2 -jar solace-publisher.jar
+</code></pre>
 <p>Notice the message from the app <code>No Subscription Match - Topic 'solace/tracing2'</code>. The message is considered as errored because it was discarded by the broker.</p>
 <p>From the Jaeger UI, search for the following tag <code>error=true</code><img alt="Jaeger6" src="img/4f246ed5480e8014.png"></p>
 <p>If you select the message and expand its detailed view, you will see that the message published had <code>No Subscription Match</code>. <img alt="Jaeger7" src="img/d59ae475a3e8e8dd.png"></p>
@@ -573,7 +574,7 @@ java -Dsolace.user-properties=&#34;myKey=myValue3&#34; -Dsolace.host=localhost:5
 
       </google-codelab-step>
     
-      <google-codelab-step label="Enabling Context Propagation in Published Messages" duration="0">
+      <google-codelab-step label="Enabling Context Propagation in Published Messages" duration="10">
         <h2 is-upgraded>Clean-up from previous sections</h2>
 <p>If there are messages on your queue from previous sections, let&#39;s take a moment to delete them.</p>
 <h3 is-upgraded>PubSub+ Manager</h3>
@@ -589,24 +590,24 @@ java -Dsolace.user-properties=&#34;myKey=myValue3&#34; -Dsolace.host=localhost:5
 --data &#39;{}&#39;
 </code></pre>
 <h3 is-upgraded>CLI</h3>
-<pre>solbroker&gt; enable
+<pre><code language="language-bash" class="language-bash">solbroker&gt; enable
 solbroker# admin
 solbroker(admin)# message-spool message-vpn default
 solbroker(admin/message-spool)# delete-messages queue q
 This will delete all spooled messages in q
 Do you want to continue (y/n)? y
-</pre>
+</code></pre>
 <h2 is-upgraded>Using solace-publisher app with auto-instrumentation</h2>
 <p>This command will launch the solace-publisher application and publish a message as well as push additional context information to the collector. Be sure to update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></p>
 <p>Be sure to replace &lt;absolute_path_to_the_jar_file&gt; with an absolute path to the <code>tracing-codelab</code> folder on your machine. There are 2 places in the command where this needs to be done.</p>
-<pre>[solace@dev tracing-codelab]$ 
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ 
 java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSPublisher&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
-</pre>
+</code></pre>
 <p>The following command will launch solace-queue-receiver application to consume the message that was just published as well as provide additional context information directly to the collector about this message being consumed.</p>
 <p>Be sure also here to replace &lt;absolute_path_to_the_jar_file&gt; with an absolute path to the <code>tracing-codelab</code> folder on your machine. There are 2 places in the command where this needs to be done.</p>
-<pre>[solace@dev tracing-codelab]$ 
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ 
 java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSQueueSubscriber&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.queue=q -Dsolace.topic=solace/tracing -jar solace-queue-receiver.jar
-</pre>
+</code></pre>
 <p>When you are done testing and wish to end the solace-queue-receiver applicaiton, simply send ctrl+c from the keyboard.</p>
 <h2 is-upgraded>Verify trace generated in Jaeger</h2>
 <p>A new trace should have been generated, notice how it has 3 spans. <img alt="Jaeger8" src="img/e4ea615a936a7866.png"></p>
@@ -618,19 +619,19 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
 
       </google-codelab-step>
     
-      <google-codelab-step label="Clean-up" duration="0">
+      <google-codelab-step label="Clean-up" duration="2">
         <h2 is-upgraded>Removing created Docker containers</h2>
 <p>To tear down Docker containers created in an earlier step, run the following command:</p>
-<pre>[solace@dev ~] $ cd tracing-codelab
+<pre><code language="language-bash" class="language-bash">[solace@dev ~] $ cd tracing-codelab
 [solace@dev tracing-codelab] $ docker compose down
-</pre>
+</code></pre>
 <p>To remove Docker images created:</p>
-<pre>[solace@dev tracing-codelab] $ docker image rm &lt;image id&gt;
-</pre>
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab] $ docker image rm &lt;image id&gt;
+</code></pre>
 <p>To view the list of Docker images, you can run the following command:</p>
-<pre>[solace@dev tracing-codelab]$ docker image ls
-</pre>
-<p>Thanks for participating in this Code Labs! If you have found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button found at the bottom left.</p>
+<pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ docker image ls
+</code></pre>
+<p>Thanks for participating in this codelab! If you have found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button found at the bottom left.</p>
 
 
       </google-codelab-step>
