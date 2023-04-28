@@ -80,7 +80,8 @@ kubectl get nodes
       </google-codelab-step>
     
       <google-codelab-step label="Install Solace Pubsub&#43; Event Broker Operator" duration="5">
-        <p>You can install the Operator in two ways:</p>
+        <p>Solace operator is a containerized application that works with the Kubernetes Operator Framework to deploy, manage and monitor other containerized applications in a declarative way.  The PubSub+ Operator deploys the PubSub+ Event broker in stand-alone or high-availability configurations. The <a href="https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorUserGuide.md" target="_blank">User Guide</a> for the PubSub+ Operator describes all of its capabilities.</p>
+<p>You can install the Operator in two ways:</p>
 <h3 is-upgraded>Option A: Operator Hub and OLM install</h3>
 <p>Follow the steps from <a href="https://operatorhub.io/operator/pubsubplus-eventbroker-operator" target="_blank">OperatorHub</a> to first setup OLM, then to install the PubSub+ Event Broker Operator. Click on the Install button to see the detailed instructions.</p>
 <h3 is-upgraded>Option B: Direct Install</h3>
@@ -103,7 +104,7 @@ kubectl get pods -n pubsubplus-operator-system --watch
       </google-codelab-step>
     
       <google-codelab-step label="Install Solace Pubsub&#43; Event Broker" duration="0">
-        <p>We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator.</p>
+        <p>We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator. Below steps are creating the &#34;developer.yaml&#34; that contains the configuration which the operator will deploy.  The format of the template is in <a href="https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorParametersReference.md" target="_blank">PubSub+ Operator API Parameters Reference</a> .  Then you are using kubectl to deploy the template.</p>
 <h2 is-upgraded>Minimum-footprint Deployment for Developers</h2>
 <pre><code language="language-bash" class="language-bash"># This command returns the list of worker nodes and their status
 # Create deployment manifest

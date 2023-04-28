@@ -111,6 +111,8 @@ kubectl get nodes
 
 Duration: 0:05:00
 
+Solace operator is a containerized application that works with the Kubernetes Operator Framework to deploy, manage and monitor other containerized applications in a declarative way.  The PubSub+ Operator deploys the PubSub+ Event broker in stand-alone or high-availability configurations. The [User Guide](https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorUserGuide.md) for the PubSub+ Operator describes all of its capabilities.
+
 You can install the Operator in two ways:
 
 #### Option A: Operator Hub and OLM install
@@ -138,7 +140,7 @@ Note: If you do not have SSH setup on your machine and got an error cloning the 
 
 ## Install Solace Pubsub+ Event Broker 
 
-We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator.
+We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator. Below steps are creating the “developer.yaml” that contains the configuration which the operator will deploy.  The format of the template is in [PubSub+ Operator API Parameters Reference](https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorParametersReference.md) .  Then you are using kubectl to deploy the template.
 
 ### Minimum-footprint Deployment for Developers
 ```bash
