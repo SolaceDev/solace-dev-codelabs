@@ -111,7 +111,7 @@ kubectl get nodes
 
 Duration: 0:05:00
 
-Solace operator is a containerized application that works with the Kubernetes Operator Framework to deploy, manage and monitor other containerized applications in a declarative way.  The PubSub+ Operator deploys the PubSub+ Event broker in stand-alone or high-availability configurations. The [User Guide](https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorUserGuide.md) for the PubSub+ Operator describes all of its capabilities.
+An operator is a containerized application that works with the Kubernetes Operator Framework to deploy, manage and monitor other containerized applications in a declarative way.  The PubSub+ Operator deploys the PubSub+ Event broker in stand-alone or high-availability configurations. The [User Guide](https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorUserGuide.md) for the PubSub+ Operator describes all of its capabilities.
 
 You can install the Operator in two ways:
 
