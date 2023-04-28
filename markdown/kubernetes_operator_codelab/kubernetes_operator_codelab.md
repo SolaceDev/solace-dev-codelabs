@@ -120,7 +120,7 @@ Today, you will learn to do the direct install.
 
 ```bash
 # clone the directory
-git clone git@github.com:SolaceDev/pubsubplus-kubernetes-operator.git
+git clone git@github.com:SolaceProducts/pubsubplus-kubernetes-operator.git
 
 # cd to the pubsubplus-kubernetes-operator/deploy folder and apply deploy.yaml
 # Manifest creates a namespace and all K8s resources for the Operator deployment
@@ -129,7 +129,7 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 ```
-Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead `https://github.com/SolaceDev/pubsubplus-kubernetes-operator.git`
+Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead `https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git`
 
 
 ![Operator Setup Verification](img/Operator_Img3.png)

@@ -86,7 +86,7 @@ kubectl get nodes
 <h3 is-upgraded>Option B: Direct Install</h3>
 <p>Today, you will learn to do the direct install.</p>
 <pre><code language="language-bash" class="language-bash"># clone the directory
-git clone git@github.com:SolaceDev/pubsubplus-kubernetes-operator.git
+git clone git@github.com:SolaceProducts/pubsubplus-kubernetes-operator.git
 
 # cd to the pubsubplus-kubernetes-operator/deploy folder and apply deploy.yaml
 # Manifest creates a namespace and all K8s resources for the Operator deployment
@@ -95,7 +95,7 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 </code></pre>
-<p>Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead <code>https://github.com/SolaceDev/pubsubplus-kubernetes-operator.git</code></p>
+<p>Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead <code>https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git</code></p>
 <p class="image-container"><img alt="Operator Setup Verification" src="img/318dd5cd01408e65.png"></p>
 <h2 is-upgraded>Next Step is to install the Event Broker</h2>
 
