@@ -118,21 +118,23 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
       <google-codelab-step label="Three Options for Config Management" duration="3">
         <p>You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.</p>
 <p>Each section of this CodeLab that performs a configuration step on the Solace broker will include all three options.</p>
-<p>Negative : <strong>Note:</strong> do <em>not</em> perform all 3 configuration options, just choose 1 for each section.</p>
-<p>For any configuration management, you will need a username/password with either admin or read/write level privileges.</p>
-<h2 is-upgraded>PubSub+ Manager GUI</h2>
+<aside class="warning"><p> **Note:** do _not_ perform all 3 configuration options, just choose 1 for each section. </p>
+</aside>
+<p> For any configuration management, you will need a username/password with either admin or read/write level privileges. </p>
+<h2 is-upgraded>A. PubSub+ Manager GUI</h2>
 <p>The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on &#34;Manage Service&#34; in the top right. (It is a replacement for SolAdmin, if you know that that is).</p>
-<p>Positive : <strong>Tip:</strong> throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help!</p>
-<p class="image-container"><img alt="alt-text-here" src="img/c1f978145c610f80.png"></p>
-<h2 is-upgraded>SEMP Management API</h2>
+<aside class="special"><p> **Tip:** throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help! </p>
+</aside>
+<p> ![alt-text-here](img/tips.png) </p>
+<h2 is-upgraded>B. SEMP Management API</h2>
 <p>All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful <strong>Solace Element Management Protocol</strong> (SEMP) API. For more information on the SEMP API, please consult the following links:</p>
 <ul>
 <li><a href="https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html" target="_blank">SEMPv2 Swagger Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/SEMP/Using-SEMP.htm" target="_blank">SEMP User Guide</a></li>
 </ul>
-<aside class="special"><p> All API commands in the CodeLab assume that the software broker is running in locally in docker and that the commands are executed using the default Admin credentials </p>
+<aside class="special"><p> All API commands in the CodeLab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials </p>
 </aside>
-<h2 is-upgraded>Command Line Interface (CLI)</h2>
+<h2 is-upgraded>C. Command Line Interface (CLI)</h2>
 <p>The Solace <strong>Command Line Interface</strong> (CLI) can be reached by one of the following methods (as appropriate):</p>
 <ul>
 <li>Software broker, SSH to port 2222, and login with the admin username/password</li>

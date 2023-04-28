@@ -118,22 +118,22 @@ You can (generally) configure the Solace PubSub+ broker using three different me
 
 Each section of this CodeLab that performs a configuration step on the Solace broker will include all three options.
 
-Negative
-: **Note:** do _not_ perform all 3 configuration options, just choose 1 for each section.
-
+<aside class="negative">
+**Note:** do _not_ perform all 3 configuration options, just choose 1 for each section.
+</aside>
 For any configuration management, you will need a username/password with either admin or read/write level privileges.
 
-### PubSub+ Manager GUI
+### A. PubSub+ Manager GUI
 
 The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on "Manage Service" in the top right. (It is a replacement for SolAdmin, if you know that that is).
 
-Positive
-: **Tip:** throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a "Tip" will show on the right-hand side of the screen describing the object. Built-in help!
-
+<aside class="positive">
+**Tip:** throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a "Tip" will show on the right-hand side of the screen describing the object. Built-in help!
+</aside>
 ![alt-text-here](img/tips.png)
 
 
-### SEMP Management API
+### B. SEMP Management API
 
 All of the commands and capabilities within the PubSub+ Manager can also be accomplished programmatically via the RESTful **Solace Element Management Protocol** (SEMP) API. For more information on the SEMP API, please consult the following links:
 
@@ -141,11 +141,11 @@ All of the commands and capabilities within the PubSub+ Manager can also be acco
 - [SEMP User Guide](https://docs.solace.com/SEMP/Using-SEMP.htm)
 
 <aside class="positive">
-All API commands in the CodeLab assume that the software broker is running in locally in docker and that the commands are executed using the default Admin credentials
+All API commands in the CodeLab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials
 </aside>
 
 
-### Command Line Interface (CLI)
+### C. Command Line Interface (CLI)
 
 The Solace **Command Line Interface** (CLI) can be reached by one of the following methods (as appropriate):
 
