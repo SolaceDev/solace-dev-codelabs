@@ -42,7 +42,10 @@
       </google-codelab-step>
     
       <google-codelab-step label="Prerequisites" duration="5">
-        <p>Before we setup the kubernetes environment in Kind, we need to make sure the below installations are complete and successful.</p>
+        <p>You will need a Kubernetes Cluster to deploy the Operator. There are several options available on Windows, Mac and Linux to setup a Kubernetes Cluster such as, <a href="https://docs.docker.com/desktop/kubernetes/" target="_blank">Docker Desktop</a> , <a href="https://rancherdesktop.io/" target="_blank">Rancher Desktop</a>, <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/" target="_blank">kubeadm</a>, <a href="https://minikube.sigs.k8s.io/docs/start/" target="_blank">minikube</a> etc.</p>
+<p>I will be using <a href="https://kind.sigs.k8s.io/" target="_blank">kind</a> to create my Kubernetes Cluster for today&#39;s tutorial. It creates the cluster which spins up Docker Containers acting as nodes.</p>
+<p>Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator.</p>
+<p>We need to make sure the below installations are complete and successful before we create a cluster using Kind:</p>
 <ul>
 <li>Install <a href="https://docs.docker.com/desktop/install/mac-install/" target="_blank">Docker Desktop</a> on macOS. For other OS options you can visit <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a>.</li>
 <li>Install Kubernetes command-line tool <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/" target="_blank">kubectl</a> on macOS. For other OS options you can visit:<br><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/" target="_blank">kubectl for Linux</a><br><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/" target="_blank">kubectl for Windows</a></li>

@@ -50,13 +50,19 @@ Plain Text followed by bullets
 
 Duration: 0:05:00
 
-Before we setup the kubernetes environment in Kind, we need to make sure the below installations are complete and successful.
+You will need a Kubernetes Cluster to deploy the Operator. There are several options available on Windows, Mac and Linux to setup a Kubernetes Cluster such as, [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) , [Rancher Desktop](https://rancherdesktop.io/), [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/), [minikube](https://minikube.sigs.k8s.io/docs/start/) etc.
 
+I will be using [kind](https://kind.sigs.k8s.io/) to create my Kubernetes Cluster for today's tutorial. It creates the cluster which spins up Docker Containers acting as nodes. 
 
+Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator.
+
+We need to make sure the below installations are complete and successful before we create a cluster using Kind:
 * Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) on macOS. For other OS options you can visit [Docker](https://docs.docker.com/get-docker/).
 * Install Kubernetes command-line tool [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/) on macOS. For other OS options you can visit: \
             [kubectl for Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)\
             [kubectl for Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) 
+
+
 
 
 <!--### Add a Link
