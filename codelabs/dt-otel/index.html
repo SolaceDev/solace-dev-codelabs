@@ -574,9 +574,8 @@ java -Dsolace.user-properties=&#34;myKey=myValue3&#34; -Dsolace.host=localhost:5
 
       </google-codelab-step>
     
-      <google-codelab-step label="Enabling Context Propagation in Published Messages" duration="10">
-        <h2 is-upgraded>Clean-up from previous sections</h2>
-<p>If there are messages on your queue from previous sections, let&#39;s take a moment to delete them.</p>
+      <google-codelab-step label="Clean-up from previous sections" duration="0">
+        <p>If there are messages on your queue from previous sections, let&#39;s take a moment to delete them.</p>
 <h3 is-upgraded>PubSub+ Manager</h3>
 <p>Login to the PubSub+ Manager console and select the default message VPN. Navigate to Queues and select the ‘q&#39; queue we created earlier. From here navigate to the Messages Queued tab and select all messages.</p>
 <p class="image-container"><img alt="alt-text-here" src="img/c803e2beb29f2263.png"></p>
@@ -597,8 +596,28 @@ solbroker(admin/message-spool)# delete-messages queue q
 This will delete all spooled messages in q
 Do you want to continue (y/n)? y
 </code></pre>
-<h2 is-upgraded>Using solace-publisher app with auto-instrumentation</h2>
-<p>This command will launch the solace-publisher application and publish a message as well as push additional context information to the collector. Be sure to update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Enabling Context Propagation in Published Messages" duration="10">
+        <p>While the previous examples have provided the ability to trace events as they arrive at the broker, we&#39;re still lacking the context required to know what is occurring at the publisher and at the subscriber. In order to create a trace containing information from end to end, we need to enable context propagation at the publisher and the subscriber.</p>
+<p><a href="https://opentelemetry.io/docs/concepts/glossary/#context-propagation" target="_blank">OpenTelemetry.io</a> describes Context Propagation as,</p>
+<p>&#34;Allowing all Data Sources to share an underling context mechanism for storing state and accessing data across the lifespan of a Transaction.&#34;</p>
+<p>In other words, Context Propagation is the processes by which we can link individual operations such as send, receive, or process together into a single trace. With opentelemetry, these operations are identified by spans and are tied to a single trace by way of parent-child relationships. For a deeper look at Context Propagation for Distributed Tracing, check out the <a href="https://docs.solace.com/Features/Distributed-Tracing/Distributed-Tracing-Context-Propagation.htm#Context_Propagation_for_Distributed_Tracing" target="_blank">Solace Docs</a>.</p>
+<p>Now that we know what Context Propagation is, when we can discuss two main ways for enabling it: Auto vs Manual Instrumentation.</p>
+<p>With Automatic instrumentation with Java, a Java agent JAR is attached to an existing Java 8+ application. The agent JAR dynamically injects bytecode to capture telemetry within the app or service. Enabling the ability to add telemetry to the existing app or service without any code changes or refactoring.</p>
+<p class="image-container"><img alt="Autoinstrumentatino.png" src="img/18702a6f35a34c55.png"></p>
+<p>With Manual instrumentation, an existing app or service must be refactored to include an implementation of the OpenTelemetry API.</p>
+<p class="image-container"><img alt="ManualInstrumentation.png" src="img/9b04c669d13d758a.png"></p>
+<p>While both options allow for the ability to add custom context information to traces (more on this later). Manual instrumentation provides for finer grained control. To determine the best option for your app or service, you must evaluate the time to implement, context required for traces, and existing opentelemetry api support.</p>
+<p>In the next few sections, we&#39;ll take a look at how both auto and manual instrumentation can be implemented to enable context propagation at the edge and across your Solace broker.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Context Propagation: Auto-instrumentation" duration="0">
+        <p>This command will launch the solace-publisher application and publish a message as well as push additional context information to the collector. Be sure to update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></p>
 <p>Be sure to replace &lt;absolute_path_to_the_jar_file&gt; with an absolute path to the <code>tracing-codelab</code> folder on your machine. There are 2 places in the command where this needs to be done.</p>
 <pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ 
 java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.exporter.otlp.endpoint=http://localhost:4317 -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSPublisher&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.topic=solace/tracing -jar solace-publisher.jar
@@ -608,13 +627,142 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
 <pre><code language="language-bash" class="language-bash">[solace@dev tracing-codelab]$ 
 java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar -Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar -Dotel.propagators=solace_jms_tracecontext -Dotel.traces.exporter=otlp -Dotel.metrics.exporter=none -Dotel.instrumentation.jms.enabled=true -Dotel.resource.attributes=&#34;service.name=SolaceJMSQueueSubscriber&#34; -Dsolace.host=localhost:55557 -Dsolace.vpn=default -Dsolace.user=default -Dsolace.password=default -Dsolace.queue=q -Dsolace.topic=solace/tracing -jar solace-queue-receiver.jar
 </code></pre>
-<p>When you are done testing and wish to end the solace-queue-receiver applicaiton, simply send ctrl+c from the keyboard.</p>
+<p>When you are done testing and wish to end the solace-queue-receiver application, simply send ctrl+c from the keyboard.</p>
 <h2 is-upgraded>Verify trace generated in Jaeger</h2>
 <p>A new trace should have been generated, notice how it has 3 spans. <img alt="Jaeger8" src="img/e4ea615a936a7866.png"></p>
 <p>Opening up the newly generated trace will allow you to easily follow the sequence of events. <img alt="Jaeger9" src="img/353b4557bfe82144.png"></p>
 <p>The first span was generated by the publisher when the message was published.</p>
 <p>The second span was generated by the PubSub+ Broker when the message was received.</p>
 <p>The third span was generated by the consumer when the message was received.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Context Propagation: Manual-instrumentation - Publisher" duration="0">
+        <p>In this section, we&#39;ll take a look at simple Publisher and Queue Subscriber java apps that have been updated to produce spans for various operations to enable context propagation at the edges.</p>
+<p>First, we&#39;ll take a look at the Publisher app leveraging the Solace <a href="https://docs.solace.com/API/Messaging-APIs/JCSMP-API/jcsmp-api-home.htm" target="_blank">JCSMP API</a> to to publish messages on the <code>solace/tracing</code> topic and the <a href="https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration" target="_blank">Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API</a> to enable tracing. The related file can be found in the <em>manual-instrumentation-publisher/src/main/java/com/solace/samples</em> directory in the zip file downloaded at the start of the codelab.</p>
+<p>After initializing the tracer in the <code>JcsmpTracingUtil.java</code> class we use <em>SolaceJCSMPTextMapGetter</em> to extract existing context from the message</p>
+<pre><code language="language-java" class="language-java">//Extract tracing context from message, if any using the SolaceJCSMPTextMapGetter
+//It is always advised to extract context before injecting new one
+final SolaceJCSMPTextMapGetter getter = new SolaceJCSMPTextMapGetter();
+final Context extractedContext = JcsmpTracingUtil.openTelemetry.getPropagators().getTextMapPropagator()
+        .extract(Context.current(), message, getter);
+</code></pre>
+<p>This context is then set as the parent on our new span. As we build out the span we can see how we are able to set specific span attributes and add in our custom attributes.</p>
+<pre><code language="language-java" class="language-java"> //Set the extract context as current context
+try (Scope parent = extractedContext.makeCurrent()) {
+    //Create a child span and set extracted/current context as parent of this span
+    final Span sendSpan = JcsmpTracingUtil.tracer
+            .spanBuilder(SERVICE_NAME + &#34; &#34; + SpanAttributes.MessagingOperation.PROCESS)
+            .setSpanKind(SpanKind.CLIENT)
+            .setAttribute(SpanAttributes.MessagingAttribute.DESTINATION_KIND.toString(),
+                    SpanAttributes.MessageDestinationKind.TOPIC.toString())
+            .setAttribute(SpanAttributes.MessagingAttribute.IS_TEMP_DESTINATION.toString(), &#34;true&#34;)
+            //Set more attributes as needed
+            .setAttribute(&#34;myKey&#34;, &#34;myValue&#34; + ThreadLocalRandom.current().nextInt(1, 3))
+            .setParent(extractedContext) // set extractedContext as parent
+            .startSpan();
+// continues below...
+</code></pre>
+<p>After creating the new span, we are able to inject it back on the message as now current context. After which we go ahead and send our message, making sure to catch relevant errors and end the current span. Only after ending the current span is the data exported to the configured Opentelemetry collector.</p>
+<aside class="special"><p> The OpenTelemetry collector is brought in to the application via the _opentelemetry-exporter-otlp_ library. Default settings are used to export to the collector executing in Docker. </p>
+</aside>
+<pre><code language="language-java" class="language-java">// ...continued from above
+    try (Scope scope = sendSpan.makeCurrent()) {
+        final SolaceJCSMPTextMapSetter setter = new SolaceJCSMPTextMapSetter();
+        final TextMapPropagator propagator = JcsmpTracingUtil.openTelemetry.getPropagators().getTextMapPropagator();
+        //and then inject new current context (set by sendSpan.makeCurrent()) in the message
+        propagator.inject(Context.current(), message, setter);
+        try {
+            producer.send(message, topic);  // send the message
+            msgSentCounter++;  // add one
+            message.reset();   // reuse this message, to avoid having to recreate it: better performance
+        } catch (JCSMPException e) {
+            System.out.printf(&#34;### Caught while trying to producer.send(): %s%n&#34;, e);
+            if (e instanceof JCSMPTransportException) {  // all reconnect attempts failed
+            isShutdown = true;  // let&#39;s quit; or, could initiate a new connection attempt
+        }
+            throw e;
+        }
+    } catch (Exception e) {
+        sendSpan.recordException(e); //Span can record exception if any
+        sendSpan.setStatus(StatusCode.ERROR, e.getMessage()); //Set span status as ERROR/FAILED
+    } finally {
+        sendSpan.end(); //End sendSpan. Span data is exported when span.end() is called.
+    }
+}
+</code></pre>
+<p>We&#39;ve provided a jar containing the manual implementation code from above, to run the jar and publish messages to the broker, execute the command below from the tracing-codelab directory.</p>
+<pre><code language="language-bash" class="language-bash">java -jar solace-samples-jcsmp-publisher-manual-instrumentation-1.0-SNAPSHOT.jar tcp://localhost:55557 default default default
+</code></pre>
+<p>After publishing a few messages, stop the jar by pressing <code>[ENTER]</code>.</p>
+<p>Navigating back to the Jaeger UI, update the Service filter to <em>SolaceJCSMPManualOpenTelemetry</em>.</p>
+<p>We should see our traces from the Publisher as well as the trace from the broker. <img alt="Jaeger10" src="img/29c6348178da9cf1.png"></p>
+<p>Clicking into trace, we can see the span created by <em>SolaceJCSMPPublisherManualInstrumentation</em> with our custom attributes. <img alt="Jaeger11" src="img/7b4c01800f73f737.png"><img alt="Jaeger12" src="img/6f508b06c0f5da59.png"></p>
+<p>Next, we&#39;ll take a look at how we can manually implement tracing in the the Queue Subscriber app.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Context Propagation: Manual-instrumentation - Queue Subscriber" duration="0">
+        <p>As with the Publisher app, the Queue Subscriber app leverages the Solace <a href="https://docs.solace.com/API/Messaging-APIs/JCSMP-API/jcsmp-api-home.htm" target="_blank">JCSMP API</a> to consume messages from the <code>q</code> queue and the <a href="https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration" target="_blank">Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API</a> to enable tracing. The related file can be found in the <em>manual-instrumentation-subscriber/src/main/java/com/solace/samples</em> directory in the zip file downloaded at the start of the codelab.</p>
+<p>With the Queue Subscriber, we add the tracing functionality to the <code>onReceive</code> method of the QueueFlowListen. Again we use the <em>SolaceJCSMPTextMapGetter</em> to extract existing context from the message.</p>
+<pre><code language="language-java" class="language-java">final SolaceJCSMPTextMapGetter getter = new SolaceJCSMPTextMapGetter();
+final Context extractedContext = JcsmpTracingUtil.openTelemetry.getPropagators().getTextMapPropagator().extract(Context.current(), message, getter);
+</code></pre>
+<p>Next, we&#39;ll see that the manual implementation has enabled us customized the behavior of the QueueSubscriber to generate a span upon initial reception of the message and after our application has completed app specific processing</p>
+<pre><code language="language-java" class="language-java">// Set the extracted context as current context
+try (Scope scope = extractedContext.makeCurrent()) {
+    //Create a child span and set extracted/current context as parent of this span
+    final Span receiveSpan = JcsmpTracingUtil.tracer.spanBuilder(SERVICE_NAME + &#34; &#34; + SpanAttributes.MessagingOperation.RECEIVE).setSpanKind(SpanKind.CLIENT).setAttribute(SpanAttributes.MessagingAttribute.DESTINATION_KIND.toString(), SpanAttributes.MessageDestinationKind.QUEUE.toString()).setAttribute(SpanAttributes.MessagingAttribute.IS_TEMP_DESTINATION.toString(), &#34;false&#34;)
+            //Set more attributes as needed
+            .setAttribute(&#34;myReceiveKey&#34;, &#34;receiveValue1&#34;)
+            //.setAttribute(...)
+            .setParent(extractedContext).startSpan();
+
+    //... and then we do processing and have another span
+    try {
+        final Span processSpan = JcsmpTracingUtil.tracer.spanBuilder(SERVICE_NAME + &#34; &#34; + SpanAttributes.MessagingOperation.PROCESS).setSpanKind(SpanKind.CLIENT)
+                //Set more attributes as needed
+                .setAttribute(&#34;myProcessingKey&#34;, &#34;postProcessInformation&#34;)
+                //.setAttribute(...)
+                .setParent(Context.current().with(receiveSpan)) // make RECEIVE span be parent
+                .startSpan();
+// continued below...
+</code></pre>
+<p>After creating both the receive and process spans, completing our custom processing, and ACK&#39;ing the message we can go ahead and end our process and receive spans (order is important here). Only after ending the current span is the data exported to the configured Opentelemetry collector.</p>
+<aside class="special"><p> The OpenTelemetry collector is brought in to the application via the _opentelemetry-exporter-otlp_ library. Default settings are used to export to the collector executing in Docker. </p>
+</aside>
+<pre><code language="language-java" class="language-java">//...continued from above
+        try {
+            msgRecvCounter++;
+            if (message.getRedelivered()) {  // useful check
+                // this is the broker telling the consumer that this message has been sent and not ACKed before.
+                 // this can happen if an exception is thrown, or the broker restarts, or the network disconnects
+                 // perhaps an error in processing? Should do extra checks to avoid duplicate processing
+                 hasDetectedRedelivery = true;
+            }
+             // Messages are removed from the broker queue when the ACK is received.
+             // Therefore, DO NOT ACK until all processing/storing of this message is complete.
+             // NOTE that messages can be acknowledged from a different thread.
+             message.ackMessage();  // ACKs are asynchronous
+        } catch (Exception e) {
+         processSpan.recordException(e); //Span can record exception if any
+         processSpan.setStatus(StatusCode.ERROR, e.getMessage()); //Set span status as ERROR/FAILED
+        } finally {
+         processSpan.end(); //End processSpan. Span data is exported when span.end() is called.
+        }
+    } finally {
+     receiveSpan.end(); //End receiveSpan. Span data is exported when span.end() is called.
+    }
+}
+</code></pre>
+<p>We&#39;ve provided a jar containing the manual implementation code from above, to run the jar and subscribe to the <code>q</code> queue on the broker, execute the command below from the tracing-codelab directory.</p>
+<pre><code language="language-bash" class="language-bash">java -jar solace-samples-jcsmp-subscriber-manual-instrumentation-1.0-SNAPSHOT.jar tcp://localhost:55557 default default default
+</code></pre>
+<p>After consuming the messages from the queue, stop the jar by pressing <code>[ENTER]</code>.</p>
+<p>Back in Jaeger, we can see the new spans added to the existing traces after refreshing the search UI.</p>
+<p>We see both the receive and process spans with their respective custom attributes. <img alt="Jaeger13" src="img/5e883fc42d7f4aad.png"></p>
 
 
       </google-codelab-step>
