@@ -27,7 +27,17 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/explore-dmr/explore-dmr.md">
     
-      <google-codelab-step label="Objectives" duration="5">
+      <google-codelab-step label="Introduction" duration="1">
+        <p>This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers.</p>
+<h2 is-upgraded>Learning Objectives:</h2>
+<p>⬜️ Setup a DMR link between two Solace Brokers<br> ⬜️ Publish and Subscribe to DMR enabled topics with Try Me<br> ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf <br><br></p>
+<h2 is-upgraded>Resulting Architecture:</h2>
+<p class="image-container"><img alt="DMR Exploration Topics" src="img/d7d655ec30491b2d.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="5">
         <h2 is-upgraded>Prerequisites</h2>
 <ol type="1">
 <li>2+ Solace PubSub+ Brokers deployed in environments where they are visable to each other over a network.</li>
@@ -41,11 +51,6 @@
 <li><a href="https://console.solace.cloud/login/new-account" target="_blank">Solace Cloud Trial</a></li>
 <li><a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">Solace PubSub+ Getting Started</a><br></li>
 </ul>
-<p>This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers.</p>
-<h2 is-upgraded>Learning Objectives:</h2>
-<p>⬜️ Setup a DMR link between two Solace Brokers<br> ⬜️ Publish and Subscribe to DMR enabled topics with Try Me<br> ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf <br><br></p>
-<h2 is-upgraded>Resulting Architecture:</h2>
-<p class="image-container"><img alt="DMR Exploration Topics" src="img/d7d655ec30491b2d.png"></p>
 
 
       </google-codelab-step>
@@ -108,6 +113,18 @@
 <li>Experience Solace Broker translate different message protocols (requires the use of Try Me and an additional publisher or subscriber).</li>
 </ul>
 <p><strong>In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.</strong></p>
+<p>The Solace Try Me Tab is small CodePen application which was created to provide a simple way of publishing and subscribing to Solace topics and queues.  The application produces and consumes WebSocket (WS) events to Solace PubSub+ brokers over a network.  Thus is it not required that the Try Me tool be used to connect to a local broker, however the tooling is setup to make connecting to the &#34;local&#34; Solace Broker effortless. Using the Try Me tool you can explore the following Solace features:</p>
+<ul>
+<li>Publish Direct Messages</li>
+<li>Publish Persistent Messages</li>
+<li>Publish to topics</li>
+<li>Publish directly to queues</li>
+<li>Subscribe to Solace topics</li>
+<li>Subscribe to Solace queues</li>
+<li>Subscribe to Solace topics using Solace wild cards</li>
+<li>Experience Solace Broker translate different message protocols (requires the use of Try Me and an additional publisher or subscriber).</li>
+</ul>
+<p><strong>In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.<br></strong>🆘!!!Maybe here I should include some topic architecture for 2 brokers that will allow you to see the DMR Event Mesh in action?</p>
 
 
       </google-codelab-step>
