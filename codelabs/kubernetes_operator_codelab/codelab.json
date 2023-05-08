@@ -3,9 +3,9 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2023-05-01T12:23:40-04:00",
+  "updated": "2023-05-08T11:39:14-04:00",
   "id": "kubernetes_operator_codelab",
-  "duration": 20,
+  "duration": 35,
   "title": "How to deploy Solace Pubsub+ Event Broker with Pubsub+ Event Broker Operator in Kubernetes",
   "summary": "",
   "source": "kubernetes_operator_codelab.md",
@@ -13,7 +13,9 @@
   "status": [
     "published"
   ],
-  "category": null,
+  "category": [
+    "kubernetes"
+  ],
   "tags": [
     "web"
   ],

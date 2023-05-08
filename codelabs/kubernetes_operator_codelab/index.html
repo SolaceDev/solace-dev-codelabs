@@ -31,7 +31,7 @@
         <p>Hello and Welcome! If you are wondering how to use our Operator , then you are in the right place!</p>
 <p>This codelab will show how to:</p>
 <ul>
-<li>Setup a kubernetes environment with Kind</li>
+<li>Setup a kubernetes environment with <a href="https://kind.sigs.k8s.io/" target="_blank">kind</a></li>
 <li>Install the Solace Pubsub+ Event Broker Operator in kubernetes</li>
 <li>Deploy a dev instance of Solace Pubsub+ Event Broker using the Operator</li>
 <li>Test the Pubsub+ Event Broker deployement and login to Pubsub+ Manager</li>
@@ -44,7 +44,8 @@
       <google-codelab-step label="Prerequisites" duration="5">
         <p>You will need a Kubernetes Cluster to deploy the Operator. There are several options available on Windows, Mac and Linux to setup a Kubernetes Cluster such as, <a href="https://docs.docker.com/desktop/kubernetes/" target="_blank">Docker Desktop</a> , <a href="https://rancherdesktop.io/" target="_blank">Rancher Desktop</a>, <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/" target="_blank">kubeadm</a>, <a href="https://minikube.sigs.k8s.io/docs/start/" target="_blank">minikube</a> etc.</p>
 <p>I will be using <a href="https://kind.sigs.k8s.io/" target="_blank">kind</a> to create my Kubernetes Cluster for today&#39;s tutorial. It creates the cluster which spins up Docker Containers acting as nodes.</p>
-<p>Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator.</p>
+<aside class="special"><p> Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator. </p>
+</aside>
 <p>We need to make sure the below installations are complete and successful before we create a cluster using Kind:</p>
 <ul>
 <li>Install <a href="https://docs.docker.com/desktop/install/mac-install/" target="_blank">Docker Desktop</a> on macOS. For other OS options you can visit <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a>.</li>
@@ -77,7 +78,7 @@ mv ./kind /some-dir-in-your-PATH/kind
 kubectl get nodes
 </code></pre>
 <p class="image-container"><img alt="Environment Setup Verification" src="img/aa74b65b95c938c1.png"></p>
-<h2 is-upgraded>Next Step is to install the Operator</h2>
+<p>Next Step is to install the Operator</p>
 
 
       </google-codelab-step>
@@ -99,14 +100,15 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 </code></pre>
-<p>Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead <code>https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git</code></p>
+<aside class="special"><p> Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead &#34;https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git&#34;. </p>
+</aside>
 <p class="image-container"><img alt="Operator Setup Verification" src="img/318dd5cd01408e65.png"></p>
-<h2 is-upgraded>Next Step is to install the Event Broker</h2>
+<p>Next Step is to install the Event Broker</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Install Solace Pubsub&#43; Event Broker" duration="0">
+      <google-codelab-step label="Install Solace Pubsub&#43; Event Broker" duration="5">
         <p>We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator. Below steps are creating the &#34;developer.yaml&#34; that contains the configuration which the operator will deploy.  The format of the template is in <a href="https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorParametersReference.md" target="_blank">PubSub+ Operator API Parameters Reference</a> .  Then you are using kubectl to deploy the template.</p>
 <h2 is-upgraded>Minimum-footprint Deployment for Developers</h2>
 <pre><code language="language-bash" class="language-bash"># This command returns the list of worker nodes and their status
@@ -130,12 +132,12 @@ kubectl get pods --show-labels --watch
 kubectl wait --for=condition=ServiceReady eventbroker dev-example
 </code></pre>
 <p class="image-container"><img alt="Broker Setup Verification" src="img/43b7096b1c362f0b.png"></p>
-<h2 is-upgraded>Next Step is to test the deployment</h2>
+<p>Next Step is to test the deployment</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Test Solace Pusbub&#43; Event Broker Deployment" duration="5">
+      <google-codelab-step label="Test Solace Pusbub&#43; Event Broker Deployment" duration="15">
         <p>In this section we are going to check the event broker deployment status, get information about the service name and type to access the broker services, and obtain the secret that contains the credentials to be used for admin access.</p>
 <h2 is-upgraded>1. Check the Event Broker Status</h2>
 <pre><code language="language-bash" class="language-bash">kubectl describe eventbroker dev-example

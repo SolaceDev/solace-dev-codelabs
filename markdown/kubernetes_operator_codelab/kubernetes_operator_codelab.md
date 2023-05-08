@@ -2,7 +2,7 @@ author: shwetamazumder
 summary:
 id: kubernetes_operator_codelab
 tags:
-categories:
+categories: kubernetes
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/kubernetes_operator_codelab
@@ -16,35 +16,15 @@ Duration: 0:01:00
 Hello and Welcome! If you are wondering how to use our Operator , then you are in the right place! 
 
 This codelab will show how to:
-* Setup a kubernetes environment with Kind
+* Setup a kubernetes environment with [kind](https://kind.sigs.k8s.io/)
 * Install the Solace Pubsub+ Event Broker Operator in kubernetes
 * Deploy a dev instance of Solace Pubsub+ Event Broker using the Operator
 * Test the Pubsub+ Event Broker deployement and login to Pubsub+ Manager
 
 
-<!--### Info Boxes
-Plain Text followed by green & yellow info boxes 
 
-Negative
-: This will appear in a yellow info box.
-
-Positive
-: This will appear in a green info box.
-
-### Bullets
-Plain Text followed by bullets
-* Hello
-* CodeLab
-* World
-
-### Numbered List
-1. List
-1. Using
-1. Numbers
-
-### Add an Image or a GIF -->
 ![Pubsub+ Operator](img/Operator_Img1.png)
-<!--![Soly Image Caption](img/soly.gif) -->
+
 
 ## Prerequisites
 
@@ -54,7 +34,7 @@ You will need a Kubernetes Cluster to deploy the Operator. There are several opt
 
 I will be using [kind](https://kind.sigs.k8s.io/) to create my Kubernetes Cluster for today's tutorial. It creates the cluster which spins up Docker Containers acting as nodes. 
 
-Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator.
+<aside class="positive"> Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator. </aside>
 
 We need to make sure the below installations are complete and successful before we create a cluster using Kind:
 * Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) on macOS. For other OS options you can visit [Docker](https://docs.docker.com/get-docker/).
@@ -63,19 +43,6 @@ We need to make sure the below installations are complete and successful before 
             [kubectl for Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) 
 
 
-
-
-<!--### Add a Link
-Add a link!
-[Example of a Link](https://www.google.com) -->
-
-<!--### Embed an iframe
-
-![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
-
-## Custom Step 1
-## Custom Step 2
-## Custom Step 3 -->
 
 ## Environment Setup
 
@@ -110,7 +77,7 @@ kubectl get nodes
 ```
 ![Environment Setup Verification](img/Operator_Img2.png)
 
-### Next Step is to install the Operator
+Next Step is to install the Operator
 
 
 ## Install Solace Pubsub+ Event Broker Operator
@@ -137,14 +104,16 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 ```
-Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead `https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git`
+ <aside class="positive"> Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead "https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git". </aside>
 
 
 ![Operator Setup Verification](img/Operator_Img3.png)
 
-### Next Step is to install the Event Broker
+Next Step is to install the Event Broker
 
 ## Install Solace Pubsub+ Event Broker 
+
+Duration: 0:05:00
 
 We are going to deploy a dev instance of the Solace Pubsub+ Event Broker using the Operator. Below steps are creating the “developer.yaml” that contains the configuration which the operator will deploy.  The format of the template is in [PubSub+ Operator API Parameters Reference](https://github.com/SolaceProducts/pubsubplus-kubernetes-operator/blob/main/docs/EventBrokerOperatorParametersReference.md) .  Then you are using kubectl to deploy the template.
 
@@ -173,11 +142,11 @@ kubectl wait --for=condition=ServiceReady eventbroker dev-example
 
 ![Broker Setup Verification](img/Operator_Img4.png)
 
-### Next Step is to test the deployment
+Next Step is to test the deployment
 
 ## Test Solace Pusbub+ Event Broker Deployment
 
-Duration: 0:05:00
+Duration: 0:15:00
 
 In this section we are going to check the event broker deployment status, get information about the service name and type to access the broker services, and obtain the secret that contains the credentials to be used for admin access.
 
