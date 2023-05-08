@@ -6,13 +6,20 @@
   "updated": "2020-11-16T17:48:13-05:00",
   "id": "opentelemetry-intro",
   "duration": 69,
-  "title": "Using OpenTelemetry to find your event in a haystack",
+  "title": "Introduction to OpenTelemetry using Python",
   "summary": "",
   "source": "opentelemetry-intro.md",
   "theme": "",
-  "status": ["draft"],
-  "category": ["opentelemetry", "taxi"],
-  "tags": ["web"],
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "opentelemetry",
+    "taxi"
+  ],
+  "tags": [
+    "web"
+  ],
   "feedback": "https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro",
   "url": "opentelemetry-intro"
 }

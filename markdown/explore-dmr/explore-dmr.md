@@ -10,7 +10,22 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 # DMR (Event Mesh) Exploration Procedures
 
-## Objectives
+## Introduction
+Duration: 0:01:00
+
+This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
+
+### Learning Objectives:
+ ⬜️ Setup a DMR link between two Solace Brokers  
+ ⬜️ Publish and Subscribe to DMR enabled topics with Try Me  
+ ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf 
+<br><br>
+
+### Resulting Architecture:
+![DMR Exploration Topics](img/DMR_Exploration.png)
+
+
+## Prerequisites
 Duration: 0:05:00
 
 ### Prerequisites
@@ -25,16 +40,6 @@ If you do not meet both of these requirements please use the following resources
 * [Solace PubSub+ Getting Started](https://solace.com/products/event-broker/software/getting-started/)
 <br>
 
-This codelab will lay the groundwork for a Solace based Event Mesh by setting up a Dynamic Message Routing (DMR) link between two stand alone brokers.  These brokers can be running in Docker or on Solace Cloud, in any cloud environment.  Then we will explore how events are propagated across a DMR link.  Setup publishers and Subscribers to each of the brokers in our Event Mesh in order to see events publish to one broker be dynamically routed to the other brokers in our Event Mesh where there are active subscribers. 
-
-### Learning Objectives:
- ⬜️ Setup a DMR link between two Solace Brokers  
- ⬜️ Publish and Subscribe to DMR enabled topics with Try Me  
- ⬜️ Publish and Subscribe to DMR enabled topics with SDKPerf 
-<br><br>
-
-### Resulting Architecture:
-![DMR Exploration Topics](img/DMR_Exploration.png)
 
 ## Setting up DMR with the Solace Broker WebUI
 Duration: 0:18:00
@@ -132,6 +137,21 @@ The Solace Try Me Tab is small CodePen application which was created to provide 
 
 **In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
 
+
+The Solace Try Me Tab is small CodePen application which was created to provide a simple way of publishing and subscribing to Solace topics and queues.  The application produces and consumes WebSocket (WS) events to Solace PubSub+ brokers over a network.  Thus is it not required that the Try Me tool be used to connect to a local broker, however the tooling is setup to make connecting to the "local" Solace Broker effortless. Using the Try Me tool you can explore the following Solace features:
+* Publish Direct Messages
+* Publish Persistent Messages
+* Publish to topics
+* Publish directly to queues
+* Subscribe to Solace topics
+* Subscribe to Solace queues
+* Subscribe to Solace topics using Solace wild cards
+* Experience Solace Broker translate different message protocols (requires the use of Try Me and an additional publisher or subscriber).
+
+<br>
+
+**In the next section we will explore how using the Try Me tool to Publish and Subscribe only to a single individual Solace Broker will allow us to obtain events from any accessible topic published to any of the Solace Brokers connected to our Solace DMR Event Mesh.** 
+<br>🆘!!!Maybe here I should include some topic architecture for 2 brokers that will allow you to see the DMR Event Mesh in action?
 
 ## Setting up and running "Try Me"
 Duration: 0:10:00
