@@ -361,7 +361,7 @@ public Function<String, String> reverse(){
 }
 ```
 
-Now that we have two functions Spring Cloud Stream won't just assume what bindings we want created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
+Now that we have two functions Spring Cloud Stream won't just assume what bindings we want to be created so we need to go configure them in the application config file. Assuming we want to uppercase an incoming String and then reverse it we will add these properties to the file:
 
 **Option 1: application.properties**
 ```
@@ -472,4 +472,4 @@ Duration: 0:02:00
 
 ![solly_wave](img/solly_wave.webp)
 
-Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
+Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Give feedback button at the bottom left of this codelab.
