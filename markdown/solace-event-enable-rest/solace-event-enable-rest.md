@@ -1183,19 +1183,17 @@ Thanks for making it this far! :-D
 
 ### Useful Links
 
-[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+[MicroGateways Overview](https://docs.solace.com/Services/Microgateways-Overview.htm)
 
-[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+[MicroGateways Use Cases](https://docs.solace.com/Services/Microgateway-Use-Cases.htm)
 
-[Solace REST Message Encoding](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref393979969)
+[Solace REST Message Encoding](https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm)
 
 [Solace REST Component Map](https://docs.solace.com/PubSub-ConceptMaps/Component-Maps.htm#REST2)
 
-[All about Solace Wildcards](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+[All about Solace Wildcards](https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm)
 
 [Solace REST Multi-Protocol Integration](https://docs.solace.com/Overviews/REST-Messaging-Concepts/Multi-Protocol-Integration.htm)
-
-[Solace REST Message Correlation](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#2.2.6.1)
 
 
 #### Thanks!
