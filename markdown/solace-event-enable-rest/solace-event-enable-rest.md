@@ -46,9 +46,9 @@ Positive
 
 ### Useful Links
 
-[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+[MicroGateways Overview](https://docs.solace.com/Services/Microgateways-Overview.htm)
 
-[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+[MicroGateways Use Cases](https://docs.solace.com/Services/Microgateway-Use-Cases.htm)
 
 [Event-Enable REST Video Tutorial](https://youtu.be/7eKAdLhlT1s)
 
