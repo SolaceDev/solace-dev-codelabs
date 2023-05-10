@@ -6,8 +6,6 @@ categories: REST,Solace,Java
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md
-analytics account: UA-3921398-10
-
 
 # Event-Enable your REST Architecture with Solace PubSub+, Part 1
 
@@ -46,9 +44,9 @@ Positive
 
 ### Useful Links
 
-[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+[MicroGateways Overview](https://docs.solace.com/Services/Microgateways-Overview.htm)
 
-[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+[MicroGateways Use Cases](https://docs.solace.com/Services/Microgateway-Use-Cases.htm)
 
 [Event-Enable REST Video Tutorial](https://youtu.be/7eKAdLhlT1s)
 
@@ -1164,6 +1162,7 @@ One very useful feature of Solace for this type back-end service is **Shared Sub
 
 
 ## Conclusion, Discussion, Best Practices, Links
+Duration: 0:02:00
 
 Thanks for making it this far! :-D
 
@@ -1183,19 +1182,17 @@ Thanks for making it this far! :-D
 
 ### Useful Links
 
-[MicroGateways Overview](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateways-Overview.htm)
+[MicroGateways Overview](https://docs.solace.com/Services/Microgateways-Overview.htm)
 
-[MicroGateways Use Cases](https://docs.solace.com/Overviews/Microgateway-Concepts/Microgateway-Use-Cases.htm)
+[MicroGateways Use Cases](https://docs.solace.com/Services/Microgateway-Use-Cases.htm)
 
-[Solace REST Message Encoding](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref393979969)
+[Solace REST Message Encoding](https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm)
 
 [Solace REST Component Map](https://docs.solace.com/PubSub-ConceptMaps/Component-Maps.htm#REST2)
 
-[All about Solace Wildcards](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+[All about Solace Wildcards](https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm)
 
 [Solace REST Multi-Protocol Integration](https://docs.solace.com/Overviews/REST-Messaging-Concepts/Multi-Protocol-Integration.htm)
-
-[Solace REST Message Correlation](https://docs.solace.com/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#2.2.6.1)
 
 
 #### Thanks!
