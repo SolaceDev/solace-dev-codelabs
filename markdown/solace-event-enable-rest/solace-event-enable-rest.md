@@ -6,8 +6,6 @@ categories: REST,Solace,Java
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-event-enable-rest/solace-event-enable-rest.md
-analytics account: UA-3921398-10
-
 
 # Event-Enable your REST Architecture with Solace PubSub+, Part 1
 
@@ -1164,6 +1162,7 @@ One very useful feature of Solace for this type back-end service is **Shared Sub
 
 
 ## Conclusion, Discussion, Best Practices, Links
+Duration: 0:02:00
 
 Thanks for making it this far! :-D
 
