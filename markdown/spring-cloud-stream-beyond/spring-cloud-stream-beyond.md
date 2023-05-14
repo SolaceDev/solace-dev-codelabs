@@ -155,7 +155,7 @@ When using Spring Cloud Stream with the Solace Binder you can decide between 3 o
 There are many use cases where you need to process events in order as they are published to a defined topic. In order to do this with Spring Cloud Stream you would create your `Function` or `Consumer` function and configure the input binding for it to receive messages from a specific destination. There are two ways to do this with the Solace binder. The standard way, with no Solace specific configurations, is non-durable and we'll start there.
 
 👀 Under the covers this option will use a Non-Durable Anonymous Queue on the broker to hold the messages for the consuming microservice. Let's check it out!
-This option will deliver events in order to your microservice while it remains up and running. To do this we just to specify a `destination`, but NO `group` on your input binding. 
+This option will deliver events in order to your microservice while it remains up and running. To do this we just need to specify a `destination`, but NO `group` on your input binding. 
 
 So open your `application.yml` file and add the following config to what already exists. This configuration is telling Spring Cloud Stream that you want your `myConsumer` function to receive events that are published to the `spring/cloud/stream` topic. 
 ``` yaml
@@ -431,7 +431,7 @@ Note the Solace Binder offers two producer properties that may come in handy for
 ## Wildcard Subscriptions
 Duration: 0:10:00
 
-Since we're using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we're in luck! There are 2 different options for configuring your topic subscriptions on consuming funcitons. Both options are configured in the Spring application properties. 
+Since we're using the Solace binder we really want to be able to make topic subscriptions with wildcards. The good news is that we're in luck! There are 2 different options for configuring your topic subscriptions on consuming functions. Both options are configured in the Spring application properties. 
 
 ### Wildcards in the destination
 The first way to do it is in the `destination` property itself. The Solace binder uses the `destination` property to both name the queue that the app will bind to, but also as a topic subscription on the queue. 
@@ -460,7 +460,7 @@ If you were to navigate to the queue in the PubSub+ Manager you'll see that the 
 ![Wildcard Queue 1](img/wildcardQueue1.webp)
 
 
-### Wildcards in queueAdditionalSubscrptions
+### Wildcards in queueAdditionalSubscriptions
 The second place you can add topic subscriptions and also use wildcards when using the Solace binder is using the `queueAdditionalSubscriptions` consumer property. 
 This property is available under `spring.cloud.stream.solace.bindings.BINDING_NAME.consumer.queueAdditionalSubscriptions` and allows for 1 to many extra topic subscriptions to be added. 
 
