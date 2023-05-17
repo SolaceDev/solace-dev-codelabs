@@ -1043,6 +1043,10 @@ Back in Jaeger, we can see the new spans added to the existing traces after refr
 We see both the receive and process spans with their respective custom attributes.
 ![Jaeger13](img/jaeger13.png)
 
+
+### More samples
+For more examples on how to use manual instrumentation head to the [Solace Samples](https://github.com/SolaceSamples) github org and navigate to the API of choice
+
 ## Clean-up
 Duration: 0:02:00
 
