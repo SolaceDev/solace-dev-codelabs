@@ -719,7 +719,7 @@ final Context extractedContext = JcsmpTracingUtil.openTelemetry.getPropagators()
 try (Scope parent = extractedContext.makeCurrent()) {
     //Create a child span and set extracted/current context as parent of this span
     final Span sendSpan = JcsmpTracingUtil.tracer
-            .spanBuilder(SERVICE_NAME + &#34; &#34; + SpanAttributes.MessagingOperation.PROCESS)
+            .spanBuilder(SERVICE_NAME + &#34; &#34; + SpanAttributes.MessagingOperation.SEND)
             .setSpanKind(SpanKind.CLIENT)
             .setAttribute(SpanAttributes.MessagingAttribute.DESTINATION_KIND.toString(),
                     SpanAttributes.MessageDestinationKind.TOPIC.toString())
@@ -763,8 +763,8 @@ try (Scope parent = extractedContext.makeCurrent()) {
 </code></pre>
 <p>After publishing a few messages, stop the jar by pressing <code>[ENTER]</code>.</p>
 <p>Navigating back to the Jaeger UI, update the Service filter to <em>SolaceJCSMPManualOpenTelemetry</em>.</p>
-<p>We should see our traces from the Publisher as well as the trace from the broker. <img alt="Jaeger10" src="img/29c6348178da9cf1.png"></p>
-<p>Clicking into trace, we can see the span created by <em>SolaceJCSMPPublisherManualInstrumentation</em> with our custom attributes. <img alt="Jaeger11" src="img/7b4c01800f73f737.png"><img alt="Jaeger12" src="img/6f508b06c0f5da59.png"></p>
+<p>We should see our traces from the Publisher as well as the trace from the broker. <img alt="Jaeger10" src="img/2cdd5329c18317e1.png"></p>
+<p>Clicking into trace, we can see the span created by <em>SolaceJCSMPPublisherManualInstrumentation</em> with our custom attributes. <img alt="Jaeger11" src="img/d01de646ada9d70f.png"></p>
 <p>Next, we&#39;ll take a look at how we can manually implement tracing in the the Queue Subscriber applicaiton.</p>
 
 

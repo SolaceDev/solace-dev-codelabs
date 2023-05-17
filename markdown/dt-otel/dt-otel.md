@@ -895,7 +895,7 @@ This context is then set as the parent on our new span. As we build out the span
 try (Scope parent = extractedContext.makeCurrent()) {
     //Create a child span and set extracted/current context as parent of this span
     final Span sendSpan = JcsmpTracingUtil.tracer
-            .spanBuilder(SERVICE_NAME + " " + SpanAttributes.MessagingOperation.PROCESS)
+            .spanBuilder(SERVICE_NAME + " " + SpanAttributes.MessagingOperation.SEND)
             .setSpanKind(SpanKind.CLIENT)
             .setAttribute(SpanAttributes.MessagingAttribute.DESTINATION_KIND.toString(),
                     SpanAttributes.MessageDestinationKind.TOPIC.toString())
@@ -957,7 +957,6 @@ We should see our traces from the Publisher as well as the trace from the broker
 
 Clicking into trace, we can see the span created by _SolaceJCSMPPublisherManualInstrumentation_ with our custom attributes.
 ![Jaeger11](img/jaeger11.png)
-![Jaeger12](img/jaeger12.png)
 
 Next, we'll take a look at how we can manually implement tracing in the the Queue Subscriber applicaiton.
 
