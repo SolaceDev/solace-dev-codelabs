@@ -617,10 +617,14 @@ Do you want to continue (y/n)? y
 <aside class="special"><p> Allowing all Data Sources to share an underling context mechanism for storing state and accessing data across the lifespan of a Transaction.  </p>
 </aside>
 <p>In other words, Context Propagation is the processes by which we can link individual operations such as <code>send</code>, <code>receive</code>, or <code>process</code> together into a single trace. With OpenTelemetry, these operations are identified by spans and are tied to a single trace by way of parent-child relationships. For a deeper look at Context Propagation for Distributed Tracing, check out the <a href="https://docs.solace.com/Features/Distributed-Tracing/Distributed-Tracing-Context-Propagation.htm#Context_Propagation_for_Distributed_Tracing" target="_blank">Solace Docs</a>.</p>
-<p>Now that we know what Context Propagation is, when we can discuss two main ways for enabling it: Auto vs Manual Instrumentation.</p>
+<p>Now that we know what Context Propagation is, when we can discuss two main ways for enabling it:</p>
+<ul>
+<li><strong>Auto Instrumentation</strong> - using a side agent as part of the java execution command</li>
+<li><strong>Manual Instrumentation</strong> - tracing implemented directly in source code</li>
+</ul>
 <h2 is-upgraded>Auto Instrumentation</h2>
 <p>With <a href="https://opentelemetry.io/docs/instrumentation/java/automatic/" target="_blank">Automatic instrumentation with Java</a>, a Java agent JAR is attached to an existing Java 8+ application. The agent JAR dynamically injects bytecode to capture telemetry within the app or service. This enables the ability to add telemetry to the existing app or service without any code changes or refactoring.</p>
-<p class="image-container"><img alt="Autoinstrumentatino.png" src="img/59cde09d74bbe393.png"></p>
+<p class="image-container"><img alt="Autoinstrumentatino.png" src="img/a535c6ded5d0e418.png"></p>
 <h2 is-upgraded>Manual Instrumentation</h2>
 <p>With Manual instrumentation, applications or services must use the <a href="https://opentelemetry.io/docs/specs/otel/library-guidelines/" target="_blank">OpenTelemetry API</a> to implement tracing directly from the source code. Note that this process requires code changes and refactoring</p>
 <p class="image-container"><img alt="ManualInstrumentation.png" src="img/beca5b957f58903c.png"></p>

@@ -765,7 +765,9 @@ Allowing all Data Sources to share an underling context mechanism for storing st
 In other words, Context Propagation
 is the processes by which we can link individual operations such as `send`, `receive`, or `process` together into a single trace. With OpenTelemetry, these operations are identified by spans and are tied to a single trace by way of parent-child relationships. For a deeper look at Context Propagation for Distributed Tracing, check out the [Solace Docs](https://docs.solace.com/Features/Distributed-Tracing/Distributed-Tracing-Context-Propagation.htm#Context_Propagation_for_Distributed_Tracing).
 
-Now that we know what Context Propagation is, when we can discuss two main ways for enabling it: Auto vs Manual Instrumentation. 
+Now that we know what Context Propagation is, when we can discuss two main ways for enabling it: 
+- **Auto Instrumentation** - using a side agent as part of the java execution command
+- **Manual Instrumentation** - tracing implemented directly in source code
 
 ### Auto Instrumentation
 
