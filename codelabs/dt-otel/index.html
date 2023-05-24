@@ -706,7 +706,7 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
     
       <google-codelab-step label="Manual-instrumentation - Publisher" duration="10">
         <p>In this section, we&#39;ll take a look at how to use the OpenTelemetry API with the <a href="https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration" target="_blank">Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API</a>. We&#39;ll start with a simple Publisher application that publishes messages on the <code>solace/tracing</code> topic and update it to produce spans for various operations to enable context propagation at the edges.</p>
-<p>The related file can be found in the following directory <code>solace-dt-demo/manual-instrumentation/jcsmp-publisher/src/main/java/com/solace/samples/Publisher.java</code></p>
+<p>The related file can be found in the following directory from the <a href="https://github.com/TamimiGitHub/solace-dt-demo" target="_blank">solace-dt-demo</a> repo <code>solace-dt-demo/manual-instrumentation/jcsmp-publisher/src/main/java/com/solace/samples/Publisher.java</code></p>
 <p>After initializing the tracer in the <code>JcsmpTracingUtil.java</code> class we use <em>SolaceJCSMPTextMapGetter</em> to extract existing context from the message</p>
 <pre><code language="language-java" class="language-java">//Extract tracing context from message, if any using the SolaceJCSMPTextMapGetter
 //It is always advised to extract context before injecting new one
@@ -772,7 +772,7 @@ try (Scope parent = extractedContext.makeCurrent()) {
     
       <google-codelab-step label="Manual-instrumentation - Queue Subscriber" duration="10">
         <p>As with the Publisher application, the Queue Subscriber application leverages the Solace <a href="https://docs.solace.com/API/Messaging-APIs/JCSMP-API/jcsmp-api-home.htm" target="_blank">JCSMP API</a> to consume messages from the <code>q</code> queue and the <a href="https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration" target="_blank">Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API</a> to enable tracing.</p>
-<p>The related file can be found in the following directory <code>solace-dt-demo/manual-instrumentation/jcsmp-subscriber/src/main/java/com/solace/samples/QueueSubscriber.java</code></p>
+<p>The related file can be found in the following directory from the <a href="https://github.com/TamimiGitHub/solace-dt-demo" target="_blank">solace-dt-demo</a> repo <code>solace-dt-demo/manual-instrumentation/jcsmp-subscriber/src/main/java/com/solace/samples/QueueSubscriber.java</code></p>
 <p>With the Queue Subscriber, we add the tracing functionality to the <code>onReceive</code> method of the QueueFlowListen. Again we use the <em>SolaceJCSMPTextMapGetter</em> to extract existing context from the message.</p>
 <pre><code language="language-java" class="language-java">final SolaceJCSMPTextMapGetter getter = new SolaceJCSMPTextMapGetter();
 final Context extractedContext = JcsmpTracingUtil.openTelemetry.getPropagators().getTextMapPropagator().extract(Context.current(), message, getter);

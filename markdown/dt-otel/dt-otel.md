@@ -877,7 +877,7 @@ Duration: 0:10:00
 
 In this section, we'll take a look at how to use the OpenTelemetry API with the [Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API](https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration). We'll start with a simple Publisher application that publishes messages on the `solace/tracing` topic and update it to produce spans for various operations to enable context propagation at the edges.
 
-The related file can be found in the following directory `solace-dt-demo/manual-instrumentation/jcsmp-publisher/src/main/java/com/solace/samples/Publisher.java` 
+The related file can be found in the following directory from the [solace-dt-demo](https://github.com/TamimiGitHub/solace-dt-demo) repo `solace-dt-demo/manual-instrumentation/jcsmp-publisher/src/main/java/com/solace/samples/Publisher.java` 
 
 After initializing the tracer in the `JcsmpTracingUtil.java` class we use _SolaceJCSMPTextMapGetter_ to extract existing context
 from the message
@@ -965,7 +965,7 @@ Duration: 0:10:00
 
 As with the Publisher application, the Queue Subscriber application leverages the Solace [JCSMP API](https://docs.solace.com/API/Messaging-APIs/JCSMP-API/jcsmp-api-home.htm) to consume messages from the `q` queue and the [Solace PubSub+ OpenTelemetry Integration For Solace JCSMP API](https://mvnrepository.com/artifact/com.solace/solace-opentelemetry-jcsmp-integration) to enable tracing.
 
-The related file can be found in the following directory `solace-dt-demo/manual-instrumentation/jcsmp-subscriber/src/main/java/com/solace/samples/QueueSubscriber.java`
+The related file can be found in the following directory from the [solace-dt-demo](https://github.com/TamimiGitHub/solace-dt-demo) repo `solace-dt-demo/manual-instrumentation/jcsmp-subscriber/src/main/java/com/solace/samples/QueueSubscriber.java`
 
 With the Queue Subscriber, we add the tracing functionality to the `onReceive` method of the QueueFlowListen.
 Again we use the _SolaceJCSMPTextMapGetter_ to extract existing context from the message.
