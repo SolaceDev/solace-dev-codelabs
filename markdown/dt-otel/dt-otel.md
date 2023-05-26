@@ -82,6 +82,17 @@ git clone git@github.com:TamimiGitHub/solace-dt-demo.git
 cd solace-dt-demo
 ```
 
+<aside class='negative'> 
+
+Note: If you do not have SSH access configured between your local machine and your github account you will receive the following error while cloning `Permission denied (publickey). fatal: Could not read from remote repository`. To avoid that, just clone the https link as follows
+
+```
+git clone https://github.com/TamimiGitHub/solace-dt-demo.git
+```
+
+</aside>
+
+
 ## Launch the required containers
 Duration: 0:02:00
 
