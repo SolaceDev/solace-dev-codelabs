@@ -63,16 +63,54 @@ etc
 
 ## Environment verification
 ### On-prem applications
+* Verify the market-data-source
+* Global-eod-event-processor
 ### Cloud region - 1 applications
+* EOD event generator
+* EOD event processor
+* S3 bucket setup
+* Client admin application in EC2 instance - FE1
+* Client frontend application in EC2 instance - FE1
 
 ## New region setup
 ### New broker and mesh integration
+* Create new service in new region, we refer it to as Cloud-2
+* Edit event mesh and add new service
 ### Event portal setup
+* Design EDA landscape, schemas, events and applications
 ### Admin application setup
+* Update application properties with new broker connection details
+* Deploy admin application in EC2 instance - FE2
+* Run application
 ### Frontend client application
+* Update application properties with new broker connection details
+* Deploy admin application in EC2 instance - FE2
+* Run application
+* Walk thru demo
 ### End-Of-Day event generator
+* Lambda creation and testing
+* Update lambda with new broker connection details and region data in the event model
+* Build lambda code
+* Deploy new lambda and test it out
+#### Event bridge scheduler
+* Create new scheduler with test schedule
+* Link it to lambda created above
 ### End-Of-Day event processor
+#### Lambda creation and testing
+* Using the code sample provided, build the lambda artifact
+* Deploy new lambda and test it out
+#### API Gateway setup
+* Create new API gateway API
+* Link to lambda created above
+* Test
+#### Connector setup
+* Connect API Gateway and the broker using the native API Gateway connector
 ### S3 datalake and analytics dashboard
+* Create S3 bucket connector ( S3 bucket details are common for all the cloud regions)
+* Test out the connector
+* Link S3 bucket to quicksight analytics dashboard
+* Demo dashboard
+
 
 
 ## Takeaways
