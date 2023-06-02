@@ -1,0 +1,168 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Solace - AWS - Integration Demo</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="aws-demo-fs-codelab"
+                  title="Solace - AWS - Integration Demo"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/aws-demo-fs-codelab">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p>Through this interactive codelab, you&#39;ll gain a comprehensive understanding of the unique strengths and advantages that Solace and AWS bring to the table. Get ready to unlock a world of innovation as we walk you through the implementation and utilization of these powerful platforms in a practical, real-world scenario. <br></p>
+<p>Step into the world of trading platforms as we guide you through the creation and exploration of a practical application that leverages the combined power of Solace and AWS. Witness firsthand how these platforms synergistically enhance each other&#39;s functionalities, opening doors to limitless possibilities.</p>
+<p>The code snippets and samples required for this codelab can be found over the github link : TODO - Link to the github repo.</p>
+<p>This codelab will walk you through the steps to :</p>
+<p>✅  Setup a Solace Event broker service and link it to an event mesh <br> ✅  Design the EDA Landscape using the Solace Event Portal ✅  Understand different Solace APIs and how to use them <br> ✅  Create a simple Angular base frontend and consume from Solace topics using the Solace Typescript API <br> ✅  Post events to the Solace event mesh using AWS Lambdas and AWS Eventbridge scheduler <br> ✅  Consume events using AWS Lambdas which are exposed by the AWS API Getway and how to use the Solace native API Gateway connector <br> ✅  Export AsyncAPI specficiations and use it to generate Spring Cloud Stream based applications. ✅  Export events to the AWS S3 bucket using the Solace native S3 connector and use it to generate AWS quicksight analytics dashboards <br></p>
+<p>In this codelab, we will be creating a relatively simple but functionally complete trading platform which has is depicted below :</p>
+<p class="image-container"><img src="img/e7975fbea55cd4b5.png"></p>
+<p>Knowledge level requirement</p>
+<ul>
+<li>Intermediate level of coding with Java</li>
+<li>Computer with internet connectivity</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="0">
+        <p>A detailed list of pre-requisites :</p>
+<ul>
+<li>Internet connection</li>
+<li>Solace cloud account</li>
+<li>AWS account</li>
+<li>Java</li>
+<li>Maven</li>
+<li>Nodejs</li>
+<li>Shell terminal</li>
+<li>IDE</li>
+<li>Web browser to access the UI</li>
+</ul>
+<p>etc</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace Cloud Account setup" duration="0">
+        <h2 is-upgraded>Login</h2>
+<h2 is-upgraded>Verify existing services</h2>
+<h2 is-upgraded>Create a mesh with 2 services</h2>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Environment verification" duration="0">
+        <h2 is-upgraded>On-prem applications</h2>
+<ul>
+<li>Verify the market-data-source</li>
+<li>Global-eod-event-processor</li>
+</ul>
+<h2 is-upgraded>Cloud region - 1 applications</h2>
+<ul>
+<li>EOD event generator</li>
+<li>EOD event processor</li>
+<li>S3 bucket setup</li>
+<li>Client admin application in EC2 instance - FE1</li>
+<li>Client frontend application in EC2 instance - FE1</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="New region setup" duration="0">
+        <h2 is-upgraded>New broker and mesh integration</h2>
+<ul>
+<li>Create new service in new region, we refer it to as Cloud-2</li>
+<li>Edit event mesh and add new service</li>
+</ul>
+<h2 is-upgraded>Event portal setup</h2>
+<ul>
+<li>Design EDA landscape, schemas, events and applications</li>
+</ul>
+<h2 is-upgraded>Admin application setup</h2>
+<ul>
+<li>Update application properties with new broker connection details</li>
+<li>Deploy admin application in EC2 instance - FE2</li>
+<li>Run application</li>
+</ul>
+<h2 is-upgraded>Frontend client application</h2>
+<ul>
+<li>Update application properties with new broker connection details</li>
+<li>Deploy admin application in EC2 instance - FE2</li>
+<li>Run application</li>
+<li>Walk thru demo</li>
+</ul>
+<h2 is-upgraded>End-Of-Day event generator</h2>
+<ul>
+<li>Lambda creation and testing</li>
+<li>Update lambda with new broker connection details and region data in the event model</li>
+<li>Build lambda code</li>
+<li>Deploy new lambda and test it out</li>
+</ul>
+<h3 is-upgraded>Event bridge scheduler</h3>
+<ul>
+<li>Create new scheduler with test schedule</li>
+<li>Link it to lambda created above</li>
+</ul>
+<h2 is-upgraded>End-Of-Day event processor</h2>
+<h3 is-upgraded>Lambda creation and testing</h3>
+<ul>
+<li>Using the code sample provided, build the lambda artifact</li>
+<li>Deploy new lambda and test it out</li>
+</ul>
+<h3 is-upgraded>API Gateway setup</h3>
+<ul>
+<li>Create new API gateway API</li>
+<li>Link to lambda created above</li>
+<li>Test</li>
+</ul>
+<h3 is-upgraded>Connector setup</h3>
+<ul>
+<li>Connect API Gateway and the broker using the native API Gateway connector</li>
+</ul>
+<h2 is-upgraded>S3 datalake and analytics dashboard</h2>
+<ul>
+<li>Create S3 bucket connector ( S3 bucket details are common for all the cloud regions)</li>
+<li>Test out the connector</li>
+<li>Link S3 bucket to quicksight analytics dashboard</li>
+<li>Demo dashboard</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="0">
+        <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

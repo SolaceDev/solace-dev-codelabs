@@ -1,0 +1,37 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-06-02T10:57:07+02:00",
+  "id": "aws-demo-fs-codelab",
+  "duration": 1,
+  "title": "Solace - AWS - Integration Demo",
+  "summary": "Building a trading domain demo which showcases the strengths and integration between Solace and AWS.",
+  "source": "aws-demo-fs-codelab.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "aws",
+    "hybridcloud",
+    "eventportal",
+    "spring",
+    "jcsmp",
+    "serverless",
+    "apigateway",
+    "lambdafunctions",
+    "eventbridgescheduler",
+    "etc."
+  ],
+  "tags": [
+    "awsimmersionday",
+    "codelab",
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/aws-demo-fs-codelab",
+  "url": "aws-demo-fs-codelab"
+}
