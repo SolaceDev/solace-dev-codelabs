@@ -58,7 +58,7 @@ We are not going to create a service replier the first time through. We are goin
 1. You will see the request come in and manually respond using the _Try Me_ feature (copy and paste the generated ReplyTo topic and correlation ID)
 1. The Solace Broker will route the reply to the waiting Boomi Process
 
-> aside POSITIVE
+> aside positive
 > This is the most basic implementation of this pattern. Queues, ACL's and other Solace features can be used for persistence, access lock down and much more.
 
 Let’s get started!
