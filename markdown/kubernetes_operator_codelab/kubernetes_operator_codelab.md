@@ -34,7 +34,8 @@ You will need a Kubernetes Cluster to deploy the Operator. There are several opt
 
 I will be using [kind](https://kind.sigs.k8s.io/) to create my Kubernetes Cluster for today's tutorial. It creates the cluster which spins up Docker Containers acting as nodes. 
 
-<aside class="positive"> Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator. </aside>
+> aside positive
+> Note: Kind installation is covered in the next step. If you already have a Kubernetes Cluster on your machine then you can directly skip to Step 4: Install Solace Pubsub+ Event Broker Operator. 
 
 We need to make sure the below installations are complete and successful before we create a cluster using Kind:
 * Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/) on macOS. For other OS options you can visit [Docker](https://docs.docker.com/get-docker/).
@@ -104,7 +105,8 @@ kubectl apply -f deploy.yaml
 # Wait for deployment to complete
 kubectl get pods -n pubsubplus-operator-system --watch
 ```
- <aside class="positive"> Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead "https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git". </aside>
+> aside positive
+> Note: If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead "https://github.com/SolaceProducts/pubsubplus-kubernetes-operator.git". 
 
 
 ![Operator Setup Verification](img/Operator_Img3.png)
