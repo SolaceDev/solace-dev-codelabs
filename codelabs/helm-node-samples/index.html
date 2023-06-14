@@ -36,12 +36,12 @@
       <google-codelab-step label="Step 1: Clone the Solace Node Sample Chart" duration="5">
         <p>My colleague Ken Barr created a simple <a href="https://github.com/KenBarr/solace-node-sample" target="_blank">chart</a> that launches the official Node image from Docker Hub, installs the Solace node.js API from NPM and clones the Solace node.js samples from github. To get started, clone the solace-node-sample repo from github. From your work directory execute the following command.</p>
 <p>Note: If this is the first time using github from your WSL Ubuntu environment, you will need to setup your ssh keys to be able to authenticate with github.</p>
-<pre><code>git clone git@github.com:KenBarr/solace-node-sample.git
+<pre><code language="language-bash" class="language-bash">git clone git@github.com:KenBarr/solace-node-sample.git
 </code></pre>
 <p class="image-container"><img alt="Solace Node Sample Chart" src="img/14e452bffea0c355.png"></p>
 <p>The deployment.yaml file is where most of the work is done. In there you will see what looks a lot like a Kubernetes template however, there are some template functions surrounded by double braces scattered throughout. The Helm template functions can be used to insert strings extracted from the values.yaml file, do simple conditional formatting etc. You can find the details of the Helm template language in the <a href="https://helm.sh/docs/chart_template_guide/" target="_blank">Helm docs</a>. When you install a Helm chart, Helm will look at the templates, process all of the Helm template functions and render a Kubernetes template that is suitable for deployment.</p>
 <p>Looking at the deployment.yaml file the key sequence is as follows:</p>
-<pre><code>command:
+<pre><code language="language-yaml" class="language-yaml">command:
   - sh
   - &#34;-ec&#34;
   - |
@@ -69,12 +69,12 @@
     
       <google-codelab-step label="Step 2: Install the Chart" duration="5">
         <p>Before installing the chart, the values.yaml file needs to be updated. In the previous step, you can see that the sample applications need the DNS (&#123;&#123;.Values.psb.name}}) name of the broker that the application is going to connect to. To get the dns name of the broker that was deployed in the previous code lab use the following command:</p>
-<pre><code>kubectl get services
+<pre><code language="language-bash" class="language-bash">kubectl get services
 </code></pre>
 <p class="image-container"><img alt="kubectl get services" src="img/ca1d79e767a54871.png"></p>
 <p>Edit the values.yaml file and replace &#34;MUST_SPECIFY_SERVICE_NAME&#34; with the service name of the PubSub+ broker (in this case pubsubplus-dev-1587734193-pubsubplus-dev).</p>
 <p>Now the chart is ready to be deployed. Change directory into the solace-node-samples and install the chart.</p>
-<pre><code>helm install solace-node-sample . -f values.yaml
+<pre><code language="language-bash" class="language-bash">helm install solace-node-sample . -f values.yaml
 </code></pre>
 <p class="image-container"><img alt="helm install solace-node-sample" src="img/7b0a31531a401bb0.png"></p>
 
@@ -89,7 +89,7 @@
 <p>You can see that the subscriber application is running and ready to receive messages.</p>
 <p class="image-container"><img alt="sample subscriber output" src="img/d2b7a59e35cbf67e.png"></p>
 <p>Execute the publish.sh script to publish a message and see that the messages was received by the subscriber app in the logs (the subscriber was started by the helm chart).</p>
-<pre><code>cd /
+<pre><code language="language-bash" class="language-bash">cd /
 /solace-samples-nodejs/publish.sh
 </code></pre>
 <p class="image-container"><img alt="sample publisher output" src="img/51b9d08d074872b.png"></p>
@@ -111,6 +111,7 @@
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

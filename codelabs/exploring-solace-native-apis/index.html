@@ -60,7 +60,7 @@
       <google-codelab-step label="Prerequisites &amp; Assumptions" duration="7">
         <p>Before you start, make sure:</p>
 <ul>
-<li>You have your favourite IDE fired up and ready to go <img alt="Everyone’s favourite IDE" src="img/962d7dd94c5769a7.png"></li>
+<li>You have your favourite IDE fired up and ready to go <img alt="Everyone&amp;rsquo;s favourite IDE" src="img/962d7dd94c5769a7.png"></li>
 <li>You have a &#34;broker&#34; set up and ready to go. A &#34;broker&#34; could be <a href="https://console.solace.cloud/" target="_blank">Solace Cloud</a> plan, local PubSub+ software running under <a href="https://products.solace.com/download/PUBSUB_DOCKER_STAND" target="_blank">Docker</a> or a <a href="https://products.solace.com/download/PUBSUB_STAND_OVA" target="_blank">VM</a>, or even a hardware appliance if you&#39;re lucky. Just make sure you have the client credentials, for instance &#34;client_username@messag-vpn&#34; and the password.</li>
 <li>You have &#34;no&#34; or &#34;basic&#34; authentication configured on the broker you&#39;re connecting to. Of course we can do TLS, but that&#39;s waaaaay beyond the scope of this one...</li>
 <li>You&#39;ve <a href="https://solace.com/downloads/" target="_blank">downloaded</a>, installed or included in your dependency manager the native API of your choice</li>
@@ -68,7 +68,7 @@
 <li>(Somewhat optional) You can write code.</li>
 <li>(A bit more optional) You&#39;ve downloaded and installed <a href="https://products.solace.com/download/SDKPERF_JAVA" target="_blank">sdkperf</a></li>
 </ul>
-<aside class="special"><p>We have a lot of excellent Tutorial material available to help you get started. This CodeLab doesn&#39;t replace those, it&#39;s here to encourage you to use them!</p>
+<aside class="special"><p> We have a lot of excellent Tutorial material available to help you get started. This CodeLab doesn&#39;t replace those, it&#39;s here to encourage you to use them!</p>
 </aside>
 <ul>
 <li>Nice simple <a href="https://www.solace.dev/" target="_blank">Get Connected Tutorials</a></li>
@@ -85,7 +85,7 @@
 <pre><code>git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp
 </code></pre>
 <h2 is-upgraded>Free Solace Stuff!</h2>
-<aside class="special"><p>All of the broker images and API software are available on the <a href="https://solace.com/downloads/" target="_blank">Solace Downloads Page</a>. If you haven&#39;t already, go to it!</p>
+<aside class="special"><p> All of the broker images and API software are available on the <a href="https://solace.com/downloads/" target="_blank">Solace Downloads Page</a>. If you haven&#39;t already, go to it!</p>
 </aside>
 
 
@@ -93,7 +93,7 @@
     
       <google-codelab-step label="Overview" duration="5">
         <p>We will walk through the basic code path to get you connected to a Solace broker using the Native APIs and exchanging messages. By the end, you should have a good grasp of the basic principles of the APIs.</p>
-<aside class="special"><p>These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.</p>
+<aside class="special"><p> These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.</p>
 </aside>
 <h2 is-upgraded>Getting Started: verifying a connection</h2>
 <p>At the start we&#39;ll validate we can connect to the broker using the Try-Me! feature of PubSub+ Broker Manager. We&#39;ll then use PubSub+ Broker Manager to find and validate our connection.</p>
@@ -122,7 +122,7 @@
 <p>Windows:</p>
 <pre><code>sdkperf_java.bat -h
 </code></pre>
-<aside class="special"><p>Replace &#34;sdkperf_java.sh&#34; with &#34;sdkperf&#34; for C or your favourite SDKPerf variant for your API of choice.</p>
+<aside class="special"><p> Replace &#34;sdkperf_java.sh&#34; with &#34;sdkperf&#34; for C or your favourite SDKPerf variant for your API of choice.</p>
 </aside>
 <h2 is-upgraded>1 Find Try-Me!</h2>
 <p>Firstly, start PubSub+ Broker Manager. This should be fairly straight-forward. You need the IP address of your broker, and the SEMP port.</p>
@@ -139,16 +139,14 @@
 <p>You&#39;ll need these details later. But to connect Try-Me, just navigate to the Try-Me tab on the left hand menu:</p>
 <p class="image-container"><img src="img/5265cf3a631ee99.png"></p>
 <p>Now we need to connect. The connection details are filled in, which makes things easy, so just go to the <strong>Subscriber</strong> and click the &#34;Connect&#34; button.</p>
-<aside class="special"><p>If you&#39;re using Docker, you may not connect. This is because the default docker compose yaml doesn&#39;t expose the port Try-Me uses. Simply stop the containerand edit the .yml file. Fine the Port Mappings section, and uncomment the line below &#34;#Web transport&#34;</p>
-<pre><code>#Port Mappings:  Ports are mapped straight through from host to
-</code></pre>
-<p>container.  This may result in port collisions on commonly used</p>
-<p>ports that will cause failure of the container to start.</p>
-<p>#Web transport</p>
-<ul>
-<li>‘80:80&#39;		&lt;—-  Uncomment this line.</li>
-</ul>
+<aside class="special"><p> If you&#39;re using Docker, you may not connect. This is because the default docker compose yaml doesn&#39;t expose the port Try-Me uses. Simply stop the containerand edit the .yml file. Fine the Port Mappings section, and uncomment the line below &#34;#Web transport&#34;</p>
 </aside>
+<pre><code>    #Port Mappings:  Ports are mapped straight through from host to
+#container.  This may result in port collisions on commonly used
+#ports that will cause failure of the container to start.
+  #Web transport
+  - &#39;80:80&#39;		&lt;----  Uncomment this line.
+</code></pre>
 <p>Then recreate and restart your container.</p>
 
 
@@ -222,7 +220,7 @@ solClient_context_createFuncInfo_t contextFuncInfo = SOLCLIENT_CONTEXT_CREATEFUN
 returnCode = solClient_context_create ( SOLCLIENT_CONTEXT_PROPS_DEFAULT_WITH_CREATE_THREAD,
   &amp;context_p, &amp;contextFuncInfo, sizeof ( contextFuncInfo ) )
 </code></pre>
-<aside class="warning"><p>I have omitted checking the return code from the C function calls for clarity. Please don&#39;t. If you get something other than SOLCLIENT_OK, you need to do something.</p>
+<aside class="warning"><p> I have omitted checking the return code from the C function calls for clarity. Please don&#39;t. If you get something other than SOLCLIENT_OK, you need to do something.</p>
 </aside>
 <p>The context thread will run reading from the socket. The <em>callbacks</em> (see below) are executed in the context thread, so please return from them as quick as possible - for instance by putting data in a structure to be processed in the application thread.</p>
 <p>Don&#39;t block the context thread. A classic problem is to get a message in the receive callback, realise it&#39;s a request/response message, create a reply and try to send() it, all in the receive callback. It&#39;ll probably work most of the time. People have made a lot of money making cars that work all the time while other people have lost a lot making cars that probably work most of the time.</p>
@@ -258,7 +256,7 @@ public class Session {
         session.connect();
 
         while (true) { }
-	  }
+      }
 }
 </code></pre>
 <p>But it doesn&#39;t do anything! Quite. Read on...</p>
@@ -290,16 +288,16 @@ public class Session {
 </code></pre>
 <p>In Java, we pass the session event callback to createSession:</p>
 <pre><code>session = JCSMPFactory.onlyInstance().createSession(properties,
-		null,
-		SessionEventHandler);
+        null,
+        SessionEventHandler);
 </code></pre>
 <p>This is optional, though, but best practice says please do something with your session events, even if it&#39;s just log them.</p>
-<aside class="special"><p>If you&#39;re the kind of person that asked the teacher for extra work after you&#39;d finished the optional work before the rest of the class had finished the first question, a good exercise is to create code that prints out all session events and run it in various scenarios.</p>
+<aside class="special"><p> If you&#39;re the kind of person that asked the teacher for extra work after you&#39;d finished the optional work before the rest of the class had finished the first question, a good exercise is to create code that prints out all session events and run it in various scenarios.</p>
 </aside>
 <h2 is-upgraded>2 Receiving messages</h2>
 <h3 is-upgraded>Subscribing</h3>
 <p>OK, we&#39;ve got a session, how do we get messages? For that we need a receive callback. How do we tell the broker <em>what</em> we want to receive? We use a <em>topic subscription</em>. First things first, we need to create the topic to which we&#39;ll subscribe.</p>
-<aside class="special"><p>Remember! This is just creating the Topic object in the API. No topic is created in the broker.</p>
+<aside class="special"><p> Remember! This is just creating the Topic object in the API. No topic is created in the broker.</p>
 </aside>
 <p>TopicSubscriber.java, line 63:</p>
 <pre><code>final Topic topic = JCSMPFactory.onlyInstance().createTopic(&#34;tutorial/topic&#34;);
@@ -310,8 +308,8 @@ public class Session {
 </code></pre>
 <p>In C, because we don&#39;t have objects we simply send the subscription request with the topic as a string (TopicSubscriber.c line 143):</p>
 <pre><code>solClient_session_topicSubscribeExt ( session_p,
-		SOLCLIENT_SUBSCRIBE_FLAGS_WAITFORCONFIRM,
-		argv[5] );
+        SOLCLIENT_SUBSCRIBE_FLAGS_WAITFORCONFIRM,
+        argv[5] );
 </code></pre>
 <p>It&#39;s no good having a subscription if we don&#39;t do anything with our messages when they arrive. How are we going to get messages asynchronously as they arrive? With a callback, of course.</p>
 <p>In Java, we create an object called a Message Consumer. TopicSubscriber.java, line 72:</p>
@@ -321,15 +319,15 @@ public class Session {
 </code></pre>
 <p>In C, we create a function and add the function pointer to the session information structure. TopicSubscriber.c, line 37:</p>
 <pre><code>solClient_rxMsgCallback_returnCode_t sessionMessageReceiveCallback(
-		solClient_opaqueSession_pt opaqueSession_p,
-		solClient_opaqueMsg_pt msg_p,
-		void *user_p ) {
+        solClient_opaqueSession_pt opaqueSession_p,
+        solClient_opaqueMsg_pt msg_p,
+        void *user_p ) {
 </code></pre>
 <p>Then at line 110:</p>
 <pre><code>    sessionFuncInfo.rxMsgInfo.callback_p = sessionMessageReceiveCallback;
 </code></pre>
 <p>That&#39;s it! All we now have to do is add some logic to actually do something with the message, like print out it&#39;s contents. We now have all that&#39;s required for TopicSubscriber to work. Go ahead and run it.</p>
-<h2 is-upgraded>3 Validating TopicSubscriber</h2>
+<p>###3 Validating TopicSubscriber</p>
 <p>Run TopicSubscriber, and <em>publish</em> a message using Try-Me!</p>
 <h3 is-upgraded>1. Connect Try-Me! Publisher</h3>
 <p>Go to the <strong>Publisher</strong> Try-Me! pane, and hit connect.</p>
@@ -367,7 +365,7 @@ Exiting.
 <pre><code>XMLMessageProducer prod = session.getMessageProducer(
 </code></pre>
 <p>As for receiving messages, we can provide some callbacks - what happens if there&#39;s a response (for request/reply messages), or some kind of error. In TopicPublisher we provide an anonymous class to do this. You could, of course, implement <strong>JCSMPStreamingPublishEventHandler</strong> and pass your class in.</p>
-<h2 is-upgraded>1 Creating a message object/buffer to populate</h2>
+<p>###1 Creating a message object/buffer to populate</p>
 <p>Before we send a message, we&#39;ll need to create it. The native APIs provide message objects or buffers to handle this for you.</p>
 <p>TopicPublisher.java, line 82:</p>
 <pre><code>TextMessage msg = JCSMPFactory.onlyInstance().createMessage(TextMessage.class);
@@ -384,14 +382,14 @@ Exiting.
 <p>In C, if you really have finished with the buffer, it&#39;s always a good idea to free it:</p>
 <pre><code>solCliet_msg_free( &amp;msg_p );
 </code></pre>
-<h2 is-upgraded>2 Delivery Mode</h2>
+<p>###2 Delivery Mode</p>
 <p>In the C API the next thing the TopicPublisher sample does is set the <strong>Delivery Mode</strong>: put simply, do you want a Guaranteed (Persisted) message, or a direct, fire-and-forget message? I&#39;ll not get in to the differences, or how to send and receive guaranteed messages (you use an API concept called a &#34;flow&#34;), and for now we&#39;ll use the simplest mode:</p>
 <pre><code>solClient_msg_setDeliveryMode ( msg_p, SOLCLIENT_DELIVERY_MODE_DIRECT );
 </code></pre>
 <p>This is assumed by default in Java.</p>
-<h2 is-upgraded>3 Destinations</h2>
+<p>###3 Destinations</p>
 <p>Now we have a message, and we&#39;ve decided what Quality of Service (Guaranteed or Direct - we chose Direct in this case) it will be. We now need to decide where to send the message - to a queue, and if so what the queue name should be, or to a topic, and if so what topic.</p>
-<aside class="special"><p>Always <strong>always</strong> send to a topic. Even if you plan to send to a queue, send to a topic and have the queue map the topic. Always. Can I say it one more time? Always send to a topic.</p>
+<aside class="special"><p> Always <strong>always</strong> send to a topic. Even if you plan to send to a queue, send to a topic and have the queue map the topic. Always. Can I say it one more time? Always send to a topic.</p>
 </aside>
 <p>In Java, this is pretty simple: we just call send on the producer and provide the topic, remembering that <strong>Topic</strong> is an object we need to create:</p>
 <pre><code>final Topic topic = JCSMPFactory.onlyInstance().createTopic(&#34;tutorial/topic&#34;);
@@ -401,7 +399,7 @@ Exiting.
 destination.dest = argv[5];
 solClient_msg_setDestination ( msg_p, &amp;destination, sizeof ( destination ) );
 </code></pre>
-<h2 is-upgraded>4 Message contents</h2>
+<p>###4 Message contents</p>
 <p>There&#39;s not much point sending a message if there&#39;s nothing in it (actually, that&#39;s not true - there&#39;s plenty of information that can be encoded in the message topic and in message headers, but that&#39;s a subject for a separate discussion!)</p>
 <p>The Java API has several message types that you can use to make manipulating message payloads easier. You&#39;ll notice from before that we create a <strong>TextMessage</strong> - you could just as easily create a BytesMessage, for instance.</p>
 <h3 is-upgraded>Adding the contents to the message</h3>
@@ -411,7 +409,7 @@ solClient_msg_setDestination ( msg_p, &amp;destination, sizeof ( destination ) )
 <p>In C, we manipulate the <strong>Binary Attachment</strong>:</p>
 <pre><code>solClient_msg_setBinaryAttachment ( msg_p, text_p, ( solClient_uint32_t ) strlen ( (char *)text_p ) );
 </code></pre>
-<h2 is-upgraded>5 Send!</h2>
+<p>###5 Send!</p>
 <p>In Java, we tell the producer where to send the message:</p>
 <pre><code>prod.send(msg,topic);
 </code></pre>
@@ -424,7 +422,7 @@ solClient_msg_setDestination ( msg_p, &amp;destination, sizeof ( destination ) )
 <pre><code>sdkperf -cip &lt;broker ip&gt; -cu &lt;username&gt;@&lt;message-vpn&gt; -stl tutorial/topic -md
 </code></pre>
 <p>The &#34;-md&#34; stands for &#34;message dump.&#34;</p>
-<aside class="special"><p>I&#39;d encourage you to always attach an sdkperf subsriber with message dump turned on whenever you&#39;re debugging an application if you can&#39;t get enough information from Try-Me!</p>
+<aside class="special"><p> I&#39;d encourage you to always attach an sdkperf subsriber with message dump turned on whenever you&#39;re debugging an application if you can&#39;t get enough information from Try-Me!</p>
 </aside>
 <p>Then we&#39;ll just fire up TopicPubisher and see what comes out:</p>
 <pre><code>^^^^^^^^^^^^^^^^^^ Start Message ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -439,7 +437,7 @@ Binary Attachment:                      len=15
 ^^^^^^^^^^^^^^^^^^ End Message ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>This is what TopicPublisher sent. Since it&#39;s what we were hoping to send, we can now attach our own subscribing application. If only we had one... hold on - TopicSubscriber!</p>
-<h2 is-upgraded>6 Publish/Subscribe</h2>
+<p>###6 Publish/Subscribe</p>
 <p><strong>LEAVE TRY-ME! RUNNING</strong> and run TopicSubscriber. The re-run topic publisher. What you should see is that same message appearing in both applications. By the magic of Publish/Subscribe, we&#39;ve sent a single message to two different applications <em>without either of the original sender or receiver being aware of it</em>.</p>
 <p class="image-container"><img src="img/df3528f4abbfca9b.png"></p>
 <p>You could even download and run different TopicSubscribers from different APIs, or different SolaceSamples. That shows how you can send a message in one language and receive it in different languages.</p>
@@ -449,14 +447,14 @@ Binary Attachment:                      len=15
     
       <google-codelab-step label="Wrap up, and Things We Didn&#39;t Cover" duration="3">
         <p>So there we go - that&#39;s the basics of creating a connection, receiving and sending messages using the Solace Native APIs.</p>
-<h2 is-upgraded>Why use the Native APIs?</h2>
+<p>###Why use the Native APIs?</p>
 <p>Why use the Native Solace APIs over, say an open API?</p>
 <ul>
 <li>Best feature support, e.g. MQTT 3.1 doesn&#39;t support request/reply</li>
 <li>Best performance</li>
 <li>Solace support for the API itself</li>
 </ul>
-<h2 is-upgraded>What&#39;s the psuedo-flow?</h2>
+<p>###What&#39;s the psuedo-flow?</p>
 <ol type="1">
 <li>Initialise API. Set up logging.</li>
 <li>Create Session properties.</li>
@@ -467,7 +465,7 @@ Binary Attachment:                      len=15
 <li>Send them.</li>
 <li>Clean up - free, dispose, close.</li>
 </ol>
-<h2 is-upgraded>We ran out of time...</h2>
+<p>###We ran out of time...</p>
 <ul>
 <li>Guranteed messages - we didn&#39;t cover this. The basic idea is the <strong>flow</strong>, both on the producer and consumer side, which is an API object which holds the state associated with whether the message has been acknowledged yet.</li>
 <li>Cleaning up - we brushed up againt this. Free/dispose of your message buffers, close() the session cleanly.</li>
@@ -486,6 +484,7 @@ Binary Attachment:                      len=15
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

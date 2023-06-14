@@ -30,8 +30,8 @@ Valuable Resources:
 - Spring Sample [Github Repository](https://github.com/spring-cloud/spring-cloud-stream-samples)
 - Solace Sample [Github Repository](https://github.com/SolaceSamples/solace-samples-spring)
 
-Positive
-: After you complete this codelab be sure to checkout the [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) one!
+> aside positive
+> After you complete this codelab be sure to checkout the [Spring Cloud Stream - Beyond the Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-beyond/#0) one!
 
 ## What You'll Need
 
@@ -213,16 +213,16 @@ spring:
                 host: 'tcp://localhost:55555'
                 msgVpn: default
 ```
-Negative
-: If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
+> aside negative
+> If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
 
 ### <strong>B. PubSub+ Broker running on Solace Cloud</strong>
 
 Locate and use the credentials from the cloud broker setup.
 ![cloud broker setup](img/connect-to-service.jpg)
 
-Negative
-: Update the host, port, message VPN, client username and password based on your cloud connection details.
+> aside negative
+> Update the host, port, message VPN, client username and password based on your cloud connection details.
 
 **Option 1: application.properties**   
 
@@ -255,8 +255,8 @@ spring:
                 msgVpn: **********
 ```
 
-Negative
-: If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
+> aside negative
+> If you want to use YAML for configuration, create an empty file with the name application.yml and copy the above content.
 
 ### Write the Java Function
 
@@ -266,8 +266,8 @@ Open the `SpringoneApplication.java` file. Unless you chose different settings w
 
 When you open the project you'll see the basic skeleton of a Spring Boot app, including the `@SpringBootApplication` java annotation.
 
-Positive
-: **@SpringBootApplication** Indicates a configuration class that declares one or more @Bean methods and also triggers auto-configuration and component scanning. This is a convenience annotation that is equivalent to declaring @Configuration, @EnableAutoConfiguration and @ComponentScan.
+> aside positive
+> **@SpringBootApplication** Indicates a configuration class that declares one or more @Bean methods and also triggers auto-configuration and component scanning. This is a convenience annotation that is equivalent to declaring @Configuration, @EnableAutoConfiguration and @ComponentScan.
 
 Let's go ahead and create a `java.util.function.Function` bean that takes in a String, changes is it to all uppercase and returns a String.
 The code might look something like below:
@@ -282,8 +282,8 @@ public Function<String, String> uppercase(){
 }
 ```
 
-Negative
-: Note: You might need to add imports, this is done by clicking `ctrl + shift + 0` and then choose java.util.function.Function
+> aside negative
+> Note: You might need to add imports, this is done by clicking `ctrl + shift + 0` and then choose java.util.function.Function
 
 🚀 That's it! No Messaging code and we have an app that can retrieve a message, process it and publish a message!
 🚀 Let's test it out.
@@ -291,8 +291,8 @@ Negative
 Run your app by right clicking on your project, choosing "Run As" and "Spring Boot App" if using Spring Tool Suite. From the command line you can also run by entering `mvn clean spring-boot:run`
 ![Run App](img/runApp.jpg)
 
-Positive
-: Note: You can find more details about Spring's functional binding in the 'Function Composition' section. You can also refer to [spring documentation] (https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_bindings)
+> aside positive
+> Note: You can find more details about Spring's functional binding in the 'Function Composition' section. You can also refer to [spring documentation] (https://docs.spring.io/spring-cloud-stream/docs/3.1.1/reference/html/spring-cloud-stream.html#_bindings)
 
 ## Test your Microservice
 
@@ -333,8 +333,8 @@ To test your function perform the following steps:
 
 🚀 You should see your application printed "Uppercasing: Spring One is Awesome!" in your IDE and the "Subscriber" in the "Try Me!" menu in Solace Cloud should show that a message was received that contained "SPRING ONE IS AWESOME!"
 
-Positive
-: Note that the "uppercase-in-0" and "uppercase-out-0" are default binding names which follow a convention of `<functionName>` + `-in-` + `<index>` for input bindings and `<functionName>` + `-out-` + `<index>` for output bindings. Those can be changed by setting them in the Spring configuration file. [More information here](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#_common_binding_properties)
+> aside positive
+> Note that the "uppercase-in-0" and "uppercase-out-0" are default binding names which follow a convention of `<functionName>` + `-in-` + `<index>` for input bindings and `<functionName>` + `-out-` + `<index>` for output bindings. Those can be changed by setting them in the Spring configuration file. [More information here](https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/current/reference/html/spring-cloud-stream.html#_common_binding_properties)
 
 🎉 **Congratulations! You just created your first Spring Cloud Stream microservice!**
 
@@ -402,8 +402,8 @@ spring:
                 msgVpn: spring-codelab
 ```
 
-Positive
-: Note that Spring Cloud Stream performs [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
+> aside positive
+> Note that Spring Cloud Stream performs [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management) between each function so you could have a String output from one function and a POJO going into another as long as the framework knows how to deal with the Message Conversion. Read more about that in the [Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
 
 ✅ We now have our function all wired up so go ahead and stop the app and restart it.  
 

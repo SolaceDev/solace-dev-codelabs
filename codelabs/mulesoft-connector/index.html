@@ -94,15 +94,15 @@
 <li>Review the new Solace Connector made available in the palette list. <img alt="Anypoint-Studio" title="Solace Connector" src="img/33593dd74c460db7.png"></li>
 <li>Save the file. Note that when you save the file, the IDE immediately executes a <code>mvn install</code> which installs the solace connector <img alt="connector-install" title="connector-install" src="img/17ec49a239f34332.png"></li>
 </ul>
-<aside class="special"><p>The connector is installed and ready to use 💥</p>
+<aside class="special"><p> The connector is installed and ready to use 💥</p>
 </aside>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Configure Connection to Solace PubSub&#43; Broker" duration="0">
-        <p>Launch Solace PubSub+ console and select the Broker  <img alt="PubSub+ Broker" src="img/a0a4d304d279187b.png"></p>
-<p>Select the Broker and open the Connect tab  <img alt="PubSub+ Broker" src="img/d9479e4788a5e3d5.png"></p>
+        <p>Launch Solace PubSub+ console and select the Broker <img alt="PubSub+ Broker" src="img/a0a4d304d279187b.png"></p>
+<p>Select the Broker and open the Connect tab <img alt="PubSub+ Broker" src="img/d9479e4788a5e3d5.png"></p>
 <p>Open the Connect tab and make a note of the parameters</p>
 <ul>
 <li>Username</li>
@@ -127,27 +127,27 @@
 <p class="image-container"><img alt="drag-publish" title="drag-publish" src="img/a1db6afb4cc91f33.png"></p>
 <p>Ensure that the &#34;Connector configuration&#34; of &#34;Publish&#34; in the bottom pane is selected with the Solace PubSub+ Connection configuration &#34;Solace_PubSub__Connector_Config&#34; created in the previous step.</p>
 <p>Now that you have a publisher object configured, let&#39;s test it out! In this step, we will configure a scheduler that will publish messages every second on a predefined topic</p>
-<aside class="special"><p>Note: You can use <strong>any</strong> trigger like a post REST request</p>
+<aside class="special"><p> Note: You can use <strong>any</strong> trigger like a post REST request</p>
 </aside>
 <h2 is-upgraded>Flow Configuration</h2>
 <ul>
 <li>To do so, let&#39;s go ahead and search for <code>Scheduler</code> under the main palette catalogue on the left hand side of the IDE <img alt="scheduler-pallette" title="scheduler-pallette" src="img/9d488d6354fd8415.png"></li>
 <li>Drag it to the Source section of the flow <img alt="scheduler-flow" title="scheduler-flow" src="img/7ec90df21c83f9d8.png"></li>
 <li>Configure the scheduler to trigger every second <img alt="scheduler-config" title="scheduler-config" src="img/48111110347e12a5.png"></li>
-<li>Now back to the Publisher object, double click on it to configure the topic publish string and the body of the payload.  <ul>
+<li>Now back to the Publisher object, double click on it to configure the topic publish string and the body of the payload.<ul>
 <li>Under the <code>Destination</code>, set <code>Deliver Mode</code> to <code>Direct</code>, <code>Type</code> to <code>Topic</code>, and <code>Name</code> to <code>solace/mule/flow</code></li>
-<li>Set the <code>Message Body</code> as &#34;This is the body of the message sent from a mule flow&#34;</li>
+<li>Set the <code>Message Body</code> as &#34;This is the body of the message sent from a mule flow&#34;<img alt="publish-config" title="publish-config" src="img/357b37197df294a3.png"></li>
 </ul>
-  <img alt="publish-config" title="publish-config" src="img/357b37197df294a3.png"></li>
+</li>
 <li>Click on the canvas and save the file!</li>
 </ul>
 <h2 is-upgraded>Subscribe to topic on the broker</h2>
 <p>Before executing the flow, let&#39;s setup a subscriber on the broker to observe the messages flowing. To do so:</p>
 <ul>
 <li>Navigate to your Solace Cloud messaging service, and click on the TryMe! tab <img alt="try-me" title="try-me" src="img/76dedb63052dc922.png"></li>
-<li>In the Subscriber section, click on <code>Connect</code> and add a topic subscription <code>solace/mule/&gt;</code><img alt="subscriber" title="subscriber" src="img/d89f460fe3410f58.png"></li>
+<li>In the Subscriber section, click on <code>Connect</code> and add a topic subscription <code>solace/mule/></code><img alt="subscriber" title="subscriber" src="img/d89f460fe3410f58.png"></li>
 </ul>
-<aside class="special"><p>Notice the usage of the <code>&gt;</code> <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">Solace Wildcard</a></p>
+<aside class="special"><p> Notice the usage of the <code>></code> <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">Solace Wildcard</a></p>
 </aside>
 <ul>
 <li>Now navigate back to your AnypointStudio and run the flow. You can either do that by clicking the <img alt="run-flow" title="run-flow" src="img/35ce55e703c9c796.png"></li>
@@ -165,21 +165,23 @@
 </ul>
 <p class="image-container"><img alt="Direct Topic Subscriber" src="img/5505d72dfbefaf87.png"></p>
 <ul>
-<li>Double click on the <code>Direct Topic Subscriber</code> object to configure it. Set  <ul>
+<li>Double click on the <code>Direct Topic Subscriber</code> object to configure it. Set<ul>
 <li>Ensure that the &#34;Solace_PubSub_Connector_Config&#34; is chosen as the <code>Connector Configuration</code></li>
-<li><code>Topic(s)</code> in the <code>Subscriptions</code> as &#34;solace/mule/&gt;&#34; and</li>
+<li><code>Topic(s)</code> in the <code>Subscriptions</code> as &#34;solace/mule/&gt;&#34; and<img alt="Direct Topic Subscriber" src="img/4f555cb408cc37cc.png"></li>
 </ul>
-  <img alt="Direct Topic Subscriber" src="img/4f555cb408cc37cc.png"></li>
+</li>
 <li>Add a logging shape. Search for <code>Logger</code> from the pallette menu and drag it to the Topic Subscriber flow</li>
 </ul>
 <p class="image-container"><img alt="add-logger" title="add-logger" src="img/5dd1a82e23fbe05.png"></p>
 <ul>
-<li>Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following <img alt="logger-config" title="logger-config" src="img/6ffc23db75fe88ee.png">  <pre><code>%dw 2.0
+<li>Configure the logger to log out the received message. Double click on the logger object, in the Message input under Generic, add the following <img alt="logger-config" title="logger-config" src="img/6ffc23db75fe88ee.png"></li>
+</ul>
+<pre><code>%dw 2.0
 output application/java
 ---
 payload
 </code></pre>
-</li>
+<ul>
 <li>Your full flow should look like this <img alt="full-flow" title="full-flow" src="img/71ac230a7db7e6eb.png"></li>
 <li>Run it! Observe in the logs every second an output of the message will be logged <img alt="log" title="log" src="img/8d870e478243f9ba.png"></li>
 </ul>
@@ -190,7 +192,7 @@ payload
     
       <google-codelab-step label="Takeaways" duration="2">
         <p>✅ We were able to show how to create a new Solace Cloud Account<br> ✅ Install Anypoint Studio<br> ✅ Install the Solace Connector<br> ✅ Configure a publish object<br> ✅ Use the Solace Cloud TryMe tab to test out our connection and configuration<br> ✅ Configure a subscriber object<br> ✅ Run the subscriber flow to receive the published events</p>
-<aside class="special"><p>For more examples on how to use the Solace MuleSoft connector checkout the <a href="https://github.com/SolaceProducts/pubsubplus-connector-mule-docs" target="_blank">SolaceProducts/pubsubplus-connector-mule-docs</a> github repository.</p>
+<aside class="special"><p> For more examples on how to use the Solace MuleSoft connector checkout the <a href="https://github.com/SolaceProducts/pubsubplus-connector-mule-docs" target="_blank">SolaceProducts/pubsubplus-connector-mule-docs</a> github repository.</p>
 </aside>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the <em>Report a mistake</em> button at the bottom left of this codelab.</p>
 <p class="image-container"><img alt="thumbsup" title="thumbsup" src="img/37820bf123c5997f.gif"></p>

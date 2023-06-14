@@ -328,8 +328,8 @@ INFO Adding subscription for topic samples/>
 null    Hello world!
 ```
 
-Positive
-: Success! The reason you see `null` is that the Consumer is displaying the Kafka message key, but we have not configured it in the Source Processor. We will do that in the next section.
+> aside positive
+> Success! The reason you see `null` is that the Consumer is displaying the Kafka message key, but we have not configured it in the Source Processor. We will do that in the next section.
 
 ## Connect the Solace Source Connector (Better)
 
@@ -394,8 +394,8 @@ taxinyc/ops/ride/updated/v1/enroute/00000190/54846519/040.74084/-073.94572
 }
 ```
 
-Positive
-: SUCCESS!
+> aside positive
+> SUCCESS!
 
 ## Connect the Solace Sink Connector
 

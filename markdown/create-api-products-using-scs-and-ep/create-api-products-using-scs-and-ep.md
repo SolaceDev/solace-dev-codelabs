@@ -47,8 +47,8 @@ Duration: 0:01:00
 
 ✅ You need to sign for a free Solace Cloud Account using [this link](https://console.solace.cloud/login/new-account).
 
-Positive
-: Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
+> aside positive
+> Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
 
 Complete the following steps:
 
@@ -58,8 +58,8 @@ Complete the following steps:
 2. __Create an Event Broker Service__ Create an event broker service (or simply a service) using Cluster Manager tool and name the service as `solace-eap`. 
    For more information on accessing the Cloud Console, check out the [documentation](https://docs.solace.com/Solace-Cloud/ggs_create_first_service.htm)
 
-Negative
-: Event Broker Service creation may take anywhere from 2 to 4 minutes to complete the process.
+> aside negative
+> Event Broker Service creation may take anywhere from 2 to 4 minutes to complete the process.
 
 ### Use an existing PubSub+ Event Broker
 
@@ -89,8 +89,8 @@ Duration: 0:01:00
 
 A ready to use code of few of the microservices referred in this workshop are available in Git. We will use this codebase and build new code wherever necessary to complete this workshop.
 
-Positive
-: Note: the completed solution is available n the `solution` branch
+> aside positive
+> Note: the completed solution is available n the `solution` branch
 
 * Launch Terminal application 
 * Execute the following command   
@@ -194,8 +194,8 @@ As of the creation of this codelab the available Cloud Stream Binders are:
 - Azure Event Hubs
 - Apache RocketMQ
 
-Positive
-: We will be using the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
+> aside positive
+> We will be using the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
 
 ### Communication Models
 
@@ -257,19 +257,19 @@ We will focus on the Analytics and Operations applications for this workshop.
 
 ![](img/smarttown-event-view.jpg)
 
-Positive    
-: Few pointers on the implementation of the microservices in this workshop
-* Temperature Sensor data generator
-  * A simulator program (microservice) will be used to generate temperature reading
-  * The simulation algorithm would use the current CPU load as a seed to generate temperature readings to cover wider temperature ranges
-  * CPU load shall be manipulated with the use of utilities like __stress_ or others to increase the CPU load, in turn increase the temperature readings
-* Alerts Generator
-  * With the intent to generate alerts with priority types as
-    * <= 60 - No alert required
-    * 60 < Temperature <= 70 - Low Priority Alert
-    * 70 < Temperature <= 80 - Medium Priority Alert
-    * Temperature > 80 - High Priority Alert
-* The scope of __Analytics__ in this workshop is limited to plotting the alert on a map. 
+> aside positive    
+> Few pointers on the implementation of the microservices in this workshop
+> * Temperature Sensor data generator
+>  * A simulator program (microservice) will be used to generate temperature reading
+>   * The simulation algorithm would use the current CPU load as a seed to generate temperature readings to cover wider temperature ranges
+>   * CPU load shall be manipulated with the use of utilities like __stress_ or others to increase the CPU load, in turn increase the temperature readings
+> * Alerts Generator
+>   * With the intent to generate alerts with priority types as
+>     * <= 60 - No alert required
+>     * 60 < Temperature <= 70 - Low Priority Alert
+>     * 70 < Temperature <= 80 - Medium Priority Alert
+>     * Temperature > 80 - High Priority Alert
+> * The scope of __Analytics__ in this workshop is limited to plotting the alert on a map. 
 
 ### References:
 
@@ -303,8 +303,8 @@ This import action would create
 
 ![](img/ep-application-domain-4.png)
 
-Positive
-: Note that the design is still missing applications and the application-event pub/sub association, which we will be defining in the next steps.
+> aside positive
+> Note that the design is still missing applications and the application-event pub/sub association, which we will be defining in the next steps.
 
 ✅ Review the elements under each of the Application Domains to get an understanding of what is created by the import and their association.  
 ## Create Application
@@ -471,8 +471,8 @@ In the Create Event API Product page:
 ![](img/ep-eapi-product-2.png)
 
 
-Negative
-: Do not yet click on __Save__ button! We will configure the Events and then save.
+> aside negative
+> Do not yet click on __Save__ button! We will configure the Events and then save.
 
 
 ✅ Navigate to the Events tab to configure Event settings
@@ -506,8 +506,8 @@ External developers can call a public REST API to retrieve this Event API Produc
 - Website
 External developers can use a website to learn about your available events. Anyone with this URL can access these events.
 
-Negative
-: This Event API Product’s REST API URL and Website are unavailable for external use until the Event API Product is released 
+> aside negative
+> This Event API Product’s REST API URL and Website are unavailable for external use until the Event API Product is released 
 
 These URLs are available only when the API Product is marked as __Released__. To release the API Product, click on the __Release__ button at the top right.
 
@@ -515,8 +515,8 @@ More info about the API release and website hosting:
 
 ![](img/ep-eapi-product-8.png)
 
-Positive
-: Do check the __Host Website__ option to ensure that the hosted URL is publicly available. 
+> aside positive
+> Do check the __Host Website__ option to ensure that the hosted URL is publicly available. 
 
 With this, the Event API Product named __HVAC Controller__ is ready and published for access on public URLs.
 
@@ -624,8 +624,8 @@ The topic name is dynamically constructed by concatenating the root topic name a
 
 ✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using _stress_ system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.
 
-Positive
-: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
+> aside positive
+> _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
 
 ####application.yml
 
@@ -662,8 +662,8 @@ logging:
       springframework: info      
 ```
 
-Positive
-: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
+> aside positive
+> Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 Affect the following changes on the application configuration file:
 
@@ -730,8 +730,8 @@ b) And after
     publish:
 ```
 
-Negative
-: Careful not to mess up the indentation in your YAML file!
+> aside negative
+> Careful not to mess up the indentation in your YAML file!
 
 With this change, the channels section of the YAML file will look like this
 ```
@@ -788,8 +788,8 @@ info:
 
 We will be building this microservice using AsyncAPI Generator tool from the AsyncAPI document hosted by the PubSub+ Event Portal.
 
-Positive
-: A file with required changes is made available in the folder by name __asyncapi-reference.yml__ for your reference.      
+> aside positive
+> A file with required changes is made available in the folder by name __asyncapi-reference.yml__ for your reference.      
 
 ###Generate code using AsyncAPI Code Generator
 
@@ -801,8 +801,8 @@ cd ~/github/smarttown/cloudstream
 
 Run the following command to invoke AsyncAPI code generator utility.
 
-Negative
-: Be sure to update the host URI in the __-p host__, __-p username__, __-p password__, and __-p msgVpn__ parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.     
+> aside negative
+> Be sure to update the host URI in the __-p host__, __-p username__, __-p password__, and __-p msgVpn__ parameters with the parameters noted from the Spring Cloud Stream connection settings in the previous section.     
 
 ``` 
 ag -o ac-city-alert-generator -p view=provider -p binder=solace -p dynamicType=header -p artifactId=ac-city-alert-generator  -p groupId=com.eap -p javaPackage=com.eap.scs.asyncapi.alertgenerator -p host=tcps://your_host_name.messaging.solace.cloud:55443 -p username=username -p password=password -p msgVpn=msgVPN asyncapi.yaml @asyncapi/java-spring-cloud-stream-template --force-write
@@ -921,11 +921,10 @@ The topic name is dynamically constructed by concatenating the root topic name a
 
 ####application.yml
 
-Positive
-: 1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
-
-Positive
-: 2. Note the City name you used in the ac-city-iot-simulator microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
+> aside positive
+> 1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+>
+> 2. Note the City name you used in the ac-city-iot-simulator microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
 
 
 ✅ Review the application.yml
@@ -958,8 +957,8 @@ logging:
       springframework: info
 
 ```
-Positive
-: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
+> aside positive
+> Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ####Running Alert Generator
 
@@ -1018,8 +1017,8 @@ This should run the simulator microservice and publish temperature reading event
 
 ✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.
 
-Positive
-: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.     
+> aside positive
+> _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.     
 
 To run the stress command, type:    
 
@@ -1189,8 +1188,8 @@ logging:
       springframework: error
 ```
 
-Positive
-: Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
+> aside positive
+> Update the __host__, __msgVpn__, __clientUsername__ and __clientPassword__ parameters with the Host URI, Message VPN, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ####Running Alert Aggregator
 
@@ -1270,8 +1269,8 @@ The connection details to establish a MQTT client session is retrieved from the 
 ```
 
 MQTT client connection is established with the Broker.
-Positive
-: Update the __host__, __username__ and __password__ parameters with the Host URI, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
+> aside positive
+> Update the __host__, __username__ and __password__ parameters with the Host URI, Client Username and Password noted before to connect with your Broker using Spring Cloud Stream client library.
 
 ![](img/connect-with-mqtt.png)
 

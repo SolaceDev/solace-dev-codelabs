@@ -86,8 +86,8 @@ We will create the following objects to configure KEDA:
 - We will use SDK-Perf utility, provided for you on **kedalab-helper** pod, to publish messages to our broker.
 - Based upon the message backlogs that we create, we will observe how KEDA scales the **solace-consumer** deployment
 
-Positive
-: Let's Get Started!
+> aside positive
+> Let's Get Started!
 
 ## Install KEDA
 
@@ -97,8 +97,8 @@ Duration: 0:15:00
 
 You will need to install KEDA if it is not already available on your cluster. Instructions here are reproduced from the [KEDA Web site](https://keda.sh/docs/2.8/deploy/). We will use Helm to install KEDA. Please refer to the KEDA site if you wish to use a deployment method other than Helm to install KEDA.
 
-Negative
-: If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br>_It may be necessary to update the installation OR to uninstall keda and then re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4_.
+> aside negative
+> If KEDA was already installed to your cluster and you intend to use it to complete the CodeLab:<br>_It may be necessary to update the installation OR to uninstall keda and then re-install it if the Solace Scaler is not available in your installed version of KEDA. The Solace Scaler is available in KEDA core starting with version 2.4_.
 
 ### Add Helm repo (if not already added)
 ```bash
@@ -213,8 +213,8 @@ Next, we'll execute a script included on **kedalab-helper** to configure our Sol
 kubectl exec -n solace kedalab-helper -- ./config/config_solace.sh
 ```
 
-Positive
-: If you completed optional step #6 above in **Install Solace PubSub Event Broker**, then you can view the results of the configuration script: Refresh the screen to observe the configured VPN and associated objects. If you navigate to the queue **SCALED_CONSUMER_QUEUE1**, you can view the attached consumers. Initially there will be zero consumers. This list will grow and shrink as we publish messages with KEDA configured.
+> aside positive
+> If you completed optional step #6 above in **Install Solace PubSub Event Broker**, then you can view the results of the configuration script: Refresh the screen to observe the configured VPN and associated objects. If you navigate to the queue **SCALED_CONSUMER_QUEUE1**, you can view the attached consumers. Initially there will be zero consumers. This list will grow and shrink as we publish messages with KEDA configured.
 
 ### Create solace-consumer Deployment
 The Solace PubSub+ Event Broker should be created and configured prior to completing this step. Create the **solace-consumer** deployment by executing the following steps.
@@ -230,8 +230,8 @@ kubectl get deployments -n solace
 kubectl get pods -n solace
 ```
 
-Positive
-: Note that there should be one replica of the **solace-consumer** pod running at this point. We are now ready to proceed with using KEDA to scale the solace-consumer deployment!
+> aside positive
+> Note that there should be one replica of the **solace-consumer** pod running at this point. We are now ready to proceed with using KEDA to scale the solace-consumer deployment!
 
 ## Review ScaledObject Configuration
 
@@ -286,8 +286,8 @@ spec:
 |minReplicaCount|_0_|If there are no messages on the queue, then our solace-consumer deployment will scale to zero replicas|
 |maxReplicaCount|_10_|KEDA/HPA may scale the solace-consumer deployment up to 10 replicas|
 
-Positive
-: We will discuss the **horizonalPodAutoscalerConfig** in our last exercise.
+> aside positive
+> We will discuss the **horizonalPodAutoscalerConfig** in our last exercise.
 
 ### Solace Event Queue Trigger
 Let's inspect the `triggers:` section of the ScaledObject. The trigger type is specified as `solace-event-queue`. The fields contained in the trigger configuration shown here _are specific to a Solace Event Queue scaler._ Other trigger types interface with different technology and logically have different requirements. The Solace Event Queue Scaler uses the SEMP API to obtain metrics from the broker. Therefore, we expect that then information necessary to connect to SEMP is required.
@@ -302,11 +302,11 @@ The `solaceSempBaseURL`, `messageVpn`, and `queueName` form a path to the queue 
 |messageCountTarget|_20_|The average number of messages desired per replica.|
 |messageSpoolUsageTarget|_1_|Value in Megabytes; The average spool usage desired per replica|
 
-Negative
-: **AT LEAST** one of **messageCountTarget** or **messageSpoolUsageTarget** is required. If both values are present, the metric value resulting in the higher desired replicas will be used. (Standard KEDA/HPA behavior)
+> aside negative
+> **AT LEAST** one of **messageCountTarget** or **messageSpoolUsageTarget** is required. If both values are present, the metric value resulting in the higher desired replicas will be used. (Standard KEDA/HPA behavior)
 
-Positive
-: You can find more information about the [Solace Event Queue Trigger](https://keda.sh/docs/2.8/scalers/solace-pub-sub/) on the KEDA web site.
+> aside positive
+> You can find more information about the [Solace Event Queue Trigger](https://keda.sh/docs/2.8/scalers/solace-pub-sub/) on the KEDA web site.
 
 ### Metric Target Values
 Target values, `messageCountTarget` and `messageSpoolUsageTarget` for the Solace Queue Scaler, represent the _maximum_ value desired per replica for the metric. From the Kubernetes HPA Documentation, the computation is expressed as:
@@ -337,8 +337,8 @@ spec:
       key:         SEMP_PASSWORD
 ```
 
-Positive
-:  **TriggerAuthentication** You can find more information about **TriggerAuthentication** records on the KEDA Web site: [KEDA Authentication](https://keda.sh/docs/2.8/concepts/authentication/)
+> aside positive
+>  **TriggerAuthentication** You can find more information about **TriggerAuthentication** records on the KEDA Web site: [KEDA Authentication](https://keda.sh/docs/2.8/concepts/authentication/)
 
 ## Create ScaledObject with Solace Queue Trigger
 
@@ -407,8 +407,8 @@ In your watch window, press Control-C to stop the command from watching the depl
 ### Recap
 In this exercise we checked our readiness and then created a KEDA ScaledObject. We verified that the ScaledObject was created and active by watching the solace-consumer Deployment scale to zero replicas, and by checking the HPA entry.
 
-Negative
-: There should be 0 replicas of the solace-consumer running in the Kubernetes cluster at this point!
+> aside negative
+> There should be 0 replicas of the solace-consumer running in the Kubernetes cluster at this point!
 
 ## Scale Deployment on Message Count
 
@@ -441,14 +441,14 @@ View the the scaling of solace-consumer deployment in the command line window Up
 ### **OPTIONAL**: Stop the Watch Command
 In your watch window, press Control-C to stop the command from watching the deployment or pod replicas and return to a command prompt. (Or you can leave this command active for the next exercise)
 
-Positive
-: You can repeat the step to Publish Messages as many times as you like and review the results. You can also modify the SDK-Perf command options to see the effects if you are familiar with the tool.<br>The command `kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -h` will display the options.
+> aside positive
+> You can repeat the step to Publish Messages as many times as you like and review the results. You can also modify the SDK-Perf command options to see the effects if you are familiar with the tool.<br>The command `kubectl exec -n solace kedalab-helper -- ./sdkperf/sdkperf_java.sh -h` will display the options.
 
 ### Recap
 We published messages to the consumer input queue hosted on our Solace Broker. We observed KEDA and HPA scale the application based on the message count from 0 to 10 replicas, and back down to 0 replicas after the input queue was cleared.
 
-Negative
-: The solace-consumer should have scaled from its maximum of 10 replicas back down to zero
+> aside negative
+> The solace-consumer should have scaled from its maximum of 10 replicas back down to zero
 
 ## Scale Deployment on Message Spool Size
 
@@ -456,8 +456,8 @@ Duration: 0:15:00
 
 In the last exercise, we scaled based on message count. In this exercise, we will scale the deployment to 10 replicas based on message spool usage.<br>We will publish 50 messages to the queue at a rate of 10 messages per second. Each message will have a size of 4 megabytes so that KEDA and HPA will scale the solace-consumer Deployment to 10 replicas. (4 megabytes = 4 * 1024 * 1024 = 4194304 bytes) Our trigger is configured with a **messageSpoolUsageTarget** of 1 megabyte, so a message spool size > (9 megabytes + 1 byte) will cause our deployment to scale to 10 replicas.
 
-Positive
-: Note that 50 messages is not sufficient for the scaler to reach 10 replicas based on ***message count.*** So we will know that the ***message spool usage*** target is in effect.
+> aside positive
+> Note that 50 messages is not sufficient for the scaler to reach 10 replicas based on ***message count.*** So we will know that the ***message spool usage*** target is in effect.
 
 ### Open Watch Window
 _(Skip this step if the watch is already active.)_ 
@@ -488,8 +488,8 @@ In your watch window, press Control-C to stop the command from watching the depl
 ### Recap
 We published messages to the consumer input queue hosted on our Solace Broker. We observed KEDA and HPA scale the application based on the message spool size from 0 to 10 replicas, and back down to 0 replicas after the input queue was cleared.
 
-Negative
-: The solace-consumer should have scaled back down from its maximum of 10 back down to 0 replicas
+> aside negative
+> The solace-consumer should have scaled back down from its maximum of 10 back down to 0 replicas
 
 ## Modify HPA Behavior
 
@@ -677,7 +677,7 @@ In the course of this CodeLab you learned how to install KEDA. And you learned h
 - [KEDA GitHub Project](https://githhub.com/kedacore/keda)
 - [Kubernetes Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 
-Positive
-: ***Thank you*** for trying the Solace-KEDA CodeLab! We hope you found it informative.
+> aside positive
+> ***Thank you*** for trying the Solace-KEDA CodeLab! We hope you found it informative.
 
 ![Soly Image Caption](img/soly.gif)

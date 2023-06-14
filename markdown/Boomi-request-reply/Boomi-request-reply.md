@@ -35,8 +35,8 @@ After you finish the Getting Started with Boomi and Solace codelab, you’ll hav
 - A local atom up and running
 - An understanding of how to deploy a Boomi process to a Boomi Atom
 
-Positive
-: If you’re new to the world of events, welcome! Solace has [extensive blogs focusing on event-driven architecture and development.](https://solace.com/blog/)
+> aside positive
+> If you’re new to the world of events, welcome! Solace has [extensive blogs focusing on event-driven architecture and development.](https://solace.com/blog/)
 
 ## Use Case Overview
 
@@ -58,8 +58,8 @@ We are not going to create a service replier the first time through. We are goin
 1. You will see the request come in and manually respond using the _Try Me_ feature (copy and paste the generated ReplyTo topic and correlation ID)
 1. The Solace Broker will route the reply to the waiting Boomi Process
 
-POSITIVE
-: This is the most basic implementation of this pattern. Queues, ACL's and other Solace features can be used for persistence, access lock down and much more.
+> aside positive
+> This is the most basic implementation of this pattern. Queues, ACL's and other Solace features can be used for persistence, access lock down and much more.
 
 Let’s get started!
 
@@ -93,8 +93,8 @@ The first thing we will do is create a simple Process in Boomi that makes a requ
   1. Set the Reply Timeout in the Request Operation to 100000, so we have plenty of time to manually respond.
      ![Solace Request Operation - sample data](img/SolaceRequestOperation.png)
 
-Positive
-: Remember, we will be using topics only in this example. This means there is nothing to create/configure on the Solace side as topics are dynamic. In this case our topic name is `T/boomi/request`
+> aside positive
+> Remember, we will be using topics only in this example. This means there is nothing to create/configure on the Solace side as topics are dynamic. In this case our topic name is `T/boomi/request`
 
 - Add a Stop Shape to the end and then wire the shapes together and click Save
   ![Completed Request Proocess - sample data](img/CompletedRequestProcess.png)
@@ -124,8 +124,8 @@ Duration: 0:5:00
 
 Duration: 0:20:00
 
-Positive
-: Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.
+> aside positive
+> Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.
 
 - Use the Test capability in Boomi to test the Request Process
 
@@ -153,8 +153,8 @@ Positive
   - And you can check the Source data for the Stop Shape to see what data was returned.
     ![StopShapeSourceData.png](img/StopShapeSourceData.png)
 
-Positive
-: **Can Solace support mid-Process requests? Yes, it can!**
+> aside positive
+> **Can Solace support mid-Process requests? Yes, it can!**
 
 ## Conclusion
 

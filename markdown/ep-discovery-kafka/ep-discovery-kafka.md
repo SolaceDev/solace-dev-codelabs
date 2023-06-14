@@ -12,8 +12,8 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## Introduction
 Duration: 0:01:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 Are you looking to discover, visual, catalog, share, and reuse your Kafka event streams, but don't know how and or where to begin. Or does your organization look something like the picture below and you are struggling to understand what is the data that is really going through your Kafka clusters?
 
@@ -35,8 +35,8 @@ So let's get started!
 
 Duration: 0:03:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 You are a member of the engineering team at the _NYC Modern Taxi Co_, a fictional taxi cab company based in New York City. Your team is playing from behind and racing to catch up with technology innovation introduced to the industry by Rideshare competitors such as Uber and Lyft. In order for the company to survive and eventually thrive your team has convinced the board that transforming the companies' IT systems is of utmost importance. Your team has done it's research and determined that moving to an Event-Driven Architecture is essential to future rapid innovation and has already kicked this initiative off by deploying a Solace Event Mesh and updating the taxi fleet to stream real-time events that include ride and location information. We know what the fleet is up to! Now it's time to start to continually improve and provide a world class customer experience.
 
@@ -48,8 +48,8 @@ In order to react in a real-time manner the team has decided that we want to pro
 
 ![Architecture](img/arch.png)
 
-Positive
-: The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
+> aside positive
+> The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
 
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
@@ -57,13 +57,13 @@ Positive
 
 Duration: 0:05:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 Before we dive deeper, let ensure we are all aligned with Kafka objects and concepts we will use in PubSub+ Event Portal.
 
-Positive
-: We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how they relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
+> aside positive
+> We are assuming you are familiar with Kafka, its foundational concepts, and have been introduced to PubSub+ Event Portal, so we won't go into depth of explaining the Kafka concepts but rather explain how they relate to the Event Portal. If you are completely new to our Event Portal then watch [this quick 2 mins video](https://share.vidyard.com/watch/cYiSmhz5ZUBh6bavDHAJNQ?) to get overview and create your [free trial account](https://solace.com/products/portal/).
 
 ### Consumer Groups
 
@@ -121,8 +121,8 @@ With the foundational concepts out of the way, lets go through some prerequisite
 
 Duration: 0:05:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 In this walk through you have a choice to pick either of the following options:
 
@@ -142,8 +142,8 @@ The most easiest way install the agent is using Docker. Option 2 will require JD
 
 If you are on Mac OS or Linux and already have Docker for Desktop installed, then go ahead copy and paste the below command into a terminal window. The Discovery Agent may take a few minutes to initialize.
 
-Negative
-: NOTE: If you are on Windows OS follow the instructions from the documentation [here](https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install).
+> aside negative
+> NOTE: If you are on Windows OS follow the instructions from the documentation [here](https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install).
 Or if you would like to install the Discovery Agent via a binary executable then refer to the instructions [here](https://docs.solace.com/Solace-Cloud/Event-Portal/Discovering-Events-and-EDAs.htm#Install2).
 
 ```bash
@@ -190,16 +190,16 @@ If you are scanning your own Kafka clusters, then the following event brokers ve
 
 Duration: 0:03:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
-Negative
-: The Kafka Cluster referenced in this section is not currently available for scanning. The steps below show you how you would scan a Kafka cluster, but for now just skip this section and use the pre-scanned discovery file available in Step 4
+> aside negative
+> The Kafka Cluster referenced in this section is not currently available for scanning. The steps below show you how you would scan a Kafka cluster, but for now just skip this section and use the pre-scanned discovery file available in Step 4
 
 Once the Offline Discovery Agent is installed, you can configure and run a scan on our NYC Taxi Kafka cluster from your browser.
 
-Negative
-: NOTE: If you going to use the pre-scanned Discovery file instead then you can skip this section.
+> aside negative
+> NOTE: If you going to use the pre-scanned Discovery file instead then you can skip this section.
 
 ### Step 1: Go to the Discovery Agent
 
@@ -249,8 +249,8 @@ Now on to the fun part where we will upload the scan to Event Portal and visuali
 
 Duration: 0:020:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 This is where all the exciting stuff will happen with your Discovery scans. A few things you can do here:
 
@@ -287,15 +287,15 @@ Once your workspace is created you'll see the **Staging view**. What you essenti
 
 ![Staging View](img/staging_view.png)
 
-Positive
-: This is where you will map what you have discovered to Applications and Events in the Event Portal to make associations with your application domain.
+> aside positive
+> This is where you will map what you have discovered to Applications and Events in the Event Portal to make associations with your application domain.
 
 ## Assign Kafka Objects to Solace Application Domain
 
 Duration: 0:05:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 Now that you have uploaded your scan file and staged your events, let's go ahead and create an application domain to map topics, events and consumer groups
 
@@ -318,8 +318,8 @@ Now lets assign our discovered Analytics Consumers Groups, Connectors, Topics, a
 Notice at the bottom of your discovery view, you can see a list of all **Objects** in the workspace
 ![Workspace Objects](img/workspace_objects.png)
 
-Positive
-: In reality you may have thousands of Consumers or Topics, so to ensure we are making the right associations with a domain, you can use the search capability on the table to filter our Analytics objects only.
+> aside positive
+> In reality you may have thousands of Consumers or Topics, so to ensure we are making the right associations with a domain, you can use the search capability on the table to filter our Analytics objects only.
 
 Assign the following objects to your newly created application domain:
 
@@ -349,8 +349,8 @@ Repeat for Connectors, Topics and Schemas
 
 Duration: 0:05:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 With the objects associated to an Application Domain, click on the Domain name tab at the top navigation bar to see a graph view of what has been mapped.
 ![Menu Tab](img/menu_tab.png)
@@ -391,8 +391,8 @@ What about the `taxinyc.analytics.kpi.exceeded.v1` topic that is being consumed 
 
 Alright, so now that we have associated and mapped all objects discovered during our scan it is time to commit this to the Event Portal so your architecture teams and developers can collaborate, design, and govern the NYC Taxi Analytics architecture.
 
-Negative
-: You also want to make sure that all association are resolved, i.e. there are no alert orange circle icons on any of the objects on the Graph View as these won't be imported or committed to the Event Portal.
+> aside negative
+> You also want to make sure that all association are resolved, i.e. there are no alert orange circle icons on any of the objects on the Graph View as these won't be imported or committed to the Event Portal.
 
 To commit click on the **Commit To Event Portal** button.
 
@@ -406,8 +406,8 @@ And your done!! ...well almost. All the applications, events and linkages you ma
 
 Duration: 0:05:00
 
-Negative
-: ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
+> aside negative
+> ⚠️  **WARNING - This Codelab is outdated. Please refer to [Solace Docs](https://docs.solace.com/Solace-Cloud/Event-Portal/event-portal-discovery.htm#Scanning-Kafka-brokers) for latest Kakfa Discovery Instructions.**
 
 Now that our Consumers Groups, Topics, and other objects have been committed to the Event Portal, they can be viewed and searched from the Designer and Catalog.
 

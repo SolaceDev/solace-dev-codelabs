@@ -83,23 +83,34 @@
       <google-codelab-step label="Create a Kafka Topic and Test Publishing and Subscribing" duration="10">
         <p>Follow the appropriate Quickstart guide (links in previous section) and verify you can publish and subscribe to Kafka topics. From the quickstart guides, the basic steps for this are (with <strong>examples for standard Kafka</strong> given):</p>
 <ol type="1">
-<li>Start Zookeeper instance. E.g.:<pre><code>bin/zookeeper-server-start.sh config/zookeeper.properties
+<li>Start Zookeeper instance. E.g.:</li>
+</ol>
+<pre><code>bin/zookeeper-server-start.sh config/zookeeper.properties
 </code></pre>
-</li>
-<li>Start Kafka server. E.g.: (in new terminal)<pre><code>bin/kafka-server-start.sh config/server.properties
+<ol type="1">
+<li>Start Kafka server. E.g.: (in new terminal)</li>
+</ol>
+<pre><code>bin/kafka-server-start.sh config/server.properties
 </code></pre>
-</li>
-<li>Create a new Kafka Topic &#34;quickstart-events&#34;. E.g.: (in new terminal)<pre><code>bin/kafka-topics.sh --create --topic quickstart-events --partitions 2 --bootstrap-server localhost:9092
+<ol type="1">
+<li>Create a new Kafka Topic &#34;quickstart-events&#34;. E.g.: (in new terminal)</li>
+</ol>
+<pre><code>bin/kafka-topics.sh --create --topic quickstart-events --partitions 2 --bootstrap-server localhost:9092
+
 bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092
 Topic: quickstart-events        PartitionCount: 2       ReplicationFactor: 1    Configs: segment.bytes=1073741824
-    Topic: quickstart-events        Partition: 0    Leader: 0       Replicas: 0     Isr: 0
-    Topic: quickstart-events        Partition: 1    Leader: 0       Replicas: 0     Isr: 0
+        Topic: quickstart-events        Partition: 0    Leader: 0       Replicas: 0     Isr: 0
+        Topic: quickstart-events        Partition: 1    Leader: 0       Replicas: 0     Isr: 0
 </code></pre>
-</li>
-<li>Start the publisher application, and send some messages. E.g.:<pre><code>bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+<ol type="1">
+<li>Start the publisher application, and send some messages. E.g.:</li>
+</ol>
+<pre><code>bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
 </code></pre>
-</li>
-<li>Publish ten messages: e.g. &#34;first message&#34;, &#34;2nd one&#34;, &#34;third&#34;, 4, 5, 6, ...<pre><code>&gt;First message
+<ol type="1">
+<li>Publish ten messages: e.g. &#34;first message&#34;, &#34;2nd one&#34;, &#34;third&#34;, 4, 5, 6, ...</li>
+</ol>
+<pre><code>&gt;First message
 &gt;2nd one
 &gt;third
 &gt;4
@@ -110,8 +121,11 @@ Topic: quickstart-events        PartitionCount: 2       ReplicationFactor: 1    
 &gt;9
 &gt;10
 </code></pre>
-</li>
-<li>Then, start the consumer application to receive the messages. E.g.: (in new terminal)<pre><code>bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+<ol type="1">
+<li>Then, start the consumer application to receive the messages. E.g.: (in new terminal)</li>
+</ol>
+<pre><code>bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+
 2nd one
 4
 5
@@ -123,17 +137,16 @@ third
 8
 9
 </code></pre>
-<ul>
-<li>Notice the messages are somewhat out-of-order.  This is because Kafka only has ordering at the partition level.  In this case, within each of the two partitions message order is maintained; but not across the whole Kafka topic.</li>
-</ul>
-</li>
-<li>Now that the consumer is caught up, publish more messages and observe they are received by the consumer.<pre><code>&gt;11
+<pre><code>- Notice the messages are somewhat out-of-order.  This is because Kafka only has ordering at the partition level.  In this case, within each of the two partitions message order is maintained; but not across the whole Kafka topic.
+</code></pre>
+<ol type="1">
+<li>Now that the consumer is caught up, publish more messages and observe they are received by the consumer.</li>
+</ol>
+<pre><code>&gt;11
 &gt;12
 &gt;13
 &gt;
 </code></pre>
-</li>
-</ol>
 <ul>
 <li>Note the delay between publishing and consuming. This is due to the consumer periodically polling the broker and pulling messages from it (unlike Solace, where messages are pushed to the consumer). <a href="https://kafka.apache.org/documentation/#theconsumer" target="_blank">https://kafka.apache.org/documentation/#theconsumer</a></li>
 </ul>
@@ -228,7 +241,7 @@ PS C:\Users\AaronLee\Downloads\pubsubplus-connector-kafka-sink-master&gt;
 <ul>
 <li><code>sol.topics</code>: one or more (comma separated) topics the Source connector can subscribe <em>Directly</em> to</li>
 <li><code>sol.queue</code>: to use Persistent/Guaranteed messaging, the Source connetor binds to a queue instead</li>
-<li><code>sol.message_processor_class</code>: which Processor to use when receiving a Solace message before writing into Kafka:  <ul>
+<li><code>sol.message_processor_class</code>: which Processor to use when receiving a Solace message before writing into Kafka: <ul>
 <li><strong>SolSampleSimpleMessageProcessor</strong>: very basic, uses <code>null</code> for the key, copies the message payload into the Kafka record</li>
 <li><strong>SolaceSampleKeyedMessageProcessor</strong>: allows you to specify what attribute to key the Kafka record on (e.g. Destination (aka Solace topic), CorrelationID, etc.). See next property.</li>
 </ul>
@@ -254,13 +267,19 @@ PS C:\Users\AaronLee\Downloads\pubsubplus-connector-kafka-sink-master&gt;
       <google-codelab-step label="Connect the Solace Source Connector (Basic)" duration="10">
         <p>If you have access to a Solace PubSub+ broker (local Docker container, free Solace Cloud, etc.), then let&#39;s connect the Solace Source Connector to it and verify it works. Otherwise, skip to the next step to use an existing Solace broker.</p>
 <ol type="1">
-<li>First, the default configuration files both use a Kafka Topic called &#34;test&#34;, so create that first:<pre><code>bin/kafka-topics.sh --create --topic test --bootstrap-server localhost:9092
+<li>First, the default configuration files both use a Kafka Topic called &#34;test&#34;, so create that first:</li>
+</ol>
+<pre><code>bin/kafka-topics.sh --create --topic test --bootstrap-server localhost:9092
 </code></pre>
-</li>
-<li>In a new terminal window, restart the Kafka Consumer app, and tell it to connect to the &#34;test&#34; topic. This way you&#39;ll be able to see messages as they arrive:<pre><code>bin/kafka-console-consumer.sh --topic test --property print.key=true --from-beginning --bootstrap-server localhost:9092
+<ol type="1">
+<li>In a new terminal window, restart the Kafka Consumer app, and tell it to connect to the &#34;test&#34; topic. This way you&#39;ll be able to see messages as they arrive:</li>
+</ol>
+<pre><code>bin/kafka-console-consumer.sh --topic test --property print.key=true --from-beginning --bootstrap-server localhost:9092
 </code></pre>
-</li>
-<li>Next, edit the <code>solace_source.properties</code> file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. For example:<pre><code># PubSub+ connection information
+<ol type="1">
+<li>Next, edit the <code>solace_source.properties</code> file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. For example:</li>
+</ol>
+<pre><code># PubSub+ connection information
 sol.host=tcp://localhost
 sol.username=default
 sol.password=default
@@ -268,19 +287,23 @@ sol.vpn_name=default
 # Solace PubSub+ topics to subscribe to
 sol.topics=samples/&gt;
 </code></pre>
-</li>
-<li>Start the Connect framework in standalone mode. Only one instance of the standalone can run, but you can pass in multiple properties files:<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
+<ol type="1">
+<li>Start the Connect framework in standalone mode. Only one instance of the standalone can run, but you can pass in multiple properties files:</li>
+</ol>
+<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
 </code></pre>
-</li>
-<li>If everything is running properly (Solace broker, Kafka broker, etc.) you should see the log entries:<pre><code>INFO Connected to host &#39;orig=tcp://localhost, scheme=tcp://, host=localhost&#39;
+<ol type="1">
+<li>If everything is running properly (Solace broker, Kafka broker, etc.) you should see the log entries:</li>
+</ol>
+<pre><code>INFO Connected to host &#39;orig=tcp://localhost, scheme=tcp://, host=localhost&#39;
 INFO Adding subscription for topic samples/&gt;
 </code></pre>
-</li>
-<li>Now we are ready to publish some test Solace messages. Connect to the Solace PubSub+ Manager (e.g. http://localhost:8080 or via the Solace Cloud console). Choose the correct Message VPN, and select the <strong>Try Me!</strong> menu selection. Connect the publisher, change the topic to match the Solace Source Connector topic subscription (e.g. <code>samples/hello</code>), and publish. You should see the message arrive in the Kafka Consumer:<pre><code>null    Hello world!
-</code></pre>
-</li>
+<ol type="1">
+<li>Now we are ready to publish some test Solace messages. Connect to the Solace PubSub+ Manager (e.g. http://localhost:8080 or via the Solace Cloud console). Choose the correct Message VPN, and select the <strong>Try Me!</strong> menu selection. Connect the publisher, change the topic to match the Solace Source Connector topic subscription (e.g. <code>samples/hello</code>), and publish. You should see the message arrive in the Kafka Consumer:</li>
 </ol>
-<aside class="special"><p>Success! The reason you see <code>null</code> is that the Consumer is displaying the Kafka message key, but we have not configured it in the Source Processor. We will do that in the next section.</p>
+<pre><code>null    Hello world!
+</code></pre>
+<aside class="special"><p> Success! The reason you see <code>null</code> is that the Consumer is displaying the Kafka message key, but we have not configured it in the Source Processor. We will do that in the next section.</p>
 </aside>
 
 
@@ -290,7 +313,9 @@ INFO Adding subscription for topic samples/&gt;
         <p>Next, we will use an existing Solace demo stream of messages: the Solace taxi demo. You can visualize the datastream here: <a href="https://sg.solace.com/taxi/" target="_blank">Solace Taxi Map Demo</a>.</p>
 <p>Stop the Connector instance (<code>Ctrl-C</code>), but leave the Kafka Consumer running. We&#39;ll repoint the Source Connector to the taxi demo stream.</p>
 <ol type="1">
-<li>Edit the <code>solace_source.properties</code> file again with the following. Note that the Processor is now changing to the &#34;keyed&#34; processor, and we&#39;ll use the messages&#39; Destination (aka Topic) as the key:<pre><code># PubSub+ connection information
+<li>Edit the <code>solace_source.properties</code> file again with the following. Note that the Processor is now changing to the &#34;keyed&#34; processor, and we&#39;ll use the messages&#39; Destination (aka Topic) as the key:</li>
+</ol>
+<pre><code># PubSub+ connection information
 sol.host=tcp://taxi.messaging.solace.cloud
 sol.username=public-taxi
 sol.password=iliketaxis
@@ -302,42 +327,44 @@ sol.message_processor_class=com.solace.connector.kafka.connect.source.msgprocess
 # What attribute to use for the Kafka message key?
 sol.kafka_message_key=DESTINATION
 </code></pre>
-</li>
-<li>Restart the Connect framework in standalone mode:<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
-</code></pre>
-</li>
-<li>Once the Source Connector connects to Solace, you should immediately see lots of taxi ride information arriving in the Kafka Consumer app:<pre><code>taxinyc/ops/ride/updated/v1/enroute/00000190/54846519/040.74084/-073.94572
-{
-&#34;ride_id&#34;: &#34;7a63e37c-b4f2-4085-9b3e-0b24873cea00&#34;,
-&#34;information_source&#34;: &#34;RideDispatcher&#34;,
-&#34;point_idx&#34;: 442,
-&#34;latitude&#34;: 40.74084,
-&#34;longitude&#34;: -73.94572,
-&#34;heading&#34;: 100,
-&#34;speed&#34;: 4,
-&#34;timestamp&#34;: &#34;2021-03-18T09:55:30.017-04:00&#34;,
-&#34;meter_reading&#34;: 9.26,
-&#34;meter_increment&#34;: 0.0209495,
-&#34;ride_status&#34;: &#34;enroute&#34;,
-&#34;passenger_count&#34;: 1,
-&#34;driver&#34;: {
-    &#34;driver_id&#34;: 190,
-    &#34;first_name&#34;: &#34;Allison&#34;,
-    &#34;last_name&#34;: &#34;Schwager&#34;,
-    &#34;rating&#34;: 2.75,
-    &#34;car_class&#34;: &#34;Sedan&#34;
-},
-&#34;passenger&#34;: {
-    &#34;passenger_id&#34;: 54846519,
-    &#34;first_name&#34;: &#34;Joe&#34;,
-    &#34;last_name&#34;: &#34;Caswell&#34;,
-    &#34;rating&#34;: 4.75
-}
-}
-</code></pre>
-</li>
+<ol type="1">
+<li>Restart the Connect framework in standalone mode:</li>
 </ol>
-<aside class="special"><p>SUCCESS!</p>
+<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_source.properties
+</code></pre>
+<ol type="1">
+<li>Once the Source Connector connects to Solace, you should immediately see lots of taxi ride information arriving in the Kafka Consumer app:</li>
+</ol>
+<pre><code>taxinyc/ops/ride/updated/v1/enroute/00000190/54846519/040.74084/-073.94572
+{
+    &#34;ride_id&#34;: &#34;7a63e37c-b4f2-4085-9b3e-0b24873cea00&#34;,
+    &#34;information_source&#34;: &#34;RideDispatcher&#34;,
+    &#34;point_idx&#34;: 442,
+    &#34;latitude&#34;: 40.74084,
+    &#34;longitude&#34;: -73.94572,
+    &#34;heading&#34;: 100,
+    &#34;speed&#34;: 4,
+    &#34;timestamp&#34;: &#34;2021-03-18T09:55:30.017-04:00&#34;,
+    &#34;meter_reading&#34;: 9.26,
+    &#34;meter_increment&#34;: 0.0209495,
+    &#34;ride_status&#34;: &#34;enroute&#34;,
+    &#34;passenger_count&#34;: 1,
+    &#34;driver&#34;: {
+        &#34;driver_id&#34;: 190,
+        &#34;first_name&#34;: &#34;Allison&#34;,
+        &#34;last_name&#34;: &#34;Schwager&#34;,
+        &#34;rating&#34;: 2.75,
+        &#34;car_class&#34;: &#34;Sedan&#34;
+    },
+    &#34;passenger&#34;: {
+        &#34;passenger_id&#34;: 54846519,
+        &#34;first_name&#34;: &#34;Joe&#34;,
+        &#34;last_name&#34;: &#34;Caswell&#34;,
+        &#34;rating&#34;: 4.75
+    }
+}
+</code></pre>
+<aside class="special"><p> SUCCESS!</p>
 </aside>
 
 
@@ -346,8 +373,10 @@ sol.kafka_message_key=DESTINATION
       <google-codelab-step label="Connect the Solace Sink Connector" duration="10">
         <p>Now that we have made the Source connector go from Solace→Kafka, let&#39;s configure the basic Sink Connector to publish data from Kafka→Solace.</p>
 <ol type="1">
-<li>Using the PubSub+ Manager GUI again, connect the Subscriber to your broker. Add a subscription for <code>sink/&gt;</code>. This will echo/display any Solace messages received that match that subscription.</li>
-<li>Edit the <code>solace_sink.properties</code> file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. Let&#39;s use the Kafka topic &#34;quickstart-events&#34;.<pre><code># Kafka topics to read from
+<li>Using the PubSub+ Manager GUI again, connect the Subscriber to your broker. Add a subscription for <code>sink/></code>. This will echo/display any Solace messages received that match that subscription.</li>
+<li>Edit the <code>solace_sink.properties</code> file which you copied into the config folder (or corresponding JSON if you want to run distributed) with the appropriate info. Let&#39;s use the Kafka topic &#34;quickstart-events&#34;.</li>
+</ol>
+<pre><code># Kafka topics to read from
 topics=quickstart-events
 # PubSub+ connection information
 sol.host=tcp://localhost
@@ -357,15 +386,17 @@ sol.vpn_name=default
 # Solace PubSub+ topics to PUBLISH to
 sol.topics=sink/events
 </code></pre>
-</li>
-<li>If it&#39;s still running, stop the Connect instance (Ctrl-C), and restart it using the Sink properties file:<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_sink.properties
-</code></pre>
-</li>
-<li>Once it connects, you should see your 10 or so messages you originally wrote to the quickstart topic published into Solace with the topic <code>sink/events</code>. <img alt="asdf" src="img/eb1f064d02b07de8.png"></li>
-<li>Feel free to restart the Kafka publisher app again, and add more messages to the Kafka topic, which will then get published into Solace:<pre><code>bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
-</code></pre>
-</li>
+<ol type="1">
+<li>If it&#39;s still running, stop the Connect instance (Ctrl-C), and restart it using the Sink properties file:</li>
 </ol>
+<pre><code>bin/connect-standalone.sh config/connect-standalone.properties config/solace_sink.properties
+</code></pre>
+<ol type="1">
+<li>Once it connects, you should see your 10 or so messages you originally wrote to the quickstart topic published into Solace with the topic <code>sink/events</code>. <img alt="asdf" src="img/eb1f064d02b07de8.png"></li>
+<li>Feel free to restart the Kafka publisher app again, and add more messages to the Kafka topic, which will then get published into Solace:</li>
+</ol>
+<pre><code>bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+</code></pre>
 
 
       </google-codelab-step>
@@ -479,6 +510,7 @@ PAYLOAD:
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

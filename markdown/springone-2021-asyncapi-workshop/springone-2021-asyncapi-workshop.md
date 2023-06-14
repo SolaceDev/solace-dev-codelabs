@@ -64,8 +64,8 @@ We'll install the generator itself later 👍
 
 ✅ Note that the Broker, Username with appropriate permissions are already setup and ready for use during the workshop.
 
-Positive
-: If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free).
+> aside positive
+> If you want to sing up and explore Solace capabilities, you can sign-up for a free Solace Cloud Account using [this link](https://bit.ly/try-solace-free).
 Note that no credit card is required. You will receive an email to activate the account and will then be prompted to start the free trail.
 
 ✅ Event mesh requires two or more Solace PubSub+ Brokers on different geographic locations to stream events across the globe.🚀
@@ -109,8 +109,8 @@ As of the creation of this codelab the available Cloud Stream Binders are:
 - Azure Event Hubs
 - Apache RocketMQ
 
-Positive
-: Today we're going to use the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
+> aside positive
+> Today we're going to use the [Solace PubSub+ Binder](https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-starters/solace-spring-cloud-stream-starter) which supports publish subscribe and consumer groups.
 
 ### Communication Models
 
@@ -338,8 +338,8 @@ In real world, this would have been a service that any device that collects temp
 
 In this workshop, we will be using a pre-built simulator microservice to publish temperature reading events. Essentially, it is a spring boot application that connects to Solace PubSub+ Broker and publishes a temperature reading event.
 
-Positive
-: We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
+> aside positive
+> We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
 
 ### AC-City Alert Generator Microservice
 
@@ -351,8 +351,8 @@ In this workshop, this application will be built from scratch by:
 1. Generating Spring Cloud Stream microservice from the AsyncAPI document
 1. Implementing business logic to generate alert
 
-Positive
-: We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
+> aside positive
+> We may have to update the connection credentials on necessary configuration files to connect to the Event Broker hosting the SmartTown EDA solution
 
 ## Workshop - IoT Sensor Data Simulation
 
@@ -438,13 +438,13 @@ The topic name is dynamically constructed by concatenating the root topic name a
 
 ✅ The temperature simulation is closely tied to CPU load on the machine, which can be manipulated using _stress_ system utility. The simulation logic is built to generate a temperature value as a multiple of CPU load.
 
-Positive
-: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
+> aside positive
+> _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
 
 ####application.yml
 
-Positive
-: Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+> aside positive
+> Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
 
 ✅ Review the application.yml
 
@@ -693,8 +693,8 @@ channels:
 cd ~/github/smarttown/cloudstream
 ```
 
-Positive
-: Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+> aside positive
+> Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
 
 Run the following command to invoke AsyncAPI code generator utility.
 
@@ -724,22 +724,22 @@ It is same as the TemperatureReading POJO present in the iot-data-collector micr
 
 ✅ Review the OperationalAlert java file. It carries operational alert data - a simple POJO with attributes and corresponding getters/setters. 
 
-Negative
-: Add the import statement manually at the top of the file along with other import statements.
-```
-import com.fasterxml.jackson.annotation.JsonProperty;
-```
+> aside negative
+> Add the import statement manually at the top of the file along with other import statements.
+> ```
+> import com.fasterxml.jackson.annotation.JsonProperty;
+> ```
 
 ####Application.java
 
 ✅ Review the Application.java, specifically the Supplier function.
 
-Negative
-: Add the @Bean annotation before the Function statement 
-```
-  @Bean
-	public Function<TemperatureReading, Message<OperationalAlert>> processTemperatureReading() {
-```
+> aside negative
+> Add the @Bean annotation before the Function statement 
+> ```
+>   @Bean
+> 	public Function<TemperatureReading, Message<OperationalAlert>> processTemperatureReading() {
+> ```
 
 Let us review the Function
 ```
@@ -827,11 +827,11 @@ The topic name is dynamically constructed by concatenating the root topic name a
 
 ####application.yml
 
-Positive
-: 1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
+> aside positive
+> 1. Before you proceed, make sure that you have received connection details for the Solace PubSub+ Event Broker from the instructor and keep it handy.
 
-Positive
-: 2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
+> aside positive
+> 2. Note the City name you used in the iot-data-collector microservice, as you would want to use the same city name to subscribe to TemperatureReading events. Otherwise, this microservice will end up receiving TemperatureReading events from all cities.
 
 ✅ Review the application.yml
 
@@ -1191,8 +1191,8 @@ OperationalAlert [ severity: Medium alertType: HighTemperature city: Bangalore t
 
 ✅ Open a terminal, change directory to ac-city-alert-generator project and run the following maven command.
 
-Positive
-: _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
+> aside positive
+> _stress_ utility is used to dynamically increase the CPU load, which in turn affects the simulation to produce higher temperature readings.
 To run the stress command, type:    
 ```   
 stress -c 6 -t 180
