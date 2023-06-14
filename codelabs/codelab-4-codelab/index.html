@@ -117,8 +117,12 @@ $ export PATH=$PATH:$GOROOT/bin
 cd solace-dev-codelabs
 git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </code></pre>
-<p>Positive : If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:<br><br><code>git clone https://github.com/<Your_Github_User>/solace-dev-codelabs.git</code></p>
-<p>Negative : Do not forget to checkout the code into a new branch <strong>git checkout -b &lt;add-codelab-name_of_codelab&gt;</strong>. This would help facilitating a peer review and approve/reject changes without affecting the published content.</p>
+<aside class="special"><p> If you do not have SSH setup on your machine and got an error cloning the repo, you can clone the https link instead as follows:</p>
+<pre><code>git clone https://github.com/&lt;Your_Github_User&gt;/solace-dev-codelabs.git
+</code></pre>
+</aside>
+<aside class="warning"><p> Do not forget to checkout the code into a new branch <strong>git checkout -b &lt;add-codelab-name_of_codelab&gt;</strong>. This would help facilitating a peer review and approve/reject changes without affecting the published content.</p>
+</aside>
 <p>Then follow one of the two options in the next two steps: Automated or Manual</p>
 
 
@@ -138,8 +142,10 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 <li>Edit your <code><name-of-codelab>.md</code> file in your text editor of choice</li>
 <li>When ready, run the export script as follows <code>./export.sh</code></li>
 </ol>
-<p>Negative : If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
-<p>Positive : Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+<aside class="warning"><p> If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
+<aside class="special"><p> Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+</aside>
 <p>🚀 Go ahead to the <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
@@ -149,7 +155,8 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
         <p>Create a folder <code><name-of-codelab></code> under the <code>markdown</code> directory. This is where your markdown file and related artifacts (such as images) will reside.</p>
 <p>Navigate to the <code><name-of-codelab></code> directory.</p>
 <p>Go ahead and create a markdown file where you&#39;ll create the actual codelab. Please have your markdown file name match the <code>id</code> in the header metadata that you will set in the next subsection.</p>
-<p>Negative : If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+<aside class="warning"><p> If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
 <pre><code language="language-bash" class="language-bash">$ vim unique-codelab-identifier.md
 </code></pre>
 <h3 is-upgraded>Fill-in the header metadata</h3>
@@ -204,11 +211,16 @@ Duration: 0:05:00
 <pre><code>### Info Boxes
 Plain Text followed by green &amp; yellow info boxes
 
-Negative
-: This will appear in a yellow info box.
+&gt; aside negative
+&gt; This will appear in a yellow info box.
+&gt; This is line two of the negative block
+&gt; ```
+&gt; this is a code block
+&gt; with multiple lines
+&gt; ```
 
-Positive
-: This will appear in a green info box.
+&gt; aside positive
+&gt; This will appear in a green info box.
 
 You created info boxes!
 
@@ -252,11 +264,14 @@ $ claat serve
 <li>Viola! You should have your first codelab!</li>
 </ul>
 <p>Repeat the export and serve locally every ime you make a new change in the markdown file</p>
-<p>Positive : When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
-<p>Negative : Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
+<aside class="special"><p> When you ran the <code>claat export</code> command you created the static web content needed to host your codelab. It placed static web content in a directory specified by your unique &#34;id&#34; and you can view it locally by opening the index.html page.</p>
+</aside>
+<aside class="warning"><p> Note that when you view it locally by opening index.html some of the graphics may not show up (such as access_time, Next, Back), but they work once online.</p>
+</aside>
 <h2 is-upgraded>Export for production</h2>
 <p>When you&#39;re done, export your static web content to the <code>codelabs</code> folder.</p>
-<p>Positive : Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
+<aside class="special"><p> Make sure your markdown file name matches your header metadata <code>id</code> for ease of future updates.</p>
+</aside>
 <pre><code language="language-bash" class="language-bash"># If creating a new codelab
 mkdir markdown/&lt;header-metadata-id&gt;
 # Add your markdown content in the markdown/&lt;header-metadata-id&gt;/&lt;file-name&gt;.md directory
@@ -267,7 +282,8 @@ cd markdown/&lt;header-metadata-id&gt;
 # Note the google analytics code used. Keep as is below
 claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 </code></pre>
-<p>Positive : Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+<aside class="special"><p> Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+</aside>
 <p>🚀 Go ahead to <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
@@ -281,8 +297,10 @@ claat export -o ../../codelabs/ &lt;header-metadata-id&gt;.md
 <li>Edit your <code><name-of-codelab>.md</code> file in your text editor of choice</li>
 <li>When ready, run the export script as follows <code>./export.sh</code></li>
 </ol>
-<p>Negative : If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
-<p>Positive : Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+<aside class="warning"><p> If you&#39;re using Windows make sure to set your text editor to use UNIX line endings!</p>
+</aside>
+<aside class="special"><p> Exporting your codelab will create the html static files under the <code>codelabs/<name-of-codelab></code> directory</p>
+</aside>
 <p>🚀 Go ahead to <strong>Step 8</strong> and add your codelabs on the main repo</p>
 
 
@@ -299,7 +317,8 @@ git push origin add-codelab-&lt;id&gt;
 <h2 is-upgraded>Create a Pull Request</h2>
 <p>Now that your changes have been pushed to a new branch, navigate to your fork <code>https://github.com/<Your_Github_User>/solace-dev-codelabs</code> and create a pull request against master.</p>
 <p>Since your commit has already been pushed you should see a highlighted box near the top of the page; Choose the &#34;Pull Request&#34; button next to it and fill out the form with comments on what changes are being requested. Upon submitting the Pull Request the Codelabs team will be notified, perform a review and ensure the codelab goes live on the site.</p>
-<p>Positive : We recommend a technical review of the codelab to verify the technical steps and make sure they work as mentioned in the codelab.</p>
+<aside class="special"><p> We recommend a technical review of the codelab to verify the technical steps and make sure they work as mentioned in the codelab.</p>
+</aside>
 <h2 is-upgraded>Thank You!</h2>
 <p>Thank you for contributing to Solace Codelabs! Please reach out to the Solace DevRel team with any questions.</p>
 
