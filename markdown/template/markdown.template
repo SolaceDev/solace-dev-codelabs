@@ -18,11 +18,11 @@ Enter a codelab overview here: what & why and github repo link where you can fin
 ### Info Boxes
 Plain Text followed by green & yellow info boxes 
 
-Negative
-: This will appear in a yellow info box.
+> aside Negative
+> This will appear in a yellow info box.
 
-Positive
-: This will appear in a green info box.
+> aside Positive
+> This will appear in a green info box.
 
 ### Bullets
 Plain Text followed by bullets
