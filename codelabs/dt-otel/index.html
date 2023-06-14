@@ -84,7 +84,7 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 <pre><code language="language-bash" class="language-bash">git clone git@github.com:TamimiGitHub/solace-dt-demo.git
 cd solace-dt-demo
 </code></pre>
-<aside class="warning"><p>Note: If you do not have SSH access configured between your local machine and your github account you will receive the following error while cloning <code>Permission denied (publickey). fatal: Could not read from remote repository</code>. To avoid that, just clone the https link as follows</p>
+<aside class="warning"><p> Note: If you do not have SSH access configured between your local machine and your github account you will receive the following error while cloning <code>Permission denied (publickey). fatal: Could not read from remote repository</code>. To avoid that, just clone the https link as follows</p>
 <pre><code>git clone https://github.com/TamimiGitHub/solace-dt-demo.git
 </code></pre>
 </aside>
@@ -113,7 +113,7 @@ cd solace-dt-demo
  ⠿ Container solace-dt-demo-solbroker-1          Started                                     1.6s
  ⠿ Container solace-dt-demo-otel-collector-1     Started   
 </code></pre>
-<aside class="warning"><p> Be aware  the command demonstrated above is `docker compose` and not  `docker-compose`. Make sure to use a recent version. Both `docker compose` and `docker-compose` may be available on your system and could differ in version. </p>
+<aside class="warning"><p> Be aware  the command demonstrated above is <code>docker compose</code> and not  <code>docker-compose</code>. Make sure to use a recent version. Both <code>docker compose</code> and <code>docker-compose</code> may be available on your system and could differ in version.</p>
 </aside>
 <h2 is-upgraded>Few notes to the code lab configuration</h2>
 <p>The <code>.env</code> file contains several environment variables that are used within the <code>docker-compose.yaml</code> file and may need to be changed by user depends on the runtime environment:</p>
@@ -129,12 +129,12 @@ cd solace-dt-demo
       <google-codelab-step label="Three Options for Config Management" duration="3">
         <p>You can (generally) configure the Solace PubSub+ broker using three different methods; this section provides a very brief outline of those.</p>
 <p>Each section of this codelab that performs a configuration step on the Solace broker will include all three options.</p>
-<aside class="warning"><p> Note: do not perform all 3 configuration options, just choose 1 for each section. </p>
+<aside class="warning"><p> Note: do not perform all 3 configuration options, just choose 1 for each section.</p>
 </aside>
-<p> For any configuration management, you will need a username/password with either admin or read/write level privileges. </p>
+<p>For any configuration management, you will need a username/password with either admin or read/write level privileges.</p>
 <h2 is-upgraded>A. PubSub+ Manager GUI</h2>
 <p>The PubSub+ Manager for Solace brokers is a web GUI, usually accessed on port 8080 on the software broker, port 80 of the management plane of the hardware appliance, or via the Solace Cloud console and clicking on &#34;Manage Service&#34; in the top right.</p>
-<aside class="special"><p> Tip: throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help! </p>
+<aside class="special"><p> Tip: throughout the PubSub+ Manager, by clicking on any configuration item or attribute, a &#34;Tip&#34; will show on the right-hand side of the screen describing the object. Built-in help!</p>
 </aside>
 <p class="image-container"><img alt="alt-text-here" src="img/c1f978145c610f80.png"></p>
 <h2 is-upgraded>B. SEMP Management API</h2>
@@ -143,7 +143,7 @@ cd solace-dt-demo
 <li><a href="https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/config/index.html" target="_blank">SEMPv2 Swagger Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/SEMP/Using-SEMP.htm" target="_blank">SEMP User Guide</a></li>
 </ul>
-<aside class="special"><p> All API commands in the codelab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials </p>
+<aside class="special"><p> All API commands in the codelab assume that the software broker is running locally in docker and that the commands are executed using the default Admin credentials</p>
 </aside>
 <h2 is-upgraded>C. Command Line Interface (CLI)</h2>
 <p>The Solace <strong>Command Line Interface</strong> (CLI) can be reached by one of the following methods (as appropriate):</p>
@@ -165,11 +165,11 @@ cd solace-dt-demo
       <google-codelab-step label="Message VPN Configuration" duration="3">
         <p>To improve the user&#39;s exposure to the distributed tracing feature, the broker comes with minimal configuration. Here are the step-by-step instructions to configure your broker. Please note that for simplicity&#39;s sake these steps will not go through configuring any TLS settings and as a result, most data will be exchanged in a non-secure manner.</p>
 <p>The following minimal configuration is <strong>necessary</strong> on the Message VPN.</p>
-<aside class="warning"><p> ⚠️ If these steps aren&#39;t followed, your OpenTelemetry Collector logs will show  </p>
+<aside class="warning"><p> ⚠️ If these steps aren&#39;t followed, your OpenTelemetry Collector logs will show</p>
+</aside>
 <pre><code language="language-bash" class="language-bash">&#34;error&#34;: &#34;no supported auth mechanism ([ANONYMOUS])&#34;.
 </code></pre>
 <p>This message is the Collector warning you that you&#39;re trying to connect to an unsecured resource (i.e. the broker).</p>
-</aside>
 <h2 is-upgraded>PubSub+ Manager</h2>
 <p>Login to the PubSub+ GUI Manager, then select the default Message VPN:</p>
 <p class="image-container"><img alt="alt-text-here" src="img/15a0899a3b6cb4df.png"></p>
@@ -618,7 +618,7 @@ Do you want to continue (y/n)? y
       <google-codelab-step label="Introduction to Context Propagation" duration="10">
         <p>While the previous examples have provided the ability to trace events as they arrive at the broker, we&#39;re still lacking the context required to know what is occurring at the publisher and at the subscriber. In order to create a trace containing information from end to end, we need to enable context propagation at the publisher and the subscriber.</p>
 <p><a href="https://opentelemetry.io/docs/concepts/glossary/#context-propagation" target="_blank">OpenTelemetry.io</a> describes Context Propagation as:</p>
-<aside class="special"><p> Allowing all Data Sources to share an underling context mechanism for storing state and accessing data across the lifespan of a Transaction.  </p>
+<aside class="special"><p> Allowing all Data Sources to share an underling context mechanism for storing state and accessing data across the lifespan of a Transaction.</p>
 </aside>
 <p>In other words, Context Propagation is the processes by which we can link individual operations such as <code>send</code>, <code>receive</code>, or <code>process</code> together into a single trace. With OpenTelemetry, these operations are identified by spans and are tied to a single trace by way of parent-child relationships. For a deeper look at Context Propagation for Distributed Tracing, check out the <a href="https://docs.solace.com/Features/Distributed-Tracing/Distributed-Tracing-Context-Propagation.htm#Context_Propagation_for_Distributed_Tracing" target="_blank">Solace Docs</a>.</p>
 <p>Now that we know what Context Propagation is, when we can discuss two main ways for enabling it:</p>
@@ -647,7 +647,7 @@ Do you want to continue (y/n)? y
 <li>Run the JMS <code>solace-publisher.jar</code> application and publish a message</li>
 </ol>
 <p>Additional context information will be <strong>automatically</strong> sent to the collector with no code changes to the JMS publishing application thanks to the opentelemetry javaagent.</p>
-<aside class="special"><p> Be sure to: </p>
+<aside class="special"><p> Be sure to:</p>
 <ul>
 <li>Update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></li>
 <li>replace <code>{absolute_path_to_the_jar_file}</code> with an absolute path to the <code>solace-dt-demo/src</code> folder on your machine. There are 2 places in the command where this needs to be done.</li>
@@ -676,7 +676,7 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
 <li>Configure the agent with the solace opentelemetry JMS integration solace-publisher JMS extension</li>
 <li>Run the JMS <code>solace-queue-receiver.jar</code> application and consume the message that was just published on to the queue</li>
 </ol>
-<aside class="special"><p> Be sure to: </p>
+<aside class="special"><p> Be sure to:</p>
 <ul>
 <li>Update this argument&#39;s IP to point to your collector: <code>-Dotel.exporter.otlp.endpoint=http://localhost:4317</code></li>
 <li>replace <code>{absolute_path_to_the_jar_file}</code> with an absolute path to the <code>solace-dt-demo/src</code> folder on your machine. There are 2 places in the command where this needs to be done.</li>
@@ -698,7 +698,7 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
 -Dsolace.topic=solace/tracing \
 -jar solace-queue-receiver.jar
 </code></pre>
-<aside class="warning"><p> Note: When you are done testing and wish to end the solace-queue-receiver application, simply send ctrl+c from the keyboard. </p>
+<aside class="warning"><p> Note: When you are done testing and wish to end the solace-queue-receiver application, simply send ctrl+c from the keyboard.</p>
 </aside>
 <h2 is-upgraded>Verify trace generated in Jaeger</h2>
 <p>A new trace should have been generated, notice how it has 3 spans. <img alt="Jaeger8" src="img/e4ea615a936a7866.png"></p>

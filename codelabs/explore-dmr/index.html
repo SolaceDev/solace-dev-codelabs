@@ -43,7 +43,7 @@
 <li>2+ Solace PubSub+ Brokers deployed in environments where they are visable to each other over a network.</li>
 <li>Access to the Solace Broker WebUI for all Brokers via administrator credentials.</li>
 </ol>
-<aside class="special"><p> A note on security: The brokers must be secured with a TLS certificate. </p>
+<aside class="special"><p> A note on security: The brokers must be secured with a TLS certificate.</p>
 </aside>
 <p>If you do not meet both of these requirements please use the following resources to setup and configure Solace PubSub+ Brokers.</p>
 <ul>
@@ -62,10 +62,11 @@
 <h2 is-upgraded>Connecting Solace Brokers via DMR</h2>
 <ol type="1">
 <li>Navigate to the Broker WebUI and Login</li>
-<li>Create a new Cluster <br><aside class="special"><p>❗️If you are on a Solace Cloud Broker a cluster ia automatically defined. If you are using Solace Software Brokers you will have to define a cluster for the broker. </p>
+<li>Create a new Cluster:<aside class="special"><p> ❗️If you are on a Solace Cloud Broker a cluster ia automatically defined. If you are using Solace Software Brokers you will have to define a cluster for the broker.</p>
 </aside>
-<br> Select Cluster from the left Solace menu then select Create New Cluster</li>
+</li>
 </ol>
+<p>Select Cluster from the left Solace menu then select Create New Cluster</p>
 <p class="image-container"><img alt="Create New Cluster" src="img/6559283cfa3ddd3c.jpeg"></p>
 <ol type="1" start="3">
 <li>Define cluster: Set Name, provide cluster password, confirm cluster password, turn off client certificate authentication, continue.</li>
@@ -79,12 +80,12 @@
 <li>After a few seconds you will see your new cluster status change to Up</li>
 </ol>
 <p class="image-container"><img alt="Cluster Up" src="img/a43b0cbbe3e31cf6.png"></p>
-<aside class="special"><p> ♻️ At this point repeat the Cluster Creation steps on each Software instance of Solace PubSub+ broker that you wish to connect into the Event Mesh. Then continue to the next step </p>
+<aside class="special"><p> ♻️ At this point repeat the Cluster Creation steps on each Software instance of Solace PubSub+ broker that you wish to connect into the Event Mesh. Then continue to the next step</p>
 </aside>
 <ol type="1" start="6">
 <li>Create an External DMR link between clusters: Right Click on the Cluster Summary page and Select &#34;Create External Link&#34; <img alt="Right Click to Create" src="img/f465ab4c7aabde5b.png"> Or Switch from the &#34;Summary&#34; tab to the &#34;External Links&#34; tab and press &#34;+ Click to Connect&#34; <img alt="External Link Click to Connect" src="img/a887f752c440b7b3.png"></li>
 <li>Select the Remote Broker you would like to link to: Provide broker URL, Admin Username and Admin Password (Note: This is not your cluster password but instead a broker Admin username and password). <img alt="Solace Remote Broker" src="img/2be9a21e1d20df1a.png"> Or Login with Solace Cloud by providing your Solace cloud Username and Password. You can also connect with a <a href="https://docs.solace.com/Cloud/ght_api_tokens.htm" target="_blank">Solace Cloud Token</a><img alt="Solace Cloud Broker Login" src="img/84260247848f68ae.png"></li>
-<li>Select Message VPNs to bridge: From the left side drop down menu select the desired Local Message VPN you wish to bridge. From the right side drop down menu select the desired Remote Message Service you would like to bridge. <br><aside class="special"><p> The term Message VPN and Service may appear seemingly interchangeably, the concept of message VPNs do not exist on our Cloud Brokers so instead we call the cloud brokers Services. </p>
+<li>Select Message VPNs to bridge: From the left side drop down menu select the desired Local Message VPN you wish to bridge. From the right side drop down menu select the desired Remote Message Service you would like to bridge.<aside class="special"><p> The term Message VPN and Service may appear seemingly interchangeably, the concept of message VPNs do not exist on our Cloud Brokers so instead we call the cloud brokers Services.</p>
 </aside>
 <img alt="Select Message VPNs" src="img/1520a34897d2a838.png"></li>
 <li>Bypass Spool Size Warning (again): If you are using a Docker Solace Software Broker and you did not alter your spool size earlier you will have to bypass another spool size warning <img alt="Again Spool Size Warning" src="img/babb4f94690fe7e8.png"></li>
@@ -92,7 +93,8 @@
 <li>Wait for Link and Test: The broker will now attempt to establish a link with the specified DMR Link mate.  Then once the connection is negotiated the brokers will run bi-directional communication tests. <img alt="Wait for Link and Test" src="img/737daab39511345a.png"></li>
 <li>Successful DMR Link: After communication tests we will have a successful DMR Link.<br><br> If you encounter an error please review a DMR troubleshooting steps to determine how to correct the error and build a successful DMR Link between brokers <img alt="Successful DMR Link" src="img/1cfbb4954b57c1f6.png"></li>
 </ol>
-<aside class="special"><p>At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.  <br>Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh</p>
+<aside class="special"><p> At this point if you would like to include more than 2 brokers in your Event Mesh repeat steps 6 to 12 for each additional broker you wish to include in the mesh.</p>
+<p>Note that events will not traverse N brokers to reach a desired broker so you have to form a direct DMR Link between each and every broker for form a full Event Mesh</p>
 </aside>
 <h2 is-upgraded>Conclusion</h2>
 <p>In the previous steps we have provisioned a cluster on each broker to prepare them to participate in an Event Mesh.  Then we created a DMR link between the brokers to form the Event Mesh.  Events will now be intelligently and Dynamically Routed from the Solace PubSub+ brokers where they are produced to the broker where there are interested subscribers. Continue to learn how we can explore the behavior of events over a DMR Link.</p>
@@ -152,7 +154,7 @@
 <li>We can also subscribe to any topics that we would like on the right side by changing the subscribe field and pressing &#34;Subscribe&#34;. The topic can be one that is published to our local broker or published to any other broker in the DMR(Event Mesh) that your user has access to. Do not forget about our <a href="https://docs.solace.com/Messaging/Wildcard-Charaters-Topic-Subs.htm" target="_blank">Solace wild</a> cards here: <br><code>* is a single level wild card: sample/topic/with/a/*/wildcard</code><br><code>> is a multi level wild card: sample/topic/></code></li>
 </ol>
 <p class="image-container"><img alt="cloud add subscriptions" src="img/8c7ecebba72a0e33.png"></p>
-<aside class="special"><p>💡 In this screen grab you can see that we are subscribed to a topic that is being published to a topic on a different Solace Broker which is in a DMR link (Event Mesh) with this broker. Thus requiring that DMR route the event from that other broker to this cloud broker when events are published.</p>
+<aside class="special"><p> 💡 In this screen grab you can see that we are subscribed to a topic that is being published to a topic on a different Solace Broker which is in a DMR link (Event Mesh) with this broker. Thus requiring that DMR route the event from that other broker to this cloud broker when events are published.</p>
 </aside>
 <h2 is-upgraded>Seeing Events flow across the DMR (Event Mesh):</h2>
 <p>Now that we have created publishers and subscribers via the &#34;Try Me&#34; tabs on our different DMR linked (Event Mesh) brokers we can start publishing events and watch them flow between brokers.  Experiment with &#34;Try Me&#34; subscriptions to only local topics, remote topics and combinations of both to get a better understanding of how Solace is Dynamically Routing messages between brokers.</p>
@@ -165,7 +167,7 @@
 <p class="image-container"><img alt="Solace SDKPerf Downlad" src="img/7f2bf2828ac1c711.png"></p>
 <p>Check out general SDKPerf documentation here: <a href="https://docs.solace.com/API/SDKPerf/SDKPerf.htm" target="_blank">https://docs.solace.com/API/SDKPerf/SDKPerf.htm</a></p>
 <p>And additional command line argument options here: <a href="https://docs.solace.com/API/SDKPerf/Command-Line-Options.htm" target="_blank">https://docs.solace.com/API/SDKPerf/Command-Line-Options.htm</a></p>
-<aside class="special"><p>💡 I will be using the Solace SDKPerf_java tool on a unix based system for this example.  All of the flavors behave similarly with different underlying protocols. </p>
+<aside class="special"><p> 💡 I will be using the Solace SDKPerf_java tool on a unix based system for this example.  All of the flavors behave similarly with different underlying protocols.</p>
 </aside>
 
 
