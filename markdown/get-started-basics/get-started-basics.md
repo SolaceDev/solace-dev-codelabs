@@ -32,8 +32,8 @@ Hello and welcome!  If you've never interacted with a Solace event broker before
 ![picture](img/broker-img.png)
 
 
-Positive
-: This CodeLab does not cover the **Event Portal**. That will be addressed in a separate CodeLab.
+> aside positive
+> This CodeLab does not cover the **Event Portal**. That will be addressed in a separate CodeLab.
 
 
 
@@ -85,8 +85,8 @@ Click on "Cluster Manager" to go into where you create and manage your broker se
 
 Give your Solace PubSub+ Cloud service instance a name, and then tell it to start!  Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc.  It takes about 5 minutes, and then you'll be ready!
 
-Positive
-: It is safe to navigate away from the "Solace is starting" page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!
+> aside positive
+> It is safe to navigate away from the "Solace is starting" page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!
 
 
 
@@ -106,8 +106,8 @@ docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000
 ```
    * Other Docker options are here: [https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm](https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm)
 
-Negative
-: **NOTE:** if you are running on a **Mac**, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the `docker run` command above, with `-p 55554:55555`
+> aside negative
+> **NOTE:** if you are running on a **Mac**, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the `docker run` command above, with `-p 55554:55555`
 
 * To run VirtualBox, VMWare, HyperV, and others: check out [solace.com/downloads](https://solace.com/downloads)
 * Lots of other software install options are here:
@@ -181,8 +181,8 @@ On the left side of the screen are the main sections to navigate through:
    * **NOTE:** Solace brokers do not use replay for recovery of persistent data (like Kafka)... there is a more fine-grained approach in Solace where each individual message is ACKnowledged to the broker when the consumer application is done with it
 * **Try Me!** this is where we will connect two WebSocket test applications
 
-Positive
-: Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.
+> aside positive
+> Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.
 
 
 
@@ -204,8 +204,8 @@ Click on the "Connect" button of both the Publisher and the Subscriber.  The gre
 
 ### Solace Cloud
 
-Negative
-: **NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.
+> aside negative
+> **NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.
 
 ![picture](img/connect.png)
 
@@ -280,8 +280,8 @@ Some examples of Solace topic subscriptions, and topics that they match:
 
 You can read more about [topic wildcard subscriptions](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm) here.
 
-Positive
-: Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.
+> aside positive
+> Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.
 
 
 
@@ -338,8 +338,8 @@ Add another one if you wish, queues can have multiple subscriptions:
 
 Click "Create" and that's it... your queue now has topic subscriptions to attract messages published on matching topics!
 
-Positive
-: Some brokers call this "topic-to-queue chaining" or "topic-to-queue mapping", but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).
+> aside positive
+> Some brokers call this "topic-to-queue chaining" or "topic-to-queue mapping", but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).
 
 
 
@@ -371,8 +371,8 @@ Hit "Publish" and make sure your messages appear on the other side.
 
 Now try disconnecting the Subscriber application, and publish a few more messages. Reconnect the subscriber and rebind to the queue and observe what happens.
 
-Negative
-: **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced concept. For use cases where end-to-end persistence is desired, ensure the publisher has set the Delivery Mode of the message to "Persistent" for sending Guaranteed messages.
+> aside negative
+> **NOTE:** it is possible to publish your messages as "Direct", and they will still go into the queue if the topic subscription matches. This is called _message promotion_ and is a more advanced concept. For use cases where end-to-end persistence is desired, ensure the publisher has set the Delivery Mode of the message to "Persistent" for sending Guaranteed messages.
 
 For more information on Guaranteed messaging and queues, please refer to these links:
 
@@ -393,8 +393,8 @@ Duration: 0:04:00
 
 This will be left as an exercise to the reader. Once you turn it on, navigate back to the "Queues" tab, select your queue, and see what "Actions" you can find to perform.
 
-Negative
-: **NOTE:** if using **Solace Cloud**, you will have to send a service request to the Solace Cloud Support team to enable Replay on your broker. Click on the "?" icon in Solace Cloud Mission Control, and say that you would like to test out Replay.
+> aside negative
+> **NOTE:** if using **Solace Cloud**, you will have to send a service request to the Solace Cloud Support team to enable Replay on your broker. Click on the "?" icon in Solace Cloud Mission Control, and say that you would like to test out Replay.
 ![picture](img/cloud-support.png)
 
 

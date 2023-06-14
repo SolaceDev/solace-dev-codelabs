@@ -28,7 +28,7 @@
                   feedback-link="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <aside class="special"><p> If you&#39;d like to learn more about OpenTelemetry architecture, but don&#39;t care about hands-on stuff, you can find it in my blog post [What is distributed tracing and how does OpenTelemetry work for event-driven integration?](https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/) </p>
+        <aside class="special"><p> If you&#39;d like to learn more about OpenTelemetry architecture, but don&#39;t care about hands-on stuff, you can find it in my blog post <a href="https://solace.com/blog/what-is-distributed-tracing-and-how-does-opentelemetry-work/" target="_blank">What is distributed tracing and how does OpenTelemetry work for event-driven integration?</a></p>
 </aside>
 <p>No business likes an angry user. That goes double if the user is a taxi driver. The language can be...intense.</p>
 <p>As NYC Modern Taxi Company modernizes its operations through event-based integration, things will go wrong. What&#39;s important is that issues are resolved quickly and as painlessly as possible for the end user, so the taxis keep moving. To help with that, NYC Modern Taxi is adding OpenTelemetry distributed tracing to all of their microservices. The goal is to trace events at they move through Solace and potentially dozens of microservices.</p>
@@ -51,7 +51,7 @@
 <li><a href="https://www.python.org/downloads/" target="_blank">Download Python</a> for free in the OS of your choosing</li>
 <li><a href="https://github.com/jmenning-solace/nycmoderntaxi/tree/master/opentelemetry-intro" target="_blank">Download the sample code</a> Or use git commands to grab it from <a href="https://github.com/jmenning-solace/nycmoderntaxi.git" target="_blank">GitHub</a>.</li>
 </ol>
-<aside class="warning"><p> It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. [Read more about the Python API.](https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga). </p>
+<aside class="warning"><p> It&#39;s important to note that this CodeLab uses a pre-release version of the Solace PubSub+ Python connector. It has the latest features, but may also have some bugs. <a href="https://solace.community/discussion/599/pubsub-messaging-api-for-python-v1-0-0-is-officially-ga" target="_blank">Read more about the Python API.</a>.</p>
 </aside>
 
 
@@ -95,7 +95,7 @@
     
       <google-codelab-step label="Set up Jaeger All-In-One" duration="5">
         <p>Jaeger collects and visualizes the spans created by your microservices. It has several different components such as an underlying database, a GUI and a span collector, but fortunately it has an all-in-one distribution that makes setup easy.</p>
-<aside class="warning"><p> If you don&#39;t have a tool that opens .gz files, you can download one. [7-Zip](https://www.7-zip.org/download.html) is a good free option </p>
+<aside class="warning"><p> If you don&#39;t have a tool that opens .gz files, you can download one. <a href="https://www.7-zip.org/download.html" target="_blank">7-Zip</a> is a good free option</p>
 </aside>
 <h2 is-upgraded>Steps to install</h2>
 <ol type="1">
@@ -105,7 +105,7 @@
 <li>Using a web browser, navigate to <code>http://localhost:16686/</code></li>
 <li>You should be greeted by a picture of a...chipmunk? Gopher? Not really sure.</li>
 </ol>
-<aside class="warning"><p> You&#39;ll need to keep the terminal window running Jaeger open. If you close it, you&#39;ll lose the traces you&#39;ve collected. </p>
+<aside class="warning"><p> You&#39;ll need to keep the terminal window running Jaeger open. If you close it, you&#39;ll lose the traces you&#39;ve collected.</p>
 </aside>
 <p>✔️ You&#39;ve created the second part of the solution! <img alt="check2" src="img/b66fd01b526bd42e.png"></p>
 
@@ -119,7 +119,7 @@
 <li>Open the Python installer that you downloaded in the prerequisites.</li>
 <li>You&#39;ll be guided through the install process.</li>
 </ol>
-<aside class="special"><p> Be sure to include Python in your PATH variable as per the download instructions </p>
+<aside class="special"><p> Be sure to include Python in your PATH variable as per the download instructions</p>
 </aside>
 <p>Once it&#39;s complete, you should have a program called IDLE (Integrated Development and Learning Environment). <img alt="IDLE" title="IDLE" src="img/7d2f16bbb5d719e4.png"></p>
 <p>That&#39;s what you&#39;ll use to modify and run the Python scripts.</p>
@@ -128,7 +128,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Create the &#34;Salesforce&#34; message publisher" duration="10">
-        <aside class="special"><p> This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events. If that&#39;s your passion, Solace has a great [CodeLab about event-enabling Salesforce with Boomi and Solace](https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/). Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API. If you want to know more about those capabilities, there will be a CodeLab soon. </p>
+        <aside class="special"><p> This CodeLab focuses on OpenTelemetry, so it won&#39;t actually implement the Salesforce events. If that&#39;s your passion, Solace has a great <a href="https://codelabs.solace.dev/codelabs/boomi-salesforce-codelab/" target="_blank">CodeLab about event-enabling Salesforce with Boomi and Solace</a>. Likewise, this CodeLab doesn&#39;t get into the nitty gritty of the Python API. If you want to know more about those capabilities, there will be a CodeLab soon.</p>
 </aside>
 <ol type="1">
 <li>If you haven&#39;t already, unzip the CodeLabs code into a convenient directory</li>
@@ -226,7 +226,7 @@ Subscribed to: opentelemetry/helloworld
 <li>The database consumer listens for incoming message until it receives a keyboard interrupt. At that point you&#39;ll see a message that says: Process finished with exit code 0</li>
 </ol>
 <p>🔁 Repeat this process with <code>solace_telemetry_consumer_REST.py</code>, so you have two consumers running at the same time.</p>
-<aside class="warning"><p> Don&#39;t forget to activate your Python virtual env in the new terminal you open! </p>
+<aside class="warning"><p> Don&#39;t forget to activate your Python virtual env in the new terminal you open!</p>
 </aside>
 <p>✔️ You&#39;ve created the entire solution! <img alt="check5" src="img/fd530409f7f515ec.png"></p>
 <h2 is-upgraded>Code Walk Through (optional)</h2>

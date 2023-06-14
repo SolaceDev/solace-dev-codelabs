@@ -55,9 +55,9 @@
 <li>A local atom up and running.</li>
 <li>An understanding of how to deploy a Boomi process to a Boomi Atom</li>
 </ul>
-<aside class="warning"><p>It&#39;s important to note that this codelab uses a pre-release version of the Solace connector to highlight cutting edge features and some prebuilt code to get you up and running faster. Please reach out to our <a href="https://solace.community/" target="_blank">Solace Community</a> to get a copy of both.</p>
+<aside class="warning"><p> It&#39;s important to note that this codelab uses a pre-release version of the Solace connector to highlight cutting edge features and some prebuilt code to get you up and running faster. Please reach out to our <a href="https://solace.community/" target="_blank">Solace Community</a> to get a copy of both.</p>
 </aside>
-<aside class="special"><p>If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+<aside class="special"><p> If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
 </aside>
 
 
@@ -91,7 +91,7 @@
 <li>The account information goes to the Analytics department&#39;s data lake for real-time analysis. (Once again, you&#39;ll save that part for another CodeLab)</li>
 </ul>
 <p>Do a deep dive into the individual applications, events and schemas by double clicking on them. Note that Event Portal houses all the schemas and topic strings that you&#39;ll need for the CodeLab.</p>
-<aside class="special"><p>If you want to learn more about the architecture for this CodeLab, check out the <a href="https://solace.com/blog/category/architects/" target="_blank">Solace Architecture blog</a>.</p>
+<aside class="special"><p> If you want to learn more about the architecture for this CodeLab, check out the <a href="https://solace.com/blog/category/architects/" target="_blank">Solace Architecture blog</a>.</p>
 </aside>
 <p>Two notes:</p>
 <ul>
@@ -130,7 +130,7 @@
 <li>Copy the generated token to a text editor. You will use it in the next section.</li>
 </ol>
 <h2 is-upgraded>⚙️ Boomi configuration</h2>
-<aside class="warning"><p>At this point, Solace is not part of the Boomi Process Library. Reach out to us at the <a href="https://solace.community/" target="_blank">Solace Community</a> and we will get the code to you.</p>
+<aside class="warning"><p> At this point, Solace is not part of the Boomi Process Library. Reach out to us at the <a href="https://solace.community/" target="_blank">Solace Community</a> and we will get the code to you.</p>
 </aside>
 <h2 is-upgraded>⚙️ Connect the process to listen for Solace events</h2>
 <ol type="1">
@@ -146,11 +146,11 @@
 </ol>
 <ul>
 <li>Change the destination to <code>NYCTAXI.BACKOFFICE.BOOMI.UPDATEDRIVERDB</code> This will be the Solace queue that the process binds to. Solace will create it automatically when you deploy the process for the first time.</li>
-<li>Replace the topic string structure with <code>taxinyc/backoffice/driver/upserted/v1/salesforce/&gt;</code> The <code>&gt;</code> character at the end is a wildcard that means that your process will get all DriverUpserted events, regardless of the upsert source or the account status.</li>
+<li>Replace the topic string structure with <code>taxinyc/backoffice/driver/upserted/v1/salesforce/></code> The <code>></code> character at the end is a wildcard that means that your process will get all DriverUpserted events, regardless of the upsert source or the account status.</li>
 <li>Make sure that the check box next to Create Queue and TS is checked.</li>
 <li>Save and Close the Connector operation and start shape.</li>
 </ul>
-<aside class="warning"><p>Due to Boomi SDK limitations, the current version of the connect does not allow you to modify an existing topic string. If you do want to make a change, re-import the event from Event Portal.</p>
+<aside class="warning"><p> Due to Boomi SDK limitations, the current version of the connect does not allow you to modify an existing topic string. If you do want to make a change, re-import the event from Event Portal.</p>
 </aside>
 <h2 is-upgraded>⚙️ Package and deploy</h2>
 <ol type="1">
@@ -160,11 +160,11 @@
 <li>In the middle column, select Listeners <img alt="image025" src="img/f6793dba81e17f58.png"></li>
 <li>You should see the listener up and running, with a green circle next to it.<br><img alt="image026" src="img/e812d78b04a21a22.png"></li>
 </ol>
-<aside class="special"><p>You&#39;ll test this flow in the next section once you have a publisher process up and running. So what did you just do? You just created the Boomi flow and the Solace objects needed for the solution. Once we have a publisher (which you&#39;ll do in the next step), you&#39;ll be able route a message through Boomi using Solace.</p>
+<aside class="special"><p> You&#39;ll test this flow in the next section once you have a publisher process up and running. So what did you just do? You just created the Boomi flow and the Solace objects needed for the solution. Once we have a publisher (which you&#39;ll do in the next step), you&#39;ll be able route a message through Boomi using Solace.</p>
 </aside>
 <p class="image-container"><img alt="image027" src="img/12ad83e62e51671c.png"></p>
-<h2 is-upgraded>And Now-One Quick Fix</h2>
-<aside class="warning"><p>In the current version of the Solace connector, if an error occurs while a Boomi process is processing an event, it could lead to a &#34;poison message&#34; scenario, where the event is processed over and over again. To avoid this, use this manual workaround for the time being, until Solace releases a new version (it&#39;s coming).</p>
+<p>###And Now-One Quick Fix</p>
+<aside class="warning"><p> In the current version of the Solace connector, if an error occurs while a Boomi process is processing an event, it could lead to a &#34;poison message&#34; scenario, where the event is processed over and over again. To avoid this, use this manual workaround for the time being, until Solace releases a new version (it&#39;s coming).</p>
 </aside>
 <ol type="1">
 <li>Go back to the Solace UI, click on Messaging Services in the upper left, then select the messaging service that you created.</li>
@@ -207,9 +207,8 @@
 <ul>
 <li>For the callback URL, insert your Boomi account ID. If you&#39;re logged into Boomi, it will be the part immediately after accountId= For example, if your Boomi URL is: <code>https://platform.boomi.com/AtomSphere.html#build;accountId=trainingjessemenning-WX1LP2</code> Then your account id is: <code>trainingjessemenning-WX1LP2</code> And your callback URL is: <code>https://platform.boomi.com/account/trainingjessemenning-WX1LP2/oauth2/callback</code></li>
 <li>For the Oauth Scopes, move Full Access into the Selected OAuth Scopes.</li>
-<li>Click on the Configure ID Token check box, and make the token valid for 720 minutes <img alt="image037" src="img/93378663649e7cf3.png"></li>
+<li>Click on the Configure ID Token check box, and make the token valid for 720 minutes <img alt="image037" src="img/93378663649e7cf3.png">1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You&#39;ll use the values when you&#39;re configuring Boomi&#39;s Salesforce Platform Event connector. <img alt="image039" src="img/d85beb6cb8ea7d3e.png"></li>
 </ul>
-<p>1.Click on Save. In the next screen, Copy and paste the consumer key and consumer secret into a text editor. You&#39;ll use the values when you&#39;re configuring Boomi&#39;s Salesforce Platform Event connector.   <img alt="image039" src="img/d85beb6cb8ea7d3e.png"></p>
 <h2 is-upgraded>⚙️ Define Platform Event structure</h2>
 <ol type="1">
 <li>Type &#34;platform&#34; into the quick find box in the left-hand column and click on &#34;Platform Events&#34; <img alt="image040" src="img/cb8e6177f62a706c.png"></li>
@@ -248,7 +247,7 @@
 <li>Cut and paste the Client Secret into the Client Secret box.</li>
 </ol>
 <p>Scroll to the bottom of the screen and click on Generate <img alt="image057" src="img/ebc5a732a70c6e2.png"></p>
-<aside class="warning"><p>If you get an error that states <code>Unable to browse connector: invalid response: [{&#34;message&#34;:&#34;The REST API is not enabled for this Organization.&#34;,&#34;errorCode&#34;:&#34;API_DISABLED_FOR_ORG&#34;}]</code> the connected app is not ready yet. It can take a couple hours.</p>
+<aside class="warning"><p> If you get an error that states <code>Unable to browse connector: invalid response: [{"message":"The REST API is not enabled for this Organization.","errorCode":"API_DISABLED_FOR_ORG"}]</code> the connected app is not ready yet. It can take a couple hours.</p>
 </aside>
 <p class="image-container"><img alt="image058" src="img/f419839f660fd6ac.png"></p>
 <p>You&#39;ll see the following if it&#39;s successful: <img alt="image059" src="img/7f6d4148d677b6b6.png"><img alt="image060" src="img/ae66ec610b0bedc1.png"></p>
@@ -278,7 +277,7 @@
 <li>To allow connections into the database, you need to create a firewall rule that allows certain IP addresses to connect.</li>
 </ol>
 <p>Click on Set Server Firewall. In the firewall rules section create a rule that looks like this: <img alt="image069" src="img/ee4cc617e0ea7e18.png"></p>
-<aside class="warning"><p>Because this is only a demo, we&#39;ll let all IPs connect. NEVER DO THIS IN A PROD ENVIRONMENT!!!!</p>
+<aside class="warning"><p> Because this is only a demo, we&#39;ll let all IPs connect. NEVER DO THIS IN A PROD ENVIRONMENT!!!!</p>
 </aside>
 <p>Click on Save</p>
 <ol type="1">
@@ -314,7 +313,7 @@
 <li>If you are using a local atom, need to do some extra steps to add the SQL jar:</li>
 <li>Download jar from here: <a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server" target="_blank">https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server</a></li>
 <li>Extract the zip file</li>
-<li>Copy mssql-jdbc-8.2.2.jre8.jar to <code>&lt;Boomi install directory&gt;/userlib/database</code> . If those directories don&#39;t exist, just create them.</li>
+<li>Copy mssql-jdbc-8.2.2.jre8.jar to <code><Boomi install directory>/userlib/database</code> . If those directories don&#39;t exist, just create them.</li>
 <li>End result should look like this, where the highlighted portion depends on how you installed the Atom <img alt="image073" src="img/4c2b255bae44a99b.png"></li>
 <li>OK, back to the fun stuff: In another tab, head back to the Boomi UI</li>
 <li>Open the &#34;Azure SQL Database Connection – taxinyc&#34;</li>
@@ -372,6 +371,7 @@
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

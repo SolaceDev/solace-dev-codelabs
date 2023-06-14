@@ -113,8 +113,8 @@ Duration: 0:02:00
 - Save the file. Note that when you save the file, the IDE immediately executes a `mvn install` which installs the solace connector
   ![connector-install](img/connector-install.png "connector-install")
 
-Positive
-: The connector is installed and ready to use 💥
+> aside positive
+> The connector is installed and ready to use 💥
 
 ## Configure Connection to Solace PubSub+ Broker
 Launch Solace PubSub+ console and select the Broker
@@ -162,8 +162,8 @@ Ensure that the "Connector configuration" of "Publish" in the bottom pane is sel
 
 Now that you have a publisher object configured, let's test it out! In this step, we will configure a scheduler that will publish messages every second on a predefined topic
 
-Positive
-: Note: You can use **any** trigger like a post REST request
+> aside positive
+> Note: You can use **any** trigger like a post REST request
 
 ### Flow Configuration
 
@@ -197,8 +197,8 @@ Before executing the flow, let's setup a subscriber on the broker to observe the
 - In the Subscriber section, click on `Connect` and add a topic subscription `solace/mule/>`
   ![subscriber](img/subscriber.png "subscriber")
 
-Positive
-: Notice the usage of the `>` [Solace Wildcard](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+> aside positive
+> Notice the usage of the `>` [Solace Wildcard](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
 - Now navigate back to your AnypointStudio and run the flow. You can either do that by clicking the
   ![run-flow](img/run-flow.png "run-flow")
@@ -260,8 +260,8 @@ Duration: 0:02:00
 ✅ Configure a subscriber object    
 ✅ Run the subscriber flow to receive the published events
 
-Positive
-: For more examples on how to use the Solace MuleSoft connector checkout the [SolaceProducts/pubsubplus-connector-mule-docs](https://github.com/SolaceProducts/pubsubplus-connector-mule-docs) github repository.
+> aside positive
+> For more examples on how to use the Solace MuleSoft connector checkout the [SolaceProducts/pubsubplus-connector-mule-docs](https://github.com/SolaceProducts/pubsubplus-connector-mule-docs) github repository.
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the _Report a mistake_ button at the bottom left of this codelab.
 

@@ -170,11 +170,8 @@ npm i
 <pre><code>docker pull dpage/pgadmin4
 docker run -d -p 5555:80 --name pgadmin -e PGADMIN_DEFAULT_EMAIL=&#34;&lt;your login name&gt;&#34; -e PGADMIN_DEFAULT_PASSWORD=&#34;&lt;your password&gt;&#34; dpage/pgadmin4
 </code></pre>
-<p>Negative : <strong>⏸️ Pause. Make sure you swapped out </strong></p>
-<p><strong><code><your login name></code></strong></p>
-<p><strong> and </strong></p>
-<p><strong><code><your password></code></strong></p>
-<p><strong>.</strong></p>
+<aside class="warning"><p><strong>⏸️ Pause. Make sure you swapped out </strong><strong><code><your login name></code></strong><strong> and </strong><strong><code><your password></code></strong><strong>.</strong></p>
+</aside>
 <p>This command will pull the necessary image and then start it as a container in detached mode, meaning it&#39;ll run in the background and not require you to keep your terminal window open.</p>
 <p>If you&#39;re able to run that command successfully and you open your browser up to localhost:5555, you&#39;ll see something like this:</p>
 <p class="image-container"><img alt="pgadmin4 login" src="img/4f548a63a4986057.png"></p>
@@ -281,7 +278,8 @@ prisma2 generate
 <ol type="1">
 <li>uncomment the code block after <code>// do some business logic</code></li>
 </ol>
-<p>Negative : <strong>⏸️ Pause. Double check to make sure your comments are correct.</strong></p>
+<aside class="warning"><p><strong>⏸️ Pause. Double check to make sure your comments are correct.</strong></p>
+</aside>
 <p>Then, go ahead and start your consumer by running <code>npm run start</code> from the mqtt-consumer directory.</p>
 <p>From a separate terminal, start up the MQTT producer (run <code>npm run start</code> from the mqtt-producer directory) and you should see this:</p>
 <p class="image-container"><img alt="Working Flow" src="img/b91302bf40706687.png"></p>

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Building Battleship with TypeScript, Java and Solace PubSub&#43;</title>
+  <title></title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -23,7 +23,7 @@
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
   <google-codelab codelab-gaid=""
                   id="solace-battleship"
-                  title="Building Battleship with TypeScript, Java and Solace PubSub&#43;"
+                  title=""
                   environment="web"
                   feedback-link="http://github.com/solacetraining/solace-battleship/issues">
     
@@ -141,11 +141,11 @@
 <p class="image-container"><img alt="Code Structure" src="img/474529f36efee008.png"></p>
 <h2 is-upgraded>Creating a configuration file</h2>
 <p>You will create a configuration file that holds your Solace Connection details by copying <code>battleship_frontend/src/common/game-config-template.ts</code> to <code>battleship_frontend/src/common/game-config.ts</code> and fill in the solace_* properties in the gameConfig object with the values retrieved from the Solace Cloud console.</p>
-<aside class="special"><p>REMINDER: Before moving on, take a second to double check that your config file is named <code>game-config.ts</code>, is properly populated with your connection details, and is located at <code>battleship_frontend/src/common/game-config.ts</code>. This is step #1 to establishing connecting to our Solace PubSub+ Event Broker.</p>
+<aside class="special"><p> REMINDER: Before moving on, take a second to double check that your config file is named <code>game-config.ts</code>, is properly populated with your connection details, and is located at <code>battleship_frontend/src/common/game-config.ts</code>. This is step #1 to establishing connecting to our Solace PubSub+ Event Broker.</p>
 </aside>
-<p>Navigate to Environment Setup to get these details from the connect details in your Solace Cloud tab:</p>
+<p>Navigate to <a href="#environment-setup" target="_blank">Environment Setup</a> to get these details from the connect details in your Solace Cloud tab:</p>
 <p class="image-container"><img alt="Solace Web Messaging Tab" title="Solace Web Messaging Tab" src="img/f708b4da3ca15283.png"></p>
-<pre><code>export const gameConfig = {
+<pre><code language="language-ts" class="language-ts">export const gameConfig = {
   solace_hostUrl: &#34;&#34;, // Secured Web Messaging host
   solace_vpn: &#34;&#34;, // Message VPN
   solace_userName: &#34;&#34;, // Username
@@ -156,7 +156,7 @@
 </code></pre>
 <p>If you do not have access to Solace Cloud, follow the <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">instructions</a> to get a docker instance of Solace PubSub+ running in a local environment.</p>
 <p>In this case, your connectivity details will be as follows:</p>
-<pre><code>export const gameConfig = {
+<pre><code language="language-ts" class="language-ts">export const gameConfig = {
   solace_hostUrl: &#34;ws://localhost:8080&#34;,
   solace_vpn: &#34;default&#34;, // Message VPN
   solace_userName: &#34;default&#34;, // Username
@@ -168,7 +168,7 @@
 <h2 is-upgraded>Connecting to Solace</h2>
 <p class="image-container"><img alt="Connect to Solace" title="Connect to Solace" src="img/38948701a63b55ed.png"></p>
 <p>Navigate to <code>battleship_frontend/src/contoller-app/landing-page.ts</code> and add the following below the <code>// Connect to Solace</code> comment in the <code>activate(params, routeConfig){}</code> function.</p>
-<pre><code>// Connect to Solace
+<pre><code language="language-ts" class="language-ts">// Connect to Solace
 this.solaceClient
   .connect()
   .then(() =&gt; {
@@ -204,12 +204,12 @@ SOLACE/BATTLESHIP/GAME-START/CONTROLLER
 <h2 is-upgraded>Setup a Global Topic Prefix</h2>
 <p>To make it easier to manage our topic namespace in our application, we will be setting up a Topic Prefix that will persist through all components of our application.</p>
 <p>Navigate to <code>battleship_frontend/src/app.ts</code> and add the following code snippet below the comment in the <code>constructor(...)</code> function:</p>
-<pre><code>//The Global Prefix for the Solace Battleship Game
+<pre><code language="language-ts" class="language-ts">//The Global Prefix for the Solace Battleship Game
 topicHelper.prefix = &#34;SOLACE/BATTLESHIP&#34;;
 </code></pre>
 <h2 is-upgraded>Connect to Solace from the Player Join Page</h2>
 <p>Navigate to <code>battleship_frontend/src/player-app/join.ts</code> and add the following below the <code>// Connect to Solace</code> comment in the <code>active(params, routeConfig){}</code> function.</p>
-<pre><code>// Connect to Solace
+<pre><code language="language-ts" class="language-ts">// Connect to Solace
 this.solaceClient
   .connect()
   .then(() =&gt; {
@@ -222,7 +222,7 @@ this.solaceClient
 <h2 is-upgraded>Publishing the Player Join Request</h2>
 <p class="image-container"><img alt="Publish a Join Event" title="Publish a Join Event" src="img/c152ef1c8007c4ce.png"></p>
 <p>Navigate to <code>battleship_frontend/src/player-app/join.ts</code> and enter the following code below the comment <code>//Publish a join request and change the pageState to waiting if the join request succeeded</code>:</p>
-<pre><code>//Publish a join request and change the pageState to waiting if the join request succeeded
+<pre><code language="language-ts" class="language-ts">//Publish a join request and change the pageState to waiting if the join request succeeded
 let topicName: string = `${this.topicHelper.prefix}/JOIN-REQUEST/${this.player.getPlayerNameForTopic()}`;
 let replyTopic: string = `${this.topicHelper.prefix}/JOIN-REPLY/${this.player.getPlayerNameForTopic()}/CONTROLLER}`;
 this.solaceClient
@@ -237,7 +237,7 @@ this.solaceClient
   });
 </code></pre>
 <p>This will setup a topic string with <code>SOLACE/BATTLESHIP/JOIN-REQUEST/PLAYER1</code> or <code>SOLACE/BATTLESHIP/JOIN-REQUEST/PLAYER2</code> depending on which player is trying to join. The <code>solaceClient.sendRequest(...)</code> method will then send a request with the following payload as an illustration:</p>
-<pre><code> {
+<pre><code language="language-js" class="language-js"> {
    &#39;playerName&#39;:&#39;Player1&#39;,
    &#39;playerNickname&#39;:&#39;TK&#39;
  }
@@ -254,7 +254,7 @@ this.solaceClient
 <p class="image-container"><img alt="Subscribe Result" src="img/fc0d721ec85217d.png"></p>
 <h2 is-upgraded>Summary</h2>
 <p>In this section, you established connectivity to a Solace PubSub+ Event Broker you provisioned in the cloud and you were able to publish a message to it. In the next section, you will now add subscriptions and set up event handler callbacks that transition between pages/states in the game.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson1&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson1"</code></p>
 <p>To see the solutions to this excercise, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-1-connect-and-publish-solution" target="_blank">battleship-lesson-1-connect-and-publish-solution</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-1-connect-and-publish-solution</code></p>
 
@@ -277,12 +277,12 @@ this.solaceClient
 <h2 is-upgraded>GitHub Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-2-subscribe-and-page-transitions/" target="_blank">battleship-lesson-2-subscribe-and-page-transitions</a> using the command:</p>
 <p><code>git checkout battleship-lesson-2-subscribe-and-page-transitions</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Subscribing the Landing Page to JOIN request events and publishing a GAME START event</h2>
 <p class="image-container"><img alt="Subscribe to Join and Publish" src="img/9a5b9b5e89d77681.png"></p>
 <p>Navigate to <code>battleship_frontend/src/controller-app/landing-page.ts</code> and add the following code snippet below the <code>//Listener for join requests</code> comment in the <code>activate(params, routeConfig)</code> function:</p>
-<pre><code>//Listener for join request
+<pre><code language="language-ts" class="language-ts">//Listener for join request
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/JOIN-REQUEST/*`,
   // join event handler callback
@@ -322,7 +322,7 @@ this.solaceClient.subscribe(
 <p class="image-container"><img alt="Subscribe to Game Start" src="img/fd34783e4ebc672.png"></p>
 <p>Navigate to <code>battleship_frontend/src/player-app/join.ts</code>.</p>
 <p>We need to add the code that will handle GAME START events that are published from the Landing Page. When a GAME START event is published, the player screens should transition to the Board Set Page. Add the following to the comment below <code>//Subscribe to the GAME-START event</code> in the <code>activate(...)</code> function:</p>
-<pre><code>//Subscribe to the GAME-START event
+<pre><code language="language-ts" class="language-ts">//Subscribe to the GAME-START event
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/GAME-START/CONTROLLER`,
   // game start event handler callback
@@ -338,7 +338,7 @@ this.solaceClient.subscribe(
 </code></pre>
 <p>The code above establishes a subscription to the <code>SOLACE/BATTLESHIP/GAME-START/CONTROLLER</code> topic and navigates to the Board Set Page once the event was received.</p>
 <p>Once the page has transitioned to the Board Set Page, you also want to unsubscribe from the <code>SOLACE/BATTLESHIP/GAME-START/CONTROLLER</code> event so that the page doesn&#39;t trigger further callbacks. In the <code>detached()</code> function, add the following code:</p>
-<pre><code>//Unsubscribe from the &lt;PREFIX&gt;/GAME-START and &lt;PREFIX&gt;&gt;/JOIN-REPLY/[PLAYER1 or PLAYER2]/[PLAYER1 or PLAYER2]
+<pre><code language="language-ts" class="language-ts">//Unsubscribe from the &lt;PREFIX&gt;/GAME-START and &lt;PREFIX&gt;&gt;/JOIN-REPLY/[PLAYER1 or PLAYER2]/[PLAYER1 or PLAYER2]
 this.solaceClient.unsubscribe(`${this.topicHelper.prefix}/GAME-START/CONTROLLER`);
 this.solaceClient.unsubscribe(`${this.topicHelper.prefix}/JOIN-REPLY/${this.player.getOtherPlayerNameForTopic()}/${this.player.getPlayerNameForTopic()}`);
 </code></pre>
@@ -346,7 +346,7 @@ this.solaceClient.unsubscribe(`${this.topicHelper.prefix}/JOIN-REPLY/${this.play
 <p class="image-container"><img alt="Publish BOARD SET events" src="img/4898d2bb1fa03736.png"></p>
 <p>Navigate to <code>battleship_frontend/src/player-app/board-set.ts</code></p>
 <p>Once a player has finished setting up their board, it will publish a BOARD SET request. Replace the <code>beginMatch{}</code> function with the code below:</p>
-<pre><code>  /**
+<pre><code language="language-ts" class="language-ts">  /**
    * Function to begin a match - it publishes a board-set request message and then sets the done placing variable to true
    */
   beginMatch() {
@@ -375,7 +375,7 @@ this.solaceClient.unsubscribe(`${this.topicHelper.prefix}/JOIN-REPLY/${this.play
 <h2 is-upgraded>Subscribing the Landing Page to BOARD SET requests</h2>
 <p class="image-container"><img alt="Subscribe to Board Set" src="img/1eb21de22b771284.png"></p>
 <p>Navigate to <code>battleship_frontend/src/controller-app/landing-page.ts</code> and add the following code to the <code>activate(params, routeConfig)</code> function:</p>
-<pre><code>//Listener for board set requests
+<pre><code language="language-ts" class="language-ts">//Listener for board set requests
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/BOARD-SET-REQUEST/*`,
   // board set event handler
@@ -425,7 +425,7 @@ this.solaceClient.subscribe(
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Lesson-02-Summary" src="img/53f94e259dcda6c4.png"></p>
 <p>In this lesson you learned how to subscribe to events via topics in the PubSub+ event broker. The callback function for each topic subscription handled game logic and also transitioned between pages. Once a page transitioned, you also unsubscribed from the events. In addition, you also learned how to disconnect a page from the Solace Broker.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson2&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson2"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-2-subscribe-and-page-transitions-solution/" target="_blank">battleship-lesson-2-subscribe-and-page-transitions-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-2-subscribe-and-page-transitions-solution</code></p>
 
@@ -443,13 +443,13 @@ this.solaceClient.subscribe(
 <h2 is-upgraded>GitHub Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-3-match-and-game-over/" target="_blank">battleship-lesson-3-match-and-game-over</a> using the command:</p>
 <p><code>git checkout battleship-lesson-3-match-and-game-over</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Subscribe the Board Set Page to Match start events</h2>
 <p class="image-container"><img alt="Match Start Events" title="Match Start Event" src="img/ee59151a153620dc.png"></p>
 <p>We need to include a mechanism to start the match once both players have finished setting their boards. This is done by listening to the match start events from the controller page.</p>
 <p>Insert the following code snippet under the <code>//subscribe to the match start event</code> comment in the <code>constructor(...)</code> function under <code>player_app/board-set.ts</code></p>
-<pre><code>//Set the subscription for the match start
+<pre><code language="language-ts" class="language-ts">//Set the subscription for the match start
 this.solaceClient.subscribe(`${this.topicHelper.prefix}/MATCH-START/CONTROLLER`, (msg) =&gt; {
   console.log(msg);
   this.router.navigateToRoute(&#34;match&#34;);
@@ -464,7 +464,7 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MATCH-START/CONTROLLER`,
 <p>If you try to make a move, nothing will happen. That&#39;s because there is no subscription being registered for the other player&#39;s move events. The following code makes a subscription to either <code>Player1/MOVE</code> or <code>Player2/MOVE</code>, performs some game logic when it receives a message on either of these topics, and then sends a reply telling the other player whether their move resulted in a hit or miss.</p>
 <p class="image-container"><img alt="Subscribe to Match-Request" title="Subscribe" src="img/9b9333ac1bc69270.png"></p>
 <p>Insert this code snippet in the <code>constructor</code> method of <code>src/player-app/match.ts</code> as instructed by the comments in that file:</p>
-<pre><code>// subscribe to the other player&#39;s moves here
+<pre><code language="language-ts" class="language-ts">// subscribe to the other player&#39;s moves here
 this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REQUEST/${this.player.getOtherPlayerNameForTopic()}`, (msg) =&gt; {
   //De-serialize the received message into a move object
   let move: Move = JSON.parse(msg.getBinaryAttachment());
@@ -497,7 +497,7 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REQUEST/${this.play
 <p class="image-container"><img alt="Publish request" title="Publish" src="img/5950f86b76a0c007.png"></p>
 <p>The following code forms a move object, makes a request, and then processes the response received back from the opposing player. The reply-to topic is specified in the request so that the opposing player&#39;s Solace client will know what topic to send the reply on. The <code>solace-client</code>&#39;s <code>sendRequest()</code> method returns a promise, which resolves if the opposing player sends back a response. So, we define a callback that will be triggered if the promise resolves. This callback is where we&#39;ll handle updating the requesting player&#39;s board state to reflect whether their move resulted in a &#34;hit&#34; or &#34;miss&#34; in the context of the battleship match.</p>
 <p>Insert this code snippet in the <code>boardSelectEvent(...)</code> method of <code>src/player-app/match.ts</code> as instructed by the comments in that file:</p>
-<pre><code>//Send the Move Request
+<pre><code language="language-ts" class="language-ts">//Send the Move Request
 this.solaceClient
   .sendRequest(`${this.topicHelper.prefix}/MOVE-REQUEST/${this.player.getPlayerNameForTopic()}`, JSON.stringify(move), `${this.topicHelper.prefix}/MOVE-REPLY/${this.player.getPlayerNameForTopic()}/${this.player.getOtherPlayerNameForTopic()}`)
   .then((msg: any) =&gt; {
@@ -525,7 +525,7 @@ this.solaceClient
 <h2 is-upgraded>Game Over!</h2>
 <p>Now that we&#39;ve wired up our battleship application&#39;s game logic, we need to handle ship hit events in each player&#39;s local application. The following code decrements the score for whichever player&#39;s ship was hit, and then checks if either player&#39;s score has reached zero. If a player&#39;s score has reached zero, route to the GAME OVER page!</p>
 <p>Insert this code snippet in the <code>shipHit(...)</code> method of <code>src/player-app/match.ts</code> as instructed by the comments in that file:</p>
-<pre><code>//Ship hit logic
+<pre><code language="language-ts" class="language-ts">//Ship hit logic
 this.scoreMap[shipHitOwner]--;
 if (this.scoreMap[shipHitOwner] == 0) {
   if (shipHitOwner == this.player.name) {
@@ -543,7 +543,7 @@ if (this.scoreMap[shipHitOwner] == 0) {
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Match and Game Over" title="Match and Game Over" src="img/bfd241bf499870e.png"></p>
 <p>In this lesson you learned how two applications can communicate using a request/reply message exchange pattern. We covered the code required to subscribe to request topics, send requests, send replies, and handle replies. Game logic was handled in the various event handler callback functions.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson3&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson3"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-3-match-and-game-over-solution/" target="_blank">battleship-lesson-3-match-and-game-over-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-3-match-and-game-over-solution</code></p>
 
@@ -559,13 +559,13 @@ if (this.scoreMap[shipHitOwner] == 0) {
 <h2 is-upgraded>Github Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-4-enabling-multiple-sessions" target="_blank">battleship-lesson-4-enabling-multiple-sessions</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-4-enabling-multiple-sessions</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Allow for multiple games to happen at once</h2>
 <p>As you may have noticed, one of the issues with the game in its current form is that only one instance of the game can run at a time.</p>
 <p>Using the power of topic-routing, you will see how easy and quick it is to allow for more than one game to go on at a time.</p>
 <p>In Lesson-1, you established a global topic prefix in <code>app.ts</code> with the following lines of code:</p>
-<pre><code>//The Global Prefix for the Solace Battleship Game
+<pre><code language="language-ts" class="language-ts">//The Global Prefix for the Solace Battleship Game
 topicHelper.prefix = &#34;SOLACE/BATTLESHIP&#34;;
 </code></pre>
 <p>As such, every time you published or subscribed - your topic would start with <code>SOLACE/BATTLESHIP</code>.</p>
@@ -574,16 +574,16 @@ topicHelper.prefix = &#34;SOLACE/BATTLESHIP&#34;;
 <h2 is-upgraded>Enabling multiple sessions in the LandingPage</h2>
 <p>Since the starting point for each game is the LandingPage, you will generate your session-id there.</p>
 <p>Navigate to the <code>battleship_frontend/src/controller-app/landing-page.ts</code> and add the following line in the LandingPage class below the comment <code>//Generate a session-id for the game (a random hex string)</code></p>
-<pre><code>//Generate a session-id for the game (a random hex string)
+<pre><code language="language-ts" class="language-ts">//Generate a session-id for the game (a random hex string)
 sessionId: string = Math.floor(Math.random() * 16777215).toString(16);
 </code></pre>
 <p>Next, you will modify the global topic prefix to include the generated session-id by adding code below the comment <code>//Append a session-id for the global topic prefix</code> in the <code>constructor(...)</code> function:</p>
-<pre><code>this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + this.sessionId;
+<pre><code language="language-ts" class="language-ts">this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + this.sessionId;
 </code></pre>
 <h2 is-upgraded>Modifying the Join Page to handle session-ids</h2>
 <p>Once a session-id has been generated at the LandingPage, it will need to be passed along to the PlayerJoin screens.</p>
 <p>Navigate to the <code>battleship_frontend/src/player-app/join.ts</code> and add the following line in the <code>activate(params,routeConfig)</code> function below the comments as indicated below:</p>
-<pre><code>//set the sessionid for the player
+<pre><code language="language-ts" class="language-ts">//set the sessionid for the player
 this.player.sessionId = params.sessionId;
 //update the topicHelperPrefix with the sessionId
 this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + params.sessionId;
@@ -596,7 +596,7 @@ this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + params.session
 <p>You can optionally also run the <code>now</code> command again in the battleship_frontend directory to update your deployment to ZEIT.</p>
 <h2 is-upgraded>Summary</h2>
 <p>In this lesson you learned about the flexibility of topic routing. By simply adding a random string to the prefix of your topic and persisting that prefix through the lifecycle of your application, you can now have more than one game going on at once. No major changes were needed for your game logic to deal with this.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson4&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson4"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-4-enabling-multiple-sessions-solution" target="_blank">battleship-lesson-4-enabling-multiple-sessions-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-4-enabling-multiple-sessions-solution</code></p>
 
@@ -616,7 +616,7 @@ this.topicHelper.prefix = this.topicHelper.prefix + &#34;/&#34; + params.session
 <h2 is-upgraded>Github Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-5-building-a-dashboard" target="_blank">battleship-lesson-5-building-a-dashboard</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-5-building-a-dashboard</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Recap of the Message Exchange Patterns implemented so far</h2>
 <ol type="1">
@@ -635,7 +635,7 @@ SOLACE/BATTLESHIP/*/MOVE-REPLY/*/*
 <h2 is-upgraded>Subscribing to the MOVE-REPLIES event from the dashboard</h2>
 <p class="image-container"><img alt="Lesson-05-dashboard-subscribe" src="img/27435743b2c250b8.png"></p>
 <p>Navigate to the <code>battleship_frontend\controller-app\dashboard.ts</code> and add the following subscription to the <code>constructor(...)</code> function:</p>
-<pre><code>//Subscribe to all MOVE-REPLYs from Player1 and Player2 to propogate in the dashboard
+<pre><code language="language-ts" class="language-ts">//Subscribe to all MOVE-REPLYs from Player1 and Player2 to propogate in the dashboard
 this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REPLY/*/*`, (msg) =&gt; {
   let moveResponseEvent: MoveResponseEvent = JSON.parse(msg.getBinaryAttachment());
   this.moveResultMap[moveResponseEvent.player] = moveResponseEvent;
@@ -648,7 +648,7 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MOVE-REPLY/*/*`, (msg) =
 <h2 is-upgraded>Summary</h2>
 <p><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17741924#overview" target="_blank">Udemy Summary Video</a></p>
 <p>In this lesson you learned about the benefits of doing a request-reply interaction over Solace. You were able to add an additional widget that listend to all player reply events without interrupting your critical path. You essentially are able to spin up additional microservices that tap events in realtime ‘for free&#39;.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson5&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson5"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-5-building-a-dashboard-solution" target="_blank">battleship-lesson-5-building-a-dashboard-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-5-building-a-dashboard-solution</code></p>
 
@@ -719,7 +719,7 @@ spring.cloud.stream.binders.solace_cloud.environment.solace.java.msgVpn=default 
 spring.cloud.stream.binders.solace_cloud.environment.solace.java.clientUsername=default //Username
 spring.cloud.stream.binders.solace_cloud.environment.solace.java.clientPassword= //Password
 </code></pre>
-<p>Once you entered in the credentials, navigate to <code>battleship_backend</code> and type the following command: <code>.\mvnw.cmd spring-boot:run</code> if under windows, otherwise run <code>chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run</code>.</p>
+<p>Once you entered in the credentials, navigate to <code>battleship_backend</code> and type the following command: <code>.\mvnw.cmd spring-boot:run</code> if under windows, otherwise run <code>chmod +x mvnw && ./mvnw spring-boot:run</code>.</p>
 <p>This will kickoff a process to download all dependent libraries, run unit tests, launch a Spring Boot Server, and create associated Queues, and also create a filewatcher to detect any changes upon succesful compilation.</p>
 <p>The console outputted log should contain the following snippet if the properties were created succesfully:</p>
 <pre><code>INFO 8296 --- [  restartedMain] c.s.j.protocol.impl.TcpClientChannel     : Connecting to host &#39;orig=tcp://&lt;HOST&gt;:&lt;PORT&gt;, scheme=tcp://, host=&lt;HOST&gt;, port=&lt;PORT&gt;&#39; (host 1 of 1, smfclient 6, attempt 1 of 3, this_host_attempt: 1 of 1)
@@ -730,7 +730,7 @@ INFO 8296 --- [  restartedMain] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creat
 <p class="image-container"><img alt="PubSub+ Manager" src="img/2f14a593c4438694.png"></p>
 <h2 is-upgraded>Summary</h2>
 <p>In this lesson you learned about considerations to be made when building distributed systems, how topic-to-queue mappings are a fundamental construct that aids with distributed systems development, how Spring Cloud Stream enables developers to rapidly create server side applications, and finally you started a local instance of a Spring Cloud Stream server.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson6&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson6"</code></p>
 
 
       </google-codelab-step>
@@ -745,20 +745,20 @@ INFO 8296 --- [  restartedMain] c.s.s.c.s.b.p.SolaceQueueProvisioner     : Creat
 <h2 is-upgraded>Github Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-7-implement-a-join-request-handler-in-scs" target="_blank">battleship-lesson-7-implement-a-join-request-handler-in-scs</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-7-implement-a-join-request-handler-in-scs</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Add the join request topic subscription to the JOIN-REQUEST queue</h2>
 <p>In the previous section, you established connectivity to your local Solace PubSub+ broker and saw a queue was automatically created. You now will enable a subscription to your queue so that it attracts join requests from Player1 and Player2.</p>
 <p>This is accomplished by navigating to <code>battleship_backend\src\main\resources\application.yml</code> and remove the # from the <code>queueAdditonalSubscriptions</code> property so that the section below the comment looks like the following:</p>
-<pre><code>#Subscription for the join request queue
+<pre><code language="language-yml" class="language-yml">#Subscription for the join request queue
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/JOIN-REQUEST/*
 </code></pre>
-<aside class="warning"><p>Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
+<aside class="warning"><p> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
 </aside>
 <p>Now all join requests for all sessions (indicated by the first ‘<em>&#39;) and Player 1 or Player 2 (indicated by the second ‘</em>&#39;) will end up in the JOIN-REQUEST queue.</p>
 <h2 is-upgraded>Add the join request handling logic</h2>
 <p>Navigate to <code>battleship_backend\src\main\java\com\solace\battleship\flows\JoinProcessor.java</code> and add a function to handle JoinRequests in the JoinProcessor class:</p>
-<pre><code>// We define an INPUT to receive data from and dynamically specify the reply to destination depending on the header and state of the game engine
+<pre><code language="language-java" class="language-java">// We define an INPUT to receive data from and dynamically specify the reply to destination depending on the header and state of the game engine
 @StreamListener(JoinRequestBinding.INPUT)
 public void handle(PlayerJoined joinRequest, @Header(&#34;reply-to&#34;) String replyTo) {
     // Pass the request to the game engine to join the game
@@ -779,7 +779,7 @@ public void handle(PlayerJoined joinRequest, @Header(&#34;reply-to&#34;) String 
 <h2 is-upgraded>Modify the landing page to subscribe to the JoinReplies and Game Start events</h2>
 <p>In the previous iteration of the application, the landing page would keep state of which player has joined the game and respond accordingly. Since the landing page no longer keeps state, in addition to the player screens, the landing page will need to subscribe to the join reply topic and also the game start topic so status could be reflected appropriately.</p>
 <p>This can be accomplished by navigating to <code>battleship_frontend/src/controller_app/landing-page.ts</code> and adding the following in the <code>activate(...)</code> function:</p>
-<pre><code>//Listener for join replies from the battleship-server
+<pre><code language="language-typescript" class="language-typescript">//Listener for join replies from the battleship-server
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/JOIN-REPLY/*/CONTROLLER`,
   // join event handler callback
@@ -815,13 +815,13 @@ this.solaceClient.subscribe(
 );
 </code></pre>
 <h2 is-upgraded>Running the application</h2>
-<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
+<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw && ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
 <p>Now navigate to <a href="http://localhost:12345" target="_blank">http://localhost:12345</a>, the game should operate exactly as before but now the Join Requests are being handled by the Battleship Spring Cloud Stream server.</p>
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Lesson 7 Summary" src="img/c5c2817689aba1b1.png"></p>
 <p>In this lesson you learned about adding a topic subscription to a queue in Spring Cloud Stream, how easy it was to create a join request message handler using the framework, and finally you made changes to the front end in order to subscribe to the join replys.</p>
 <p>Now, the client-side controller app is no longer responsible for responding to join requests but simply listens to join-replys originating from the battleship-server.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson7&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson7"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-7-implement-a-join-request-handler-in-scs-solution" target="_blank">battleship-lesson-7-implement-a-join-request-handler-in-scs-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-7-implement-a-join-request-handler-in-scs-solution</code></p>
 
@@ -838,20 +838,20 @@ this.solaceClient.subscribe(
 <h2 is-upgraded>Github Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-8-implement-a-board-set-request-handler-in-scs" target="_blank">battleship-lesson-8-implement-a-board-set-request-handler-in-scs</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-8-implement-a-board-set-request-handler-in-scs</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Add the Board Set Request topic subscription to the BOARD-SET-REQUEST queue</h2>
 <p>In the previous section, you established connectivity to your local Solace PubSub+ broker and saw a queue was automatically created. You now will enable a subscription to your queue so that it attracts Board Set Requests from Player1 and Player2.</p>
 <p>This is accomplished by navigating to <code>battleship_backend\src\main\resources\application.yml</code> and uncommenting the following comment:</p>
-<pre><code>#Subscription for the board set request queue
+<pre><code language="language-yml" class="language-yml">#Subscription for the board set request queue
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/BOARD-SET-REQUEST/*
 </code></pre>
-<aside class="warning"><p>Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
+<aside class="warning"><p> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
 </aside>
 <p>Now all Board Set Requests will end up in the BOARD-SET-REQUEST queue.</p>
 <h2 is-upgraded>Implement the Board Set Request logic in the Spring Cloud Stream server</h2>
 <p>Navigate to <code>battleship_backend\src\main\java\com\solace\battleship\flows\BoardSetRequestProcessor.java</code> and add a function to handle BoardSetRequests in the BoardSetRequestProcessor class:</p>
-<pre><code>  // We define an INPUT to receive data from and dynamically specify the reply to
+<pre><code language="language-java" class="language-java">  // We define an INPUT to receive data from and dynamically specify the reply to
   // destination depending on the header and state of the game enginer
   @StreamListener(BoardSetRequestBinding.INPUT)
   public void handle(BoardSetRequest boardSetRequest, @Header(&#34;reply-to&#34;) String replyTo) {
@@ -870,7 +870,7 @@ queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/BOARD-SET-REQUEST/*
 <h2 is-upgraded>Modify the landing page to subscribe to the BoardSetReplies and MatchStart Events</h2>
 <p>In the previous iteration of the application, the landing page would keep state of which player has set their board and respond with board set replies. The landing page would also broadcast a match start event when both players set their boards. Now that we have committed to lifting our game state to a backend server, for good reason, the landing page and board set pages will need to subscribe to the board set reply and match start topics so that game status can be reflected appropriately.</p>
 <p>This can be accomplished by navigating to <code>battleship_frontend/src/controller_app/landing-page.ts</code> and adding the following in the <code>activate(...)</code> function:</p>
-<pre><code>//Listening for a BOARD-SET-REPLY events from the battleship-server
+<pre><code language="language-typescript" class="language-typescript">//Listening for a BOARD-SET-REPLY events from the battleship-server
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/BOARD-SET-REPLY/*/CONTROLLER`,
   // Game-Start event
@@ -892,14 +892,14 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MATCH-START/CONTROLLER`,
 });
 </code></pre>
 <h2 is-upgraded>Running the application</h2>
-<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
+<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw && ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
 <p>Now navigate to <a href="http://localhost:12345" target="_blank">http://localhost:12345</a>, the game should operate exactly as before but now the Join Requests are being handled by the Battleship Spring Cloud Stream server.</p>
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Lesson 8 Summary" src="img/5fded5ee0086efb4.png"></p>
 <p>In this lesson, you implemented another message handler in our Spring Cloud Stream application using the same pattern we used in lesson 7. Spring Cloud Stream does a lot of the heavy lifting in terms of session management, connect logic, etc. when it comes to Solace. As you saw, all you had to do was implement your business logic and modify the <code>application.yml</code> configuration file to make sure the correct messages are being attracted and queued.</p>
 <p>Additionally, we modified the client-side controller app further so that it is no longer responsible for responding to board set requests. Instead of responding to the board set requests, all the client-side controller app has to do is listen for board set reponses.</p>
 <p>Now, the only state left on the client side application is the match flow. In the next lesson we&#39;ll finish up lifting this state into our SCS application.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson8&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson8"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-8-implement-a-board-set-request-handler-in-scs-solution" target="_blank">battleship-lesson-8-implement-a-board-set-request-handler-in-scs-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-8-implement-a-board-set-request-handler-in-scs-solution</code></p>
 
@@ -916,20 +916,20 @@ this.solaceClient.subscribe(`${this.topicHelper.prefix}/MATCH-START/CONTROLLER`,
 <h2 is-upgraded>Github Branch</h2>
 <p>Sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-9-implement-match-logic-in-scs" target="_blank">battleship-lesson-9-implement-match-logic-in-scs</a> using the following command:</p>
 <p><code>git checkout battleship-lesson-9-implement-match-logic-in-scs</code></p>
-<aside class="special"><p>REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
+<aside class="special"><p> REMINDER: Make sure the &#34;au run watch&#34; script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: <code>au run watch</code> .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes</p>
 </aside>
 <h2 is-upgraded>Add the Move Request topic subscription to the MOVE-REQUEST queue</h2>
 <p>In the previous section, you established connectivity to your local Solace PubSub+ broker and saw a queue was automatically created. You now will enable a subscription to your queue so that it attracts Move Requests from Player1 and Player2.</p>
 <p>This is accomplished by navigating to <code>battleship_backend\src\main\resources\application.yml</code> and uncommenting the following comment:</p>
-<pre><code>#Subscription for the move request queue
+<pre><code language="language-yml" class="language-yml">#Subscription for the move request queue
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/MOVE-REQUEST/*
 </code></pre>
-<aside class="warning"><p>Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
+<aside class="warning"><p> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.</p>
 </aside>
 <p>Now all Move Requests will end up in the MOVE-REQUEST queue.</p>
 <h2 is-upgraded>Implement the Move Request logic in the Spring Cloud Stream server</h2>
 <p>Navigate to <code>battleship_backend\src\main\java\com\solace\battleship\flows\MoveRequestProcessor.java</code> and add a function to handle MoveRequests in the MoveRequestProcessor class:</p>
-<pre><code>  // We define an INPUT to receive data from and dynamically specify the reply to
+<pre><code language="language-java" class="language-java">  // We define an INPUT to receive data from and dynamically specify the reply to
   // destination depending on the header and state of the game engine
   @StreamListener(MoveRequestBinding.INPUT)
   public void handle(Move moveRequest, @Header(&#34;reply-to&#34;) String replyTo) {
@@ -951,7 +951,7 @@ queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/MOVE-REQUEST/*
 <h2 is-upgraded>Modify the match page to subscribe to MatchEnd events</h2>
 <p>Our application&#39;s state is almost completely managed by our backend server component. All that is left is to modify the match page to expect move requests to be handled by the Spring Cloud Stream server. What this means is that the match page will no longer handle Move Requests, and instead of using guards (if statements) to check whether the game should end, the match page should subscribe to the MATCH-END topic that the backend server will use to publish MatchEnd events.</p>
 <p>This can be accomplished by navigating to <code>battleship_frontend/src/player-app/match.ts</code> and adding the following in the <code>activate(...)</code> function:</p>
-<pre><code>//Subscribe to the MATCH-END event
+<pre><code language="language-typescript" class="language-typescript">//Subscribe to the MATCH-END event
 this.solaceClient.subscribe(
   `${this.topicHelper.prefix}/MATCH-END/CONTROLLER`,
   // game start event handler callback
@@ -968,14 +968,14 @@ this.solaceClient.subscribe(
 );
 </code></pre>
 <h2 is-upgraded>Running the application</h2>
-<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw &amp;&amp; ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
+<p>Run either <code>mvnw.cmd spring-boot:run</code> if on Windows or <code>chmod +x mvnw && ./mvnw spring-boot:run</code> from the battleship_backend folder.</p>
 <p>Now navigate to <a href="http://localhost:12345" target="_blank">http://localhost:12345</a>, the game should operate exactly as before but now the Join Requests are being handled by the Battleship Spring Cloud Stream server.</p>
 <h2 is-upgraded>Summary</h2>
 <p class="image-container"><img alt="Lesson 9 Summary" src="img/68149511d9a7e47.png"></p>
 <p><a href="https://www.udemy.com/course/battleship-over-pubsub/learn/lecture/17742000#overview" target="_blank">Udemy Summary Video</a></p>
 <p>In this final lesson of the course, you implemented another message handler in Spring Cloud Stream using the same patter we used in lessons 7 and 8. Lessons 7-9 show you how building applications using event-driven architecture allows you to build microservices in a decoupled manner. Instead of modifying a single orchestrating &#34;backend service,&#34; we&#39;re able to add flow processors that act independently.</p>
 <p>Additionally, you modified the client-side controller app further so that it is not responsible for any game state. Instead, it is able to derive the match&#39;s state from events it receives from our more secure Spring Cloud Stream backend application. Better yet, we were able to implement this transition without a major overhaul of our client application because it was built using event-driven architecture and a message broker instead of tightly coupled REST microservices exposed via an API.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;lesson9&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "lesson9"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacetraining/solace-battleship/tree/battleship-lesson-9-implement-match-logic-in-scs-solution" target="_blank">battleship-lesson-9-implement-match-logic-in-scs-solution</a> using the command:</p>
 <p><code>git checkout battleship-lesson-9-implement-match-logic-in-scs-solution</code></p>
 
@@ -999,7 +999,7 @@ this.solaceClient.subscribe(
 </ul>
 <p>Friendly reminder: this Codelab assumes you have a fairly well organized mental model of the objects related to clients in Solace. If you need to cheat or need a refresher, this section will be talking about <a href="https://docs.solace.com/PubSub-ConceptMaps/Component-Maps.htm#SMF" target="_blank">Sessions, Subscriptions, Flows, and Solace Object Hierarchy</a>.</p>
 <p>Firstly, a session object is initialized using connection variables passed in by the game-config.ts object. This session object will be used to establish a connection between the client and the Solace Event Broker specified in the config file.</p>
-<pre><code>this.session = solace.SolclientFactory.createSession({
+<pre><code language="language-ts" class="language-ts">this.session = solace.SolclientFactory.createSession({
   url: gameConfig.solace_hostUrl,
   vpnName: gameConfig.solace_vpn,
   userName: gameConfig.solace_userName,
@@ -1017,7 +1017,7 @@ this.solaceClient.subscribe(
 <p class="image-container"><img alt="Topic Dispatch" src="img/92815dabc98e33b2.gif"></p>
 <p><strong>Here are the corresponding code blocks that handle the subscription logic</strong>:</p>
 <h3 is-upgraded>SubscriptionObject</h3>
-<pre><code>class SubscriptionObject {
+<pre><code language="language-ts" class="language-ts">class SubscriptionObject {
   callback: any;
   isSubscribed: boolean;
 
@@ -1028,11 +1028,11 @@ this.solaceClient.subscribe(
 }
 </code></pre>
 <h3 is-upgraded>topicSubscriptions</h3>
-<pre><code>  // Map that holds the topic subscription string and the associated callback function, subscription state
+<pre><code language="language-ts" class="language-ts">  // Map that holds the topic subscription string and the associated callback function, subscription state
   topicSubscriptions: Map&lt;string, SubscriptionObject&gt; = new Map&lt;string, SubscriptionObject&gt;();
 </code></pre>
 <h3 is-upgraded>subscribe()</h3>
-<pre><code>subscribe(topicName: string, callback: any) {
+<pre><code language="language-javascript" class="language-javascript">subscribe(topicName: string, callback: any) {
   // Create a subscription object with the callback, upon succesful subscription, the object will be updated
   let subscriptionObject: SubscriptionObject = new SubscriptionObject(callback, false);
   this.topicSubscriptions.set(topicName, subscriptionObject);
@@ -1051,7 +1051,7 @@ this.solaceClient.subscribe(
 </code></pre>
 <p>In this code block the client wrapper first creates a local subscription to the provided topic that includes what function to use as the handler callback. Then, the client uses the session object to register the subscription with the Solace Event Broker it is connected to.</p>
 <h3 is-upgraded>solace.SessionEventCode.SUBSCRIPTION_OK</h3>
-<pre><code>// SUBSCRIPTION_OK implies that a subscription was succesfully applied/removed from the broker
+<pre><code language="language-ts" class="language-ts">// SUBSCRIPTION_OK implies that a subscription was succesfully applied/removed from the broker
 this.session.on(solace.SessionEventCode.SUBSCRIPTION_OK, (sessionEvent) =&gt; {
   this.log(`Session co-relation-key for event: ${sessionEvent.correlationKey}`);
   //Check if the topic exists in the map
@@ -1071,7 +1071,7 @@ this.session.on(solace.SessionEventCode.SUBSCRIPTION_OK, (sessionEvent) =&gt; {
 </code></pre>
 <p>There&#39;s not much to add to the comments besides emphasizing that this session event is sent for both succesfully applied AND removed subscriptions. So if the client subscribes to <code>topic/a</code>, it will receive this event if the subscription is successfully applied. If the client unsubscribes to <code>topic/a</code>, it will also receive this event when the subscription is successfully removed. That&#39;s why this code includes checks to see whether the client is subscribed to the provided topic already, and why our SubscriptionObject includes an <code>isSubscribed</code> flag.</p>
 <h3 is-upgraded>solace.SessionEventCode.MESSAGE</h3>
-<pre><code>//Message callback function
+<pre><code language="language-ts" class="language-ts">//Message callback function
 this.session.on(solace.SessionEventCode.MESSAGE, (message) =&gt; {
   //Get the topic name from the message&#39;s destination
   let topicName: string = message.getDestination().getName();
@@ -1106,7 +1106,7 @@ this.session.on(solace.SessionEventCode.MESSAGE, (message) =&gt; {
 </code></pre>
 <p>This code interprets wild card topic subscriptions using regex patterns, and then maps the received message to the appropriate handler callback function that was associated with the subscription object at the time of subscription.</p>
 <h3 is-upgraded>sendRequest() and subscribeReply()</h3>
-<pre><code>async sendRequest(topicName: string, payload: string, replyTopic: string) {
+<pre><code language="language-ts" class="language-ts">async sendRequest(topicName: string, payload: string, replyTopic: string) {
   return new Promise((resolve, reject) =&gt; {
     // form request
     let request = solace.SolclientFactory.createMessage();
@@ -1141,7 +1141,7 @@ this.session.on(solace.SessionEventCode.MESSAGE, (message) =&gt; {
   });
 }
 </code></pre>
-<pre><code>subscribeReply(topic: string, callback?: any) {
+<pre><code language="language-ts" class="language-ts">subscribeReply(topic: string, callback?: any) {
   if (this.topicSubscriptions.get(topic)) {
     if (callback == null) {
       this.log(&#34;[WARNING] Attempting to establish a subscription on a reply without a callback topic&#34;);
@@ -1155,7 +1155,7 @@ this.session.on(solace.SessionEventCode.MESSAGE, (message) =&gt; {
   }
 }
 </code></pre>
-<pre><code>sendReply(requestMessage, replyString: string) {
+<pre><code language="language-ts" class="language-ts">sendReply(requestMessage, replyString: string) {
   if (!this.session) {
     this.log(&#34;[WARNING] Cannot subscribe because not connected to Solace message router!&#34;);
     return;
@@ -1180,6 +1180,7 @@ this.session.on(solace.SessionEventCode.MESSAGE, (message) =&gt; {
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

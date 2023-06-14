@@ -129,7 +129,7 @@ Distance to the object from the sensor = 1/2 * Distance that the sound travelled
         <p>Ok now that you have the proximity sensor hooked up to your Raspberry PI, the next step is to create a simple application to read from the sensor.</p>
 <p>While there are a variety of libraries and languages that are available for you to interact with your GPIO pins and the connected sensors, we will be using the <a href="http://johnny-five.io/" target="_blank">Johnny-Five</a> JavaScript Framework.</p>
 <p>Johnny-Five is a JavaScript based Robotics and IoT Platform that works across multiple processor architectures such as Arduino, Raspberry PI, and SparkFun.</p>
-<p>Co-incidentally it is also the name of a robot in a campy 80&#39;s movie called <a href="https://en.wikipedia.org/wiki/Short_Circuit_(1986_film" target="_blank">Short Circuit</a>&gt;) which I wholly recommend against watching :)!</p>
+<p>Co-incidentally it is also the name of a robot in a campy 80&#39;s movie called <a href="https://en.wikipedia.org/wiki/Short_Circuit_(1986_film)" target="_blank">Short Circuit</a> which I wholly recommend against watching :)!</p>
 <h2 is-upgraded>Setting up the code</h2>
 <p>Clone the following repo by running the following command from your Raspberry PI terminal:</p>
 <p><code>git clone https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt.git</code></p>
@@ -190,7 +190,7 @@ run();
 </code></pre>
 <h2 is-upgraded>Summary</h2>
 <p>You succesfully wired up the HCSR04 proximity sensor to your Raspberry PI. In addition, you used the Johnny-Five JavaScript library to read events from the proximity sensor and print them to the console.</p>
-<p>Be sure to commit the changes you made to this branch by running <code>git commit -m &#34;setting-up-with-johnny-five&#34;</code></p>
+<p>Be sure to commit the changes you made to this branch by running <code>git commit -m "setting-up-with-johnny-five"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt/tree/setting-up-with-johnny-five-solution" target="_blank">setting-up-with-johnny-five-solution</a> using the command:</p>
 <pre><code>git checkout setting-up-with-johnny-five-solution
 </code></pre>
@@ -344,7 +344,7 @@ Enabling range of proxmity dection to be [10,60]cms
 <p class="image-container"><img alt="Try Me" src="img/a56bb23d9680a127.png"></p>
 <h2 is-upgraded>Summary</h2>
 <p>You succesfully ‘liberated&#39; the sensor events to be streamed over the internet. You can now build microservices off these events by connecting into the Solace PubSub+ broker.</p>
-<p>Be sure to commit the changes made to the branch by running <code>git commit -m &#34;sensor-with-pubsub-plus&#34;</code></p>
+<p>Be sure to commit the changes made to the branch by running <code>git commit -m "sensor-with-pubsub-plus"</code></p>
 <p>To see the completed code for this section, sync the following branch <a href="https://github.com/solacese/raspberry-pi-ultrasonic-sensor-mqtt/tree/sensor-with-pubsub-plus-solution" target="_blank">sensor-with-pubsub-plus-solution</a> using the command:</p>
 <pre><code>git checkout sensor-with-pubsub-plus-solution
 </code></pre>
@@ -358,6 +358,7 @@ Enabling range of proxmity dection to be [10,60]cms
   <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>

@@ -48,7 +48,8 @@
 <li>A local atom up and running</li>
 <li>An understanding of how to deploy a Boomi process to a Boomi Atom</li>
 </ul>
-<p>Positive : If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+<aside class="special"><p> If you&#39;re new to the world of events, welcome! Solace has <a href="https://solace.com/blog/" target="_blank">extensive blogs focusing on event-driven architecture and development.</a></p>
+</aside>
 
 
       </google-codelab-step>
@@ -69,7 +70,8 @@
 <li>You will see the request come in and manually respond using the <em>Try Me</em> feature (copy and paste the generated ReplyTo topic and correlation ID)</li>
 <li>The Solace Broker will route the reply to the waiting Boomi Process</li>
 </ol>
-<p>POSITIVE : This is the most basic implementation of this pattern. Queues, ACL&#39;s and other Solace features can be used for persistence, access lock down and much more.</p>
+<aside class="special"><p>aside POSITIVE This is the most basic implementation of this pattern. Queues, ACL&#39;s and other Solace features can be used for persistence, access lock down and much more.</p>
+</aside>
 <p>Let&#39;s get started!</p>
 
 
@@ -99,7 +101,8 @@
 </ol>
 </li>
 </ul>
-<p>Positive : Remember, we will be using topics only in this example. This means there is nothing to create/configure on the Solace side as topics are dynamic. In this case our topic name is <code>T/boomi/request</code></p>
+<aside class="special"><p> Remember, we will be using topics only in this example. This means there is nothing to create/configure on the Solace side as topics are dynamic. In this case our topic name is <code>T/boomi/request</code></p>
+</aside>
 <ul>
 <li>Add a Stop Shape to the end and then wire the shapes together and click Save <img alt="Completed Request Proocess - sample data" src="img/808b7c7c214d2ad4.png"></li>
 </ul>
@@ -129,7 +132,8 @@
       </google-codelab-step>
     
       <google-codelab-step label="Test" duration="20">
-        <p>Positive : Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.</p>
+        <aside class="special"><p> Note that the first time through this exercise, its very likely your Boomi Process will timeout, as you will be reading along. Never fear, you can simply send a new message by starting a new test and then follow along with the steps to publish a reply. You can do this as many times as you like.</p>
+</aside>
 <ul>
 <li>Use the Test capability in Boomi to test the Request Process<ul>
 <li>Go back to your Boomi Process and click Test in the upper right <img alt="InitiateProcessTest" src="img/c7e63bf36c7ffb6b.png"></li>
@@ -151,7 +155,8 @@
 </ul>
 </li>
 </ul>
-<p>Positive : <strong>Can Solace support mid-Process requests? Yes, it can!</strong></p>
+<aside class="special"><p><strong>Can Solace support mid-Process requests? Yes, it can!</strong></p>
+</aside>
 
 
       </google-codelab-step>

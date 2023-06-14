@@ -23,8 +23,8 @@ In this tutorial, you will learn how to
 1. Configure the Solace connector in the Boomi AtomSphere
 1. Send/Receive messages between Boomi and Solace
 
-Positive
-: Note that this tutorial is meant to be platform and programming language agnostic. Meaning that regardless what operating system you are running (Mac, Linux, Windows), programming languages or messaging APIs you choose to use, the setup will be the same.
+> aside positive
+> Note that this tutorial is meant to be platform and programming language agnostic. Meaning that regardless what operating system you are running (Mac, Linux, Windows), programming languages or messaging APIs you choose to use, the setup will be the same.
 
 ### Prerequisite
 
@@ -77,8 +77,8 @@ Boomi builds, deploys and manages all the processes in a concept called **Atoms*
 1. **In-the-cloud deployment** (using Boomi Atom Cloud)
 1. **On-premise deployment** (using local Atom setup)
 
-Positive
-: The Boomi Atom is a lightweight, dynamic runtime engine. Once your integration processes have been deployed to your Atom, the Atom contains all the components required to execute your processes from end to end, including connectors, transformation rules, decision handling, and processing logic.
+> aside positive
+> The Boomi Atom is a lightweight, dynamic runtime engine. Once your integration processes have been deployed to your Atom, the Atom contains all the components required to execute your processes from end to end, including connectors, transformation rules, decision handling, and processing logic.
 
 ![Atom gif](img/atom.gif "Atom gif")
 
@@ -114,8 +114,8 @@ Give it a name and choose **Test** for the environment classification
 
 In this tutorial, we will be setting up a local Atom.
 
-Positive
-: You can skip this if you have access to a cloud Atom
+> aside positive
+> You can skip this if you have access to a cloud Atom
 
 You can either navigate to the links below for more information or follow the steps after
 
@@ -144,8 +144,8 @@ chmod +x atom_install64.sh
 
 👉 Run the installer `./atom_install64.sh` and follow the on-screen prompt to install the local atom. Make sure to select the previously created environment.
 
-Positive
-: Note: you can attach your atom to the environment of choice at a later step from the Boomi cloud UI
+> aside positive
+> Note: you can attach your atom to the environment of choice at a later step from the Boomi cloud UI
 
 #### [Alternative] Configure and deploy your local Atom via Docker
 
@@ -179,8 +179,8 @@ At this point, you can confirm that the Atom has been created and linked to your
 If you did not attach the atom directly fro the Wizard installer or you are manually running the atom on a docker image, you can follow the following steps to attach the atom to the newly created Environment. To do so, select your newly created environment and search for your atom to attach it
 ![env-wiz](img/env-wiz.png "env-wiz")
 
-Positive
-: Note: a blue icon next to your newly created Atom means that it has an Online Status
+> aside positive
+> Note: a blue icon next to your newly created Atom means that it has an Online Status
 
 ![active-atom](img/active-atom.png "active-atom")
 
@@ -218,8 +218,8 @@ Two things to note here:
 - The topic is meta information about the event that lets Boomi flows quickly know if they are interested or not.
 - The schema describes the data format, similar to a [profile](https://help.boomi.com/bundle/integration/page/c-atm-Profile_components.html) within Boomi
 
-Positive
-: The topic and schema information in the Event Portal can be imported into Boomi using the Solace connector
+> aside positive
+> The topic and schema information in the Event Portal can be imported into Boomi using the Solace connector
 
 ## Setup Solace connector in Boomi
 
@@ -237,8 +237,8 @@ Now back to the Boomi AtomSphere!
 
 ![component](img/component.png "component")
 
-Positive
-: The Boomi canvas is where you drag and drop different Boomi connecters, also known as **Shapes**
+> aside positive
+> The Boomi canvas is where you drag and drop different Boomi connecters, also known as **Shapes**
 
 ![canvas](img/canvas.png "canvas")
 
@@ -252,8 +252,8 @@ Positive
 
 ![connector-config](img/connector-config.png "connector-config")
 
-Positive
-: Note: For more information about the solace connector available operations (`Listen`, `Get`, `Send`) check out the [Solace PubSub+ – Partner operation documentation guide](https://help.boomi.com/bundle/connectors/page/int-Solace_PubSub_operation.html).
+> aside positive
+> Note: For more information about the solace connector available operations (`Listen`, `Get`, `Send`) check out the [Solace PubSub+ – Partner operation documentation guide](https://help.boomi.com/bundle/connectors/page/int-Solace_PubSub_operation.html).
 
 ### 3. Configure Connection
 
@@ -288,8 +288,8 @@ Positive
 
 ![success-connection](img/success-connection.png "success-connection")
 
-Positive
-: Dont forget to "Save and Close" when done!
+> aside positive
+> Dont forget to "Save and Close" when done!
 
 ### 4. Configure Operation
 
@@ -310,8 +310,8 @@ Boomi grabs the events available to you from the Event Portal, and lists them in
 Now check out our Connector Operation: The data format from the Event Portal is now a Boomi Profile (click on the pencil to see more) and the topic string is filled in for us.
 ![operationupdated](img/operationupdated.png "operationupdated")
 
-Positive
-: Don't forget to Save and close!
+> aside positive
+> Don't forget to Save and close!
 
 👉 Now your Canvas should look like this with the newly added shape
 
@@ -337,13 +337,13 @@ Note that `{1}` in the Boomi context means variables. Click on the `+` icon to a
 
 ![boomi-connect](img/boomi-connect.gif "boomi-connect")
 
-Positive
-: It is good practice to add a Stop Shape at the end of your process that provides the ability to terminate the data flow in the a process path
+> aside positive
+> It is good practice to add a Stop Shape at the end of your process that provides the ability to terminate the data flow in the a process path
 
 ![stop](img/stop.png "stop")
 
-Positive
-: Don't forget to Save and close!
+> aside positive
+> Don't forget to Save and close!
 
 ## Send and receive messages!
 
@@ -377,8 +377,8 @@ To connect everything together, we will need to package the newly created proces
 
 ![deploy-success](img/deploy-success.png "deploy-success")
 
-Positive
-: Typically this is when you would have to manually create queues and subscriptions. But behind the scenes, the Solace connector autocreates those for you, so no work there.
+> aside positive
+> Typically this is when you would have to manually create queues and subscriptions. But behind the scenes, the Solace connector autocreates those for you, so no work there.
 
 ### Publish events 💥!
 
@@ -409,8 +409,8 @@ You will see the process reporting menu with your newly created **NewProcess** p
 
 You're done!
 
-Positive
-: Note that any publisher that publishes on topic `acme/rideshare/ride/requested/>` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
+> aside positive
+> Note that any publisher that publishes on topic `acme/rideshare/ride/requested/>` will be received by Solace PubSub+ Connector on the Boomi AtomSphere and logged
 
 ## Takeaways
 

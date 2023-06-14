@@ -25,8 +25,8 @@ Oh, and of course you'll also be using some Java and Solace PubSub+ Event Broker
 
 So let's get started!
 
-Positive
-: There is no code needed to start this workshop, but you can find the solution in this [Github Repo](https://github.com/Mrc0113/design-to-code-workshop)
+> aside positive
+> There is no code needed to start this workshop, but you can find the solution in this [Github Repo](https://github.com/Mrc0113/design-to-code-workshop)
 
 ## Use Case Overview
 
@@ -42,8 +42,8 @@ In order to react in a real-time manner the team has decided that we want to pro
 
 ![Architecture](img/arch.png)
 
-Positive
-: The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
+> aside positive
+> The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
 
 <p>Terms of Use: This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.</p>
 
@@ -160,8 +160,8 @@ Fill in the fields as follows:
 1. Click _Add/Remove Owners_ and choose yourself
 1. For **Payload Schema** click _Add New_
 
-Positive
-: When designing your own Event-Driven Architecture the defining of your topic space is an important step towards achieving the benefits promised by an EDA. Be sure to take the time to read our [Topic Architecture Best Practices](https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm).
+> aside positive
+> When designing your own Event-Driven Architecture the defining of your topic space is an important step towards achieving the benefits promised by an EDA. Be sure to take the time to read our [Topic Architecture Best Practices](https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm).
 
 Since our data is JSON we'll define a JSON Schema to define our event payload.
 
@@ -292,8 +292,8 @@ If you have the prequisites installed as defined earlier in the "What You'll Nee
 npm install -g @asyncapi/generator
 ```
 
-Negative
-: Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.
+> aside negative
+> Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.
 
 ## Develop the RideDropoffProcessor
 
@@ -319,8 +319,8 @@ It should include a lot of the information about the app that we defined via the
 
 ![asyncapi_doc](img/asyncapi_doc.png)
 
-Positive
-: The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
+> aside positive
+> The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
 
 Let's add a few of the template's configuration options to the download AsyncAPI document.
 
@@ -330,8 +330,8 @@ Let's add a few of the template's configuration options to the download AsyncAPI
 ✅ After adding those configuration options your channels section of the AsyncAPI document should look like the image below.
 ![asyncapi_doc2](img/asyncapi_doc2.png)
 
-Negative
-: Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.
+> aside negative
+> Note that by default, AsyncAPI code generator templates generate publisher code for subscribe operations and vice versa. You can switch this by setting the `info.x-view` parameter to `provider`. This parameter is automatically set in AsyncAPI documents exported from the Solace PubSub+ Event Portal.
 
 Our AsyncAPI document is now ready to generate the actual code so go over to your terminal and enter the command in the code snippet below.
 
@@ -379,8 +379,8 @@ A few notes on the project:
 
 As of the writing of this codelab, dynamic topics are not yet supported by the Event Portal or the AsyncAPI Code Generator template. Because our Taxis are publishing their _TaxiStatusUpdate_ events to a dynamic topic structure of `taxinyc/ops/ride/updated/v1/${ride_status}/${driver_id}/${passenger_id}/${current_latitude}/${current_longitude}` we need to update the `application.yml` file to subscribe to only `dropoff` events. To do this change the `queueAdditionalSubscriptions` parameter value to `taxinyc/ops/ride/updated/v1/dropoff/>`
 
-Positive
-: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+> aside positive
+> Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
 ### Publish to a personalized topic for uniqueness
 
@@ -489,8 +489,8 @@ Since we're using [Project Lombok](https://projectlombok.org/) to keep our code 
     </dependency>
 ```
 
-Negative
-: If you prefer not to use Lombok go ahead and use the tools available in your IDE to generate a getter and setter for each parameter in the `Accumulator` class. You'll also need to add a Constructor that looks like `public Accumulator(int rideCount, double totalMeter, int totalPassengers)`
+> aside negative
+> If you prefer not to use Lombok go ahead and use the tools available in your IDE to generate a getter and setter for each parameter in the `Accumulator` class. You'll also need to add a Constructor that looks like `public Accumulator(int rideCount, double totalMeter, int totalPassengers)`
 
 #### Run the app!
 
@@ -500,11 +500,11 @@ If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 
 Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command.
 
-Negative
-: If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
+> aside negative
+> If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
 
-Positive
-: Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer.
+> aside positive
+> Notice that by using Spring Cloud Stream the developer doesn't need to learn the Solace Messaging API. The developer just writes generic Spring beans and configuration, filled in by the AsyncAPI generator, in the application.yml file binds the messaging channels and connection to the broker for the developer.
 
 ## Extend Your EDA Design
 
@@ -621,8 +621,8 @@ If your IDE has support for Spring Boot you can run it as a Spring Boot App.
 
 Or run it from the terminal by navigating to the directory with the pom and running the `mvn clean spring-boot:run` command.
 
-Negative
-: If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
+> aside negative
+> If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
 
 🤯🤯 **The Microservice is now is now Running, connected to the Solace Event Broker and receiving events!** 🤯🤯
 

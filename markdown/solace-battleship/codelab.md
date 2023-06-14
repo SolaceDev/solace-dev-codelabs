@@ -183,8 +183,8 @@ For the sake of simplicity, you can imagine that these two subfolders contain di
 
 You will create a configuration file that holds your Solace Connection details by copying `battleship_frontend/src/common/game-config-template.ts` to `battleship_frontend/src/common/game-config.ts` and fill in the solace\_\* properties in the gameConfig object with the values retrieved from the Solace Cloud console.
 
-Positive
-: REMINDER: Before moving on, take a second to double check that your config file is named `game-config.ts`, is properly populated with your connection details, and is located at `battleship_frontend/src/common/game-config.ts`. This is step #1 to establishing connecting to our Solace PubSub+ Event Broker.
+> aside positive
+> REMINDER: Before moving on, take a second to double check that your config file is named `game-config.ts`, is properly populated with your connection details, and is located at `battleship_frontend/src/common/game-config.ts`. This is step #1 to establishing connecting to our Solace PubSub+ Event Broker.
 
 Navigate to [Environment Setup](#environment-setup) to get these details from the connect details in your Solace Cloud tab:
 
@@ -384,8 +384,8 @@ Sync the following branch [battleship-lesson-2-subscribe-and-page-transitions](h
 
 `git checkout battleship-lesson-2-subscribe-and-page-transitions`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Subscribing the Landing Page to JOIN request events and publishing a GAME START event
 
@@ -589,8 +589,8 @@ Sync the following branch [battleship-lesson-3-match-and-game-over](https://gith
 
 `git checkout battleship-lesson-3-match-and-game-over`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 localhost:12345 to pick up any changes
 
 ### Subscribe the Board Set Page to Match start events
@@ -750,8 +750,8 @@ Sync the following branch [battleship-lesson-4-enabling-multiple-sessions](https
 
 `git checkout battleship-lesson-4-enabling-multiple-sessions`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Allow for multiple games to happen at once
 
@@ -844,8 +844,8 @@ Sync the following branch [battleship-lesson-5-building-a-dashboard](https://git
 
 `git checkout battleship-lesson-5-building-a-dashboard`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous section is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Recap of the Message Exchange Patterns implemented so far
 
@@ -1045,8 +1045,8 @@ Sync the following branch [battleship-lesson-7-implement-a-join-request-handler-
 
 `git checkout battleship-lesson-7-implement-a-join-request-handler-in-scs`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Add the join request topic subscription to the JOIN-REQUEST queue
 
@@ -1059,8 +1059,8 @@ This is accomplished by navigating to `battleship_backend\src\main\resources\app
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/JOIN-REQUEST/*
 ```
 
-Negative
-: Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
+> aside negative
+> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
 
 Now all join requests for all sessions (indicated by the first '_') and Player 1 or Player 2 (indicated by the second '_') will end up in the JOIN-REQUEST queue.
 
@@ -1165,8 +1165,8 @@ Sync the following branch [battleship-lesson-8-implement-a-board-set-request-han
 
 `git checkout battleship-lesson-8-implement-a-board-set-request-handler-in-scs`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Add the Board Set Request topic subscription to the BOARD-SET-REQUEST queue
 
@@ -1179,8 +1179,8 @@ This is accomplished by navigating to `battleship_backend\src\main\resources\app
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/BOARD-SET-REQUEST/*
 ```
 
-Negative
-: Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
+> aside negative
+> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
 
 Now all Board Set Requests will end up in the BOARD-SET-REQUEST queue.
 
@@ -1271,8 +1271,8 @@ Sync the following branch [battleship-lesson-9-implement-match-logic-in-scs](htt
 
 `git checkout battleship-lesson-9-implement-match-logic-in-scs`
 
-Positive
-: REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
+> aside positive
+> REMINDER: Make sure the "au run watch" script you setup in the previous sections is still running. If not goto battleship_frontend/ and type the following command: `au run watch` .This will auto watch any changes to your files and automatically reload the page at http://localhost:12345 to pick up any changes
 
 ### Add the Move Request topic subscription to the MOVE-REQUEST queue
 
@@ -1285,8 +1285,8 @@ This is accomplished by navigating to `battleship_backend\src\main\resources\app
 queueAdditionalSubscriptions: SOLACE/BATTLESHIP/*/MOVE-REQUEST/*
 ```
 
-Negative
-: Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
+> aside negative
+> Ensure that you just remove the # and not affect the tabs/whitespace precluding the # as the YML file depends on whitespacing in order for it to be parsed properly.
 
 Now all Move Requests will end up in the MOVE-REQUEST queue.
 

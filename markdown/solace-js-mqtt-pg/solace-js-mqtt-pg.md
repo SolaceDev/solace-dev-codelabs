@@ -200,8 +200,8 @@ docker pull dpage/pgadmin4
 docker run -d -p 5555:80 --name pgadmin -e PGADMIN_DEFAULT_EMAIL="<your login name>" -e PGADMIN_DEFAULT_PASSWORD="<your password>" dpage/pgadmin4
 ```
 
-Negative
-: **⏸️ Pause. Make sure you swapped out `<your login name>` and `<your password>`.**
+> aside negative
+> **⏸️ Pause. Make sure you swapped out `<your login name>` and `<your password>`.**
 
 This command will pull the necessary image and then start it as a container in detached mode, meaning it'll run in the background and not require you to keep your terminal window open.
 
@@ -376,8 +376,8 @@ Navigate to `mqtt-consumer/src/event-handlers.js`
 
 1. uncomment the code block after `// do some business logic`
 
-Negative
-: **⏸️ Pause. Double check to make sure your comments are correct.**
+> aside negative
+> **⏸️ Pause. Double check to make sure your comments are correct.**
 
 Then, go ahead and start your consumer by running `npm run start` from the mqtt-consumer directory.
 

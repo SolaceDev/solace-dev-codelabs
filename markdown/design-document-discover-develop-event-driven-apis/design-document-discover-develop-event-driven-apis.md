@@ -38,8 +38,8 @@ AsyncAPI
 - AsyncAPI is an open initiative for defining asynchronous APIs, providing a specification, and tooling such as code generation.
 - Use the AsyncAPI Generator to generate skeleton code and object models for event-driven microservices
 
-Positive
-: Artifacts created or used throughout this codelab can be found in [this Github repo](https://github.com/Mrc0113/ep-design-workshop)
+> aside positive
+> Artifacts created or used throughout this codelab can be found in [this Github repo](https://github.com/Mrc0113/ep-design-workshop)
 
 ## What you need: Prerequisites
 
@@ -142,8 +142,8 @@ In order to react in a real-time manner the team has decided that we want to pro
 
 ![Architecture](img/arch2.jpg)
 
-Positive
-: The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
+> aside positive
+> The dataset you will be using in this lab originally comes from the NYC Taxi & Limousine Commission's open data release of more than a billion taxi ride records. Google then extended one week worth of data (3M taxi rides) from their original pickup and drop-off points into full routes in order to simulate a fleet of taxis roaming the streets of NYC. Solace is streaming this data over Solace PubSub+ for you to analyze and process.
 
 _Terms of Use:_ This dataset is publicly available for anyone to use under the following terms provided by the Dataset Source — [https://data.cityofnewyork.us/](https://data.cityofnewyork.us/) — and is provided "AS IS" without any warranty, express or implied, from Solace. Solace disclaims all liability for any damages, direct or indirect, resulting from the use of the dataset.
 
@@ -245,7 +245,7 @@ It is important to consider how your enterprise is organized so that it can be d
 
 ### Topic Naming Best Practices
 
-The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned in advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. **Regardless of your broker type**, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific.
+> aside The topic of which an event is addressed seems like a pretty simple decision, but in reality, it can result in some negative consequences if not planned >n advance. A topic is more than an address, it is metadata that describes the event and can be used for several purposes such as routing, access control and versioning. Thus, it is important to properly govern and manage the topic structure. **Regardless of your broker type**, it is a good practice to make topics structured and hierarchical the same way a RESTful Resource uses hierarchical addressing. In other words we want to produce hierarchical topics that rank from least specific to most specific.
 
 #### Parts of the Event Topic
 
@@ -261,12 +261,12 @@ The event topic structure has two parts:
 - Event Topic Properties: The Event Topic Properties should have the following form:
   Locality/SourceID/ObjectID
 
-Positive
-: Complete Event Topic Format: Putting together an Event Topic Root and Event Topic Properties creates an event topic that describes the event with a series of fields from least specific to most specific.
-
-        Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
-
-For more information about topic best practices, review the [Topic Architecture Best Practices Guide] (https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm)
+> aside positive
+> Complete Event Topic Format: Putting together an Event Topic Root and Event Topic Properties creates an event topic that describes the event with a series of fields from least specific to most specific.
+>
+>         Domain/ObjectType/Verb/Version/Locality/SourceID/ObjectID
+> 
+> For more information about topic best practices, review the [Topic Architecture Best Practices Guide](https://docs.solace.com/Best-Practices/Topic-Architecture-Best-Practices.htm)
 
 ### Event Information Exchange Patterns
 
@@ -276,25 +276,25 @@ There are multiple Event Exchange Patterns (EEP) that should be considered when 
 
 - If using a _Thin Event Notification_ pattern, where only the necessary details are provided from a data point of view, this does tend to increase coupling between the event source and sink’s (consumers) as what attributes are provided are typically directly correlated with the needs of the use case vs being more flexible.
 
-Positive
-: The advantage of this pattern however is that the data is smaller and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes.
+> aside positive
+> The advantage of this pattern however is that the data is smaller and can thus reduce latency and bandwidth when important. In general, the source of that event should be the single authoritative source for all published attributes.
 
 #### Hypermedia-Driven Events
 
 - If using _Hypermedia-Driven Events_ pattern, links are provided in the event payload and works to bridge event notifications with dynamic API backends. This can be a good pattern to use where multiple levels of security are concerned related to attributes of the event. Consumers are still notified in realtime of state changes but must invoke the hyperlink in order to get access to more data. The service can then filter the response based on the client’s access level.
 
-Negative
-: The disadvantage to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior.
+> aside negative
+> The disadvantage to this pattern is it increases the latency of the interaction as all the data is not available within the event and puts more complexity on the client and its behavior.
 
 #### Event-Carried State Transfer
 
 - If using _Event-Carried State Transfer_ pattern, all known data is broadcast with the event (possibly entire record) thus enabling the consuming system to know the entire entity state vs just what changed as is the case with Thin Events. This is very common approach as many times the subscribing application want the entire snapshot to avoid having to persist previous state changes.
 
-Negative
-: The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance.
+> aside negative
+> The challenge in this case is that the publishing application may not be the authoritative source of all attributes published. Additionally, the event may become large and increase latency/decrease performance.
 
-Positive
-: The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client’s usage of the data.
+> aside positive
+> The benefit however is that decoupling has been achieved in that it will support a variety of use cases and the publisher does not need to be aware of the client’s usage of the data.
 
 For more information about discovering, organizing and enhancing your Event-Driven Architecture, review [Understand, Manage, and Enhance Your Event-Driven Architecture Lifecycle
 ] (https://docs.solace.com/Cloud/Event-Portal/get-started-event-portal-user-scenario.htm)
@@ -320,8 +320,8 @@ Lets say that your tasked with working within the Back Office team (where the co
 
 So essentially we need to consider, is there a business event that would help us trigger on the moment when the ride has been completed?
 
-Positive
-: Event-Driven Ideation: To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem, and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description.
+> aside positive
+> Event-Driven Ideation: To create new business value you must be able to imagine or conceive of a new solution to an existing problem. These ideas can be derived from two different directions. First, I have a known problem, and I am searching for a solution or secondly, let us look at what is available and uncover unique solutions for problems we were not actively looking for. The Event Portal enables learnings from both directions as without it, you do not have a central location to capture all the events that are available, nor do you have a way to understand whether a given event stream solves your problem. The search and filter functionality enable the user to perform keyword searches which range from data level attributes to metadata within the description.
 
 1. Navigate to the _Catalog_ component of the Event Portal  
    ![](img/catalog.png)
@@ -657,8 +657,8 @@ Now for the fun part! We need to design the event-driven interface of the _Proce
 5. You should now see the newly added application on the graph!
 ![](img/created-application-in-graph.png)
 
-Positive
-: Pro Tip!: If you wanted to develop/implement this application you could right-click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
+> aside positive
+> Pro Tip!: If you wanted to develop/implement this application you could right-click on the _ProcessPayment_ Application in graph and export an AsyncAPI Document that could be used to generate code!
 
 ### Step 4b: Design _InvoiceSystem_ Application
 
@@ -708,8 +708,8 @@ You should now see the relationship on the graph where we are subscribed to the 
 
 ![](img/share-event.png)
 
-Positive
-: Change Impact Analysis: Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management. The Event Portal enables you to navigate the relationships you just designed and understand impact.
+> aside positive
+> Change Impact Analysis: Changes happen. The question is what is the effect and who is affected? In the synchronous world changes to an API of course may/will affect the clients, so changes are rolled out, clients notified, and changes implemented. The challenge in the EDA world is that consumers are decoupled from producers and vice/versa. In addition, the ripple effect can be large in that integrations though connectors and integration capabilities can move events between different groups which further casts a fog upon dependency management. The Event Portal enables you to navigate the relationships you just designed and understand impact.
 
 ## Documentation Best Practices
 
@@ -750,8 +750,8 @@ The events which you have are used to enable real-time collaboration between sys
 Duration: 0:08:00
 Events are only as good as their documentation. After all, it is up to a human to understand what something is and make a determination as to wither it provides value. This is why documentation is critical for success in Event Driven Architecture. Creating and maintaining good documentation that’s easy to read, enjoyable to interact with and sets up the user for success can be challenging. Great documentation requires effort but has significant implications on the reuse of the events within the ecosystem. The PubSub+ Event portal enables you to document Events easily while also managing the decoupled relationships so that users can easily understand the context of an event. Before you sit down and write documentation on events, applications and schemas, It is good to consider the purpose along with who will be using the artifacts.
 
-Positive
-: Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question “so how does this actually work” and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.
+> aside positive
+> Organizational Enablement: Organizational changes happen all the time. How ready are you to take over another groups EDA implementation? How about enable new members on yours? What if your current architect were to resign, are you capturing everything you should be? Tribal knowledge happens and is dangerous. The above organizational changes showcase the multitude of scenarios that can occur that leave the business in limbo and result in reverse engineering something that was already engineered. If you get into the habit and develop the muscle memory around designing/documenting and continuously validating your EDA, tribal knowledge is eliminated as its now available centrally and kept up to date. While most organizations believe they have a software development and governance process that will prevent this from happening, it is typically comprised of multiple conflicting sources of truth, none of which actually representing the current truth. This leads the team to constantly as the question “so how does this actually work” and wasting time trying to investigate vs simply using a tool that captures the information and ensures it matches reality.
 
 ### Update Documentation of _PaymentCharged_ Event
 
@@ -883,8 +883,8 @@ Duration: 0:03:00
 
 The [AsyncAPI Initiative](https://www.asyncapi.com/) is an open source initiative that provides both the AsyncAPI specification to define your asynchronous APIs, and open source tools to enable developers to build and maintain an event-driven architecture.
 
-Positive
-: Learn More in the [AsyncAPI Docs](https://www.asyncapi.com/docs/getting-started)
+> aside positive
+> Learn More in the [AsyncAPI Docs](https://www.asyncapi.com/docs/getting-started)
 
 The AsyncAPI Generator allows you to generate a wide variety of things from an AsyncAPI document depending on what template you choose. The latest list of templates can be found [here](https://github.com/asyncapi/generator#list-of-official-generator-templates)
 
@@ -905,8 +905,8 @@ If you have the prerequisites installed as defined earlier in the "What You'll N
 npm install -g @asyncapi/generator
 ```
 
-Negative
-: Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.
+> aside negative
+> Note that the AsyncAPI project is continuously updated so if you previously installed the generator you can also use the command above to update to the latest.
 
 ## Implement ProcessPayment (Java/Spring)
 
@@ -923,8 +923,8 @@ Open the `NYC Modern Taxi Co - Back Office` Application Domain in the Solace Eve
 
 ![processPaymentAsyncapi](img/processPaymentAsyncapi.png)
 
-Positive
-: The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
+> aside positive
+> The AsyncAPI Java Spring Cloud Stream Generator Template includes many [Configuration Options](https://github.com/asyncapi/java-spring-cloud-stream-template#configuration-options) that allow you to change what the generated code will look like.
 
 
 #### *Direct Download of updated AsyncAPI document*
@@ -965,8 +965,8 @@ channels:
         $ref: '#/components/messages/RideUpdated'
 ```
 
-Negative
-: To work-around an issue in the AsncAPI code generator, the `$id` fields need to be removed. You can use the following command in the terminal to accomplish this.   
+> aside negative
+> To work-around an issue in the AsncAPI code generator, the `$id` fields need to be removed. You can use the following command in the terminal to accomplish this.   
 `sed -i '/$id:/d' ProcessPayment.yaml`
 
 
@@ -1003,8 +1003,8 @@ Check out your shiny new generated files at /private/tmp/codelab/ProcessPayment.
 The generated project is a Maven project so head over to your IDE and import the project, so we can add our business logic. Once imported you should see something like the image below.  
 ![projectsetup2](img/projectsetup2.png)
 
-Negative
-: If you are wondering why the POJO name has a character 1 – it is because there already exists a schema with the same name.
+> aside negative
+> If you are wondering why the POJO name has a character 1 – it is because there already exists a schema with the same name.
 
 
 A few notes on the project:
@@ -1015,8 +1015,8 @@ A few notes on the project:
 - The `application.yml` file contains the Spring configuration which tells our app how to connect to Solace using the SCSt binder as well as which message channels to bind our methods to.
 - The `pom.xml` file contains the dependencies needed for the microservice. These include the `solace-cloud-starter-stream-solace` dependency which allows you to use the Solace SCSt. Binder.
 
-Negative
-: You can use a Java IDE like Eclipse or Spring Tool Suite to work with the generated Spring Boot application. Alternatively, you can also use a simple text editor like Visual Source Code or other text editors to make changes to the files.
+> aside negative
+> You can use a Java IDE like Eclipse or Spring Tool Suite to work with the generated Spring Boot application. Alternatively, you can also use a simple text editor like Visual Source Code or other text editors to make changes to the files.
 
 #### *Updates to _application.yml_*
 
@@ -1082,8 +1082,8 @@ Let us make the following changes to the _application.yml_ file.
   
 Now we have the ProcessPayment application subscribing to a dynamic topic `taxinyc/ops/ride/updated/v1/dropoff/>` and publishing to `test/taxinyc/YOUR_UNIQUE_NAME/backoffice/payment/charged/v1/accepted` topic.
 
-Positive
-: Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
+> aside positive
+> Note that the `>` symbol, when placed by itself as the last level in a topic, is a multi-level wildcard in Solace which subscribes to all events published to topics that begin with the same prefix. Example: `animals/domestic/>` matches `animals/domestic/cats` and `animals/domestic/dogs`. [More wildcard info, including a single level wildcard, can be found in docs](https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm)
 
 #### Implement the Business Logic
 
@@ -1140,13 +1140,13 @@ public Function<RideUpdated1, Message<PaymentCharged>> processPayment() {
 
 
 
-Negative
-: After updating the code, ensure that all "Instant cannot be resolved" errors due to missing imports. Or simply insert the following import statements at the top of the file.
-```
-import java.time.Instant;
-import java.util.UUID;
-import org.apache.commons.lang.math.RandomUtils;
-```
+> aside negative
+> After updating the code, ensure that all "Instant cannot be resolved" errors due to missing imports. Or simply insert the following import statements at the top of the file.
+> ```
+> import java.time.Instant;
+> import java.util.UUID;
+> import org.apache.commons.lang.math.RandomUtils;
+> ```
 
 
 
@@ -1166,8 +1166,8 @@ Or run it from the terminal by navigating to the directory with the pom and runn
 
 `mvn clean spring-boot:run`
 
-Negative
-: If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
+> aside negative
+> If you get an error that says something like `Web server failed to start. Port XXXX was already in use.` then change the `server.port` value in `application.yml` to an open port.
 
 Once running you should see that for each RideUpdated event that is received a PaymentCharged Event is created which is being published back out onto the broker for downstream apps to consume. The output should look something like the below.
 

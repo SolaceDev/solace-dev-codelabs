@@ -39,7 +39,7 @@
 <li>Enable <strong>Replay</strong> on the Solace broker, and test it</li>
 </ul>
 <p class="image-container"><img alt="picture" src="img/e9acad34fc34a8c8.png"></p>
-<aside class="special"><p>This CodeLab does not cover the <strong>Event Portal</strong>. That will be addressed in a separate CodeLab.</p>
+<aside class="special"><p> This CodeLab does not cover the <strong>Event Portal</strong>. That will be addressed in a separate CodeLab.</p>
 </aside>
 
 
@@ -64,23 +64,24 @@
 <p>Click on &#34;Cluster Manager&#34; to go into where you create and manage your broker services.  Then click the big &#34;+&#34; Plus button to create a new Service.  Ensure you have selected Developer Service, choose a cloud provider you&#39;d like to host the broker, and then click the map to find a region close to you:</p>
 <p class="image-container"><img alt="picture" src="img/8c1c4a649ca6c677.png"></p>
 <p>Give your Solace PubSub+ Cloud service instance a name, and then tell it to start!  Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc.  It takes about 5 minutes, and then you&#39;ll be ready!</p>
-<aside class="special"><p>It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
+<aside class="special"><p> It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
 </aside>
 <h2 is-upgraded>Software Broker</h2>
 <p>There are multiple options on how to install/download/configure/run the PubSub+ broker:</p>
 <ul>
-<li>If you have Docker installed, this is <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">probably the easist way</a>. Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:  <pre><code>docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+<li>If you have Docker installed, this is <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">probably the easist way</a>. Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:</li>
+</ul>
+<pre><code>docker run -d -p 8080:8080 -p 55555:55555 -p:8008:8008 -p:1883:1883 -p:8000:8000 -p:5672:5672 -p:9000:9000 -p:2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+
 </code></pre>
 <ul>
 <li>Other Docker options are here: <a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm</a></li>
-</ul>
-</li>
 </ul>
 <aside class="warning"><p><strong>NOTE:</strong> if you are running on a <strong>Mac</strong>, OSX has now reserved one of the default Solace ports: 55555. Change the port mapping in the <code>docker run</code> command above, with <code>-p 55554:55555</code></p>
 </aside>
 <ul>
 <li>To run VirtualBox, VMWare, HyperV, and others: check out <a href="https://solace.com/downloads" target="_blank">solace.com/downloads</a></li>
-<li>Lots of other software install options are here:  <ul>
+<li>Lots of other software install options are here: <ul>
 <li><a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Docker-Containers/Set-Up-Docker-Container-Image.htm</a></li>
 <li><a href="https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm" target="_blank">https://docs.solace.com/Solace-SW-Broker-Set-Up/Machine-Image-Set-Up.htm</a></li>
 </ul>
@@ -120,13 +121,13 @@
 <li><strong>Queues:</strong> used for Guaranteed / persistent messaging</li>
 <li><strong>Connectors:</strong> helpful wizards to connect to a variety of web services</li>
 <li><strong>Access Control:</strong> where you create new client usernames, ACL profiles, and client profiles</li>
-<li><strong>Replay:</strong> where you can enable replay, to allow the broker to send previous messages again  <ul>
+<li><strong>Replay:</strong> where you can enable replay, to allow the broker to send previous messages again <ul>
 <li><strong>NOTE:</strong> Solace brokers do not use replay for recovery of persistent data (like Kafka)... there is a more fine-grained approach in Solace where each individual message is ACKnowledged to the broker when the consumer application is done with it</li>
 </ul>
 </li>
 <li><strong>Try Me!</strong> this is where we will connect two WebSocket test applications</li>
 </ul>
-<aside class="special"><p>Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.</p>
+<aside class="special"><p> Feel free to poke around and look at the various screens. Within each section, there are multiple sub-sections, arranged in buttons across the top. There are also sometimes actions you can perform, generally visible as a button at the top-right, near the user ID.</p>
 </aside>
 
 
@@ -166,47 +167,47 @@
 <h2 is-upgraded>Subscription Wildcards</h2>
 <p>Because published topics can be so variable and dynamic, subscribers can use wildcards to match a single subscription to multiple published topics. Solace supports two different types of wildcards:</p>
 <ul>
-<li><code>*</code>   Single-level wildcard, 0-or-more chars, matches up to the next level <code>/</code>.  <ul>
+<li><code>*</code>   Single-level wildcard, 0-or-more chars, matches up to the next level <code>/</code>. <ul>
 <li>Can be used with a prefix e.g.: <code>abc*</code>, but not a suffix.</li>
 </ul>
 </li>
-<li><code>></code>   Multi-level wildcard, matches <em>one</em>-or-more levels.  <ul>
+<li><code>></code>   Multi-level wildcard, matches <em>one</em>-or-more levels. <ul>
 <li>Must occur at the end of the topic subscription.</li>
 </ul>
 </li>
 </ul>
 <p>Some examples of Solace topic subscriptions, and topics that they match:</p>
 <ul>
-<li><code>hello/world/*</code>  <ul>
+<li><code>hello/world/*</code><ul>
 <li>✅ <code>hello/world/aaron</code></li>
 <li>❌ <code>hello/world</code></li>
 <li>❌ <code>hello/world/solace/rules</code></li>
 </ul>
 </li>
-<li><code>acme/taxi/rider/></code>  <ul>
+<li><code>acme/taxi/rider/></code><ul>
 <li>✅ <code>acme/taxi/rider/hail</code></li>
 <li>✅ <code>acme/taxi/rider/dropoff/051.0283/-001.7281</code></li>
 </ul>
 </li>
-<li><code>city/*/*/alert/></code>  <ul>
+<li><code>city/*/*/alert/></code><ul>
 <li>✅ <code>city/train/01784/alert/new</code></li>
 <li>❌ <code>city/fire/stn014/alert</code></li>
 </ul>
 </li>
-<li><code>mfg/plant*/inv/update/></code>  <ul>
+<li><code>mfg/plant*/inv/update/></code><ul>
 <li>✅ <code>mfg/plant/inv/update/all</code></li>
 <li>✅ <code>mfg/plant42/inv/update/o-rings/med/shortage</code></li>
 <li>❌ <code>mfg/123plant/inv/update/boo</code></li>
 </ul>
 </li>
-<li><code>payme/debit/*/bank01/*/ok</code>  <ul>
+<li><code>payme/debit/*/bank01/*/ok</code><ul>
 <li>✅ <code>payme/debit/dep/bank01/acct:12345/ok</code></li>
 <li>❌ <code>payme/debit/qr/bank01/anything/fail</code></li>
 </ul>
 </li>
 </ul>
 <p>You can read more about <a href="https://docs.solace.com/PubSub-Basics/Wildcard-Charaters-Topic-Subs.htm" target="_blank">topic wildcard subscriptions</a> here.</p>
-<aside class="special"><p>Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.</p>
+<aside class="special"><p> Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.</p>
 </aside>
 
 
@@ -227,7 +228,7 @@
 <p>Enter a new topic subscription, feel free to use wildcards: <img alt="picture" src="img/7526394a5821b499.png"></p>
 <p>Add another one if you wish, queues can have multiple subscriptions: <img alt="picture" src="img/5b9ddf532e4cf74.png"></p>
 <p>Click &#34;Create&#34; and that&#39;s it... your queue now has topic subscriptions to attract messages published on matching topics!</p>
-<aside class="special"><p>Some brokers call this &#34;topic-to-queue chaining&#34; or &#34;topic-to-queue mapping&#34;, but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).</p>
+<aside class="special"><p> Some brokers call this &#34;topic-to-queue chaining&#34; or &#34;topic-to-queue mapping&#34;, but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).</p>
 </aside>
 
 

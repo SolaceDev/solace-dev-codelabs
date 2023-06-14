@@ -47,11 +47,11 @@ After you finish the Getting Started with Boomi and Solace codelab, you’ll hav
 - A local atom up and running.
 - An understanding of how to deploy a Boomi process to a Boomi Atom
 
-Negative
-: It's important to note that this codelab uses a pre-release version of the Solace connector to highlight cutting edge features and some prebuilt code to get you up and running faster. Please reach out to our [Solace Community](https://solace.community/) to get a copy of both.
+> aside negative
+> It's important to note that this codelab uses a pre-release version of the Solace connector to highlight cutting edge features and some prebuilt code to get you up and running faster. Please reach out to our [Solace Community](https://solace.community/) to get a copy of both.
 
-Positive
-: If you’re new to the world of events, welcome! Solace has [extensive blogs focusing on event-driven architecture and development.](https://solace.com/blog/)
+> aside positive
+> If you’re new to the world of events, welcome! Solace has [extensive blogs focusing on event-driven architecture and development.](https://solace.com/blog/)
 
 ## Use Case Overview 🚕
 
@@ -100,8 +100,8 @@ Here's the basic flow of events through the system
 
 Do a deep dive into the individual applications, events and schemas by double clicking on them. Note that Event Portal houses all the schemas and topic strings that you’ll need for the CodeLab.
 
-Positive
-: If you want to learn more about the architecture for this CodeLab, check out the [Solace Architecture blog](https://solace.com/blog/category/architects/).
+> aside positive
+> If you want to learn more about the architecture for this CodeLab, check out the [Solace Architecture blog](https://solace.com/blog/category/architects/).
 
 Two notes:
 
@@ -147,8 +147,8 @@ Follow the steps in the [Getting Started with Boomi and Solace codelab](https://
 
 ### ⚙️ Boomi configuration
 
-Negative
-: At this point, Solace is not part of the Boomi Process Library. Reach out to us at the [Solace Community](https://solace.community/) and we will get the code to you.
+> aside negative
+> At this point, Solace is not part of the Boomi Process Library. Reach out to us at the [Solace Community](https://solace.community/) and we will get the code to you.
 
 ### ⚙️ Connect the process to listen for Solace events
 
@@ -178,8 +178,8 @@ Negative
 - Make sure that the check box next to Create Queue and TS is checked.
 - Save and Close the Connector operation and start shape.
 
-Negative
-: Due to Boomi SDK limitations, the current version of the connect does not allow you to modify an existing topic string. If you do want to make a change, re-import the event from Event Portal.
+> aside negative
+> Due to Boomi SDK limitations, the current version of the connect does not allow you to modify an existing topic string. If you do want to make a change, re-import the event from Event Portal.
 
 ### ⚙️ Package and deploy
 
@@ -198,15 +198,15 @@ Negative
 1. You should see the listener up and running, with a green circle next to it.  
    ![image026](img/image026.png)
 
-Positive
-: You’ll test this flow in the next section once you have a publisher process up and running.
+> aside positive
+> You’ll test this flow in the next section once you have a publisher process up and running.
 So what did you just do? You just created the Boomi flow and the Solace objects needed for the solution. Once we have a publisher (which you’ll do in the next step), you’ll be able route a message through Boomi using Solace.
 
 ![image027](img/image027.png)
 
 ###And Now-One Quick Fix
-Negative
-: In the current version of the Solace connector, if an error occurs while a Boomi process is processing an event, it could lead to a "poison message" scenario, where the event is processed over and over again. To avoid this, use this manual workaround for the time being, until Solace releases a new version (it's coming).
+> aside negative
+> In the current version of the Solace connector, if an error occurs while a Boomi process is processing an event, it could lead to a "poison message" scenario, where the event is processed over and over again. To avoid this, use this manual workaround for the time being, until Solace releases a new version (it's coming).
 
 1. Go back to the Solace UI, click on Messaging Services in the upper left, then select the messaging service that you created.
 1. Click on Manage
@@ -343,8 +343,8 @@ Duration: 0:30:00
 Scroll to the bottom of the screen and click on Generate
 ![image057](img/image057.png)
 
-NEGATIVE
-: If you get an error that states `Unable to browse connector: invalid response: [{"message":"The REST API is not enabled for this Organization.","errorCode":"API_DISABLED_FOR_ORG"}]`
+> aside negative
+> If you get an error that states `Unable to browse connector: invalid response: [{"message":"The REST API is not enabled for this Organization.","errorCode":"API_DISABLED_FOR_ORG"}]`
 the connected app is not ready yet. It can take a couple hours.
 
 ![image058](img/image058.png)
@@ -390,8 +390,8 @@ You’ll see the following if it’s successful:
 Click on Set Server Firewall. In the firewall rules section create a rule that looks like this:
 ![image069](img/image069.png)
 
-NEGATIVE
-: Because this is only a demo, we’ll let all IPs connect. NEVER DO THIS IN A PROD ENVIRONMENT!!!!
+> aside negative
+> Because this is only a demo, we’ll let all IPs connect. NEVER DO THIS IN A PROD ENVIRONMENT!!!!
 
 Click on Save
 

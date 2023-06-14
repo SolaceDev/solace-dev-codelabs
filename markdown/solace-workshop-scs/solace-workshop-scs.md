@@ -13,8 +13,8 @@ feedback link: github.com/SolaceTraining/solace-workshop-scs
 
 Duration: 0:05:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 Using Java & Spring Cloud Streams (SCS) to create Event-Driven Applications with PubSub+
 
@@ -24,20 +24,20 @@ Using Java & Spring Cloud Streams (SCS) to create Event-Driven Applications with
 
 ![story_section1](images/story_section1.png)
 
-Positive
-: **Developer Resources**
-Spring Cloud Stream Project Home: [https://spring.io/projects/spring-cloud-stream](https://spring.io/projects/spring-cloud-stream)
-The Spring Cloud Stream Reference Guide can be found [here](https://cloud.spring.io/spring-cloud-stream/spring-cloud-stream.html#spring-cloud-stream-overview-introducing).
+> aside positive
+> **Developer Resources**
+> Spring Cloud Stream Project Home: [https://spring.io/projects/spring-cloud-stream](https://spring.io/projects/spring-cloud-stream)
+> The Spring Cloud Stream Reference Guide can be found [here](https://cloud.spring.io/spring-cloud-stream/spring-cloud-stream.html#spring-cloud-stream-overview-introducing).
 
-Negative
-: The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events. While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud. When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.
+> aside negative
+> The SCS framework allows for building messaging-driven applications without having to explicitly write any code for publishing or receiving events. While many microservices-oriented applications today are based on synchronous, request/response interactions based on protocols such as HTTP or gRPC, the asynchronous, event-driven nature of communications using SCS allows for building highly scalable, efficient and responsive distributed systems that can run on-premise or in the cloud. When combined with the high-performance Solace PubSub+ Event Broker which can be deployed in virtually any environment, you can create powerful and flexible applications that support both hybrid and multi-cloud capabilities, all operating in real-time with high throughput and low latency.
 
 ## Set-up & Prerequisites
 
 Duration: 0:10:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section2](images/story_section2.png)
 
@@ -88,8 +88,8 @@ After importing everything you should see the following projects in STS:
 - 09-scs-processor-positive
 - 10-spring-boot-mqttwebapp
 
-Negative
-: Note: There may be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.
+> aside negative
+> Note: There may be errors associated with the template projects as they are incomplete and will be addressed in the exercises that follow.
 
 ###
 
@@ -153,8 +153,8 @@ find . -name ScSProcessorFeaturesDynamic.java -exec sed -i '' 's/ATTENDEE/UNIQUE
 
 Duration: 0:30:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section3](images/story_section3_g1.png)
 
@@ -165,11 +165,14 @@ The Source will send out tweets that will be received by the marketing Sink.
 
 ![1 Application Architecture](images/DiagramFirst.png)
 
-Negative
-: SCS Provides 3 Binding Interfaces:
-1: Sink - "Identifies the contract for the message consumer by providing the destination from which the message is consumed."
-2: Source - "Identifies the contract for the message producer by providing the destination to which the produced message is sent."
-3: Processor - "Encapsulates both the sink and the source contracts by exposing two destinations that allow consumption and production of messages."
+> aside negative
+> SCS Provides 3 Binding Interfaces:
+>
+> 1: **Sink** - "Identifies the contract for the message consumer by providing the destination from which the message is consumed."
+>
+> 2: **Source** - "Identifies the contract for the message producer by providing the destination to which the produced message is sent."
+>
+> 3: **Processor** - "Encapsulates both the sink and the source contracts by exposing two destinations that allow consumption and production of messages."
 
 ### Creating a Source
 
@@ -183,8 +186,8 @@ Before we take a look at the code, let's take a quick look at the structure of a
 
 ![SCS Project Structure](images/ScsProjectStructure.png)
 
-Negative
-: Spring Cloud Streams is built on top of Spring Boot. A great resource for creating your own Spring Boot applications is Spring Initializr. A publically hosted version is hosted here: [start.spring.io](https://start.spring.io)
+> aside negative
+> Spring Cloud Streams is built on top of Spring Boot. A great resource for creating your own Spring Boot applications is Spring Initializr. A publically hosted version is hosted here: [start.spring.io](https://start.spring.io)
 
 ###
 
@@ -195,8 +198,8 @@ Negative
 
 - Let's take a look at a simple sample implementation in the image below. You can see that the enrichLogMessage method is associated with both an INPUT and OUTPUT channel. In a future section we will create an application following a similar pattern, but notice that if you look at the _ScsSourceTweets.java_ class in your "02-scs-source-tweets" project you will see something a bit different. We are using an _@InboundChannelAdapter_ annotation in order to create our fake tweets at a fixed rate.
 
-Negative
-: "Spring Cloud Stream is built on the concepts and patterns defined by Enterprise Integration Patterns and relies in its internal implementation on an already established and popular implementation of Enterprise Integration Patterns within the Spring portfolio of projects: Spring Integration framework." By using Spring Integration we can make use of familiar annotations such as _@InboundChannelAdapater, @Transformer or @ServiceActivator_
+> aside negative
+> "Spring Cloud Stream is built on the concepts and patterns defined by Enterprise Integration Patterns and relies in its internal implementation on an already established and popular implementation of Enterprise Integration Patterns within the Spring portfolio of projects: Spring Integration framework." By using Spring Integration we can make use of familiar annotations such as _@InboundChannelAdapater, @Transformer or @ServiceActivator_
 
 ![SCS Sample Implementation](images/ScsProcessorCodeSnippet.png)
 
@@ -204,8 +207,8 @@ Negative
 
 ![SCS Application Config File](images/ScsApplicationYaml.png)
 
-Positive
-: SCS apps are not restricted to only using one binder at a time. This allows a SCS app the flexibility of receiving events from one binder/location/environment/etc, performing business logic and then sending new events to another binder/location/environment/etc.
+> aside positive
+> SCS apps are not restricted to only using one binder at a time. This allows a SCS app the flexibility of receiving events from one binder/location/environment/etc, performing business logic and then sending new events to another binder/location/environment/etc.
 Also note that because bindings are dynamically configured at run-time you don't have to touch the code to switch out your binder of choice, environment info, etc.
 
 #### Run our 02-scs-source-tweets app
@@ -235,23 +238,23 @@ To do this we will create a sink app. Recall that a sink app binds to an INPUT c
 - Time to test it out! Run the "03-scs-sink-analytics" app the same way you started "02-scs-source-tweets"
 - Now that your sink is started you should see it logging the tweets as they come in!
 
-Negative
-: Note that Spring Cloud Streams [provides message converters](https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_provided_messageconverters) which enable the conversion of a payload to/from a specified format/shape (such as a Tweet POJO in our case) based on the argumentType in the method signature and the contentType specified on the message. The default content type is application/json.
+> aside negative
+> Note that Spring Cloud Streams [provides message converters](https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_provided_messageconverters) which enable the conversion of a payload to/from a specified format/shape (such as a Tweet POJO in our case) based on the argumentType in the method signature and the contentType specified on the message. The default content type is application/json.
 
 ###
 
 - Developer - Woohoo! We've created our first SCS source and sink applications and the marketing department is now getting the stream of tweets as they requested! Time to give our boss the good news.
   ![story_section3_g3](images/story_section3_g3.png)
 
-Positive
-: You now have a source application sending events to a sink application via an external eventing system, but notice that you didn't need to use any messaging APIs! SCS provides this abstraction and makes it possible for developers to concentrate on their business logic rather than learning proprietary messaging APIs!
+> aside positive
+> You now have a source application sending events to a sink application via an external eventing system, but notice that you didn't need to use any messaging APIs! SCS provides this abstraction and makes it possible for developers to concentrate on their business logic rather than learning proprietary messaging APIs!
 
 ## Discover the ease of 1-to-Many with Publish-Subscribe
 
 Duration: 0:10:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section5_g1](images/story_section5_g1.png)
 
@@ -272,10 +275,12 @@ We obviously don't have a giant LED board that we can use so we're going to sett
 - Update the application.yml file, verify that there is indeed a destination configured for the input channel, replace `ATTENDEE` with your unique name (e.g: TWEETS.Q.BOARD.Marc). Note that by not specifying a group we are using the "Publish-Subscribe" messaging model.
 - Update the host, msgVpn, clientUsername, clientPassword in the application.yml file.
 
-Negative
-: Spring Cloud Streams supports multiple messaging models. We are going to use two different ones in this workshop
-1: Publish-Subscribe allows for an application to process all events sent to the defined subscription. It also allows new applications to be added to the topology without disruption of the existing flow.  
-2: Consumer Groups allow for a set of applications to participate in a "group" to consume messages. This option is commonly used to allow the ability for an application to scale horizontally (creating multiple instances of the same application) while only processing each event once.
+> aside negative
+> Spring Cloud Streams supports multiple messaging models. We are going to use two different ones in this workshop:
+>
+> 1: Publish-Subscribe allows for an application to process all events sent to the defined subscription. It also allows new applications to be added to the topology without disruption of the existing flow.  
+>
+> 2: Consumer Groups allow for a set of applications to participate in a "group" to consume messages. This option is commonly used to allow the ability for an application to scale horizontally (creating multiple instances of the same application) while only processing each event once.
 
 ### Run the Tweet Board
 
@@ -295,17 +300,21 @@ $ mvn spring-boot:run
 
 ![story_section5_g2](images/story_section5_g2.png)
 
-Positive
-: Notice that the publisher (Source) application did not need to be modified in order for another consumer (Sink) application to receive the stream of tweets. There are two takeaways here:
-1: The publish-subscribe paradigm allows for the publisher to send data once and not care whether 0,1,2 or 100 applications are subscribed on the other end. It just send the data and moves on.
-2: Developing event driven applications allows for decoupling of your sending and receiving applications. This powerful concept allowed our company to add new functionality without touching our already operational applications.
+> aside positive
+> Notice that the publisher (Source) application did not need to be modified in order for another consumer (Sink) application to receive the stream of tweets
+>
+> There are two takeaways here:
+>
+> 1: The publish-subscribe paradigm allows for the publisher to send data once and not care whether 0,1,2 or 100 applications are subscribed on the other end. It just send the data and moves on.
+>
+> 2: Developing event driven applications allows for decoupling of your sending and receiving applications. This powerful concept allowed our company to add new functionality without touching our already operational applications.
 
 ## Creating your first Processor
 
 Duration: 0:20:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 So far in this workshop we have created source or sink applications. In this section we will create our first processor.
 
@@ -328,8 +337,8 @@ In order to meet our new goal we will add the Features processor and a new Sink 
 - Now open the _ScsProcessorFeatures.java_ class.
 - Note that our _@EnableBinding_ Annotation is specifying the _ProcessorOneInTwoOutBinding_ class; this is because we have specified a custom interface to have 2 output channels (one for tweets with features, and one for all other tweets)
 
-Positive
-: Custom binding interfaces can be defined in order for your SCS app to have additional input or output channels. They also allow for custom naming of channels.
+> aside positive
+> Custom binding interfaces can be defined in order for your SCS app to have additional input or output channels. They also allow for custom naming of channels.
 
 ###
 
@@ -340,8 +349,8 @@ Positive
 
 #### Processor using Dynamic Destinations
 
-Negative
-: At this point you might be thinking "Okay these custom binding interfaces are great, but what if I don't know how many or what to call my output channels at design time?" Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation! Dynamic destinations allow you to use business logic to define your destinations at runtime.
+> aside negative
+> At this point you might be thinking "Okay these custom binding interfaces are great, but what if I don't know how many or what to call my output channels at design time?" Spring Cloud Streams supports the use of Dynamic Destinations for this exact situation! Dynamic destinations allow you to use business logic to define your destinations at runtime.
 
 ###
 
@@ -356,8 +365,8 @@ Negative
 - You'll notice that the _@EnableBinding_ annotation defines the app as a "Sink" app. This is because we only bind the INPUT channel at startup and then at runtime we are using a _BinderAwareChannelResolver_ (which is registered automatically by the _@EnableBinding_ annotation) to dynamically create output channels.
 - Update the _topicStart_ variable to replace `ATTENDEE` with your unique name
 
-Negative
-: From the JavaDocs, the _BinderAwareChannelResolver_ is "A DestinationResolver implementation that resolves the channel from the bean factory and, if not present, creates a new channel and adds it to the factory after binding it to the binder."
+> aside negative
+> From the JavaDocs, the _BinderAwareChannelResolver_ is "A DestinationResolver implementation that resolves the channel from the bean factory and, if not present, creates a new channel and adds it to the factory after binding it to the binder."
 
 ###
 
@@ -385,23 +394,23 @@ Note that our processor that we created earlier in this lab publishes to multipl
 - Save the file
 - If you're running the app within the IDE it will automatically restart the updated application, if you're running it from the cli go ahead and do a `mvn clean install` followed by a `mvn spring-boot:run` to restart the app.
 
-Negative
-: spring-boot-devtools is handy for development and adds features such as automatic restart and remote debugging. Click [here](https://www.baeldung.com/spring-boot-devtools) for a high level overview of some of the functionality it provides.
+> aside negative
+> spring-boot-devtools is handy for development and adds features such as automatic restart and remote debugging. Click [here](https://www.baeldung.com/spring-boot-devtools) for a high level overview of some of the functionality it provides.
 
-Positive
-: Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don't underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don't mix upper and lower case! A good topic hierarchy might be defined as "\<country\>/\<state\>/\<locality\>" which would allow you to subscribe to all events in a given country "canada/>" or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they're in "\*/\*/sanjose"
+> aside positive
+> Notice that the use of topic hierarchies provides an organized way of keeping track of your event streams. This ability, combined with the ability to wildcard in PubSub+ gives your applications an easy way to subscribe to the exact event streams necessary to meet your need. Don't underestimate the value of creating a well-defined topic hierarchy! A few best practices to keep in mind are: start general and become more specific as more levels are added, use short words or abbrevations as topics can only be so long, and don't mix upper and lower case! A good topic hierarchy might be defined as "\<country\>/\<state\>/\<locality\>" which would allow you to subscribe to all events in a given country "canada/>" or even subscribe to events from all 1,716 localities named San Jose no matter what country or state they're in "\*/\*/sanjose"
 
 ## Reactive with Spring Cloud Streams
 
 Duration: 0:10:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section7](images/story_section7.png)
 
-Negative
-: Spring Cloud Stream currently has two different ways to follow a Reactive Programming Model: Spring Cloud Function and spring-cloud-stream-reactive. We're going to concentrate on Spring Cloud Function since the latter option is marked for deprecation.
+> aside negative
+> Spring Cloud Stream currently has two different ways to follow a Reactive Programming Model: Spring Cloud Function and spring-cloud-stream-reactive. We're going to concentrate on Spring Cloud Function since the latter option is marked for deprecation.
 
 ### Application Architecture
 
@@ -416,11 +425,14 @@ We're going to add a "No Yelling" processor in our event driven architecture in 
 
 ###
 
-Negative
-: Spring Cloud Functions supports 3 types that conveniently map to our 3 SCS binding interfaces.
-java.util.function.Function maps to a SCS Processor
-java.util.function.Supplier maps to a SCS Source
-java.util.function.Consumer maps to a SCS Sink
+> aside negative
+> Spring Cloud Functions supports 3 types that conveniently map to our 3 SCS binding interfaces.
+> `java.util.function.Function` maps to a SCS Processor
+>
+> `java.util.function.Supplier` maps to a SCS Source
+>
+> `java.util.function.Consumer` maps to a SCS Sink
+
 
 ###
 
@@ -456,21 +468,22 @@ At this point we've created our reactive function, registered it as a bean, and 
 - Now that we've seen how to create a SCS app using Spring Cloud Functions go ahead and run it.
 - After it's running you should start to see the BEFORE and AFTER log entries scrolling across the console where the AFTER log entries do not contain any uppercase letters in the text field.
 
-Positive
-: From the Spring docs, Spring Cloud Functions allows you to "Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task." Read more here: [https://spring.io/projects/spring-cloud-function](https://spring.io/projects/spring-cloud-function)
+> aside positive
+> From the Spring docs, Spring Cloud Functions allows you to "Decouple the development lifecycle of business logic from any specific runtime target so that the same code can run as a web endpoint, a stream processor, or a task." Read more here: [https://spring.io/projects/spring-cloud-function](https://spring.io/projects/spring-cloud-function)
 
 ## Multiple Processor Chaining
 
 Duration: 0:10:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section8](images/story_section8.png)
 
-Negative
-: Obviously this company has some morality issues :)
-In the real world you should definitely not modify people's speech or create fake news!
+> aside negative
+> Obviously this company has some morality issues :)
+>
+> In the real world you should definitely not modify people's speech or create fake news!
 
 ### Application Architecture
 
@@ -487,8 +500,8 @@ Let's get started and hopefully have a bit of fun!
 - Find & Open the _ScsProcessorPositive.java_ class. At this point we know how to create and run a processor so we'll do something a bit different. At the top of the class you'll see that the negToPosMap object is being initialized in a static method. This Map holds the key for changing our negative tweets to positive ones. Go ahead and fill in some positive words for each negative one in the map. Remember that you can find the canned tweets in the canned_tweets.txt file under the "02-scs-source-tweets" project if you need some more context :)
 - After filling in your "positive" words go ahead and start the app
 
-Positive
-: Notice that multiple processors can easily be connected together in order to form a processing chain.
+> aside positive
+> Notice that multiple processors can easily be connected together in order to form a processing chain.
 
 ### Update the Tweet Board Subscription
 
@@ -502,8 +515,8 @@ Positive
 
 Duration: 0:10:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ![story_section9](images/story_section9.png)
 
@@ -513,8 +526,8 @@ To meet this new requirement we are going to add the MQTT Web App shown in the d
 
 ![6 Application Architecture](images/DiagramSixth.png)
 
-Positive
-: Since we're using Solace PubSub+ as our event broker we support a bunch of open standards and protocols. Even though the SCS apps are sending/receiving events using the Java API other applications can still use their language/protocol of choice.
+> aside positive
+> Since we're using Solace PubSub+ as our event broker we support a bunch of open standards and protocols. Even though the SCS apps are sending/receiving events using the Java API other applications can still use their language/protocol of choice.
 
 ### Obtain PubSub+ Connection Info for MQTT over Websockets
 
@@ -550,15 +563,15 @@ Positive
 
 Duration: 0:05:00
 
-Negative
-: **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
+> aside negative
+> **Note that this CodeLab uses the Annotation based Spring Cloud Stream code which is effectively deprecated in Cloud Stream v3. Please see the [Spring Cloud Stream Basics](https://codelabs.solace.dev/codelabs/spring-cloud-stream-basics/#0) Codelab to learn how to leverage Spring Cloud Function which is preferred in v3+.**
 
 ### Review
 
 ![story_section10](images/story_section10.png)
 
-Positive
-: Hopefully you not only learned how to use Spring Cloud Streams today, but also how it enables developers to concentrate on achieving business goals by removing the need to learn messaging APIs. You should also now have a solid understanding of how implementing an event-driven architecture allows for loose coupling between your apps which enables rapid addition of new functionality.
+> aside positive
+> Hopefully you not only learned how to use Spring Cloud Streams today, but also how it enables developers to concentrate on achieving business goals by removing the need to learn messaging APIs. You should also now have a solid understanding of how implementing an event-driven architecture allows for loose coupling between your apps which enables rapid addition of new functionality.
 
 ### Continued learning topics:
 

@@ -58,8 +58,8 @@ Before you start, make sure:
 - (Somewhat optional) You can write code.
 - (A bit more optional) You've downloaded and installed [sdkperf](https://products.solace.com/download/SDKPERF_JAVA)
 
-Positive
-: We have a lot of excellent Tutorial material available to help you get started. This CodeLab doesn't replace those, it's here to encourage you to use them!
+> aside positive
+> We have a lot of excellent Tutorial material available to help you get started. This CodeLab doesn't replace those, it's here to encourage you to use them!
 
 - Nice simple [Get Connected Tutorials](https://www.solace.dev/)
 - More detailed [Developer Tutorials](https://docs.solace.com/Developer-Tutorials/Developer-Tutorials.htm)
@@ -78,8 +78,8 @@ As an example, using git clone for the java samples:
 
 ### Free Solace Stuff!
 
-Positive
-: All of the broker images and API software are available on the [Solace Downloads Page](https://solace.com/downloads/). If you haven't already, go to it!
+> aside positive
+> All of the broker images and API software are available on the [Solace Downloads Page](https://solace.com/downloads/). If you haven't already, go to it!
 
 ## Overview
 
@@ -87,8 +87,8 @@ Duration: 0:05:00
 
 We will walk through the basic code path to get you connected to a Solace broker using the Native APIs and exchanging messages. By the end, you should have a good grasp of the basic principles of the APIs.
 
-Positive
-: These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.
+> aside positive
+> These samples tend to use Java, but the basic concepts and terminology behind the APIs are the same across all the APIs.
 
 ### Getting Started: verifying a connection
 
@@ -134,8 +134,8 @@ Windows:
 
     sdkperf_java.bat -h
 
-Positive
-: Replace "sdkperf_java.sh" with "sdkperf" for C or your favourite SDKPerf variant for your API of choice.
+> aside positive
+> Replace "sdkperf_java.sh" with "sdkperf" for C or your favourite SDKPerf variant for your API of choice.
 
 ### 1 Find Try-Me!
 
@@ -161,8 +161,8 @@ You'll need these details later. But to connect Try-Me, just navigate to the Try
 
 Now we need to connect. The connection details are filled in, which makes things easy, so just go to the **Subscriber** and click the "Connect" button.
 
-Positive
-: If you're using Docker, you may not connect. This is because the default docker compose yaml doesn't expose the port Try-Me uses. Simply stop the containerand edit the .yml file. Fine the Port Mappings section, and uncomment the line below "#Web transport"
+> aside positive
+> If you're using Docker, you may not connect. This is because the default docker compose yaml doesn't expose the port Try-Me uses. Simply stop the containerand edit the .yml file. Fine the Port Mappings section, and uncomment the line below "#Web transport"
 
         #Port Mappings:  Ports are mapped straight through from host to
     #container.  This may result in port collisions on commonly used
@@ -278,8 +278,8 @@ We need a thread to read and write to the socket, which in the Solace APIs we ca
     returnCode = solClient_context_create ( SOLCLIENT_CONTEXT_PROPS_DEFAULT_WITH_CREATE_THREAD,
       &context_p, &contextFuncInfo, sizeof ( contextFuncInfo ) )
 
-Negative
-: I have omitted checking the return code from the C function calls for clarity. Please don't. If you get something other than SOLCLIENT_OK, you need to do something.
+> aside negative
+> I have omitted checking the return code from the C function calls for clarity. Please don't. If you get something other than SOLCLIENT_OK, you need to do something.
 
 The context thread will run reading from the socket. The _callbacks_ (see below) are executed in the context thread, so please return from them as quick as possible - for instance by putting data in a structure to be processed in the application thread.
 
@@ -371,8 +371,8 @@ In Java, we pass the session event callback to createSession:
 
 This is optional, though, but best practice says please do something with your session events, even if it's just log them.
 
-Positive
-: If you're the kind of person that asked the teacher for extra work after you'd finished the optional work before the rest of the class had finished the first question, a good exercise is to create code that prints out all session events and run it in various scenarios.
+> aside positive
+> If you're the kind of person that asked the teacher for extra work after you'd finished the optional work before the rest of the class had finished the first question, a good exercise is to create code that prints out all session events and run it in various scenarios.
 
 ### 2 Receiving messages
 
@@ -380,8 +380,8 @@ Positive
 
 OK, we've got a session, how do we get messages? For that we need a receive callback. How do we tell the broker _what_ we want to receive? We use a _topic subscription_. First things first, we need to create the topic to which we'll subscribe.
 
-Positive
-: Remember! This is just creating the Topic object in the API. No topic is created in the broker.
+> aside positive
+> Remember! This is just creating the Topic object in the API. No topic is created in the broker.
 
 TopicSubscriber.java, line 63:
 
@@ -511,8 +511,8 @@ This is assumed by default in Java.
 
 Now we have a message, and we've decided what Quality of Service (Guaranteed or Direct - we chose Direct in this case) it will be. We now need to decide where to send the message - to a queue, and if so what the queue name should be, or to a topic, and if so what topic.
 
-Positive
-: Always **always** send to a topic. Even if you plan to send to a queue, send to a topic and have the queue map the topic. Always. Can I say it one more time? Always send to a topic.
+> aside positive
+> Always **always** send to a topic. Even if you plan to send to a queue, send to a topic and have the queue map the topic. Always. Can I say it one more time? Always send to a topic.
 
 In Java, this is pretty simple: we just call send on the producer and provide the topic, remembering that **Topic** is an object we need to create:
 
@@ -560,8 +560,8 @@ I said earlier that SDKPerf can be very handy for application debug as its messa
 
 The "-md" stands for "message dump."
 
-Positive
-: I'd encourage you to always attach an sdkperf subsriber with message dump turned on whenever you're debugging an application if you can't get enough information from Try-Me!
+> aside positive
+> I'd encourage you to always attach an sdkperf subsriber with message dump turned on whenever you're debugging an application if you can't get enough information from Try-Me!
 
 Then we'll just fire up TopicPubisher and see what comes out:
 
