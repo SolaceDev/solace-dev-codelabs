@@ -1,0 +1,32 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-06-21T13:36:43+02:00",
+  "id": "EventEnabalingWithPs+_Devs",
+  "duration": 6,
+  "title": "Event Enabaling with Solace PubSub+ for developers",
+  "summary": "Codelab covering the hands-on parts of the workshop : Event Enabaling with Solace PubSub+ for developers",
+  "source": "EventEnabalingWithPs+_Devs.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "workshop",
+    "topicsandsubscriptions",
+    "queues",
+    "eventportal",
+    "eventmeshanddmr",
+    "distributedtracing",
+    "cloudrestapis"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/EventEnabalingWithPs+_Devs",
+  "url": "EventEnabalingWithPs+_Devs"
+}
