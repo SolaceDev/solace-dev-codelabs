@@ -1,0 +1,30 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-06-26T12:04:55+02:00",
+  "id": "smarttrade-workshop",
+  "duration": 6,
+  "title": "SmartTrade workshop : Event Enabling with Solace PubSub+ for developers",
+  "summary": "Codelab covering the hands-on parts of the workshop for SmartTrade",
+  "source": "smarttrade-workshop.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "workshop",
+    "topicsandsubscriptions",
+    "javaapis",
+    "cloudrestapis",
+    "semp"
+  ],
+  "tags": [
+    "web",
+    "workshop"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/smarttrade-workshop",
+  "url": "smarttrade-workshop"
+}

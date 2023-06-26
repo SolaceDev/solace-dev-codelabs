@@ -1,0 +1,115 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SmartTrade workshop : Event Enabling with Solace PubSub&#43; for developers</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="smarttrade-workshop"
+                  title="SmartTrade workshop : Event Enabling with Solace PubSub&#43; for developers"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/smarttrade-workshop">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <p>This codelab is specifically built for SmartTrade and follows the <strong>Event Enabling with Solace PubSub+ for developers</strong> workshop and contains the hands-on section of the workshop.<br> In this codelab, we will be doing hands-on activities on the following topics:</p>
+<ul>
+<li>Solace basics : Getting started</li>
+<li>Topics and subscriptions</li>
+<li>Cloud REST API</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace Basics : Getting started" duration="0">
+        <p>The below codelab introduces the Solace Portal and will guide thru the steps for creating a Solace PubSub+ broker service.<br> Walk thru the steps <strong>2-6</strong> and acquaint yourself with the Solace Cloud.<br> Follow the link to the codelab over here : <a href="https://codelabs.solace.dev/codelabs/get-started-basics/index.html?index=..%2F..index#0" target="_blank">A Solace Primer - Getting Started with Solace PubSub+ Event Broker</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Topics and subscription : Overview using Try-Me" duration="0">
+        <p>The below codelab introduces the hierarchical topic structure and subscriptions using wildcards.<br> Follow the step 7 and understand the power of the dynamic topic structure and its capabilities.<br> Follow the link to the codelab over here : <a href="https://codelabs.solace.dev/codelabs/get-started-basics/index.html?index=..%2F..index#6" target="_blank">Topic Hierarchies and Wildcards</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Cloud REST API" duration="0">
+        <p>The Solace Cloud REST APIs are documented over here : <a href="https://api.solace.dev/cloud/reference/using-the-v2-rest-apis-for-pubsub-cloud" target="_blank">PubSub+ Cloud REST APIs</a><br> As explained in the workshop, the v2 Cloud REST APIs are classified into 3 categories :</p>
+<ul>
+<li>Mission Control APIs</li>
+<li>Event Portal - Designer APIs</li>
+<li>Event Portal - Runtime APIs</li>
+<li>Platform and billing APIs</li>
+</ul>
+<p>In this section, we will see how to make a request for few common scenarios that are encountered in a real-life impelementation :</p>
+<ul>
+<li>Creating an event broker service</li>
+<li>Retreiving the details of an event broker service</li>
+<li>Configuring client profiles for eliding</li>
+</ul>
+<p>To perform these actions, for simplicity sake we will use the try-me functionality included in the documentation page.</p>
+<h2 is-upgraded>Authentication token creation</h2>
+<p>Start off with creating an authentication bearer token as described over here : <a href="https://api.solace.dev/cloud/reference/authentication" target="_blank">Authentication bearer token</a><br><strong>Keep this token secure as we will be using it for the rest of the steps.</strong> Each API that we will be describing below requires this token to be provided.<br> Insert the token as defined below : <img alt="Insert bearer token" src="img/984d51852c3d2a20.jpeg"></p>
+<h2 is-upgraded>Creating an event broker service</h2>
+<p>The details of this resource are detailed over at <a href="https://api.solace.dev/cloud/reference/createservice" target="_blank">Create an event broker service</a></p>
+<p>This resource requires 3 mandatory parameters as described in the screenshot : <img alt="Create Service API parameters" src="img/86af14c63d0f510f.jpeg"></p>
+<p>Fill in these parameters and the authentication tokens as descibed earlier and click on the &#34;Try It!&#34; :</p>
+<p class="image-container"><img alt="Make service request" src="img/c0041142156db8d1.png"></p>
+<p>If you observe the request closely, it will contain the parameters and the bearer-token that was provided in the input boxes. The response of the request is detailed with the HTTP code, message and other details.</p>
+<h2 is-upgraded>Retreiving the details of an event broker service</h2>
+<p>The details of this resource are detailed over at <a href="https://api.solace.dev/cloud/reference/getservice" target="_blank">Get an event broker service</a><br> This resource requires one mandatory parameter which is an identifier for an existing service. We can use the serviceId of the service which we created in the previous excercise for this.<br> Fill in the serviceId parameter and the authentication tokens as descibed earlier and click on the &#34;Try It!&#34; : If you observe the request closely, it will contain the parameters and the bearer-token that was provided in the input boxes. The response of the request is detailed with the HTTP code, message and other details.</p>
+<h2 is-upgraded>Configuring client profiles for eliding</h2>
+<p>Client profiles are objects provisioned on Message VPNs that are used to assign a common set of configuration properties to clients that have been successfully authorized.<br> They control a number of client behaviors and capabilities and can be applied to multiple client usernames or LDAP authorization groups in a Message VPN.</p>
+<p>Message Eliding Message eliding allows client applications to receive only the most current Direct messages published to topics that they subscribe to, at a rate they can manage, rather than queue up outdated messages.<br> It can be useful in situations where there are slow consumers, or where a slower message rate is required. Only Direct messages can be elided. A receiving client application must be assigned a client profile through its client username.</p>
+<p>In this section, we will create a client profile which support eliding with a delay for the messages.</p>
+<p>Solace has a regular release schedule where new versions of the software broker The details of the create client profile resource are detailed over at <a href="https://api.solace.dev/cloud/reference/createclientprofile" target="_blank">Create a client profile</a><br> As you can see, the client profile can be configured with a variety of different parameters, but today we will be focusing on the <strong>elidingEnabled</strong> and <strong>elidingDelay</strong> parameters.<br><img alt="Eliding parameters" src="img/9154b9441f5d6688.png"></p>
+<p>Fill in the following parameters:</p>
+<ul>
+<li>serviceId (denoting the name of the broker service)</li>
+<li>name of the client profile as <strong>eliding-default-profile</strong></li>
+<li>elidingEnabled as true</li>
+<li>elidingDelay as 500 The response of the request is detailed with the HTTP code, message and other details.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="1">
+        <p>During the course of this workshop, you would have got the following :<br> ✅ Introduction to the Solace platform<br> ✅ Topics and queues<br> ✅ Cloud REST APIs</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="0">
+        <p><img alt="Soly Image Caption" src="img/44f356558033e250.gif"><br> Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
