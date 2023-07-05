@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link: http://github.com/solacetraining/solace-battleship/issues
 
-#Building Battleship with TypeScript, Java and Solace PubSub+
+# Building Battleship with TypeScript, Java and Solace PubSub+
 
 ## Welcome!
 
