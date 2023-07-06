@@ -286,8 +286,8 @@ public class DemoApplication {
       <google-codelab-step label="Message Headers" duration="10">
         <p>By default when coding your Spring Cloud Stream microservice you are writing Spring Cloud Function beans that can be re-used for multiple purposes and can leverage the framework&#39;s <a href="https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management" target="_blank">Content Type Negotiation</a> to pass your POJOs directly into the function while decoupling your business logic from the specific runtime target and triggering mechanism (web endpoint, stream processor, task). This is convenient, but sometimes when creating a function for a stream processor our business logic requires the use of metadata in the message headers that we need access to on the Consuming side or need to set on the Publishing side.</p>
 <h2 is-upgraded>Consumer - Accessing Headers</h2>
-<p>We&#39;ll start with the consuming side. In order to get access to the headers you&#39;ll need to set the input argument to a <code>Message<?></code> type. Once you have the Spring Message object you can retrieve a map of the headers using the <code>getHeaders()</code> method. Note that because the input argument is now a <code>Message<?></code> you would now use the <code>getPayload()</code> method to get the actual payload itself.</p>
-<p>For example, if we modify the <code>Consumer</code> from the previous section to take in a <code>Message<String></code> we can now access the headers as seen below.</p>
+<p>We&#39;ll start with the consuming side. In order to get access to the headers you&#39;ll need to set the input argument to a <code>Message<</code>?<code>></code> type. Once you have the Spring Message object you can retrieve a map of the headers using the <code>getHeaders()</code> method. Note that because the input argument is now a <code>Message<</code>?<code>></code> you would now use the <code>getPayload()</code> method to get the actual payload itself.</p>
+<p>For example, if we modify the <code>Consumer</code> from the previous section to take in a <code>Message<</code>String<code>></code> we can now access the headers as seen below.</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
       return v -&gt; {
@@ -309,7 +309,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(){
 <aside class="special"><p> 💡 Note that we&#39;re currently working with the Spring Engineering team to allow for enhanced header mapping capabilities that will allow for the parsing of topic levels into headers.</p>
 </aside>
 <h2 is-upgraded>Publishing - Setting Headers</h2>
-<p>On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a <code>Message<?></code> object. Note that if you don&#39;t return a <code>Message<?></code> object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by <em>SpringIntegrationProperties.messageHandlerNotPropagatedHeaders</em> or the Solace Binder <code>headerExclusions</code> producer property</p>
+<p>On the source/publishing side of things we sometimes also need to set headers that downstream listeners may need access to. In order to do this we will need the output argument of our Function to also be a ``Message&lt;<code>?</code>&gt;<code>object. Note that if you don't return a</code>Message&lt;<code>?</code>&gt;<code>object the framework will re-use the headers on the inbound message on the outbound one minus the headers defined or filtered by *SpringIntegrationProperties.messageHandlerNotPropagatedHeaders* or the Solace Binder</code>headerExclusions` producer property</p>
 <p>For example, the code below sets a header named &#34;Key&#34; to the value &#34;Value&#34; on an outbound message.</p>
 <pre><code language="language-java" class="language-java">@Bean
 Supplier&lt;Message&lt;String&gt;&gt; mySupplier(){
@@ -442,7 +442,7 @@ public Consumer&lt;Message&lt;String&gt;&gt; myConsumer(StreamBridge sb) {
 <p>✅ Now you know how to use StreamBridge to publish to dynamic topics!</p>
 <h2 is-upgraded>BinderHeaders.TARGET_DESTINATION</h2>
 <p>The second way to publish to a dynamic destination is to use the <code>BinderHeaders.TARGET_DESTINATION</code> header. Note that this option will only work with binders that explicity support the feature, including Solace. When setting this header the framework is actually delegating the dynamic publishing to the Binder itself and therefore may result in better performance than the StreamBridge option depending on the binder&#39;s implementation. 🚀 If using the Solace binder this dynamic publishing option results in lower latencies as the Binder doesn&#39;t create/cache Spring Integration channels.</p>
-<p>Different than when using StreamBridge, when using the <code>BinderHeaders.TARGET_DESTINATION</code> option you would actually use a <code>Function</code> or <code>Supplier</code> and return a <code>Message<?></code> with the header set to the destination you&#39;d like the message to be published to. If the <code>BinderHeaders.TARGET_DESTINATION</code> header is set it will override the default <code>destination</code> that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired.</p>
+<p>Different than when using StreamBridge, when using the <code>BinderHeaders.TARGET_DESTINATION</code> option you would actually use a <code>Function</code> or <code>Supplier</code> and return a <code>Message<</code>?<code>></code> with the header set to the destination you&#39;d like the message to be published to. If the <code>BinderHeaders.TARGET_DESTINATION</code> header is set it will override the default <code>destination</code> that is configured on the output binding. This allows you to configure a default destination that is used a majority of the time and only override it when necessary if desired.</p>
 <p>Let&#39;s create a <code>myFunction</code> Function that will perform the same processing that we just implemented with <code>StreamBridge</code>.<br> Your code will look something like this:</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction() {
@@ -482,9 +482,9 @@ public Function&lt;Message&lt;String&gt;, Message&lt;String&gt;&gt; myFunction()
       </google-codelab-step>
     
       <google-codelab-step label="Batch Publishing" duration="7">
-        <p>Sometimes when following the <code>Supplier</code> or the <code>Function</code> pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you&#39;d like, but there is also another option. That options is to return a <code>Collection<Message<?>></code> object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it&#39;s own message.</p>
+        <p>Sometimes when following the <code>Supplier</code> or the <code>Function</code> pattern you may need to send more than one output message for each one that you process. As we saw earlier, you can use StreamBridge to send messages whenever you&#39;d like, but there is also another option. That options is to return a <code>Collection<</code>Message<code><</code>?<code>>></code> object in your Function. When doing this Spring Cloud Stream will send each member of the collection as it&#39;s own message.</p>
 <h2 is-upgraded>Batch Publish to Default Binding Destination</h2>
-<p>👀 Let&#39;s check it out! Go ahead and <strong>comment out your previous code</strong> and create a <code>myFunction</code> function that takes in a String and returns a <code>Collection<Message<String>></code>. It should look something like this:</p>
+<p>👀 Let&#39;s check it out! Go ahead and <strong>comment out your previous code</strong> and create a <code>myFunction</code> function that takes in a String and returns a <code>Collection<</code>Message<code><</code>String<code>>></code>. It should look something like this:</p>
 <pre><code language="language-java" class="language-java">@Bean
 public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunction() {
     return v -&gt; {
@@ -545,6 +545,124 @@ public Function&lt;String, Collection&lt;Message&lt;String&gt;&gt;&gt; myFunctio
 
       </google-codelab-step>
     
+      <google-codelab-step label="Batch Consumption" duration="7">
+        <p>Batch consumers are a feature that allows consuming messages in batches rather than individually. This feature is particularly useful when dealing with high-volume data processing scenarios where processing messages individually may introduce performance overhead.</p>
+<p>Batching of messages is applied only when the <code>spring.cloud.stream.bindings.<binding-name>.consumer.batch-mode</code> is set to true. The number of messages in a batch is dependent on the availability of messages in the queue and the timeout to receive messages from the queue.</p>
+<p>Other parameters that can control the batching are:</p>
+<p><code>batch-max-size</code> The maximum number of messages per batch. Only applicable when <code>batch-mode</code> is <code>true</code>, and the default value is 255</p>
+<p><code>batch-timeout</code> The maximum wait time in milliseconds to receive a batch of messages. If this timeout is reached, then the messages that have already been received will be used to create the batch. A value of <code>0</code> means wait forever, and the default value is 5000 Only applicable when <code>batch-mode</code> is <code>true</code>.</p>
+<p>It should be noted that a batch that the binder creates is a collection of individual messages and must not to be treated as a single consistent unit.</p>
+<h2 is-upgraded>Batch Consumer in action</h2>
+<p>👀 Let&#39;s check it out!</p>
+<pre><code language="language-java" class="language-java">	@Bean
+	Consumer&lt;Message&lt;List&lt;String&gt;&gt;&gt; batchConsume() {
+		return batchMsg -&gt; { // (1)
+			List&lt;?&gt; data = batchMsg.getPayload();
+			MessageHeaders headers = batchMsg.getHeaders();
+			List&lt;?&gt; dataHeaders = (List&lt;?&gt;) headers.get(SolaceBinderHeaders.BATCHED_HEADERS);
+
+			log.info(&#34;Received Batch Size: &#34; + data.size());
+			for (int i=0; i&lt; data.size(); i++) {
+				log.info(&#34;Batch Headers: &#34; + dataHeaders.get(i));
+				log.info(&#34;Batch Payload: &#34; + new String((byte[]) data.get(i), StandardCharsets.UTF_8));
+			}
+		};
+	}
+</code></pre>
+<p>The code above will receive batches of messages based on the batch settings set on the consumer on the solace binding in the application configuration.</p>
+<p>We will amend the application properties from the previous section with addition of a consumer with batch settings configured.</p>
+<p>Note that the previous exercise upon receiving the message on the processor, published multiple messages to dynamic topic <code>solace/other/topic/></code>. We will build the consumer subscribing to these messages.</p>
+<pre><code language="language-yaml" class="language-yaml">spring:
+  cloud:
+    function:
+      definition: myFunction;batchConsume
+    stream:
+      bindings:
+        myFunction-in-0:
+          destination: &#39;a/b/&gt;&#39;
+          group: nonexclusive
+        myFunction-out-0:
+          destination: &#39;my/default/topic&#39;
+        batchConsume-in-0:
+          destination: &#39;some/other/topic/&gt;&#39;
+          group: batch
+          consumer:
+            batch-mode: true
+            useNativeDecoding: true
+      solace:
+        bindings:
+          batchConsume-in-0:
+            consumer:
+              batch-max-size: 5
+              batch-timeout: 5000
+</code></pre>
+<p>🛠 Test it out by starting your app via your IDE or using <code>mvn clean spring-boot:run</code> inside of your project. Use the &#34;Try-Me&#34;  <strong>Publisher</strong> to send a message to the <code>a/b/c</code> topic. You should see your Subscriber receive 3 messages for each message that you send 🎊. No batching yet, because the number of messages is less than the set max batch size.</p>
+<p>Now, go ahead and click on the publish button of &#34;Try-Me&#34; publisher 4 times. On the console, you should be able to see the messages were delivered in batches of 5+5+2.</p>
+<pre><code language="language-java" class="language-java">2023-07-06T07:44:42.824+05:30  INFO 9858 --- [ool-12-thread-1] com.example.demo.DemoApplication         : 
+Received: Hello world!
+2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Received Batch Size: 5
+2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/1, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001eaf, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, target-protocol=kafka, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=181ee60e-0809-8121-34e2-e8ad11609457, contentType=application/json, timestamp=1688609682842}
+2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Hello world!
+2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/2, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001eb2, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=2e640bb5-a047-a275-2e77-1057acd8359c, contentType=application/json, timestamp=1688609682843}
+2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 2
+2023-07-06T07:44:42.852+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/3, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001eb4, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=6f07d2ad-a433-2615-0a56-0fd9cd893332, contentType=application/json, timestamp=1688609682843}
+2023-07-06T07:44:42.852+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 3
+2023-07-06T07:44:42.853+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/1, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001eb8, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, target-protocol=kafka, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=6b57ac4a-c4c3-e476-bcb7-0f8b268880fa, contentType=application/json, timestamp=1688609682844}
+2023-07-06T07:44:42.853+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Hello world!
+2023-07-06T07:44:42.857+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/2, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ebb, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=751a506f-2598-d369-9d33-0bbefdf0583e, contentType=application/json, timestamp=1688609682844}
+2023-07-06T07:44:42.857+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 2
+2023-07-06T07:44:43.173+05:30  INFO 9858 --- [ool-12-thread-1] com.example.demo.DemoApplication         : 
+Received: Hello world!
+2023-07-06T07:44:43.540+05:30  INFO 9858 --- [ool-12-thread-1] com.example.demo.DemoApplication         : 
+Received: Hello world!
+2023-07-06T07:44:43.548+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Received Batch Size: 5
+2023-07-06T07:44:43.548+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/3, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ebd, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=0b86f672-97e9-1167-fc5f-cc2152eed3c0, contentType=application/json, timestamp=1688609683546}
+2023-07-06T07:44:43.548+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 3
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/1, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ec1, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, target-protocol=kafka, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=5f48b49a-625f-c5f1-b157-252d5a0f721d, contentType=application/json, timestamp=1688609683547}
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Hello world!
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/2, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ec4, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=82252888-6e99-4175-8cc9-bf81db0db086, contentType=application/json, timestamp=1688609683547}
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 2
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/3, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ec6, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=85fdd815-e914-f375-0233-daad0929adac, contentType=application/json, timestamp=1688609683548}
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 3
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/1, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001eca, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, target-protocol=kafka, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=38b762fb-7a48-feb2-e97f-1619a8783ca0, contentType=application/json, timestamp=1688609683548}
+2023-07-06T07:44:43.549+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Hello world!
+2023-07-06T07:44:48.563+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Received Batch Size: 2
+2023-07-06T07:44:48.563+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/2, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ecd, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=d6179b9e-b3c0-957d-639e-3d293596245c, contentType=application/json, timestamp=1688609688563}
+2023-07-06T07:44:48.564+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 2
+2023-07-06T07:44:48.564+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Headers: {solace_scst_messageVersion=1, solace_expiration=0, solace_destination=some/other/topic/3, solace_replicationGroupMessageId=rmid1:24c78-197d007757c-00000000-00001ecf, solace_isReply=false, solace_timeToLive=0, solace_receiveTimestamp=0, solace_discardIndication=false, solace_dmqEligible=true, solace_priority=4, solace_redelivered=false, id=ba3610fb-67f0-a0d3-1a6c-17a11251b2cb, contentType=application/json, timestamp=1688609688563}
+2023-07-06T07:44:48.564+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
+Batch Payload: Payload 3
+</code></pre>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Client/Manual Acknowledgements" duration="12">
         <p>By default when using Spring Cloud Stream with imperative functions (not reactive!) it automatically acknowledges a message when the Function successfully exists. However sometimes you want more control. In this section we&#39;ll cover how you can use client/manual acknowledgements to handle this situation.</p>
 <p>Using Client/Manual Acknowledgements can be simplified into a two step process:</p>
@@ -582,7 +700,7 @@ try {
 <li>Be able to handle many messages when dealing with high throughput. This is common when inserting into a down stream datastore and not wanting to do an insert/update for each and every message.</li>
 </ol>
 </aside>
-<p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message<String></code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
+<p>👉 Let&#39;s go ahead and put it all together with a simple sample Function (<strong>Comment out previous code</strong>) that receives a <code>Message<</code>String<code>></code>, disable auto-ack, executes some simple business logic and decides whether it wants to accept, reject or requeue a message.</p>
 <p>1️⃣  First off let&#39;s go ahead and change our application configuration to create a fresh queue and set <code>queueMaxMsgRedelivery</code> so we don&#39;t get stuck in an infinite loop of rejecting/receiving the same message over and over again. Note that the queue name will be different because we changed the group to <code>clientAck</code> and the group is used as part of the queue naming convention.</p>
 <pre><code language="language-yaml" class="language-yaml">spring:
   cloud:
