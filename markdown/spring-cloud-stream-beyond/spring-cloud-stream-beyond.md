@@ -93,7 +93,13 @@ Take note of the "Connect to Service" section and you'll see that the connection
 ✅ (1) Create an Empty Spring Cloud Stream Microservice to use throughout this codelab 
 
 Navigate to [start.spring.io](https://start.spring.io/#!dependencies=solace,cloud-stream) and choose the "Solace PubSub+" and the "Cloud Stream" dependencies. If you used that link we already added them for you 😉.
+
+> aside negative
+> ⚠️  Choose versions 3.0.x or 3.1.x for the Spring Boot and version 17 or above for Java. You can refer to the Solace Spring Cloud projects page for information on dependencies and supported versions [here.](https://github.com/SolaceProducts/solace-spring-cloud/releases)
+
 You can leave everything else as the default or modify the Java version, package info, etc. as desired. 
+
+
 
 Click the "Generate" button which will download the project. You can then unzip it and import the project into your preferred Java IDE as a maven project. I'll be using [Spring Tool Suite 4 for Eclipse](https://spring.io/tools) in the screenshots.
 Your imported project should look like this: 

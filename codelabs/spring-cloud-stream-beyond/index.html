@@ -85,7 +85,10 @@
 <p class="image-container"><img alt="Connect to service menu" title="Connect to service menu" src="img/ed3cc9cd7f839f23.png"></p>
 <h2 is-upgraded>Create a Spring Cloud Stream Microservice</h2>
 <p>✅ (1) Create an Empty Spring Cloud Stream Microservice to use throughout this codelab</p>
-<p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉. You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>
+<p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉.</p>
+<aside class="warning"><p> ⚠️  Choose versions 3.0.x or 3.1.x for the Spring Boot and version 17 or above for Java. You can refer to the Solace Spring Cloud projects page for information on dependencies and supported versions <a href="https://github.com/SolaceProducts/solace-spring-cloud/releases" target="_blank">here.</a></p>
+</aside>
+<p>You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>
 <p>Click the &#34;Generate&#34; button which will download the project. You can then unzip it and import the project into your preferred Java IDE as a maven project. I&#39;ll be using <a href="https://spring.io/tools" target="_blank">Spring Tool Suite 4 for Eclipse</a> in the screenshots. Your imported project should look like this: <img alt="Imported Project" title="Imported Project" src="img/eed71f56783ccd45.webp"></p>
 <p>✅ (2) Add your Connection Details from the Messaging Service</p>
 <p>Change the <code>application.properties</code> file to <code>application.yml</code> and copy and paste the <code>spring.cloud.stream.binders</code> part of the Spring Cloud Stream configuration previously found in the &#34;Connect to Service&#34; widget in your Message Service. It should look something like this, but with the values that were provided by your Message Service.</p>
