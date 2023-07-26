@@ -12,6 +12,9 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## Overview
 Duration: 0:01:00
 
+> aside negative
+> **Note that this Codelab uses Event Portal v1 which has been deprecated in favor of Event Portal v2. Please use the in-app samples and the [Solace Docs](https://docs.solace.com/Cloud/Event-Portal/event-portal-lp.htm) to get started.**
+
 If your requirement is to build modern real-time applications using event-driven architecture (EDA), this codelab is for you! 
 
 This codelab will walk you through the steps to 

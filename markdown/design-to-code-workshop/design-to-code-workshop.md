@@ -13,6 +13,9 @@ feedback link: https://github.com/Mrc0113/design-to-code-workshop
 
 Duration: 0:02:00
 
+> aside negative
+> **Note that this Codelab uses Event Portal v1 which has been deprecated in favor of Event Portal v2. Please use the in-app samples and the [Solace Docs](https://docs.solace.com/Cloud/Event-Portal/event-portal-lp.htm) to get started.**
+
 🚀 Welcome to this Developer Workshop! 🚀
 
 During this workshop we're going to use a real-world use case to explore some new technologies. We'll jump into our use case more in a little bit (hint: 🚕 🚖 🚕 ) but first let's introduce the 3 main technologies you'll be learning during this workshop.
