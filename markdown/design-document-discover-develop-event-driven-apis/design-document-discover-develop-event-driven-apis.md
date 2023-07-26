@@ -4,7 +4,7 @@ id: design-document-discover-develop-event-driven-apis
 tags: workshop
 categories: Solace, Taxi, Event Portal
 environments: Web
-status: Archive
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/design-document-discover-develop-event-driven-apis
 
 # Be Real-Time: Design, Document, Discover and Develop Event-Driven APIs

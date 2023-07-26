@@ -4,7 +4,7 @@ summary: This codelab walks you through how to design an EDA using the Solace Pu
 categories: Solace, AsyncAPI, Spring, Java, Event Portal, Taxi
 tags: workshop
 environments: Web
-status: Archive
+status: Hidden
 feedback link: https://github.com/Mrc0113/design-to-code-workshop
 
 # Design to Code using Event Portal + AsyncAPI Code Generation
