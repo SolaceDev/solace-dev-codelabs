@@ -4,7 +4,7 @@ id: create-api-products-using-scs-and-ep
 tags: workshop,
 categories: Spring, Java, AsyncAPI, Event Portal
 environments: Web
-status: Published
+status: Archive
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/create-api-products-using-scs-and-ep
 
 # Creating Event API Products using Spring Cloud Stream, Event Portal and AsyncAPI
