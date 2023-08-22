@@ -92,14 +92,10 @@ Take note of the "Connect to Service" section and you'll see that the connection
 
 ✅ (1) Create an Empty Spring Cloud Stream Microservice to use throughout this codelab 
 
-Navigate to [start.spring.io](https://start.spring.io/#!dependencies=solace,cloud-stream) and choose the "Solace PubSub+" and the "Cloud Stream" dependencies. If you used that link we already added them for you 😉.
-
-> aside negative
-> ⚠️  Choose versions 3.0.x or 3.1.x for the Spring Boot and version 17 or above for Java. You can refer to the Solace Spring Cloud projects page for information on dependencies and supported versions [here.](https://github.com/SolaceProducts/solace-spring-cloud/releases)
-
-You can leave everything else as the default or modify the Java version, package info, etc. as desired. 
-
-
+<p>Navigate to <a href="https://start.spring.io/#!dependencies=solace,cloud-stream" target="_blank">start.spring.io</a> and choose the &#34;Solace PubSub+&#34; and the &#34;Cloud Stream&#34; dependencies. If you used that link we already added them for you 😉.</p>
+<aside class="warning"><p> ⚠️  Choose versions 3.0.x or 3.1.x for the Spring Boot and version 17 or above for Java. You can refer to the Solace Spring Cloud projects page for information on dependencies and supported versions <a href="https://github.com/SolaceProducts/solace-spring-cloud/releases" target="_blank">here.</a></p>
+</aside>
+<p>You can leave everything else as the default or modify the Java version, package info, etc. as desired.</p>
 
 Click the "Generate" button which will download the project. You can then unzip it and import the project into your preferred Java IDE as a maven project. I'll be using [Spring Tool Suite 4 for Eclipse](https://spring.io/tools) in the screenshots.
 Your imported project should look like this: 
@@ -249,7 +245,7 @@ Another popular consuming pattern is using what are called **Consumer Groups**. 
 To do this you just need to specify a `group` on your input binding. 
 
 To configure this on our app that has the `myConsumer` Consumer function your config would look like this.
-```
+``` yaml
 spring:
   cloud:
     function:
@@ -364,10 +360,10 @@ For example, if we modify the `Consumer` from the previous section to take in a 
 ``` java
 @Bean
 public Consumer<Message<String>> myConsumer(){
-      return v -> {
+    return v -> {
         logger.info("Received: " + v.getPayload());
         logger.info("All Headers: " + v.getHeaders());
-      };
+    };
 }
 ```
 
@@ -377,11 +373,11 @@ Note that a list of common [Solace Headers are found in the Solace Binder docs](
 ``` java
 @Bean
 public Consumer<Message<String>> myConsumer(){
-      return v -> {
+    return v -> {
         logger.info("Received: " + v.getPayload());
         logger.info("Destination: " + v.getHeaders().get("solace_destination"));
         logger.info("TTL: " + v.getHeaders().get("solace_timeToLive"));
-      };
+    };
 }
 ```
 
@@ -395,9 +391,9 @@ For example, the code below sets a header named "Key" to the value "Value" on an
 ``` java
 @Bean
 Supplier<Message<String>> mySupplier(){
-	return () -> {
-		return MessageBuilder.withPayload("Hello Headers").setHeader("Key", "Value").build();
-	};
+    return () -> {
+        return MessageBuilder.withPayload("Hello Headers").setHeader("Key", "Value").build();
+    };
 }
 ```
 
@@ -424,12 +420,12 @@ And modify your `Consumer` function to print out the "Key" header:
 ``` java
 @Bean
 public Consumer<Message<String>> myConsumer() {
-  return v -> {
-    logger.info("Received myConsumer: " + v.getPayload());
-    logger.info("Destination: " + v.getHeaders().get("solace_destination"));
-    logger.info("TTL: " + v.getHeaders().get("solace_timeToLive"));
-    logger.info("My Custom Header: " + v.getHeaders().get("Key"));
-  };
+    return v -> {
+        logger.info("Received myConsumer: " + v.getPayload());
+        logger.info("Destination: " + v.getHeaders().get("solace_destination"));
+        logger.info("TTL: " + v.getHeaders().get("solace_timeToLive"));
+        logger.info("My Custom Header: " + v.getHeaders().get("Key"));
+    };
 }
 ```
 
@@ -683,7 +679,7 @@ Duration: 0:07:00
 
 Batch consumers are a feature that allows consuming messages in batches rather than individually. This feature is particularly useful when dealing with high-volume data processing scenarios where processing messages individually may introduce performance overhead.
 
-Batching of messages is applied only when the `spring.cloud.stream.bindings.<binding-name>.consumer.batch-mode` is set to true. The number of messages in a batch is dependent on the availability of messages in the queue and the timeout to receive messages from the queue.
+Batching of messages is applied only when the `spring.cloud.stream.bindings.`<`binding-name`>`.consumer.batch-mode` is set to true. The number of messages in a batch is dependent on the availability of messages in the queue and the timeout to receive messages from the queue.
 
 Other parameters that can control the batching are:
 
@@ -702,20 +698,20 @@ It should be noted that a batch that the binder creates is a collection of indiv
 ### Batch Consumer in action
 👀 Let's check it out! 
 ``` java 
-	@Bean
-	Consumer<Message<List<String>>> batchConsume() {
-		return batchMsg -> { // (1)
-			List<?> data = batchMsg.getPayload();
-			MessageHeaders headers = batchMsg.getHeaders();
-			List<?> dataHeaders = (List<?>) headers.get(SolaceBinderHeaders.BATCHED_HEADERS);
+@Bean
+Consumer<Message<List<String>>> batchConsume() {
+    return batchMsg -> { // (1)
+        List<?> data = batchMsg.getPayload();
+        MessageHeaders headers = batchMsg.getHeaders();
+        List<?> dataHeaders = (List<?>) headers.get(SolaceBinderHeaders.BATCHED_HEADERS);
 
-			log.info("Received Batch Size: " + data.size());
-			for (int i=0; i< data.size(); i++) {
-				log.info("Batch Headers: " + dataHeaders.get(i));
-				log.info("Batch Payload: " + new String((byte[]) data.get(i), StandardCharsets.UTF_8));
-			}
-		};
-	}
+        log.info("Received Batch Size: " + data.size());
+        for (int i=0; i< data.size(); i++) {
+            log.info("Batch Headers: " + dataHeaders.get(i));
+            log.info("Batch Payload: " + new String((byte[]) data.get(i), StandardCharsets.UTF_8));
+        }
+    };
+}
 ```
 
 The code above will receive batches of messages based on the batch settings set on the consumer on the solace binding in the application configuration.
@@ -753,7 +749,7 @@ spring:
 
 Now, go ahead and click on the publish button of "Try-Me" publisher 4 times. On the console, you should be able to see the messages were delivered in batches of 5+5+2. 
 
-``` java
+```
 2023-07-06T07:44:42.824+05:30  INFO 9858 --- [ool-12-thread-1] com.example.demo.DemoApplication         : 
 Received: Hello world!
 2023-07-06T07:44:42.845+05:30  INFO 9858 --- [ool-13-thread-1] com.example.demo.DemoApplication         : 
@@ -887,41 +883,41 @@ spring:
 ``` java
 @Bean
 public Function<Message<String>, String> myFunction() {
-        return v -> {
-            logger.info("Received: " + v);
+    return v -> {
+        logger.info("Received: " + v);
 
-            // Disable Auto-Ack
-            AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v);
-            ackCallback.noAutoAck();
+        // Disable Auto-Ack
+        AcknowledgmentCallback ackCallback = StaticMessageHeaderAccessor.getAcknowledgmentCallback(v);
+        ackCallback.noAutoAck();
 
-            // TODO Execute Business Logic + Maybe even pass to another thread?
-            // Use CorrelationID for easy business logic...
-            String cid = (String) v.getHeaders().get("solace_correlationId");
-            if (cid == null) {
-				cid = "none";
-			}
+        // TODO Execute Business Logic + Maybe even pass to another thread?
+        // Use CorrelationID for easy business logic...
+        String cid = (String) v.getHeaders().get("solace_correlationId");
+        if (cid == null) {
+            cid = "none";
+        }
             
-            // Acknowledge the Message!
-            try {
-                if (cid.equals("accept")) {
-                    logger.info("Accepting the Message");
-                    AckUtils.accept(ackCallback);
-                } else if (cid.equals("requeue")) {
-                    logger.info("Requeuing the Message");
-                    AckUtils.requeue(ackCallback);
-                    Thread.sleep(60000);
-                } else {
-                    logger.info("Rejecting the Message");
-                    AckUtils.reject(ackCallback);
-                    Thread.sleep(60000);
-                }
-            } catch (SolaceAcknowledgmentException e) {
-                logger.warn("Warning, exception occurred but message will be re-queued on broker and re-delivered", e);
-                return null; //Don't send an output message
+        // Acknowledge the Message!
+        try {
+            if (cid.equals("accept")) {
+                logger.info("Accepting the Message");
+                AckUtils.accept(ackCallback);
+            } else if (cid.equals("requeue")) {
+                logger.info("Requeuing the Message");
+                AckUtils.requeue(ackCallback);
+                Thread.sleep(60000);
+            } else {
+                logger.info("Rejecting the Message");
+                AckUtils.reject(ackCallback);
+                Thread.sleep(60000);
             }
+        } catch (SolaceAcknowledgmentException e) {
+            logger.warn("Warning, exception occurred but message will be re-queued on broker and re-delivered", e);
+            return null; //Don't send an output message
+        }
 
-            return "My Payload";
-        };
+        return "My Payload";
+    };
 }
 ```
 
@@ -1003,7 +999,7 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
 
 If your Maven BOM in the pom file does not include Spring Cloud Stream v3.2.5 (or higher) jar file, you can explicity add it to the dependencies section.
 
-```
+``` xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-stream</artifactId>
@@ -1015,11 +1011,11 @@ After the Retries have been exhausted the Cloud Stream framework will next send 
 
 Here is an example of registering binding-specific and global error handlers in the configuration.
 
-```
+``` yaml
 spring:
   cloud:
     function:
-      definition: myFunction
+      definition: myFunction;myFunction2;handleGlobalError;handleBindingError;
     stream:
       default:
         error-handler-definition: handleGlobalError
@@ -1035,15 +1031,30 @@ spring:
             default-retryable: true
             retryable-exceptions:
               java.lang.IllegalStateException: true
+          binder: solace-broker
+        myFunction2-in-0:       
+          destination: 'a/c/>'
+          group: clientAck
+          consumer:
+            max-attempts: 2
+            back-off-initial-interval: 1
+            back-off-multiplier: 3
+            default-retryable: true
+            retryable-exceptions:
+              java.lang.IllegalStateException: true
+          binder: solace-broker
+          ...
 ```
 
 Here is an example of binding-specific error handler function. If your binding specific error handler exits successfully then the binder will acknowledge/accept the message back to the broker, if an exception is thrown then the binder error handling process will kick in. Note that if you are using Client/Manual acknowledgements you can also use them in the binding specific error handler.
 
 ``` java
 @Bean
-public void handleError(ErrorMessage message) {
-    logger.info("Binding Specific Error Handler executing business logic for: " + message.toString());
-    logger.info("Exception is here: " + message.getPayload());
+public Consumer<ErrorMessage> handleBindingError() {
+    return message -> {
+        logger.info("Binding Specific Error Handler executing business logic for: " + message.toString());
+        logger.info("Original Message: " + message.getOriginalMessage());
+    }
 }
 ```
 
@@ -1051,8 +1062,11 @@ And here is an example of a global error channel, an error handling function tha
 
 ``` java
 @Bean
-public void handleNotificationErrorChannel(ErrorMessage message) {
-    logger.info("Global errorChannel received msg. NO BUSINESS LOGIC HERE! Notify ONLY!" + message.toString());
+public Consumer<ErrorMessage> handleGlobalError() {
+    return message -> {
+        logger.info("Global errorChannel received msg. NO BUSINESS LOGIC HERE! Notify ONLY!" + message.toString());
+        logger.info("Original Message: " + message.getOriginalMessage());
+    }
 }
 ```
 
@@ -1060,6 +1074,7 @@ public void handleNotificationErrorChannel(ErrorMessage message) {
 
 🛠 You can easily test this out be changing your `myFunction` to throw a RuntimeException like below:
 ``` java
+@Bean
 public Function<Message<String>, String> myFunction() {
     return v -> {
         logger.info("Received: " + v);
@@ -1078,6 +1093,26 @@ public Function<Message<String>, String> myFunction() {
 
 🛠 Go ahead and use the "Try-Me" tool to publish a message to the "a/b/c" topic. You should see that the binding specific error handler received the message. 
 
+🛠 You can easily test this out be changing your `myFunction2` to throw a RuntimeException like below:
+``` java
+@Bean
+public Function<Message<String>, String> myFunction2() {
+    return v -> {
+        logger.info("Received: " + v);
+
+        // Logic to Avoid infinite loop of message being re-delivered when testing error
+        // handling during codelab. DO NOT USE IN PRODUCTION CODE
+        if (true == (Boolean) v.getHeaders().get("solace_redelivered")) {
+            logger.warn("Exiting successfully to ACK msg and avoid infinite redelivieres");
+            return null;
+        }
+
+        throw new RuntimeException("Oh no!");
+    };
+}
+```
+
+🛠 Go ahead and use the "Try-Me" tool to publish a message to the "a/c/d" topic. You should see that the global error handler received the message. 
 
 **Don't send a message!**
 It is common to have a microservice that receives an event, processes it, and publishes an outbound event. But what if I don't want to send an output message!? The framework makes this easy, just `return null` and no outbound message will be published. 
@@ -1283,20 +1318,20 @@ This section will (might 😝) be expanded in the future, for now these are the 
 1. Write your code using Spring Cloud Function and keep your functions simple. Test your functions with unit tests that do not require the underlying message broker.
 1. Spring Cloud Stream does offer a test binder which is automatically included if you generate your microservice from [start.spring.io](https://start.spring.io). Check out the [Testing](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_testing) section of the Spring Cloud Stream reference guide for guidance on how to use it. This can be used to test simple binding configurations. 
 
-      ``` xml
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-stream</artifactId>
-        <scope>test</scope>
-        <classifier>test-binder</classifier>
-        <type>test-jar</type>
-      </dependency>
-      ```
+``` xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-test</artifactId>
+  <scope>test</scope>
+</dependency>
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-stream</artifactId>
+  <scope>test</scope>
+  <classifier>test-binder</classifier>
+  <type>test-jar</type>
+</dependency>
+```
 
 1. Keep in mind that the test binder will not be able to simulate the topic to queue mappings that occur with the Solace Binder & Solace PubSub+ Event Broker. Because of this you will want to run integration tests in a "real environment" that has an actual PubSub+ Event Broker. This is usually done by spinning up an Event Broker in a docker container or in [PubSub+ Cloud](https://console.solace.cloud/?utm_source=devrel) using the REST API.
 
