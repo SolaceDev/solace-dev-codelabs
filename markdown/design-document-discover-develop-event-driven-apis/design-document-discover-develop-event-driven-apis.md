@@ -4,7 +4,7 @@ id: design-document-discover-develop-event-driven-apis
 tags: workshop
 categories: Solace, Taxi, Event Portal
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/design-document-discover-develop-event-driven-apis
 
 # Be Real-Time: Design, Document, Discover and Develop Event-Driven APIs
@@ -12,6 +12,9 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## What you'll learn
 
 Duration: 0:01:00
+
+> aside negative
+> **Note that this Codelab uses Event Portal v1 which has been deprecated in favor of Event Portal v2. Please use the in-app samples, [PubSub+ Cloud Event Portal Fundamentals](https://training.solace.com/learn/course/external/view/elearning/373/pubsub-cloud-event-portal-fundamentals) course, and the [Solace Docs](https://docs.solace.com/Cloud/Event-Portal/event-portal-lp.htm) to get started.**
 
 Most organizations are adopting an event-driven architecture (EDA) to compete in a world where customer satisfaction requires real-time outcomes.
 

@@ -4,13 +4,16 @@ id: create-api-products-using-scs-and-ep
 tags: workshop,
 categories: Spring, Java, AsyncAPI, Event Portal
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/create-api-products-using-scs-and-ep
 
 # Creating Event API Products using Spring Cloud Stream, Event Portal and AsyncAPI
 
 ## Overview
 Duration: 0:01:00
+
+> aside negative
+> **Note that this Codelab uses Event Portal v1 which has been deprecated in favor of Event Portal v2. Please use the in-app samples, [PubSub+ Cloud Event Portal Fundamentals](https://training.solace.com/learn/course/external/view/elearning/373/pubsub-cloud-event-portal-fundamentals) course, and the [Solace Docs](https://docs.solace.com/Cloud/Event-Portal/event-portal-lp.htm) to get started.**
 
 If your requirement is to build modern real-time applications using event-driven architecture (EDA), this codelab is for you! 
 
