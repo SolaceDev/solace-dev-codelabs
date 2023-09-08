@@ -7,7 +7,7 @@ environments: Web
 status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-demo
 
-# Title of codelab goes here
+# SAP AEM Codelab
 
 ## What you'll learn: Overview
 
@@ -53,9 +53,12 @@ Add a link!
 
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
 
-## Custom Step 1
-## Custom Step 2
-## Custom Step 3
+## Day 1 - Setup Advanced Event Mesh
+## Day 2 - Event Portal Setup
+## Day 1 - Access UI5 Samples
+## Day 1 - SAP Workflow template
+## Day 1 - Event Enabled Integration flows
+## Day 1 - Event Enabled SAP 
 
 ## Takeaways
 
