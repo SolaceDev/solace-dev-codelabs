@@ -1,0 +1,18 @@
+{
+  "environment": "web",
+  "source": "slurm.md",
+  "format": "html",
+  "prefix": "../../",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-09-26T11:21:25+02:00",
+  "id": "",
+  "duration": 0,
+  "title": "Title of codelab goes here",
+  "author": "Iker Ortiz de Luzuriaga",
+  "summary": "",
+  "theme": "",
+  "status": null,
+  "category": null,
+  "tags": null,
+  "url": ""
+}
