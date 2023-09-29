@@ -54,11 +54,74 @@ Add a link!
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
 
 ## Day 1 - Setup Advanced Event Mesh
-## Day 2 - Event Portal Setup
-## Day 1 - Access UI5 Samples
-## Day 1 - SAP Workflow template
-## Day 1 - Event Enabled Integration flows
-## Day 1 - Event Enabled SAP 
+### Part 1 -  Event Mesh
+### Part 2 -  SAP simulator
+
+The SAP Cloud Application Programming Model (CAP) is a framework of languages, libraries, and tools for building enterprise-grade services and applications. It guides developers along a 'golden path' of proven best practices and a great wealth of out-of-the-box solutions to recurring tasks.
+CAP-based projects benefit from a primary focus on domain. Instead of delving into overly technical disciplines, we focus on accelerated development and safeguarding investments in a world of rapidly changing cloud technologies.
+
+For more information on SAP CAP, you can refer to the link : [SAP Cloud Application Programming Model](https://cap.cloud.sap/docs/)
+
+To showcase the integration capability of SAP CAP and AEM, we have created a CAP based Java microservice which will publish different SAP business object events into your AEM instance.
+This application can be deployed in your SAP CloudFoundry space.
+
+#### Step 1 : CloudFoundry CLI installation
+To start with, we will be installing the CloudFoundry CLI for the deployment process.
+Follow the steps mentioned over here [Installing the cf CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) for detailed instructions on this.
+
+#### Step 2 : Downloading the deployables artefacts
+Download the following files artefact files and save them in the same directory:
+- capm-erp-simulation-exec.jar : [https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar)
+- manifest.yml : [https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml)
+
+#### Step 3 : Login to CloudFoundry space
+You can log in to the SAP CloudFoundry space in your account as below :
+
+- Use the command : `cf login` to log in, which will prompt for your SAP login credentials.
+- Once authenticated, the details of the default cloudfoundry space will be displayed.
+
+#### Step 4 : Deploying the SAP Simulator application
+- Navigate to the directory where the above deployable artefact files are saved.
+- Run the command `cf push` which will upload the jar file and use the manifest.yml for properties. **Note : this command will take some time to completely execute as it uploads the jar deployable and also start the application.**
+- Once the command is completely executed, run the command `cf apps` to view a listing of the apps in your cloudfoundry space
+- Verify that the app **capm-erp-simulation** is deployed and started
+
+#### Step 5 : Accessing the SAP Simulator application
+- Navigate to the Cloud Foundry environment in your SAP BTP Cockpit
+- You should see a screen like below :
+  ![Cloud Foundry Space](img/cf_space.png)
+- Click on the application name : **capm-erp-simulation** and enter the application overview screen.
+  ![capm-erp-simulation-Overview](img/capm-erp-simulator-overview.png)
+- Click on the application route as highlighted below. Note : this route url will differ from for different SAP BTP accounts.
+![capm-erp-simulation-Overview](img/capm-erp-simulator-overview-highlighted.png)
+
+#### Step 6 : Connecting to SAP AEM and running the simulator
+- As you click on the above application route url, you will be redirected to the simulator screen as below
+![Simulator connection screen](img/simulator-connection-screen.png)
+Here you can connect to your SAP AEM instance to publish events.
+- The connection parameters for the simulator can be captured from below :
+  ![Broker console connect screen](img/brokerconsole_connect.png)
+  ![Console-Connect - Java Spring](img/brokerconsole_connect_creds_java.png)
+  Enter the appropriate value as specified below :
+- Host URL : Public Endpoint
+- VPN Name : Message VPN
+- Username : Username
+- Password : Password
+  ![Console-Connect - Creds highlighted](img/brokerconsole_connect_creds_java_highlighted.png)
+- Once the broker is successfully connected, you will be displayed a screen as below :
+  ![Simulator connected screen](img/simulator-connected-screen.png)
+- You can choose which events to simulate and its frequency by using the sliders. As you change a schedule, the submit button in the bottom will be enabled
+  ![Simulator scheduling](img/simulator-scheduling.png)
+- In case you want to disable any of the events, then pull the slider to **0** and click submit and the event will be disabled immediately
+  ![Simulator disabling](img/simulator-disabling.png)
+
+
+## Day 2 - Event portal content and UI5 Cards
+### Part -1 - Event Portal Setup
+### Part -2 - Access UI5 Samples
+## Day 3 - Deploy SAP BPA Processes
+## Day 4 - Event Enabled Integration flows
+## Day 5 - Event Enabled SAP objects
 
 ## Takeaways
 
