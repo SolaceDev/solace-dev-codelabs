@@ -41,6 +41,9 @@ Duration: 0:5:00
 ### Docker
 This codelab relies on the use of Docker. If you do not already have Docker installed, you will first need to do that. [Docker Desktop](https://www.docker.com/products/docker-desktop/) can be installed  for ease of use. At least 4 GiB and 2 cores should be made available for Docker. If more physical resources are available, providing more may improve your experience (e.g. 8 GiB and 4 cores).
 
+> aside positive
+> For Kubernetes instructions, please refer to the `k8s` directory in the github repository referenced below
+
 ### Java
 
 This codelab relies on the features found in modern Java JRE version (Open JDK or Oracle JDK when appropriate license is available by user). For this demo you must have Java 16 or higher.
