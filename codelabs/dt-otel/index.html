@@ -77,9 +77,14 @@ OpenJDK 64-Bit Server VM (build 16+36-2231, mixed mode, sharing)
 <li><code>solace_config_keys.env</code></li>
 <li><code>.env</code> (file with environment variables used in a docker compose files)</li>
 <li><code>solace-publisher.jar</code> (command line Solace jms application for publishing of messages)</li>
-<li><code>solace-queue-receiver.jar</code> (command line Solace jms application for receiving of messages from a JMS Queue)</li>
+<li><code>solace-queue-receiver.jar</code> (command line Solace jms application for receiving of messages from a JMS Queue) «««&lt; Updated upstream</li>
 <li><code>opentelemetry-javaagent-all-{version}.jar</code> OpenTelemetry Java Instrumentation API</li>
-<li><code>solace-opentelemetry-jms-integration-{version}.jar</code></li>
+<li><code>solace-opentelemetry-jms-integration-{version}.jar</code> =======</li>
+<li><code>opentelemetry-javaagent.jar</code> OpenTelemetry Java Instrumentation API</li>
+<li><code>solace-opentelemetry-jms-integration-{version}.jar</code> <a href="https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.1.0/solace-opentelemetry-jms-integration-1.1.0.jar" target="_blank">Solace PubSub+ OpenTelemetry Integration API for JMS</a></li>
+</ul>
+<p>Stashed changes</p>
+<ul>
 <li><code>jms-auto-instrumentation-sampler-sources.jar</code> (Source code for the Solace jms application for publishing and receiving messages)</li>
 </ul>
 <p>To get access to the above resources, clone the repository as follows</p>
@@ -656,8 +661,8 @@ Do you want to continue (y/n)? y
 </ul>
 </aside>
 <pre><code language="language-bash" class="language-bash">[solace@dev solace-dt-demo]$ 
-java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar \
--Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar \
+java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent.jar \
+-Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.1.0.jar \
 -Dotel.propagators=solace_jms_tracecontext \
 -Dotel.exporter.otlp.endpoint=http://localhost:4317 \
 -Dotel.traces.exporter=otlp \
@@ -685,8 +690,8 @@ java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-al
 </ul>
 </aside>
 <pre><code language="language-bash" class="language-bash">[solace@dev solace-dt-demo]$ 
-java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent-all-1.19.0.jar \
--Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.0.0.jar \
+java -javaagent:&lt;absolute_path_to_the_jar_file&gt;/opentelemetry-javaagent.jar \
+-Dotel.javaagent.extensions=&lt;absolute_path_to_the_jar_file&gt;/solace-opentelemetry-jms-integration-1.1.0.jar \
 -Dotel.propagators=solace_jms_tracecontext \
 -Dotel.traces.exporter=otlp \
 -Dotel.metrics.exporter=none \

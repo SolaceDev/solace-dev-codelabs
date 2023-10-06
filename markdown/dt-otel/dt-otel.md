@@ -74,8 +74,8 @@ The [solace-dt-demo repository](https://github.com/TamimiGitHub/solace-dt-demo) 
 * `.env `(file with environment variables used in a docker compose files)
 * `solace-publisher.jar` (command line Solace jms application for publishing of messages)
 * `solace-queue-receiver.jar` (command line Solace jms application for receiving of messages from a JMS Queue)
-* `opentelemetry-javaagent-all-{version}.jar` OpenTelemetry Java Instrumentation API 
-* `solace-opentelemetry-jms-integration-{version}.jar` 
+* `opentelemetry-javaagent.jar` OpenTelemetry Java Instrumentation API 
+* `solace-opentelemetry-jms-integration-{version}.jar` [Solace PubSub+ OpenTelemetry Integration API for JMS](https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.1.0/solace-opentelemetry-jms-integration-1.1.0.jar)
 * `jms-auto-instrumentation-sampler-sources.jar` (Source code for the Solace jms application for publishing and receiving messages) 
 
 To get access to the above resources, clone the repository as follows
@@ -816,8 +816,8 @@ Additional context information will be **automatically** sent to the collector w
 
 ```bash
 [solace@dev solace-dt-demo]$ 
-java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all-1.19.0.jar \
--Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.0.0.jar \
+java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent.jar \
+-Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.1.0.jar \
 -Dotel.propagators=solace_jms_tracecontext \
 -Dotel.exporter.otlp.endpoint=http://localhost:4317 \
 -Dotel.traces.exporter=otlp \
@@ -849,8 +849,8 @@ The following command will
 
 ```bash
 [solace@dev solace-dt-demo]$ 
-java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent-all-1.19.0.jar \
--Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.0.0.jar \
+java -javaagent:<absolute_path_to_the_jar_file>/opentelemetry-javaagent.jar \
+-Dotel.javaagent.extensions=<absolute_path_to_the_jar_file>/solace-opentelemetry-jms-integration-1.1.0.jar \
 -Dotel.propagators=solace_jms_tracecontext \
 -Dotel.traces.exporter=otlp \
 -Dotel.metrics.exporter=none \
