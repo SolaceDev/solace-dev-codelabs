@@ -75,7 +75,7 @@ The [solace-dt-demo repository](https://github.com/TamimiGitHub/solace-dt-demo) 
 * `solace-publisher.jar` (command line Solace jms application for publishing of messages)
 * `solace-queue-receiver.jar` (command line Solace jms application for receiving of messages from a JMS Queue)
 * `opentelemetry-javaagent-all-{version}.jar` OpenTelemetry Java Instrumentation API 
-* `solace-opentelemetry-jms-integration-{version}.jar` [Solace PubSub+ OpenTelemetry Integration API for JMS](https://repo1.maven.org/maven2/com/solace/solace-opentelemetry-jms-integration/1.0.0/solace-opentelemetry-jms-integration-1.0.0.jar)
+* `solace-opentelemetry-jms-integration-{version}.jar` 
 * `jms-auto-instrumentation-sampler-sources.jar` (Source code for the Solace jms application for publishing and receiving messages) 
 
 To get access to the above resources, clone the repository as follows
@@ -125,9 +125,9 @@ The following command will download and launch all containers necessary for the 
 ###  Few notes to the code lab configuration
 The `.env` file contains several environment variables that are used within the `docker-compose.yaml` file and may need to be changed by user depends on the runtime environment: 
 
-* Solace Pub Sub Plus broker port `55557`
-* OpenTelemetry contribution repository collector docker image tag and version `otel/opentelemetry-collector-contrib:0.67.0`
-* Solace PubSub+ broker docker image tag and version `solace/solace-pubsub-standard:10.2`
+* Solace PubSub+ broker port `55557`
+* OpenTelemetry contribution repository collector docker image tag and version for `otel/opentelemetry-collector-contrib`
+* Solace PubSub+ broker docker image tag and version `solace/solace-pubsub-standard`
 
 ## Three Options for Config Management
 Duration: 0:03:00
