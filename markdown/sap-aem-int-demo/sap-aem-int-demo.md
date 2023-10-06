@@ -127,7 +127,7 @@ Here you can connect to your SAP AEM instance to publish events.
 
 ### Step 2a - Setup/configure SAP AEM
 - Create input queues for your integration flows:
-1. For AEMBusinessPartnerAdressCheck:
+1. For AEMBusinessPartnerAddressCheck:
 * CIBusinessPartnerChecker
 * CIBusinessPartnerCheckerDMQ
 * CIBusinessPartnerChecked (optional)
@@ -140,8 +140,21 @@ Here you can connect to your SAP AEM instance to publish events.
 * CILegacyAdapterInDMQ
 
 ### Step 2b - Setup/configure dependency services
+1. For AEMBusinessPartnerAddressCheck
+* Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/)
+2. For AEMSalesOrderNotification
+* You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
+3. For AEMLegacyOutputAdapter
+* The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system.
+* The actual flow doesn't require a working sftp destination as it's just being used to simulate a failure to demonstrate the retry and error handling capabilities of AEM.
+* The flow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual processing by a UI5 and Business Process Automation workflow.
+* If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint.
+
 ### Step 3 - Configure your integration flows
+
 ### Step 4 - Deploy your integration flows
+
+
 ## Day 5 - Event Enabled SAP objects
 
 ## Takeaways
