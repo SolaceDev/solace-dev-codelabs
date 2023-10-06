@@ -121,6 +121,27 @@ Here you can connect to your SAP AEM instance to publish events.
 ### Part -2 - Access UI5 Samples
 ## Day 3 - Deploy SAP BPA Processes
 ## Day 4 - Event Enabled Integration flows
+### Step 1 - Download and import the template integration flows
+- Download [AEMBusinessPartnerAddressCheck.zip](artifacts/cloud-integration-flows/AEMBusinessPartnerAddressCheck.zip), [AEMLegacyOutputAdapter.zip](artifacts/cloud-integration-flows/AEMLegacyOutputAdapter.zip) & [AEMSalesOrderNotification.zip](artifacts/cloud-integration-flows/AEMSalesOrderNotification.zip)
+- Import AEMBusinessPartnerAddressCheck.zip, AEMLegacyOutputAdapter.zip & AEMSalesOrderNotification.zip into your Integration Suite tenant
+
+### Step 2a - Setup/configure SAP AEM
+- Create input queues for your integration flows:
+1. For AEMBusinessPartnerAdressCheck:
+* CIBusinessPartnerChecker
+* CIBusinessPartnerCheckerDMQ
+* CIBusinessPartnerChecked (optional)
+* CIBusinessPartnerInvalid (optional)
+2. For AEMSalesOrderNotification
+* CISalesOrderNotification
+* CISalesOrderNotificationProcessed (optional)
+3. For AEMLegacyOutputAdapter
+* CILegacyAdapterIn
+* CILegacyAdapterInDMQ
+
+### Step 2b - Setup/configure dependency services
+### Step 3 - Configure your integration flows
+### Step 4 - Deploy your integration flows
 ## Day 5 - Event Enabled SAP objects
 
 ## Takeaways
