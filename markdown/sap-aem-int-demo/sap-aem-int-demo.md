@@ -67,7 +67,7 @@ This application can be deployed in your SAP CloudFoundry space.
 
 #### Step 1 : CloudFoundry CLI installation
 To start with, we will be installing the CloudFoundry CLI for the deployment process.
-Follow the steps mentioned over here [Installing the cf CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) for detailed instructions on this.
+Follow the steps mentioned over here [Installing the cf CLI](https://github.com/cloudfoundry/cli/wiki/V8-CLI-Installation-Guide) for detailed instructions on this.
 
 #### Step 2 : Downloading the deployables artefacts
 Download the following files artefact files and save them in the same directory:
