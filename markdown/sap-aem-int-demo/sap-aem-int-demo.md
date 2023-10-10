@@ -127,17 +127,46 @@ Here you can connect to your SAP AEM instance to publish events.
 
 ### Step 2a - Setup/configure SAP AEM
 Create input queues for your integration flows:
+[Go to Cluster Manager -> <your service> -> Manage -> Queues - to open the Broker UI]
 1. For AEMBusinessPartnerAddressCheck:
 	* CIBusinessPartnerChecker
+	![queue settings](img/CIBusinessPartnerChecker-queue-settings.png)
+	![queue settings pt2](img/CIBusinessPartnerChecker-queue-settings-pt2.png)
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CIBusinessPartnerChecker-queue-subs.png)
+		
 	* CIBusinessPartnerCheckerDMQ
+	![queue settings](img/CIBusinessPartnerCheckerDMQ-queue-settings.png)
 	* CIBusinessPartnerChecked (optional)
+	![queue settings](img/CIBusinessPartnerChecked-queue-settings.png) 
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CIBusinessPartnerChecked-queue-subs.png)
 	* CIBusinessPartnerInvalid (optional)
+	![queue settings](img/CIBusinessPartnerCheckedInvalid-queue-settings.png) 
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CIBusinessPartnerCheckedInvalid-queue-subs.png) 
+
 2. For AEMSalesOrderNotification
 	* CISalesOrderNotification
+	![queue settings](img/CISalesOrderNotification-queue-settings.png)
+	![queue settings pt2](img/CISalesOrderNotification-queue-settings-pt2.png)
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CISalesOrderNotification-queue-subs.png) 
+		
 	* CISalesOrderNotificationProcessed (optional)
+	![queue settings](img/CISalesOrderNotificationProcessed-queue-settings.png) 
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)  
+	
 3. For AEMLegacyOutputAdapter
 	* CILegacyAdapterIn
+	![queue settings](img/CILegacyAdapterIn-queue-settings.png)
+	![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+		*Add the following subscriptions to the queue
+		![queue subscriptions](img/CILegacyAdapterIn-queue-subs.png) 
+		
 	* CILegacyAdapterInDMQ
+	![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
 
 ### Step 2b - Setup/configure dependency services
 1. For AEMBusinessPartnerAddressCheck
