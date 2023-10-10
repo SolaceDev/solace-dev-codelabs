@@ -4,7 +4,7 @@ id: solace-battleship
 tags: workshop,udemy,microservices,
 categories: Java,Spring,Javascript
 environments: Web
-status: Published
+status: Hidden
 feedback link: http://github.com/solacetraining/solace-battleship/issues
 
 # Building Battleship with TypeScript, Java and Solace PubSub+
