@@ -4,7 +4,7 @@ id: sap-aem-int-demo
 tags: SAP, AEM, Event Portal, SAP BTP, CAPM
 categories:
 environments: Web
-status: Hidden
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-demo
 
 # SAP AEM Codelab
