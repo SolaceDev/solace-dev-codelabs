@@ -123,7 +123,7 @@ SAP Ui5 Integration cards present a new means to expose application content to t
 
 With the use of cards, you can group information, link to details, or present a summary. As a result, your users get direct insights without the need to leave the current screen and choose further navigation options.
 
-For more information on SAP Ui5 Integration cards, you can refer to the link: [UI Integration cards](link_here)
+For more information on SAP Ui5 Integration cards, you can refer to the link: [UI Integration cards](https://ui5.sap.com/test-resources/sap/ui/integration/demokit/cardExplorer/index.html)
 
 To showcase the simplicity of using SAP integration cards to visualize the power of the SAP Advanced Event Mesh, we have created a dashboard using HTML5 for each business scenario. We also made them easy to use. All you need to do is enter your broker details, click "Connect," and watch the business case come to life as events flow in. Each integration card that is displayed in the dashboard represents another tool at your fingertips to visualize your data. The cards are each subscribed to the various Topics in which you will send your events from your SAP System. Follow the steps below to set up your dashboard and get started.
 
@@ -134,20 +134,20 @@ Here is a portal where you can find all of the available dashboards that support
 - [DashBoard Portal](https://solacedemo-uf1dchbp.launchpad.cfapps.ca10.hana.ondemand.com/125692ff-95ad-4b2d-a216-fde644eef1c0.DashboardPortal.DashboardPortal-1.0.0/index.html)
 
 
-![Portal](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Portal_Dashboard.png?raw=true)
+![Portal](img/Portal_Dashboard.png)
 
 ### Step 2: Connect with Your Broker Details
 
 To connect with your broker details:
 
 - Open your broker and select the “connect” tab at the top.
-![BrokerDetails](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Find1.png?raw=true)
+![BrokerDetails](img/Broker_Credentials_Find1.png)
 - Then, under the “Solace Web Messaging” section, you will find the 4 inputs you need to connect your broker to the dashboard.
-![BrokerDetails](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Find2.png?raw=true)
+![BrokerDetails](img/Broker_Credentials_Find2.png)
 - Now, you can copy and paste each input into the fields at the top of the dashboard and then finally click “Connect”.
-![Dashboard](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Dashboard.png?raw=true)
+![Dashboard](img/Broker_Credentials_Dashboard.png)
 - If your credentials are entered correctly, you will get a “Success” message that will verify that you are connected properly to the dashboard. If you do not see a “Success” message, then try again and make sure your details are correct for each input.
-![Dashboard](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Connected_Dashboard.png?raw=true)
+![Dashboard](img/Broker_Connected_Dashboard.png)
 
 Repeat these steps for each dashboard.
 
