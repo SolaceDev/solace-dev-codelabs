@@ -119,6 +119,49 @@ Here you can connect to your SAP AEM instance to publish events.
 ## Day 2 - Event portal content and UI5 Cards
 ### Part -1 - Event Portal Setup
 ### Part -2 - Access UI5 Samples
+SAP Ui5 Integration cards present a new means to expose application content to the end user in a unified way. Depending on the use cases, cards can be easily embedded in a host environment, such as an application, SAP Build, dashboards, or any HTML page. A variety of card types can be configured by a simple JSON configuration (schema) without the need to write code for UI rendering. In this way, even users without programming skills are enabled to create new cards according to their specific needs. Cards are composite controls that follow a predefined structure and offer content in a specific context. Cards contain the most important information for a given object (usually a task or a list of business entities). You can use cards for presenting information, which can be displayed in flexible layouts that work well across a variety of screens and window sizes.
+
+With the use of cards, you can group information, link to details, or present a summary. As a result, your users get direct insights without the need to leave the current screen and choose further navigation options.
+
+For more information on SAP Ui5 Integration cards, you can refer to the link: [UI Integration cards](link_here)
+
+To showcase the simplicity of using SAP integration cards to visualize the power of the SAP Advanced Event Mesh, we have created a dashboard using HTML5 for each business scenario. We also made them easy to use. All you need to do is enter your broker details, click "Connect," and watch the business case come to life as events flow in. Each integration card that is displayed in the dashboard represents another tool at your fingertips to visualize your data. The cards are each subscribed to the various Topics in which you will send your events from your SAP System. Follow the steps below to set up your dashboard and get started.
+
+### Step 1: Choose the Business Case Dashboard
+
+Here is a portal where you can find all of the available dashboards that support the 5 business scenarios. Visit the link below and choose the dashboard that you want to see. Here you will also find additional documentation and helpful videos to get started with.
+
+- [DashBoard Portal](https://solacedemo-uf1dchbp.launchpad.cfapps.ca10.hana.ondemand.com/125692ff-95ad-4b2d-a216-fde644eef1c0.DashboardPortal.DashboardPortal-1.0.0/index.html)
+
+
+![Portal](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Portal_Dashboard.png?raw=true)
+
+### Step 2: Connect with Your Broker Details
+
+To connect with your broker details:
+
+- Open your broker and select the “connect” tab at the top.
+![BrokerDetails](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Find1.png?raw=true)
+- Then, under the “Solace Web Messaging” section, you will find the 4 inputs you need to connect your broker to the dashboard.
+![BrokerDetails](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Find2.png?raw=true)
+- Now, you can copy and paste each input into the fields at the top of the dashboard and then finally click “Connect”.
+![Dashboard](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Credentials_Dashboard.png?raw=true)
+- If your credentials are entered correctly, you will get a “Success” message that will verify that you are connected properly to the dashboard. If you do not see a “Success” message, then try again and make sure your details are correct for each input.
+![Dashboard](https://github.com/SolaceDev/solace-dev-codelabs/blob/add-codelab-sap-aem-int/markdown/sap-aem-int-demo/img/Broker_Connected_Dashboard.png?raw=true)
+
+Repeat these steps for each dashboard.
+
+### Step 3: Getting to Know Your Dashboard
+
+Each dashboard has different components and scenarios to showcase the capabilities of SAP Advanced Event Mesh. For example, in the Sales Order Dashboard, there is a card that is reading messages from a Dead Message queue. This showcases how error handling can be achieved. Furthermore, you can submit a message from that queue to trigger an SAP Process Automation flow with the click of a button. You'll also find different data visualization types, as well as functional visualizations that highlight integration with other parts of SAP BTP.
+
+### Troubleshooting
+
+Here are some troubleshooting tips:
+
+- Use the latest version of Chrome, and you can try opening the dashboard in “incognito” mode if you have issues with caching.
+- If you do not see the “Success” message at the top, then you are not connected. In case you entered your credentials correctly and still don’t see the message, try to refresh your browser to prompt the application to try your credentials again. You may need to refresh a couple of times to get the “Success” message.
+- If messages are being sent and the cards are not updating, right-click anywhere on the dashboard and click “inspect”. Then select the “console” tab and look at the logs. It may be the case that the payload format is off, or possibly that the events are flowing to the wrong topic. Error messages here should help.
 ## Day 3 - Deploy SAP BPA Processes
 ## Day 4 - Event Enabled Integration flows
 ### Step 1 - Download and import the template integration flows
