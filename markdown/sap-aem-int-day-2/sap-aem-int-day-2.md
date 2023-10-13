@@ -15,14 +15,20 @@ Duration: 0:05:00
 
 Day 2 of 5.
 Topics covered :
-- SAP EDA artefacts visualized using the Event Portal
-- UI5 cards in realtime
+
+SAP EDA artifacts visualized using the Event Portal
+- Explore the Event Portal and learn how to import objects.
+- Learn how to create a design so that your events can be maped and understood.
+
+SAP UI5 Integration cards displaying events in real time
+- Using the services provided in the SAP BTP, you will learn how to create visualizations for your data using eventing.
+- Learn how easy it is to bring your events to life.
 
 ## What you need: Prerequisites
 
 Duration: 0:07:00
 
-Enter environment setup & prerequisites here
+Complete all activities in day 2. You access and use the same broker you setup previously as well as the simulator push events.
 
 ## Step 1 - SAP EDA artefacts visualized
 
@@ -194,4 +200,4 @@ Duration: 0:07:00
 
 ![Soly Image Caption](img/soly.gif)
 
-Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
+Thank you for participating on Day 2. Today you learned how to import objects into the Event portal and also had a chance to visualize events coming from the simulator into your broker. We look forward to seeing you on Day 3 where you will begin to setup some SAP Integration Flows.
