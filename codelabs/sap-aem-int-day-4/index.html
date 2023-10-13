@@ -48,8 +48,44 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+      <google-codelab-step label="Takeaways" duration="90">
+        <p>✅  Understand concept of Dead Message Queus ✅  Understand how to use SAP BPA to process Dead Messages</p>
+<p>In the world of Event Driven Asynchronous messaging, occasionally an event will not be able to be processed by one of the subscribers. Sometimes you will hear customers referring to a &#34;poison message&#34;, something that cannot be processed due to the format of the message. Depending on your setup, you might decide to take advantage of the functionality of the Advanced Event Mesh to place messages in a Dead Message Queue. <a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Read more</a></p>
+<p>In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. In the iFlow you created on Day 3, we will essentially corrupt the name of the SFTP Server so that messages cannot be delivered. Once the iFlow attempts delivery of the message and is unsuccessful, the messages will be placed into a Queue (aka Dead Message Queue) for review/processing. The messages in this queue will remain there until they are reviewed and released back onto the broker for re-processing. To facilitate this operation, we have decided to take advantage of the SAP Business Process Automation service.</p>
+<p>There are several components to this scenario that work together to facilitate the review.</p>
+<p class="image-container"><img alt="AEM CLUSTER" src="img/5459955abc49fc86.jpg"></p>
+<p>The first component is the iFlow that you will have installed on Day 3. The first thing you will need to do is to &#34;corrupt&#34; the SFTP Server name so that the messages cannot be delivered to the SFTP Server.</p>
+<p><strong>Step 1</strong> - Modify this iFlow with the bad SFTP Server name and redeploy the iFlow. Once the iFlow is redployed, it will start to send messages to the DMQ. Once these messages arrive at the DMQ, you will start to see the Dead Message Integration Card get populated with messages.</p>
+<p><strong>Step 2</strong> – Configure the RDP on the broker where the SO_WF Queue will be located. Navigate to the main console and goto your cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.</p>
+<p class="image-container"><img alt="BPA-3" src="img/5d17a9489e9542bf.jpg"></p>
+<p>From this screen, you will select the manage option at the top.</p>
+<p class="image-container"><img alt="BPA-4" src="img/b80fb424669f69fc.jpg"></p>
+<p>You will then select &#34;Queues&#34; towards the middle of the screen. Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker so you will see a much different display with many options.</p>
+<p class="image-container"><img alt="BPA-5" src="img/d3164cb9ed25806.jpg"></p>
+<p class="image-container"><img alt="BPA-6" src="img/cede29c1e18daa64.jpg"></p>
+<p>On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the +Queue option.</p>
+<p class="image-container"><img alt="BPA-7" src="img/58ec93762d861d09.jpg"></p>
+<p>The name of the Queue we will create is &#34;SO_WF&#34;...press &#34;Create&#34;.</p>
+<p class="image-container"><img alt="BPA-8" src="img/6d828063f7aee887.jpg"></p>
+<p>Now you will create a subscription to attract the correct entries into this Queue. The name of the subscription is &#34;sap.com/salesorder/v1/rejected&#34;.</p>
+<p class="image-container"><img alt="BPA-9" src="img/3ecdc905acbddbb.jpg"></p>
+<p>Next step to create the Rest Delivery Point and associated components. Navigate to the clients tab as shown on the left and then click the + Rest Delivery Point Button.</p>
+<p class="image-container"><img alt="BPA-10" src="img/250beb2bbb27b1f5.jpg"></p>
+<p>The name of the RDP is &#34;RDP1&#34;.</p>
+<p class="image-container"><img alt="BPA-11" src="img/207e0b27c29bf87b.jpg"></p>
+<p>You will now create a Rest Consumer that will be the target for your Events. Click the + Rest Consumer.</p>
+<p class="image-container"><img alt="BPA-12" src="img/26ba5ebc9981cd13.jpg"></p>
+<p>Enter &#34;SO_WF_REST_CONSUMER&#34; and press &#34;Create&#34;</p>
+<p class="image-container"><img alt="BPA-13" src="img/b1463c990f21fb17.jpg"></p>
+<p>This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it&#39;s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit...specifically the Client ID and the Token URL.</p>
+<p class="image-container"><img alt="BPA-14" src="img/f5e32c7e7ffea52f.jpg"></p>
+<p>Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the &#34;+Queue Binding&#34;.</p>
+<p class="image-container"><img alt="BPA-15" src="img/66f82447ff9822e1.jpg"></p>
+<p>From the dropdown, select the previously created Queue &#34;SO_WF&#34;.</p>
+<p class="image-container"><img alt="BPA-16" src="img/454d538d9ecdb714.jpg"></p>
+<p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value &#34;/workflow/rest/v1/workflow-instances&#34;</p>
+<p class="image-container"><img alt="BPA-17" src="img/c4526ddbad053dea.jpg"></p>
+<p>At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them says &#34;Down&#34;, you will need to TroubleShoot, go back and double check your settings. There is also a Stats link that you can use to sometimes see the Error Messages.</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
