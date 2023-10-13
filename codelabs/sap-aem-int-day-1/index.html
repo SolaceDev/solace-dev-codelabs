@@ -29,20 +29,72 @@
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-day-1">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Day 1 of 5. Topics covered :</p>
+        <h2 is-upgraded>Problem Statement</h2>
+<h3 is-upgraded>Opportunity to EDA Enable your ERP Environment</h3>
 <ul>
-<li>Setup AEM Services</li>
-<li>Build an event mesh</li>
-<li>Deploy SAP CAP based Simulator on CloudFoundry</li>
-<li>Test the Simulator and publish SAP objects to the Event Mesh</li>
+<li>Would you like clarity on how to keep the core clean with BTP and Event Driven Architecture?</li>
+<li>Would you like a prescriptive approach to building extensions with BTP?</li>
+<li>Have you heard the term Enterprise Event Mesh?</li>
+<li>Have you ever considered the potential outcome of your ERP operating in real time?</li>
+<li>Have you considered the possibility that batch jobs and out of sync data stores could be a thing of the past?</li>
+<li>Have you considered the implication of starting to become event driven?</li>
+</ul>
+<h3 is-upgraded>Scenarios where customers are starting with EDA</h3>
+<ul>
+<li>Do you provide an amazon like customer experience where all order status changes are proactively sent to your customers when their order has been delayed, cancelled or shipped early?</li>
+<li>Do you notify your service technicians when they have a new high priority work order?</li>
+<li>How do you distribute master data changes to both SAP and non-SAP applications in real time to avoid costly manual rework? (for example GL Accounts, Customer, Cost Center, etc...)</li>
+<li>Can you react in real time to employee changes like promotions, transfers, onboarding activities,off boarding, etc...(e.g. removing access for employees once terminated across all applications and systems)</li>
+<li>As part of your adoption and rollout of Integration Suite or as part of your PI/PO move strategy, are you adopting best practices for event driven integration scenarios?</li>
+<li>Are you actively triggering microservices based on Events from S/4 or ECC? (e.g. CAPM services)</li>
+<li>Have you considered feeding your Datasphere (or other Analytics Platforms ) environment with real time S/4 or ECC Events?</li>
+<li>As part of SAP Rise, are you aware that there are hundreds of events out of the Box with S/4?</li>
+</ul>
+<h2 is-upgraded>Workshop Scenarios</h2>
+<h3 is-upgraded>Scenario 1 – Customer Experience</h3>
+<p><strong>Question</strong>: How can we use EDA to actively and selectively push relevant and timely events out to the Enterprise? <strong>For Example</strong>: A customer orders a new pair of shoes, and they will ship late, how will we notify the customer about this update. <img alt="Workshop Scenario-1" src="img/694ee51737b0744c.png"></p>
+<h3 is-upgraded>Scenario 2 – Customer Master Data Change</h3>
+<p><strong>Question</strong>: How can we use EDA to actively and selectively push any and all master data changes to the entire enterprise? <strong>For Example</strong>: Customer changes their address information. <img alt="Workshop Scenario-1" src="img/a0cbaebd567d1e8e.png"></p>
+<h2 is-upgraded>Workshop structure</h2>
+<p>For logistics and ease of delivery, this workshop has been divided into 5 half-days and this covers day 1. It describes the below topics :</p>
+<ul>
+<li>Setting up of  AEM Services</li>
+<li>Building an Event Mesh</li>
+<li>Deploying a SAP CAP based Simulator on CloudFoundry</li>
+<li>Testing the Simulator and publishing SAP objects to the Event Mesh</li>
 </ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
-        <p>Enter environment setup &amp; prerequisites here</p>
-<iframe class="embedded-iframe" src="https://codepen.io/tzoght/embed/yRNZaP"></iframe>
+      <google-codelab-step label="What you need: Prerequisites" duration="0">
+        <p>You will need the following resources prior to the commencement of the workshop :</p>
+<ol type="1">
+<li>CPEA Contract in place</li>
+<li>Approximately 5K of CPEA credits available to activate 2 AEM brokers for 4 weeks <ul>
+<li>Please refer to the following link to activate the service should you need assistance : <a href="https://drive.google.com/file/d/1IWsCTKQDZX6_BL0K35KOQJPPZY4oWwTs/view?usp=drive_link" target="_blank">Enable AEM in BTP</a></li>
+</ul>
+</li>
+<li>Signed ASAPIO trial agreement : <a href="https://protect-us.mimecast.com/s/g1YTCR6nxjIrnKJri9FGqr?domain=asapio.com/" target="_blank">ASAPIO Store - Evaluation Licenses - ASAPIO</a><ul>
+<li>ASAPIO Plugin to be downloaded and installed prior to the workshop</li>
+</ul>
+</li>
+<li>SAP Build Process Automation (Free Tier Available) <ul>
+<li>Access to SAP WorkZone</li>
+</ul>
+</li>
+<li>Access to Integration Suite (Free Tier Available) <ul>
+<li>Integration Suite Activated prior to the workshop</li>
+</ul>
+</li>
+<li>Access and ability to change ERP Environment</li>
+<li>A BTP Resource who has the appropriate authorizations to activate/use the relevant BTP Services. (E.g. Advanced Event Mesh, SAP Bus. Process Automation and Integration Suite)</li>
+<li>ASAPIO Plugin to be downloaded and installed prior to the workshop. This will be made available as transport that will need to be installed once the Agreement is signed, link on previous page)</li>
+<li>Authorization for your development SAP Landscape to send events to the AEM Service.</li>
+<li>SAP Build Process Automation – a resource who is familiar with Building Processes/Workflows</li>
+<li>Integration Suite – a resource who is familiar with building iFlows and has the necessary authorizations to deploy new artifacts</li>
+<li>Relevant Functional Resources who might be responsible for the Sales Order, Business Partner, GL, Material Master or Notification Objects within SAP, so they can fully appreciate the art of the possible once these objects are event enabled.</li>
+</ol>
 
 
       </google-codelab-step>
@@ -130,23 +182,59 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
 </ul>
 <h2 is-upgraded>2 : Connecting to SAP AEM and running the simulator</h2>
 <ul>
-<li>As you click on the above application route url, you will be redirected to the simulator screen as below <img alt="Simulator connection screen" src="img/c6759297a02c87fc.png"> Here you can connect to your SAP AEM instance to publish events.</li>
-<li>The connection parameters for the simulator can be captured from below : <img alt="Broker console connect screen" src="img/3e8e66d3a1fcf752.png"><img alt="Console-Connect - Java Spring" src="img/f8a81cec5a7fb67e.png"> Enter the appropriate value as specified below :</li>
+<li>As you click on the above application route url, you will be redirected to the simulator screen as below <img alt="Simulator connection screen" src="img/c6759297a02c87fc.png"> Here you can connect to your SAP AEM instance to publish events. <aside class="warning"><p> As long as both of your SAP AEM services are connected to the event mesh, messages will flow freely between the two of them. Due to this intelligent routing, you can connect the simulator to either of your AEM services created earlier.</p>
+</aside>
+</li>
+<li>The connection parameters for the simulator can be captured from below : <img alt="Broker console connect screen" src="img/8c6dff9e40c07cf0.png"><img alt="Console-Connect - Java Spring" src="img/caac8dd1bbf0db04.png"> Enter the appropriate value as specified below :</li>
 <li>Host URL : Public Endpoint</li>
 <li>VPN Name : Message VPN</li>
 <li>Username : Username</li>
-<li>Password : Password <img alt="Console-Connect - Creds highlighted" src="img/76bb965d88c4bdd.png"></li>
+<li>Password : Password <img alt="Console-Connect - Creds highlighted" src="img/1b8c31e55f67d4e9.png"></li>
 <li>Once the broker is successfully connected, you will be displayed a screen as below : <img alt="Simulator connected screen" src="img/6625ffc92d379ca9.png"></li>
 <li>You can choose which events to simulate and its frequency by using the sliders. As you change a schedule, the submit button in the bottom will be enabled <img alt="Simulator scheduling" src="img/351c71924c528784.png"></li>
 <li>In case you want to disable any of the events, then pull the slider to <strong>0</strong> and click submit and the event will be disabled immediately <img alt="Simulator disabling" src="img/540804a93303a315.png"></li>
 </ul>
 <h2 is-upgraded>3 : Test the incoming events</h2>
+<p>You can easily test the simulator by using the <strong>Cluster Manager - Try-Me</strong> as below: &gt; aside negative &gt; As mentioned earlier due to the intelligent routing in the event mesh, you can connect the simulator and try-me to either of the two SAP AEM services in the event mesh and see the messages flowing freely. <img alt="Cluster Manager-try-me" src="img/f8b7106ae89d716.png"></p>
+<ul>
+<li>Click on the <strong>Connect</strong> button in the <strong>Subscriber</strong> side of the panel as below : <img alt="Cluster Manager-try-me-Subscriber-highlighted" src="img/9102cecc05655040.png"></li>
+<li>Add topic subscription(s) to view incoming messages on the topic as below : <img alt="Cluster Manager-try-me-Subscriber-subscriptions-highlighted" src="img/3d87f378af7bb0de.png"></li>
+<li>You can use the below topic structures for different event types :<ul>
+<li><strong>Sales Order</strong> : <ul>
+<li>Create : <code>sap.com/salesorder/create/></code></li>
+<li>Change : <code>sap.com/salesorder/change/></code></li>
+</ul>
+</li>
+<li><strong>Business Partner</strong> : <ul>
+<li>Create : <code>sap.com/businesspartner/create/></code></li>
+<li>Change : <code>sap.com/businesspartner/change/></code></li>
+</ul>
+</li>
+<li><strong>Chart of Accounts</strong> : <ul>
+<li>Create : <code>sap.com/chartofaccounts/create/></code></li>
+<li>Change : <code>sap.com/chartofaccounts/change/></code></li>
+</ul>
+</li>
+<li><strong>Material Master</strong> : <ul>
+<li>Create : <code>sap.com/material/create/></code></li>
+<li>Change : <code>sap.com/material/change/></code></li>
+</ul>
+</li>
+<li><strong>Notifications</strong> : <ul>
+<li>Create : <code>sap.com/notification/create/></code></li>
+<li>Change : <code>sap.com/notification/change/></code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>As the simulator publishes events to the broker you should see events appearing in the subscribed topic(s)</li>
+</ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+        <p>✅ Introduction to the workshop<br> ✅ Understanding how to create AEM services ✅ Set up an Event Mesh<br> ✅ Deploy the SAP CAPM based simulator in CloudFoundry ✅ Testing the simulator and publishing events to the Event Mesh</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 

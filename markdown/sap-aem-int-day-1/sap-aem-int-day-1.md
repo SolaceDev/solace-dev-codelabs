@@ -13,22 +13,65 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 Duration: 0:05:00
 
+### Problem Statement
 
-Day 1 of 5.
-Topics covered :
-- Setup AEM Services
-- Build an event mesh 
-- Deploy SAP CAP based Simulator on CloudFoundry
-- Test the Simulator and publish SAP objects to the Event Mesh
+#### Opportunity to EDA Enable your ERP Environment
+* Would you like clarity on how to keep the core clean with BTP and Event Driven Architecture?
+* Would you like a prescriptive approach to building extensions with BTP?
+* Have you heard the term Enterprise Event Mesh?
+* Have you ever considered the potential outcome of your ERP operating in real time?
+* Have you considered the possibility that batch jobs and out of sync data stores could be a thing of the past?
+* Have you considered the implication of starting to become event driven?
+
+#### Scenarios where customers are starting with EDA
+* Do you provide an amazon like customer experience where all order status changes are proactively sent to your customers when their order has been delayed, cancelled or shipped early?
+* Do you notify your service technicians when they have a new high priority work order?
+* How do you distribute master data changes to both SAP and non-SAP applications in real time to avoid costly manual rework? (for example GL Accounts, Customer, Cost Center, etc…)
+* Can you react in real time to employee changes like promotions, transfers, onboarding activities,off boarding, etc…(e.g. removing access for employees once terminated across all applications and systems)
+* As part of your adoption and rollout of Integration Suite or as part of your PI/PO move strategy, are you adopting best practices for event driven integration scenarios?
+* Are you actively triggering microservices based on Events from S/4 or ECC? (e.g. CAPM services)
+* Have you considered feeding your Datasphere (or other Analytics Platforms ) environment with real time S/4 or ECC Events?
+* As part of SAP Rise, are you aware that there are hundreds of events out of the Box with S/4?
+
+### Workshop Scenarios
+
+#### Scenario 1 – Customer Experience
+**Question**: How can we use EDA to actively and selectively push relevant and timely events out to the Enterprise?
+**For Example**: A customer orders a new pair of shoes, and they will ship late, how will we notify the customer about this update.
+![Workshop Scenario-1](img/workshop-scenario-1.png)
+
+#### Scenario 2 – Customer Master Data Change
+**Question**: How can we use EDA to actively and selectively push any and all master data changes to the entire enterprise?
+**For Example**: Customer changes their address information.
+![Workshop Scenario-1](img/workshop-scenario-2.png)
+
+### Workshop structure
+For logistics and ease of delivery, this workshop has been divided into 5 half-days and this covers day 1. It describes the below topics :
+- Setting up of  AEM Services
+- Building an Event Mesh 
+- Deploying a SAP CAP based Simulator on CloudFoundry
+- Testing the Simulator and publishing SAP objects to the Event Mesh
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+You will need the following resources prior to the commencement of the workshop : 
 
-Enter environment setup & prerequisites here
-
-
-![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
+1. CPEA Contract in place
+2. Approximately 5K of CPEA credits available to activate 2 AEM brokers for 4 weeks
+   - Please refer to the following link to activate the service should you need assistance : [Enable AEM in BTP](https://drive.google.com/file/d/1IWsCTKQDZX6_BL0K35KOQJPPZY4oWwTs/view?usp=drive_link)
+3. Signed ASAPIO trial agreement : [ASAPIO Store - Evaluation Licenses - ASAPIO](https://protect-us.mimecast.com/s/g1YTCR6nxjIrnKJri9FGqr?domain=asapio.com/)
+   - ASAPIO Plugin to be downloaded and installed prior to the workshop
+4. SAP Build Process Automation (Free Tier Available)
+   - Access to SAP WorkZone
+5. Access to Integration Suite (Free Tier Available)
+   - Integration Suite Activated prior to the workshop
+6. Access and ability to change ERP Environment
+7. A BTP Resource who has the appropriate authorizations to activate/use the relevant BTP Services. (E.g. Advanced Event Mesh, SAP Bus. Process Automation and Integration Suite)
+8. ASAPIO Plugin to be downloaded and installed prior to the workshop. This will be made available as transport that will need to be installed once the Agreement is signed, link on previous page)
+9. Authorization for your development SAP Landscape to send events to the AEM Service.
+10. SAP Build Process Automation – a resource who is familiar with Building Processes/Workflows
+11. Integration Suite – a resource who is familiar with building iFlows and has the necessary authorizations to deploy new artifacts
+12. Relevant Functional Resources who might be responsible for the Sales Order, Business Partner, GL, Material Master or Notification Objects within SAP, so they can fully appreciate the art of the possible once these objects are event enabled.
 
 ## Step 1 - Create AEM Services
 In this task, you will be creating two Enterprise AEM services, meshing them, and verifying your mesh health.
@@ -245,7 +288,10 @@ You can log in to the SAP CloudFoundry space in your account as below :
 
 - As you click on the above application route url, you will be redirected to the simulator screen as below
   ![Simulator connection screen](img/simulator-connection-screen.png)
-  Here you can connect to your SAP AEM instance to publish events.
+  Here you can connect to your SAP AEM instance to publish events. 
+    > aside negative
+    > As long as both of your SAP AEM services are connected to the event mesh, messages will flow freely between the two of them.
+    > Due to this intelligent routing, you can connect the simulator to either of your AEM services created earlier.
 - The connection parameters for the simulator can be captured from below :
   ![Broker console connect screen](img/brokerconsole_connect.png)
   ![Console-Connect - Java Spring](img/brokerconsole_connect_creds_java.png)
@@ -266,15 +312,42 @@ You can log in to the SAP CloudFoundry space in your account as below :
 
 ### 3 : Test the incoming events
 
+You can easily test the simulator by using the **Cluster Manager - Try-Me** as below:
+    > aside negative
+    > As mentioned earlier due to the intelligent routing in the event mesh, you can connect the simulator and try-me to either of the two SAP AEM services in the event mesh and see the messages flowing freely.
+![Cluster Manager-try-me](img/cluster-manager-tryme.png)
+- Click on the **Connect** button in the **Subscriber** side of the panel as below :
+![Cluster Manager-try-me-Subscriber-highlighted](img/cluster-manager-try-me-subscriber-highlighted.png)
+- Add topic subscription(s) to view incoming messages on the topic as below :
+![Cluster Manager-try-me-Subscriber-subscriptions-highlighted](img/cluster-tryme-connected-subscriptions-highlighted.png)
+- You can use the below topic structures for different event types : 
 
+  - **Sales Order** :
+    - Create : ```sap.com/salesorder/create/>```
+    - Change : ```sap.com/salesorder/change/>```
+  - **Business Partner** :
+    - Create : ```sap.com/businesspartner/create/>```
+    - Change : ```sap.com/businesspartner/change/>```
+  - **Chart of Accounts** :
+    - Create : ```sap.com/chartofaccounts/create/>```
+    - Change : ```sap.com/chartofaccounts/change/>```
+  - **Material Master** :
+    - Create : ```sap.com/material/create/>```
+    - Change : ```sap.com/material/change/>```
+  - **Notifications** :
+    - Create : ```sap.com/notification/create/>```
+    - Change : ```sap.com/notification/change/>```
+- As the simulator publishes events to the broker you should see events appearing in the subscribed topic(s)
 
 ## Takeaways
 
 Duration: 0:07:00
 
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3>   
+✅ Introduction to the workshop   
+✅ Understanding how to create AEM services
+✅ Set up an Event Mesh   
+✅ Deploy the SAP CAPM based simulator in CloudFoundry
+✅ Testing the simulator and publishing events to the Event Mesh
 
 ![Soly Image Caption](img/soly.gif)
 
