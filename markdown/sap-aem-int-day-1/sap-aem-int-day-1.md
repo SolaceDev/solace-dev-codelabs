@@ -7,7 +7,7 @@ environments: Web
 status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-day-1
 
-# Event Enable SAP Using SAP Advanced Event Mesh
+# Event Enable SAP Using SAP Advanced Event Mesh - Day 1
 
 ## What you'll learn: Overview
 
