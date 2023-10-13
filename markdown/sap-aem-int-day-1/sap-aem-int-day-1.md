@@ -343,11 +343,11 @@ You can easily test the simulator by using the **Cluster Manager - Try-Me** as b
 
 Duration: 0:07:00
 
-✅ Introduction to the workshop   
-✅ Understanding how to create AEM services
-✅ Set up an Event Mesh   
-✅ Deploy the SAP CAPM based simulator in CloudFoundry
-✅ Testing the simulator and publishing events to the Event Mesh
+✅ Introduction to the workshop \
+✅ Understanding how to create AEM services \
+✅ Set up an Event Mesh \
+✅ Deploy the SAP CAPM based simulator in CloudFoundry \
+✅ Testing the simulator and publishing events to the Event Mesh \
 
 ![Soly Image Caption](img/soly.gif)
 
