@@ -153,11 +153,11 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 2a. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
 > This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
-> a) Storing the original event payload in an environment variable.
-> b) Populating the DQM request payload with the addresses in the input event.
-> c) Invoking the DQM service over REST and
-> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.
-> e) Merging any corrected addresses back into the original payload.
+> a) Storing the original event payload in an environment variable.<br>
+> b) Populating the DQM request payload with the addresses in the input event.<br>
+> c) Invoking the DQM service over REST and<br>
+> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br>
+> e) Merging any corrected addresses back into the original payload.<br>
 > f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
 > `sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
 
@@ -210,6 +210,10 @@ TODO
 
 
 4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
+- Hit configure at the top right and fill in the details to connect to your AEM broker service:
+![AEM service configuration pt1](img/CIAEMLegacyOutputAdapterConfiguration.png)
+![AEM service configuration pt2](img/CIAEMLegacyOutputAdapterConfiguration-pt2.png)
+- Then hit deploy at the bottom right.
 
 4c. Check that your flow was deployed successfully and fix if necessary.
 - Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
