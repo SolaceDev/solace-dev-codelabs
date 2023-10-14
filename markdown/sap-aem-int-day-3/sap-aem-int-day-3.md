@@ -9,6 +9,8 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 # Event Enable SAP Using SAP Advanced Event Mesh - Day 3
 
+Overall Duration: 2:20:00
+
 ## What you'll learn: Overview
 
 Duration: 0:01:00
@@ -20,7 +22,7 @@ Topics covered :
 
 ## What you need: Prerequisites
 
-Duration: 0:10:00
+Duration: 0:09:00
 
 - Complete all activities in day 1 & 2. You access and use the same broker you setup previously as well as the simulator push events.
 - Have access to an active Integration Suite Cloud Integration tenant.
