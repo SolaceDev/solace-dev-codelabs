@@ -140,7 +140,7 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 ![Manage Keystore](img/CIManageKeystore.png)
 > See [this stackexchange post](https://security.stackexchange.com/questions/70528/how-to-get-ssl-certificate-of-a-mail-server) if you need help with finding and [this article](https://help.sap.com/docs/cloud-integration/sap-cloud-integration/uploading-certificate?locale=en-US) for help with importing the right CA certificate for your email server in Integration Suite.
 
-2. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
+2a. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
 > This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br> 
 > a) Storing the original event payload in an environment variable.
@@ -151,8 +151,16 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 > f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
 > `sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
 
+2b. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
 
-## 5 - Deploy your integration flows
+3a. Let's take a look at the AEMSalesOrderNotification iflow:
+
+3b. Configuring and deploying  the AEMSalesOrderNotification iflow:
+
+4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
+
+4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
+
 
 ## Takeaways
 

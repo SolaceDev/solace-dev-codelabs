@@ -11,7 +11,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
-Duration: 0:05:00
+Duration: 0:01:00
 
 Day 3 of 5.
 Topics covered :
@@ -20,7 +20,7 @@ Topics covered :
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+Duration: 0:10:00
 
 - Complete all activities in day 1 & 2. You access and use the same broker you setup previously as well as the simulator push events.
 - Have access to an active Integration Suite Cloud Integration tenant.
@@ -30,6 +30,8 @@ Duration: 0:07:00
 
 
 ## Step 1 - Set up Integration Suite and import Event Enabled Integration flows
+
+Duration: 0:30:00
 
 ### A) - Activate SAP Data Quality Management service in BTP
 
@@ -53,6 +55,8 @@ Download [AEM-Rapid-Pilot.zip](artifacts/AEM-Rapid-Pilot.zip)
 	![CI Package import](img/CIPackageImport.png)
 
 ## Step 2 - Setup/configure SAP AEM
+
+Duration: 0:20:00
 
 Create input queues for your integration flows:
 - Go to Cluster Manager -> <your service> -> Manage -> Queues - to open the Broker UI
@@ -101,9 +105,11 @@ Create input queues for your integration flows:
 
 ## 3 - Setup/configure dependency services
 
+Duration: 0:10:00
+
 1. For AEMBusinessPartnerAddressCheck
     * Activate SAP's Data Quality Management Service (DQM) by following
-      this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/)
+      this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) take a note of the URL and user credentials once you've activated the service.
 2. For AEMSalesOrderNotification
     * You'll need an external email service to be able to automatically send emails, details like smtp server address,
       username (email) and password.
@@ -119,6 +125,8 @@ Create input queues for your integration flows:
    endpoint (sftp server address and username password) and import the ssh identidy into .
 
 ## 4 - Configure your Integration Suite flows
+
+Duration: 1:00:00
 
 One thing, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
 ![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png), we will need them in the next steps when configuring our flows.
@@ -164,7 +172,7 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 
 ## Takeaways
 
-Duration: 0:07:00
+Duration: 0:10:00
 
 ✅ < Fill IN TAKEAWAY 1>   
 ✅ < Fill IN TAKEAWAY 2>   
