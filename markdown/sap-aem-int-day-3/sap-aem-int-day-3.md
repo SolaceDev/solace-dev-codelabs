@@ -45,7 +45,7 @@ Please follow along the steps in this [blog post](https://blogs.sap.com/2022/02/
 A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.
 Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:
 - Download [Integration Suite AEM Adapter](artifacts/AEM-Adapter-EA.zip)
-- Import the AEM adapter into your Integration Suite tenant.
+- Import the AEM adapter into your Integration Suite tenant by following the instructions in the [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) to upload and deploy this adapter.
 
 ### C) - Download and import the template integration flows package
 
@@ -152,16 +152,33 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 
 2a. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
-> This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br> 
+> This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
 > a) Storing the original event payload in an environment variable.
 > b) Populating the DQM request payload with the addresses in the input event.
-> c) Invoking the DQM service over REST and 
+> c) Invoking the DQM service over REST and
 > d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.
 > e) Merging any corrected addresses back into the original payload.
 > f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
 > `sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
 
 2b. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
+![DQM service configuration](img/CIDQMServiceConfiguration.png)
+- Populate the connection details for the DQM service call out with the ones for your own DQM service instance.
+- Hit configure at the top right and fill in the details to connect to your AEM broker service:
+![AEM service configuration pt1](img/CIAEMBPCheckerConfiguration.png)
+![AEM service configuration pt2](img/CIAEMBPCheckerConfiguration-pt2.png)
+- Then hit deploy at the bottom right.
+
+2c. Check that your flow was deployed successfully and fix if necessary.
+- Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
+You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar to this view:
+![CPI flow monitoring](img/CIFlowsMonitoring.png)
+- Go to your AEM Console and navigate to Cluster Manager -> <your service> -> Manage and click on the Qeueus tile:
+![AEM service queue management](img/AEMServiceManageQueues.png)
+- Check that the CIBusinessPartnerChecker input queue has at least one consumer connected to it.
+![AEM service queue overview](img/CIBusinessPartnerChecker-queue-status.png)
+
+Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!
 
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
 
