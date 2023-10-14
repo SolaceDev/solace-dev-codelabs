@@ -61,7 +61,7 @@ Download [AEM-Rapid-Pilot.zip](artifacts/AEM-Rapid-Pilot.zip)
 Duration: 0:20:00
 
 Create input queues for your integration flows:
-- Go to Cluster Manager -> <your service> -> Manage -> Queues - to open the Broker UI
+- Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
 
 1. For the AEMBusinessPartnerAddressCheck flow, create:
     * CIBusinessPartnerChecker
@@ -173,7 +173,7 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 - Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
 You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar to this view:
 ![CPI flow monitoring](img/CIFlowsMonitoring.png)
-- Go to your AEM Console and navigate to Cluster Manager -> <your service> -> Manage and click on the Qeueus tile:
+- Go to your AEM Console and navigate to Cluster Manager -> {your service} -> Manage and click on the Queues tile:
 ![AEM service queue management](img/AEMServiceManageQueues.png)
 - Check that the CIBusinessPartnerChecker input queue has at least one consumer connected to it.
 ![AEM service queue overview](img/CIBusinessPartnerChecker-queue-status.png)
