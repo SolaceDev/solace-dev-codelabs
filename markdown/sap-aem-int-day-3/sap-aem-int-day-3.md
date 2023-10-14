@@ -181,12 +181,45 @@ You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar
 Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!
 
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
+![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
+
+TODO
+
 
 3b. Configuring and deploying  the AEMSalesOrderNotification iflow:
+![AEM output adapter](img/CISalesOrderNotificationAEMOutput.png)
+- Populate the connection details for the AEM broker service to send an event to the AEM broker whenever the flow successfully sends a notification email.
+- Hit configure at the top right and fill in the details to connect to your AEM broker service:
+![AEM service configuration pt1](img/CIAEMSalesOrderNotificationConfiguration.png)
+![AEM service configuration pt2](img/CIAEMSalesOrderNotificationConfiguration-pt2.png)
+- Then hit deploy at the bottom right.
+
+3c. Check that your flow was deployed successfully and fix if necessary.
+- Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
+You should be seeing the AEMSalesOrderNotification flow as Started, similar to this view:
+![CPI flow monitoring](img/CIFlowsMonitoring.png)
+- Go to your AEM Console and navigate to Cluster Manager -> {your service} -> Manage and click on the Queues tile:
+![AEM service queue management](img/AEMServiceManageQueues.png)
+- Check that the AEMSalesOrderNotification input queue has at least one consumer connected to it.
+![AEM service queue overview](img/CISalesOrderNotification-queue-status.png)
 
 4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
+![AEMLegacyOutputAdapter_flow](img/AEMLegacyOutputAdapter_flow.png)
+
+TODO
+
 
 4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
+
+4c. Check that your flow was deployed successfully and fix if necessary.
+- Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
+You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this view:
+![CPI flow monitoring](img/CIFlowsMonitoring.png)
+- Go to your AEM Console and navigate to Cluster Manager -> {your service} -> Manage and click on the Queues tile:
+![AEM service queue management](img/AEMServiceManageQueues.png)
+- Check that the AEMLegacyOutputAdapter input queue has at least one consumer connected to it.
+![AEM service queue overview](img/CILegacyAdapterIn-queue-status.png)
+
 
 
 ## Takeaways
