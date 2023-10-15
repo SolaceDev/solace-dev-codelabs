@@ -161,6 +161,14 @@ Now that we have set up all the prerequisites for our Integration Suite flows, w
 > f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
 > `sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
 
+Let's also look at what happens in order to publish a new event back to the Advanced Event Mesh broker.
+> First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive.
+![AEMBusinessPartnerAddressCheck flow settings](img/CIBusinessPartnerChecker-flow-settings.png)
+> Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header.
+![AEMBusinessPartnerAddressCheck topic processing](img/CIBusinessPartnerChecker-topic-processing.png)
+> Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script.
+![AEM Publisher settings](img/CIBusinessPartnerChecker-output-AEM-adapter-settings.png)
+
 2b. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
 ![DQM service configuration](img/CIDQMServiceConfiguration.png)
 - Populate the connection details for the DQM service call out with the ones for your own DQM service instance.
