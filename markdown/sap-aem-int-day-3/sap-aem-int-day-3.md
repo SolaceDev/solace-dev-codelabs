@@ -183,7 +183,10 @@ Congratulations, if you are seeing both the Started iflow as well as the consume
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
 ![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
 
-TODO
+> This flow gets triggered by Sales Order events and does two things:<br>
+> a) It creates an email and puts the Sales Order into the body of the email.<br>
+> (The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
+> b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email was successfully sent.
 
 
 3b. Configuring and deploying  the AEMSalesOrderNotification iflow:
@@ -206,8 +209,29 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
 ![AEMLegacyOutputAdapter_flow](img/AEMLegacyOutputAdapter_flow.png)
 
-TODO
+> This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.
+> Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM.
+> The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter's retry behaviour.
+> Once the max configured retry attempts are exceeded, the AEM broker will move the message to a configured DMQ for exception processing.
+> Let's take a look at some of the relevant settings of the AEM adapter that control this behaviour.
 
+![AEM error handling settings](img/CILegacyAdapterIn-AEM-error-handling.png)
+> Let's look at these settings one by one:<br>
+> 1) Acknowledgement Mode: "Automatic on Exchange Complete"<br>
+The most important setting when it comes to not accidentally acknowledging and therefore removing a message from the broker's queue. This setting tells the flow/AEM adapter to only acknowledge (ack) the message after the flow has successfully completed processing the message. If any in the processing occurs, the AEM adapter will instead send a negative acknowledgment back (nack) to tell the broker to keep the message and retry it, because it couldn't be successfully processed by the flow. The alternative is to immediately ack the message when it's received, which will always result in the message being removed from the queue even if the flow fails to successfully process the message. (!!)<br>
+> 2) Settlement Outcome After Maximum Attempts: "Failed"<br>
+This setting controls the nack type and behaviour, we have two options here:<br>
+	a) Failed, which will nack the message back to the broker and let's the broker check the retry count of the message to trigger retries based on the queue settings and only sending messages to DMQ when the retry count on the message has exceeded the max retry settings on the queue.<br>
+	b) Rejected, which will nack the message telling the broker to immediately move the message to DMQ when the AEM adapter settings (Maximum Message Processing Attempts) are exceeded irrespective of queue settings.<br>
+> 3) Max. Message Processing Attempts: 2<br>
+Controls how often we want to retry a message before we "give up".<br>
+> 4) Retry interval, Max Retry Interval and Exponential Backoff Multiplier<br>
+These are all settings that control how quickly we want to retry and whether we want to incremently increase our retry delay with each failure. A good retry delay value prevents the broker from repeatedly retrying a message within a few milli-seconds and gives some time for transient error situations to clear before we retry.
+
+Keep in mind that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow:
+![queue settings](img/CILegacyAdapterIn-queue-settings.png)
+![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+> Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
 
 4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
