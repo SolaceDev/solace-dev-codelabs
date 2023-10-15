@@ -28,9 +28,9 @@ SAP UI5 Integration cards displaying events in real time
 
 Duration: 0:07:00
 
-Complete all activities in day 2. You access and use the same broker you setup previously as well as the simulator push events.
+Complete all activities in day#1. You access and use the same broker you setup previously as well as the simulator push events.
 
-## Step 1 - SAP EDA artefacts visualized
+## SAP EDA artefacts visualized
 
 In this task, you will be importing the design representing the events for this rapid evaluation. \
 This design is an example, and not a full implementation. The intent is to have enough design for an evaluation while
@@ -47,8 +47,8 @@ but it is not the full schema for the SAP objects involved.
    ![SAP AEM EP Designer Import AppDomain-1](img/ep-designer-import-app-domain-1.png)\
    ![SAP AEM EP Designer Import AppDomain-2](img/ep-designer-import-app-domain-2.png)\
    \
-   Select the demo file from the file system. \
-   ![SAP AEM EP Designer Import AppDomain-3](img/ep-designer-import-app-domain-3.png)\
+   Locate the **btp_aem_demo.json** file in your file system and import it: \
+   ![SAP AEM EP Designer Import AppDomain-3](img/ep-designer-import-app-domain-3.png) \
    After the import is complete, you will see the evaluation domain in the domains list. \
    ![SAP AEM EP Designer Import AppDomain-4](img/ep-designer-import-app-domain-4.png)
 
@@ -57,8 +57,6 @@ but it is not the full schema for the SAP objects involved.
    \
    The initial view of the domain will be of the Applications tab. \
    You will see a number of modeled applications in the list related to the demo. \
-   Note that these are simple references that allow visualization of the event flows – The designer tool does not
-   simulate the actual applications. \
    ![SAP AEM EP Designer AppDomain-view](img/ep-designer-appDomain-view.png)
 
    Event APIs and Event API Products can be used to expose and manage AsyncAPI interfaces within organizations, or with
@@ -67,7 +65,7 @@ but it is not the full schema for the SAP objects involved.
    > Note that Event APIs and Event API Products are advanced topics that will not be covered by this demonstration
    design.
 
-   Clicking on the Events tab, you will see a listing of 17 events defined for the domain.
+   Clicking on the Events tab, you will see a listing of events defined for the domain.
    ![SAP AEM EP Designer events list](img/ep-designer-events-list.png)
    \
    Clicking on the Schemas tab, you will see 5 schemas.
@@ -78,7 +76,7 @@ but it is not the full schema for the SAP objects involved.
    ![SAP AEM EP Designer enum list](img/ep-designer-enum-list.png)
    \
    Enums are used in the model to show a finite set of possible values. \
-   This one is defined to hold a concise set of rejected reason code values for sales orders.
+   For example, this one is defined to hold a concise set of rejected reason code values for sales orders.
 
    Moving back to the Events tab, we can use the search box near the top to filter down to the event(s) we want to find.
    For example, typing "Sales" here results in a live search that filters the list down to just Sales Order related
@@ -98,10 +96,11 @@ but it is not the full schema for the SAP objects involved.
    It also serves as a collaboration space that allows you to leverage events you create more effectively to derive new
    value for the business.
    \
-   **Topic Address:** \
-   For AEM services (type = Solace), the topic address is a string with **"/"** separators that enables dynamic routing
-   and filtering. Following best practice guidelines for creating topic strings is critical to your EDA success. \
-   The general format is **ORG/DOMAIN/VERB/VERSION/{ATTRIBUTE1}/{ATTRIBUTE2}/ …** \
+   **Broker Type & Topic Address:** \
+   For AEM services (broker type = Solace), the topic address is a string with **“/”** separators that enables dynamic routing and filtering.
+   Following best practice guidelines for creating topic strings is critical to your EDA success. \
+   \
+   The general format is **ORG/DOMAIN/VERB/VERSION/{ATTRIBUTE1}/{ATTRIBUTE2}/…** \
    Topics are a powerful mechanism employed by AEM to perform dynamic routing in an event mesh, moving copies of events
    only where they are needed. It also enables consuming clients to filter events within topics using subscriptions and
    wildcard characters **(*, >)**. \
@@ -119,8 +118,55 @@ but it is not the full schema for the SAP objects involved.
    If you click on the expander, you can view just the schema text in a larger view without opening it for editing.
    ![SAP AEM EP Designer schema designer](img/ep-designer-schema-designer.png)\
    The Designer tool will be a useful way to explore the demonstration data throughout your evaluation.
+4. Practice using the Catalog.
+   The Catalog is an important collaboration feature that allows you to quickly find objects across domains. Let’s use this tool to find the Sales Order events again.
+   From the SAP AEM Console, open the Catalog: \
+   ![SAP AEM EP Catalog](img/ep-catalog-intro.png)
 
-## Step 2 - UI5 Cards in realtime
+   After clicking on the Events tab, enter “Sales Order” into the search box: \
+   ![SAP AEM EP Catalog-Screen 2](img/ep-catalog-2.png)\
+   You will see the filtering of the live search as you type.  Next, get more specific and “Create” to the search string.  This will narrow your results to Sales Order related events: \
+   ![SAP AEM EP Catalog-Screen 3](img/ep-catalog-3.png)\
+   Finally, click on the filter icon next to the search box to see how results can be filtered further: \
+   ![SAP AEM EP Catalog-Screen 4](img/ep-catalog-4.png)
+5. Visualize your imported design with a modeled event mesh.
+   Event Portal includes a powerful tool called the Runtime Manager. One of the functions of this tool is to associate a domain model with a “modeled event mesh” running on your launched AEM event services. 
+   This allows the Runtime Manager to display a visualization of the interactions between applications and events. \
+   While there are many additional powerful features of Runtime Manager, our evaluation will focus just on visualization. \
+   From the SAP AEM Console, open the Runtime Manager: \
+   ![SAP AEM EP Runtime Event Manager - 1](img/ep-runtime-event-manager-1.png)\
+   Click on Create Modeled Event Mesh top right: \
+   ![SAP AEM EP Runtime Event Manager - 2](img/ep-runtime-event-manager-2.png)\
+   Enter the name of your modeled event mesh and click on Create: \
+   ![SAP AEM EP Runtime Event Manager - 3](img/ep-runtime-event-manager-3.png)\
+   Now click on your MEM to open it: \
+   ![SAP AEM EP Runtime Event Manager - 4](img/ep-runtime-event-manager-4.png)\
+   Note that there are no objects in your MEM. \
+   In the Event Broker Connections tab, click on Connect Event Broker: \
+   ![SAP AEM EP Runtime Event Manager - 5](img/ep-runtime-event-manager-5.png)\
+   Use the search box to filter to your services, mark the checkboxes for both and click Add: \
+   ![SAP AEM EP Runtime Event Manager - 6](img/ep-runtime-event-manager-6.png)\
+   You will see both of your brokers listed in the modeled event mesh.  For the scope of this evaluation, we will not be exercising the Discovery Scan or Audit capabilities. \
+   ![SAP AEM EP Runtime Event Manager - 7](img/ep-runtime-event-manager-7.png)
+
+   Next, navigate back to the Designer and open the **BTP AEM Demo** domain. \
+   Under the Applications tab, you will see all the modeled applications. **For each application**, perform the following actions: 
+   - Click on the application’s row where it says “Standard” for application type. 
+   - In the preview pane to the right, select the “Add to Environment” extended menu action for version 1.0.0 of the application object. 
+   - Leaving the Default environment selected, pick your Modeled Event Mesh from the second pull down and both of your event mesh services from the Event Broker menu, then click Add.
+   ![SAP AEM EP Runtime Event Manager - 8](img/ep-runtime-event-manager-8.png)\
+   This will add the modeled applications to your modeled event mesh.  Since these applications reference the events, and those events reference the schemas, all of your model will now be associated with your modeled event mesh. \
+   \
+   Finally, navigate back to the Runtime Manager and your modeled event mesh to see the default visualization: 
+   ![SAP AEM EP Runtime Event Manager - 9](img/ep-runtime-event-manager-9.png)\
+   The applications are connected to one another with flow lines through the events which they are exchanging. This provides an overview of the interactions being modeled by the design.\
+   You can use the view controls to zoom, center and change visualization settings: \
+   ![SAP AEM EP Runtime Event Manager - 10](img/ep-runtime-event-manager-10.png)\
+   You can also re-arrange and save your visualization layout to organize the relationships to your preferences.  If you like the changes, click on Publish Layout to save them.
+   ![SAP AEM EP Runtime Event Manager - 10](img/ep-runtime-event-manager-11.png)
+
+
+## UI5 Cards in realtime
 
 SAP Ui5 Integration cards present a new means to expose application content to the end user in a unified way. Depending
 on the use cases, cards can be easily embedded in a host environment, such as an application, SAP Build, dashboards, or
@@ -197,7 +243,9 @@ Here are some troubleshooting tips:
 
 Duration: 0:07:00
 
+✅ Import objects into the Event portal \
+✅ Visualize events coming from the simulator into your broker
 
 ![Soly Image Caption](img/soly.gif)
 
-Thank you for participating on Day 2. Today you learned how to import objects into the Event portal and also had a chance to visualize events coming from the simulator into your broker. We look forward to seeing you on Day 3 where you will begin to setup some SAP Integration Flows.
+Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
