@@ -262,8 +262,13 @@ You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this
 
 Duration: 0:10:00
 
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3>   
+✅ Configuring AEM broker queues, subscriptions and queue related settings   
+✅ Import additional adapters into Integration Suite (if not already present)   
+✅ Import Integration Suite packages
+✅ Configure security related settings in Integration Suite
+✅ Understand event-driven iflows and configure them for your AEM environment
+✅ Receive events in Integration Suite and publish new events
+✅ Access topic information and parse and modify topic levels to publish to new dynamic Topics
+✅ Understand retry and error processing capabilities in the AEM adapter and the AEM broker
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
