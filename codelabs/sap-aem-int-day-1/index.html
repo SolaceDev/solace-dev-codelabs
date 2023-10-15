@@ -54,7 +54,7 @@
 <h3 is-upgraded>Scenario 1 – Customer Experience</h3>
 <p><strong>Question</strong>: How can we use EDA to actively and selectively push relevant and timely events out to the Enterprise? <strong>For Example</strong>: A customer orders a new pair of shoes, and they will ship late, how will we notify the customer about this update. <img alt="Workshop Scenario-1" src="img/694ee51737b0744c.png"></p>
 <h3 is-upgraded>Scenario 2 – Customer Master Data Change</h3>
-<p><strong>Question</strong>: How can we use EDA to actively and selectively push any and all master data changes to the entire enterprise? <strong>For Example</strong>: Customer changes their address information. <img alt="Workshop Scenario-1" src="img/a0cbaebd567d1e8e.png"></p>
+<p><strong>Question</strong>: How can we use EDA to actively and selectively push any and all master data changes to the entire enterprise? <strong>For Example</strong>: Customer changes their address information. <img alt="Workshop Scenario-1" src="img/27526ce25c4aeeba.png"></p>
 <h2 is-upgraded>Workshop structure</h2>
 <p>For logistics and ease of delivery, this workshop has been divided into 5 half-days and this covers day 1. It describes the below topics :</p>
 <ul>
@@ -99,9 +99,9 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 1 - Create AEM Services" duration="0">
-        <p>In this task, you will be creating two Enterprise AEM services, meshing them, and verifying your mesh health.</p>
-<p>Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed. The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems. If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to help select an appropriate cloud location for that AEM service.</p>
+      <google-codelab-step label="Create AEM Services" duration="0">
+        <p>In this task, you will be creating two Enterprise AEM services, connecting them to form a mesh and verifying your mesh health.</p>
+<p>Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed. The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems. If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to help select an appropriate location for that AEM service.</p>
 <h2 is-upgraded>Create your first AEM service:</h2>
 <ol type="1">
 <li>From the SAP AEM Console, open the Cluster Manager.<br><img alt="AEM Cluster Manager" src="img/d6ee451c2c736db7.png"></li>
@@ -133,7 +133,7 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 2 - Build an event mesh" duration="0">
+      <google-codelab-step label="Build an event mesh" duration="0">
         <ol type="1">
 <li>Define a new mesh. From the SAP AEM Console, open the Mesh Manager:<br><img alt="AEM Console Mesh Manager" src="img/5dbca0e1bbd1c46c.png"><br> In the top right, click the Create Mesh action to open the mesh definition.<br><img alt="AEM Console Mesh Manager Create" src="img/a53778017c1b7c91.png"><br> Enter the same mesh name used when defining your AEM services.<br><img alt="AEM Console Mesh Manager Create" src="img/8e5c618902a3f016.png"></li>
 <li>Add your AEM services to the mesh.<br> Click Add Service, then use the pull down search box to find and select your first service.<br><img alt="AEM Mesh Manager Add service-1" src="img/4a29b4de67a42c4f.png"><br> Click Add Service in the dialog to complete the action:<br><img alt="AEM Mesh Manager Add service complete" src="img/6055fb52e9a6f3a7.png"><br> Click Add Service again and add your second service.<br><img alt="AEM Mesh Manager Add service2" src="img/3dd3260bef8484e6.png"><br> Mesh Manager will show the layout of your mesh geography.<br><img alt="AEM Mesh Manager geography" src="img/abdd95dce462cada.png"><br> Click Create Mesh to complete the mesh setup.<br><img alt="AEM Mesh Manager create" src="img/53d2a7b73e260d23.png"><br> Mesh Manager will update the status of your mesh when configuration is complete.<br><img alt="AEM Mesh Manager complete" src="img/1c9f5a982fae5e7d.png"></li>
@@ -143,7 +143,7 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 3 - SAP Simulator setup" duration="0">
+      <google-codelab-step label="SAP Simulator setup" duration="0">
         <p>The SAP Cloud Application Programming Model (CAP) is a framework of languages, libraries, and tools for building enterprise-grade services and applications. It guides developers along a ‘golden path&#39; of proven best practices and a great wealth of out-of-the-box solutions to recurring tasks. CAP-based projects benefit from a primary focus on domain. Instead of delving into overly technical disciplines, we focus on accelerated development and safeguarding investments in a world of rapidly changing cloud technologies.</p>
 <p>For more information on SAP CAP, you can refer to the link : <a href="https://cap.cloud.sap/docs/" target="_blank">SAP Cloud Application Programming Model</a></p>
 <p>To showcase the integration capability of SAP CAP and AEM, we have created a CAP based Java microservice which will publish different SAP business object events into your AEM instance. This application can be deployed in your SAP CloudFoundry space.</p>
@@ -172,7 +172,7 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 4 - Test SAP Simulator" duration="0">
+      <google-codelab-step label="Test SAP Simulator" duration="0">
         <h2 is-upgraded>1 : Accessing the SAP Simulator application</h2>
 <ul>
 <li>Navigate to the Cloud Foundry environment in your SAP BTP Cockpit</li>
@@ -234,7 +234,7 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ Introduction to the workshop<br> ✅ Understanding how to create AEM services<br> ✅ Set up an Event Mesh<br> ✅ Deploy the SAP CAPM based simulator in CloudFoundry<br> ✅ Testing the simulator and publishing events to the Event Mesh \</p>
+        <p>✅ Introduction to the workshop<br> ✅ Understanding how to create AEM services<br> ✅ Set up an Event Mesh<br> ✅ Deploy the SAP CAPM based simulator in CloudFoundry<br> ✅ Testing the simulator and publishing events to the Event Mesh</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 

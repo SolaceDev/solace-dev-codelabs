@@ -73,15 +73,12 @@ You will need the following resources prior to the commencement of the workshop 
 11. Integration Suite – a resource who is familiar with building iFlows and has the necessary authorizations to deploy new artifacts
 12. Relevant Functional Resources who might be responsible for the Sales Order, Business Partner, GL, Material Master or Notification Objects within SAP, so they can fully appreciate the art of the possible once these objects are event enabled.
 
-## Step 1 - Create AEM Services
-In this task, you will be creating two Enterprise AEM services, meshing them, and verifying your mesh health.
+## Create AEM Services
+In this task, you will be creating two Enterprise AEM services, connecting them to form a mesh and verifying your mesh health.
 
-Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary
-cloud provider and region where your cloud applications are deployed.
-The value of building a mesh topology is realized when placing your AEM services close to your event producing and
-consuming systems.
-If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to
-help select an appropriate cloud location for that AEM service.
+Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed. 
+The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems. 
+If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to help select an appropriate location for that AEM service.
 
 ### Create your first AEM service:
 
@@ -194,7 +191,7 @@ help select an appropriate cloud location for that AEM service.
     \
     This example shows low utilization, version detail and cluster detail which includes the message VPN name which
     should be the same for both AEM services.
-## Step 2 - Build an event mesh
+## Build an event mesh
 
 1. Define a new mesh. From the SAP AEM Console, open the Mesh Manager: \
     ![AEM Console Mesh Manager](img/aem-console-mesh-manager.png)
@@ -226,7 +223,7 @@ help select an appropriate cloud location for that AEM service.
     ![AEM Mesh Manager Health check Status](img/aem-mesh-manager-health-check-status.png)
 
 
-## Step 3 - SAP Simulator setup
+## SAP Simulator setup
 
 The SAP Cloud Application Programming Model (CAP) is a framework of languages, libraries, and tools for building
 enterprise-grade services and applications. It guides developers along a 'golden path' of proven best practices and a
@@ -271,7 +268,7 @@ You can log in to the SAP CloudFoundry space in your account as below :
   space
 - Verify that the app **capm-erp-simulation** is deployed and started
 
-## Step 4 - Test SAP Simulator
+## Test SAP Simulator
 
 ### 1 : Accessing the SAP Simulator application
 
@@ -347,7 +344,7 @@ Duration: 0:07:00
 ✅ Understanding how to create AEM services \
 ✅ Set up an Event Mesh \
 ✅ Deploy the SAP CAPM based simulator in CloudFoundry \
-✅ Testing the simulator and publishing events to the Event Mesh \
+✅ Testing the simulator and publishing events to the Event Mesh 
 
 ![Soly Image Caption](img/soly.gif)
 
