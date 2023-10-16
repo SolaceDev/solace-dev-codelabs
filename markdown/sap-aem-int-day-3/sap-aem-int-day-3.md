@@ -78,7 +78,7 @@ Create the following queues:
   - Add the following subscriptions to the queue
       ![queue subscriptions](img/CIBusinessPartnerChecked-queue-subs.png)
 	  > aside negative
-		> Notice the second subscriptions that starts with `!` ? <br>
+      > Notice the second subscriptions that starts with `!` ? <br>   
 	  > This is called a topic exception and removes any events matching topic subscription `sap.com/businesspartner/addressChecked/V1/*/*/Invalid` from the previously matched list of events matched by `sap.com/businesspartner/addressChecked/V1/>`. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See [link](https://docs.solace.com/Messaging/SMF-Topics.htm) for more details on Solace's topic syntax.
 
   - CIBusinessPartnerInvalid (optional - if you want to see the output)
