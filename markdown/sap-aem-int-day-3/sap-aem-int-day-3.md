@@ -115,23 +115,16 @@ Create the following queues:
 Duration: 0:10:00
 
 ### A) - For AEMBusinessPartnerAddressCheck
-  - Activate SAP's Data Quality Management Service (DQM) by following
-      this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) take a note of the URL and user credentials once you've activated the service.
+Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) take a note of the URL and user credentials once you've activated the service.
 
 ### B) - For AEMSalesOrderNotification
-  - You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
+You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
 
 ### C) - For AEMLegacyOutputAdapter
+The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system. The actual flow doesn't require a working sftp destination as it's just being used to simulate a failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual  processing by a UI5 and Business Process Automation workflow.
 
-   > The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to
-   a legacy system. The actual flow doesn't require a working sftp destination as it's just being used to simulate a
-   failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver
-   each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual
-   processing by a UI5 and Business Process Automation workflow.
-
-   > If, after successful demonstration of the error handling, you would still like to see a successful delivery of
-   events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid
-   endpoint (sftp server address and username password) and import the ssh identidy into .
+> aside negative
+> If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .
 
 ## Configure Your Integration Suite Flows
 
@@ -161,7 +154,6 @@ Let's configure the security details we will need to connect to the various serv
 ### B) - AEMBusinessPartnerAddressCheck
 1. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
-> aside negative
 > This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
 > a) Storing the original event payload in an environment variable.<br>
 > b) Populating the DQM request payload with the addresses in the input event.<br>
@@ -201,7 +193,6 @@ Congratulations, if you are seeing both the Started iflow as well as the consume
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
 ![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
 
-> aside negative
 > This flow gets triggered by Sales Order events and does two things:<br>
 > a) It creates an email and puts the Sales Order into the body of the email.<br>
 > (The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
@@ -229,7 +220,6 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
 ![AEMLegacyOutputAdapter_flow](img/AEMLegacyOutputAdapter_flow.png)
 
-> aside negative
 > This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.
 > Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM.
 > The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter's retry behaviour.
@@ -237,7 +227,6 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 > Let's take a look at some of the relevant settings of the AEM adapter that control this behaviour.
 
 ![AEM error handling settings](img/CILegacyAdapterIn-AEM-error-handling.png)
-> aside negative
 > Let's look at these settings one by one:<br>
 > 1) Acknowledgement Mode: "Automatic on Exchange Complete"<br>
 The most important setting when it comes to not accidentally acknowledging and therefore removing a message from the broker's queue. This setting tells the flow/AEM adapter to only acknowledge (ack) the message after the flow has successfully completed processing the message. If any in the processing occurs, the AEM adapter will instead send a negative acknowledgment back (nack) to tell the broker to keep the message and retry it, because it couldn't be successfully processed by the flow. The alternative is to immediately ack the message when it's received, which will always result in the message being removed from the queue even if the flow fails to successfully process the message. (!!)<br>
@@ -253,6 +242,7 @@ These are all settings that control how quickly we want to retry and whether we 
 Keep in mind that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow:
 ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
 ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+> aside negative
 > Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
 
 4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
