@@ -24,7 +24,7 @@ Topics covered :
 - Access to the AEM Console
 
 
-## Step 1 - Using SAP BPA to handle event exceptions
+## Using SAP BPA to handle event exceptions
 
 In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link. 
 
@@ -34,7 +34,7 @@ In our scenario, we will artificially create a situation where messages cannot b
 
 ![BPA Image](img/BPA-1.jpg)
 
-## Step 1 – Configure the required components for a Rest Delivery Point on the broker
+## Configure the required components for a Rest Delivery Point on the broker
 
 Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
 
@@ -172,7 +172,8 @@ For the SAP BPA setup, we will be importing 2 different projects:
 - 
 We will start by importing the Action project. Select the import option which is highlighted by the red square. When prompted, select the AEMSALESORDERAPI.mtar file for import. Once it’s successfully imported, you will see it listed as per the screenshot below and you should see type “Actions” listed. Repeat the exact same process to import the second file SAPAEMSO.mtar. It will result in the  project being imported of type “Process Automation”.
 
-***Because I have deployed several versions of the project, you likely won’t see the information under versions matching and that’s okay*** 
+>aside negative
+> Depending on the versions of the deployed project, there might be some differences between your project and the screenshot in this codelab. This is acceptable.
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
@@ -195,7 +196,7 @@ Once the project is released, select the “Publish to Library” button.
 
 Duration: 1:30:00
 
-✅  Understand concept of Dead Message Queus
+✅  Understand concept of Dead Message Queues \
 ✅  Understand how to use SAP BPA to process Dead Messages
 
 

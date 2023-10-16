@@ -28,64 +28,137 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-day-4">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="90">
         <p>Day 4 of 5. Topics covered :</p>
 <ul>
-<li>Using SAP BPA to handle event exceptions</li>
+<li>Using SAP Business Process Automation to review event exceptions</li>
 </ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
-        <p>Enter environment setup &amp; prerequisites here</p>
+      <google-codelab-step label="What you need: Prerequisites" duration="0">
+        <ul>
+<li>SAP Business Process Automation Activated</li>
+<li>Access to SAP BTP Cockpit and ability to create Destinations</li>
+<li>Access to Cloud Integration and Ability to create development artifacts</li>
+<li>Access to the AEM Console</li>
+</ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 1 - Using SAP BPA to handle event exceptions" duration="0">
-        <p>In the world of Event Driven Asynchronous messaging, occasionally an event will not be able to be processed by one of the subscribers. Sometimes you will hear customers referring to a &#34;poison message&#34;, something that cannot be processed due to the format of the message. Depending on your setup, you might decide to take advantage of the functionality of the Advanced Event Mesh to place messages in a Dead Message Queue. <a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Read more</a></p>
-<p>In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. In the iFlow you created on Day 3, we will essentially corrupt the name of the SFTP Server so that messages cannot be delivered. Once the iFlow attempts delivery of the message and is unsuccessful, the messages will be placed into a Queue (aka Dead Message Queue) for review/processing. The messages in this queue will remain there until they are reviewed and released back onto the broker for re-processing. To facilitate this operation, we have decided to take advantage of the SAP Business Process Automation service.</p>
-<p>There are several components to this scenario that work together to facilitate the review.</p>
-<p class="image-container"><img alt="AEM CLUSTER" src="img/5459955abc49fc86.jpg"></p>
-<p>The first component is the iFlow that you will have installed on Day 3. The first thing you will need to do is to &#34;corrupt&#34; the SFTP Server name so that the messages cannot be delivered to the SFTP Server.</p>
-<p><strong>Step 1</strong> - Modify this iFlow with the bad SFTP Server name and redeploy the iFlow. Once the iFlow is redployed, it will start to send messages to the DMQ. Once these messages arrive at the DMQ, you will start to see the Dead Message Integration Card get populated with messages.</p>
-<p><strong>Step 2</strong> – Configure the RDP on the broker where the SO_WF Queue will be located. Navigate to the main console and goto your cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.</p>
-<p class="image-container"><img alt="BPA-3" src="img/5d17a9489e9542bf.jpg"></p>
+      <google-codelab-step label="Using SAP BPA to handle event exceptions" duration="0">
+        <p>In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link.</p>
+<p><a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Link to Blog</a></p>
+<p>In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called &#34;Dead Message Queue&#34;. This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. Hitting the submit button will release the message from the Queue and it will be sent to the broker with a special topic. A special topic that will result in the message being placed into a Queue that is being actively monitored by Cloud Integration. The message will be transformed by Cloud Integration and the message will be placed back into the mesh. The broker will act upon this new message and instantiate a new business process for each message.</p>
+<p class="image-container"><img alt="BPA Image" src="img/5459955abc49fc86.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure the required components for a Rest Delivery Point on the broker" duration="0">
+        <p>Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.</p>
+<p class="image-container"><img alt="BPA Image 3" src="img/5d17a9489e9542bf.jpg"></p>
 <p>From this screen, you will select the manage option at the top.</p>
-<p class="image-container"><img alt="BPA-4" src="img/b80fb424669f69fc.jpg"></p>
-<p>You will then select &#34;Queues&#34; towards the middle of the screen. Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker so you will see a much different display with many options.</p>
-<p class="image-container"><img alt="BPA-5" src="img/d3164cb9ed25806.jpg"></p>
-<p class="image-container"><img alt="BPA-6" src="img/cede29c1e18daa64.jpg"></p>
-<p>On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the +Queue option.</p>
-<p class="image-container"><img alt="BPA-7" src="img/58ec93762d861d09.jpg"></p>
-<p>The name of the Queue we will create is &#34;SO_WF&#34;...press &#34;Create&#34;.</p>
-<p class="image-container"><img alt="BPA-8" src="img/6d828063f7aee887.jpg"></p>
-<p>Now you will create a subscription to attract the correct entries into this Queue. The name of the subscription is &#34;sap.com/salesorder/v1/rejected&#34;.</p>
-<p class="image-container"><img alt="BPA-9" src="img/3ecdc905acbddbb.jpg"></p>
-<p>Next step to create the Rest Delivery Point and associated components. Navigate to the clients tab as shown on the left and then click the + Rest Delivery Point Button.</p>
-<p class="image-container"><img alt="BPA-10" src="img/250beb2bbb27b1f5.jpg"></p>
+<p class="image-container"><img alt="BPA Image 4" src="img/b80fb424669f69fc.jpg"></p>
+<p>You will then select &#34;Queues&#34; towards the middle of the screen.</p>
+<p class="image-container"><img alt="BPA Image 5" src="img/d3164cb9ed25806.jpg"></p>
+<p>On this screen, we will start by creating a Queue and Subscription.</p>
+<p class="image-container"><img alt="BPA Image 6" src="img/cede29c1e18daa64.jpg"></p>
+<p>Create a new Queue with the name &#34;SOREJECTED&#34;.</p>
+<p class="image-container"><img alt="BPA Image 22" src="img/ef528ed14443ae0c.jpg"></p>
+<p>Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card from the Dead Message Queue.</p>
+<p class="image-container"><img alt="BPA Image 24" src="img/3761d649df77747f.jpg"></p>
+<p>Repeat the process to add another Queue called &#34;SO_WF&#34;.</p>
+<p class="image-container"><img alt="BPA Image 23" src="img/33689ff9e5d3e6d9.jpg"></p>
+<p>Next step to create the Rest Delivery Point and associated components.</p>
+<p class="image-container"><img alt="BPA Image 10" src="img/250beb2bbb27b1f5.jpg"></p>
 <p>The name of the RDP is &#34;RDP1&#34;.</p>
-<p class="image-container"><img alt="BPA-11" src="img/207e0b27c29bf87b.jpg"></p>
-<p>You will now create a Rest Consumer that will be the target for your Events. Click the + Rest Consumer.</p>
-<p class="image-container"><img alt="BPA-12" src="img/26ba5ebc9981cd13.jpg"></p>
-<p>Enter &#34;SO_WF_REST_CONSUMER&#34; and press &#34;Create&#34;</p>
-<p class="image-container"><img alt="BPA-13" src="img/b1463c990f21fb17.jpg"></p>
-<p>This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it&#39;s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit...specifically the Client ID and the Token URL.</p>
-<p class="image-container"><img alt="BPA-14" src="img/f5e32c7e7ffea52f.jpg"></p>
-<p>Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the &#34;+Queue Binding&#34;.</p>
-<p class="image-container"><img alt="BPA-15" src="img/66f82447ff9822e1.jpg"></p>
+<p class="image-container"><img alt="BPA Image 11" src="img/207e0b27c29bf87b.jpg"></p>
+<p>You will now create a Rest Consumer that will be the target for your Events.</p>
+<p class="image-container"><img alt="BPA Image 12" src="img/26ba5ebc9981cd13.jpg"></p>
+<p>Enter &#34;SO_WF_REST_CONSUMER&#34; and press &#34;Create&#34;.</p>
+<p class="image-container"><img alt="BPA Image 13" src="img/b1463c990f21fb17.jpg"></p>
+<p>This is the screen that requires some attention to detail.</p>
+<p class="image-container"><img alt="BPA Image 14" src="img/f5e32c7e7ffea52f.jpg"></p>
+<p>Next you will create the connection between the Rest Consumer and the Queue that it will use.</p>
+<p class="image-container"><img alt="BPA Image 15" src="img/66f82447ff9822e1.jpg"></p>
 <p>From the dropdown, select the previously created Queue &#34;SO_WF&#34;.</p>
-<p class="image-container"><img alt="BPA-16" src="img/454d538d9ecdb714.jpg"></p>
-<p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value &#34;/workflow/rest/v1/workflow-instances&#34;</p>
-<p class="image-container"><img alt="BPA-17" src="img/c4526ddbad053dea.jpg"></p>
-<p>At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them says &#34;Down&#34;, you will need to TroubleShoot, go back and double check your settings. There is also a Stats link that you can use to sometimes see the Error Messages.</p>
+<p class="image-container"><img alt="BPA Image 16" src="img/454d538d9ecdb714.jpg"></p>
+<p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances.</p>
+<p class="image-container"><img alt="BPA Image 17" src="img/c4526ddbad053dea.jpg"></p>
+<p>At this point, you should have a functioning RDP.</p>
+<p>Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Integration Suite Setup" duration="0">
+        <p>In the Business Process Automation scenario. In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:</p>
+<ul>
+<li>SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API</li>
+<li>SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema.</li>
+</ul>
+<p>Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into &#34;Edit&#34; mode.</p>
+<p class="image-container"><img alt="IS Image 1" src="img/94bc8ebe6c91d1d2.jpg"></p>
+<p>Once you have the package in edit mode, select the DropDown under &#34;Add&#34; and select &#34;Message Mapping&#34;.</p>
+<p class="image-container"><img alt="IS Image 2" src="img/1e239d360dcf32eb.jpg"></p>
+<p>At the top of this form, you will select &#34;Upload&#34; and then you will select the zip file with the &#34;MM&#34; at the end for Message Mapping. ***Ignore the Red X...I had already deployed the mapping in my environment and hence the message 😊 ***</p>
+<p><img alt="IS Image 3" src="img/5478a200ba994ad5.jpg"> Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is &#34;DefinitionID&#34;. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. Once you have modified the ID, be sure to hit Save at the top and then you can hit &#34;Deploy&#34; from there or back from the main screen as shown below. <img alt="IS Image 8" src="img/c4138bb9fdcb9dd1.jpg"></p>
+<p>The 2nd way to deploy an artifact is from the main screen as shown below.</p>
+<p class="image-container"><img alt="IS Image 4" src="img/fb146b2ec5f2a325.jpg"></p>
+<p>Now we will import the iFlow using the same approach we just followed for the Message Mapping.</p>
+<p><img alt="IS Image 5" src="img/cd603c54872ae343.jpg"> Select the &#34;Upload&#34; checkbox and use the 2nd zip file that contains the iFlow (***Not the one with the MM Extension ***).</p>
+<p class="image-container"><img alt="IS Image 6" src="img/3dad131dfa74fb56.jpg"></p>
+<p>Once the iFlow is imported, you can just select the arrow to the right and click &#34;Deploy&#34;.</p>
+<p class="image-container"><img alt="IS Image 7" src="img/2450866f214ff6b9.jpg"></p>
+<p>Before proceeding, please check the monitor to ensure that both artifacts have been deployed successfully.</p>
+<p class="image-container"><img alt="IS Image 9" src="img/15fe203355387b60.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Business Process Automation Setup" duration="0">
+        <p>The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA &#34;Action&#34; highlighted in Red Below. This action requires the creation of a Destination on the BTP Platform which will be the first step in this process.</p>
+<p class="image-container"><img alt="SAP BPA Image 1" src="img/60af0e589798c49d.jpg"></p>
+<p>From the BTP Cockpit, Select the &#34;New Destination&#34; option. You will be creating a destination called &#34;AEMBROKERREST&#34;.</p>
+<p class="image-container"><img alt="BPA Image 20" src="img/238772c7c56d504a.jpg"></p>
+<p>For the destination information needed below, you will need connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the &#34;Connect&#34; option at the top. On this screen, make sure that the &#34;View By&#34; is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.</p>
+<p class="image-container"><img alt="AEM Image 1" src="img/29394e8e5760b39e.jpg"></p>
+<p>You will populate the Destination information as shown below and you will add two properties that are both set to true.</p>
+<ul>
+<li>sap.applicationdevelopment.actions.enabled – true</li>
+<li>sap.applicationdevelopment.actions.enabled – true</li>
+</ul>
+<p>When your destination is finished and saved, double check to make sure both properties are there.</p>
+<p class="image-container"><img alt="BPA Image 21" src="img/9f318b8a11781f58.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating the SAP BPA Project" duration="0">
+        <p>For the SAP BPA setup, we will be importing 2 different projects:</p>
+<ul>
+<li>a project of type &#34;Actions&#34;</li>
+<li>a project of type &#34;Process Automation&#34;</li>
+</ul>
+<p>We will start by importing the Action project. Select the import option which is highlighted by the red square. When prompted, select the AEMSALESORDERAPI.mtar file for import. Once it&#39;s successfully imported, you will see it listed as per the screenshot below and you should see type &#34;Actions&#34; listed. Repeat the exact same process to import the second file SAPAEMSO.mtar. It will result in the  project being imported of type &#34;Process Automation&#34;.</p>
+<aside class="warning"><p> Depending on the versions of the deployed project, there might be some differences between your project and the screenshot in this codelab. This is acceptable.</p>
+</aside>
+<p class="image-container"><img alt="SPA BPA Image 11" src="img/629153fe58404f69.jpg"></p>
+<p>In order to deploy the Action project, you need to first configure the project with a Destination that you have already created in BTP. The Destination will be selected in the deployment so we need to create that first. Navigate to the &#34;Settings&#34; tab from the BPA environment. In this example, we are not really creating a destination but more referencing an already existing Destination. When you click &#34;New Destination&#34;, you should see the Destination you created in BTP called &#34;AEMBROKERREST&#34;, if you don&#39;t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the Action project.</p>
+<p class="image-container"><img alt="SPA BPA Image 12" src="img/37ac5b44e639c6e1.jpg"></p>
+<p>Return to the &#34;Lobby&#34; and Click into the AEMSALESORDERAPI project. From this screen you will now hit the Release Button.</p>
+<p class="image-container"><img alt="SPA BPA Image 9" src="img/33efdf97754ec0e0.jpg"></p>
+<p>Once the project is released, select the &#34;Publish to Library&#34; button.</p>
+<p class="image-container"><img alt="SPA BPA Image 10" src="img/ef335c77e6120737.jpg"></p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="90">
-        <p>✅  Understand concept of Dead Message Queus ✅  Understand how to use SAP BPA to process Dead Messages</p>
+        <p>✅  Understand concept of Dead Message Queues<br> ✅  Understand how to use SAP BPA to process Dead Messages</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
