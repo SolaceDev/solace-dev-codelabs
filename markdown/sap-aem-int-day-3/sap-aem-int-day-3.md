@@ -63,59 +63,66 @@ Duration: 0:20:00
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
 
-### A) - For the AEMBusinessPartnerAddressCheck flow, create:
-    * CIBusinessPartnerChecker
+### A) - For the AEMBusinessPartnerAddressCheck flow
+Create the following queues:
+  - CIBusinessPartnerChecker
       ![queue settings](img/CIBusinessPartnerChecker-queue-settings.png)
       ![queue settings pt2](img/CIBusinessPartnerChecker-queue-settings-pt2.png)
-      *Add the following subscriptions to the queue
+  - Add the following subscriptions to the queue
       ![queue subscriptions](img/CIBusinessPartnerChecker-queue-subs.png)
 
-    * CIBusinessPartnerCheckerDMQ
+  - CIBusinessPartnerCheckerDMQ
       ![queue settings](img/CIBusinessPartnerCheckerDMQ-queue-settings.png)
-    * CIBusinessPartnerChecked (optional - if you want to see the output)
+  - CIBusinessPartnerChecked (optional - if you want to see the output)
       ![queue settings](img/CIBusinessPartnerChecked-queue-settings.png)
-      *Add the following subscriptions to the queue
+  - Add the following subscriptions to the queue
       ![queue subscriptions](img/CIBusinessPartnerChecked-queue-subs.png)
-	  > Notice the second subscriptions that starts with `!` ? <br>
+	  > aside negative
+		> Notice the second subscriptions that starts with `!` ? <br>
 	  > This is called a topic exception and removes any events matching topic subscription `sap.com/businesspartner/addressChecked/V1/*/*/Invalid` from the previously matched list of events matched by `sap.com/businesspartner/addressChecked/V1/>`. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See [link](https://docs.solace.com/Messaging/SMF-Topics.htm) for more details on Solace's topic syntax.
-    * CIBusinessPartnerInvalid (optional - if you want to see the output)
+
+  - CIBusinessPartnerInvalid (optional - if you want to see the output)
       ![queue settings](img/CIBusinessPartnerCheckedInvalid-queue-settings.png)
       *Add the following subscriptions to the queue
       ![queue subscriptions](img/CIBusinessPartnerCheckedInvalid-queue-subs.png)
 
-### B) - For the AEMSalesOrderNotification flow, create:
-    * CISalesOrderNotification
-      ![queue settings](img/CISalesOrderNotification-queue-settings.png)
-      ![queue settings pt2](img/CISalesOrderNotification-queue-settings-pt2.png)
-      *Add the following subscriptions to the queue
-      ![queue subscriptions](img/CISalesOrderNotification-queue-subs.png)
+### B) - For the AEMSalesOrderNotification flow
+Create the following queues:
+  - CISalesOrderNotification
+	![queue settings](img/CISalesOrderNotification-queue-settings.png)
+	![queue settings pt2](img/CISalesOrderNotification-queue-settings-pt2.png)
+  - Add the following subscriptions to the queue
+  ![queue subscriptions](img/CISalesOrderNotification-queue-subs.png)
 
-    * CISalesOrderNotificationProcessed (optional - if you want to see the output)
-      ![queue settings](img/CISalesOrderNotificationProcessed-queue-settings.png)
-      *Add the following subscriptions to the queue
-      ![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)
+  - CISalesOrderNotificationProcessed (optional - if you want to see the output)
+  ![queue settings](img/CISalesOrderNotificationProcessed-queue-settings.png)
+  - Add the following subscriptions to the queue
+  ![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)
 
-### C) - For the AEMLegacyOutputAdapter flow, create:
-    * CILegacyAdapterIn
-      ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
-      ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
-      *Add the following subscriptions to the queue
-      ![queue subscriptions](img/CILegacyAdapterIn-queue-subs.png)
+### C) - For the AEMLegacyOutputAdapter flow
+Create the following queues:
+  - CILegacyAdapterIn
+  ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
+  ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+  - Add the following subscriptions to the queue
+  ![queue subscriptions](img/CILegacyAdapterIn-queue-subs.png)
 
-    * CILegacyAdapterInDMQ
-      ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
+  - CILegacyAdapterInDMQ
+  ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
 
 ## Setup/Configure Dependency Services
 
 Duration: 0:10:00
 
 ### A) - For AEMBusinessPartnerAddressCheck
-    * Activate SAP's Data Quality Management Service (DQM) by following
+  - Activate SAP's Data Quality Management Service (DQM) by following
       this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) take a note of the URL and user credentials once you've activated the service.
+
 ### B) - For AEMSalesOrderNotification
-    * You'll need an external email service to be able to automatically send emails, details like smtp server address,
-      username (email) and password.
+  - You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
+
 ### C) - For AEMLegacyOutputAdapter
+
    > The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to
    a legacy system. The actual flow doesn't require a working sftp destination as it's just being used to simulate a
    failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver
@@ -154,6 +161,7 @@ Let's configure the security details we will need to connect to the various serv
 ### B) - AEMBusinessPartnerAddressCheck
 1. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
+> aside negative
 > This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
 > a) Storing the original event payload in an environment variable.<br>
 > b) Populating the DQM request payload with the addresses in the input event.<br>
@@ -193,6 +201,7 @@ Congratulations, if you are seeing both the Started iflow as well as the consume
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
 ![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
 
+> aside negative
 > This flow gets triggered by Sales Order events and does two things:<br>
 > a) It creates an email and puts the Sales Order into the body of the email.<br>
 > (The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
@@ -220,6 +229,7 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
 ![AEMLegacyOutputAdapter_flow](img/AEMLegacyOutputAdapter_flow.png)
 
+> aside negative
 > This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.
 > Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM.
 > The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter's retry behaviour.
@@ -227,6 +237,7 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 > Let's take a look at some of the relevant settings of the AEM adapter that control this behaviour.
 
 ![AEM error handling settings](img/CILegacyAdapterIn-AEM-error-handling.png)
+> aside negative
 > Let's look at these settings one by one:<br>
 > 1) Acknowledgement Mode: "Automatic on Exchange Complete"<br>
 The most important setting when it comes to not accidentally acknowledging and therefore removing a message from the broker's queue. This setting tells the flow/AEM adapter to only acknowledge (ack) the message after the flow has successfully completed processing the message. If any in the processing occurs, the AEM adapter will instead send a negative acknowledgment back (nack) to tell the broker to keep the message and retry it, because it couldn't be successfully processed by the flow. The alternative is to immediately ack the message when it's received, which will always result in the message being removed from the queue even if the flow fails to successfully process the message. (!!)<br>
