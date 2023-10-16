@@ -44,13 +44,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Step 1 - Using SAP BPA to handle event exceptions" duration="0">
-        
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Takeaways" duration="90">
-        <p>✅  Understand concept of Dead Message Queus ✅  Understand how to use SAP BPA to process Dead Messages</p>
-<p>In the world of Event Driven Asynchronous messaging, occasionally an event will not be able to be processed by one of the subscribers. Sometimes you will hear customers referring to a &#34;poison message&#34;, something that cannot be processed due to the format of the message. Depending on your setup, you might decide to take advantage of the functionality of the Advanced Event Mesh to place messages in a Dead Message Queue. <a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Read more</a></p>
+        <p>In the world of Event Driven Asynchronous messaging, occasionally an event will not be able to be processed by one of the subscribers. Sometimes you will hear customers referring to a &#34;poison message&#34;, something that cannot be processed due to the format of the message. Depending on your setup, you might decide to take advantage of the functionality of the Advanced Event Mesh to place messages in a Dead Message Queue. <a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Read more</a></p>
 <p>In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. In the iFlow you created on Day 3, we will essentially corrupt the name of the SFTP Server so that messages cannot be delivered. Once the iFlow attempts delivery of the message and is unsuccessful, the messages will be placed into a Queue (aka Dead Message Queue) for review/processing. The messages in this queue will remain there until they are reviewed and released back onto the broker for re-processing. To facilitate this operation, we have decided to take advantage of the SAP Business Process Automation service.</p>
 <p>There are several components to this scenario that work together to facilitate the review.</p>
 <p class="image-container"><img alt="AEM CLUSTER" src="img/5459955abc49fc86.jpg"></p>
@@ -86,6 +80,12 @@
 <p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value &#34;/workflow/rest/v1/workflow-instances&#34;</p>
 <p class="image-container"><img alt="BPA-17" src="img/c4526ddbad053dea.jpg"></p>
 <p>At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them says &#34;Down&#34;, you will need to TroubleShoot, go back and double check your settings. There is also a Stats link that you can use to sometimes see the Error Messages.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="90">
+        <p>✅  Understand concept of Dead Message Queus ✅  Understand how to use SAP BPA to process Dead Messages</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 

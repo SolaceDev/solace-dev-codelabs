@@ -25,26 +25,19 @@ Enter environment setup & prerequisites here
 
 ## Step 1 - Using SAP BPA to handle event exceptions
 
-## Takeaways
-
-Duration: 1:30:00
-
-✅  Understand concept of Dead Message Queus
-✅  Understand how to use SAP BPA to process Dead Messages
-
 In the world of Event Driven Asynchronous messaging, occasionally an event will not be able to be processed by one of the subscribers. Sometimes you will hear customers referring to a “poison message”, something that cannot be processed due to the format of the message. Depending on your setup, you might decide to take advantage of the functionality of the Advanced Event Mesh to place messages in a Dead Message Queue. [Read more](https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/)
 
-In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. In the iFlow you created on Day 3, we will essentially corrupt the name of the SFTP Server so that messages cannot be delivered. Once the iFlow attempts delivery of the message and is unsuccessful, the messages will be placed into a Queue (aka Dead Message Queue) for review/processing. The messages in this queue will remain there until they are reviewed and released back onto the broker for re-processing. To facilitate this operation, we have decided to take advantage of the SAP Business Process Automation service. 
+In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. In the iFlow you created on Day 3, we will essentially corrupt the name of the SFTP Server so that messages cannot be delivered. Once the iFlow attempts delivery of the message and is unsuccessful, the messages will be placed into a Queue (aka Dead Message Queue) for review/processing. The messages in this queue will remain there until they are reviewed and released back onto the broker for re-processing. To facilitate this operation, we have decided to take advantage of the SAP Business Process Automation service.
 
-There are several components to this scenario that work together to facilitate the review. 
+There are several components to this scenario that work together to facilitate the review.
 
 ![AEM CLUSTER](img/BPA-1.jpg)
 
-The first component is the iFlow that you will have installed on Day 3. The first thing you will need to do is to “corrupt” the SFTP Server name so that the messages cannot be delivered to the SFTP Server. 
+The first component is the iFlow that you will have installed on Day 3. The first thing you will need to do is to “corrupt” the SFTP Server name so that the messages cannot be delivered to the SFTP Server.
 
 **Step 1** - Modify this iFlow with the bad SFTP Server name and redeploy the iFlow. Once the iFlow is redployed, it will start to send messages to the DMQ. Once these messages arrive at the DMQ, you will start to see the Dead Message Integration Card get populated with messages.
 
-**Step 2** – Configure the RDP on the broker where the SO_WF Queue will be located. Navigate to the main console and goto your cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point. 
+**Step 2** – Configure the RDP on the broker where the SO_WF Queue will be located. Navigate to the main console and goto your cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
 
 ![BPA-3](img/BPA-3.jpg)
 
@@ -74,7 +67,7 @@ Next step to create the Rest Delivery Point and associated components. Navigate 
 
 ![BPA-10](img/BPA-10.jpg)
 
-The name of the RDP is “RDP1”. 
+The name of the RDP is “RDP1”.
 
 ![BPA-11](img/BPA-11.jpg)
 
@@ -103,6 +96,15 @@ This is where you will enter the remainder of the endpoint…aka the endpoint fo
 ![BPA-17](img/BPA-17.jpg)
 
 At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them says “Down”, you will need to TroubleShoot, go back and double check your settings. There is also a Stats link that you can use to sometimes see the Error Messages.
+
+
+## Takeaways
+
+Duration: 1:30:00
+
+✅  Understand concept of Dead Message Queus
+✅  Understand how to use SAP BPA to process Dead Messages
+
 
 
 ![Soly Image Caption](img/soly.gif)
