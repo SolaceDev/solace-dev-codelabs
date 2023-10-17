@@ -105,7 +105,7 @@ Create the following queues:
   ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
   ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
   - Add the following subscriptions to the queue
-  ![queue subscriptions](img/CILegacyAdapterIn-queue-subs.png)
+  ![queue subscriptions](img/CILegacyAdapterIn-queue-subsv2.png)
 
   - CILegacyAdapterInDMQ
   ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
