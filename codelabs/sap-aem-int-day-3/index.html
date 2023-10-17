@@ -56,7 +56,7 @@
 <h2 is-upgraded>B) - Download and import the AEM adapter for Integration Suite</h2>
 <p>A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step. Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:</p>
 <ul>
-<li>Download <a href="artifacts/AEM-Adapter-EA.zip" target="_blank">Integration Suite AEM Adapter</a></li>
+<li>Download <a href="artifacts/AEM-Adapter-EA-10-16.zip" target="_blank">Integration Suite AEM Adapter</a></li>
 <li>Import the AEM adapter into your Integration Suite tenant by following the instructions in the <a href="https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure" target="_blank">SAP documentation</a> to upload and deploy this adapter.</li>
 </ul>
 <h2 is-upgraded>C) - Download and import the template integration flows package</h2>
@@ -80,10 +80,13 @@
 <li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/13f3a2584c29ca1b.png"></li>
 <li>CIBusinessPartnerCheckerDMQ <img alt="queue settings" src="img/50ad5dcf05cf212a.png"></li>
 <li>CIBusinessPartnerChecked (optional - if you want to see the output) <img alt="queue settings" src="img/74bd1f98f780dba8.png"></li>
-<li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/3c1e875d8eb8d3c.png"><aside class="warning"><p> Notice the second subscriptions that starts with <code>!</code> ? <br><br> This is called a topic exception and removes any events matching topic subscription <code>sap.com/businesspartner/addressChecked/V1/*/*/Invalid</code> from the previously matched list of events matched by <code>sap.com/businesspartner/addressChecked/V1/></code>. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See <a href="https://docs.solace.com/Messaging/SMF-Topics.htm" target="_blank">link</a> for more details on Solace&#39;s topic syntax.</p>
+<li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/3c1e875d8eb8d3c.png"></li>
+</ul>
+<aside class="warning"><p> Notice the second subscriptions that starts with <code>!</code> ? <br><br> This is called a topic exception and removes any events matching topic subscription <code>sap.com/businesspartner/addressChecked/V1/*/*/Invalid</code> from the previously matched list of events matched by <code>sap.com/businesspartner/addressChecked/V1/></code>. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See <a href="https://docs.solace.com/Messaging/SMF-Topics.htm" target="_blank">link</a> for more details on Solace&#39;s topic syntax.</p>
 </aside>
-</li>
-<li>CIBusinessPartnerInvalid (optional - if you want to see the output) <img alt="queue settings" src="img/df0c166eb9bc8942.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/a98cb26fd7cdebf.png"></li>
+<ul>
+<li>CIBusinessPartnerInvalid (optional - if you want to see the output) <img alt="queue settings" src="img/df0c166eb9bc8942.png"></li>
+<li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/a98cb26fd7cdebf.png"></li>
 </ul>
 <h2 is-upgraded>B) - For the AEMSalesOrderNotification flow</h2>
 <p>Create the following queues:</p>
