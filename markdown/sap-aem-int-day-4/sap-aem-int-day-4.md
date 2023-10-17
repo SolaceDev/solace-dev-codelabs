@@ -199,6 +199,7 @@ From this screen you can Release the project in the top right corner. Alternativ
 ![SPA BPA Image 14](img/SPA-BPA-14.jpg)
 You can select the appropriate version with either of the radio boxes and then press the release button.
 ![SPA BPA Image 15](img/SPA-BPA-15.jpg)
+
 Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks.
 ![SPA BPA Image 16](img/SPA-BPA-16.jpg)
 Press Next
@@ -209,12 +210,28 @@ This is the last step to deploy your business process, click Deploy.
 ![SPA BPA Image 19](img/SPA-BPA-19.jpg)
 You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
 ![SPA BPA Image 20](img/SPA-BPA-20.jpg)
+
+Theoretically, the process should be running and the next time you press "Submit" on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?
+
+From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
+![SPA BPA Image 21](img/SPA-BPA-21.jpg)
+Now you will see the form that we created to display the contents of a Sales Order Event.
+![SPA BPA Image 21](img/SPA-BPA-21.jpg)
+
+## Testing the components
+At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don't?
+
+My first suggestion would be to use the "Try Me" tab on the broker with the configured Rest Delivery Point and let's do some simple tests.
+
 ## Takeaways
 
 Duration: 1:30:00
 
-✅  Understand concept of Dead Message Queues \
+✅  Understand concept of Dead Message Queues
 ✅  Understand how to use SAP BPA to process Dead Messages
+✅  Understand how to use an iFlow with an Event for transformations
+✅  Understand how to setup a Rest Delivery Point
+
 
 
 
