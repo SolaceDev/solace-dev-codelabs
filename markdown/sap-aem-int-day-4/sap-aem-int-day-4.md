@@ -102,7 +102,7 @@ Congratulations, you have completed setup of the Rest Delivery Point. Each time 
 
 ## Integration Suite Setup
 
-In the Business Process Automation scenario. In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
+In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
 - SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
 - SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
 
@@ -133,7 +133,19 @@ Select the “Upload” checkbox and use the 2nd zip file that contains the iFlo
 
 ![IS Image 6](img/IS-6.jpg)
 
-Once the iFlow is imported, you can just select the arrow to the right and click “Deploy”.
+Once after the iFlow is successfully imported, we need to configure the appropriate connection information to connect to the AEM Service. You should know where to find this information now :-)
+
+![IS Image 12](img/IS-12.jpg)
+
+On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED"....short for Sales Orders Reject.
+![IS Image 13](img/IS-13.jpg)
+
+Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
+![IS Image 14](img/IS-14.jpg)
+Now we configure the configuration information. In this configuration, we will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue.
+![IS Image 15](img/IS-15.jpg)
+
+Once the iFlow is imported, you can just select the arrow to the right and click “Deploy”. Please note, you will need to create the secure alias shown in the screenshot.
 
 ![IS Image 7](img/IS-7.jpg)
 
