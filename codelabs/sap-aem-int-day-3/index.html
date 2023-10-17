@@ -100,7 +100,7 @@
 <p>Create the following queues:</p>
 <ul>
 <li>CILegacyAdapterIn <img alt="queue settings" src="img/c30144defe0de341.png"><img alt="queue settings pt2" src="img/b1ca0b67e789fbe9.png"></li>
-<li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/d87049856c24e09a.png"></li>
+<li>Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/5436614198556cf7.png"></li>
 <li>CILegacyAdapterInDMQ <img alt="queue settings" src="img/184d57d9217e015e.png"></li>
 </ul>
 
@@ -121,7 +121,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Configure Your Integration Suite Flows" duration="60">
-        <p>One thing, before we jump back into Integration Suite: Let&#39;s head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the &#34;Connect&#34; tab. Take a note of the connectivity details underneath &#34;Solace Messaging&#34; (click on the section to open it up): <img alt="AEM broker service connectivity details" src="img/a620f3ff7799345c.png">, we will need them in the next steps when configuring our flows.</p>
+        <p>One thing, before we jump back into Integration Suite: Let&#39;s head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the &#34;Connect&#34; tab. Take a note of the connectivity details underneath &#34;Solace Messaging&#34; (click on the section to open it up): <img alt="AEM broker service connectivity details" src="img/a620f3ff7799345c.png"> We will need them in the next steps when configuring our flows.</p>
 <p>The connect tab lists all the various connectivity details for the various supported protocols. Our Cloud Integration AEM adapter uses the Solace Messaging protocol, which is AEM&#39;s very own protocol with a broad feature support. Each AEM service also comes with a default client user called <code>solace-cloud-client</code> that is configured for convenience reasons and is allowed to publish and subscribe to all topics. We will be using this user for all our iflows. In a real production environment where security is important, you or your administrator will likely have this user disabled and will be creating separate users for each of the applications that connect to the AEM broker. Or this may even be deferred to an external authentication service over LDAP or OAuth.</p>
 <p>Now that we have set up all the prerequisites for our Integration Suite flows, we can take a look at the individual flows and prepare them for deployment.</p>
 <h2 is-upgraded>A) - Security Configuration</h2>
