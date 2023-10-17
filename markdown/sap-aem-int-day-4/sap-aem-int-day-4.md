@@ -216,12 +216,65 @@ Theoretically, the process should be running and the next time you press "Submit
 From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
 ![SPA BPA Image 21](img/SPA-BPA-21.jpg)
 Now you will see the form that we created to display the contents of a Sales Order Event.
-![SPA BPA Image 21](img/SPA-BPA-21.jpg)
+![SPA BPA Image 22](img/SPA-BPA-22.jpg)
 
 ## Testing the components
 At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don't?
 
 My first suggestion would be to use the "Try Me" tab on the broker with the configured Rest Delivery Point and let's do some simple tests.
+
+![SPA BPA Image 23](img/SPA-BPA-23.jpg)
+On this screen, we can test several things. For starters, we can confirm that the iFlow that we deployed is working and successfully transforming our message.
+On the publisher side, connect to the broker and use "sap.com/salesorder/rejected/V1" as the topic and for the message use the following structure. This will simulate an event being submitted for Review from the Integration Card.
+```JSON
+{
+	"orderHeader": [
+		{
+			"salesOrderNumber": "SO1002",
+			"creator": "Jane Smith",
+			"date": 1691193600000,
+			"salesType": "In-store",
+			"ordertype": "Express",
+			"salesOrg": "SA02",
+			"distributionChannel": "DC02",
+			"division": "DV02",
+			"customer": [
+				{
+					"customerId": "CUST002",
+					"customerName": "XYZ Ltd",
+					"zipCode": "54321",
+					"street": "First Avenue",
+					"phone": "555-987-6543",
+					"country": "USA",
+					"city": "Los Angeles"
+				}
+			],
+			"orderItem": [
+				{
+					"item": "ITEM002",
+					"material": "MAT002",
+					"materialType": "Service",
+					"itemType": "Premium",
+					"orderSchedule": [
+						{
+							"scheduleNumber": "SCH002",
+							"quantity": 50,
+							"uom": "Hrs"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+On the subscriber side, connect to the broker and use ">" as your topic. This will show everything. When you publish your message, you should immediately see a message appear in the subscriber window and you should be looking for a couple of things:
+- A new message with a different Topic - sap.com/bpasalesorder/rejected/V1
+- The body of the message should essentially be the same BUT it has a new wrapper called "context" and a new attribute called "definitionId". If you don't see both of these things, something is wrong with the iFlow.
+- After you publish the method, you should see a new item in your inbox. If the message appears to have the right structure in the subscriber window  (aka your iFlow is working) then the next place to look is the configuration of the Rest Delivery Point. The RDP will be listening for these rejected messages and then calling the API to start the BPA process. If it's not, potentially check the queue to see if messages are accumulating in SO_WF.
+
+  ### IF YOU SEE MESSAGES IN THE INBOX....WOOHOO
+
 
 ## Takeaways
 
