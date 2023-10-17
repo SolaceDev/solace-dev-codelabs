@@ -120,12 +120,12 @@
       </google-codelab-step>
     
       <google-codelab-step label="Business Process Automation Setup" duration="0">
-        <p>The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA &#34;Action&#34; highlighted in Red Below. This action requires the creation of a Destination on the BTP Platform which will be the first step in this process.</p>
+        <p>The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA &#34;Action&#34; highlighted in Red Below.</p>
 <p class="image-container"><img alt="SAP BPA Image 1" src="img/60af0e589798c49d.jpg"></p>
-<p>From the BTP Cockpit, Select the &#34;New Destination&#34; option. You will be creating a destination called &#34;AEMBROKERREST&#34;.</p>
+<p>The &#34;Action&#34; component needs to be associatd with a destination. For the destination information needed below, you will need &#34;REST&#34; connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the &#34;Connect&#34; option at the top. On this screen, make sure that the &#34;View By&#34; is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.</p>
+<p class="image-container"><img alt="SAP BPA Image 2" src="img/700fa4064296f1c3.jpg"></p>
+<p>Once you have the connectivity information, open the BTP Cockpit, Select the &#34;New Destination&#34; option. You will be creating a destination called &#34;AEMBROKERREST&#34;.</p>
 <p class="image-container"><img alt="BPA Image 20" src="img/238772c7c56d504a.jpg"></p>
-<p>For the destination information needed below, you will need connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the &#34;Connect&#34; option at the top. On this screen, make sure that the &#34;View By&#34; is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.</p>
-<p class="image-container"><img alt="AEM Image 1" src="img/29394e8e5760b39e.jpg"></p>
 <p>You will populate the Destination information as shown below and you will add two properties that are both set to true.</p>
 <ul>
 <li>sap.applicationdevelopment.actions.enabled – true</li>
@@ -153,12 +153,74 @@
 <p class="image-container"><img alt="SPA BPA Image 9" src="img/33efdf97754ec0e0.jpg"></p>
 <p>Once the project is released, select the &#34;Publish to Library&#34; button.</p>
 <p class="image-container"><img alt="SPA BPA Image 10" src="img/ef335c77e6120737.jpg"></p>
+<p>Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer. <img alt="SPA BPA Image 13" src="img/a8cf8277d6a44df2.jpg"></p>
+<p>From this screen you can Release the project in the top right corner. Alternatively, you can click on the &#34;Sales Order Review&#34; process to review the structure of the process to see how it is built.</p>
+<p><img alt="SPA BPA Image 14" src="img/10ec49b868f14085.jpg"> You can select the appropriate version with either of the radio boxes and then press the release button. <img alt="SPA BPA Image 15" src="img/d103924d276b457.jpg"></p>
+<p>Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks. <img alt="SPA BPA Image 16" src="img/78cae032bc452e5c.jpg"> Press Next <img alt="SPA BPA Image 17" src="img/1cc0a11bdef81c81.jpg"> Here you must select your destination for the action. If your destination is not in the dropdown, someone has not been configured properly in the Settings of the project. <img alt="SPA BPA Image 18" src="img/91fbe0c5a9e25aed.jpg"> This is the last step to deploy your business process, click Deploy. <img alt="SPA BPA Image 19" src="img/cc3fab0d0fe8544b.jpg"> You should now see &#34;Deployed&#34; and &#34;Active&#34; on the top left of the screen and your process should now be running. <img alt="SPA BPA Image 20" src="img/fe184e512631f017.jpg"></p>
+<p>Theoretically, the process should be running and the next time you press &#34;Submit&#34; on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?</p>
+<p>From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It. <img alt="SPA BPA Image 21" src="img/eacdcfe9b1226382.jpg"> Now you will see the form that we created to display the contents of a Sales Order Event. <img alt="SPA BPA Image 22" src="img/57e73f7397bc4a62.jpg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Testing the components" duration="0">
+        <p>At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don&#39;t?</p>
+<p>My first suggestion would be to use the &#34;Try Me&#34; tab on the broker with the configured Rest Delivery Point and let&#39;s do some simple tests.</p>
+<p><img alt="SPA BPA Image 23" src="img/1d5be2539d134914.jpg"> On this screen, we can test several things. For starters, we can confirm that the iFlow that we deployed is working and successfully transforming our message. On the publisher side, connect to the broker and use &#34;sap.com/salesorder/rejected/V1&#34; as the topic and for the message use the following structure. This will simulate an event being submitted for Review from the Integration Card.</p>
+<pre><code language="language-JSON" class="language-JSON">{
+	&#34;orderHeader&#34;: [
+		{
+			&#34;salesOrderNumber&#34;: &#34;SO1002&#34;,
+			&#34;creator&#34;: &#34;Jane Smith&#34;,
+			&#34;date&#34;: 1691193600000,
+			&#34;salesType&#34;: &#34;In-store&#34;,
+			&#34;ordertype&#34;: &#34;Express&#34;,
+			&#34;salesOrg&#34;: &#34;SA02&#34;,
+			&#34;distributionChannel&#34;: &#34;DC02&#34;,
+			&#34;division&#34;: &#34;DV02&#34;,
+			&#34;customer&#34;: [
+				{
+					&#34;customerId&#34;: &#34;CUST002&#34;,
+					&#34;customerName&#34;: &#34;XYZ Ltd&#34;,
+					&#34;zipCode&#34;: &#34;54321&#34;,
+					&#34;street&#34;: &#34;First Avenue&#34;,
+					&#34;phone&#34;: &#34;555-987-6543&#34;,
+					&#34;country&#34;: &#34;USA&#34;,
+					&#34;city&#34;: &#34;Los Angeles&#34;
+				}
+			],
+			&#34;orderItem&#34;: [
+				{
+					&#34;item&#34;: &#34;ITEM002&#34;,
+					&#34;material&#34;: &#34;MAT002&#34;,
+					&#34;materialType&#34;: &#34;Service&#34;,
+					&#34;itemType&#34;: &#34;Premium&#34;,
+					&#34;orderSchedule&#34;: [
+						{
+							&#34;scheduleNumber&#34;: &#34;SCH002&#34;,
+							&#34;quantity&#34;: 50,
+							&#34;uom&#34;: &#34;Hrs&#34;
+						}
+					]
+				}
+			]
+		}
+	]
+}
+</code></pre>
+<p>On the subscriber side, connect to the broker and use &#34;&gt;&#34; as your topic. This will show everything. When you publish your message, you should immediately see a message appear in the subscriber window and you should be looking for a couple of things:</p>
+<ul>
+<li>A new message with a different Topic - sap.com/bpasalesorder/rejected/V1</li>
+<li>The body of the message should essentially be the same BUT it has a new wrapper called &#34;context&#34; and a new attribute called &#34;definitionId&#34;. If you don&#39;t see both of these things, something is wrong with the iFlow.</li>
+<li>After you publish the method, you should see a new item in your inbox. If the message appears to have the right structure in the subscriber window  (aka your iFlow is working) then the next place to look is the configuration of the Rest Delivery Point. The RDP will be listening for these rejected messages and then calling the API to start the BPA process. If it&#39;s not, potentially check the queue to see if messages are accumulating in SO_WF.<h2 is-upgraded>IF YOU SEE MESSAGES IN THE INBOX....WOOHOO</h2>
+</li>
+</ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="90">
-        <p>✅  Understand concept of Dead Message Queues<br> ✅  Understand how to use SAP BPA to process Dead Messages</p>
+        <p>✅  Understand concept of Dead Message Queues ✅  Understand how to use SAP BPA to process Dead Messages ✅  Understand how to use an iFlow with an Event for transformations ✅  Understand how to setup a Rest Delivery Point</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
