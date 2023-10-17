@@ -145,32 +145,34 @@ Let's configure the security details we will need to connect to the various serv
 ![Security Material](img/CISecurityMaterial.png)
 - In here, create security credentials for your AEM broker service, email and SFTP server.
 ![Security Material details](img/CISecurityMaterial-details.png)
-- You may also need to create a known.hosts file, populate it with your SFTP server's ssh id if you want to complete the optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow).
-> See [this post](https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/) by Pravesh Shukla if you need help with this step.
+- You may also need to create a known.hosts file, populate it with your SFTP server's ssh id if you want to complete the optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow). See [this post](https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/) by Pravesh Shukla if you need help with this step.
 - Go to Integration Suite Monitor Artifacts -> Manage Security -> Manage Keystore.
 - You will need to import your email servers public CA certificate, if you want the email adapter to successfully connect and send emails. In our case, we are sending from an Outlook address, so we imported the TLS certificate that Microsoft uses for those servers in order to connect.
 ![Manage Keystore](img/CIManageKeystore.png)
+> aside negative
 > See [this stackexchange post](https://security.stackexchange.com/questions/70528/how-to-get-ssl-certificate-of-a-mail-server) if you need help with finding and [this article](https://help.sap.com/docs/cloud-integration/sap-cloud-integration/uploading-certificate?locale=en-US) for help with importing the right CA certificate for your email server in Integration Suite.
 
 ### B) - AEMBusinessPartnerAddressCheck
 1. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
-> This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
-> a) Storing the original event payload in an environment variable.<br>
-> b) Populating the DQM request payload with the addresses in the input event.<br>
-> c) Invoking the DQM service over REST and<br>
-> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br>
-> e) Merging any corrected addresses back into the original payload.<br>
-> f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
-> `sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
+This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
+a) Storing the original event payload in an environment variable.<br>
+b) Populating the DQM request payload with the addresses in the input event.<br>
+c) Invoking the DQM service over REST and<br>
+d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br>
+e) Merging any corrected addresses back into the original payload.<br>
+f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br>
+`sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}`
 
 Let's also look at what happens in order to publish a new event back to the Advanced Event Mesh broker.
-> First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive.
+First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive.
 ![AEMBusinessPartnerAddressCheck flow settings](img/CIBusinessPartnerChecker-flow-settings.png)
-> Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header.
+Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header.
 ![AEMBusinessPartnerAddressCheck topic processing](img/CIBusinessPartnerChecker-topic-processing.png)
-> Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script.
+Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script.
 ![AEM Publisher settings](img/CIBusinessPartnerChecker-output-AEM-adapter-settings.png)
+
+
 
 2b. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
 ![DQM service configuration](img/CIDQMServiceConfiguration.png)
@@ -194,10 +196,10 @@ Congratulations, if you are seeing both the Started iflow as well as the consume
 3a. Let's take a look at the AEMSalesOrderNotification iflow:
 ![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
 
-> This flow gets triggered by Sales Order events and does two things:<br>
-> a) It creates an email and puts the Sales Order into the body of the email.<br>
-> (The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
-> b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email was successfully sent.
+This flow gets triggered by Sales Order events and does two things:<br>
+a) It creates an email and puts the Sales Order into the body of the email.<br>
+(The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
+b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email was successfully sent.
 
 ### C) - AEMSalesOrderNotification
 3b. Configuring and deploying  the AEMSalesOrderNotification iflow:
@@ -221,28 +223,29 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 4a. Let's take a look at the AEMLegacyOutputAdapter iflow:
 ![AEMLegacyOutputAdapter_flow](img/AEMLegacyOutputAdapter_flow.png)
 
-> This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.
-> Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM.
-> The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter's retry behaviour.
-> Once the max configured retry attempts are exceeded, the AEM broker will move the message to a configured DMQ for exception processing.
-> Let's take a look at some of the relevant settings of the AEM adapter that control this behaviour.
+This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.<br>
+Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM.
+The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter's retry behaviour.<br>
+Once the max configured retry attempts are exceeded, the AEM broker will move the message to a configured DMQ for exception processing.<br>
+Let's take a look at some of the relevant settings of the AEM adapter that control this behaviour.
 
 ![AEM error handling settings](img/CILegacyAdapterIn-AEM-error-handling.png)
-> Let's look at these settings one by one:<br>
-> 1) Acknowledgement Mode: "Automatic on Exchange Complete"<br>
+Let's look at these settings one by one:<br>
+1) Acknowledgement Mode: "Automatic on Exchange Complete"<br>
 The most important setting when it comes to not accidentally acknowledging and therefore removing a message from the broker's queue. This setting tells the flow/AEM adapter to only acknowledge (ack) the message after the flow has successfully completed processing the message. If any in the processing occurs, the AEM adapter will instead send a negative acknowledgment back (nack) to tell the broker to keep the message and retry it, because it couldn't be successfully processed by the flow. The alternative is to immediately ack the message when it's received, which will always result in the message being removed from the queue even if the flow fails to successfully process the message. (!!)<br>
-> 2) Settlement Outcome After Maximum Attempts: "Failed"<br>
+2) Settlement Outcome After Maximum Attempts: "Failed"<br>
 This setting controls the nack type and behaviour, we have two options here:<br>
 	a) Failed, which will nack the message back to the broker and let's the broker check the retry count of the message to trigger retries based on the queue settings and only sending messages to DMQ when the retry count on the message has exceeded the max retry settings on the queue.<br>
 	b) Rejected, which will nack the message telling the broker to immediately move the message to DMQ when the AEM adapter settings (Maximum Message Processing Attempts) are exceeded irrespective of queue settings.<br>
-> 3) Max. Message Processing Attempts: 2<br>
+3) Max. Message Processing Attempts: 2<br>
 Controls how often we want to retry a message before we "give up".<br>
-> 4) Retry interval, Max Retry Interval and Exponential Backoff Multiplier<br>
+4) Retry interval, Max Retry Interval and Exponential Backoff Multiplier<br>
 These are all settings that control how quickly we want to retry and whether we want to incremently increase our retry delay with each failure. A good retry delay value prevents the broker from repeatedly retrying a message within a few milli-seconds and gives some time for transient error situations to clear before we retry.
 
 Keep in mind that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow:
 ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
 ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+
 > aside negative
 > Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
 
