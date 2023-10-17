@@ -131,7 +131,8 @@ The legacy output adapter is simulating appending events to a file via an SFTP a
 Duration: 1:00:00
 
 One thing, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
-![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png), we will need them in the next steps when configuring our flows.
+![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png)
+We will need them in the next steps when configuring our flows.
 
 > The connect tab lists all the various connectivity details for the various supported protocols. Our Cloud Integration AEM adapter uses the Solace Messaging protocol, which is AEM's very own protocol with a broad feature support.
 > Each AEM service also comes with a default client user called `solace-cloud-client` that is configured for convenience reasons and is allowed to publish and subscribe to all topics. We will be using this user for all our iflows. In a real production environment where security is important, you or your administrator will likely have this user disabled and will be creating separate users for each of the applications that connect to the AEM broker. Or this may even be deferred to an external authentication service over LDAP or OAuth.
