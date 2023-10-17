@@ -143,17 +143,17 @@ Before proceeding, please check the monitor to ensure that both artifacts have b
 
 ## Business Process Automation Setup
 
-The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. This action requires the creation of a Destination on the BTP Platform which will be the first step in this process.
+The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. 
 
 ![SAP BPA Image 1](img/SPA-BPA-1.jpg)
 
-From the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
+The "Action" component needs to be associatd with a destination. For the destination information needed below, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
+
+![SAP BPA Image 2](img/AEM-2.jpg)
+
+Once you have the connectivity information, open the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
 
 ![BPA Image 20](img/BPA-20.jpg)
-
-For the destination information needed below, you will need connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible. 
-
-![AEM Image 1](img/AEM-1.jpg)
 
 You will populate the Destination information as shown below and you will add two properties that are both set to true.
 - sap.applicationdevelopment.actions.enabled – true
@@ -191,7 +191,24 @@ Once the project is released, select the “Publish to Library” button.
 
 ![SPA BPA Image 10](img/SPA-BPA-10.jpg)
 
+Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
+![SPA BPA Image 13](img/SPA-BPA-13.jpg)
 
+From this screen you can Release the project in the top right corner. Alternatively, you can click on the "Sales Order Review" process to review the structure of the process to see how it is built.
+
+![SPA BPA Image 14](img/SPA-BPA-14.jpg)
+You can select the appropriate version with either of the radio boxes and then press the release button.
+![SPA BPA Image 15](img/SPA-BPA-15.jpg)
+Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks.
+![SPA BPA Image 16](img/SPA-BPA-16.jpg)
+Press Next
+![SPA BPA Image 17](img/SPA-BPA-17.jpg)
+Here you must select your destination for the action. If your destination is not in the dropdown, someone has not been configured properly in the Settings of the project.
+![SPA BPA Image 18](img/SPA-BPA-18.jpg)
+This is the last step to deploy your business process, click Deploy.
+![SPA BPA Image 19](img/SPA-BPA-19.jpg)
+You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
+![SPA BPA Image 20](img/SPA-BPA-20.jpg)
 ## Takeaways
 
 Duration: 1:30:00
