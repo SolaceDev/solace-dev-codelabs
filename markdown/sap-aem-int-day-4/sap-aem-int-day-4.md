@@ -44,11 +44,12 @@ From this screen, you will select the manage option at the top.
 
 ![BPA Image 4](img/BPA-4.jpg)
 
-You will then select “Queues” towards the middle of the screen.
+You will then select “Queues” towards the middle of the screen. 
+Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker. 
 
 ![BPA Image 5](img/BPA-5.jpg)
 
-On this screen, we will start by creating a Queue and Subscription.
+On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the “+Queue” option.
 
 ![BPA Image 6](img/BPA-6.jpg)
 
@@ -56,35 +57,37 @@ Create a new Queue with the name “SOREJECTED”.
 
 ![BPA Image 22](img/BPA-22.jpg)
 
-Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card from the Dead Message Queue.
+Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card. Messages are published from the Integration Card and then removed from the Queue.
+Add a Subscription by Clicking the “+Subscription” button and then add the subscription “sap.com/salesorder/rejected/V1”. Once messages are received into this Queue, they will be picked up by the Integration Flow that will augment the schema of the message. This iFlow will publish a message that will be used to activate the Business Process Automation process.
+
 
 ![BPA Image 24](img/BPA-24.jpg)
 
-Repeat the process to add another Queue called “SO_WF”.
+Repeat the process to add another Queue called “SO_WF”. Add a subscription for “sap.com/bpasalesorder/rejected/V1”. The iFlow that enriches the SalesOrder publishes the new message using that topic.
 
 ![BPA Image 23](img/BPA-23.jpg)
 
-Next step to create the Rest Delivery Point and associated components.
+Next step to create the Rest Delivery Point and associated components. Navigate to the clients tab as shown on the left and then click the + Rest Delivery Point Button.. The name of the RDP is “RDP1”.
+
 
 ![BPA Image 10](img/BPA-10.jpg)
-
-The name of the RDP is “RDP1”.
+You will now create a Rest Consumer that will be the target for your Events.
 
 ![BPA Image 11](img/BPA-11.jpg)
 
-You will now create a Rest Consumer that will be the target for your Events.
+ Enter “SO_WF_REST_CONSUMER” and press “Create”.
 
 ![BPA Image 12](img/BPA-12.jpg)
 
-Enter “SO_WF_REST_CONSUMER” and press “Create”.
+This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it’s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit…specifically the Client ID and the Token URL.
 
 ![BPA Image 13](img/BPA-13.jpg)
 
-This is the screen that requires some attention to detail.
+Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the “+Queue Binding”.
 
 ![BPA Image 14](img/BPA-14.jpg)
 
-Next you will create the connection between the Rest Consumer and the Queue that it will use.
+
 
 ![BPA Image 15](img/BPA-15.jpg)
 
@@ -92,11 +95,11 @@ From the dropdown, select the previously created Queue “SO_WF”.
 
 ![BPA Image 16](img/BPA-16.jpg)
 
-This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances.
+This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value “/workflow/rest/v1/workflow-instances”
 
 ![BPA Image 17](img/BPA-17.jpg)
 
-At this point, you should have a functioning RDP.
+At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate “Down”, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.
 
 Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.
 
@@ -137,15 +140,15 @@ Once after the iFlow is successfully imported, we need to configure the appropri
 
 ![IS Image 12](img/IS-12.jpg)
 
-On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED"....short for Sales Orders Reject.
+On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED"....short for Sales Orders Rejected.
 ![IS Image 13](img/IS-13.jpg)
 
 Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
 ![IS Image 14](img/IS-14.jpg)
-Now we configure the configuration information. In this configuration, we will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue.
+Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
 ![IS Image 15](img/IS-15.jpg)
 
-Once the iFlow is imported, you can just select the arrow to the right and click “Deploy”. Please note, you will need to create the secure alias shown in the screenshot.
+Once the configuration is complete, save and then click “Deploy”. Please note, you will need to create the secure alias shown in the screenshot.
 
 ![IS Image 7](img/IS-7.jpg)
 
