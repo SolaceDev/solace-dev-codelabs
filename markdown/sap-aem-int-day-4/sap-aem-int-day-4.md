@@ -157,8 +157,6 @@ From here, you will create a Secure Paramater and you will use the name "CABroke
 
 ![IS Image 7](img/IS-16.jpg)
 
-![IS Image 7](img/IS-7.jpg)
-
 Before proceeding, please check the monitor to ensure that both artifacts have been deployed successfully.
 
 ![IS Image 9](img/IS-9.jpg)
@@ -226,7 +224,7 @@ Once the project is released, you should see the Deploy Button. Press it to trig
 ![SPA BPA Image 16](img/SPA-BPA-16.jpg)
 Press Next
 ![SPA BPA Image 17](img/SPA-BPA-17.jpg)
-Here you must select your destination for the action. If your destination is not in the dropdown, someone has not been configured properly in the Settings of the project.
+Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
 ![SPA BPA Image 18](img/SPA-BPA-18.jpg)
 This is the last step to deploy your business process, click Deploy.
 ![SPA BPA Image 19](img/SPA-BPA-19.jpg)
@@ -299,8 +297,6 @@ On the subscriber side, connect to the broker and use ">" as your topic. This wi
 
 
 ## Takeaways
-
-Duration: 1:30:00
 
 ✅  Understand concept of Dead Message Queues
 ✅  Understand how to use SAP BPA to process Dead Messages
