@@ -80,9 +80,16 @@ You will now create a Rest Consumer that will be the target for your Events.
 ![BPA Image 12](img/BPA-12.jpg)
 
 This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it’s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit…specifically the Client ID and the Token URL.
+### In the next screenshots, we have the screenshots to show you where to get this information ###
 
 ![BPA Image 13](img/BPA-13.jpg)
 
+From the BTP Cockpit, we need to find the service key for the BPA Service. Navigate to the sub-account where you can find the BPA service. From there, click on the "Instances and Subscriptions" and navigate to the 3 "..." at the end.
+![BPA Image 25](img/SPA-BPA-25.jpg)
+To the right of the service key, you should again see 3 "..." where you can click "View". This will display the service key.
+![BPA Image 26](img/SPA-BPA-26.jpg)
+From there, all the information you need is displayed for the oAuth configuration. The only thing you need to watch is that after you copy/paste the URl for authentication, you will see there needs to be a suffix added which is "/oauth/token". The client ID can be copied and pasted as is.
+![BPA Image 24](img/SPA-BPA-24.jpg)
 Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the “+Queue Binding”.
 
 ![BPA Image 14](img/BPA-14.jpg)
