@@ -62,40 +62,38 @@
 <p class="image-container"><img alt="BPA Image 3" src="img/5d17a9489e9542bf.jpg"></p>
 <p>From this screen, you will select the manage option at the top.</p>
 <p class="image-container"><img alt="BPA Image 4" src="img/b80fb424669f69fc.jpg"></p>
-<p>You will then select &#34;Queues&#34; towards the middle of the screen.</p>
+<p>You will then select &#34;Queues&#34; towards the middle of the screen. Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker.</p>
 <p class="image-container"><img alt="BPA Image 5" src="img/d3164cb9ed25806.jpg"></p>
-<p>On this screen, we will start by creating a Queue and Subscription.</p>
+<p>On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the &#34;+Queue&#34; option.</p>
 <p class="image-container"><img alt="BPA Image 6" src="img/cede29c1e18daa64.jpg"></p>
 <p>Create a new Queue with the name &#34;SOREJECTED&#34;.</p>
 <p class="image-container"><img alt="BPA Image 22" src="img/ef528ed14443ae0c.jpg"></p>
-<p>Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card from the Dead Message Queue.</p>
+<p>Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card. Messages are published from the Integration Card and then removed from the Queue. Add a Subscription by Clicking the &#34;+Subscription&#34; button and then add the subscription &#34;sap.com/salesorder/rejected/V1&#34;. Once messages are received into this Queue, they will be picked up by the Integration Flow that will augment the schema of the message. This iFlow will publish a message that will be used to activate the Business Process Automation process.</p>
 <p class="image-container"><img alt="BPA Image 24" src="img/3761d649df77747f.jpg"></p>
-<p>Repeat the process to add another Queue called &#34;SO_WF&#34;.</p>
+<p>Repeat the process to add another Queue called &#34;SO_WF&#34;. Add a subscription for &#34;sap.com/bpasalesorder/rejected/V1&#34;. The iFlow that enriches the SalesOrder publishes the new message using that topic.</p>
 <p class="image-container"><img alt="BPA Image 23" src="img/33689ff9e5d3e6d9.jpg"></p>
-<p>Next step to create the Rest Delivery Point and associated components.</p>
-<p class="image-container"><img alt="BPA Image 10" src="img/250beb2bbb27b1f5.jpg"></p>
-<p>The name of the RDP is &#34;RDP1&#34;.</p>
+<p>Next step to create the Rest Delivery Point and associated components. Navigate to the clients tab as shown on the left and then click the + Rest Delivery Point Button.. The name of the RDP is &#34;RDP1&#34;.</p>
+<p><img alt="BPA Image 10" src="img/250beb2bbb27b1f5.jpg"> You will now create a Rest Consumer that will be the target for your Events.</p>
 <p class="image-container"><img alt="BPA Image 11" src="img/207e0b27c29bf87b.jpg"></p>
-<p>You will now create a Rest Consumer that will be the target for your Events.</p>
-<p class="image-container"><img alt="BPA Image 12" src="img/26ba5ebc9981cd13.jpg"></p>
 <p>Enter &#34;SO_WF_REST_CONSUMER&#34; and press &#34;Create&#34;.</p>
+<p class="image-container"><img alt="BPA Image 12" src="img/26ba5ebc9981cd13.jpg"></p>
+<p>This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it&#39;s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit...specifically the Client ID and the Token URL.</p>
 <p class="image-container"><img alt="BPA Image 13" src="img/b1463c990f21fb17.jpg"></p>
-<p>This is the screen that requires some attention to detail.</p>
+<p>Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the &#34;+Queue Binding&#34;.</p>
 <p class="image-container"><img alt="BPA Image 14" src="img/f5e32c7e7ffea52f.jpg"></p>
-<p>Next you will create the connection between the Rest Consumer and the Queue that it will use.</p>
 <p class="image-container"><img alt="BPA Image 15" src="img/66f82447ff9822e1.jpg"></p>
 <p>From the dropdown, select the previously created Queue &#34;SO_WF&#34;.</p>
 <p class="image-container"><img alt="BPA Image 16" src="img/454d538d9ecdb714.jpg"></p>
-<p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances.</p>
+<p>This is where you will enter the remainder of the endpoint...aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value &#34;/workflow/rest/v1/workflow-instances&#34;</p>
 <p class="image-container"><img alt="BPA Image 17" src="img/c4526ddbad053dea.jpg"></p>
-<p>At this point, you should have a functioning RDP.</p>
+<p>At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate &#34;Down&#34;, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.</p>
 <p>Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Integration Suite Setup" duration="0">
-        <p>In the Business Process Automation scenario. In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:</p>
+        <p>In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:</p>
 <ul>
 <li>SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API</li>
 <li>SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema.</li>
@@ -111,8 +109,14 @@
 <p>Now we will import the iFlow using the same approach we just followed for the Message Mapping.</p>
 <p><img alt="IS Image 5" src="img/cd603c54872ae343.jpg"> Select the &#34;Upload&#34; checkbox and use the 2nd zip file that contains the iFlow (***Not the one with the MM Extension ***).</p>
 <p class="image-container"><img alt="IS Image 6" src="img/3dad131dfa74fb56.jpg"></p>
-<p>Once the iFlow is imported, you can just select the arrow to the right and click &#34;Deploy&#34;.</p>
-<p class="image-container"><img alt="IS Image 7" src="img/2450866f214ff6b9.jpg"></p>
+<p>Once after the iFlow is successfully imported, we need to configure the appropriate connection information to connect to the AEM Service. You should know where to find this information now :-)</p>
+<p class="image-container"><img alt="IS Image 12" src="img/84ff6d4c797ff5bf.jpg"></p>
+<p>On this screen, we will configure the iFlow to be watching the Queue &#34;SOREJECTED&#34;....short for Sales Orders Rejected. <img alt="IS Image 13" src="img/ae3112f22d949a9f.jpg"></p>
+<p>Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above. <img alt="IS Image 14" src="img/98c781d5c1a813a1.jpg"> Now we configure the iFlow. We will publish to a topic called &#34;sap.com/bpasalesorder/rejected/V1&#34;. The thought here is that we still have a Sales Order but it&#39;s been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it&#39;s really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done. Save and Deploy the iFlow. <img alt="IS Image 15" src="img/5f6d9afd7fcf78fa.jpg"></p>
+<p>Now that both artifacts have been deployed, you need to create the secure parameter. Under &#34;Monitor&#34; Select Integrations.</p>
+<p class="image-container"><img alt="IS Image 17" src="img/23baeec1bc488c07.jpg"></p>
+<p>From here, you will create a Secure Paramater and you will use the name &#34;CABrokerUserPass&#34; <strong><em>or you can use another name, just be sure to use the same one in the iFlow</em></strong> You will enter the corresponding password for the solace-cloud-client Username.</p>
+<p class="image-container"><img alt="IS Image 7" src="img/86cfe5539ff95bb5.jpg"></p>
 <p>Before proceeding, please check the monitor to ensure that both artifacts have been deployed successfully.</p>
 <p class="image-container"><img alt="IS Image 9" src="img/15fe203355387b60.jpg"></p>
 
@@ -156,7 +160,7 @@
 <p>Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer. <img alt="SPA BPA Image 13" src="img/a8cf8277d6a44df2.jpg"></p>
 <p>From this screen you can Release the project in the top right corner. Alternatively, you can click on the &#34;Sales Order Review&#34; process to review the structure of the process to see how it is built.</p>
 <p><img alt="SPA BPA Image 14" src="img/10ec49b868f14085.jpg"> You can select the appropriate version with either of the radio boxes and then press the release button. <img alt="SPA BPA Image 15" src="img/d103924d276b457.jpg"></p>
-<p>Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks. <img alt="SPA BPA Image 16" src="img/78cae032bc452e5c.jpg"> Press Next <img alt="SPA BPA Image 17" src="img/1cc0a11bdef81c81.jpg"> Here you must select your destination for the action. If your destination is not in the dropdown, someone has not been configured properly in the Settings of the project. <img alt="SPA BPA Image 18" src="img/91fbe0c5a9e25aed.jpg"> This is the last step to deploy your business process, click Deploy. <img alt="SPA BPA Image 19" src="img/cc3fab0d0fe8544b.jpg"> You should now see &#34;Deployed&#34; and &#34;Active&#34; on the top left of the screen and your process should now be running. <img alt="SPA BPA Image 20" src="img/fe184e512631f017.jpg"></p>
+<p>Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks. <img alt="SPA BPA Image 16" src="img/78cae032bc452e5c.jpg"> Press Next <img alt="SPA BPA Image 17" src="img/1cc0a11bdef81c81.jpg"> Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project. <img alt="SPA BPA Image 18" src="img/91fbe0c5a9e25aed.jpg"> This is the last step to deploy your business process, click Deploy. <img alt="SPA BPA Image 19" src="img/cc3fab0d0fe8544b.jpg"> You should now see &#34;Deployed&#34; and &#34;Active&#34; on the top left of the screen and your process should now be running. <img alt="SPA BPA Image 20" src="img/fe184e512631f017.jpg"></p>
 <p>Theoretically, the process should be running and the next time you press &#34;Submit&#34; on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?</p>
 <p>From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It. <img alt="SPA BPA Image 21" src="img/eacdcfe9b1226382.jpg"> Now you will see the form that we created to display the contents of a Sales Order Event. <img alt="SPA BPA Image 22" src="img/57e73f7397bc4a62.jpg"></p>
 
@@ -219,7 +223,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Takeaways" duration="90">
+      <google-codelab-step label="Takeaways" duration="0">
         <p>✅  Understand concept of Dead Message Queues ✅  Understand how to use SAP BPA to process Dead Messages ✅  Understand how to use an iFlow with an Event for transformations ✅  Understand how to setup a Rest Delivery Point</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
