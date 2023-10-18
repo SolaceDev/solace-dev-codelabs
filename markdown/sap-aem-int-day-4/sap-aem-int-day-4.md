@@ -146,9 +146,16 @@ On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED
 Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
 ![IS Image 14](img/IS-14.jpg)
 Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
+Save and Deploy the iFlow.
 ![IS Image 15](img/IS-15.jpg)
 
-Once the configuration is complete, save and then click “Deploy”. Please note, you will need to create the secure alias shown in the screenshot.
+Now that both artifacts have been deployed, you need to create the secure parameter. Under "Monitor" Select Integrations.
+
+![IS Image 17](img/IS-17.jpg)
+
+From here, you will create a Secure Paramater and you will use the name "CABrokerUserPass" ***or you can use another name, just be sure to use the same one in the iFlow*** You will enter the corresponding password for the solace-cloud-client Username.
+
+![IS Image 7](img/IS-16.jpg)
 
 ![IS Image 7](img/IS-7.jpg)
 
