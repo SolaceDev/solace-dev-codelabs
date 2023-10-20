@@ -79,10 +79,7 @@ You will now create a Rest Consumer that will be the target for your Events.
 
 ![BPA Image 12](img/BPA-12.jpg)
 
-This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it’s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit…specifically the Client ID and the Token URL.
-### In the next screenshots, we have the screenshots to show you where to get this information ###
-
-![BPA Image 13](img/BPA-13.jpg)
+In order to fill out the information for the Rest_Consumer, we need to get the authentication information for the Rest Consumer.
 
 From the BTP Cockpit, we need to find the service key for the BPA Service. Navigate to the sub-account where you can find the BPA service. From there, click on the "Instances and Subscriptions" and navigate to the 3 "..." at the end.
 ![BPA Image 25](img/SPA-BPA-25.jpg)
@@ -143,7 +140,7 @@ When your destination is finished and saved, double check to make sure both prop
 For the SAP BPA setup, we will be importing 1 File that contains 2 projects: 
 - a project of type “Actions”
 - a project of type “Process Automation”
-- 
+
 We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 2 projects listed as per the screenshot below 
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
@@ -180,16 +177,7 @@ You should now see "Deployed" and "Active" on the top left of the screen and you
 ![SPA BPA Image 20](img/SPA-BPA-20.jpg)
 
 
-
-
-Theoretically, the process should be running and we should be able to test this by placing a message in the SO_WF Queue. 
-
-the next time you press "Submit" on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?
-
-From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
-![SPA BPA Image 21](img/SPA-BPA-21.jpg)
-Now you will see the form that we created to display the contents of a Sales Order Event.
-![SPA BPA Image 22](img/SPA-BPA-22.jpg)
+The process should now be running. Now we need to add an iFlow to transform messages so that they can be used to Trigger the process.
 
 ## Integration Suite Setup
 
@@ -253,8 +241,20 @@ Before proceeding, please check the monitor to ensure that both artifacts have b
 
 
 
+
+
 ## Testing the components
-At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don't?
+At the moment, you should have a fully integrated scenario. 
+
+From the Sales Order Dashboard, hit "Submit" on the "Dead Message Queue" card to send a message for review. Now we to check if the event triggered a creation of an Inbox Item.
+
+From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
+![SPA BPA Image 21](img/SPA-BPA-21.jpg)
+Now you will see the form that we created to display the contents of a Sales Order Event.
+![SPA BPA Image 22](img/SPA-BPA-22.jpg)
+
+Of course, this is the Happy Path :-) Everything Worked. 
+However, what if you don't see the item in the inbox ?
 
 My first suggestion would be to use the "Try Me" tab on the broker with the configured Rest Delivery Point and let's do some simple tests.
 
