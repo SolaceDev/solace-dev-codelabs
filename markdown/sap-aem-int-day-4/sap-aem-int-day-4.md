@@ -115,7 +115,7 @@ At this point, you should have a functioning RDP. The operational status on the 
 Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.
 
 
-## Business Process Automation Setup
+## Creating BTP Destination for BPA
 
 The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. 
 
@@ -140,14 +140,11 @@ When your destination is finished and saved, double check to make sure both prop
 
 ## Creating the SAP BPA Project
 
-For the SAP BPA setup, we will be importing 2 different projects: 
+For the SAP BPA setup, we will be importing 1 File that contains 2 projects: 
 - a project of type “Actions”
 - a project of type “Process Automation”
 - 
-We will start by importing the Action project. Select the import option which is highlighted by the red square. When prompted, select the AEMSALESORDERAPI.mtar file for import. Once it’s successfully imported, you will see it listed as per the screenshot below and you should see type “Actions” listed. Repeat the exact same process to import the second file SAPAEMSO.mtar. It will result in the  project being imported of type “Process Automation”.
-
->aside negative
-> Depending on the versions of the deployed project, there might be some differences between your project and the screenshot in this codelab. This is acceptable.
+We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 2 projects listed as per the screenshot below 
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
@@ -157,20 +154,17 @@ In this example, we are not really creating a destination but more referencing a
 
 ![SPA BPA Image 12](img/SPA-BPA-12.jpg)
 
-Return to the “Lobby” and Click into the AEMSALESORDERAPI project. From this screen you will now hit the Release Button.
-
-![SPA BPA Image 9](img/SPA-BPA-9.jpg)
-
-Once the project is released, select the “Publish to Library” button.
-
-![SPA BPA Image 10](img/SPA-BPA-10.jpg)
-
 Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
 ![SPA BPA Image 13](img/SPA-BPA-13.jpg)
 
-From this screen you can Release the project in the top right corner. Alternatively, you can click on the "Sales Order Review" process to review the structure of the process to see how it is built.
+Prior to releasing the project, we have to make a small change to the project. Lets start by clicking on the "Sales Order Review" Process.
 
 ![SPA BPA Image 14](img/SPA-BPA-14.jpg)
+
+In the business process, we must indicate which users will have the notification delivered to their inbox. Click on the Approval Form for Sales Order. You will see properties appear on the right side of the screen. Specify the userid of users who should have the notification sent to their inbox. In this case, I have specified 2 IDs separated by a comma.
+Once you have made the change, we now need to release and deploy the project. Click the "Release" option in the upper right.
+![SPA BPA Image 25](img/BPA-25.jpg)
+
 You can select the appropriate version with either of the radio boxes and then press the release button.
 ![SPA BPA Image 15](img/SPA-BPA-15.jpg)
 
