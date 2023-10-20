@@ -34,7 +34,7 @@ In our scenario, we will artificially create a situation where messages cannot b
 
 ![BPA Image](img/BPA-1.jpg)
 
-## Configure the required components for a Rest Delivery Point on the broker
+## Creating a Rest Delivery Point
 
 Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
 
@@ -118,11 +118,12 @@ The business process that we will deploy is activated by an API Trigger which ca
 
 ![SAP BPA Image 1](img/SPA-BPA-1.jpg)
 
-The "Action" component needs to be associatd with a destination. For the destination information needed below, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
+The "Action" component needs to be associatd with a destination. In order to create the destination, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
 
 ![SAP BPA Image 2](img/AEM-2.jpg)
 
-Once you have the connectivity information, open the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
+### Navigate to the BTP Cloud Cockpit
+Once you have the connectivity information, Navigate to the Destinatios Section within the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
 
 ![BPA Image 20](img/BPA-20.jpg)
 
@@ -145,10 +146,10 @@ We will import the SAPAEMSO.mtar file. Select the import option which is highlig
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
-In order to deploy the Action project, you need to first configure the project with a Destination that you have already created in BTP. The Destination will be selected in the deployment so we need to create that first. Navigate to the “Settings” tab from the BPA environment.
-In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the Action project.
+In order to deploy the BPA project, you need to asociate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Navigate to the “Settings” tab from the BPA environment.
+In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
 
-
+From the SAP BPA Environment, select the "Settings" option at the top.
 ![SPA BPA Image 12](img/SPA-BPA-12.jpg)
 
 Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
@@ -200,6 +201,7 @@ At the top of this form, you will select “Upload” and then you will select t
 ![IS Image 3](img/IS-3.jpg)
 Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is “DefinitionID”. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. (** Go see the next screenshot to see specific details on how to find ID**) Once you have modified the ID, be sure to hit Save at the top and then you can hit “Deploy” from there or back from the main screen as shown below.
 ![IS Image 8](img/IS-8.jpg)
+Navigate Back to the SAP Business Process Automation Environment temporarily
 From the Business Process environment, navigate to the "Monitor" section across the top of the screen. From there, on the left side Under the "Manage" option, select "Processes and Workflow". Select the "Sales Order Review" Process and towards the top, highlighted in Red, you will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process.
 ![IS Image 27](img/SPA-BPA-27.jpg)
 
@@ -222,6 +224,7 @@ On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED
 ![IS Image 13](img/IS-13.jpg)
 
 Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
+### Please note the creation of the Secure Parameter is further down 
 ![IS Image 14](img/IS-14.jpg)
 Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
 Save and Deploy the iFlow.
