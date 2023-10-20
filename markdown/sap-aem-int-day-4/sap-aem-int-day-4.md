@@ -94,81 +94,26 @@ Next you will create the connection between the Rest Consumer and the Queue that
 
 ![BPA Image 14](img/BPA-14.jpg)
 
-
+From the dropdown, select the previously created Queue “SO_WF”.
 
 ![BPA Image 15](img/BPA-15.jpg)
 
-From the dropdown, select the previously created Queue “SO_WF”.
+This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value “/workflow/rest/v1/workflow-instances”
 
 ![BPA Image 16](img/BPA-16.jpg)
 
-This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value “/workflow/rest/v1/workflow-instances”
+The type of content that we will send to the API is of JSON format. In order to indicate this, we need to create a request header called "Content-Type" and set the value to "application/json".
 
-![BPA Image 17](img/BPA-17.jpg)
+![rdp Image 1](img/rdp-1.jpg)
 
 At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate “Down”, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.
 
+![BPA Image 17](img/BPA-17.jpg)
+
+
+
 Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.
 
-## Integration Suite Setup
-
-In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
-- SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
-- SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
-
-Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into “Edit” mode.
-
-
-![IS Image 1](img/IS-1.jpg)
-
-Once you have the package in edit mode, select the DropDown under “Add” and select “Message Mapping”.
-
-![IS Image 2](img/IS-2.jpg)
-
-At the top of this form, you will select “Upload” and then you will select the zip file with the “MM” at the end for Message Mapping.
-***Ignore the Red X…I had already deployed the mapping in my environment and hence the message 😊 ***
-
-![IS Image 3](img/IS-3.jpg)
-Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is “DefinitionID”. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. (** Go see the next screenshot to see specific details on how to find ID**) Once you have modified the ID, be sure to hit Save at the top and then you can hit “Deploy” from there or back from the main screen as shown below.
-![IS Image 8](img/IS-8.jpg)
-From the Business Process environment, navigate to the "Monitor" section across the top of the screen. From there, on the left side Under the "Manage" option, select "Processes and Workflow". Select the "Sales Order Review" Process and towards the top, highlighted in Red, you will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process.
-![IS Image 27](img/SPA-BPA-27.jpg)
-
-The 2nd way to deploy an artifact is from the main screen as shown below.
-
-![IS Image 4](img/IS-4.jpg)
-
-Now we will import the iFlow using the same approach we just followed for the Message Mapping.
-
-![IS Image 5](img/IS-5.jpg)
-Select the “Upload” checkbox and use the 2nd zip file that contains the iFlow (***Not the one with the MM Extension ***).
-
-![IS Image 6](img/IS-6.jpg)
-
-Once after the iFlow is successfully imported, we need to configure the appropriate connection information to connect to the AEM Service. You should know where to find this information now :-)
-
-![IS Image 12](img/IS-12.jpg)
-
-On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED"....short for Sales Orders Rejected.
-![IS Image 13](img/IS-13.jpg)
-
-Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
-![IS Image 14](img/IS-14.jpg)
-Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
-Save and Deploy the iFlow.
-![IS Image 15](img/IS-15.jpg)
-
-Now that both artifacts have been deployed, you need to create the secure parameter. Under "Monitor" Select Integrations.
-
-![IS Image 17](img/IS-17.jpg)
-
-From here, you will create a Secure Paramater and you will use the name "CABrokerUserPass" ***or you can use another name, just be sure to use the same one in the iFlow*** You will enter the corresponding password for the solace-cloud-client Username.
-
-![IS Image 7](img/IS-16.jpg)
-
-Before proceeding, please check the monitor to ensure that both artifacts have been deployed successfully.
-
-![IS Image 9](img/IS-9.jpg)
 
 ## Business Process Automation Setup
 
@@ -240,12 +185,79 @@ This is the last step to deploy your business process, click Deploy.
 You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
 ![SPA BPA Image 20](img/SPA-BPA-20.jpg)
 
-Theoretically, the process should be running and the next time you press "Submit" on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?
+
+
+
+Theoretically, the process should be running and we should be able to test this by placing a message in the SO_WF Queue. 
+
+the next time you press "Submit" on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?
 
 From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
 ![SPA BPA Image 21](img/SPA-BPA-21.jpg)
 Now you will see the form that we created to display the contents of a Sales Order Event.
 ![SPA BPA Image 22](img/SPA-BPA-22.jpg)
+
+## Integration Suite Setup
+
+In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
+- SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
+- SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
+
+Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into “Edit” mode.
+
+
+![IS Image 1](img/IS-1.jpg)
+
+Once you have the package in edit mode, select the DropDown under “Add” and select “Message Mapping”.
+
+![IS Image 2](img/IS-2.jpg)
+
+At the top of this form, you will select “Upload” and then you will select the zip file with the “MM” at the end for Message Mapping.
+***Ignore the Red X…I had already deployed the mapping in my environment and hence the message 😊 ***
+
+![IS Image 3](img/IS-3.jpg)
+Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is “DefinitionID”. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. (** Go see the next screenshot to see specific details on how to find ID**) Once you have modified the ID, be sure to hit Save at the top and then you can hit “Deploy” from there or back from the main screen as shown below.
+![IS Image 8](img/IS-8.jpg)
+From the Business Process environment, navigate to the "Monitor" section across the top of the screen. From there, on the left side Under the "Manage" option, select "Processes and Workflow". Select the "Sales Order Review" Process and towards the top, highlighted in Red, you will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process.
+![IS Image 27](img/SPA-BPA-27.jpg)
+
+The 2nd way to deploy an artifact is from the main screen as shown below.
+
+![IS Image 4](img/IS-4.jpg)
+
+Now we will import the iFlow using the same approach we just followed for the Message Mapping.
+
+![IS Image 5](img/IS-5.jpg)
+Select the “Upload” checkbox and use the 2nd zip file that contains the iFlow (***Not the one with the MM Extension ***).
+
+![IS Image 6](img/IS-6.jpg)
+
+Once after the iFlow is successfully imported, we need to configure the appropriate connection information to connect to the AEM Service. You should know where to find this information now :-)
+
+![IS Image 12](img/IS-12.jpg)
+
+On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED"....short for Sales Orders Rejected.
+![IS Image 13](img/IS-13.jpg)
+
+Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
+![IS Image 14](img/IS-14.jpg)
+Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
+Save and Deploy the iFlow.
+![IS Image 15](img/IS-15.jpg)
+
+Now that both artifacts have been deployed, you need to create the secure parameter. Under "Monitor" Select Integrations.
+
+![IS Image 17](img/IS-17.jpg)
+
+From here, you will create a Secure Paramater and you will use the name "CABrokerUserPass" ***or you can use another name, just be sure to use the same one in the iFlow*** You will enter the corresponding password for the solace-cloud-client Username.
+
+![IS Image 7](img/IS-16.jpg)
+
+Before proceeding, please check the monitor to ensure that both artifacts have been deployed successfully.
+
+![IS Image 9](img/IS-9.jpg)
+
+
 
 ## Testing the components
 At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don't?
