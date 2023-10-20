@@ -88,8 +88,8 @@ From the BTP Cockpit, we need to find the service key for the BPA Service. Navig
 ![BPA Image 25](img/SPA-BPA-25.jpg)
 To the right of the service key, you should again see 3 "..." where you can click "View". This will display the service key.
 ![BPA Image 26](img/SPA-BPA-26.jpg)
-From there, all the information you need is displayed for the oAuth configuration. The only thing you need to watch is that after you copy/paste the URl for authentication, you will see there needs to be a suffix added which is "/oauth/token". The client ID can be copied and pasted as is.
-![BPA Image 24](img/SPA-BPA-24.jpg)
+The service key has all the information you need. In this screenshot, copy from the Service Key as shown in this screenshot to configure the oAuth authentication. Pay attention to the detail that outlines the necessary information to be added to the Token URL
+![SK Image 2](img/SK-2.jpg)
 Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the “+Queue Binding”.
 
 ![BPA Image 14](img/BPA-14.jpg)
@@ -131,7 +131,7 @@ Once you have the connectivity information, open the BTP Cockpit, Select the “
 
 You will populate the Destination information as shown below and you will add two properties that are both set to true.
 - sap.applicationdevelopment.actions.enabled – true
-- sap.applicationdevelopment.actions.enabled – true
+- sap.processautomation.enabled – true
 
 When your destination is finished and saved, double check to make sure both properties are there.
 
