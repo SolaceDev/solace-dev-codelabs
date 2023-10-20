@@ -40,14 +40,7 @@ Duration: 0:30:00
 One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don't have one already, you can use a free tier subscription for this purpose.
 Please follow along the steps in this [blog post](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) by Hozumi Nakano to active the service.
 
-### B) - Download and import the AEM adapter for Integration Suite
-
-A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.
-Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:
-- Download [Integration Suite AEM Adapter](artifacts/AEM-Adapter-EA-10-16.zip)
-- Import the AEM adapter into your Integration Suite tenant by following the instructions in the [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) to upload and deploy this adapter.
-
-### C) - Download and import the template integration flows package
+### B) - Download and import the template integration flows package
 
 <!---
 Download [AEMBusinessPartnerAddressCheck.zip](artifacts/cloud-integration-flows/AEMBusinessPartnerAddressCheck.zip), [AEMLegacyOutputAdapter.zip](artifacts/cloud-integration-flows/AEMLegacyOutputAdapter.zip) & [AEMSalesOrderNotification.zip](artifacts/cloud-integration-flows/AEMSalesOrderNotification.zip)
@@ -55,6 +48,25 @@ Download [AEMBusinessPartnerAddressCheck.zip](artifacts/cloud-integration-flows/
 Download [AEM-Rapid-Pilot.zip](artifacts/AEM-Rapid-Pilot.zip)
 - Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
+
+### C) - Download and import the AEM adapter for Integration Suite
+
+>asidge negative A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br>
+	Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:<br>
+	- Download [Integration Suite AEM Adapter](artifacts/AEM-Adapter-EA-10-16.zip)<br>
+	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
+
+Import the adapter into your package.
+![CI Adapter import](img/CIAdapterImport.png)
+
+Extract the downloaded zip and select the .esa file in the upload dialog. Runtime Profile should be Cloud Integration. (You should not be seeing the warning message `Integration adapter with the ID 'AdvancedEventMesh' already exists`. If you do, then you can skip this step as the adapter has already been made available to you.)
+![CI Adapter import](img/CIAdapterImportWizard.png)
+
+Deploy the adapter after import.
+![CI Adapter deploy](img/CIAdapterDeploy.png)
+
+
+See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) for more detailed instructions
 
 ## Setup/configure SAP AEM broker service
 
@@ -81,7 +93,7 @@ Create the following queues:
 > Notice the second subscriptions that starts with `!` ? <br>   
 > This is called a topic exception and removes any events matching topic subscription `sap.com/businesspartner/addressChecked/V1/*/*/Invalid` from the previously matched list of events matched by `sap.com/businesspartner/addressChecked/V1/>`. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See [link](https://docs.solace.com/Messaging/SMF-Topics.htm) for more details on Solace's topic syntax.
 
-  - CIBusinessPartnerInvalid (optional - if you want to see the output)
+  - CIBusinessPartnerCheckedInvalid (optional - if you want to see the output)
       ![queue settings](img/CIBusinessPartnerCheckedInvalid-queue-settings.png)
   - Add the following subscriptions to the queue
       ![queue subscriptions](img/CIBusinessPartnerCheckedInvalid-queue-subs.png)
