@@ -35,12 +35,12 @@ Duration: 0:09:00
 
 Duration: 0:30:00
 
-### A) - Activate SAP Data Quality Management service in BTP
+### A) Activate SAP Data Quality Management service in BTP
 
 One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don't have one already, you can use a free tier subscription for this purpose.
 Please follow along the steps in this [blog post](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) by Hozumi Nakano to active the service.
 
-### B) - Download and import the template integration flows package
+### B) Download and import the template integration flows package
 
 <!---
 Download [AEMBusinessPartnerAddressCheck.zip](artifacts/cloud-integration-flows/AEMBusinessPartnerAddressCheck.zip), [AEMLegacyOutputAdapter.zip](artifacts/cloud-integration-flows/AEMLegacyOutputAdapter.zip) & [AEMSalesOrderNotification.zip](artifacts/cloud-integration-flows/AEMSalesOrderNotification.zip)
@@ -49,9 +49,9 @@ Download [AEM-Rapid-Pilot.zip](artifacts/AEM-Rapid-Pilot.zip)
 - Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
 
-### C) - Download and import the AEM adapter for Integration Suite
+### C) Download and import the AEM adapter for Integration Suite
 
->asidge negative A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br>
+>aside negative A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br>
 	Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:<br>
 	- Download [Integration Suite AEM Adapter](artifacts/AEM-Adapter-EA-10-16.zip)<br>
 	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
@@ -74,60 +74,167 @@ Duration: 0:20:00
 
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
+![AEM Console](img/AEMCloudConsoleSelectClusterManager.png)
+![Services Overview](img/AEMServicesOverview.png)
+![Service Management](img/AEMServiceManagement.png)
 
-### A) - For the AEMBusinessPartnerAddressCheck flow
-Create the following queues:
-  - CIBusinessPartnerChecker
-      ![queue settings](img/CIBusinessPartnerChecker-queue-settings.png)
-      ![queue settings pt2](img/CIBusinessPartnerChecker-queue-settings-pt2.png)
-  - Add the following subscriptions to the queue
-      ![queue subscriptions](img/CIBusinessPartnerChecker-queue-subs.png)
+To create the queues in the next sections, repeatedly click on the "+ Queue" button to bring up the create queue dialog.
+![Create Queue](img/AEMCreateQueue.png)
 
-  - CIBusinessPartnerCheckerDMQ
-      ![queue settings](img/CIBusinessPartnerCheckerDMQ-queue-settings.png)
-  - CIBusinessPartnerChecked (optional - if you want to see the output)
-      ![queue settings](img/CIBusinessPartnerChecked-queue-settings.png)
-  - Add the following subscriptions to the queue
-      ![queue subscriptions](img/CIBusinessPartnerChecked-queue-subs.png)
+Provide the name as given (in the next sections).
+![Name Queue](img/AEMNameQueue.png)
+
+Open up the "Advanced Queue Settings" section, then follow along and provide the details as showing in the screenshots below.
+![Advanced Queue Settings](img/AEMAdvancedQueueSettings.png)
+
+
+### A) For the AEMBusinessPartnerAddressCheck flow
+Create the following queues and provide the details as given.
+#### 1) CIBusinessPartnerChecker queue
+
+- Name: `CIBusinessPartnerChecker`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+- DMQ Name: `CIBusinessPartnerCheckerDMQ`
+- Redelivery: `enabled`
+- Try Forever: `disabled`
+- Maximum Redelivery Count: `3`
+
+![queue settings](img/CIBusinessPartnerChecker-queue-settings.png)
+![queue settings pt2](img/CIBusinessPartnerChecker-queue-settings-pt2.png)
+
+
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+
+- Add the following subscriptions to the queue
+ - `sap.com/businesspartner/create/V1/>`
+ - `sap.com/businesspartner/change/V1/>`
+
+![queue subscriptions](img/CIBusinessPartnerChecker-queue-subs.png)
+
+#### 2) CIBusinessPartnerCheckerDMQ queue
+- Name: `CIBusinessPartnerCheckerDMQ`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+
+![queue settings](img/CIBusinessPartnerCheckerDMQ-queue-settings.png)
+
+#### 3) CIBusinessPartnerChecked queue <br>(optional - if you want to see/check the output of the flow)
+- Name: `CIBusinessPartnerChecked`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+
+![queue settings](img/CIBusinessPartnerChecked-queue-settings.png)
+
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+- Add the following subscriptions to the queue
+ - `sap.com/businesspartner/addressChecked/V1/>`
+ - `!sap.com/businesspartner/addressChecked/*/*/Invalid`
+
+![queue subscriptions](img/CIBusinessPartnerChecked-queue-subs.png)
+
 > aside negative
 > Notice the second subscriptions that starts with `!` ? <br>   
 > This is called a topic exception and removes any events matching topic subscription `sap.com/businesspartner/addressChecked/V1/*/*/Invalid` from the previously matched list of events matched by `sap.com/businesspartner/addressChecked/V1/>`. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See [link](https://docs.solace.com/Messaging/SMF-Topics.htm) for more details on Solace's topic syntax.
 
-  - CIBusinessPartnerCheckedInvalid (optional - if you want to see the output)
-      ![queue settings](img/CIBusinessPartnerCheckedInvalid-queue-settings.png)
-  - Add the following subscriptions to the queue
-      ![queue subscriptions](img/CIBusinessPartnerCheckedInvalid-queue-subs.png)
+#### 4) CIBusinessPartnerCheckedInvalid queue <br>(optional - if you want to see/check the output of the flow)
+- Name: `CIBusinessPartnerCheckedInvalid`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+
+![queue settings](img/CIBusinessPartnerCheckedInvalid-queue-settings.png)
+
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+- Add the following subscriptions to the queue
+ - `sap.com/businesspartner/addressChecked/V1/*/*/invalid`
+
+![queue subscriptions](img/CIBusinessPartnerCheckedInvalid-queue-subs.png)
 
 ### B) - For the AEMSalesOrderNotification flow
-Create the following queues:
-  - CISalesOrderNotification
-	![queue settings](img/CISalesOrderNotification-queue-settings.png)
-	![queue settings pt2](img/CISalesOrderNotification-queue-settings-pt2.png)
-  - Add the following subscriptions to the queue
-  ![queue subscriptions](img/CISalesOrderNotification-queue-subs.png)
+Create the following queues and provide the details as given.
 
-  - CISalesOrderNotificationProcessed (optional - if you want to see the output)
-  ![queue settings](img/CISalesOrderNotificationProcessed-queue-settings.png)
-  - Add the following subscriptions to the queue
-  ![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)
+#### 1) CISalesOrderNotification queue
+- Name: `CISalesOrderNotification`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+- Redelivery: `enabled`
+- Try Forever: `disabled`
+- Maximum Redelivery Count: `3`
+![queue settings](img/CISalesOrderNotification-queue-settings.png)
+![queue settings pt2](img/CISalesOrderNotification-queue-settings-pt2.png)
+
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+
+- Add the following subscriptions to the queue
+ - `sap.com/salesorder/create/V1/>`
+
+![queue subscriptions](img/CISalesOrderNotification-queue-subs.png)
+
+#### 2) CISalesOrderNotificationProcessed queue <br>(optional - if you want to see/check the output of the flow)
+- Name: `CISalesOrderNotificationProcessed`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+
+![queue settings](img/CISalesOrderNotificationProcessed-queue-settings.png)
+
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+
+- Add the following subscriptions to the queue
+ - `sap.com/salesorder/notified/V1/>`
+
+![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)
 
 ### C) - For the AEMLegacyOutputAdapter flow
-Create the following queues:
-  - CILegacyAdapterIn
-  ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
-  ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
-  - Add the following subscriptions to the queue
-  ![queue subscriptions](img/CILegacyAdapterIn-queue-subsv2.png)
+Create the following queues and provide the details as given.
 
-  - CILegacyAdapterInDMQ
-  ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
+#### 1) CILegacyAdapterIn queue
+- Name: `CILegacyAdapterIn`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+- DMQ Name: `CILegacyAdapterInDMQ`
+- Redelivery: `enabled`
+- Try Forever: `disabled`
+- Maximum Redelivery Count: `3`
+
+![queue settings](img/CILegacyAdapterIn-queue-settings.png)
+![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
+- Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.
+
+![queue sub dialog](img/AEMQueueSubsciptionsDialog.png)
+
+- Add the following subscriptions to the queue
+ - `sap.com/salesorder/create/V1/>`
+ - `sap.com/salesorder/change/V1/>`
+ - `sap.com/salesorder/retry/V1`
+ - `salesorder/retry/V1`
+
+![queue subscriptions](img/CILegacyAdapterIn-queue-subsv2.png)
+
+#### 2) CILegacyAdapterInDMQ queue
+- Name: `CILegacyAdapterInDMQ`
+- Owner: `solace-cloud-client`
+- Non-Owner Permission: `No access`
+
+![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
 
 ## Setup/Configure Dependency Services
 
 Duration: 0:10:00
 
 ### A) - For AEMBusinessPartnerAddressCheck
-Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) take a note of the URL and user credentials once you've activated the service.
+Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) if you haven't already done so.<br>
+Additionally, you will have to create a service instance and a service key to be configured with your integration flow later. Follow [these steps](https://developers.sap.com/tutorials/btp-sdm-gwi-create-serviceinstance.html) to create a service instance and key.<br>
+Take a note of the URL and user credentials once you've activated the service.<BR>
+TODO specify which URL to be taken.
 
 ### B) - For AEMSalesOrderNotification
 You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
@@ -151,7 +258,7 @@ We will need them in the next steps when configuring our flows.
 
 Now that we have set up all the prerequisites for our Integration Suite flows, we can take a look at the individual flows and prepare them for deployment.
 
-### A) - Security Configuration
+### 0) - Security Configuration
 Let's configure the security details we will need to connect to the various services like AEM, email & SFTP server.
 - Go to Integration Suite Monitor Artifacts -> Manage Security -> Security Material.
 ![Security Material](img/CISecurityMaterial.png)
