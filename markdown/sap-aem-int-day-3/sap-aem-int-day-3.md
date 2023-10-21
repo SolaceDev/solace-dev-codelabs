@@ -239,7 +239,7 @@ The legacy output adapter is simulating appending events to a file via an SFTP a
 Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) if you haven't already done so.<br>
 Additionally, you will have to create a service instance and a service key to be configured with your integration flow later. Follow [these steps](https://developers.sap.com/tutorials/btp-sdm-gwi-create-serviceinstance.html) to create a service instance and key.<br>
 Take a note of the URL and user credentials once you've activated the service.<BR>
-TODO specify which URL to be taken.
+<!-- TODO specify which URL to be taken. -->
 
 ### C) - For AEMSalesOrderNotification
 You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
@@ -398,9 +398,11 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 
 ![AEM service queue overview](img/CISalesOrderNotification-queue-status.png)
 
+<!--
 ## Troubleshooting
 
 TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
+-->
 
 ## Takeaways
 
