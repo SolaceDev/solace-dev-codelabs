@@ -34,7 +34,7 @@ In our scenario, we will artificially create a situation where messages cannot b
 
 ![BPA Image](img/BPA-1.jpg)
 
-## Configure the required components for a Rest Delivery Point on the broker
+## Creating a Rest Delivery Point
 
 Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
 
@@ -79,36 +79,106 @@ You will now create a Rest Consumer that will be the target for your Events.
 
 ![BPA Image 12](img/BPA-12.jpg)
 
-This is the screen that requires some attention to detail. For starters, if you notice in the first red highlighted box, it’s not the entire endpoint, this will come later. This is the address of your BPA service on BTP. Also take note of the Port and Http Method. The next section is the Authentication Scheme. You will need to select oAuth 2.0 Client Credentials. Once you have selected those, you will need to retrieve the oAuth specifics from the BTP Cockpit…specifically the Client ID and the Token URL.
-### In the next screenshots, we have the screenshots to show you where to get this information ###
-
-![BPA Image 13](img/BPA-13.jpg)
+In order to fill out the information for the Rest_Consumer, we need to get the authentication information for the Rest Consumer.
 
 From the BTP Cockpit, we need to find the service key for the BPA Service. Navigate to the sub-account where you can find the BPA service. From there, click on the "Instances and Subscriptions" and navigate to the 3 "..." at the end.
 ![BPA Image 25](img/SPA-BPA-25.jpg)
 To the right of the service key, you should again see 3 "..." where you can click "View". This will display the service key.
 ![BPA Image 26](img/SPA-BPA-26.jpg)
-From there, all the information you need is displayed for the oAuth configuration. The only thing you need to watch is that after you copy/paste the URl for authentication, you will see there needs to be a suffix added which is "/oauth/token". The client ID can be copied and pasted as is.
-![BPA Image 24](img/SPA-BPA-24.jpg)
+The service key has all the information you need. In this screenshot, copy from the Service Key as shown in this screenshot to configure the oAuth authentication. Pay attention to the detail that outlines the necessary information to be added to the Token URL
+![SK Image 2](img/SK-2.jpg)
 Next you will create the connection between the Rest Consumer and the Queue that it will use. Select Queue Bindings and then click the “+Queue Binding”.
 
 ![BPA Image 14](img/BPA-14.jpg)
 
-
+From the dropdown, select the previously created Queue “SO_WF”.
 
 ![BPA Image 15](img/BPA-15.jpg)
 
-From the dropdown, select the previously created Queue “SO_WF”.
+This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value “/workflow/rest/v1/workflow-instances”
 
 ![BPA Image 16](img/BPA-16.jpg)
 
-This is where you will enter the remainder of the endpoint…aka the endpoint for creating the Workflow Instances. This should be the same so you can use the same value “/workflow/rest/v1/workflow-instances”
+The type of content that we will send to the API is of JSON format. In order to indicate this, we need to create a request header called "Content-Type" and set the value to "application/json".
 
-![BPA Image 17](img/BPA-17.jpg)
+![rdp Image 1](img/rdp-1.jpg)
 
 At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate “Down”, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.
 
+![BPA Image 17](img/BPA-17.jpg)
+
+
+
 Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.
+
+
+## Creating BTP Destination for BPA
+
+The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. 
+
+![SAP BPA Image 1](img/SPA-BPA-1.jpg)
+
+The "Action" component needs to be associatd with a destination. In order to create the destination, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
+
+![SAP BPA Image 2](img/AEM-2.jpg)
+
+### Navigate to the BTP Cloud Cockpit
+Once you have the connectivity information, Navigate to the Destinatios Section within the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
+
+![BPA Image 20](img/BPA-20.jpg)
+
+You will populate the Destination information as shown below and you will add two properties that are both set to true.
+- sap.applicationdevelopment.actions.enabled – true
+- sap.processautomation.enabled – true
+
+When your destination is finished and saved, double check to make sure both properties are there.
+
+
+![BPA Image 21](img/BPA-21.jpg)
+
+## Creating the SAP BPA Project
+
+For the SAP BPA setup, we will be importing 1 File that contains 2 projects: 
+- a project of type “Actions”
+- a project of type “Process Automation”
+
+We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 2 projects listed as per the screenshot below 
+
+![SPA BPA Image 11](img/SPA-BPA-11.jpg)
+
+In order to deploy the BPA project, you need to asociate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Navigate to the “Settings” tab from the BPA environment.
+In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+
+From the SAP BPA Environment, select the "Settings" option at the top.
+![SPA BPA Image 12](img/SPA-BPA-12.jpg)
+
+Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
+![SPA BPA Image 13](img/SPA-BPA-13.jpg)
+
+Prior to releasing the project, we have to make a small change to the project. Lets start by clicking on the "Sales Order Review" Process.
+
+![SPA BPA Image 14](img/SPA-BPA-14.jpg)
+
+In the business process, we must indicate which users will have the notification delivered to their inbox. Click on the Approval Form for Sales Order. You will see properties appear on the right side of the screen. Specify the userid of users who should have the notification sent to their inbox. In this case, I have specified 2 IDs separated by a comma.
+Once you have made the change, we now need to release and deploy the project. Click the "Release" option in the upper right.
+![SPA BPA Image 25](img/BPA-25.jpg)
+
+You can select the appropriate version with either of the radio boxes and then press the release button.
+![SPA BPA Image 15](img/SPA-BPA-15.jpg)
+
+Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks.
+![SPA BPA Image 16](img/SPA-BPA-16.jpg)
+Press Next
+![SPA BPA Image 17](img/SPA-BPA-17.jpg)
+Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
+![SPA BPA Image 18](img/SPA-BPA-18.jpg)
+This is the last step to deploy your business process, click Deploy.
+![SPA BPA Image 19](img/SPA-BPA-19.jpg)
+You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
+![SPA BPA Image 20](img/SPA-BPA-20.jpg)
+
+
+The process should now be running. Now we need to add an iFlow to transform messages so that they can be used to Trigger the process.
 
 ## Integration Suite Setup
 
@@ -131,6 +201,7 @@ At the top of this form, you will select “Upload” and then you will select t
 ![IS Image 3](img/IS-3.jpg)
 Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is “DefinitionID”. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. (** Go see the next screenshot to see specific details on how to find ID**) Once you have modified the ID, be sure to hit Save at the top and then you can hit “Deploy” from there or back from the main screen as shown below.
 ![IS Image 8](img/IS-8.jpg)
+Navigate Back to the SAP Business Process Automation Environment temporarily
 From the Business Process environment, navigate to the "Monitor" section across the top of the screen. From there, on the left side Under the "Manage" option, select "Processes and Workflow". Select the "Sales Order Review" Process and towards the top, highlighted in Red, you will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process.
 ![IS Image 27](img/SPA-BPA-27.jpg)
 
@@ -153,6 +224,7 @@ On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED
 ![IS Image 13](img/IS-13.jpg)
 
 Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
+### Please note the creation of the Secure Parameter is further down 
 ![IS Image 14](img/IS-14.jpg)
 Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
 Save and Deploy the iFlow.
@@ -170,85 +242,22 @@ Before proceeding, please check the monitor to ensure that both artifacts have b
 
 ![IS Image 9](img/IS-9.jpg)
 
-## Business Process Automation Setup
-
-The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. 
-
-![SAP BPA Image 1](img/SPA-BPA-1.jpg)
-
-The "Action" component needs to be associatd with a destination. For the destination information needed below, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
-
-![SAP BPA Image 2](img/AEM-2.jpg)
-
-Once you have the connectivity information, open the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
-
-![BPA Image 20](img/BPA-20.jpg)
-
-You will populate the Destination information as shown below and you will add two properties that are both set to true.
-- sap.applicationdevelopment.actions.enabled – true
-- sap.applicationdevelopment.actions.enabled – true
-
-When your destination is finished and saved, double check to make sure both properties are there.
 
 
-![BPA Image 21](img/BPA-21.jpg)
-
-## Creating the SAP BPA Project
-
-For the SAP BPA setup, we will be importing 2 different projects: 
-- a project of type “Actions”
-- a project of type “Process Automation”
-- 
-We will start by importing the Action project. Select the import option which is highlighted by the red square. When prompted, select the AEMSALESORDERAPI.mtar file for import. Once it’s successfully imported, you will see it listed as per the screenshot below and you should see type “Actions” listed. Repeat the exact same process to import the second file SAPAEMSO.mtar. It will result in the  project being imported of type “Process Automation”.
-
->aside negative
-> Depending on the versions of the deployed project, there might be some differences between your project and the screenshot in this codelab. This is acceptable.
-
-![SPA BPA Image 11](img/SPA-BPA-11.jpg)
-
-In order to deploy the Action project, you need to first configure the project with a Destination that you have already created in BTP. The Destination will be selected in the deployment so we need to create that first. Navigate to the “Settings” tab from the BPA environment.
-In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the Action project.
 
 
-![SPA BPA Image 12](img/SPA-BPA-12.jpg)
+## Testing the components
+At the moment, you should have a fully integrated scenario. 
 
-Return to the “Lobby” and Click into the AEMSALESORDERAPI project. From this screen you will now hit the Release Button.
-
-![SPA BPA Image 9](img/SPA-BPA-9.jpg)
-
-Once the project is released, select the “Publish to Library” button.
-
-![SPA BPA Image 10](img/SPA-BPA-10.jpg)
-
-Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
-![SPA BPA Image 13](img/SPA-BPA-13.jpg)
-
-From this screen you can Release the project in the top right corner. Alternatively, you can click on the "Sales Order Review" process to review the structure of the process to see how it is built.
-
-![SPA BPA Image 14](img/SPA-BPA-14.jpg)
-You can select the appropriate version with either of the radio boxes and then press the release button.
-![SPA BPA Image 15](img/SPA-BPA-15.jpg)
-
-Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks.
-![SPA BPA Image 16](img/SPA-BPA-16.jpg)
-Press Next
-![SPA BPA Image 17](img/SPA-BPA-17.jpg)
-Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
-![SPA BPA Image 18](img/SPA-BPA-18.jpg)
-This is the last step to deploy your business process, click Deploy.
-![SPA BPA Image 19](img/SPA-BPA-19.jpg)
-You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
-![SPA BPA Image 20](img/SPA-BPA-20.jpg)
-
-Theoretically, the process should be running and the next time you press "Submit" on the Dead Message Queue Integration Card, you should activate the flow. The question is how will you know? For starters, do you know how to check your inbox for messages?
+From the Sales Order Dashboard, hit "Submit" on the "Dead Message Queue" card to send a message for review. Now we to check if the event triggered a creation of an Inbox Item.
 
 From the main screen of the BPA Lobby, you can see in the upper right, a little inbox symbol...Click It.
 ![SPA BPA Image 21](img/SPA-BPA-21.jpg)
 Now you will see the form that we created to display the contents of a Sales Order Event.
 ![SPA BPA Image 22](img/SPA-BPA-22.jpg)
 
-## Testing the components
-At the moment, you should have a fully integrated scenario. Whenever you press the Submit button on the Dead Message Queue Card, you should see a new Inbox Item magically appear in your Inbox. However, what if you don't?
+Of course, this is the Happy Path :-) Everything Worked. 
+However, what if you don't see the item in the inbox ?
 
 My first suggestion would be to use the "Try Me" tab on the broker with the configured Rest Delivery Point and let's do some simple tests.
 
