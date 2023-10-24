@@ -37,7 +37,7 @@ Duration: 0:30:00
 
 ### A) Download and import the template integration flows package
 
-Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/artifacts/AEM-Rapid-Pilot.zip)
+Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Rapid-Pilot.zip)
 - Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
 
@@ -45,7 +45,7 @@ Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration
 
 >aside negative A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br>
 	Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:<br>
-	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/artifacts/AEM-Adapter-EA-10-16.zip)<br>
+	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip)<br>
 	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
 
 Import the adapter into your package.
