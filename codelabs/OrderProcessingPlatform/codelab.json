@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-11-22T12:00:05+01:00",
+  "id": "OrderProcessingPlatform",
+  "duration": 0,
+  "title": "",
+  "summary": "",
+  "source": "OrderProcessingPlatform.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": null,
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/OrderProcessingPlatform",
+  "url": "OrderProcessingPlatform"
+}
