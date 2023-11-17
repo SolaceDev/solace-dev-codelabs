@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-10-20T14:33:14+02:00",
+  "id": "sap-aem-int-day-4",
+  "duration": 90,
+  "title": "Event Enable SAP Using SAP Advanced Event Mesh - Day 4",
+  "summary": "Day 4/5 : This code lab walks the participant through the setup and configuration of using SAP Business Process Automation to deal with message exceptions generated when using SAP AEM. This scenario will use SAP BPA, SAP Cloud Integration and SAP UI5 for the end to end scenario.",
+  "source": "sap-aem-int-day-4.md",
+  "theme": "",
+  "status": [
+    "hidden"
+  ],
+  "category": null,
+  "tags": [
+    "aem",
+    "capm",
+    "eventportal",
+    "sap",
+    "sapbtp",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-day-4",
+  "url": "sap-aem-int-day-4"
+}
