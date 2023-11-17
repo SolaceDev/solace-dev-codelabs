@@ -207,7 +207,7 @@ To connect with your broker details:
 - Open your broker and select the “connect” tab at the top.
   ![BrokerDetails](img/Broker_Credentials_Find1.png)
 - Then, under the “Solace Web Messaging” section, you will find the 4 inputs you need to connect your broker to the
-  dashboard. \
+  dashboard.
   ![BrokerDetails](img/Broker_Credentials_Find2.png)
 - Now, you can copy and paste each input into the fields at the top of the dashboard and then finally click “Connect”.
   ![Dashboard](img/Broker_Credentials_Dashboard.png)

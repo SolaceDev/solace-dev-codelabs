@@ -31,7 +31,7 @@
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
         <p>Day 3 of 5. Topics covered :</p>
 <ul>
-<li>Configuring AEM brokers&#39; queues and topic subscriptions.</li>
+<li>Configuring an AEM brokers&#39; queues and topic subscriptions.</li>
 <li>Event enabling integration flows and connecting them to AEM brokers to create event-driven integration flows.</li>
 </ul>
 
@@ -40,131 +40,214 @@
     
       <google-codelab-step label="What you need: Prerequisites" duration="9">
         <ul>
-<li>Complete all activities in day 1 &amp; 2. You access and use the same broker you setup previously as well as the simulator push events.</li>
+<li>Complete all activities in day 1 &amp; 2. <br>You access and use the same broker you setup previously as well as the simulator to push events for testing.</li>
 <li>Have access to an active Integration Suite Cloud Integration tenant.</li>
-<li>Have an email server and account credentials that allows smtp access if you want to send email notifications from your flow.</li>
-<li>Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system.</li>
-<li>Have a subscription to SAP Data Quality Management for location data or permission to activate it.</li>
+<li>Have an email server and account credentials that allows SMTP access if you want to send email notifications from your iflow.</li>
+<li>Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system <strong>(optional)</strong>.</li>
+<li>Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We&#39;ll show you how to activate one, if you don&#39;t have it already). <strong>(optional)</strong></li>
 </ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 1 - Set up Integration Suite and import Event Enabled Integration flows" duration="30">
-        <h2 is-upgraded>A) - Activate SAP Data Quality Management service in BTP</h2>
-<p>One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don&#39;t have one already, you can use a free tier subscription for this purpose. Please follow along the steps in this <a href="https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/" target="_blank">blog post</a> by Hozumi Nakano to active the service.</p>
-<h2 is-upgraded>B) - Download and import the AEM adapter for integration suite</h2>
-<p>A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step. Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:</p>
-<ul>
-<li>Download <a href="artifacts/AEM-Adapter-EA.zip" target="_blank">Integration Suite AEM Adapter</a></li>
-<li>Import the AEM adapter into your Integration Suite tenant by following the instructions in the <a href="https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure" target="_blank">SAP documentation</a> to upload and deploy this adapter.</li>
-</ul>
-<h2 is-upgraded>C) - Download and import the template integration flows package</h2>
-<p>Download <a href="artifacts/AEM-Rapid-Pilot.zip" target="_blank">AEM-Rapid-Pilot.zip</a></p>
+      <google-codelab-step label="Set up Integration Suite and Import Event Enabled Integration Flows" duration="30">
+        <h2 is-upgraded>A) Download and import the template integration flows package</h2>
+<p>Download <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Rapid-Pilot.zip" target="_blank">AEM-Rapid-Pilot.zip</a></p>
 <ul>
 <li>Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant: <img alt="CI Package import" src="img/b06731c9b38a0223.png"></li>
 </ul>
+<h2 is-upgraded>B) Download and import the AEM adapter for Integration Suite</h2>
+<aside class="warning"><p> A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br> Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:<br> - Download <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip" target="_blank">Integration Suite AEM Adapter</a><br> - Import the AEM adapter into your Integration Suite tenant and deploy this adapter.</p>
+</aside>
+<p>Import the adapter into your package. <img alt="CI Adapter import" src="img/e27a876d26769930.png"></p>
+<p>Extract the downloaded zip and select the .esa file in the upload dialog. Runtime Profile should be Cloud Integration. (You should not be seeing the warning message <code>Integration adapter with the ID 'AdvancedEventMesh' already exists</code>. If you do, then you can skip this step as the adapter has already been made available to you.) <img alt="CI Adapter import" src="img/6e850082abe05775.png"></p>
+<p>Deploy the adapter after import. <img alt="CI Adapter deploy" src="img/5f567b5457e1fe8c.png"></p>
+<p>See  <a href="https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure" target="_blank">SAP documentation</a> for more detailed instructions</p>
+<h2 is-upgraded>C) Activate SAP Data Quality Management service in BTP <strong>(optional)</strong></h2>
+<p>One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don&#39;t have one already, you can use a free tier subscription for this purpose. Please follow along the steps in this <a href="https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/" target="_blank">blog post</a> by Hozumi Nakano to active the service.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 2 - Setup/configure SAP AEM" duration="20">
-        <p>Create input queues for your integration flows:</p>
+      <google-codelab-step label="Setup/configure SAP AEM broker service" duration="20">
+        <p>In this section we will create the required input queues for your integration flows.</p>
 <ul>
-<li>Go to Cluster Manager -&gt; {your service} -&gt; Manage -&gt; Queues - to open the Broker UI</li>
+<li>Go to Cluster Manager -&gt; {your service} -&gt; Manage -&gt; Queues - to open the Broker UI <img alt="AEM Console" src="img/103870520369ee11.png"><img alt="Services Overview" src="img/b8f330506d062cd7.png"><img alt="Service Management" src="img/f6edbb73065d3430.png"></li>
 </ul>
-<ol type="1">
-<li>For the AEMBusinessPartnerAddressCheck flow, create:<ul>
-<li>CIBusinessPartnerChecker <img alt="queue settings" src="img/6398968d4fafdb96.png"><img alt="queue settings pt2" src="img/e48903fc8b1ef12c.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/13f3a2584c29ca1b.png"></li>
-<li>CIBusinessPartnerCheckerDMQ <img alt="queue settings" src="img/50ad5dcf05cf212a.png"></li>
-<li>CIBusinessPartnerChecked (optional - if you want to see the output) <img alt="queue settings" src="img/74bd1f98f780dba8.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/3c1e875d8eb8d3c.png">Notice the second subscriptions that starts with <code>!</code> ? <br> This is called a topic exception and removes any events matching topic subscription <code>sap.com/businesspartner/addressChecked/V1/*/*/Invalid</code> from the previously matched list of events matched by <code>sap.com/businesspartner/addressChecked/V1/></code>. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See <a href="https://docs.solace.com/Messaging/SMF-Topics.htm" target="_blank">link</a> for more details on Solace&#39;s topic syntax.</li>
-<li>CIBusinessPartnerInvalid (optional - if you want to see the output) <img alt="queue settings" src="img/df0c166eb9bc8942.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/a98cb26fd7cdebf.png"></li>
+<p>To create the queues in the next sections, repeatedly click on the &#34;+ Queue&#34; button to bring up the create queue dialog. <img alt="Create Queue" src="img/c1c01d77063fe0a2.png"></p>
+<p>Provide the name as given (in the next sections). <img alt="Name Queue" src="img/46bba2fbbba3b6c9.png"></p>
+<p>Open up the &#34;Advanced Queue Settings&#34; section, then follow along and provide the details as showing in the screenshots below. <img alt="Advanced Queue Settings" src="img/c24f338dfb7672b.png"></p>
+<h2 is-upgraded>A) - For the AEMLegacyOutputAdapter flow</h2>
+<p>Create the following queues and provide the details as given.</p>
+<h3 is-upgraded>1. CILegacyAdapterIn queue</h3>
+<ul>
+<li>Name: <code>CILegacyAdapterIn</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+<li>DMQ Name: <code>CILegacyAdapterInDMQ</code></li>
+<li>Redelivery: <code>enabled</code></li>
+<li>Try Forever: <code>disabled</code></li>
+<li>Maximum Redelivery Count: <code>3</code></li>
 </ul>
-</li>
-<li>For the AEMSalesOrderNotification flow, create:<ul>
-<li>CISalesOrderNotification <img alt="queue settings" src="img/236fdff5b74d8542.png"><img alt="queue settings pt2" src="img/96270e7d181dbd6e.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/f9d093e31b1cb2c5.png"></li>
-<li>CISalesOrderNotificationProcessed (optional - if you want to see the output) <img alt="queue settings" src="img/c926b2546a57243d.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/3f876221063c853e.png"></li>
+<p class="image-container"><img alt="queue settings" src="img/c30144defe0de341.png"><img alt="queue settings pt2" src="img/b1ca0b67e789fbe9.png"></p>
+<ul>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.</li>
 </ul>
-</li>
-<li>For the AEMLegacyOutputAdapter flow, create:<ul>
-<li>CILegacyAdapterIn <img alt="queue settings" src="img/c30144defe0de341.png"><img alt="queue settings pt2" src="img/b1ca0b67e789fbe9.png"> *Add the following subscriptions to the queue <img alt="queue subscriptions" src="img/d87049856c24e09a.png"></li>
-<li>CILegacyAdapterInDMQ <img alt="queue settings" src="img/184d57d9217e015e.png"></li>
+<p class="image-container"><img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></p>
+<ul>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/salesorder/create/V1/></code></li>
+<li><code>sap.com/salesorder/change/V1/></code></li>
+<li><code>sap.com/salesorder/retry/V1</code></li>
+<li><code>salesorder/retry/V1</code></li>
 </ul>
-</li>
-</ol>
+<p class="image-container"><img alt="queue subscriptions" src="img/5436614198556cf7.png"></p>
+<h3 is-upgraded>2. CILegacyAdapterInDMQ queue</h3>
+<ul>
+<li>Name: <code>CILegacyAdapterInDMQ</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/184d57d9217e015e.png"></p>
+<h2 is-upgraded>B) For the AEMBusinessPartnerAddressCheck flow <strong>(optional)</strong></h2>
+<p>Create the following queues and provide the details as given.</p>
+<h3 is-upgraded>1. CIBusinessPartnerChecker queue</h3>
+<ul>
+<li>Name: <code>CIBusinessPartnerChecker</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+<li>DMQ Name: <code>CIBusinessPartnerCheckerDMQ</code></li>
+<li>Redelivery: <code>enabled</code></li>
+<li>Try Forever: <code>disabled</code></li>
+<li>Maximum Redelivery Count: <code>3</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/6398968d4fafdb96.png"><img alt="queue settings pt2" src="img/e48903fc8b1ef12c.png"></p>
+<ul>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog. <img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></li>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/businesspartner/create/V1/></code></li>
+<li><code>sap.com/businesspartner/change/V1/></code></li>
+</ul>
+<p class="image-container"><img alt="queue subscriptions" src="img/13f3a2584c29ca1b.png"></p>
+<h3 is-upgraded>2. CIBusinessPartnerCheckerDMQ queue</h3>
+<ul>
+<li>Name: <code>CIBusinessPartnerCheckerDMQ</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/50ad5dcf05cf212a.png"></p>
+<h3 is-upgraded>3. CIBusinessPartnerChecked queue <br>(optional - if you want to see/check the output of the flow)</h3>
+<ul>
+<li>Name: <code>CIBusinessPartnerChecked</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/74bd1f98f780dba8.png"></p>
+<ul>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.</li>
+</ul>
+<p class="image-container"><img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></p>
+<ul>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/businesspartner/addressChecked/V1/></code></li>
+<li><code>!sap.com/businesspartner/addressChecked/*/*/Invalid</code></li>
+</ul>
+<p class="image-container"><img alt="queue subscriptions" src="img/3c1e875d8eb8d3c.png"></p>
+<aside class="warning"><p> Notice the second subscriptions that starts with <code>!</code> ? <br><br> This is called a topic exception and removes any events matching topic subscription <code>sap.com/businesspartner/addressChecked/V1/*/*/Invalid</code> from the previously matched list of events matched by <code>sap.com/businesspartner/addressChecked/V1/></code>. This is a really handy feature to exclude subsets of events matched by a larger topic subscription. See <a href="https://docs.solace.com/Messaging/SMF-Topics.htm" target="_blank">link</a> for more details on Solace&#39;s topic syntax.</p>
+</aside>
+<h3 is-upgraded>4. CIBusinessPartnerCheckedInvalid queue <br>(optional - if you want to see/check the output of the flow)</h3>
+<ul>
+<li>Name: <code>CIBusinessPartnerCheckedInvalid</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/df0c166eb9bc8942.png"></p>
+<ul>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.</li>
+</ul>
+<p class="image-container"><img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></p>
+<ul>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/businesspartner/addressChecked/V1/*/*/invalid</code></li>
+</ul>
+<p class="image-container"><img alt="queue subscriptions" src="img/a98cb26fd7cdebf.png"></p>
+<h2 is-upgraded>C) - For the AEMSalesOrderNotification flow</h2>
+<p>Create the following queues and provide the details as given.</p>
+<h3 is-upgraded>1. CISalesOrderNotification queue</h3>
+<ul>
+<li>Name: <code>CISalesOrderNotification</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+<li>Redelivery: <code>enabled</code></li>
+<li>Try Forever: <code>disabled</code></li>
+<li>Maximum Redelivery Count: <code>3</code><img alt="queue settings" src="img/236fdff5b74d8542.png"><img alt="queue settings pt2" src="img/96270e7d181dbd6e.png"></li>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.</li>
+</ul>
+<p class="image-container"><img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></p>
+<ul>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/salesorder/create/V1/></code></li>
+</ul>
+<p class="image-container"><img alt="queue subscriptions" src="img/f9d093e31b1cb2c5.png"></p>
+<h3 is-upgraded>2. CISalesOrderNotificationProcessed queue <br>(optional - if you want to see/check the output of the flow)</h3>
+<ul>
+<li>Name: <code>CISalesOrderNotificationProcessed</code></li>
+<li>Owner: <code>solace-cloud-client</code></li>
+<li>Non-Owner Permission: <code>No access</code></li>
+</ul>
+<p class="image-container"><img alt="queue settings" src="img/c926b2546a57243d.png"></p>
+<ul>
+<li>Once the queue is created, click on the queue name in the list, navigate to the Subscriptions tab and open the subscriptions dialog.</li>
+</ul>
+<p class="image-container"><img alt="queue sub dialog" src="img/6b3a1de37af14fb8.png"></p>
+<ul>
+<li>Add the following subscriptions to the queue</li>
+<li><code>sap.com/salesorder/notified/V1/></code></li>
+</ul>
+<p class="image-container"><img alt="queue subscriptions" src="img/3f876221063c853e.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="3 - Setup/configure dependency services" duration="10">
-        <ol type="1">
-<li>For AEMBusinessPartnerAddressCheck<ul>
-<li>Activate SAP&#39;s Data Quality Management Service (DQM) by following this <a href="https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/" target="_blank">blog</a> take a note of the URL and user credentials once you&#39;ve activated the service.</li>
-</ul>
-</li>
-<li>For AEMSalesOrderNotification<ul>
-<li>You&#39;ll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.</li>
-</ul>
-</li>
-<li>For AEMLegacyOutputAdapterThe legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system. The actual flow doesn&#39;t require a working sftp destination as it&#39;s just being used to simulate a failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual processing by a UI5 and Business Process Automation workflow.If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .</li>
-</ol>
+      <google-codelab-step label="Setup/Configure Dependency Services" duration="10">
+        <h2 is-upgraded>A) - For AEMLegacyOutputAdapter</h2>
+<p>The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system. The actual flow doesn&#39;t require a working sftp destination as it&#39;s just being used to simulate a failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual  processing by a UI5 and Business Process Automation workflow.</p>
+<aside class="warning"><p> If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .</p>
+</aside>
+<h2 is-upgraded>B) - For AEMBusinessPartnerAddressCheck <strong>(optional)</strong></h2>
+<p>Activate SAP&#39;s Data Quality Management Service (DQM) by following this <a href="https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/" target="_blank">blog</a> if you haven&#39;t already done so.<br> Additionally, you will have to create a service instance and a service key to be configured with your integration flow later. Follow <a href="https://developers.sap.com/tutorials/btp-sdm-gwi-create-serviceinstance.html" target="_blank">these steps</a> to create a service instance and key.<br> Take a note of the URL and user credentials once you&#39;ve activated the service.<br></p>
+<h2 is-upgraded>C) - For AEMSalesOrderNotification</h2>
+<p>You&#39;ll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="4 - Configure your Integration Suite flows" duration="60">
-        <p>One thing, before we jump back into Integration Suite: Let&#39;s head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the &#34;Connect&#34; tab. Take a note of the connectivity details underneath &#34;Solace Messaging&#34; (click on the section to open it up): <img alt="AEM broker service connectivity details" src="img/a620f3ff7799345c.png">, we will need them in the next steps when configuring our flows.</p>
+      <google-codelab-step label="Configure Your Integration Suite Flows" duration="60">
+        <p>One thing, before we jump back into Integration Suite: Let&#39;s head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the &#34;Connect&#34; tab. Take a note of the connectivity details underneath &#34;Solace Messaging&#34; (click on the section to open it up): <img alt="AEM broker service connectivity details" src="img/a620f3ff7799345c.png"> We will need them in the next steps when configuring our flows.</p>
 <p>The connect tab lists all the various connectivity details for the various supported protocols. Our Cloud Integration AEM adapter uses the Solace Messaging protocol, which is AEM&#39;s very own protocol with a broad feature support. Each AEM service also comes with a default client user called <code>solace-cloud-client</code> that is configured for convenience reasons and is allowed to publish and subscribe to all topics. We will be using this user for all our iflows. In a real production environment where security is important, you or your administrator will likely have this user disabled and will be creating separate users for each of the applications that connect to the AEM broker. Or this may even be deferred to an external authentication service over LDAP or OAuth.</p>
 <p>Now that we have set up all the prerequisites for our Integration Suite flows, we can take a look at the individual flows and prepare them for deployment.</p>
-<ol type="1">
-<li>Let&#39;s configure the security details we will need to connect to the various services like AEM, email &amp; SFTP server.</li>
-</ol>
+<h2 is-upgraded>0) - Security Configuration</h2>
+<p>Let&#39;s configure the security details we will need to connect to the various services like AEM, email &amp; SFTP server.</p>
 <ul>
 <li>Go to Integration Suite Monitor Artifacts -&gt; Manage Security -&gt; Security Material. <img alt="Security Material" src="img/9596404aa77f1bd.png"></li>
-<li>In here, create security credentials for your AEM broker service, email and SFTP server. <img alt="Security Material details" src="img/f8de9d3d2ed615a2.png"></li>
-<li>You may also need to create a known.hosts file, populate it with your SFTP server&#39;s ssh id if you want to complete the optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow).</li>
-</ul>
-<p>See <a href="https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/" target="_blank">this post</a> by Pravesh Shukla if you need help with this step.</p>
-<ul>
+<li>In here, create security credentials for your AEM broker service, email and SFTP server.</li>
+<li>Create SecureParameter <code>CABrokerUserPass</code> and store the password for your <code>solace-cloud-client</code> application user credentials.</li>
+<li>Create UserCredentials <code>sftpuser</code> and store your SFTP servers user and password credentials (optional - only required for successful transfer of events to a file).</li>
+<li>Create OAuth2 Client Credentials and store your credentials from your DQM service key.</li>
+<li>Token Service URL</li>
+<li>Client ID</li>
+<li>Client Secret <img alt="DQM client credentials" src="img/889749457f7edbbe.png"><img alt="Security Material details" src="img/f8de9d3d2ed615a2.png"></li>
+<li>You may also need to create a known.hosts file, populate it with your SFTP server&#39;s ssh id if you want to complete the optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow). See <a href="https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/" target="_blank">this post</a> by Pravesh Shukla if you need help with this step.</li>
 <li>Go to Integration Suite Monitor Artifacts -&gt; Manage Security -&gt; Manage Keystore.</li>
 <li>You will need to import your email servers public CA certificate, if you want the email adapter to successfully connect and send emails. In our case, we are sending from an Outlook address, so we imported the TLS certificate that Microsoft uses for those servers in order to connect. <img alt="Manage Keystore" src="img/4ab85d7d1b905afe.png"></li>
 </ul>
-<p>See <a href="https://security.stackexchange.com/questions/70528/how-to-get-ssl-certificate-of-a-mail-server" target="_blank">this stackexchange post</a> if you need help with finding and <a href="https://help.sap.com/docs/cloud-integration/sap-cloud-integration/uploading-certificate?locale=en-US" target="_blank">this article</a> for help with importing the right CA certificate for your email server in Integration Suite.</p>
-<p>2a. Let&#39;s take a look at the AEMBusinessPartnerAddressCheck iflow: <img alt="AEMBusinessPartnerAddressCheck_flow" src="img/850c4d221a30107e.png"></p>
-<p>This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br> a) Storing the original event payload in an environment variable.<br> b) Populating the DQM request payload with the addresses in the input event.<br> c) Invoking the DQM service over REST and<br> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br> e) Merging any corrected addresses back into the original payload.<br> f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br><code>sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}</code></p>
-<p>Let&#39;s also look at what happens in order to publish a new event back to the Advanced Event Mesh broker.</p>
-<p>First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive. <img alt="AEMBusinessPartnerAddressCheck flow settings" src="img/ad23f169d749c108.png"> Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header. <img alt="AEMBusinessPartnerAddressCheck topic processing" src="img/34b75b7451b0e15a.png"> Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script. <img alt="AEM Publisher settings" src="img/10eeb30c7c1b616b.png"></p>
-<p>2b. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow: <img alt="DQM service configuration" src="img/500def0a5eb92ab0.png"></p>
-<ul>
-<li>Populate the connection details for the DQM service call out with the ones for your own DQM service instance.</li>
-<li>Hit configure at the top right and fill in the details to connect to your AEM broker service: <img alt="AEM service configuration pt1" src="img/fd1b428ffffe6dfb.png"><img alt="AEM service configuration pt2" src="img/6fb8287226606682.png"></li>
-<li>Then hit deploy at the bottom right.</li>
-</ul>
-<p>2c. Check that your flow was deployed successfully and fix if necessary.</p>
-<ul>
-<li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar to this view: <img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></li>
-<li>Go to your AEM Console and navigate to Cluster Manager -&gt; {your service} -&gt; Manage and click on the Queues tile: <img alt="AEM service queue management" src="img/d9613fb2693c5930.png"></li>
-<li>Check that the CIBusinessPartnerChecker input queue has at least one consumer connected to it. <img alt="AEM service queue overview" src="img/f8e15a9653ae5b98.png"></li>
-</ul>
-<p>Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!</p>
-<p>3a. Let&#39;s take a look at the AEMSalesOrderNotification iflow: <img alt="AEMSalesOrderNotification_flow.png" src="img/8141492f4fb24f5d.png"></p>
-<p>This flow gets triggered by Sales Order events and does two things:<br> a) It creates an email and puts the Sales Order into the body of the email.<br> (The recipient&#39;s address is currently fixed in this example, because we don&#39;t have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br> b) It sends a new event to <code>sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}</code> to indicate that the email was successfully sent.</p>
-<p>3b. Configuring and deploying  the AEMSalesOrderNotification iflow: <img alt="AEM output adapter" src="img/d44a9384cac5d21.png"></p>
-<ul>
-<li>Populate the connection details for the AEM broker service to send an event to the AEM broker whenever the flow successfully sends a notification email.</li>
-<li>Hit configure at the top right and fill in the details to connect to your AEM broker service: <img alt="AEM service configuration pt1" src="img/199603aca385ac18.png"><img alt="AEM service configuration pt2" src="img/216e95c8565d0fd6.png"></li>
-<li>Then hit deploy at the bottom right.</li>
-</ul>
-<p>3c. Check that your flow was deployed successfully and fix if necessary.</p>
-<ul>
-<li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing the AEMSalesOrderNotification flow as Started, similar to this view: <img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></li>
-<li>Go to your AEM Console and navigate to Cluster Manager -&gt; {your service} -&gt; Manage and click on the Queues tile: <img alt="AEM service queue management" src="img/d9613fb2693c5930.png"></li>
-<li>Check that the AEMSalesOrderNotification input queue has at least one consumer connected to it. <img alt="AEM service queue overview" src="img/d26b855c901e8b52.png"></li>
-</ul>
-<p>4a. Let&#39;s take a look at the AEMLegacyOutputAdapter iflow: <img alt="AEMLegacyOutputAdapter_flow" src="img/8693bab4f457a036.png"></p>
-<p>This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives. Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM. The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter&#39;s retry behaviour. Once the max configured retry attempts are exceeded, the AEM broker will move the message to a configured DMQ for exception processing. Let&#39;s take a look at some of the relevant settings of the AEM adapter that control this behaviour.</p>
-<p class="image-container"><img alt="AEM error handling settings" src="img/32fec0cc64764a31.png"></p>
-<p>Let&#39;s look at these settings one by one:<br></p>
+<aside class="warning"><p> See <a href="https://security.stackexchange.com/questions/70528/how-to-get-ssl-certificate-of-a-mail-server" target="_blank">this stackexchange post</a> if you need help with finding and <a href="https://help.sap.com/docs/cloud-integration/sap-cloud-integration/uploading-certificate?locale=en-US" target="_blank">this article</a> for help with importing the right CA certificate for your email server in Integration Suite.</p>
+</aside>
+<h2 is-upgraded>A) - AEMLegacyOutputAdapter</h2>
+<h3 is-upgraded>1. Let&#39;s take a look at the AEMLegacyOutputAdapter iflow:</h3>
+<p class="image-container"><img alt="AEMLegacyOutputAdapter_flow" src="img/8693bab4f457a036.png"></p>
+<p>This flow is really straightforward. It receives Sales Order events and appends them to a file over SFTP. This could be used for legacy system integration (as the name suggests) for systems that do not have capabilities to receive data/events in an event-driven fashion and instead are relying on batch-based file imports. AEM + CI could send all relevant events in real-time to the file and the downstream legacy system can then simply consume the file in batch intervals (or potentially triggered by a file detector if available), move/delete the import file and AEM + CI will simply create a new one as soon as the next event arrives.<br> Now we are going to use this simple flow to demonstrate the error handling capabilities of AEM. The flow will try to send events to a file, but we have deliberately misconfigured to SFTP adapter to point to an invalid destination, so all messages delivery attempts will fail and trigger the AEM adapter&#39;s retry behaviour.<br> Once the max configured retry attempts are exceeded, the AEM broker will move the message to a configured DMQ for exception processing.<br> Let&#39;s take a look at some of the relevant settings of the AEM adapter that control this behaviour.</p>
+<p><img alt="AEM error handling settings" src="img/32fec0cc64764a31.png"> Let&#39;s look at these settings one by one:<br></p>
 <ol type="1">
 <li>Acknowledgement Mode: &#34;Automatic on Exchange Complete&#34;<br> The most important setting when it comes to not accidentally acknowledging and therefore removing a message from the broker&#39;s queue. This setting tells the flow/AEM adapter to only acknowledge (ack) the message after the flow has successfully completed processing the message. If any in the processing occurs, the AEM adapter will instead send a negative acknowledgment back (nack) to tell the broker to keep the message and retry it, because it couldn&#39;t be successfully processed by the flow. The alternative is to immediately ack the message when it&#39;s received, which will always result in the message being removed from the queue even if the flow fails to successfully process the message. (!!)<br></li>
 <li>Settlement Outcome After Maximum Attempts: &#34;Failed&#34;<br> This setting controls the nack type and behaviour, we have two options here:<br> a) Failed, which will nack the message back to the broker and let&#39;s the broker check the retry count of the message to trigger retries based on the queue settings and only sending messages to DMQ when the retry count on the message has exceeded the max retry settings on the queue.<br> b) Rejected, which will nack the message telling the broker to immediately move the message to DMQ when the AEM adapter settings (Maximum Message Processing Attempts) are exceeded irrespective of queue settings.<br></li>
@@ -172,18 +255,74 @@
 <li>Retry interval, Max Retry Interval and Exponential Backoff Multiplier<br> These are all settings that control how quickly we want to retry and whether we want to incremently increase our retry delay with each failure. A good retry delay value prevents the broker from repeatedly retrying a message within a few milli-seconds and gives some time for transient error situations to clear before we retry.</li>
 </ol>
 <p>Keep in mind that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow: <img alt="queue settings" src="img/c30144defe0de341.png"><img alt="queue settings pt2" src="img/b1ca0b67e789fbe9.png"></p>
-<p>Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.</p>
-<p>4b. Configuring and deploying  the AEMLegacyOutputAdapter iflow:</p>
+<aside class="warning"><p> Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.</p>
+</aside>
+<h3 is-upgraded>2. Configuring and deploying  the AEMLegacyOutputAdapter iflow:</h3>
 <ul>
 <li>Hit configure at the top right and fill in the details to connect to your AEM broker service: <img alt="AEM service configuration pt1" src="img/34e6d96f65e93ef8.png"><img alt="AEM service configuration pt2" src="img/2731f012ab32148d.png"></li>
 <li>Then hit deploy at the bottom right.</li>
 </ul>
-<p>4c. Check that your flow was deployed successfully and fix if necessary.</p>
+<h3 is-upgraded>3. Check that your flow was deployed successfully and fix if necessary.</h3>
 <ul>
 <li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this view: <img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></li>
 <li>Go to your AEM Console and navigate to Cluster Manager -&gt; {your service} -&gt; Manage and click on the Queues tile: <img alt="AEM service queue management" src="img/d9613fb2693c5930.png"></li>
 <li>Check that the AEMLegacyOutputAdapter input queue has at least one consumer connected to it. <img alt="AEM service queue overview" src="img/95dc3c6a45cdb501.png"></li>
 </ul>
+<h2 is-upgraded>B) - AEMBusinessPartnerAddressCheck <strong>(optional)</strong></h2>
+<h3 is-upgraded>1. Let&#39;s take a look at the AEMBusinessPartnerAddressCheck iflow:</h3>
+<p><img alt="AEMBusinessPartnerAddressCheck_flow" src="img/850c4d221a30107e.png"> This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br> a) Storing the original event payload in an environment variable.<br> b) Populating the DQM request payload with the addresses in the input event.<br> c) Invoking the DQM service over REST and<br> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br> e) Merging any corrected addresses back into the original payload.<br> f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br><code>sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}</code></p>
+<p>Let&#39;s also look at what happens in order to publish a new event back to the Advanced Event Mesh broker. First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive. <img alt="AEMBusinessPartnerAddressCheck flow settings" src="img/ad23f169d749c108.png"> Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header. <img alt="AEMBusinessPartnerAddressCheck topic processing" src="img/34b75b7451b0e15a.png"> Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script. <img alt="AEM Publisher settings" src="img/10eeb30c7c1b616b.png"></p>
+<h3 is-upgraded>2. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:</h3>
+<p class="image-container"><img alt="DQM service configuration" src="img/500def0a5eb92ab0.png"></p>
+<ul>
+<li>Populate the connection details for the DQM service call out with the ones for your own DQM service instance.</li>
+<li>Hit configure at the top right and fill in the details to connect to your AEM broker service:</li>
+</ul>
+<p class="image-container"><img alt="AEM service configuration pt1" src="img/fd1b428ffffe6dfb.png"><img alt="AEM service configuration pt2" src="img/6fb8287226606682.png"></p>
+<ul>
+<li>Then hit deploy at the bottom right.</li>
+</ul>
+<h3 is-upgraded>3. Check that your flow was deployed successfully and fix if necessary.</h3>
+<ul>
+<li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar to this view:</li>
+</ul>
+<p class="image-container"><img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></p>
+<ul>
+<li>Go to your AEM Console and navigate to Cluster Manager -&gt; {your service} -&gt; Manage and click on the Queues tile:</li>
+</ul>
+<p class="image-container"><img alt="AEM service queue management" src="img/d9613fb2693c5930.png"></p>
+<ul>
+<li>Check that the CIBusinessPartnerChecker input queue has at least one consumer connected to it.</li>
+</ul>
+<p class="image-container"><img alt="AEM service queue overview" src="img/f8e15a9653ae5b98.png"></p>
+<p>Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!</p>
+<h2 is-upgraded>C) - AEMSalesOrderNotification</h2>
+<h3 is-upgraded>1. Let&#39;s take a look at the AEMSalesOrderNotification iflow:</h3>
+<p class="image-container"><img alt="AEMSalesOrderNotification_flow.png" src="img/8141492f4fb24f5d.png"></p>
+<p>This flow gets triggered by Sales Order events and does two things:<br> a) It creates an email and puts the Sales Order into the body of the email.<br> (The recipient&#39;s address is currently fixed in this example, because we don&#39;t have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br> b) It sends a new event to <code>sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}</code> to indicate that the email was successfully sent.</p>
+<h3 is-upgraded>2. Configuring and deploying  the AEMSalesOrderNotification iflow:</h3>
+<p class="image-container"><img alt="AEM output adapter" src="img/d44a9384cac5d21.png"></p>
+<ul>
+<li>Populate the connection details for the AEM broker service to send an event to the AEM broker whenever the flow successfully sends a notification email.</li>
+<li>Hit configure at the top right and fill in the details to connect to your AEM broker service:</li>
+</ul>
+<p class="image-container"><img alt="AEM service configuration pt1" src="img/199603aca385ac18.png"><img alt="AEM service configuration pt2" src="img/216e95c8565d0fd6.png"></p>
+<ul>
+<li>Then hit deploy at the bottom right.</li>
+</ul>
+<h3 is-upgraded>3. Check that your flow was deployed successfully and fix if necessary.</h3>
+<ul>
+<li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing the AEMSalesOrderNotification flow as Started, similar to this view:</li>
+</ul>
+<p class="image-container"><img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></p>
+<ul>
+<li>Go to your AEM Console and navigate to Cluster Manager -&gt; {your service} -&gt; Manage and click on the Queues tile:</li>
+</ul>
+<p class="image-container"><img alt="AEM service queue management" src="img/d9613fb2693c5930.png"></p>
+<ul>
+<li>Check that the AEMSalesOrderNotification input queue has at least one consumer connected to it.</li>
+</ul>
+<p class="image-container"><img alt="AEM service queue overview" src="img/d26b855c901e8b52.png"></p>
 
 
       </google-codelab-step>
