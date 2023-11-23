@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="sap-aem-int-day-4"
@@ -174,44 +174,44 @@
 <p>My first suggestion would be to use the &#34;Try Me&#34; tab on the broker with the configured Rest Delivery Point and let&#39;s do some simple tests.</p>
 <p><img alt="SPA BPA Image 23" src="img/1d5be2539d134914.jpg"> On this screen, we can test several things. For starters, we can confirm that the iFlow that we deployed is working and successfully transforming our message. On the publisher side, connect to the broker and use &#34;sap.com/salesorder/rejected/V1&#34; as the topic and for the message use the following structure. This will simulate an event being submitted for Review from the Integration Card.</p>
 <pre><code language="language-JSON" class="language-JSON">{
-	&#34;orderHeader&#34;: [
-		{
-			&#34;salesOrderNumber&#34;: &#34;SO1002&#34;,
-			&#34;creator&#34;: &#34;Jane Smith&#34;,
-			&#34;date&#34;: 1691193600000,
-			&#34;salesType&#34;: &#34;In-store&#34;,
-			&#34;ordertype&#34;: &#34;Express&#34;,
-			&#34;salesOrg&#34;: &#34;SA02&#34;,
-			&#34;distributionChannel&#34;: &#34;DC02&#34;,
-			&#34;division&#34;: &#34;DV02&#34;,
-			&#34;customer&#34;: [
-				{
-					&#34;customerId&#34;: &#34;CUST002&#34;,
-					&#34;customerName&#34;: &#34;XYZ Ltd&#34;,
-					&#34;zipCode&#34;: &#34;54321&#34;,
-					&#34;street&#34;: &#34;First Avenue&#34;,
-					&#34;phone&#34;: &#34;555-987-6543&#34;,
-					&#34;country&#34;: &#34;USA&#34;,
-					&#34;city&#34;: &#34;Los Angeles&#34;
-				}
-			],
-			&#34;orderItem&#34;: [
-				{
-					&#34;item&#34;: &#34;ITEM002&#34;,
-					&#34;material&#34;: &#34;MAT002&#34;,
-					&#34;materialType&#34;: &#34;Service&#34;,
-					&#34;itemType&#34;: &#34;Premium&#34;,
-					&#34;orderSchedule&#34;: [
-						{
-							&#34;scheduleNumber&#34;: &#34;SCH002&#34;,
-							&#34;quantity&#34;: 50,
-							&#34;uom&#34;: &#34;Hrs&#34;
-						}
-					]
-				}
-			]
-		}
-	]
+  &#34;orderHeader&#34;: [
+    {
+      &#34;salesOrderNumber&#34;: &#34;SO1002&#34;,
+      &#34;creator&#34;: &#34;Jane Smith&#34;,
+      &#34;date&#34;: 1691193600000,
+      &#34;salesType&#34;: &#34;In-store&#34;,
+      &#34;ordertype&#34;: &#34;Express&#34;,
+      &#34;salesOrg&#34;: &#34;SA02&#34;,
+      &#34;distributionChannel&#34;: &#34;DC02&#34;,
+      &#34;division&#34;: &#34;DV02&#34;,
+      &#34;customer&#34;: [
+        {
+          &#34;customerId&#34;: &#34;CUST002&#34;,
+          &#34;customerName&#34;: &#34;XYZ Ltd&#34;,
+          &#34;zipCode&#34;: &#34;54321&#34;,
+          &#34;street&#34;: &#34;First Avenue&#34;,
+          &#34;phone&#34;: &#34;555-987-6543&#34;,
+          &#34;country&#34;: &#34;USA&#34;,
+          &#34;city&#34;: &#34;Los Angeles&#34;
+        }
+      ],
+      &#34;orderItem&#34;: [
+        {
+          &#34;item&#34;: &#34;ITEM002&#34;,
+          &#34;material&#34;: &#34;MAT002&#34;,
+          &#34;materialType&#34;: &#34;Service&#34;,
+          &#34;itemType&#34;: &#34;Premium&#34;,
+          &#34;orderSchedule&#34;: [
+            {
+              &#34;scheduleNumber&#34;: &#34;SCH002&#34;,
+              &#34;quantity&#34;: 50,
+              &#34;uom&#34;: &#34;Hrs&#34;
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 </code></pre>
 <p>On the subscriber side, connect to the broker and use &#34;&gt;&#34; as your topic. This will show everything. When you publish your message, you should immediately see a message appear in the subscriber window and you should be looking for a couple of things:</p>
@@ -221,6 +221,31 @@
 <li>After you publish the method, you should see a new item in your inbox. If the message appears to have the right structure in the subscriber window  (aka your iFlow is working) then the next place to look is the configuration of the Rest Delivery Point. The RDP will be listening for these rejected messages and then calling the API to start the BPA process. If it&#39;s not, potentially check the queue to see if messages are accumulating in SO_WF.<h2 is-upgraded>IF YOU SEE MESSAGES IN THE INBOX....WOOHOO</h2>
 </li>
 </ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Debugging RDP Error" duration="0">
+        <p>This is an optional step in case you encounter any issue with AEM RDP Connection.</p>
+<p>Below steps will allow you to connect to AEM CLI console and look at the logs.</p>
+<h2 is-upgraded>Enable the Access to Port 22</h2>
+<p>Before accessing the CLI, we need to make sure that access to port 22 (default ssh port) is open.</p>
+<ol type="1">
+<li>From the SAP AEM Console, select your service that you want to debug <img alt="BPA Image 3" src="img/5d17a9489e9542bf.jpg"></li>
+<li>Select Manage and then Advanced Options<img alt="AEM Image 3" src="img/6ece00dfc9e37ac9.jpg"></li>
+<li>This will open up New Advanced Management Options Page<img alt="AEM Image 4" src="img/a34b651060372fee.jpg"></li>
+<li>Scroll down to &#34;Port Configuration&#34; Section. On the Public Endpoint section, select &#34;...&#34; to edit the port configuration<img alt="AEM Image 5" src="img/36e8f3bbc85cd9ea.jpg"></li>
+<li>Scroll down to &#34;Management&#34; and check the &#34;Enable Secured CLI Host (SSH), use port&#34; option. This will allow access to the broker command line utility<img alt="AEM Image 6" src="img/fade4e3cab74590.jpg"></li>
+<li>Go back to Manage Tab from Advanced Management Options page.<img alt="AEM Image 7" src="img/d8550bb63d327584.jpg"></li>
+<li>Get the hostname, management userid and password of the service. Make sure to get the viewer credentials<img alt="AEM Image 8" src="img/d91563a01b4f5ae8.jpg"></li>
+</ol>
+<h2 is-upgraded>Accessing AEM Service Commandline Utility</h2>
+<ol type="1" start="8">
+<li>Use any commandline utility and ssh to the service using valid hostname, userid and password as below:<em><code>ssh <userid>@<hostname></code></em><img alt="AEM Image 9" src="img/1d47edc800959c28.jpg"></li>
+<li>Now you can view the rdp error logs using the command</li>
+</ol>
+<p><em><code>show log rest rest-delivery-point errors</code></em></p>
+<p>This command will give you HTTP error (if any)that you might have received from BPA web endpoint.</p>
 
 
       </google-codelab-step>
