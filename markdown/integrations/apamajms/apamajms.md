@@ -38,7 +38,7 @@ These links contain information related to this guide:
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html)
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
-* [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/docs/)
+* [Apama Streaming Analytics Documentation](https://documentation.softwareag.com/apama/)
 * [Connecting Apama Applications to External Components](https://documentation.softwareag.com/onlinehelp/Rohan/Apama/v10-7/apama10-7/10-7_Connecting_Apama_Applications_to_External_Components.pdf)
 
 
@@ -113,13 +113,13 @@ Duration: 00:05:00
 
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Apama CEP Correlator. The full code is freely available on Github as part of this project in [src/apama-solace-sample](https://github.com/SolaceLabs/solace-integration-guides).
 
-The general Apama Streaming Analytics support for connectors is documented in the [Apama Streaming Analytics Documentation](https://www.apamacommunity.com/docs/). The configuration outlined in this document makes use of correlator-integrated messaging for JMS to achieve the desired integration with Solace via JMS. 
+The general Apama Streaming Analytics support for connectors is documented in the [Apama Streaming Analytics Documentation](https://documentation.softwareag.com/apama/). The configuration outlined in this document makes use of correlator-integrated messaging for JMS to achieve the desired integration with Solace via JMS. 
 
 This integration guide demonstrates how to configure a Apama Streaming Analytics application to receive JMS messages using a set of custom message-to-event configurations. Accomplishing this requires completion of the following steps. 
 
 * Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://solace.dev)
 * Step 2 - Configuration of the Solace Event Broker.
-* Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](http://www.apamacommunity.com/downloads/)
+* Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](https://techcommunity.softwareag.com/en_en/apama-downloads.html)
 * Step 4 – Coding Solace message producer
 * Step 5 – Coding Apama Event Processing Language AKA MonitorScript
 * Step 6 - Configuring Apama correlator-integrated adapter for JMS
@@ -319,7 +319,7 @@ They are configured as follows:
 
 The Apama Streaming Analytics can be obtained one of 2 ways.     
 1.	If you are in an organization that is an existing Apama customer, it is likely your organization already has Apama Streaming Analytics and corporate policies about their use.  You will have to contact your application management team in regards to a Apama Streaming Analytics license.
-2.	If you are new to Apama Streaming Analytics, you can obtain Apama Community Edition from the [Apama Community Edition Downloads](http://www.apamacommunity.com/downloads/). For help getting started with your Apama Streaming Analytics Community Edition you can refer to [Apama Community Edition Docs](http://www.apamacommunity.com/docs/).
+2.	If you are new to Apama Streaming Analytics, you can obtain Apama Community Edition from the [Apama Community Edition Downloads](https://techcommunity.softwareag.com/en_en/apama-downloads.html). For help getting started with your Apama Streaming Analytics Community Edition you can refer to [Apama Community Edition Docs](https://documentation.softwareag.com/apama/).
 
 ### Step 4 – Coding Solace message producer
 
@@ -372,7 +372,7 @@ The Apama Streaming Analytics can be obtained one of 2 ways.
 
 ### Step 5 – Coding Apama Event Processing Language AKA MonitorScript
 
-From [Apama Streaming Analytics Documentation](https://www.apamacommunity.com/docs/), there are details on how to develop Apama applications.
+From [Apama Streaming Analytics Documentation](https://documentation.softwareag.com/apama/), there are details on how to develop Apama applications.
 
 **Apama Event Definition**
 A simple event with 2 fields, payload string field and extraParam dictionary field.
@@ -410,7 +410,7 @@ monitor SampleTopicReceiver {
 
 ### Step 6 – Configuring Apama correlator-integrated adapter for JMS
 
-From [Apama Streaming Analytics Documentation](https://www.apamacommunity.com/docs/) there are details on how to set up JMS connection bundle.  JMS adapter can be configured either in the correlator-integrated adapter for JMS editor or by editing sections of the XML and .properties configuration files directly.
+From [Apama Streaming Analytics Documentation](https://documentation.softwareag.com/apama/) there are details on how to set up JMS connection bundle.  JMS adapter can be configured either in the correlator-integrated adapter for JMS editor or by editing sections of the XML and .properties configuration files directly.
 
 The Apama correlator-integrated messaging for JMS configuration consists of a set of XML files and .properties files.
 
@@ -467,7 +467,7 @@ The message to event mapping is done in adapter editor. Manual changes to the ma
 
 ### Step 7 – Starting up Apama correlator with correlator-integrated adapter for JMS
 
-Starting up Apama correlator in development is done from Apama Workbench. For server deployment, please see From [Deploying and Managing Apama Applications](https://www.apamacommunity.com/docs/).
+Starting up Apama correlator in development is done from Apama Workbench. For server deployment, please see From [Deploying and Managing Apama Applications](https://documentation.softwareag.com/apama/).
 
 ## Working with Solace High Availability (HA)
 Duration: 00:05:00

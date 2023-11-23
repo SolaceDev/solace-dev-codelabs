@@ -48,13 +48,13 @@ Duration: 0:05:00
 ### Workshop structure
 For logistics and ease of delivery, this workshop has been divided into 5 half-days and this covers day 1. It describes the below topics :
 - Setting up of  AEM Services
-- Building an Event Mesh 
+- Building an Event Mesh
 - Deploying a SAP CAP based Simulator on CloudFoundry
 - Testing the Simulator and publishing SAP objects to the Event Mesh
 
 ## What you need: Prerequisites
 
-You will need the following resources prior to the commencement of the workshop : 
+You will need the following resources prior to the commencement of the workshop :
 
 1. CPEA Contract in place
 2. Approximately 5K of CPEA credits available to activate 2 AEM brokers for 4 weeks
@@ -76,8 +76,8 @@ You will need the following resources prior to the commencement of the workshop 
 ## Create AEM Services
 In this task, you will be creating two Enterprise AEM services, connecting them to form a mesh and verifying your mesh health.
 
-Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed. 
-The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems. 
+Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed.
+The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems.
 If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to help select an appropriate location for that AEM service.
 
 ### Create your first AEM service:
@@ -126,40 +126,7 @@ If your SAP environment is running in an on-premises data center, you will use t
 7. Keep the Default Broker Version selection. \
    ![AEM Cluster Manager New service broker version](img/aem-cluster-manager-new-service-broker-version.png)
 
-8. Expand the Advanced Connection Options section. \
-   ![AEM Cluster Manager New service Broker Adv. Option](img/aem-cluster-manager-new-service-adv-opts.png)
-
-9. Enter the name for your cluster.
-   \
-   AEM services can be clustered within a cloud location to expand capacity horizontally.
-   These clusters can then be interconnected across cloud locations to form a mesh.
-   Today, we will create two clusters of one AEM service each and then interconnect them.
-   \
-   When clicking in the Cluster Name field, you will see a pull-down menu of existing clusters (the list will likely be
-   empty) and a search box at the top.
-   \
-   Click in the search box and use your mesh name plus the cloud provider and region
-   to define the name of your cluster. As you type, the search results will include the cluster name you are defining:\
-   ![AEM Cluster Manager New service Broker Mesh name](img/aem-cluster-manager-new-service-mesh-name.png)
-   \
-   Remember to use your specific mesh name, provider and region followed by the word Cluster and then click your cluster
-   name in the search result to select it: \
-   ![AEM Cluster Manager New service Broker New Mesh name](img/aem-cluster-manager-new-service-mesh-name-new.png)
-   \
-   Leave the Enable mate-link encryption checkbox selected.
-
-10. Set the Message VPN Name.
-    \
-    By default, each AEM service has a unique VPN name. The message VPN is a logical messaging
-    domain where events are shared by producing and consuming applications.
-    For our evaluation exercise, we will use a single message VPN across both AEM services. \
-    Click on the pencil icon to the right of the Message VPN Name field and set the name to your mesh name followed by
-    the
-    keyword VPN : \
-    ![AEM Cluster Manager New service Broker Msg VPN name](img/aem-cluster-manager-new-service-msg-vpn-name.png)
-    \
-    Leave the Port Configuration section default values for now. After reviewing all the settings on the Create Service
-    page, click Create Service to launch your AEM service.\
+8. Click Create Service to launch your AEM service.\
     ![AEM Cluster Manager New service Broker Create-button](img/aem-cluster-manager-new-service-create-service.png)
     \
     You will see a progress bar as the service is being started. Click the back-arrow at the top of the window next to
@@ -169,7 +136,7 @@ If your SAP environment is running in an on-premises data center, you will use t
     \
     You can proceed with the next step while your first AEM service is starting.
 
-11. Repeat steps 2 through 10 for your second AEM service. \
+9. Repeat steps 2 through 8 for your second AEM service. \
     Substitute the name (Svc2) along with the appropriate cloud provider and region.
     > aside negative
     > Note that your second service can be with the same cloud provider or a different cloud provider.\
@@ -285,7 +252,7 @@ You can log in to the SAP CloudFoundry space in your account as below :
 
 - As you click on the above application route url, you will be redirected to the simulator screen as below
   ![Simulator connection screen](img/simulator-connection-screen.png)
-  Here you can connect to your SAP AEM instance to publish events. 
+  Here you can connect to your SAP AEM instance to publish events.
     > aside negative
     > As long as both of your SAP AEM services are connected to the event mesh, messages will flow freely between the two of them.
     > Due to this intelligent routing, you can connect the simulator to either of your AEM services created earlier.
@@ -317,7 +284,7 @@ You can easily test the simulator by using the **Cluster Manager - Try-Me** as b
 ![Cluster Manager-try-me-Subscriber-highlighted](img/cluster-manager-try-me-subscriber-highlighted.png)
 - Add topic subscription(s) to view incoming messages on the topic as below :
 ![Cluster Manager-try-me-Subscriber-subscriptions-highlighted](img/cluster-tryme-connected-subscriptions-highlighted.png)
-- You can use the below topic structures for different event types : 
+- You can use the below topic structures for different event types :
 
   - **Sales Order** :
     - Create : ```sap.com/salesorder/create/>```
@@ -344,7 +311,7 @@ Duration: 0:07:00
 ✅ Understanding how to create AEM services \
 ✅ Set up an Event Mesh \
 ✅ Deploy the SAP CAPM based simulator in CloudFoundry \
-✅ Testing the simulator and publishing events to the Event Mesh 
+✅ Testing the simulator and publishing events to the Event Mesh
 
 ![Soly Image Caption](img/soly.gif)
 
