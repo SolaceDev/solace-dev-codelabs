@@ -12,7 +12,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## What you'll learn: Overview
 Duration: 0:03:00
 
-This codelab will take you through the basics of the Soalce PubSub+ Distributed Tracing feature. Following these steps will take you through:
+This codelab will take you through the basics of the Soalce PubSub+ Distributed Tracing feature. The following steps will take you through:
 * Launching and configuring a PubSub+ Event Broker Software
 * Launching the OpenTelemetry Collector Contribution
 * Launching Jaeger, the open source, end-to-end distributed tracing backend to observe our traces   
