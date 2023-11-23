@@ -27,8 +27,8 @@ Duration: 0:09:00
 - Complete all activities in day 1 & 2. <br>You access and use the same broker you setup previously as well as the simulator to push events for testing.
 - Have access to an active Integration Suite Cloud Integration tenant.
 - Have an email server and account credentials that allows SMTP access if you want to send email notifications from your iflow.
-- Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system (optional).
-- Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already).
+- Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system **(optional)**.
+- Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
 
 
 ## Set up Integration Suite and Import Event Enabled Integration Flows
@@ -60,7 +60,7 @@ Deploy the adapter after import.
 
 See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) for more detailed instructions
 
-### C) Activate SAP Data Quality Management service in BTP
+### C) Activate SAP Data Quality Management service in BTP **(optional)**
 
 One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don't have one already, you can use a free tier subscription for this purpose.
 Please follow along the steps in this [blog post](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) by Hozumi Nakano to active the service.
@@ -119,7 +119,7 @@ Create the following queues and provide the details as given.
 
 ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
 
-### B) For the AEMBusinessPartnerAddressCheck flow
+### B) For the AEMBusinessPartnerAddressCheck flow **(optional)**
 Create the following queues and provide the details as given.
 
 #### 1. CIBusinessPartnerChecker queue
@@ -235,7 +235,7 @@ The legacy output adapter is simulating appending events to a file via an SFTP a
 > aside negative
 > If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .
 
-### B) - For AEMBusinessPartnerAddressCheck
+### B) - For AEMBusinessPartnerAddressCheck **(optional)**
 Activate SAP's Data Quality Management Service (DQM) by following this [blog](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) if you haven't already done so.<br>
 Additionally, you will have to create a service instance and a service key to be configured with your integration flow later. Follow [these steps](https://developers.sap.com/tutorials/btp-sdm-gwi-create-serviceinstance.html) to create a service instance and key.<br>
 Take a note of the URL and user credentials once you've activated the service.<BR>
@@ -322,7 +322,7 @@ You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this
 - Check that the AEMLegacyOutputAdapter input queue has at least one consumer connected to it.
 ![AEM service queue overview](img/CILegacyAdapterIn-queue-status.png)
 
-### B) - AEMBusinessPartnerAddressCheck
+### B) - AEMBusinessPartnerAddressCheck **(optional)**
 #### 1. Let's take a look at the AEMBusinessPartnerAddressCheck iflow:
 ![AEMBusinessPartnerAddressCheck_flow](img/AEMBusinessPartnerAddressCheck_flow.png)
 This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br>
