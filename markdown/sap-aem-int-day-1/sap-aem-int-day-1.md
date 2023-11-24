@@ -145,8 +145,6 @@ If your SAP environment is running in an on-premises data center, you will use t
 
     **IMPORTANT - For your second AEM service:**
     - Location will be in a **DIFFERENT region** (with the same or different cloud provider).
-    - The **cluster name** follows the same pattern but is **DIFFERENT** from the first AEM service.
-    - You will use the **EXACT SAME Message VPN Name** as for the first AEM service.
 
     Once your services have started, you can click to open them and view details of their status:
     ![AEM Cluster Manager Services list](img/aem-cluster-manager-services-list.png)
