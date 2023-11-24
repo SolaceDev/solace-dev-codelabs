@@ -47,7 +47,7 @@ but it is not the full schema for the SAP objects involved.
    ![SAP AEM EP Designer Import AppDomain-1](img/ep-designer-import-app-domain-1.png)\
    ![SAP AEM EP Designer Import AppDomain-2](img/ep-designer-import-app-domain-2.png)\
    \
-   Locate the **btp_aem_demo.json** file in your file system and import it: \
+   Download [btp_aem_demo.json](https://github.com/SolaceLabs/aem-sap-integration/blob/main/EP-design/btp_aem_demo.json) to your file system and import it: \
    ![SAP AEM EP Designer Import AppDomain-3](img/ep-designer-import-app-domain-3.png) \
    After the import is complete, you will see the evaluation domain in the domains list. \
    ![SAP AEM EP Designer Import AppDomain-4](img/ep-designer-import-app-domain-4.png)
@@ -130,7 +130,7 @@ but it is not the full schema for the SAP objects involved.
    Finally, click on the filter icon next to the search box to see how results can be filtered further: \
    ![SAP AEM EP Catalog-Screen 4](img/ep-catalog-4.png)
 5. Visualize your imported design with a modeled event mesh.
-   Event Portal includes a powerful tool called the Runtime Manager. One of the functions of this tool is to associate a domain model with a “modeled event mesh” running on your launched AEM event services. 
+   Event Portal includes a powerful tool called the Runtime Manager. One of the functions of this tool is to associate a domain model with a “modeled event mesh” running on your launched AEM event services.
    This allows the Runtime Manager to display a visualization of the interactions between applications and events. \
    While there are many additional powerful features of Runtime Manager, our evaluation will focus just on visualization. \
    From the SAP AEM Console, open the Runtime Manager: \
@@ -150,14 +150,14 @@ but it is not the full schema for the SAP objects involved.
    ![SAP AEM EP Runtime Event Manager - 7](img/ep-runtime-event-manager-7.png)
 
    Next, navigate back to the Designer and open the **BTP AEM Demo** domain. \
-   Under the Applications tab, you will see all the modeled applications. **For each application**, perform the following actions: 
-   - Click on the application’s row where it says “Standard” for application type. 
-   - In the preview pane to the right, select the “Add to Environment” extended menu action for version 1.0.0 of the application object. 
+   Under the Applications tab, you will see all the modeled applications. **For each application**, perform the following actions:
+   - Click on the application’s row where it says “Standard” for application type.
+   - In the preview pane to the right, select the “Add to Environment” extended menu action for version 1.0.0 of the application object.
    - Leaving the Default environment selected, pick your Modeled Event Mesh from the second pull down and both of your event mesh services from the Event Broker menu, then click Add.
    ![SAP AEM EP Runtime Event Manager - 8](img/ep-runtime-event-manager-8.png)\
    This will add the modeled applications to your modeled event mesh.  Since these applications reference the events, and those events reference the schemas, all of your model will now be associated with your modeled event mesh. \
    \
-   Finally, navigate back to the Runtime Manager and your modeled event mesh to see the default visualization: 
+   Finally, navigate back to the Runtime Manager and your modeled event mesh to see the default visualization:
    ![SAP AEM EP Runtime Event Manager - 9](img/ep-runtime-event-manager-9.png)\
    The applications are connected to one another with flow lines through the events which they are exchanging. This provides an overview of the interactions being modeled by the design.\
    You can use the view controls to zoom, center and change visualization settings: \
