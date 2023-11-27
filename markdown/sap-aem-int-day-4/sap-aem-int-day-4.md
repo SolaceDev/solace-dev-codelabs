@@ -32,7 +32,17 @@ In the world of Event Driven Asynchronous messaging, sometimes events cannot be 
 
 In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called "Dead Message Queue". This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. Hitting the submit button will release the message from the Queue and it will be sent to the broker with a special topic. A special topic that will result in the message being placed into a Queue that is being actively monitored by Cloud Integration. The message will be transformed by Cloud Integration and the message will be placed back into the mesh. The broker will act upon this new message and instantiate a new business process for each message.
 
-![BPA Image](img/BPA-1.jpg)
+In the following diagram, you can see the flow you are about to implement.
+- Step 1 -> The user decides to investigate the item displayed in the dead message queue so they hit the submit button which causes the message to be published on the topic shown.
+- Step 2 -> There a queue that you will create called SOREJECTED that has a subscription to attract these events.
+- Step 3 -> The cloud integration iFlow is listening on the SOREJECTED queue for these events.
+- Step 4 -> The iFlow is responsible for transforming the message into a different format that can be used later by the BPA API.
+- Step 5 -> The SO_WF queue is attracting events with this new format.
+- Step 6 -> A rest delivery point will use the information in the event to call the API for starting the BPA process
+- Step 7 -> The BPA Process will place an entry in the Inbox for Approval
+- Step 8 -> Once the SalesOrder is approved via the Form, it will be re-published for processing which triggers an updated on the orginal screen that started the entire process.
+
+![BPA Image](img/BPAPRocess.png)
 
 ## Creating a Rest Delivery Point
 
@@ -103,6 +113,8 @@ The type of content that we will send to the API is of JSON format. In order to 
 
 ![rdp Image 1](img/rdp-1.jpg)
 
+Last but not least, one last small change. The RDP process will be the owner of this queue so now that we have the RDP Created, lets ensure that we set the owner properly. Modify the owner of the SO_WF as per the following screenshot.
+![rdp Image 1](img/SOWFSettings.png)
 At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate “Down”, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.
 
 ![BPA Image 17](img/BPA-17.jpg)
