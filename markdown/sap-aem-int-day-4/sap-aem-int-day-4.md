@@ -42,7 +42,7 @@ In the following diagram, you can see the flow you are about to implement.
 - Step 7 -> The BPA Process will place an entry in the Inbox for Approval
 - Step 8 -> Once the SalesOrder is approved via the Form, it will be re-published for processing which triggers an updated on the orginal screen that started the entire process.
 
-![BPA Image](img/BPAPRocess.png)
+![BPA Image](img/BPAPRocess2.png)
 
 ## Creating a Rest Delivery Point
 
