@@ -52,7 +52,18 @@
         <p>In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link.</p>
 <p><a href="https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/" target="_blank">Link to Blog</a></p>
 <p>In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called &#34;Dead Message Queue&#34;. This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. Hitting the submit button will release the message from the Queue and it will be sent to the broker with a special topic. A special topic that will result in the message being placed into a Queue that is being actively monitored by Cloud Integration. The message will be transformed by Cloud Integration and the message will be placed back into the mesh. The broker will act upon this new message and instantiate a new business process for each message.</p>
-<p class="image-container"><img alt="BPA Image" src="img/5459955abc49fc86.jpg"></p>
+<p>In the following diagram, you can see the flow you are about to implement.</p>
+<ul>
+<li>Step 1 -&gt; The user decides to investigate the item displayed in the dead message queue so they hit the submit button which causes the message to be published on the topic shown.</li>
+<li>Step 2 -&gt; There a queue that you will create called SOREJECTED that has a subscription to attract these events.</li>
+<li>Step 3 -&gt; The cloud integration iFlow is listening on the SOREJECTED queue for these events.</li>
+<li>Step 4 -&gt; The iFlow is responsible for transforming the message into a different format that can be used later by the BPA API.</li>
+<li>Step 5 -&gt; The SO_WF queue is attracting events with this new format.</li>
+<li>Step 6 -&gt; A rest delivery point will use the information in the event to call the API for starting the BPA process</li>
+<li>Step 7 -&gt; The BPA Process will place an entry in the Inbox for Approval</li>
+<li>Step 8 -&gt; Once the SalesOrder is approved via the Form, it will be re-published for processing which triggers an updated on the orginal screen that started the entire process.</li>
+</ul>
+<p class="image-container"><img alt="BPA Image" src="img/c1bcea72a23ae54.png"></p>
 
 
       </google-codelab-step>
@@ -86,7 +97,7 @@
 <p class="image-container"><img alt="BPA Image 16" src="img/454d538d9ecdb714.jpg"></p>
 <p>The type of content that we will send to the API is of JSON format. In order to indicate this, we need to create a request header called &#34;Content-Type&#34; and set the value to &#34;application/json&#34;.</p>
 <p class="image-container"><img alt="rdp Image 1" src="img/966e5064d429da17.jpg"></p>
-<p>At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate &#34;Down&#34;, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.</p>
+<p>Last but not least, one last small change. The RDP process will be the owner of this queue so now that we have the RDP Created, lets ensure that we set the owner properly. Modify the owner of the SO_WF as per the following screenshot. <img alt="rdp Image 1" src="img/901e08f3855b67e9.png"> At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate &#34;Down&#34;, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.</p>
 <p class="image-container"><img alt="BPA Image 17" src="img/c4526ddbad053dea.jpg"></p>
 <p>Congratulations, you have completed setup of the Rest Delivery Point. Each time a message is placed into the Queue, it will automatically call the API associated with the RDP.</p>
 
