@@ -49,7 +49,7 @@ jobs:
       - name: Push updates to codelabs repo
         run: |
           cd main
-          git config user.name SollyBot
+          git config user.name solacecommunity-bot
           git config user.email community@solace.com
           git add codelabs/.
           git commit -m "Adding ${{env.CHANGED_CODELABS}} html files"
