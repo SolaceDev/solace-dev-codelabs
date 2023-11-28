@@ -53,4 +53,4 @@ jobs:
           git config user.email community@solace.com
           git add codelabs/.
           git commit -m "Adding ${{env.CHANGED_CODELABS}} html files"
-          git push https://solacecommunity-bot:${{env.SOLACE_BOT}}@github.com/Solacedev/solace-dev-codelabs
+          git push https://solacecommunity-bot:${{env.SOLACE_COMMUNITY_BOT_ULTIMATE}}@github.com/Solacedev/solace-dev-codelabs
