@@ -16,7 +16,7 @@ This codelab will take you through the basics of the Soalce PubSub+ Distributed 
 * Launching and configuring a PubSub+ Event Broker locally via Docker
 * Launching and configuring the OpenTelemetry Collector Contribution
 * Launching Jaeger - the open source, end-to-end distributed tracing backend to observe our traces   
-* Publishing and receiving messages to/from your broker to generate broker trace events
+* Publishing and receiving messages to/from the broker to generate broker trace events
 * Context propagation via auto-instrumented JMS applications that will generate end to end linked traces (publisher – broker – receiver traces)
 * Context propagation via manual-instrumented JCSMP applications that will generate end to end linked traces (publisher – broker – receiver traces)
   
