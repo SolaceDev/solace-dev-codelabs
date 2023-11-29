@@ -20,20 +20,21 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="dt-otel"
                   title="Getting Started with Solace Distributed Tracing and Context Propagation"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/dt-otel">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="3">
-        <p>This codelab will take you through the basics of the Soalce PubSub+ Distributed Tracing feature. Following these steps will take you through:</p>
+        <p>This codelab will take you through the basics of the Soalce PubSub+ Distributed Tracing feature. The following steps will take you through:</p>
 <ul>
-<li>Launching and configuring a PubSub+ Event Broker Software</li>
-<li>Launching the OpenTelemetry Collector Contribution</li>
-<li>Launching Jaeger, the open source, end-to-end distributed tracing backend to observe our traces</li>
-<li>Publishing and receiving messages to/from your broker to generate broker trace events</li>
+<li>Launching and configuring a PubSub+ Event Broker locally via Docker</li>
+<li>Launching and configuring the OpenTelemetry Collector Contribution</li>
+<li>Launching Jaeger - the open source, end-to-end distributed tracing backend to observe our traces</li>
+<li>Publishing and receiving messages to/from the broker to generate broker trace events</li>
 <li>Context propagation via auto-instrumented JMS applications that will generate end to end linked traces (publisher – broker – receiver traces)</li>
 <li>Context propagation via manual-instrumented JCSMP applications that will generate end to end linked traces (publisher – broker – receiver traces)</li>
 </ul>

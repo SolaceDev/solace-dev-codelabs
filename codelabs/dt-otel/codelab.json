@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2023-10-06T12:44:20-04:00",
+  "updated": "2023-11-29T00:11:53Z",
   "id": "dt-otel",
   "duration": 89,
   "title": "Getting Started with Solace Distributed Tracing and Context Propagation",
   "summary": "This Codelab will walk you through how to get started using Solace Distributed Tracing with Context Propagation",
-  "source": "dt-otel.md",
+  "source": "main/markdown/dt-otel/dt-otel.md",
   "theme": "",
   "status": [
     "published"
