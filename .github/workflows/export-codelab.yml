@@ -1,0 +1,64 @@
+name: Export Codelabs
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - markdown/**
+
+env:
+  CHANGED_CODELABS: ''
+jobs:
+  Export-Codelab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20.5'
+      
+      - name: Checkout Current Branch
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          token: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
+          path: main
+
+      - name: Checkout claat repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
+          repository: SolaceDev/google-tools
+          path: google-tools
+      
+      - name: Build claat
+        run: cd google-tools/claat; go build .
+      
+      - name: Get all changed markdown files
+        id: changed-markdown-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: | 
+            **.md
+          path: main
+        
+      - name: Generate html codelabs
+        run: |
+          for file in ${{ steps.changed-markdown-files.outputs.all_changed_files }}; do
+            folder="$(basename $file .md)"
+            google-tools/claat/claat export -o main/codelabs/ main/$file
+            echo "CHANGED_CODELABS=${CHANGED_CODELABS} $folder" >> $GITHUB_ENV
+          done
+          
+      - name: Push updates to codelabs repo
+        run: |
+          cd main
+          git config user.name solacecommunity-bot
+          git config user.email community@solace.com
+          git add codelabs/.
+          git commit -m "Adding ${{env.CHANGED_CODELABS}} html files"
+          git push https://solacecommunity-bot:${{secrets.SOLACE_COMMUNITY_BOT_ULTIMATE}}@github.com/Solacedev/solace-dev-codelabs
+        env:
+          GITHUB_TOKEN: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}

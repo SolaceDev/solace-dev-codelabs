@@ -32,7 +32,17 @@ In the world of Event Driven Asynchronous messaging, sometimes events cannot be 
 
 In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called "Dead Message Queue". This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. Hitting the submit button will release the message from the Queue and it will be sent to the broker with a special topic. A special topic that will result in the message being placed into a Queue that is being actively monitored by Cloud Integration. The message will be transformed by Cloud Integration and the message will be placed back into the mesh. The broker will act upon this new message and instantiate a new business process for each message.
 
-![BPA Image](img/BPA-1.jpg)
+In the following diagram, you can see the flow you are about to implement.
+- Step 1 -> The user decides to investigate the item displayed in the dead message queue so they hit the submit button which causes the message to be published on the topic shown.
+- Step 2 -> There a queue that you will create called SOREJECTED that has a subscription to attract these events.
+- Step 3 -> The cloud integration iFlow is listening on the SOREJECTED queue for these events.
+- Step 4 -> The iFlow is responsible for transforming the message into a different format that can be used later by the BPA API.
+- Step 5 -> The SO_WF queue is attracting events with this new format.
+- Step 6 -> A rest delivery point will use the information in the event to call the API for starting the BPA process
+- Step 7 -> The BPA Process will place an entry in the Inbox for Approval
+- Step 8 -> Once the SalesOrder is approved via the Form, it will be re-published for processing which triggers an updated on the orginal screen that started the entire process.
+
+![BPA Image](img/BPAPRocess2.png)
 
 ## Creating a Rest Delivery Point
 
@@ -103,6 +113,8 @@ The type of content that we will send to the API is of JSON format. In order to 
 
 ![rdp Image 1](img/rdp-1.jpg)
 
+Last but not least, one last small change. The RDP process will be the owner of this queue so now that we have the RDP Created, lets ensure that we set the owner properly. Modify the owner of the SO_WF as per the following screenshot.
+![rdp Image 1](img/SOWFSettings.png)
 At this point, you should have a functioning RDP. The operational status on the screen should say Up for all components with the exception of the RDP Client. If any of them indicate “Down”, you will need to Troubleshoot, go back and double check your settings. There is also a Stats link that you can use to see the Error Messages.
 
 ![BPA Image 17](img/BPA-17.jpg)
@@ -266,44 +278,44 @@ On this screen, we can test several things. For starters, we can confirm that th
 On the publisher side, connect to the broker and use "sap.com/salesorder/rejected/V1" as the topic and for the message use the following structure. This will simulate an event being submitted for Review from the Integration Card.
 ```JSON
 {
-	"orderHeader": [
-		{
-			"salesOrderNumber": "SO1002",
-			"creator": "Jane Smith",
-			"date": 1691193600000,
-			"salesType": "In-store",
-			"ordertype": "Express",
-			"salesOrg": "SA02",
-			"distributionChannel": "DC02",
-			"division": "DV02",
-			"customer": [
-				{
-					"customerId": "CUST002",
-					"customerName": "XYZ Ltd",
-					"zipCode": "54321",
-					"street": "First Avenue",
-					"phone": "555-987-6543",
-					"country": "USA",
-					"city": "Los Angeles"
-				}
-			],
-			"orderItem": [
-				{
-					"item": "ITEM002",
-					"material": "MAT002",
-					"materialType": "Service",
-					"itemType": "Premium",
-					"orderSchedule": [
-						{
-							"scheduleNumber": "SCH002",
-							"quantity": 50,
-							"uom": "Hrs"
-						}
-					]
-				}
-			]
-		}
-	]
+  "orderHeader": [
+    {
+      "salesOrderNumber": "SO1002",
+      "creator": "Jane Smith",
+      "date": 1691193600000,
+      "salesType": "In-store",
+      "ordertype": "Express",
+      "salesOrg": "SA02",
+      "distributionChannel": "DC02",
+      "division": "DV02",
+      "customer": [
+        {
+          "customerId": "CUST002",
+          "customerName": "XYZ Ltd",
+          "zipCode": "54321",
+          "street": "First Avenue",
+          "phone": "555-987-6543",
+          "country": "USA",
+          "city": "Los Angeles"
+        }
+      ],
+      "orderItem": [
+        {
+          "item": "ITEM002",
+          "material": "MAT002",
+          "materialType": "Service",
+          "itemType": "Premium",
+          "orderSchedule": [
+            {
+              "scheduleNumber": "SCH002",
+              "quantity": 50,
+              "uom": "Hrs"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 On the subscriber side, connect to the broker and use ">" as your topic. This will show everything. When you publish your message, you should immediately see a message appear in the subscriber window and you should be looking for a couple of things:
@@ -313,6 +325,55 @@ On the subscriber side, connect to the broker and use ">" as your topic. This wi
 
   ### IF YOU SEE MESSAGES IN THE INBOX....WOOHOO
 
+## Debugging RDP Error
+
+This is an optional step in case you encounter any issue with AEM RDP Connection.
+
+Below steps will allow you to connect to AEM CLI console and look at the logs.
+
+### Enable the Access to Port 22
+
+Before accessing the CLI, we need to make sure that access to port 22 (default ssh port) is open.
+
+1.	From the SAP AEM Console, select your service that you want to debug
+      ![BPA Image 3](img/BPA-3.jpg)
+
+2.	Select Manage and then Advanced Options
+
+	![AEM Image 3](img/AEM-3.jpg)
+
+3.	This will open up New Advanced Management Options Page
+
+	![AEM Image 4](img/AEM-4.jpg)
+
+4.	Scroll down to “Port Configuration” Section. On the Public Endpoint section, select “…” to edit the port configuration
+
+	![AEM Image 5](img/AEM-5.jpg)
+
+5.	Scroll down to “Management” and check the “Enable Secured CLI Host (SSH), use port” option. This will allow access to the broker command line utility
+
+	![AEM Image 6](img/AEM-6.jpg)
+
+6. Go back to Manage Tab from Advanced Management Options page.
+
+   ![AEM Image 7](img/AEM-7.jpg)
+
+7. Get the hostname, management userid and password of the service. Make sure to get the viewer credentials
+
+   ![AEM Image 8](img/AEM-8.jpg)
+
+### Accessing AEM Service Commandline Utility
+
+8. Use any commandline utility and ssh to the service using valid hostname, userid and password as below: \
+   *`ssh userid@hostname`*  
+\
+   ![AEM Image 9](img/AEM-9.jpg)
+
+9.	Now you can view the rdp error logs using the command
+
+*`show log rest rest-delivery-point errors`*
+
+This command will give you HTTP error (if any)that you might have received from BPA web endpoint.
 
 ## Takeaways
 
@@ -320,8 +381,6 @@ On the subscriber side, connect to the broker and use ">" as your topic. This wi
 ✅  Understand how to use SAP BPA to process Dead Messages
 ✅  Understand how to use an iFlow with an Event for transformations
 ✅  Understand how to setup a Rest Delivery Point
-
-
 
 
 ![Soly Image Caption](img/soly.gif)
