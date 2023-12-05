@@ -8,9 +8,9 @@ jobs:
     name: Add guidelines comment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
       - uses: harupy/comment-on-pr@master
         env:
-          GITHUB_TOKEN: ${{ secrets.SOLACE_BOT }}
+          GITHUB_TOKEN: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
         with:
           filename: comment-content.md

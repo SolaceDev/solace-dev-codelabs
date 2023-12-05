@@ -419,6 +419,6 @@ Duration: 0:07:00
 ✅ Sign up for a Solace PubSub+ Cloud account and configure a messaging service broker with a queue  
 ✅ Sign up for a Boomi AtomSphere account and setup a Solace Pubsub+ Connector for a listen configuration and bind to a message queue  
 ✅ Send events to the same topic the queue is subscribed to  
-✅ Check out more information on the Solace Connector in the [PubSub+ Connector Hub](https://solace.com/connectors/dell-boomi-ipaas/) page
+✅ Check out more information on the Solace Connector in the [PubSub+ Connector Hub](https://solace.com/integration-hub/boomi-ipaas/) page
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)!
