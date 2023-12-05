@@ -227,7 +227,7 @@ You can log in to the SAP CloudFoundry space in your account as below :
 ###  4 : Deploying the SAP Simulator application
 
 - Navigate to the directory where the above deployable artefact files are saved.
-- Run the command `cf push` which will upload the jar file and use the manifest.yml for properties. **Note : this
+- Run the command `cf push --random-route` which will upload the jar file and use the manifest.yml for properties. **Note : this
   command will take some time to completely execute as it uploads the jar deployable and also start the application.**
 - Once the command is completely executed, run the command `cf apps` to view a listing of the apps in your cloudfoundry
   space
