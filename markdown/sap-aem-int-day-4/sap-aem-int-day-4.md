@@ -162,16 +162,14 @@ We will import the SAPAEMSO.mtar file. Select the import option which is highlig
 
 In order to deploy the BPA project, you need to associate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Expand the menu options on the top left.
 ![SPA BPA LOBBY](img/BPA_LOBBY.png)
-Click on the Control Tower.
+Click on the Control Tower and Select Destinations
 ![SPA BPA ControlTower](img/BPA_ControlTower.png)
-Now Select Destinations
-In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+![SPA BPA Destination](img/BPA_Destination.png)
 
-From the SAP BPA Environment, select the "Settings" option at the top.
-![SPA BPA Image 12](img/SPA-BPA-12.jpg)
 
-Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
-![SPA BPA Image 13](img/SPA-BPA-13.jpg)
+Head back to the Lobby and Click on the SAPAEMSO project.
+![SPA BPA LOBBY](img/BPA_LOBBY.png)
 
 Prior to releasing the project, we have to make a small change to the project. Lets start by clicking on the "Sales Order Review" Process.
 
