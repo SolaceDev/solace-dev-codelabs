@@ -150,15 +150,17 @@ When your destination is finished and saved, double check to make sure both prop
 
 ## Creating the SAP BPA Project
 
-For the SAP BPA setup, we will be importing 1 File that contains 2 projects: 
-- a project of type “Actions”
+For the SAP BPA setup, we will be importing 1 File that contains several components: 
+- 11 Artifacts
+- 1 Trigger
+- 1 Dependency for the Action Group that represents the action group
 - a project of type “Process Automation”
 
 We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 2 projects listed as per the screenshot below 
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
-In order to deploy the BPA project, you need to asociate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Navigate to the “Settings” tab from the BPA environment.
+In order to deploy the BPA project, you need to associate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Navigate to the “Settings” tab from the BPA environment.
 In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
 
 From the SAP BPA Environment, select the "Settings" option at the top.
