@@ -26,11 +26,11 @@ Topics covered :
 
 ## Using SAP BPA to handle event exceptions
 
-In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link. 
+In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to as a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link. 
 
 [Link to Blog](https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/)
 
-In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called "Dead Message Queue". This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. Hitting the submit button will release the message from the Queue and it will be sent to the broker with a special topic. A special topic that will result in the message being placed into a Queue that is being actively monitored by Cloud Integration. The message will be transformed by Cloud Integration and the message will be placed back into the mesh. The broker will act upon this new message and instantiate a new business process for each message.
+In our scenario, we will artificially create a situation where messages cannot be delivered to the endpoint. As a result, they end up in the Dead Message Queue and the application shown below has an integration card on it called "Dead Message Queue". This card is a very simple Queue browser. It displays the messages without removing them from the Queue unless you hit the submit button. The steps and diagram below walk through the exact flow you will be implementing.
 
 In the following diagram, you can see the flow you are about to implement.
 - Step 1 -> The user decides to investigate the item displayed in the dead message queue so they hit the submit button which causes the message to be published on the topic shown.
@@ -130,12 +130,12 @@ The business process that we will deploy is activated by an API Trigger which ca
 
 ![SAP BPA Image 1](img/SPA-BPA-1.jpg)
 
-The "Action" component needs to be associatd with a destination. In order to create the destination, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
+The "Action" component needs to be associated with a destination. In order to create the destination, you will need "REST" connectivity information from your broker. Navigate to your AEM Cloud Console, you will select the Cluster Manager and then you will select your broker. From there, you will select the “Connect” option at the top. On this screen, make sure that the “View By” is set to Protocol as the first step. From there, expand the REST protocol and everything you need to create the destination will be visible.
 
 ![SAP BPA Image 2](img/AEM-2.jpg)
 
 ### Navigate to the BTP Cloud Cockpit
-Once you have the connectivity information, Navigate to the Destinatios Section within the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
+Once you have the connectivity information, Navigate to the Destinations Section within the BTP Cockpit, Select the “New Destination” option. You will be creating a destination called “AEMBROKERREST”.
 
 ![BPA Image 20](img/BPA-20.jpg)
 
@@ -143,29 +143,33 @@ You will populate the Destination information as shown below and you will add tw
 - sap.applicationdevelopment.actions.enabled – true
 - sap.processautomation.enabled – true
 
-When your destination is finished and saved, double check to make sure both properties are there.
+When your destination is created, double check to make sure both properties are there.
 
 
 ![BPA Image 21](img/BPA-21.jpg)
 
 ## Creating the SAP BPA Project
 
-For the SAP BPA setup, we will be importing 1 File that contains 2 projects: 
-- a project of type “Actions”
+For the SAP BPA setup, we will be importing 1 File that contains several components: 
+- 11 Artifacts
+- 1 Trigger
+- 1 Dependency for the Action Group that represents the action group
 - a project of type “Process Automation”
 
-We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 2 projects listed as per the screenshot below 
+We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below 
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
-In order to deploy the BPA project, you need to asociate the project with a Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Navigate to the “Settings” tab from the BPA environment.
-In this example, we are not really creating a destination but more referencing an already existing Destination. When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+In order to deploy the BPA project, you need to associate the project with the Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Expand the menu options on the top left.
+![SPA BPA LOBBY](img/BPA_LOBBY.png)
+Click on the Control Tower and Select Destinations
+![SPA BPA ControlTower](img/BPA_ControlTower.png)
+When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+![SPA BPA Destination](img/BPA_Destination.png)
 
-From the SAP BPA Environment, select the "Settings" option at the top.
-![SPA BPA Image 12](img/SPA-BPA-12.jpg)
 
-Now we will deploy the SAPAEMSO project. Click on the project to open it in the designer.
-![SPA BPA Image 13](img/SPA-BPA-13.jpg)
+Head back to the Lobby and Click on the SAPAEMSO project.
+![SPA BPA LOBBY](img/BPA_LOBBY.png)
 
 Prior to releasing the project, we have to make a small change to the project. Lets start by clicking on the "Sales Order Review" Process.
 
