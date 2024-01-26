@@ -17,13 +17,19 @@ jobs:
           go-version: '1.20.5'
       
       - name: Checkout Current Branch
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
+          persist-credentials: false
+          fetch-depth: 0
+          token: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
           path: main
 
       - name: Checkout claat repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
           repository: SolaceDev/google-tools
           path: google-tools
       
@@ -49,8 +55,10 @@ jobs:
       - name: Push updates to codelabs repo
         run: |
           cd main
-          git config user.name SollyBot
+          git config user.name solacecommunity-bot
           git config user.email community@solace.com
           git add codelabs/.
           git commit -m "Adding ${{env.CHANGED_CODELABS}} html files"
-          git push
+          git push https://solacecommunity-bot:${{secrets.SOLACE_COMMUNITY_BOT_ULTIMATE}}@github.com/Solacedev/solace-dev-codelabs
+        env:
+          GITHUB_TOKEN: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}

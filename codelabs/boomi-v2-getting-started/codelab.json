@@ -3,19 +3,19 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-11-30T13:24:45-05:00",
+  "updated": "2023-11-30T00:33:04Z",
   "id": "boomi-v2-getting-started",
   "duration": 86,
   "title": "Getting started with Boomi and Solace",
   "summary": "",
-  "source": "boomi-v2-getting-started.md",
+  "source": "main/markdown/boomi-v2-getting-started/boomi-v2-getting-started.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
     "boomi",
-    "event portal"
+    "eventportal"
   ],
   "tags": [
     "web",
