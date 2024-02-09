@@ -43,8 +43,9 @@ Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration
 
 ### B) Download and import the AEM adapter for Integration Suite
 
->aside negative A new Advanced Event Mesh specific adapter will be made available in November 2023. If you already have this enabled in your Integration Suite environment, you can skip this step.<br>
-	Otherwise, follow the steps in this section to get a preview of the soon to be released AEM adapter:<br>
+>aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. <br>
+**Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant.** <br>
+	In that case, follow the steps in this section to get a preview of the AEM adapter:<br>
 	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip)<br>
 	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
 
@@ -61,15 +62,8 @@ Deploy the adapter after import.
 See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) for more detailed instructions
 
 
-## Set up all components for the legacy output adapter iflow **(mandatory)**
+## Set up sales order scenario 1: AEMLegacyOutputAdapter **(mandatory)**
 Duration: 0:45:00
-
-### Setup/Configure Dependency Services **(optional)**
-
-The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system. The actual flow **doesn't** require a working sftp destination as it's just being used to simulate a failure to demonstrate the retry and error handling capabilities of AEM. The flow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual  processing by a UI5 and Business Process Automation workflow.
-
-> aside negative
-> If, after successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .
 
 ### Setup/configure SAP AEM broker service
 
@@ -121,7 +115,7 @@ Create the following queues and provide the details as given.
 
 ![queue settings](img/CILegacyAdapterInDMQ-queue-settings.png)
 
-One thing, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
+Now, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
 ![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png)
 We will need them in the next steps when configuring our flows.
 
@@ -139,8 +133,7 @@ Let's configure the security details we will need to connect to the various serv
 ![Security Material](img/CISecurityMaterial.png)
 - In here, create security credentials for your AEM broker service, and SFTP server (sftp optional).
 - Create SecureParameter `CABrokerUserPass` and store the password for your `solace-cloud-client` application user credentials.
-- Create UserCredentials `sftpuser` and store your SFTP servers user and password credentials (optional - only required for successful transfer of events to a file).
-- You may also need to create a known.hosts file, populate it with your SFTP server's ssh id if you want to complete the optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow). See [this post](https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/) by Pravesh Shukla if you need help with this step.
+- Create UserCredentials `sftpuser` and store SFTP servers user and password credentials (these can be prepopulated with dummy values for now).
 
 ### Configure/Deploy AEMLegacyOutputAdapter
 #### 1. Let's take a look at the AEMLegacyOutputAdapter iflow:
@@ -194,11 +187,32 @@ You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this
 TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
 -->
 
-## Set up all components for the sales order email notification iflow
+### Complete the success path for this scenario **(optional step for later)**
+
+> aside negative
+> Only complete this step *after* you have seen the flow interact end to end with the UI5 components and the BPA process in this Dead Message Queue (DMQ) error handling scenario.
+
+The legacy output adapter is simulating appending events to a file via an SFTP adapter, which could be imported to a legacy system. **The workshop scenario doesn't require a working sftp destination**, as we are using this iflow to simulate a failure to demonstrate the retry and error handling capabilities of AEM. The iflow will try a few times to deliver each event to the SFTP destination. After 3 failed attempts messages will be moved to a Dead Message Queue for manual  processing by a UI5 and Business Process Automation workflow.
+
+> aside negative
+> If, **AFTER** successful demonstration of the error handling, you would still like to see a successful delivery of events to a file via sftp, you will need an sftp server and sftp credentials to configure the flow with a valid endpoint (sftp server address and username password) and import the ssh identidy into .
+
+### Security Configuration
+Let's go back and configure the security details we will need to connect to the SFTP server.
+- Go to Integration Suite Monitor Artifacts -> Manage Security -> Security Material.
+![Security Material](img/CISecurityMaterial.png)
+- Update UserCredentials `sftpuser` and store your SFTP servers user and password credentials.
+- You may also need to create a known.hosts file, populate it with your SFTP server's ssh id if you want to complete this optional step of successfully sending events to a file via SFTP (success path of the AEMLegacyOutputAdapter flow). See [this post](https://blogs.sap.com/2017/09/26/how-to-generate-sftp-known_host-file-cloud-platform-integration/) by Pravesh Shukla if you need help with this step.
+
+### Configure and Deploy your iflows
+Go back to your iflow, reconfigure the SFTP adapter with your SFTP servers address and redeploy.
+
+
+## Set up sales order scenario 2: AEMSalesOrderNotification
 Duration: 0:30:00
 
 ### Setup/Configure Dependency Services
-You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password.
+You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password. (A test Gmail account might serve this purpose if you don't have another email service you can use for this exercise.)
 
 ### Setup/configure SAP AEM broker service
 
@@ -316,7 +330,7 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
 -->
 
-## Set up all components for the business partner address check iflow
+## Set up business partner scenario: AEMBusinessPartnerAddressCheck
 Duration: 1:00:00
 
 ### Setup/Configure Dependency Services
