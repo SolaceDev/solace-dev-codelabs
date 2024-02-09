@@ -63,7 +63,7 @@ See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integra
 
 
 ## Scenario 1 - SalesOrder: AEMLegacyOutputAdapter (mandatory)
-Duration: 0:45:00
+Duration: 0:30:00
 
 ### Setup/configure SAP AEM broker service
 
@@ -207,6 +207,35 @@ Let's go back and configure the security details we will need to connect to the 
 ### Configure and Deploy your iflows
 Go back to your iflow, reconfigure the SFTP adapter with your SFTP servers address and redeploy.
 
+## Automation of AEM setup via APIs and CI/CD (optional)
+Duration: 0:20:00
+### Advanced Event Mesh APIs & CI
+All configuration within AEM can be automated using a combination of two APIs:
+- AEM Cloud API (for any configuration on the AEM Cloud Console)
+- The broker's SEMP API (for any configuration on the broker service directly)
+
+The documentation of these APIs can be found in the AEM docs [here](https://help.pubsub.em.services.cloud.sap/Cloud/gqs_building_apps.htm)
+
+Both these APIs are RESTful and can be used in numerous ways to pull/push configuration like queues and client configuration throught CI/CD pipelines or configure/promote Event Portal content in step with code promotion from environment to environment.
+
+### Sample CI/CD Configuration Tool
+There are many options/tools that can be used to automate these tasks, like Jenkins, Ansible, scripts, Terraform etc. For the purpose of this exercise we are going to use a sample application written in CAP that has the nice advantage of running in our browser that we can point at our broker's API and feed some configuration files.
+![AEM Configuration Tool](img/ConfigTool-empty.png)
+
+### Pushing AEM Configuration for Scenario 2 & 3
+Here we will look at one example for automating our broker configuration for scenario 2 & 3 respectively, which will save us some time not having to repeat similar configuration steps like in scenario 1 again and again.
+
+The AEM Rapid Pilot - Automatic Configuration can be accessed [here](https://rapid-pilot-createconfig-palm-dog-sl.cfapps.ca10.hana.ondemand.com/)
+
+We will need some details from your AEM service again to connect the configuration tool with your AEM service. Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Manage" tab. Take a note of the connectivity details underneath "SEMP - REST API" (click on the section to open it up):
+![AEM Broker SEMP API Details](img/AEMBrokerSEMPDetails.png)
+
+And copy & paste the URL, vpn name, admin username and password into the config tool:
+![AEM Configuration Tool populated](img/ConfigTool-populated.png)
+
+Please download the configuration file from [AEM configuration file](https://github.com/SolaceLabs/aem-sap-integration/blob/main/AEMConfiguration/AEMConfigDay3-scenario_2_and_3.json) and copy & paste the content into the "Config JSON Payload" input field.
+
+Hit "Create Configuration" to apply this config to your broker.
 
 ## Scenario 2 - SalesOrder: AEMSalesOrderNotification (optional)
 Duration: 0:30:00
