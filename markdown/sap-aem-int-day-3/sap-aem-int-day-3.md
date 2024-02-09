@@ -262,6 +262,8 @@ Open up the "Advanced Queue Settings" section, then follow along and provide the
 
 Create the following queues and provide the details as given.
 
+**You can skip over this step if you have used the CI/CD tool to automate the configuration.**
+
 #### 1. CISalesOrderNotification queue
 - Name: `CISalesOrderNotification`
 - Owner: `solace-cloud-client`
@@ -392,6 +394,8 @@ Open up the "Advanced Queue Settings" section, then follow along and provide the
 ![Advanced Queue Settings](img/AEMAdvancedQueueSettings.png)
 
 Create the following queues and provide the details as given.
+
+**You can skip over this step if you have used the CI/CD tool to automate the configuration.**
 
 #### 1. CIBusinessPartnerChecker queue
 
