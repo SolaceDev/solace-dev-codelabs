@@ -62,7 +62,7 @@ Deploy the adapter after import.
 See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) for more detailed instructions
 
 
-## Scenario 1 - SalesOrder: AEMLegacyOutputAdapter **(mandatory)**
+## Scenario 1 - SalesOrder: <br>AEMLegacyOutputAdapter **(mandatory)**
 Duration: 0:45:00
 
 ### Setup/configure SAP AEM broker service
@@ -208,7 +208,7 @@ Let's go back and configure the security details we will need to connect to the 
 Go back to your iflow, reconfigure the SFTP adapter with your SFTP servers address and redeploy.
 
 
-## Scenario 2 - SalesOrder: AEMSalesOrderNotification (optional)
+## Scenario 2 - SalesOrder: <br>AEMSalesOrderNotification (optional)
 Duration: 0:30:00
 
 ### Setup/Configure Dependency Services
@@ -330,7 +330,7 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
 -->
 
-## Scenario 3 - BusinessPartner: AEMBusinessPartner AddressCheck (optional)
+## Scenario 3 - BusinessPartner: <br>AEMBusinessPartner AddressCheck (optional)
 Duration: 1:00:00
 
 ### Setup/Configure Dependency Services
