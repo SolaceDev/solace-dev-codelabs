@@ -330,7 +330,7 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
 -->
 
-## Scenario 3 - BusinessPartner: AEMBusinessPartnerAddressCheck (optional)
+## Scenario 3 - BusinessPartner: AEMBusinessPartner AddressCheck (optional)
 Duration: 1:00:00
 
 ### Setup/Configure Dependency Services
