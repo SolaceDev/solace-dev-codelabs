@@ -31,6 +31,7 @@ Duration: 0:09:00
 - Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
 
 
+
 ## Set up Integration Suite and Import Event Enabled Integration Flows
 
 Duration: 0:30:00
