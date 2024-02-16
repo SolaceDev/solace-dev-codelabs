@@ -40,7 +40,7 @@ Duration: 0:30:00
 
 ### A) Download and import the template integration flows package
 
-Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Rapid-Pilot.zip)
+Download [AEM-Rapid-Pilot-day3.zip](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Rapid-Pilot-day3.zip)
 - Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
 
@@ -234,7 +234,7 @@ Please download the configuration file from [AEM configuration file](https://git
 
 Hit "Create Configuration" to apply this config to your broker.
 
-## Scenario 2 - SalesOrder: AEMSalesOrderNotification (mandatory)
+## Scenario 2 - SalesOrder: AEMSONotificationV2 (mandatory)
 Duration: 0:30:00
 
 ### Setup/Configure Dependency Services
@@ -319,26 +319,27 @@ Let's configure the security details we will need to connect to the various serv
 
 
 
-### Configure/Deploy AEMSalesOrderNotification
-#### 1. Let's take a look at the AEMSalesOrderNotification iflow:
-![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
+### Configure/Deploy AEMSONotificationV2
+#### 1. Let's take a look at the AEMSONotificationV2 iflow:
+![AEMSalesOrderNotification_flow.png](img/AEMSONotificationV2_flow.png)
 
 This flow gets triggered by Sales Order events and does two things:<br>
-a) It creates an email request and by forwarding this event to an email service iflow on another broker (hosted by us).<br>
+a) It creates an email request and by forwarding this event to an email service iflow on another broker (hosted by us) on topic `sap.com/emailnotification/created/V1`.<br>
 b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email request was successfully forwarded.
 
-#### 2. Configuring and deploying  the AEMSalesOrderNotification iflow:
-![AEM output adapter](img/CISalesOrderNotificationAEMOutput.png)
+#### 2. Configuring and deploying  the AEMSONotificationV2 iflow:
+![AEM output adapter](img/CIAEMSONotificationV2Configuration.png)
 - Populate the connection details for the AEM broker service to send an event to the AEM broker whenever the flow successfully sends a notification email.
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
 
-![AEM service configuration pt1](img/CIAEMSalesOrderNotificationConfiguration.png)
-![AEM service configuration pt2](img/CIAEMSalesOrderNotificationConfiguration-pt2.png)
+![AEM service configuration pt1](img/CIAEMSONotificationV2Configuration-pt1.png)
+![AEM service configuration pt2](img/CIAEMSONotificationV2Configuration-pt2.png)
+- No need to configure the adapter connecting to our email service, we've prepopulated this one and we have already deployed the necessary security configuration in the step above.
 - Then hit deploy at the bottom right.
 
 #### 3. Check that your flow was deployed successfully and fix if necessary.
 - Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
-You should be seeing the AEMSalesOrderNotification flow as Started, similar to this view:
+You should be seeing the AEMSONotificationV2 flow as Started, similar to this view (instead of AEMSalesOrderNotification, you should see AEMSONotificationV2):
 
 ![CPI flow monitoring](img/CIFlowsMonitoring.png)
 
