@@ -19,6 +19,8 @@ Day 3 of 5.
 Topics covered :
 - Configuring an AEM brokers' queues and topic subscriptions.
 - Event enabling integration flows and connecting them to AEM brokers to create event-driven integration flows.
+- How to use the broker's config APIs to automate configuration and enable CI/CD pipelines.
+- Fine-grained security access in AEM.
 
 ## What you need: Prerequisites
 
@@ -45,7 +47,7 @@ Download [AEM-Rapid-Pilot.zip](https://github.com/SolaceLabs/aem-sap-integration
 ### B) Download and import the AEM adapter for Integration Suite
 
 >aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. <br>
-**Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant.** <br>
+**Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant or if you want to use the preview version (provided) instead.** <br>
 	In that case, follow the steps in this section to get a preview of the AEM adapter:<br>
 	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip)<br>
 	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
@@ -155,16 +157,16 @@ This setting controls the nack type and behaviour, we have two options here:<br>
 	a) Failed, which will nack the message back to the broker and let's the broker check the retry count of the message to trigger retries based on the queue settings and only sending messages to DMQ when the retry count on the message has exceeded the max retry settings on the queue.<br>
 	b) Rejected, which will nack the message telling the broker to immediately move the message to DMQ when the AEM adapter settings (Maximum Message Processing Attempts) are exceeded irrespective of queue settings.<br>
 3) Max. Message Processing Attempts: 2<br>
-Controls how often we want to retry a message before we "give up".<br>
+Controls how often we want to retry a message inside the iflow before we "give up" and pass it back to the broker.<br>
 4) Retry interval, Max Retry Interval and Exponential Backoff Multiplier<br>
-These are all settings that control how quickly we want to retry and whether we want to incremently increase our retry delay with each failure. A good retry delay value prevents the broker from repeatedly retrying a message within a few milli-seconds and gives some time for transient error situations to clear before we retry.
+These are all settings that control how quickly we want to retry and whether we want to incremently increase our retry delay with each failure. A good retry delay value prevents the iflow from repeatedly retrying a message within a few milli-seconds and gives some time for transient error situations to clear before we retry.
 
-Keep in mind that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow:
+Note that the error handling and retry settings go hand-in-hand with the DMQ and retry settings on the input queue for this flow (queue retry settings multiply with the internal retry settings in the iflow, e.g. if the iflow tries 2 times internally every time we pass it a message and the broker is configured to retry the same message 3 times to the broker, then we might get 8 executions before the message is actually stopped being processed and moved to the DMQ [(1 initial attempt + 3 times retry) * 2 times retry inside the iflow = 8 processing attempts]):
 ![queue settings](img/CILegacyAdapterIn-queue-settings.png)
 ![queue settings pt2](img/CILegacyAdapterIn-queue-settings-pt2.png)
 
 > aside negative
-> Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We only need to set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
+> Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We can only set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
 
 #### 2. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
@@ -181,12 +183,6 @@ You should be seeing the AEMLegacyOutputAdapter flow as Started, similar to this
 - Check that the AEMLegacyOutputAdapter input queue has at least one consumer connected to it.
 ![AEM service queue overview](img/CILegacyAdapterIn-queue-status.png)
 
-#### Troubleshooting
-<!--
-## Troubleshooting
-
-TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
--->
 
 ### Complete the success path for this scenario **(optional step for later)**
 
@@ -238,13 +234,16 @@ Please download the configuration file from [AEM configuration file](https://git
 
 Hit "Create Configuration" to apply this config to your broker.
 
-## Scenario 2 - SalesOrder: AEMSalesOrderNotification (optional)
+## Scenario 2 - SalesOrder: AEMSalesOrderNotification (mandatory)
 Duration: 0:30:00
 
 ### Setup/Configure Dependency Services
-You'll need an external email service to be able to automatically send emails, details like smtp server address, username (email) and password. (A test Gmail account might serve this purpose if you don't have another email service you can use for this exercise.)
+We will give you connectivity details to one of our brokers where we have an iflow deployed that is configured to send emails via an external email service to enable us to automatically send welcome/confirmation emails.
 
 ### Setup/configure SAP AEM broker service
+
+> aside negative
+> **You can skip over this step if you have used the CI/CD tool to automate the configuration in the previous step.**
 
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
@@ -263,7 +262,6 @@ Open up the "Advanced Queue Settings" section, then follow along and provide the
 
 Create the following queues and provide the details as given.
 
-**You can skip over this step if you have used the CI/CD tool to automate the configuration.**
 
 #### 1. CISalesOrderNotification queue
 - Name: `CISalesOrderNotification`
@@ -377,8 +375,12 @@ Take a note of the URL and user credentials once you've activated the service.<B
 
 #### Alternative: Use DQM service credentials provided by us during the workshop
 
+We will hand out the token and connectivity details to our DQM service, which can use instead.
+
 ### Setup/configure SAP AEM broker service
 
+> aside negative
+> **You can skip over this step if you have used the CI/CD tool to automate the configuration in the previous step.**
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
 ![AEM Console](img/AEMCloudConsoleSelectClusterManager.png)
@@ -396,7 +398,6 @@ Open up the "Advanced Queue Settings" section, then follow along and provide the
 
 Create the following queues and provide the details as given.
 
-**You can skip over this step if you have used the CI/CD tool to automate the configuration.**
 
 #### 1. CIBusinessPartnerChecker queue
 
@@ -552,5 +553,7 @@ Duration: 0:10:00
 ✅ Receive events in Integration Suite and publish new events <br>
 ✅ Access topic information and parse and modify topic levels to publish to new dynamic Topics <br>
 ✅ Understand retry and error processing capabilities in the AEM adapter and the AEM broker <br>
+✅ How to use the broker's config APIs to automate configuration and enable CI/CD pipelines.<br>
+✅ How fine-grained security access in AEM works.<br>
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
