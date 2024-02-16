@@ -310,16 +310,13 @@ We will need them in the next steps when configuring our flows.
 Now that we have set up all the prerequisites for our Integration Suite flows, we can take a look at the individual flows and prepare them for deployment.
 
 ### 0) - Security Configuration
-Let's configure the security details we will need to connect to the various services like AEM & email server.
+Let's configure the security details we will need to connect to the various services like AEM & email service iflow's AEM broker.
 - Go to Integration Suite Monitor Artifacts -> Manage Security -> Security Material.
 ![Security Material](img/CISecurityMaterial.png)
 - In here, create security credentials for your AEM broker service **(if not already done)** & email server.
 - Create SecureParameter `CABrokerUserPass` and store the password for your `solace-cloud-client` application user credentials.
-- Go to Integration Suite Monitor Artifacts -> Manage Security -> Manage Keystore.
-- You will need to import your email servers public CA certificate, if you want the email adapter to successfully connect and send emails. In our case, we are sending from an Outlook address, so we imported the TLS certificate that Microsoft uses for those servers in order to connect.
-![Manage Keystore](img/CIManageKeystore.png)
-> aside negative
-> See [this stackexchange post](https://security.stackexchange.com/questions/70528/how-to-get-ssl-certificate-of-a-mail-server) if you need help with finding and [this article](https://help.sap.com/docs/cloud-integration/sap-cloud-integration/uploading-certificate?locale=en-US) for help with importing the right CA certificate for your email server in Integration Suite.
+- Create another SecureParamter `email-profile-pwd` and store the password we have handed out in the workshop.
+
 
 
 ### Configure/Deploy AEMSalesOrderNotification
@@ -327,9 +324,8 @@ Let's configure the security details we will need to connect to the various serv
 ![AEMSalesOrderNotification_flow.png](img/AEMSalesOrderNotification_flow.png)
 
 This flow gets triggered by Sales Order events and does two things:<br>
-a) It creates an email and puts the Sales Order into the body of the email.<br>
-(The recipient's address is currently fixed in this example, because we don't have an email address in the sample Sales Order nor did we want to overcomplicate the flow with another look up to get the email address from another service/database, but these are all possible ways to send the email to the original customer to confirm the order receipt.)<br>
-b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email was successfully sent.
+a) It creates an email request and by forwarding this event to an email service iflow on another broker (hosted by us).<br>
+b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distributionChannel}/{division}/{customerId}` to indicate that the email request was successfully forwarded.
 
 #### 2. Configuring and deploying  the AEMSalesOrderNotification iflow:
 ![AEM output adapter](img/CISalesOrderNotificationAEMOutput.png)
@@ -353,12 +349,6 @@ You should be seeing the AEMSalesOrderNotification flow as Started, similar to t
 
 ![AEM service queue overview](img/CISalesOrderNotification-queue-status.png)
 
-#### Troubleshooting
-<!--
-## Troubleshooting
-
-TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
--->
 
 ## Scenario 3 - BusinessPartner: AEMBusinessPartner AddressCheck (optional)
 Duration: 1:00:00
@@ -534,7 +524,14 @@ You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar
 
 Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!
 
-#### Troubleshooting
+## Security and fine grained access control to topics
+<!--
+## Security
+
+TODO: Add some details on security and ACLs.
+-->
+
+## Troubleshooting
 <!--
 ## Troubleshooting
 
