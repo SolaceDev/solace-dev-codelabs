@@ -416,7 +416,7 @@ videos to get started with.
 
 - [DashBoard Portal](https://solacedemo-uf1dchbp.launchpad.cfapps.ca10.hana.ondemand.com/125692ff-95ad-4b2d-a216-fde644eef1c0.DashboardPortal.DashboardPortal-1.0.0/index.html)
 
-![Portal](img/Portal_Dashboard.png)
+![Portal](img/Dashportal.png)
 
 ### Step 2: Connect with Your Broker Details
 
@@ -428,11 +428,11 @@ To connect with your broker details:
   dashboard.
   ![BrokerDetails](img/Broker_Credentials_Find2.png)
 - Now, you can copy and paste each input into the fields at the top of the dashboard and then finally click “Connect”.
-  ![Dashboard](img/Broker_Credentials_Dashboard.png)
+  ![Dashboard](img/PreconnectDash.png)
 - If your credentials are entered correctly, you will get a “Success” message that will verify that you are connected
   properly to the dashboard. If you do not see a “Success” message, then try again and make sure your details are
   correct for each input.
-  ![Dashboard](img/Broker_Connected_Dashboard.png)
+![Dashboard](img/ConnectedDashboard.png)
 
 Repeat these steps for each dashboard.
 
@@ -443,6 +443,8 @@ example, in the Sales Order Dashboard, there is a card that is reading messages 
 showcases how error handling can be achieved. Furthermore, you can submit a message from that queue to trigger an SAP
 Process Automation flow with the click of a button. You'll also find different data visualization types, as well as
 functional visualizations that highlight integration with other parts of SAP BTP.
+
+As an additional way to trigger events and test the dashboards, choose the "Customer Order Form" application and create your own bike order. This order will create a mocked SAP Sales Order with the same payload format that the simulator and the ASAPIO package are providing.
 
 ### Troubleshooting
 
