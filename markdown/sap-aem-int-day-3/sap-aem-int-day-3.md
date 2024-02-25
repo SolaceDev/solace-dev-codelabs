@@ -35,7 +35,7 @@ Duration: 0:09:00
 
 ## Set up Integration Suite and Import Event Enabled Integration Flows
 
-Duration: 0:30:00
+Duration: 0:20:00
 
 ### A) Download and import the template integration flows package
 
@@ -204,7 +204,7 @@ Let's go back and configure the security details we will need to connect to the 
 Go back to your iflow, reconfigure the SFTP adapter with your SFTP servers address and redeploy.
 
 ## Automation of AEM setup via APIs and CI/CD (optional)
-Duration: 0:20:00
+Duration: 0:15:00
 ### Advanced Event Mesh APIs & CI
 All configuration within AEM can be automated using a combination of two APIs:
 - AEM Cloud API (for any configuration on the AEM Cloud Console)
@@ -525,6 +525,7 @@ You should be seeing the AEMBusinessPartnerAddressCheck flow as Started, similar
 Congratulations, if you are seeing both the Started iflow as well as the consumers on the queue, then that confirms that your iflow is running and has successfully opened and bound to the queue waiting for event to flow!
 
 ## Security and fine grained access control to topics
+Duration: 0:20:00
 <!--
 ## Security
 
