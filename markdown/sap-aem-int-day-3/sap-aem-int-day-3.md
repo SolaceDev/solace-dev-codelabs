@@ -29,7 +29,6 @@ Duration: 0:09:00
 - Complete all activities in day 1 & 2. <br>You access and use the same broker you setup previously as well as the simulator to push events for testing.
 - Have access to an active Integration Suite Cloud Integration tenant.
 - Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system **(optional)**.
-- Have an email server and account credentials that allows SMTP access if you want to send email notifications from your iflow **(optional)**.
 - Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
 
 
@@ -533,11 +532,25 @@ TODO: Add some details on security and ACLs.
 -->
 
 ## Troubleshooting
-<!--
-## Troubleshooting
 
-TODO: Add some details on how to troubleshoot iflow issues and issues with events not being picked up.
--->
+#### Checking that your flow was deployed successfully.
+- Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
+You should be seeing your flow as Started, similar to this view:
+![CPI flow monitoring](img/CIFlowsMonitoring.png)
+- Go to your AEM Console and navigate to Cluster Manager -> {your service} -> Manage and click on the Queues tile:
+![AEM service queue management](img/AEMServiceManageQueues.png)
+- Check that the input queue for your flow has at least one consumer connected to it.
+![AEM service queue overview](img/CILegacyAdapterIn-queue-status.png)
+
+#### Checking your flow is running successfully.
+- Go to Monitor Artifacts -> Monitor Message Processing -> All Artifacts (Past Hour). <br>
+In this view you can see whether your flows are being triggered and completing successfully or running into any errors.
+![CPI flow execution monitor](img/CIFlowExecutionMonitor.png)
+(Please note that the AEMLegacyOutputAdapter flow is meant to fail in the initial scenario.)
+You can use this view to see various details about the flow execution and click on the trace/log to see exactly where the flow has failed. (If the log is set to info and isn't givin you enough information to troubleshoot, then you may want to go over to the flow monitor as seen in the previous step to change it to a more detailed level.)
+![CPI flow execution monitor - log](img/CIFlowExecutionMonitor-log.png)
+![CPI flow execution monitor - log](img/CIFlowExecutionMonitor-flow-trace.png)
+
 
 ## Takeaways
 
