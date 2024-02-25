@@ -221,7 +221,7 @@ There are many options/tools that can be used to automate these tasks, like Jenk
 ### Pushing AEM Configuration for Scenario 2 & 3
 Here we will look at one example for automating our broker configuration for scenario 2 & 3 respectively, which will save us some time not having to repeat similar configuration steps like in scenario 1 again and again.
 
-The AEM Rapid Pilot - Automatic Configuration can be accessed [here](https://rapid-pilot-createconfig-palm-dog-sl.cfapps.ca10.hana.ondemand.com/)
+The AEM Rapid Pilot - Automatic Configuration can be accessed [here](https://rapid-pilot-createconfig-quiet-elephant-yt.cfapps.ca10.hana.ondemand.com/)
 
 We will need some details from your AEM service again to connect the configuration tool with your AEM service. Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Manage" tab. Take a note of the connectivity details underneath "SEMP - REST API" (click on the section to open it up):
 ![AEM Broker SEMP API Details](img/AEMBrokerSEMPDetails.png)
