@@ -1,0 +1,249 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Event Enable SAP Using SAP Advanced Event Mesh - Day 1</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="sap-aem-int-day-1"
+                  title="Event Enable SAP Using SAP Advanced Event Mesh - Day 1"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-day-1">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <h2 is-upgraded>Problem Statement</h2>
+<h3 is-upgraded>Opportunity to EDA Enable your ERP Environment</h3>
+<ul>
+<li>Would you like clarity on how to keep the core clean with BTP and Event Driven Architecture?</li>
+<li>Would you like a prescriptive approach to building extensions with BTP?</li>
+<li>Have you heard the term Enterprise Event Mesh?</li>
+<li>Have you ever considered the potential outcome of your ERP operating in real time?</li>
+<li>Have you considered the possibility that batch jobs and out of sync data stores could be a thing of the past?</li>
+<li>Have you considered the implication of starting to become event driven?</li>
+</ul>
+<h3 is-upgraded>Scenarios where customers are starting with EDA</h3>
+<ul>
+<li>Do you provide an amazon like customer experience where all order status changes are proactively sent to your customers when their order has been delayed, cancelled or shipped early?</li>
+<li>Do you notify your service technicians when they have a new high priority work order?</li>
+<li>How do you distribute master data changes to both SAP and non-SAP applications in real time to avoid costly manual rework? (for example GL Accounts, Customer, Cost Center, etc...)</li>
+<li>Can you react in real time to employee changes like promotions, transfers, onboarding activities,off boarding, etc...(e.g. removing access for employees once terminated across all applications and systems)</li>
+<li>As part of your adoption and rollout of Integration Suite or as part of your PI/PO move strategy, are you adopting best practices for event driven integration scenarios?</li>
+<li>Are you actively triggering microservices based on Events from S/4 or ECC? (e.g. CAPM services)</li>
+<li>Have you considered feeding your Datasphere (or other Analytics Platforms ) environment with real time S/4 or ECC Events?</li>
+<li>As part of SAP Rise, are you aware that there are hundreds of events out of the Box with S/4?</li>
+</ul>
+<h2 is-upgraded>Workshop Scenarios</h2>
+<h3 is-upgraded>Scenario 1 – Customer Experience</h3>
+<p><strong>Question</strong>: How can we use EDA to actively and selectively push relevant and timely events out to the Enterprise? <strong>For Example</strong>: A customer orders a new pair of shoes, and they will ship late, how will we notify the customer about this update. <img alt="Workshop Scenario-1" src="img/694ee51737b0744c.png"></p>
+<h3 is-upgraded>Scenario 2 – Customer Master Data Change</h3>
+<p><strong>Question</strong>: How can we use EDA to actively and selectively push any and all master data changes to the entire enterprise? <strong>For Example</strong>: Customer changes their address information. <img alt="Workshop Scenario-1" src="img/27526ce25c4aeeba.png"></p>
+<h2 is-upgraded>Workshop structure</h2>
+<p>For logistics and ease of delivery, this workshop has been divided into 5 half-days and this covers day 1. It describes the below topics :</p>
+<ul>
+<li>Setting up of  AEM Services</li>
+<li>Building an Event Mesh</li>
+<li>Deploying a SAP CAP based Simulator on CloudFoundry</li>
+<li>Testing the Simulator and publishing SAP objects to the Event Mesh</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="0">
+        <p>You will need the following resources prior to the commencement of the workshop :</p>
+<ol type="1">
+<li>CPEA Contract in place</li>
+<li>Approximately 5K of CPEA credits available to activate 2 AEM brokers for 4 weeks <ul>
+<li>Please refer to the following link to activate the service should you need assistance : <a href="https://drive.google.com/file/d/1IWsCTKQDZX6_BL0K35KOQJPPZY4oWwTs/view?usp=drive_link" target="_blank">Enable AEM in BTP</a></li>
+</ul>
+</li>
+<li>Signed ASAPIO trial agreement : <a href="https://protect-us.mimecast.com/s/g1YTCR6nxjIrnKJri9FGqr?domain=asapio.com/" target="_blank">ASAPIO Store - Evaluation Licenses - ASAPIO</a><ul>
+<li>ASAPIO Plugin to be downloaded and installed prior to the workshop</li>
+</ul>
+</li>
+<li>SAP Build Process Automation (Free Tier Available) <ul>
+<li>Access to SAP WorkZone</li>
+</ul>
+</li>
+<li>Access to Integration Suite (Free Tier Available) <ul>
+<li>Integration Suite Activated prior to the workshop</li>
+</ul>
+</li>
+<li>Access and ability to change ERP Environment</li>
+<li>A BTP Resource who has the appropriate authorizations to activate/use the relevant BTP Services. (E.g. Advanced Event Mesh, SAP Bus. Process Automation and Integration Suite)</li>
+<li>ASAPIO Plugin to be downloaded and installed prior to the workshop. This will be made available as transport that will need to be installed once the Agreement is signed, link on previous page)</li>
+<li>Authorization for your development SAP Landscape to send events to the AEM Service.</li>
+<li>SAP Build Process Automation – a resource who is familiar with Building Processes/Workflows</li>
+<li>Integration Suite – a resource who is familiar with building iFlows and has the necessary authorizations to deploy new artifacts</li>
+<li>Relevant Functional Resources who might be responsible for the Sales Order, Business Partner, GL, Material Master or Notification Objects within SAP, so they can fully appreciate the art of the possible once these objects are event enabled.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create AEM Services" duration="0">
+        <p>In this task, you will be creating two Enterprise AEM services, connecting them to form a mesh and verifying your mesh health.</p>
+<p>Before starting, it will be helpful to know what cloud provider and region your SAP environment is in, and the primary cloud provider and region where your cloud applications are deployed. The value of building a mesh topology is realized when placing your AEM services close to your event producing and consuming systems. If your SAP environment is running in an on-premises data center, you will use the geographic region of that site to help select an appropriate location for that AEM service.</p>
+<h2 is-upgraded>Create your first AEM service:</h2>
+<ol type="1">
+<li>From the SAP AEM Console, open the Cluster Manager.<br><img alt="AEM Cluster Manager" src="img/d6ee451c2c736db7.png"></li>
+<li>Click the + box to create a new AEM service.<br><img alt="AEM Cluster Manager Plus sign" src="img/40b458ee79ba0616.png"></li>
+<li>Name your service<br><img alt="AEM Cluster Manager New service" src="img/f905ea1d423e81aa.png"><aside class="warning"><p> Note that service names must be unique within your account. We suggest using the mesh name you want, a hyphen, and a service ID to make it unique.</p>
+</aside>
+</li>
+<li>Pick Enterprise as the service type.<br><img alt="AEM Cluster Manager New service type" src="img/c5a7fb25ffdf120d.png"><br> For now, keep the default service class and message storage settings.</li>
+<li>Choose your cloud provider from the pull down list.<br><br> For the first AEM service, select the same IaaS (Infrastructure as a Service) provider and region where your SAP is running, the RISE provider and region where your SAP Cloud is running, or for an on-premises SAP pick a cloud provider and region closest to where your data center is located.<br><br> For the second AEM service, select the same provider and region where your cloud applications are located. If you have several, pick one that is distant from your SAP environment (you can expand your mesh later to include additional cloud locations).<br><img alt="AEM Cluster Manager New service cloud provider" src="img/b72171e5ac906032.png"><aside class="warning"><p> Note that you can also request buildout of a private cloud region on-premises at your data center later, but for now please select the best matching cloud provider.</p>
+</aside>
+</li>
+<li>Click the Select Region box inside the map and select your cloud region.<br><img alt="AEM Cluster Manager New service region" src="img/49c5f913899d9511.png"><br> This example shows selecting Azure as the provider and East US 2 (Virginia) as the region:<br><img alt="AEM Cluster Manager New service Azure USEas2" src="img/e160966abfa6e8f1.png"><br> Please substitute your best provider and region as you make your selection and click OK.</li>
+<li>Keep the Default Broker Version selection.<br><img alt="AEM Cluster Manager New service broker version" src="img/4becf77382baa3b9.png"></li>
+<li>Click Create Service to launch your AEM service.<br><img alt="AEM Cluster Manager New service Broker Create-button" src="img/fd7a76c766a7b42d.png"><br> You will see a progress bar as the service is being started. Click the back-arrow at the top of the window next to your service name to return to the Cluster Manager view. You will see your AEM service instance with the progress bar.<br><img alt="AEM Cluster Manager New service Broker Progress" src="img/a5e64dd9cf4d24d0.png"><br> You can proceed with the next step while your first AEM service is starting.</li>
+<li>Repeat steps 2 through 8 for your second AEM service.<br> Substitute the name (Svc2) along with the appropriate cloud provider and region.<aside class="warning"><p> Note that your second service can be with the same cloud provider or a different cloud provider.<br> For example, it is common for organizations to use Azure as their SAP IaaS provider for cost/location reasons, but to have applications being built in AWS or another cloud provider.</p>
+</aside>
+<strong>IMPORTANT - For your second AEM service:</strong><ul>
+<li>Location will be in a <strong>DIFFERENT region</strong> (with the same or different cloud provider).</li>
+</ul>
+Once your services have started, you can click to open them and view details of their status: <img alt="AEM Cluster Manager Services list" src="img/26d70f2273921d25.png"><aside class="warning"><p> (Note - This example shows developer class services)</p>
+</aside>
+Click on each service to inspect the detailed status:<br><img alt="AEM Cluster Service-1 details" src="img/c46de2cb3850e8c8.png"><br> This example shows low utilization, version detail and cluster detail which includes the message VPN name which should be the same for both AEM services.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Build an event mesh" duration="0">
+        <ol type="1">
+<li>Define a new mesh. From the SAP AEM Console, open the Mesh Manager:<br><img alt="AEM Console Mesh Manager" src="img/5dbca0e1bbd1c46c.png"><br> In the top right, click the Create Mesh action to open the mesh definition.<br><img alt="AEM Console Mesh Manager Create" src="img/a53778017c1b7c91.png"><br> Enter the same mesh name used when defining your AEM services.<br><img alt="AEM Console Mesh Manager Create" src="img/8e5c618902a3f016.png"></li>
+<li>Add your AEM services to the mesh.<br> Click Add Service, then use the pull down search box to find and select your first service.<br><img alt="AEM Mesh Manager Add service-1" src="img/4a29b4de67a42c4f.png"><br> Click Add Service in the dialog to complete the action:<br><img alt="AEM Mesh Manager Add service complete" src="img/6055fb52e9a6f3a7.png"><br> Click Add Service again and add your second service.<br><img alt="AEM Mesh Manager Add service2" src="img/3dd3260bef8484e6.png"><br> Mesh Manager will show the layout of your mesh geography.<br><img alt="AEM Mesh Manager geography" src="img/abdd95dce462cada.png"><br> Click Create Mesh to complete the mesh setup.<br><img alt="AEM Mesh Manager create" src="img/53d2a7b73e260d23.png"><br> Mesh Manager will update the status of your mesh when configuration is complete.<br><img alt="AEM Mesh Manager complete" src="img/1c9f5a982fae5e7d.png"></li>
+<li>(<strong>Optional</strong>) Run a health check on your event mesh. From the Mesh Manager, click on your event mesh to open the status page :<br><img alt="AEM Mesh Manager Status check" src="img/a91bed91221af860.png"><br> Expand the Latest Health Check and click Run Health Check action:<br><img alt="AEM Mesh Manager Health check" src="img/9ddb486d82d9b63a.png"><br> The health check progress is shown, followed by the health check status:<br><img alt="AEM Mesh Manager Health check Status" src="img/f4e5475577df98a4.png"></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SAP Simulator setup" duration="0">
+        <p>The SAP Cloud Application Programming Model (CAP) is a framework of languages, libraries, and tools for building enterprise-grade services and applications. It guides developers along a ‘golden path&#39; of proven best practices and a great wealth of out-of-the-box solutions to recurring tasks. CAP-based projects benefit from a primary focus on domain. Instead of delving into overly technical disciplines, we focus on accelerated development and safeguarding investments in a world of rapidly changing cloud technologies.</p>
+<p>For more information on SAP CAP, you can refer to the link : <a href="https://cap.cloud.sap/docs/" target="_blank">SAP Cloud Application Programming Model</a></p>
+<p>To showcase the integration capability of SAP CAP and AEM, we have created a CAP based Java microservice which will publish different SAP business object events into your AEM instance. This application can be deployed in your SAP CloudFoundry space.</p>
+<h2 is-upgraded>1 : CloudFoundry CLI installation</h2>
+<p>To start with, we will be installing the CloudFoundry CLI for the deployment process. Follow the steps mentioned over here <a href="https://github.com/cloudfoundry/cli/wiki/V8-CLI-Installation-Guide" target="_blank">Installing the cf CLI</a> for detailed instructions on this.</p>
+<h2 is-upgraded>2 : Downloading the deployables artefacts</h2>
+<p>Download the following files artefact files and save them in the same directory:</p>
+<ul>
+<li>capm-erp-simulation-exec.jar : <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar" target="_blank">https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar</a></li>
+<li>manifest.yml : <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml" target="_blank">https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml</a></li>
+</ul>
+<h2 is-upgraded>3 : Login to CloudFoundry space</h2>
+<p>You can log in to the SAP CloudFoundry space in your account as below :</p>
+<ul>
+<li>Use the command : <code>cf login</code> to log in, which will prompt for your SAP login credentials.</li>
+<li>Once authenticated, the details of the default cloudfoundry space will be displayed.</li>
+</ul>
+<h2 is-upgraded>4 : Deploying the SAP Simulator application</h2>
+<ul>
+<li>Navigate to the directory where the above deployable artefact files are saved.</li>
+<li>Run the command <code>cf push --random-route</code> which will upload the jar file and use the manifest.yml for properties. <strong>Note : this command will take some time to completely execute as it uploads the jar deployable and also start the application.</strong></li>
+<li>Once the command is completely executed, run the command <code>cf apps</code> to view a listing of the apps in your cloudfoundry space</li>
+<li>Verify that the app <strong>capm-erp-simulation</strong> is deployed and started</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Test SAP Simulator" duration="0">
+        <h2 is-upgraded>1 : Accessing the SAP Simulator application</h2>
+<ul>
+<li>Navigate to the Cloud Foundry environment in your SAP BTP Cockpit</li>
+<li>You should see a screen like below : <img alt="Cloud Foundry Space" src="img/208778290e3cd8a9.png"></li>
+<li>Click on the application name : <strong>capm-erp-simulation</strong> and enter the application overview screen. <img alt="capm-erp-simulation-Overview" src="img/c2dd6c7c29d488d8.png"></li>
+<li>Click on the application route as highlighted below. Note : this route url will differ from for different SAP BTP accounts. <img alt="capm-erp-simulation-Overview" src="img/dd60d3caf8afe398.png"></li>
+</ul>
+<h2 is-upgraded>2 : Connecting to SAP AEM and running the simulator</h2>
+<ul>
+<li>As you click on the above application route url, you will be redirected to the simulator screen as below <img alt="Simulator connection screen" src="img/c6759297a02c87fc.png"> Here you can connect to your SAP AEM instance to publish events. <aside class="warning"><p> As long as both of your SAP AEM services are connected to the event mesh, messages will flow freely between the two of them. Due to this intelligent routing, you can connect the simulator to either of your AEM services created earlier.</p>
+</aside>
+</li>
+<li>The connection parameters for the simulator can be captured from below : <img alt="Broker console connect screen" src="img/8c6dff9e40c07cf0.png"><img alt="Console-Connect - Java Spring" src="img/caac8dd1bbf0db04.png"> Enter the appropriate value as specified below :</li>
+<li>Host URL : Public Endpoint</li>
+<li>VPN Name : Message VPN</li>
+<li>Username : Username</li>
+<li>Password : Password <img alt="Console-Connect - Creds highlighted" src="img/1b8c31e55f67d4e9.png"></li>
+<li>Once the broker is successfully connected, you will be displayed a screen as below : <img alt="Simulator connected screen" src="img/6625ffc92d379ca9.png"></li>
+<li>You can choose which events to simulate and its frequency by using the sliders. As you change a schedule, the submit button in the bottom will be enabled <img alt="Simulator scheduling" src="img/351c71924c528784.png"></li>
+<li>In case you want to disable any of the events, then pull the slider to <strong>0</strong> and click submit and the event will be disabled immediately <img alt="Simulator disabling" src="img/540804a93303a315.png"></li>
+</ul>
+<h2 is-upgraded>3 : Test the incoming events</h2>
+<p>You can easily test the simulator by using the <strong>Cluster Manager - Try-Me</strong> as below: &gt; aside negative &gt; As mentioned earlier due to the intelligent routing in the event mesh, you can connect the simulator and try-me to either of the two SAP AEM services in the event mesh and see the messages flowing freely. <img alt="Cluster Manager-try-me" src="img/f8b7106ae89d716.png"></p>
+<ul>
+<li>Click on the <strong>Connect</strong> button in the <strong>Subscriber</strong> side of the panel as below : <img alt="Cluster Manager-try-me-Subscriber-highlighted" src="img/9102cecc05655040.png"></li>
+<li>Add topic subscription(s) to view incoming messages on the topic as below : <img alt="Cluster Manager-try-me-Subscriber-subscriptions-highlighted" src="img/3d87f378af7bb0de.png"></li>
+<li>You can use the below topic structures for different event types :<ul>
+<li><strong>Sales Order</strong> : <ul>
+<li>Create : <code>sap.com/salesorder/create/></code></li>
+<li>Change : <code>sap.com/salesorder/change/></code></li>
+</ul>
+</li>
+<li><strong>Business Partner</strong> : <ul>
+<li>Create : <code>sap.com/businesspartner/create/></code></li>
+<li>Change : <code>sap.com/businesspartner/change/></code></li>
+</ul>
+</li>
+<li><strong>Chart of Accounts</strong> : <ul>
+<li>Create : <code>sap.com/chartofaccounts/create/></code></li>
+<li>Change : <code>sap.com/chartofaccounts/change/></code></li>
+</ul>
+</li>
+<li><strong>Material Master</strong> : <ul>
+<li>Create : <code>sap.com/material/create/></code></li>
+<li>Change : <code>sap.com/material/change/></code></li>
+</ul>
+</li>
+<li><strong>Notifications</strong> : <ul>
+<li>Create : <code>sap.com/notification/create/></code></li>
+<li>Change : <code>sap.com/notification/change/></code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>As the simulator publishes events to the broker you should see events appearing in the subscribed topic(s)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <p>✅ Introduction to the workshop<br> ✅ Understanding how to create AEM services<br> ✅ Set up an Event Mesh<br> ✅ Deploy the SAP CAPM based simulator in CloudFoundry<br> ✅ Testing the simulator and publishing events to the Event Mesh</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

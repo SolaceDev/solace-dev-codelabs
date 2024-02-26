@@ -12,12 +12,12 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 ## What you'll learn: Overview
 Duration: 0:03:00
 
-This codelab will take you through the basics of Soalce's PubSub+ Distributed Tracing feature. Following these steps will take you through:
-* Launching and configuring a PubSub+ Event Broker Software
-* Launching the OpenTelemetry Collector Contribution
-* Launching Jaeger, the open source, end-to-end distributed tracing backend to observe our traces   
-* Publishing and receiving messages to/from your broker to generate broker trace events
-* Context propagation via auto-instrumented JMS applications that will generate end to end linked traces (publisher – broker – receiver traces)
+This codelab will take you through the basics of the Soalce PubSub+ Distributed Tracing feature. The following steps will take you through:
+* Launching and configuring a PubSub+ Event Broker locally via Docker
+* Launching and configuring the OpenTelemetry Collector Contribution
+* Launching Jaeger: the open source, end-to-end distributed tracing backend to observe our traces   
+* Publishing and receiving messages to and from the broker to generate broker trace events
+* Context propagation via auto-instrumented JMS applications that generates end to end linked traces (publisher – broker – receiver traces)
 * Context propagation via manual-instrumented JCSMP applications that will generate end to end linked traces (publisher – broker – receiver traces)
   
 Upon successful completion of this codelab, we encourage you to experiment with distributed tracing and the environment provided to see how it fits with your use case(s). This can include other message sources, OpenTelemetry exporters, and telemetry analysis tools.
