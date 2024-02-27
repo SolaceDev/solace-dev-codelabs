@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2023-11-23T11:40:53+01:00",
+  "updated": "2024-02-27T16:49:30Z",
   "id": "sap-aem-int-day-3",
-  "duration": 140,
+  "duration": 195,
   "title": "Event Enable SAP Using SAP Advanced Event Mesh - Day 3",
   "summary": "Day 3/5 : This code lab walks the participant through the experience of using SAP AEM to event enable their SAP ecosystem and workflows",
-  "source": "sap-aem-int-day-3.md",
+  "source": "main/markdown/sap-aem-int-day-3/sap-aem-int-day-3.md",
   "theme": "",
   "status": [
     "hidden"
