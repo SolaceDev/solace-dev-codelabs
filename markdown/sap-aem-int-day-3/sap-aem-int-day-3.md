@@ -572,9 +572,9 @@ Again, you have been “Denied” - That was expected. 😊
 Now, lets head back to the “Publisher” and change the “Topic” to ``sap.com/emailnotification/created/V1``
 Use the following structure for your Message Content….be sure to copy the entire structure below including all of the curly braces. This is the structure that is passed to the Solace Event Mesh for processing. If successful, you should receive an email shortly after publishing with the information contained in the message.
 In the structure below, please replace “YOUREMAILADDRESS” with your actual email address prior to hitting the publish button.
->```json 
-{"orderHeader": [{"salesOrderNumber":"SO2958","creator":"John Doe","date":"2023-08-11","salesType":"Online","ordertype":"Expedited","salesOrg":"SA03","distributionChannel":"DC01","division":"DV02","netvalue":423.76,"currency":"CAD","customer":[{"customerId":"CUST008","customerName":"scott","zipCode":"13579","street":"Seventh Avenue","phone":"555-888-9999","country":"USA","city":"Houston","emailAddress":[{"email":"YOUREMAILADDRESS"}]}],"orderItem":[{"item":"ITEM013","material":"MAT013","materialType":"Product","itemType":"Standard","itemDescription":"Volt Electric bike","orderSchedule":[{"scheduleNumber":"SCH013","quantity":40,"uom":"EA"}]}]}]}
-````
+>```json
+{"orderHeader": [{"salesOrderNumber":"SO2958","creator":"John Doe","date":"2023-08-11","salesType":"Online","ordertype":"Expedited","salesOrg":"SA03","distributionChannel":"DC01","division":"DV02","netvalue":423.76,"currency":"CAD","customer":[{"customerId":"CUST008","customerName":"scott","zipCode":"13579","street":"Seventh Avenue","phone":"555-888-9999","country":"USA","city":"Houston","emailAddress":[{"email":"YOUREMAILADDRESS"}]}],"orderItem":[{"item":"ITEM013","material":"MAT013","materialType":"Product","itemType":"Standard","itemDescription":"Volt Electric bike","orderSchedule":[{"scheduleNumber":"SCH013","quantity":40,"uom":"EA"}]}]}]} ````
+
 
 ![AEM broker Try-Me pub succeeded](img/AEM-ACLs-BrokerTryMe-PubSucceeded.png)
 
