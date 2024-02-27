@@ -186,13 +186,15 @@ Once the project is released, you should see the Deploy Button. Press it to reve
 ***Note, in my case, I have several versions already deployed, so if it's the first deployment, it might not say "upgrade" as in the screenshot.***
 ![SPA BPA Image 15](img/SPA-BPA-15A.jpg)
 You will likely getting a warning message that indicates this deployment could have an affect on already deployed triggers..." press deploy.
+
 ![SPA BPA Image 15](img/SPA-BPA-15B.jpg)
 
-![SPA BPA Image 17](img/SPA-BPA-17.jpg)
 Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
-![SPA BPA Image 18](img/SPA-BPA-18.jpg)
+![SPA BPA Image 17](img/SPA-BPA-17.jpg)
+
 This is the last step to deploy your business process, click Deploy.
 ![SPA BPA Image 19](img/SPA-BPA-19.jpg)
+
 You should now see "Deployed" and "Active" on the top left of the screen and your process should now be running.
 ![SPA BPA Image 20](img/SPA-BPA-20.jpg)
 
@@ -202,7 +204,7 @@ The process should now be running. Now we need to add an iFlow to transform mess
 ## Integration Suite Setup
 
 In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
-- SalesOrderToBPASalesOrderMM – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
+- SOTOBPASOV2 – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
 - SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
 
 Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into “Edit” mode.
@@ -214,12 +216,11 @@ Once you have the package in edit mode, select the DropDown under “Add” and 
 
 ![IS Image 2](img/IS-2.jpg)
 
-At the top of this form, you will select “Upload” and then you will select the zip file with the “MM” at the end for Message Mapping.
-***Ignore the Red X…I had already deployed the mapping in my environment and hence the message 😊 ***
+At the top of this form, you will select “Upload” and then you will select the zip file with the name "SOTOBAPSOV2" for Message Mapping.
 
-![IS Image 3](img/IS-3.jpg)
+![IS Image 3](img/IMPORTMM.jpg)
 Once the artifact is uploaded, you will open it up and edit one of the properties. You will see one of the attributes in the target mapping is “DefinitionID”. This is the unique ID of the Business Process Automation process that we will be activating. This ID will be taken from the BPA environment. Within the BPA environment, navigate to the Monitor section, find your business process and you will find the ID that needs to be entered. (** Go see the next screenshot to see specific details on how to find ID**) Once you have modified the ID, be sure to hit Save at the top and then you can hit “Deploy” from there or back from the main screen as shown below.
-![IS Image 8](img/IS-8.jpg)
+![IS Image 8](img/MMDEFID.jpg)
 Navigate Back to the SAP Business Process Automation Environment temporarily
 From the Business Process environment, navigate to the "Monitor" section across the top of the screen. From there, on the left side Under the "Manage" option, select "Processes and Workflow". Select the "Sales Order Review" Process and towards the top, highlighted in Red, you will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process.
 ![IS Image 27](img/SPA-BPA-27.jpg)
