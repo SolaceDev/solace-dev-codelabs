@@ -22,6 +22,7 @@ Topics covered :
 - Access to SAP BTP Cockpit and ability to create Destinations
 - Access to Cloud Integration and Ability to create development artifacts
 - Access to the AEM Console
+- Insights
 
 
 ## Using SAP BPA to handle event exceptions
