@@ -526,11 +526,77 @@ Congratulations, if you are seeing both the Started iflow as well as the consume
 
 ## Security and fine grained access control to topics
 Duration: 0:20:00
-<!--
-## Security
 
-TODO: Add some details on security and ACLs.
--->
+For this section and in general, we would like to take this opportunity to answer a common question. Is it possible to prevent clients from publishing to certain Topics and/or subscribing to certain topics?<br>
+***The answer is absolutely!***
+
+We would like everyone to experience an Access Control List and how it can be used to control what is published or subscribed.
+
+#### Experimenting publishing and subscribing to protected topics
+
+From the console, we need to navigate to the broker manager. You can get there by either clicking on the “Open Broker Manager” button or clicking any of the Tiles labelled “Clients”, “Queues”, “Access Control”.
+
+![AEM broker manager link](img/AEM-ACLs-BrokerManager.png)
+
+You will then see the Broker Manager Screen and on the left you will see a more advanced “try-me” test client. Click on it, to reveal the information you must provide to connect:
+For this screen, you will be trying to connect to our Broker (Note: We are doing this because your iFlow on Day 3 will send an Event to our broker to send an email) where we have created an ACL to limit what you can do and on what topics you can publish. The information you will use is as follows:
+````
+Broker URL: wss://montrealbroker.messaging.solace.cloud:443
+Message VPN: montrealbroker-10-1
+Client UserName: email-profile
+Client Password: ******** <- provided during the course
+````
+
+![AEM broker Try-Me](img/AEM-ACLs-BrokerTryMe.png)
+
+Once you have entered in the connectivity information, you should see the “Connected” message in blue.
+
+Once connected, change nothing and hit “Publish”, you should immediately see the “Publish ACL Denied” on this action because the ACL will not permit you to complete this action.
+
+![AEM broker Try-Me denied](img/AEM-ACLs-BrokerTryMe-Denied.png)
+
+Now, let’s try the exact same thing with the subscription. Hit the “Connect” button, and you should see the connection properties already populated so accept this and hit connect.
+
+![AEM broker Try-Me not connected](img/AEM-ACLs-BrokerTryMe-NotConnected.png)
+
+Once connected, you will see this:
+
+![AEM broker Try-Me connected](img/AEM-ACLs-BrokerTryMe-Connected.png)
+
+From here, just hit the Subscribe button and you should see the following screen:
+
+![AEM broker Try-Me sub denied](img/AEM-ACLs-BrokerTryMe-SubDenied.png)
+
+Again, you have been “Denied” 😊
+
+Now, lets head back to the “Publisher” and change the “Topic” to “sap.com/emailnotification/created/V1”
+Use the following structure for your Message Content….be sure to copy the entire structure below including all of the curly braces. This is the structure that is passed to the Solace Event Mesh for processing. If successful, you should receive an email shortly after publishing with the information contained in the message.
+In the structure below, please replace “YOUREMAILADDRESS” with your actual email address prior to hitting the publish button.
+```json
+{"orderHeader":[{"salesOrderNumber":"SO2958","creator":"John Doe","date":"2023-08-11","salesType":"Online","ordertype":"Expedited","salesOrg":"SA03","distributionChannel":"DC01","division":"DV02","netvalue":423.76,"currency":"CAD","customer":[{"customerId":"CUST008","customerName":"scott","zipCode":"13579","street":"Seventh Avenue","phone":"555-888-9999","country":"USA","city":"Houston","emailAddress":[{"email":"YOUREMAILADDRESS"}]}],"orderItem":[{"item":"ITEM013","material":"MAT013","materialType":"Product","itemType":"Standard","itemDescription":"Volt Electric bike","orderSchedule":[{"scheduleNumber":"SCH013","quantity":40,"uom":"EA"}]}]}]}
+```
+![AEM broker Try-Me pub succeeded](img/AEM-ACLs-BrokerTryMe-PubSucceeded.png)
+
+If you have entered the topic and message body correctly, you should see that 1 message has been published.
+
+So how did we do that? The magic happens in the ACL Profile as shown next.
+
+#### Broker Topic ACLs
+
+We have changed the Default Publish Action to be Disallow. In other words, unless we specify an exception, the user profile associated with this ACL cannot publish anything by default. In this case, as you can see, we have listed one exception.
+
+![AEM broker Publish ACL](img/AEM-ACLs-Broker-ACL-Publish.png)
+
+For the subscription settings, it’s very simple:
+We specify the Default Action is “Disallow” and do not provide any exceptions. AKA, this ACL does not permit any subscriptions.
+
+![AEM broker Subscribe ACL](img/AEM-ACLs-Broker-ACL-Subscribe.png)
+
+Now that you have this understanding, you will see when you configure/deploy this iFlow why we have a Username “email-profile”. It has been assigned the ACL email-profile so the iFlow can publish to our broker but only on that topic.
+
+![AEM broker ACL iFlow](img/AEM-ACLs-Broker-ACL-iFlow.png)
+
+
 
 ## Troubleshooting
 
