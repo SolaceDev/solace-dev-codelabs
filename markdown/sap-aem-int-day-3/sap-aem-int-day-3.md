@@ -33,6 +33,7 @@ Duration: 0:09:00
 
 
 
+
 ## Set up Integration Suite and Import Event Enabled Integration Flows
 
 Duration: 0:20:00
