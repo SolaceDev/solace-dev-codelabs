@@ -126,7 +126,7 @@ Congratulations, you have completed setup of the Rest Delivery Point. Each time 
 
 ## Creating BTP Destination for BPA
 
-The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” highlighted in Red Below. 
+The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” which can be seen in the screenshot immediately following the "Approve" action. 
 
 ![SAP BPA Image 1](img/SPA-BPA-1.jpg)
 
@@ -156,7 +156,7 @@ For the SAP BPA setup, we will be importing 1 File that contains several compone
 - 1 Dependency for the Action Group that represents the action group
 - a project of type “Process Automation”
 
-We will import the SAPAEMSO.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below 
+We will import the SAPAEMSO_3.1.0.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO_3.1.0.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below 
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
@@ -182,9 +182,12 @@ Once you have made the change, we now need to release and deploy the project. Cl
 You can select the appropriate version with either of the radio boxes and then press the release button.
 ![SPA BPA Image 15](img/SPA-BPA-15.jpg)
 
-Once the project is released, you should see the Deploy Button. Press it to trigger a serious of project checks.
-![SPA BPA Image 16](img/SPA-BPA-16.jpg)
-Press Next
+Once the project is released, you should see the Deploy Button. Press it to reveal a new feature that will ask you to select an environment. Select the "Public" environment and press "Upgrade".
+***Note, in my case, I have several versions already deployed, so if it's the first deployment, it might not say "upgrade" as in the screenshot.***
+![SPA BPA Image 15](img/SPA-BPA-15A.jpg)
+You will likely getting a warning message that indicates this deployment could have an affect on already deployed triggers..." press deploy.
+![SPA BPA Image 15](img/SPA-BPA-15B.jpg)
+
 ![SPA BPA Image 17](img/SPA-BPA-17.jpg)
 Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
 ![SPA BPA Image 18](img/SPA-BPA-18.jpg)
