@@ -245,10 +245,13 @@ Now we need to configure the publishing component of the iFlow. It will be the s
 ### Please note the creation of the Secure Parameter is further down 
 ![IS Image 14](img/IS-14.jpg)
 Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
-Save and Deploy the iFlow.
+
 ![IS Image 15](img/IS-15.jpg)
 
-Now that both artifacts have been deployed, you need to create the secure parameter. Under "Monitor" Select Integrations.
+Now that both the message mapping and the iFlow have been imported and configured, you need to deploy them both. You have a few ways to deploy an artifact. As you are editing within the editor and have saved your changes, you can deploy from within the editor. The 2nd option is from the list of artifacts within the folder.
+![IS Image 17](img/iFlowDeploy.jpg)
+
+Once both of the artifacts have been deployed, your last step is to create the secure parameter. Under "Monitor" Select Integrations.
 
 ![IS Image 17](img/IS-17.jpg)
 
