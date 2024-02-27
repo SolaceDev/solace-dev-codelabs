@@ -143,26 +143,31 @@ Click on each service to inspect the detailed status:<br><img alt="AEM Cluster S
         <p>The SAP Cloud Application Programming Model (CAP) is a framework of languages, libraries, and tools for building enterprise-grade services and applications. It guides developers along a ‘golden path&#39; of proven best practices and a great wealth of out-of-the-box solutions to recurring tasks. CAP-based projects benefit from a primary focus on domain. Instead of delving into overly technical disciplines, we focus on accelerated development and safeguarding investments in a world of rapidly changing cloud technologies.</p>
 <p>For more information on SAP CAP, you can refer to the link : <a href="https://cap.cloud.sap/docs/" target="_blank">SAP Cloud Application Programming Model</a></p>
 <p>To showcase the integration capability of SAP CAP and AEM, we have created a CAP based Java microservice which will publish different SAP business object events into your AEM instance. This application can be deployed in your SAP CloudFoundry space.</p>
-<h2 is-upgraded>1 : CloudFoundry CLI installation</h2>
-<p>To start with, we will be installing the CloudFoundry CLI for the deployment process. Follow the steps mentioned over here <a href="https://github.com/cloudfoundry/cli/wiki/V8-CLI-Installation-Guide" target="_blank">Installing the cf CLI</a> for detailed instructions on this.</p>
-<h2 is-upgraded>2 : Downloading the deployables artefacts</h2>
+<h2 is-upgraded>1 : Downloading the deployable artefacts</h2>
 <p>Download the following files artefact files and save them in the same directory:</p>
 <ul>
 <li>capm-erp-simulation-exec.jar : <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar" target="_blank">https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/capm-erp-simulation-exec.jar</a></li>
 <li>manifest.yml : <a href="https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml" target="_blank">https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/manifest.yml</a></li>
 </ul>
-<h2 is-upgraded>3 : Login to CloudFoundry space</h2>
-<p>You can log in to the SAP CloudFoundry space in your account as below :</p>
+<h2 is-upgraded>2 : Identify CF Domain address</h2>
+<p>In order to deploy the simulator to your CloudFoundry space, you need to identify the domain address which is a part of the API endpoint.</p>
 <ul>
-<li>Use the command : <code>cf login</code> to log in, which will prompt for your SAP login credentials.</li>
-<li>Once authenticated, the details of the default cloudfoundry space will be displayed.</li>
+<li>Navigate to your SAP BTP Sub account Overview page</li>
+<li>Copy the specified section of the API Endpoint in the Cloud Foundry Environment as shown below : <img alt="cf-domain-address.jpeg" src="img/344390f02e5b2376.jpeg"></li>
+</ul>
+<h2 is-upgraded>3 : Update the manifest file</h2>
+<ul>
+<li>Open the manifest.yml file which you downloaded earlier in a text editor</li>
+<li>Replace the placeholder text {API_ENDPOINT} on line number 12 with the value copied from the API Endpoint <img alt="original-manifest.png" src="img/99322bc67aab4309.png"></li>
+<li>After replacing your manifest file should look like this : <img alt="updated-manifest.png" src="img/2b431a2038d0a342.png"></li>
+<li>Save and close the file.</li>
 </ul>
 <h2 is-upgraded>4 : Deploying the SAP Simulator application</h2>
 <ul>
-<li>Navigate to the directory where the above deployable artefact files are saved.</li>
-<li>Run the command <code>cf push --random-route</code> which will upload the jar file and use the manifest.yml for properties. <strong>Note : this command will take some time to completely execute as it uploads the jar deployable and also start the application.</strong></li>
-<li>Once the command is completely executed, run the command <code>cf apps</code> to view a listing of the apps in your cloudfoundry space</li>
-<li>Verify that the app <strong>capm-erp-simulation</strong> is deployed and started</li>
+<li>Navigate to the CloudFoundry space where you want to deploy the application and click on the <strong>Deploy Application</strong> button as below : <img alt="SAP-CF-space.png" src="img/a6173ca5c54628ba.png"></li>
+<li>A <strong>Deploy Application</strong> modal window will be displayed where you can browse and select the <strong>capm-erp-simulation-exec.jar</strong> and <strong>manifest.yml</strong> as below <img alt="cf-deploy-app.png" src="img/d2944db9d11e1ea9.png"></li>
+<li>Click on the deploy button <strong>Note : this  action will take some time to completely execute as it uploads the jar deployable and also start the application.</strong></li>
+<li>Once the upload is completely executed, you should be able to see the application deployed and running as below : <img alt="cf-app-deployed.png" src="img/5ca2c181ce044b1c.png"></li>
 </ul>
 
 
