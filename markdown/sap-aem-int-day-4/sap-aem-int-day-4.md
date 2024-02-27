@@ -225,16 +225,12 @@ Navigate Back to the SAP Business Process Automation Environment temporarily.
 From the Business Process environment, navigate to the "Monitoring" section. To find this, simply click on the SAP Icon at the top to reveal the main menu. From there, on the left side, Click "Monitoring" and then "Processes and Workflows".
 ![IS Image 27](img/MonitoringBPA.jpg)
 You should now see the "Sales Order Review" process listed and right below it you should see the ID. This is the ID you want to copy and paste into the iFlow mapping section. You will take the ID and you will use it in the iFlow to uniquely identify the Workflow to be started. Essentially, the API from SAP is very generic. You call the API with the ID of the workflow to be started with the payload and voila, you can start the process. *** If for some reason, the Sales Order Review process is not visible, select "Navigation" at the top to select Sales Order Review.
-![IS Image 27](img/SPA-BPAID.jpg)
-
-The 2nd way to deploy an artifact is from the main screen as shown below.
-
-![IS Image 4](img/IS-4.jpg)
+![IS Image 27](img/BPAID.jpg)
 
 Now we will import the iFlow using the same approach we just followed for the Message Mapping.
 
 ![IS Image 5](img/IS-5.jpg)
-Select the “Upload” checkbox and use the 2nd zip file that contains the iFlow (***Not the one with the MM Extension ***).
+Select the “Upload” checkbox and use the 2nd zip file called "SalesOrderToBPAiFlow.zip.
 
 ![IS Image 6](img/IS-6.jpg)
 
