@@ -29,7 +29,7 @@ Duration: 0:09:00
 - Complete all activities in day 1 & 2. <br>You access and use the same broker you setup previously as well as the simulator to push events for testing.
 - Have access to an active Integration Suite Cloud Integration tenant.
 - Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system **(optional)**.
-- Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
+- Access to SAP Data Quality Management for location data via a provided service instance (by your hosts) or permission to activate or use your own instance.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
 
 
 
