@@ -213,6 +213,7 @@ You will likely getting a warning message that indicates this deployment could h
 ![SPA BPA Image 15](img/SPA-BPA-15B.jpg)
 
 Here you must select your destination for the action. If your destination is not in the dropdown, something has not been configured properly in the Settings of the project.
+
 ![SPA BPA Image 17](img/SPA-BPA-17.jpg)
 
 This is the last step to deploy your business process, click Deploy.
@@ -228,8 +229,9 @@ The process should now be running. Now we need to add an iFlow to transform mess
 
 In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
 - SOTOBPASOV2 – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
+- https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SOTOBPASOV2.zip
 - SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
-
+https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SalesOrderToBPAiFlow.zip
 Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into “Edit” mode.
 
 
