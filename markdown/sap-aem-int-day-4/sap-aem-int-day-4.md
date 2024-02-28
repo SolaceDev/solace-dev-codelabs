@@ -44,39 +44,50 @@ In the following diagram, you can see the flow you are about to implement.
 
 ![BPA Image](img/BPAPRocess2.png)
 
-## Creating a Rest Delivery Point
+## Creating the Queues for BPA Scenario
 
-Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
+You will now create the queues for this scenario via the CI/CD tool that can be found at this link:
 
-![BPA Image 3](img/BPA-3.jpg)
+https://rapid-pilot-createconfig-quiet-elephant-yt.cfapps.ca10.hana.ondemand.com/
 
-From this screen, you will select the manage option at the top.
+![BPACLI1](img/BPACLI1.jpg)
 
-![BPA Image 4](img/BPA-4.jpg)
+Below you will find the JSON structure to paste into the window. The only other thing you will need is the SEMP (Solace Element Management Protocol) Connection details. Details to find the SEMP API will be provided after the JSON Structure.
 
-You will then select “Queues” towards the middle of the screen. 
-Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker. 
+```JSON
+{
+    "Queues": [
+        {
+            "name": "SO_WF",
+            "owner": "#rdp/RDP1",
+			"access-type": "non-exclusive",
+            "redelivery": true,
+            "try-forever": false,
+            "max-redelivery-count": 3,
+			"non-owner-permission" : "consume",
+            "subscriptions": [
+                "sap.com/bpasalesorder/rejected/V1"
+                
+            ]
+        },
+        {
+            "name": "SORJECTED",
+			"access-type": "exclusive",
+            "owner": "",
+            "redelivery": true,
+			"non-owner-permission" : "consume",
+            "subscriptions": [
+                "sap.com/salesorder/rejected/V1"
+            ]
+        }
+    ]
+}
+```
 
-![BPA Image 5](img/BPA-5.jpg)
+From the manage tab within the web console, towards the bottom, you will see "Other Management Tools", expand the "SEMP - REST API" section. From there, you can find the 4 pieces of information you need to execute the tool above. Copy/paste those details into the tool above along with the JSON structure and voila, you should have your 2 queues and subscriptions created.
+****When copying the details over, make sure not to copy over extra spaces like I did on my first 3 attempts :-) ****
 
-On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the “+Queue” option.
-
-![BPA Image 6](img/BPA-6.jpg)
-
-Create a new Queue with the name “SOREJECTED”.
-
-![BPA Image 22](img/BPA-22.jpg)
-
-Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card. Messages are published from the Integration Card and then removed from the Queue.
-Add a Subscription by Clicking the “+Subscription” button and then add the subscription “sap.com/salesorder/rejected/V1”. Once messages are received into this Queue, they will be picked up by the Integration Flow that will augment the schema of the message. This iFlow will publish a message that will be used to activate the Business Process Automation process.
-
-
-![BPA Image 24](img/BPA-24.jpg)
-
-Repeat the process to add another Queue called “SO_WF”. Add a subscription for “sap.com/bpasalesorder/rejected/V1”. The iFlow that enriches the SalesOrder publishes the new message using that topic.
-
-![BPA Image 23](img/BPA-23.jpg)
-
+## Creating the Rest Delivery Point
 Next step to create the Rest Delivery Point and associated components. Navigate to the clients tab as shown on the left and then click the + Rest Delivery Point Button.. The name of the RDP is “RDP1”.
 
 
@@ -392,6 +403,39 @@ Before accessing the CLI, we need to make sure that access to port 22 (default s
 *`show log rest rest-delivery-point errors`*
 
 This command will give you HTTP error (if any)that you might have received from BPA web endpoint.
+
+## Appendix 1 - Creating Queues Manually for Section 4
+If you want extra practice creating queues via the web console, you can follow these instructions and then return to section 4 to finish your configuration
+Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
+
+![BPA Image 3](img/BPA-3.jpg)
+
+From this screen, you will select the manage option at the top.
+
+![BPA Image 4](img/BPA-4.jpg)
+
+You will then select “Queues” towards the middle of the screen. 
+Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker. 
+
+![BPA Image 5](img/BPA-5.jpg)
+
+On this screen, we will start by creating a Queue and Subscription that will be used to capture the items from the DMQ that users would like to start review processes for. Click on the “+Queue” option.
+
+![BPA Image 6](img/BPA-6.jpg)
+
+Create a new Queue with the name “SOREJECTED”.
+
+![BPA Image 22](img/BPA-22.jpg)
+
+Now we will create a subscription that will capture all the messages that are being pushed out from the Integration Card. Messages are published from the Integration Card and then removed from the Queue.
+Add a Subscription by Clicking the “+Subscription” button and then add the subscription “sap.com/salesorder/rejected/V1”. Once messages are received into this Queue, they will be picked up by the Integration Flow that will augment the schema of the message. This iFlow will publish a message that will be used to activate the Business Process Automation process.
+
+
+![BPA Image 24](img/BPA-24.jpg)
+
+Repeat the process to add another Queue called “SO_WF”. Add a subscription for “sap.com/bpasalesorder/rejected/V1”. The iFlow that enriches the SalesOrder publishes the new message using that topic.
+
+![BPA Image 23](img/BPA-23.jpg)
 
 ## Takeaways
 
