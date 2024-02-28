@@ -232,8 +232,6 @@ In the Business Process Automation scenario, we will activate an instance each t
 - https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SOTOBPASOV2.zip
 - SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
 https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SalesOrderToBPAiFlow.zip
-Two artifacts will be provided to you for import, so the first step is to navigate to the package where you will create your content and place your package into “Edit” mode.
-
 
 ![IS Image 1](img/IS-1.jpg)
 
