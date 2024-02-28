@@ -85,6 +85,7 @@ Below you will find the JSON structure to paste into the window. The only other 
 ```
 
 From the manage tab within the web console, towards the bottom, you will see "Other Management Tools", expand the "SEMP - REST API" section. From there, you can find the 4 pieces of information you need to execute the tool above. Copy/paste those details into the tool above along with the JSON structure and voila, you should have your 2 queues and subscriptions created.
+![SEMPDETAILS](img/SEMPDETAILS.jpg)
 **** When copying the details over, make sure not to copy over extra spaces like I did on my first 3 attempts :-) ****
 **** Of course, it would be a great idea to check the queues on the console and verify that you have 2 new queues SOREJECTED and SO_WF :-) ****
 
