@@ -287,50 +287,59 @@ On this screen, we can test several things. For starters, we can confirm that th
 On the publisher side, connect to the broker and use "sap.com/salesorder/rejected/V1" as the topic and for the message use the following structure. This will simulate an event being submitted for Review from the Integration Card.
 ```JSON
 {
-  "orderHeader": [
-    {
-      "salesOrderNumber": "SO1002",
-      "creator": "Jane Smith",
-      "date": 1691193600000,
-      "salesType": "In-store",
-      "ordertype": "Express",
-      "salesOrg": "SA02",
-      "distributionChannel": "DC02",
-      "division": "DV02",
-      "customer": [
-        {
-          "customerId": "CUST002",
-          "customerName": "XYZ Ltd",
-          "zipCode": "54321",
-          "street": "First Avenue",
-          "phone": "555-987-6543",
-          "country": "USA",
-          "city": "Los Angeles"
-        }
-      ],
-      "orderItem": [
-        {
-          "item": "ITEM002",
-          "material": "MAT002",
-          "materialType": "Service",
-          "itemType": "Premium",
-          "orderSchedule": [
-            {
-              "scheduleNumber": "SCH002",
-              "quantity": 50,
-              "uom": "Hrs"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+	"orderHeader": [
+		{
+			"salesOrderNumber": "SO1001",
+			"creator": "John Doe",
+			"date": "2023-08-04",
+			"salesType": "Online",
+			"ordertype": "Standard",
+			"salesOrg": "SA01",
+			"distributionChannel": "DC01",
+			"division": "DV01",
+			"netvalue": 375,
+			"currency": "USD",
+			"customer": [
+				{
+					"customerId": "CUST001",
+					"customerName": "ABC Corp",
+					"zipCode": "12345",
+					"street": "Main Street",
+					"phone": "555-123-4567",
+					"country": "USA",
+					"city": "New York",
+					"emailAddress": [
+						{
+							"email": "john.doe@abccorp.com"
+						}
+					]
+				}
+			],
+			"orderItem": [
+				{
+					"item": "ITEM001",
+					"material": "MAT001",
+					"materialType": "Product",
+					"itemType": "Standard",
+					"itemDescription": "Rocky Ridge Mountain bike",
+					"orderSchedule": [
+						{
+							"scheduleNumber": "SCH001",
+							"quantity": 100,
+							"uom": "EA"
+						}
+					]
+				}
+			]
+		}
+	]
 }
 ```
 On the subscriber side, connect to the broker and use ">" as your topic. This will show everything. When you publish your message, you should immediately see a message appear in the subscriber window and you should be looking for a couple of things:
+- The message that you published above
 - A new message with a different Topic - sap.com/bpasalesorder/rejected/V1
-- The body of the message should essentially be the same BUT it has a new wrapper called "context" and a new attribute called "definitionId". If you don't see both of these things, something is wrong with the iFlow.
-- After you publish the method, you should see a new item in your inbox. If the message appears to have the right structure in the subscriber window  (aka your iFlow is working) then the next place to look is the configuration of the Rest Delivery Point. The RDP will be listening for these rejected messages and then calling the API to start the BPA process. If it's not, potentially check the queue to see if messages are accumulating in SO_WF.
+- The body of the message should essentially be the same BUT it has a new wrapper called "context" and a new attribute called "definitionId". If you don't see both of these things, something is wrong with the iFlow. It's important that the "definitionID" is populated with the definition ID that represents your process or it won't work.
+- After you publish the event, you should see a new item in your inbox. If the message appears to have the right structure in the subscriber window, then your iFlow is working as designed. If the iFlow is working then the next place to look is the configuration of the Rest Delivery Point. The RDP will be listening for these rejected messages and then calling the API to start the BPA process. Below we have a section that outlines how to see the logs associated with the rest delivery point. Last but not least, check to see if messages are accumulating in SO_WF.
 
   ### IF YOU SEE MESSAGES IN THE INBOX....WOOHOO
 
