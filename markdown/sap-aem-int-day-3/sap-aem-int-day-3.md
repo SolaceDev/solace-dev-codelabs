@@ -29,7 +29,8 @@ Duration: 0:09:00
 - Complete all activities in day 1 & 2. <br>You access and use the same broker you setup previously as well as the simulator to push events for testing.
 - Have access to an active Integration Suite Cloud Integration tenant.
 - Have an SFTP server and account credentials if you want to test successful integration of events to a file based interface of a legacy system **(optional)**.
-- Have a subscription to SAP Data Quality Management for location data or permission to activate it.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
+- Access to SAP Data Quality Management for location data via a provided service instance (by your hosts) or permission to activate or use your own instance.<br> (We'll show you how to activate one, if you don't have it already). **(optional)**
+
 
 
 
@@ -242,7 +243,7 @@ We will give you connectivity details to one of our brokers where we have an ifl
 ### Setup/configure SAP AEM broker service
 
 > aside negative
-> **You can skip over this step if you have used the CI/CD tool to automate the configuration in the previous step.**
+> **You can skip over this step for configuring the AEM queues if you have used the CI/CD tool in section 5 to automate the configuration in the previous step. Resume with the Integration Suite flow configuration next.**
 
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
@@ -298,6 +299,8 @@ Create the following queues and provide the details as given.
 ![queue subscriptions](img/CISalesOrderNotificationProcessed-queue-subs.png)
 
 ### Configure Your Integration Suite Flow
+>aside negative
+> **Continue here, if you have completed the CI/CD section or configured your queues manually in the step above.**
 
 One thing, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
 ![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png)
@@ -354,23 +357,32 @@ You should be seeing the AEMSONotificationV2 flow as Started, similar to this vi
 Duration: 1:00:00
 
 ### Setup/Configure Dependency Services
-#### Activate SAP Data Quality Management service in BTP **(optional)**
 
-One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this. The good news, if you don't have one already, you can use a free tier subscription for this purpose.
+One of our iflows that we are going to deploy is invoking the SAP Data Quality Management service (DQM) to check and cleanse address data in the BusinessPartner events. For the flow to work properly, you will need a working DQM service subscription so you can configure your iflow with this.
+For completing this section, you have two options:
+
+#### A) Use DQM service credentials provided by us during the workshop
+
+SAP is providing us with a credentials for a SAP owned DQM service instance.
+We will hand out the token and connectivity details to our DQM service, which can use instead.
+
+#### B) Alternative: Activate your own SAP Data Quality Management service in BTP
+
+> aside negative
+> Please note that if you want to proceed down this route, it may take some time to complete, so you may want to complete this in your own time after the workshop.
+
+The good news, if you don't have a DQM subscription already or are not using our instance, then you can use a free tier subscription for this purpose.
 Please follow along the steps in this [blog post](https://blogs.sap.com/2022/02/15/getting-started-with-sap-data-quality-management-microservices-for-location-data-btp-free-tier/) by Hozumi Nakano to active the service.
 
 Additionally, you will have to create a service instance and a service key to be configured with your integration flow later. Follow [these steps](https://developers.sap.com/tutorials/btp-sdm-gwi-create-serviceinstance.html) to create a service instance and key.<br>
 Take a note of the URL and user credentials once you've activated the service.<BR>
 <!-- TODO specify which URL to be taken. -->
 
-#### Alternative: Use DQM service credentials provided by us during the workshop
-
-We will hand out the token and connectivity details to our DQM service, which can use instead.
-
 ### Setup/configure SAP AEM broker service
 
 > aside negative
-> **You can skip over this step if you have used the CI/CD tool to automate the configuration in the previous step.**
+> **You can skip over this step for configuring the AEM queues if you have used the CI/CD tool in section 5 to automate the configuration in the previous step. Resume with the Integration Suite flow configuration next.**
+
 In this section we will create the required input queues for your integration flows.
 - Go to Cluster Manager -> {your service} -> Manage -> Queues - to open the Broker UI
 ![AEM Console](img/AEMCloudConsoleSelectClusterManager.png)
@@ -456,6 +468,8 @@ Create the following queues and provide the details as given.
 
 
 ### Configure Your Integration Suite Flow
+>aside negative
+> **Continue here, if you have completed the CI/CD section or configured your queues manually in the step above.**
 
 One thing, before we jump back into Integration Suite: Let's head to our Advanced Event Mesh Console and go to Cluster Manager, select the service that you want to connect your Integration Suite flows to and go to the "Connect" tab. Take a note of the connectivity details underneath "Solace Messaging" (click on the section to open it up):
 ![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png)
@@ -475,7 +489,7 @@ Let's configure the security details we will need to connect to the various serv
 - Create OAuth2 Client Credentials and store your credentials from your DQM service key.
  - Token Service URL
  - Client ID
- - Client Secret
+ - Client Secret (either use your own or the one we will have handed out during the workshop.)
 ![DQM client credentials](img/DQM-Client-Credentials.png)
 ![Security Material details](img/CISecurityMaterial-details.png)
 
@@ -602,10 +616,14 @@ We specify the Default Action is “Disallow” and do not provide any exception
 ![AEM broker Subscribe ACL](img/AEM-ACLs-Broker-ACL-Subscribe.png)
 
 Now that you have this understanding, you will see when you configure/deploy this iFlow why we have a Username “email-profile”. It has been assigned the ACL email-profile so the iFlow can publish to our broker but only on that topic.
+Everything else is prohibited by the email-profile user ACL, so it can only be used for this single purpose.
+
+See below screenshot for where you would have used these credentials in your iflow.
 
 ![AEM broker ACL iFlow](img/AEM-ACLs-Broker-ACL-iFlow.png)
 
-
+As you can see, broker ACLs are a quite powerful tool to tightly control access to the broker and its topics. You can separately control publish topics and subscribe topics and even IP address ranges that clients are allowed to connect from.
+In addition to topic ACLs, remember that queue access is controlled by the queue ownership model and the "other permission".
 
 ## Troubleshooting
 
