@@ -175,16 +175,21 @@ For the SAP BPA setup, we will be importing 1 File that contains several compone
 - a project of type “Process Automation”
 
 We will import the SAPAEMSO_3.1.0.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO_3.1.0.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below 
+*** You can download the file here https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SAPAEMSO_3.1.0.mtar ***
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
 
 In order to deploy the BPA project, you need to associate the project with the Destination that you have already created in BTP. The deployment process will ask you to select a Destination so you need to register the destination with the BPA tooling. Expand the menu options on the top left.
-![SPA BPA LOBBY](img/BPA_LOBBY.png)
-Click on the Control Tower and Select Destinations
-![SPA BPA ControlTower](img/BPA_ControlTower.png)
-When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
-![SPA BPA Destination](img/BPA_Destination.png)
 
+![SPA BPA LOBBY](img/BPA_LOBBY.png)
+
+Click on the Control Tower and Select Destinations
+
+![SPA BPA ControlTower](img/BPA_ControlTower.png)
+
+When you click “New Destination”, you should see the Destination you created in BTP called “AEMBROKERREST”, if you don’t, you have not specified the properties correctly and you will need to investigate. Select the Destination and you should see it populate in the UI. Now, we can deploy the project.
+
+![SPA BPA Destination](img/BPA_Destination.png)
 
 Head back to the Lobby and Click on the SAPAEMSO project.
 ![SPA BPA LOBBY](img/BPA_LOBBY.png)
