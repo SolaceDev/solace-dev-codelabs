@@ -454,10 +454,10 @@ Repeat the process to add another Queue called “SO_WF”. Add a subscription f
 
 ## Takeaways
 
-✅  Understand concept of Dead Message Queues
-✅  Understand how to use SAP BPA to process Dead Messages
-✅  Understand how to use an iFlow with an Event for transformations
-✅  Understand how to setup a Rest Delivery Point
+✅  Understand concept of Dead Message Queues<br>
+✅  Understand how to use SAP BPA to process Dead Messages<br>
+✅  Understand how to use an iFlow with an Event for transformations<br>
+✅  Understand how to setup a Rest Delivery Point<br>
 
 
 ![Soly Image Caption](img/soly.gif)
