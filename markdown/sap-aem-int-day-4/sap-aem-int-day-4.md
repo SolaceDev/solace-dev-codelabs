@@ -45,7 +45,7 @@ In the following diagram, you can see the flow you are about to implement.
 ![BPA Image](img/BPAPRocess2.png)
 
 ## Creating the Queues for BPA Scenario
-> aside negatve Note: If you prefer not to use the CI/CD tool, check out the Appendix further down to find instructions to do it manually.
+> aside negative Note: If you prefer not to use the CI/CD tool, check out the Appendix further down to find instructions to do it manually.
 
 You will now create the queues for this scenario via the CI/CD tool that can be found at this link:
 
