@@ -10,7 +10,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 # Event Enable SAP Using SAP Advanced Event Mesh - Prerequisites
 
-Overall Duration: 0:10:00
+Overall Duration: 0:41:00
 
 ## What you'll learn: Overview
 
@@ -42,19 +42,38 @@ In addition it is advised to have some people from your organisation in the work
 
 ## Requesting an Asapio Cloud Integration Trial license
 
-TODO: explain steps.
+Duration: 0:10:00
+
+Asapio are offering free 30-day trials for those participating in the AEM Rapid Pilot workshops. Please click on the link below and request a trial license for the Asapio Cloud Integrator + Advanced Event Mesh or Solace connector.
+
+[Request Asapio Trial license](https://protect-us.mimecast.com/s/g1YTCR6nxjIrnKJri9FGqr?domain=asapio.com/)
+
 
 ## Starting Services in SAP BTP
+
+Duration: 0:10:00
 
 TODO: explain steps.
 
 ## Testing Connectivity/Access to AEM
 
-TODO: explain steps.
+Duration: 0:05:00
+
+The AEM broker UI runs on a non-standard web port per default. This can sometimes cause access issues when enterprises are tightly controlling internet access and forcing everything through an internet/http proxy.
+If that is the case in your enterprise, please request a rule to to be added to allow access to hosts running on `*.messaging.solace.cloud:943` (on port 943).
+
+Alternatively you can switch the ports of the broker service when you are starting those during the workshop to have the UI run on standard port 443. You will just have to swap our web messaging port to a different port then (e.g. 943 - if you just want to swap those two.)
+
+You can test if your enterprise is blocking access to non-standard ports by clicking on the following link:
+
+[AEM broker UI](https://mr-connection-qhgik3f2ezp.messaging.solace.cloud:943/)
+
+If you see a login screen, you're good!
+If not, check with your security team to allow access as described above!
 
 ## Takeaways
 
-Duration: 0:10:00
+Duration: 0:05:00
 
 ✅ If you have completed all the prerequisites in this lab, then you should be good to go for our AEM Rapid Pilot workshop! <br>
 ✅ Congratulations and looking forward to seeing you there!<br>
