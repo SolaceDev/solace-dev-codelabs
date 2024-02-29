@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-10-12T14:29:36+02:00",
+  "id": "sap-aem-int-demo",
+  "duration": 19,
+  "title": "SAP AEM Codelab",
+  "summary": "This codelab walks a developer thru the experience of using SAP AEM to event enable their SAP ecosystem and",
+  "source": "sap-aem-int-demo.md",
+  "theme": "",
+  "status": [
+    "hidden"
+  ],
+  "category": null,
+  "tags": [
+    "aem",
+    "capm",
+    "eventportal",
+    "sap",
+    "sapbtp",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sap-aem-int-demo",
+  "url": "sap-aem-int-demo"
+}
