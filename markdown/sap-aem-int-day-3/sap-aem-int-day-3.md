@@ -41,7 +41,7 @@ Duration: 0:20:00
 ### A) Download and import the template integration flows package
 
 Download [AEM-Rapid-Pilot-day3.zip](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Rapid-Pilot-day3.zip)
-- Import AEM-Rapid-Pilot.zip as a new package into your Integration Suite tenant:
+- Import AEM-Rapid-Pilot-day3.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
 
 ### B) Download and import the AEM adapter for Integration Suite
@@ -169,6 +169,11 @@ Note that the error handling and retry settings go hand-in-hand with the DMQ and
 > Note: The delayed redelivery settings on the queue are not currently used by the AEM adapter. We can only set these settings in the adapter itself, but the queue needs to have a DMQ configured, a max redelivery count set (as opposed to retrying forever) and the events/messages have had to be published as DMQ eligible by the publisher.
 
 #### 2. Configuring and deploying  the AEMLegacyOutputAdapter iflow:
+
+Remember the connectivity details for our AEM broker from the previous step?
+We will need those now.
+![AEM broker service connectivity details](img/AEMBrokerServiceConnectionDetails.png)
+
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
 ![AEM service configuration pt1](img/CIAEMLegacyOutputAdapterConfiguration.png)
 ![AEM service configuration pt2](img/CIAEMLegacyOutputAdapterConfiguration-pt2.png)
@@ -331,8 +336,13 @@ b) It sends a new event to `sap.com/salesorder/notified/V1/{salesOrg}/{distribut
 
 #### 2. Configuring and deploying  the AEMSONotificationV2 iflow:
 ![AEM output adapter](img/CIAEMSONotificationV2Configuration.png)
-- Populate the connection details for the AEM broker service to send an event to the AEM broker whenever the flow successfully sends a notification email.
+- Populate the connection details for the AEM broker service to send an event to the AEM broker provided by us whenever the flow successfully sends a notification email.
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
+
+>aside negative
+> **If you get confused about which parts of your iflow to connect to your broker and which ones to connect to our broker, remember this simple rule:<br>
+> The sender and receiver (left and right of your iflow) connect to your broker.
+> The connector down at the bottom connects to our, from your point of view external, broker.**
 
 ![AEM service configuration pt1](img/CIAEMSONotificationV2Configuration-pt1.png)
 ![AEM service configuration pt2](img/CIAEMSONotificationV2Configuration-pt2.png)
@@ -487,7 +497,7 @@ Let's configure the security details we will need to connect to the various serv
 - In here, create security credentials for your AEM broker service **(if not already done)**.
 - Create SecureParameter `CABrokerUserPass` and store the password for your `solace-cloud-client` application user credentials.
 - Create OAuth2 Client Credentials and store your credentials from your DQM service key.
- - Token Service URL
+ - Token Service URL (should end in /oauth/token)
  - Client ID
  - Client Secret (either use your own or the one we will have handed out during the workshop.)
 ![DQM client credentials](img/DQM-Client-Credentials.png)
@@ -516,8 +526,8 @@ Lastly, the AEM Receiver adapter is configured to persistently (to avoid message
 
 
 #### 2. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
-![DQM service configuration](img/CIDQMServiceConfiguration.png)
-- Populate the connection details for the DQM service call out with the ones for your own DQM service instance.
+![DQM service configuration](img/CIDQMServiceConfiguration.png)You
+- Populate the connection details for the DQM service call out with the ones for your own DQM service instance. (You don't need to change the address, if you are using our DQM service. If you are using your own DQM service, you'll need to take the API URL from your token and append `/dq/addressCleanse/batch` to the end of it. It should look something like `https://api.dqmmicro.cfapps.eu10.hana.ondemand.com/dq/addressCleanse/batch`).
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
 
 ![AEM service configuration pt1](img/CIAEMBPCheckerConfiguration.png)
