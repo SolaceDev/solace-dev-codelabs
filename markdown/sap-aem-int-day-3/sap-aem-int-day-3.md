@@ -44,7 +44,27 @@ Download [AEM-Rapid-Pilot-day3.zip](https://github.com/SolaceLabs/aem-sap-integr
 - Import AEM-Rapid-Pilot-day3.zip as a new package into your Integration Suite tenant:
 	![CI Package import](img/CIPackageImport.png)
 
-### B) Download and import the AEM adapter for Integration Suite
+### B) Importing the official SAP AdvancedEventMesh Adapter into your CI tenant
+>aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. If you haven't used this adatper in your CI tenant before, you may need to import it once. Follow these steps to get the official adapter from SAP. <br>
+
+- Navigate to your newly imported package: AEM-Rapid-Pilot-day3.
+- Take a copy of the AEMLegacyOutputAdapter flow.
+![CI Copy flow](img/CICopyFlow.png)
+- Choose a new name. (Accepting the default of `AEMLegacyOutputAdapter_copy` will do.)
+- Then open and edit your copy named  `AEMLegacyOutputAdapter_copy` or similar.
+![CI Edit flow](img/CICopyflowEdit.png)
+- Select the line named AdvancedEventMesh and delete it by clicking on the rubbish bin icon that appears.
+![CI delete adapter](img/CICopyflowDeleteAdapter.png)
+- After deletion, select the connector tool from the top and reconnect the Sender box to the Start icon.
+![CI connector tool](img/CICopyFlowConnectorTool.png)
+- You should see a pop up appear in which you can select the AdvancedEventMesh adapter. Selecting this should pull the SAP version of this adapter into your CI tenant.
+
+That's it, we should now be good to proceed.
+(You can cancel the changes in your copy `AEMLegacyOutputAdapter_copy` or similar and delete the copy of the flow now.)
+
+>aside negative Skip over C) if you have successfully completed this step.
+
+### C) Download and import the AEM adapter for Integration Suite
 
 >aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. <br>
 **Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant or if you want to use the preview version (provided) instead.** <br>
