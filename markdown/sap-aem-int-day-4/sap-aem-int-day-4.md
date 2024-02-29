@@ -26,7 +26,7 @@ Topics covered :
 
 ## Using SAP BPA to handle event exceptions
 
-In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to as a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link. 
+In the world of Event Driven Asynchronous messaging, sometimes events cannot be successfully processed by a consumer and as a result, they need to be dealt with on an exception basis. As a result, there is built in capability within the broker referred to as a Dead Messages Queue. Essentially, messages can be placed into a special queue where they can later be reviewed and properly dealt with. Should you wish to read more on the concept of Dead Message Queues, please refer to the following link.
 
 [Link to Blog](https://solace.com/blog/pubsub-message-handling-features-dead-message-queues/)
 
@@ -45,11 +45,11 @@ In the following diagram, you can see the flow you are about to implement.
 ![BPA Image](img/BPAPRocess2.png)
 
 ## Creating the Queues for BPA Scenario
-Note: If you prefer not to use the CI/CD tool, check out the Appendix further down to find instructions to do it manually.
+> aside negatve Note: If you prefer not to use the CI/CD tool, check out the Appendix further down to find instructions to do it manually.
 
 You will now create the queues for this scenario via the CI/CD tool that can be found at this link:
 
-https://rapid-pilot-createconfig-quiet-elephant-yt.cfapps.ca10.hana.ondemand.com/
+[Link to CI/CD tool](https://rapid-pilot-createconfig-quiet-elephant-yt.cfapps.ca10.hana.ondemand.com/)
 
 ![BPACLI1](img/BPACLI1.jpg)
 
@@ -68,7 +68,7 @@ Below you will find the JSON structure to paste into the window. The only other 
 			"non-owner-permission" : "consume",
             "subscriptions": [
                 "sap.com/bpasalesorder/rejected/V1"
-                
+
             ]
         },
         {
@@ -85,7 +85,7 @@ Below you will find the JSON structure to paste into the window. The only other 
 }
 ```
 
-From the manage tab within the web console, towards the bottom, you will see "Other Management Tools", expand the "SEMP - REST API" section. From there, you can find the 4 pieces of information you need to execute the tool above. 
+From the manage tab within the web console, towards the bottom, you will see "Other Management Tools", expand the "SEMP - REST API" section. From there, you can find the 4 pieces of information you need to execute the tool above.
 ![SEMPDETAILS](img/SEMPDETAILS.jpg)
 Copy/paste those details into the tool above along with the JSON structure and press the "Create Configuration" Button and voila, you should have your 2 queues and subscriptions created.
 **** When copying the details over, make sure not to copy over extra spaces like I did on my first 3 attempts :-) ****
@@ -144,7 +144,7 @@ Congratulations, you have completed setup of the Rest Delivery Point. Each time 
 
 ## Creating BTP Destination for BPA
 
-The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” which can be seen in the screenshot immediately following the "Approve" action. 
+The business process that we will deploy is activated by an API Trigger which can be seen in the diagram and the last step of the process is the publishing of an event. This process uses a Rest Call to the broker that is encapsulated in the SAP BPA “Action” which can be seen in the screenshot immediately following the "Approve" action.
 
 ![SAP BPA Image 1](img/SPA-BPA-1.jpg)
 
@@ -168,13 +168,13 @@ When your destination is created, double check to make sure both properties are 
 
 ## Creating the SAP BPA Project
 
-For the SAP BPA setup, we will be importing 1 File that contains several components: 
+For the SAP BPA setup, we will be importing 1 File that contains several components:
 - 11 Artifacts
 - 1 Trigger
 - 1 Dependency for the Action Group that represents the action group
 - a project of type “Process Automation”
 
-We will import the SAPAEMSO_3.1.0.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO_3.1.0.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below 
+We will import the SAPAEMSO_3.1.0.mtar file. Select the import option which is highlighted by the red square. When prompted, select the SAPAEMSO_3.1.0.mtar file for import. Once it’s successfully imported, you will see 1 project listed as per the screenshot below
 *** You can download the file here https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SAPAEMSO_3.1.0.mtar ***
 
 ![SPA BPA Image 11](img/SPA-BPA-11.jpg)
@@ -230,7 +230,7 @@ The process should now be running. Now we need to add an iFlow to transform mess
 In the Business Process Automation scenario, we will activate an instance each time a record from the Dead Message Queue is submitted for review. The Sales Order Event from the Queue will need to be augmented with some additional metadata that is required for the BPA API. In order to augment the message with the additional elements, we will use 2 Cloud Integration Artifacts to do this:
 - SOTOBPASOV2 – This message mapping artifact will map the incoming Sales Order Event to the Structure required for the BPA API
 - https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SOTOBPASOV2.zip
-- SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema. 
+- SalesOrderToBPAiFlow – This iFlow will connect to the Advanced Event Mesh and pull in all orders that have been submitted for processing from the UI5 application. Technically, the iFlow connects to a Queue that you will create on the broker. Once the Sales Order event is received, it will be routed  through the mapping and then published onto a new topic with the augmented schema.
 https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/SalesOrderToBPAiFlow.zip
 
 ![IS Image 1](img/IS-1.jpg)
@@ -265,7 +265,7 @@ On this screen, we will configure the iFlow to be watching the Queue "SOREJECTED
 ![IS Image 13](img/IS-13.jpg)
 
 Now we need to configure the publishing component of the iFlow. It will be the same connection information as the consumer above.
-### Please note the creation of the Secure Parameter is further down 
+### Please note the creation of the Secure Parameter is further down
 ![IS Image 14](img/IS-14.jpg)
 Now we configure the iFlow. We will publish to a topic called "sap.com/bpasalesorder/rejected/V1". The thought here is that we still have a Sales Order but it's been formated for the Business Process Automation API. Earlier in the exercise you setup a Queue listening for this event so it's really important that these 2 topics match so that all BPA rejected sales orders get attracted into the right Queue. You could add another level to the Topic to reflect the use case or embed something in the name like I have done.
 
@@ -291,7 +291,7 @@ Before proceeding, please check the monitor to ensure that both artifacts have b
 
 
 ## Testing the components
-At the moment, you should have a fully integrated scenario. 
+At the moment, you should have a fully integrated scenario.
 
 From the Sales Order Dashboard, hit "Submit" on the "Dead Message Queue" card to send a message for review. Now we to check if the event triggered a creation of an Inbox Item.
 
@@ -300,7 +300,7 @@ From the main screen of the BPA Lobby, you can see in the upper right, a little 
 Now you will see the form that we created to display the contents of a Sales Order Event.
 ![SPA BPA Image 22](img/SPA-BPA-22.jpg)
 
-Of course, this is the Happy Path :-) Everything Worked. 
+Of course, this is the Happy Path :-) Everything Worked.
 However, what if you don't see the item in the inbox ?
 
 My first suggestion would be to use the "Try Me" tab on the broker with the configured Rest Delivery Point and let's do some simple tests.
@@ -368,7 +368,7 @@ On the subscriber side, connect to the broker and use ">" as your topic. This wi
 
 ## Debugging RDP Error
 
-This is an optional step in case you encounter any issue with AEM RDP Connection.
+> aside negative This is an optional step in case you encounter any issue with AEM RDP Connection.
 
 Below steps will allow you to connect to AEM CLI console and look at the logs.
 
@@ -417,6 +417,9 @@ Before accessing the CLI, we need to make sure that access to port 22 (default s
 This command will give you HTTP error (if any)that you might have received from BPA web endpoint.
 
 ## Appendix 1 - Creating Queues Manually for Section 4
+
+> aside negative Only follow these steps here, if you have skipped over the section to create queues with the CI/CD tool.
+
 If you want extra practice creating queues via the web console, you can follow these instructions and then return to section 4 to finish your configuration
 Navigate to the main console and go to the cluster manager. From there, select the broker where you will be configuring your Rest Delivery Point.
 
@@ -426,8 +429,8 @@ From this screen, you will select the manage option at the top.
 
 ![BPA Image 4](img/BPA-4.jpg)
 
-You will then select “Queues” towards the middle of the screen. 
-Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker. 
+You will then select “Queues” towards the middle of the screen.
+Selecting the Queue option will now re-direct you to a different screen and will open the Broker Manager for the selected broker.
 
 ![BPA Image 5](img/BPA-5.jpg)
 
