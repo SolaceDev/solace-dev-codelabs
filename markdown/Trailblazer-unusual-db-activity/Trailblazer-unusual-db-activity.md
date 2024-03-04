@@ -13,6 +13,11 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 Duration: 0:05:00
 
+Cloud Anomaly Detection
+Trailblazer - An AI-based agentless security engine that monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors. Analyzing audit logs and tracking API sessions is no longer a challenge.
+The Cloud Anomaly Detection feature does this work for you with zero human touch.
+
+
 We want to explore and see detections coming from trailblazer anomay engine related to Unusual Db activities.
 
 From the same Principal (user, role, etc.) initiate API calls applying to multiple DB instances, engines, tables, snapshots, keyspaces and similar DBs-related resources (i.e. via RDS, DynamoDB, and other AWS DB services),
