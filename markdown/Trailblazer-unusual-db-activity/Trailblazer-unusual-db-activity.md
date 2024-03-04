@@ -85,14 +85,16 @@ This phase needs to run for 24 hours to let TB  create solid base line profiles
 After running the CFT you should see:
 ![Cloud formation after running](img/CFT.png)
 
-## Validating resources created for initialization phase
-
-Filter the threat findings for event source = Rapid7
-Filter the threat findings for audited Environment = CloudTrail
-
+Click the resources tab of the stack that ran the CFT you should see the following resources created in status CREATE_COMPLETE
+- Event Bridge Rule
+- Lambda function
+- Lambda Role
+- PermissionForLambdaEvent
+![Resources created CFT](img/db-unusual-resources.png)
 
 ## Running the attack CFT
 
+Prepare your cloud formation in order to run db unusual activities attack
 
 ## Verifying detection appear in ICS UI
 
