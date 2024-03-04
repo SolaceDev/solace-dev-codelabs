@@ -112,6 +112,6 @@ Duration: 0:03:00
 
 ✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
 
-![Soly Image Caption](img/soly.gif)
+![Soly Image Caption](img/audit_log_analysis.png)
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
