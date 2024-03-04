@@ -96,6 +96,10 @@ Filter the threat findings for audited Environment = CloudTrail
 
 ## Verifying detection appear in ICS UI
 
+After waiting for about 10 minutes
+Navigate to the ICS UI and refresh the page and perform the needed filtering
+
+![threat findings](img/threatFindings.png)
 ## Takeaways
 
 Duration: 0:03:00
