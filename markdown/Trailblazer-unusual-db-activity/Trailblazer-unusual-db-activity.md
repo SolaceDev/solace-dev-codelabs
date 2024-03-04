@@ -19,6 +19,11 @@ From the same Principal (user, role, etc.) initiate API calls applying to multip
 in roughly the same time (seconds), repeatedly over an extended period (roughly 15 minutes).
 Persist an item to a DynamoDB table using Lambda function
 
+The detection is usung Lambda function to:
+1. Contaminate the dynamo db table with non relavant record rows
+2. Scan table for exiting data
+3. Print all data in table to sys log  :hushed:
+
 ### Info Boxes
 Plain Text followed by green & yellow info boxes
 
@@ -47,8 +52,16 @@ Plain Text followed by bullets
 
 Duration: 0:07:00
 
-Uou need to have Cloudformation account for running the cloud formation template.
-Enter environment setup & prerequisites here
+prerequisites
+You need to have AWS Cloudformation account and access in order to run the cloud formation template.
+
+There are two cloud formation template for each attack
+1. Initialization phase cloud formation template which creates basic frofiling of anomaly engine on the suspected/inspected role
+   The init phase should run at least for 24 hours before going into step 2
+
+2. Attack demo cloud formation template which creates the actual attack using the role from step 1
+
+
 
 ### Add a Link
 Add a link!
@@ -58,17 +71,32 @@ Add a link!
 
 ![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
 
-## Custom Step 1
-## Custom Step 2
-## Custom Step 3
+## Setting up the init phase in Cloud formation
+
+In Ics navigate into Threat findings UI
+
+This phase needs to run for 24 hours to let TB  create solid base line profiles
+
+## Validating resources created for initialization phase
+
+Filter the threat findings for event source = Rapid7
+Filter the threat findings for audited Environment = CloudTrail
+
+
+## Running the attack CFT
+
+
+## Verifying correct detections were created
 
 ## Takeaways
 
 Duration: 0:07:00
 
-✅ < Fill IN TAKEAWAY 1>
-✅ < Fill IN TAKEAWAY 2>
-✅ < Fill IN TAKEAWAY 3>
+✅ Trailblazer created detection finding type of - unusual change in count of unique actions
+
+✅ Trailblazer anomaly detection of resource name lambda.amazonaws.com
+
+✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
 
 ![Soly Image Caption](img/soly.gif)
 
