@@ -77,6 +77,9 @@ In Ics navigate into Threat findings UI
 
 This phase needs to run for 24 hours to let TB  create solid base line profiles
 
+After running the CFT you should see:
+![Cloud formation after running](img/CFT.png)
+
 ## Validating resources created for initialization phase
 
 Filter the threat findings for event source = Rapid7
@@ -86,11 +89,11 @@ Filter the threat findings for audited Environment = CloudTrail
 ## Running the attack CFT
 
 
-## Verifying correct detections were created
+## Verifying detection appear in ICS UI
 
 ## Takeaways
 
-Duration: 0:07:00
+Duration: 0:03:00
 
 ✅ Trailblazer created detection finding type of - unusual change in count of unique actions
 
