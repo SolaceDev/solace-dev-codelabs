@@ -18,18 +18,16 @@ Trailblazer - An AI-based agentless security engine that monitors cloud control 
 The Cloud Anomaly Detection feature does this work for you with zero human touch.
 
 
-We want to explore and see detections coming from trailblazer anomay engine related to Unusual Db activities.
+We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities.
 
 From the same Principal (user, role, etc.) initiate API calls applying to multiple DB instances, engines, tables, snapshots, keyspaces and similar DBs-related resources (i.e. via RDS, DynamoDB, and other AWS DB services),
 in roughly the same time (seconds), repeatedly over an extended period (roughly 15 minutes).
 Persist an item to a DynamoDB table using Lambda function
 
-The detection is usung Lambda function to:
-1. Contaminate the dynamo db table with non relavant record rows
-2. Scan table for exiting data
-3. Print all data in table to sys log  :hushed:
-
-
+This attack is using AWS Lambda function:
+1. Contaminate dynamo db table with non relavant record rows
+2. Scan dynamo db table for all data
+3. Print data in table to sys log  :hushed:
 
 
 
@@ -41,7 +39,7 @@ The detection is usung Lambda function to:
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+Duration: 0:05:00
 
 Prerequisites
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
@@ -66,8 +64,8 @@ Plain Text followed by green & yellow info boxes
 ## Setting up the init phase in Cloud formation
 
 
-### Steps to upload and run the CFT
-Plain Text followed by bullets
+### Steps to upload and run the CFT baseline
+
 * Prerequists: make sure youre using the currect user with permission to run and create CF stack
 * Navigate to CloudFormation > Stacks
 * Click the Create Stack button
@@ -86,7 +84,7 @@ Continuing choose the following options:
 
 Wait for like 5 minutes until all resources are created
 
-This CFT needs to run for at least 24 hours to let Anomaly Engine getting solid base line profiles
+CFT needs to run for **at least 24 hours** to let Anomaly Engine getting solid base line profiles
 
 After running the CFT you should see:
 ![Cloud formation after running](img/CFT.png)
@@ -96,11 +94,31 @@ Click the resources tab of the stack that ran the CFT you should see the followi
 - Lambda function
 - Lambda Role
 - PermissionForLambdaEvent
+
 ![Resources created CFT](img/db-unusual-resources.png)
 
-## Running the attack CFT
+## Running the actual attack Cloud Formation table
+
+> aside positive
+> You will the baseline to run at least 24 hours before running CFT
 
 Prepare your cloud formation in order to run db unusual activities attack
+
+* Prerequists: make sure youre using the currect user with permission to run and create CF stack
+* Navigate to CloudFormation > Stacks
+* Click the Create Stack button
+* Choose the option (with new resources)
+
+Continuing choose the following options:
+* Template is ready
+* upload a template file
+* Click the choose file button
+* Choose the CFT-Trailblazer-Demo-Start-Unusual-DB-Activity.yaml
+* Click the next button
+* Enter unique descriptive stack name
+* Click the next button
+* check the checkbox of I acknowledge that AWS CloudFormation might create IAM resources
+* Finish while click submit button
 
 ## Verifying detection appear in ICS UI
 
@@ -110,13 +128,15 @@ Navigate to the ICS UI and refresh the page and perform the needed filtering
 ![threat findings](img/threatFindings.png)
 ## Takeaways
 
-Duration: 0:03:00
+Duration: 0:02:00
 
 ✅ Trailblazer created detection finding type of - unusual change in count of unique actions
 
 ✅ Trailblazer anomaly detection of resource name lambda.amazonaws.com
 
 ✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
+
+✅ Verify whether GuardDuty identified the attack and created detection ...
 
 ![Soly Image Caption](img/soly.gif)
 
