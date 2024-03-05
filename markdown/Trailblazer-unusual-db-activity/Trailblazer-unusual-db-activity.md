@@ -29,14 +29,7 @@ The detection is usung Lambda function to:
 2. Scan table for exiting data
 3. Print all data in table to sys log  :hushed:
 
-### Info Boxes
-Plain Text followed by green & yellow info boxes
 
-> aside negative
-> This will appear in a yellow info box.
-
-> aside positive
-> This will appear in a green info box.
 
 
 
@@ -45,15 +38,12 @@ Plain Text followed by green & yellow info boxes
 1. Using
 1. Numbers
 
-### Add an Image or a GIF
-
-![Soly Image Caption](img/soly.gif)
 
 ## What you need: Prerequisites
 
 Duration: 0:07:00
 
-prerequisites
+Prerequisites
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
 
 There are two cloud formation template for each attack
@@ -62,15 +52,16 @@ There are two cloud formation template for each attack
 
 2. Attack demo cloud formation template which creates the actual attack using the role from step 1
 
+### Info Boxes
+Plain Text followed by green & yellow info boxes
+
+> aside negative
+> verify with your AWS admin before running this CFT
+
+> aside positive
+> You will need user/role with the right permissions to run cloud formation templates
 
 
-### Add a Link
-Add a link!
-[Example of a Link](https://www.google.com)
-
-### Embed an iframe
-
-![https://codepen.io/tzoght/embed/yRNZaP](https://en.wikipedia.org/wiki/File:Example.jpg "Try Me Publisher")
 
 ## Setting up the init phase in Cloud formation
 
