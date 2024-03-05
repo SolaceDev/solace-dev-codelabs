@@ -31,12 +31,6 @@ This attack is using AWS Lambda function:
 
 
 
-### Numbered List
-1. List
-1. Using
-1. Numbers
-
-
 ## What you need: Prerequisites
 
 Duration: 0:05:00
@@ -51,7 +45,6 @@ There are two cloud formation template for each attack
 2. Attack demo cloud formation template which creates the actual attack using the role from step 1
 
 ### Info Boxes
-Plain Text followed by green & yellow info boxes
 
 > aside negative
 > verify with your AWS admin before running this CFT
@@ -60,8 +53,7 @@ Plain Text followed by green & yellow info boxes
 > You will need user/role with the right permissions to run cloud formation templates
 
 
-
-## Setting up the init phase in Cloud formation
+## Setting up the initialization phase in AWS Cloudformation
 
 
 ### Steps to upload and run the CFT baseline
@@ -100,7 +92,7 @@ Click the resources tab of the stack that ran the CFT you should see the followi
 ## Running the actual attack Cloud Formation table
 
 > aside positive
-> You will the baseline to run at least 24 hours before running CFT
+> Before performing these steps verify that the baseline was run at least 24 hours before running CFT
 
 Prepare your cloud formation in order to run db unusual activities attack
 
@@ -122,8 +114,17 @@ Continuing choose the following options:
 
 ## Verifying detection appear in ICS UI
 
-After waiting for about 10 minutes
-Navigate to the ICS UI and refresh the page and perform the needed filtering
+
+> aside negative
+> After waiting for about 10 minutes
+
+Navigate to the ICS UI and refresh the page and perform the needed advanced filtering:
+* Events Source=Rapid7
+
+Verify you see detection of finding type
+``` txt
+unusual change in count of unique actions
+```
 
 ![threat findings](img/threatFindings.png)
 ## Takeaways
