@@ -38,11 +38,7 @@ Plain Text followed by green & yellow info boxes
 > aside positive
 > This will appear in a green info box.
 
-### Bullets
-Plain Text followed by bullets
-* Hello
-* CodeLab
-* World
+
 
 ### Numbered List
 1. List
@@ -78,9 +74,28 @@ Add a link!
 
 ## Setting up the init phase in Cloud formation
 
-In Ics navigate into Threat findings UI
 
-This phase needs to run for 24 hours to let TB  create solid base line profiles
+### Steps to upload and run the CFT
+Plain Text followed by bullets
+* Prerequists: make sure youre using the currect user with permission to run and create CF stack
+* Navigate to CloudFormation > Stacks
+* Click the Create Stack button
+* Choose the option (with new resources)
+
+Continuing choose the following options:
+* Template is ready
+* upload a template file
+* Click the choose file button
+* Choose the CFT-Trailblazer-Demo-Start-Unusual-DB-Activity.yaml
+* Click the next button
+* Enter unique descriptive stack name
+* Click the next button
+* check the checkbox of I acknowledge that AWS CloudFormation might create IAM resources
+* Finish while click submit button
+
+Wait for like 5 minutes until all resources are created
+
+This CFT needs to run for at least 24 hours to let Anomaly Engine getting solid base line profiles
 
 After running the CFT you should see:
 ![Cloud formation after running](img/CFT.png)
