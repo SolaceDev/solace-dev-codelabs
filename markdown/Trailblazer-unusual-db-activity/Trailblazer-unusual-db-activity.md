@@ -86,7 +86,7 @@ The attacker scan all data in the dynamo db table, and start to conteminate the 
 Duration: 0:10:00
 
 Before running the AWS account activity simulation, make sure the account is onboarded and monitored in Audit Log Monitoring:
-[Audit Log Monitoring Documentation](https://docs.divvycloud.com/docs/audit-log-monitoring)
+[Audit Log Monitoring Documentation](https://docs.rapid7.com/insightcloudsec/cloud-anomaly-detection/)
 
 Also make sure there are no errors for the account audit log in ICS UI
 
