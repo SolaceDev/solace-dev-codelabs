@@ -7,7 +7,7 @@ environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Trailblazer-unusual-db-activity
 
-# Trailblazer demo: Unusual db activity
+# Trailblazer demo: Unusual db activity attack
 
 ## Overview
 
@@ -17,7 +17,6 @@ Cloud Anomaly Detection
 Trailblazer - An artificail inteligence agentless anomaly security engine that monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors.
 Analyzing threat detections audit logs and tracking API sessions is no longer a challenge.
 The Cloud Anomaly Detection feature does this work for you with zero human touch using unsupervised learming.
-
 
 We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities such as dynamo db tables/databases.
 
@@ -32,9 +31,13 @@ This attack is using AWS Lambda function:
 
 
 
-## What you need: Prerequisites
+## Prerequisites: What you need
 
 Duration: 0:05:00
+
+You need to have an AWS Cloud account and access in order to run the cloud formation templates.
+CloudTrail needs to be enabled for the account, as well as Data Events for the dynamo db tables participating in the attack. (named 'xxx.-\*' - regex pattern)
+
 
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
 
@@ -43,14 +46,23 @@ There are two cloud formation template for each attack
    The init phase should run at least for 24 hours before going into step 2
 
 2. Attack demo cloud formation template which creates the actual attack using the role from step 1
+## About the demo templates
 
-### Roles configurations
+There are two cloud formation templates for the attack scenario:
+1. CFT-Trailblazer-Demo-**Start**-Unusual-DB-Activity.yaml - Initialization phase cloud formation template which creates basic frofiling of anomaly engine on the suspected/inspected role.
+The init phase should run at least for 24 hours before going into step 2
 
-> aside positive
-> verify with your AWS admin you have the right permissions before running this CFT
+2. CFT-Trailblazer-Demo-**Attack**-Unusual-DB-Activity.yaml - Attack demo cloud formation template which creates the actual attack using the role from step 1
+
+> aside negative
+> This cloudformation template simulates malicious activity! make sure you run it in a non critical environment
+
+> aside negative
+> verify with your AWS admin before running this CFT
 
 > aside positive
 > You will need user/role with the right permissions to run cloud formation templates
+
 
 ## Attack scenario description
 
@@ -156,9 +168,10 @@ Duration: 0:15:00
 Navigate to the ICS UI and refresh the page and perform the needed advanced filtering:
 * Events Source=Rapid7
 
-Verify you see detection of finding type
+Verify you see in threat findings UI detections of finding type
 ``` txt
 API Activity: unusual change in count of unique actions
+API Activity: unusual DB activity
 ```
 
 ![threat findings](img/threatFindings.png)
