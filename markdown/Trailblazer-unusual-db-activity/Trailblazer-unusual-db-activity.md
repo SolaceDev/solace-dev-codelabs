@@ -14,11 +14,11 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 Duration: 0:05:00
 
 Cloud Anomaly Detection
-Trailblazer - An artificail inteligence agentless anomaly security engine that monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors.
-Analyzing threat detections audit logs and tracking API sessions is no longer a challenge.
-The Cloud Anomaly Detection feature does this work for you with zero human touch using unsupervised learming.
+Trailblazer - An artificial inteligence agentless anomaly detection security engine which monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors.
+With Trailblazer analyzing threat detections audit logs and tracking API sessions is no longer a challenge.
+Trailblazer does this work for you with zero human intervention using unsupervised learming.
 
-We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities such as dynamo db tables/databases.
+We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities inference of dynamo db tables/databases.
 
 From the same Principal (user, role, etc.) initiate API calls applying to multiple DB instances, engines, tables, snapshots, keyspaces and similar DBs-related resources (i.e. via RDS, DynamoDB, and other AWS DB services),
 in roughly the same time (seconds), repeatedly over an extended period (roughly 15 minutes).
@@ -27,7 +27,7 @@ Persist an item to a DynamoDB table using Lambda function
 This attack is using AWS Lambda function:
 1. Contaminate dynamo db table with non relavant record rows
 2. Scan dynamo db table for all data
-3. Print data in table to sys log  :hushed:
+3. Syslog data of inspected table to sys log  :hushed:
 
 
 
@@ -36,7 +36,7 @@ This attack is using AWS Lambda function:
 Duration: 0:05:00
 
 You need to have an AWS Cloud account and access in order to run the cloud formation templates.
-CloudTrail needs to be enabled for the account, as well as Data Events for the dynamo db tables participating in the attack. (named 'xxx.-\*' - regex pattern)
+CloudTrail needs to be enabled for the account, as well as Data Events for the dynamo db tables participating in this attack. (named '-UnusualDBActivity.-\*' - regex pattern)
 
 
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
