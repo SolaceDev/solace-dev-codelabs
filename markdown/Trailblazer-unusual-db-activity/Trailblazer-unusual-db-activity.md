@@ -1,24 +1,25 @@
 author: Tal Avissar
-summary: this
+summary: Trailblazer unusual db activity pattern demo
 id: Trailblazer-unusual-db-activity
 tags:
-categories:
+categories: attack
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Trailblazer-unusual-db-activity
 
-# Trailblazer demo attack of unusual db activity
+# Trailblazer demo: Unusual db activity
 
-## What you'll learn: Overview
+## Overview
 
 Duration: 0:05:00
 
 Cloud Anomaly Detection
-Trailblazer - An AI-based agentless security engine that monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors. Analyzing audit logs and tracking API sessions is no longer a challenge.
-The Cloud Anomaly Detection feature does this work for you with zero human touch.
+Trailblazer - An artificail inteligence agentless anomaly security engine that monitors cloud control plane api activity, detects threats, suspicious activities and abnormal behaviors.
+Analyzing threat detections audit logs and tracking API sessions is no longer a challenge.
+The Cloud Anomaly Detection feature does this work for you with zero human touch using unsupervised learming.
 
 
-We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities.
+We want to explore and see detections (anomalies/incidents) from trailblazer anomaly engine related to Unusual Db activities such as dynamo db tables/databases.
 
 From the same Principal (user, role, etc.) initiate API calls applying to multiple DB instances, engines, tables, snapshots, keyspaces and similar DBs-related resources (i.e. via RDS, DynamoDB, and other AWS DB services),
 in roughly the same time (seconds), repeatedly over an extended period (roughly 15 minutes).
@@ -45,8 +46,8 @@ There are two cloud formation template for each attack
 
 ### Roles configurations
 
-> aside negative
-> verify with your AWS admin before running this CFT
+> aside positive
+> verify with your AWS admin you have the right permissions before running this CFT
 
 > aside positive
 > You will need user/role with the right permissions to run cloud formation templates
@@ -54,6 +55,9 @@ There are two cloud formation template for each attack
 
 ## Setting up the initialization phase in AWS Cloudformation
 
+Duration: 0:10:00
+
+The normal activity we set up is a lambda, which assumes a role and prints to the log.
 
 ### Steps to upload and run the CFT baseline
 
@@ -90,6 +94,9 @@ Click the resources tab of the stack that ran the CFT you should see the followi
 
 ## Running the actual attack Cloud Formation table
 
+The attack is a malicious lambda which uses the previous role,
+the lambda starts to contiminate the db with useless data and scan the db to syslog.
+
 > aside positive
 > Before performing these steps verify that the baseline was run at least 24 hours before running CFT
 
@@ -108,24 +115,48 @@ Continuing choose the following options:
 * Click the next button
 * Enter unique descriptive stack name
 * Click the next button
-* check the checkbox of I acknowledge that AWS CloudFormation might create IAM resources
-* Finish while click submit button
+* Click the checkbox of I acknowledge that AWS CloudFormation might create IAM resources
+* Click submit
 
 ## Verifying detection appear in ICS UI
 
+Duration: 0:15:00
 
 > aside negative
-> After waiting for about 10 minutes
+> After waiting for at least 15 minutes
 
 Navigate to the ICS UI and refresh the page and perform the needed advanced filtering:
 * Events Source=Rapid7
 
 Verify you see detection of finding type
 ``` txt
-unusual change in count of unique actions
+API Activity: unusual change in count of unique actions
 ```
 
 ![threat findings](img/threatFindings.png)
+
+## Remediation and recommendations
+#### Social Engineering:
+Preventing cyber social engineering involves a combination of education, awareness, and implementing security measures. Here are some strategies to help prevent cyber social engineering:
+- Education and training
+- Verify requests by contacting the supposed requester
+- Use multi-factor authentication
+- Use Strong passwords
+
+#### Overpermissive Principles
+To prevent overpermissive principles in AWS roles and users, regularly review IAM policies, adhere to the principle of least privilege, utilize IAM policy conditions, implement automated policy enforcement, and provide comprehensive training on IAM best practices.
+
+#### Centralized Backups
+Centralized backups consolidate data in one location, creating a single point of failure vulnerable to hardware issues or cyberattacks. In contrast, distributed backups spread data across multiple locations, enhancing resilience and reducing the risk of data loss.
+
+## Demo removal
+In order to remove the demo, follow these steps:
+1. Log into the AWS account
+2. Go to AWS CloudFormation
+3. Delete CFT-Trailblazer-Demo-**Attack**-Start-Unusual-DB-Activity Cloud Formation Template
+4. Delete CFT-Trailblazer-Demo-**Normal**-Base-Unusual-DB-Activity Cloud Formation Template
+
+
 ## Takeaways
 
 Duration: 0:02:00
