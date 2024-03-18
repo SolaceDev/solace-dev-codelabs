@@ -52,8 +52,36 @@ There are two cloud formation template for each attack
 > aside positive
 > You will need user/role with the right permissions to run cloud formation templates
 
+## Attack scenario description
 
-## Setting up the initialization phase in AWS Cloudformation
+The scenario comprises of two parts, baseline (normal behaviour) and attack
+
+#### Baseline:
+The normal activity we set up is a normal behaviour lambda. The lambda assumes a role and get data to from dynamo db table every few hours, this simulates a periodic fetch of data that runs every few hours from dynamo db.
+
+#### Attack:
+The attacker have managed to get access to the role which the backup lambda uses (we can assume it was comprimised using social engineering).
+The attacker scan all data in the dynamo db table, and start to conteminate the db table with useless data.
+
+#### Weak points:
+- Social Engineering
+- Overpermissive role
+- Centralized backup
+
+
+## Onboard Audit Log Monitoring in ICS and monitor the AWS account
+
+Duration: 0:10:00
+
+Before running the AWS account activity simulation, make sure the account is onboarded and monitored in Audit Log Monitoring:
+[Audit Log Monitoring Documentation](https://docs.divvycloud.com/docs/audit-log-monitoring)
+
+Also make sure there are no errors for the account audit log in ICS UI
+
+![Audit Log Monitoring enabled](img/audit-log-monitoring-enabled.png)
+
+
+## Setting up the initialization phase in AWS
 
 Duration: 0:10:00
 
@@ -157,7 +185,7 @@ In order to remove the demo, follow these steps:
 4. Delete CFT-Trailblazer-Demo-**Normal**-Base-Unusual-DB-Activity Cloud Formation Template
 
 
-## Takeaways
+## Summary
 
 Duration: 0:02:00
 
@@ -167,8 +195,6 @@ Duration: 0:02:00
 
 ✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
 
-✅ Verify whether GuardDuty identified the attack and created detection ...
+✅ Verify whether GuardDuty identified the attack and created detection (probably not detected)...
 
-![Soly Image Caption](img/soly.gif)
 
-Thanks for participating in this codelab! Let us know what you thought in the [Rapid7 Community Forum](https://rapid7.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
