@@ -35,7 +35,6 @@ This attack is using AWS Lambda function:
 
 Duration: 0:05:00
 
-Prerequisites
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
 
 There are two cloud formation template for each attack
@@ -44,7 +43,7 @@ There are two cloud formation template for each attack
 
 2. Attack demo cloud formation template which creates the actual attack using the role from step 1
 
-### Info Boxes
+### Roles configurations
 
 > aside negative
 > verify with your AWS admin before running this CFT
