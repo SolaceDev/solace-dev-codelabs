@@ -129,7 +129,7 @@ Wait for like 5 minutes until all resources are created
 
 CFT needs to run for **at least 24 hours** to let Anomaly Engine getting solid base line profiles
 
-After running the CFT you should see:
+After running the CFT you should see following rows appear in CFT stack:
 ![Cloud formation after running](img/CFT.png)
 
 Click the resources tab of the stack that ran the CFT you should see the following resources created in status CREATE_COMPLETE
@@ -137,7 +137,6 @@ Click the resources tab of the stack that ran the CFT you should see the followi
 - Lambda function
 - Lambda Role
 - PermissionForLambdaEvent
-
 
 
 ## Running the actual attack Cloud Formation table
@@ -159,7 +158,7 @@ Continuing choose the following options:
 * Template is ready
 * upload a template file
 * Click the choose file button
-* Choose the CFT-Trailblazer-Demo-Start-Unusual-DB-Activity.yaml
+* Choose the CFT-Trailblazer-Demo-S3-Account-Search.yaml
 * Click the next button
 * Enter unique descriptive stack name
 * Click the next button
@@ -178,11 +177,12 @@ Navigate to the ICS UI and refresh the page and perform the needed advanced filt
 
 Verify you see in threat findings UI detections of finding type
 ``` txt
-API Activity: unusual change in count of unique actions
-API Activity: unusual DB activity
+API Activity: change in count of unauthorized read access attempts
 ```
-
-![threat findings](img/threatFindings.png)
+with entity_id in the raw json like:
+```
+my-baseline-start-search-1-AttackSimulationRole-XXXXXX/AssumeRoleSessionTbAttack
+```
 
 ## Remediation and recommendations
 #### Social Engineering:
