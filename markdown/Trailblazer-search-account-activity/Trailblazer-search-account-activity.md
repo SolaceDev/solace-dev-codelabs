@@ -1,11 +1,11 @@
 author: Tal Avissar
 summary: Trailblazer unusual search account number data by using bucket name
-id: Trailblazer-unusual-db-activity
+id: Trailblazer-search-account-activity
 tags:
 categories: attack
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Trailblazer-search-account-activity
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Trailblazer-search-account-activity.md
 
 # Trailblazer demo: Unusual search account activity attack
 
