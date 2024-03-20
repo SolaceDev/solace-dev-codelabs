@@ -35,6 +35,15 @@ This attack is using AWS Lambda function:
 1. Search and find an account number with policy parameter which is using policy condition key called “s3:ResourceAccount”
 2. Iteratively Find account number using wildcard match on the s3:ResourceAccount condition on the s3 bucket instance attacked in order to look legit later part of the attack.
 
+## How we do this
+
+We can determine an AWS account by taking advantage of the new S3:ResourceAccount Policy Condition Key. This condition restricts access based on the S3 bucket an account is in (other account-based policies restrict based on the account the requesting principal is in).
+
+If we start with access to an object and write a condition with an “Allow” on exactly one account ID, we can determine if this bucket is in this account. We will be able to access the bucket if we get the account ID right, but we will see an access denied if we try the wrong number.
+
+Finding exactly the right account might seem impractical, with literally one trillion possibilities to try, but we don’t need to test them all.
+
+Conditions in policies use string matching and support wildcards. We can leverage that to exclude a whole range at a time. For example, to find the first digit, we can test “1*”, “2*”, “3*” etc. Once we gain access, we know our first digit and can do the same for the second, reducing the number of requests (in the worst case) from a trillion (10^12) to one hundred and twenty (10*12).
 
 ## Prerequisites: What you need
 
@@ -188,8 +197,8 @@ my-baseline-start-search-1-AttackSimulationRole-XXXXXX/AssumeRoleSessionTbAttack
 Preventing cyber social engineering involves a combination of education, awareness, and implementing security measures. Here are some strategies to help prevent cyber social engineering:
 - Education and training
 - Verify requests by contacting the supposed requester
-- Use multi-factor authentication
 - Use Strong passwords
+- Use s3 bucket protection
 
 #### Overpermissive Principles
 To prevent overpermissive principles in AWS roles and users, regularly review IAM policies, adhere to the principle of least privilege, utilize IAM policy conditions, implement automated policy enforcement, and provide comprehensive training on IAM best practices.
@@ -210,7 +219,9 @@ In order to remove the demo, follow these steps:
 Duration: 0:02:00
 
 ✅ Trailblazer created detection finding type of - unusual change in count of unauthorized access attempts
-✅ Trailblazer created detection finding type on the s3 bucket that is being attacked
-✅ Verify whether GuardDuty identified the attack and created detection (probably not detected)...
+
+✅ Trailblazer created detection finding type on the s3 bucket reasource that was compromised/attacked
+
+✅ Verify whether GuardDuty identified the attack and created detection (we assume probably not detected)...
 
 
