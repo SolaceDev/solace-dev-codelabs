@@ -32,9 +32,8 @@ Why is this important and useful to attackers (even though accountId is not "sec
 
 
 This attack is using AWS Lambda function:
-1. Search abd find an account number isng the policy parameter using policy condition key called “s3:ResourceAccount”
-2. Find account number and other hidden metadata for the s3 bucket instance attacked in order to look legit later on.
-
+1. Search and find an account number with policy parameter which is using policy condition key called “s3:ResourceAccount”
+2. Iteratively Find account number using wildcard match on the s3:ResourceAccount condition on the s3 bucket instance attacked in order to look legit later part of the attack.
 
 
 ## Prerequisites: What you need
@@ -42,7 +41,7 @@ This attack is using AWS Lambda function:
 Duration: 0:05:00
 
 You need to have an AWS Cloud account and access in order to run the cloud formation templates.
-CloudTrail needs to be enabled for the account, as well as Data Events for the dynamo db tables participating in this attack. (named '-UnusualDBActivity.-\*' - regex pattern)
+CloudTrail needs to be enabled for the account, as well as Data Events for the s3 bucket tables participating in this attack.
 
 
 You need to have AWS Cloudformation account and access in order to run the cloud formation template.
@@ -177,7 +176,7 @@ Navigate to the ICS UI and refresh the page and perform the needed advanced filt
 
 Verify you see in threat findings UI detections of finding type
 ``` txt
-API Activity: change in count of unauthorized read access attempts
+API Activity: unusual change in count of unauthorized access attempts
 ```
 with entity_id in the raw json like:
 ```
@@ -210,12 +209,8 @@ In order to remove the demo, follow these steps:
 
 Duration: 0:02:00
 
-✅ Trailblazer created detection finding type of - unusual change in count of unique actions
-
-✅ Trailblazer anomaly detection of resource name lambda.amazonaws.com
-
-✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
-
+✅ Trailblazer created detection finding type of - unusual change in count of unauthorized access attempts
+✅ Trailblazer created detection finding type on the s3 bucket that is being attacked
 ✅ Verify whether GuardDuty identified the attack and created detection (probably not detected)...
 
 
