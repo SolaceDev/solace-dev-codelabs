@@ -24,11 +24,6 @@ From the same Principal (user, role, etc.) initiate API calls applying to multip
 in roughly the same time (seconds), repeatedly over an extended period (roughly 15 minutes).
 Persist an item to a DynamoDB table using Lambda function
 
-This attack is using AWS Lambda function:
-1. Contaminate dynamo db table with non relavant record rows
-2. Scan dynamo db table for all data
-3. Syslog data of inspected table to sys log  :hushed:
-
 
 
 ## Prerequisites: What you need
@@ -49,8 +44,8 @@ There are two cloud formation template for each attack
 ## About the demo templates
 
 There are two cloud formation templates for the attack scenario:
-1. CFT-Trailblazer-Demo-**Start**-Unusual-DB-Activity.yaml - Initialization phase cloud formation template which creates basic frofiling of anomaly engine on the suspected/inspected role.
-The init phase should run at least for 24 hours before going into step 2
+1. CFT-Trailblazer-Demo-**Start**-Unusual-DB-Activity.yaml - Initialization phase cloud formation template which creates basic profiling of anomaly engine on the suspected/inspected role.
+Initialization phase should run at least for 24 hours before going into step 2
 
 2. CFT-Trailblazer-Demo-**Attack**-Unusual-DB-Activity.yaml - Attack demo cloud formation template which creates the actual attack using the role from step 1
 
@@ -72,11 +67,17 @@ The scenario comprises of two parts, baseline (normal behaviour) and attack
 The normal activity we set up is a normal behaviour lambda. The lambda assumes a role and get data to from dynamo db table every few hours, this simulates a periodic fetch of data that runs every few hours from dynamo db.
 
 #### Attack:
-The attacker have managed to get access to the role which the backup lambda uses (we can assume it was comprimised using social engineering).
-The attacker scan all data in the dynamo db table, and start to conteminate the db table with useless data.
+The attacker have managed to get access to the role which the backup lambda uses (we can assume it was comprimised role configuration).
+
+The attack is using AWS Lambda function:
+1. Contaminate dynamo db table with non relavant record rows
+2. Scan dynamo db table for all data
+3. Syslog data of inspected table to sys log  :hushed:
+4. Missing ompliance checks to monitor Lamda function resources executions
 
 #### Weak points:
-- Social Engineering
+- Social engineering
+- Cloud resource compromised
 - Overpermissive role
 - Centralized backup
 
@@ -184,6 +185,12 @@ Preventing cyber social engineering involves a combination of education, awarene
 - Use multi-factor authentication
 - Use Strong passwords
 
+#### Cloud resource compromised
+- Identify and monitor potentially compromised Lambda functions
+- Activate multi-factor authentication (MFA) on the AWS account root user and any users with interactive access to AWS Identity and Access Management (IAM)
+- Check the code used inside the Lambda function, to be sure there aren’t any security bugs inside it and all the user inputs are correctly sanitized following the security guidelines for writing code securely or risk it becoming a threat
+- Apply the least privileges concept in all the AWS IAM Roles applied to cloud features to avoid unwanted actions or possible privilege escalation paths inside the account.
+
 #### Overpermissive Principles
 To prevent overpermissive principles in AWS roles and users, regularly review IAM policies, adhere to the principle of least privilege, utilize IAM policy conditions, implement automated policy enforcement, and provide comprehensive training on IAM best practices.
 
@@ -202,11 +209,11 @@ In order to remove the demo, follow these steps:
 
 Duration: 0:02:00
 
-✅ Trailblazer created detection finding type of - unusual change in count of unique actions
+✅ Trailblazer detected finding type of - unusual change in count of unique actions
 
-✅ Trailblazer anomaly detection of resource name lambda.amazonaws.com
+✅ Trailblazer detected detection of resource name lambda.amazonaws.com
 
-✅ Trailblazer created anomaly detection of resource name lambda.amazonaws.com
+✅ Trailblazer detected anomaly detection of resource name lambda.amazonaws.com
 
 ✅ Verify whether GuardDuty identified the attack and created detection (probably not detected)...
 

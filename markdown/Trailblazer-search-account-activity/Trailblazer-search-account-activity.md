@@ -218,9 +218,9 @@ In order to remove the demo, follow these steps:
 
 Duration: 0:02:00
 
-✅ Trailblazer created detection finding type of - unusual change in count of unauthorized access attempts
+✅ Trailblazer detected detection finding type of - unusual change in count of unauthorized access attempts
 
-✅ Trailblazer created detection finding type on the s3 bucket reasource that was compromised/attacked
+✅ Trailblazer detected detection finding type on the s3 bucket reasource that was compromised/attacked
 
 ✅ Verify whether GuardDuty identified the attack and created detection (we assume probably not detected)...
 
