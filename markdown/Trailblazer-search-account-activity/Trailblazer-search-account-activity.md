@@ -93,6 +93,7 @@ The attacker scan all data in the dynamo db table, and start to conteminate the 
 
 #### Weak points:
 - Social Engineering
+- Cloud resource compromised
 - Overpermissive role
 - Centralized backup
 
@@ -199,6 +200,12 @@ Preventing cyber social engineering involves a combination of education, awarene
 - Verify requests by contacting the supposed requester
 - Use Strong passwords
 - Use s3 bucket protection
+
+#### Cloud resource compromised
+- Identify and monitor potentially compromised Lambda functions
+- Activate multi-factor authentication (MFA) on the AWS account root user and any users with interactive access to AWS Identity and Access Management (IAM)
+- Check the code used inside the Lambda function, to be sure there aren’t any security bugs inside it and all the user inputs are correctly sanitized following the security guidelines for writing code securely or risk it becoming a threat
+- Apply the least privileges concept in all the AWS IAM Roles applied to cloud features to avoid unwanted actions or possible privilege escalation paths inside the account.
 
 #### Overpermissive Principles
 To prevent overpermissive principles in AWS roles and users, regularly review IAM policies, adhere to the principle of least privilege, utilize IAM policy conditions, implement automated policy enforcement, and provide comprehensive training on IAM best practices.
