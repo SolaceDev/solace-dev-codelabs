@@ -169,13 +169,13 @@ Duration: 0:15:00
 Navigate to the ICS UI and refresh the page and perform the needed advanced filtering:
 * Events Source=Rapid7
 
-Verify you see in threat findings UI detections of finding type
+Verify you see in threat findings UI detections of finding types
 ``` txt
-API Activity: unusual change in count of unique actions
-API Activity: unusual DB activity
+API Activity: unusual change in count of unique actions -> related to dynamodb.amazonaws.com
+API Activity: Unusual Actions                           -> related to lambda.amazonaws.com
 ```
 
-![threat findings](img/threatFindings.png)
+![threat findings](img/ThreatFindings1.png)
 
 ## Remediation and recommendations
 #### Social Engineering:
