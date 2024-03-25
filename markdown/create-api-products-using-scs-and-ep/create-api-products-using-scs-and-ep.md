@@ -423,7 +423,7 @@ PubSub+ Event Portal makes adopting and using AsyncAPI simple:
 
 
 # References:
-- [AsyncAPI Specification](https://www.asyncapi.com/docs/specifications/v2.2.0)
+- [AsyncAPI Specification](https://v2.asyncapi.com/docs/reference/specification/v2.4.0)
 - [AsyncAPI Code Generator](https://www.asyncapi.com/generator)
 - [AsyncAPI Code Generator - GitHub](https://github.com/asyncapi/generator#update-the-cli)
 - [AsyncAPI vs OpenAPI](https://solace.com/blog/asyncapi-vs-openapi/)
