@@ -1,5 +1,6 @@
 author: HariRangarajan-Solace
-summary: This codelab describes the whole technical hands-on part of the Solace Masterclass session
+summary: This codelab describes the whole
+technical hands-on part of the Solace Masterclass session
 id: solace-masterclass
 tags: Solace-Masterclass, Java, Springboot
 categories:
@@ -41,8 +42,8 @@ In the hands-on section of this masterclass, you can choose one of the below ind
 1. Retail
 2. Banking
 
-and follow it for implementing. Due to time limit considerations, we will be implementing only a selected subset of the
-whole design.
+and follow it for implementing.
+Due to time limit considerations, we will be implementing only a selected subset of the whole design.
 
 ## Solace Cloud Account and broker provisioning
 
@@ -65,9 +66,8 @@ developer grade broker which will be used in the next sections.
 - and then click the map to find a region close to you:
   ![broker_create_service.jpg](img/broker-setup/broker_create_service.jpg)
 
-Give your Solace PubSub+ Cloud service instance a name using the naming convention : \
-**_FirstName-masterclass**, and then tell it start!.\
-For eg. if your name is John Doe, then the name of your broker will be **john-masterclass**
+Give your Solace PubSub+ Cloud service instance a name of your choice and then let it start!.
+> aside negative As a guide, try to keep your broker name short for this session
 
 Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured,
 load-balancer setup, monitoring enabled, etc.
@@ -118,14 +118,23 @@ In summary, the Event Portal streamlines event management, making it an essentia
 
 In the virtual machine box provided to you for this masterclass session, a GitHub repository has been checked out.
 
-- Navigate to the folder : <mark>**Solace-masterclass/Postman-collection**</mark>
-- Start Postman application
-- Import the file with the name **Establish Environment for Event Portal.postman_collection.json** as a Postman
-  collection as shown below
+- Navigate to the folder in a file explorer : `/home/ubuntu/GitHub/solace-masterclass-code/postman-collections`
+- Start Postman application from the desktop by right-clicking on the Postman icon and click _Execute_
+- Click on the **Workspaces** button the menu which will display a list of all workspaces under this account. Create a
+  new one for you to work with for this hands-on exercise as below :
+  ![create-workspace.png](img/commons/create-workspace.png)
+- Select **Blank workspace**, enter your first name and **Only me** as the access type and click **Create** as below :
+  ![blank-workspace-step1.png](img/commons/blank-workspace-step1.png)
+  ![blank-workspace-step2.png](img/commons/blank-workspace-step2.png)
+
+> aside negative : please make sure to select and work only within this workspace as this is a shared account and you
+> can access and disrupt other's activities mistakenly
+
+- Import the file with the name **Solace-masterclass-collection.json** as a Postman collection as shown below
   ![postman-collection-import.png](img/commons/postman-collection-import.png)
 - Once imported, you should be able to see a Postman collection as below :
   ![collection-imported.png](img/commons/collection-imported.png)
-- Similarly, import the file with the name **Environment Definition.postman_environment.json** as a Postman environment
+- Similarly, import the file with the name **Solace-masterclass-environment.json** as a Postman environment
   as shown below
   ![Postman-environment-import.png](img/commons/Postman-environment-import.png)
 - Once imported, you should be able to see a Postman environment as below :
@@ -145,7 +154,7 @@ Make sure that you enable the following permissions during the process :
 - Environments - Read and Write
 - Account Management - Read and Write
 
-**Keep this token safe as it will not be available again**
+> aside negative **Keep this token safe as it will not be available again**
 
 ### Step 3 : Import Event Portal design
 
@@ -190,7 +199,8 @@ challenges in expanding their operations as below :
 * Fraudulent orders
 
 This has impacted their customer's experience, and they are at risk of loosing their customers.
-As a solution, they have defined a POC to event enable the Order-to-Cash (OTC) flow. \
+As a solution, they have defined a POC to event enable the Order-to-Cash (OTC) flow.
+
 Below is the flowchart for this flow :
 ![retail-domain-flowchart.png](img/retail-domain-usecase/retail-domain-flowchart.png)
 
@@ -216,6 +226,17 @@ The dependency between the applications and events are described as below :
 
 ![retail-domain-usecase.png](img/retail-domain-usecase/retail-domain-usecase.png)
 
+This POC leverages the following architectural principles and practices :
+
+* **Microservices Architecture**: The system is broken down into smaller, independent services that communicate with
+  each other through messages. This makes the system more scalable, resilient, and easier to maintain.
+* **Event-Driven Architecture**:  Events are used to trigger actions in different parts of the system. For example,
+  placing an order triggers an event is subscribed by multiple interested consumers. This makes the system more flexible
+  and responsive to changes.
+* **Publish-Subscribe Pattern**:  Services publish events to a central message broker, and other services can subscribe
+  to those events. This allows for loose coupling between services, as they don't need to know about each other
+  directly.
+
 As a part of the workshop you will have access to prebuilt applications and artefacts which you will be using in this
 segment of the workshop.
 
@@ -233,7 +254,7 @@ relevant events which it uses for showing realtime status updates on the order l
 - Navigate to the directory : <mark>**Solace-masterclass/retail-domain/order-service**</mark>
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
-  url : [http://localhost:8080/](http://localhost:8080/)
+  url : [http://localhost:9002/](http://localhost:9002/)
 - You should see a page which looks like this :
   ![Order-Service-Application.png](img/retail-domain-usecase/Order-Service-Application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
@@ -366,6 +387,9 @@ by the broker were lost as the broker could not find an active consumer for them
 Now that you have created the queue, newly published orders will lie in the queue till a consumer processes and
 acknowledges the event.
 
+Let's test out the flow again till now by building and deploying the Order-Service and observing the logs on the *
+*Inventory-FraudCheck-Service** to see incoming order created events.
+
 #### Agile feature enhancement
 
 For each incoming **Order-Created** event, an **Order-Confirmed** event will be published as the stock reservation and
@@ -381,6 +405,13 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
       | all-order-updates | `acmeretail/onlineservices/order/confirmed/v2/*/*`  |
 
 > aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
+
+* Import the **Order-Service** as a project into an IDE of your choice :Intellij, Eclipse or SpringSource Tool Suite.
+  All the 3 tools are installed on the VM and are available on the desktop for your use.
+* The code for importing is available at the location :
+  **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service**
+
+> aside negative If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.
 
 * Open the file : **SolaceEventPublisher.java** and make the below updates to the file :
     * In the method **connectToBroker**, add in the code snippet before the return statement :
@@ -477,12 +508,11 @@ The _Payment Created_ event is in-turn subscribed by the **Order Service** for u
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
 
-* Now that we have configured the queue for feeding the **Payment Service**, we have to make sure that the *
-  *Order-Service**
-  can also receive the _Payment Created_ events. This is done by updating the subscription list of the
+* Now that we have configured the queue for feeding the **Payment Service**, we have to make sure that the
+  **Order-Service** can also receive the _Payment Created_ events. This is done by updating the subscription list of the
   _all-order-updates_ queue with the topic pattern of the _Payment Created_ events.
 * You can do this by :
-    * Open the queue configuration for the _all-orders-confirmed_ queue
+    * Open the queue configuration for the _all-order-updates_ queue
     * Click on **Subscription** tab
     * Click on **+ Subscription** and add in an additional topic subscription
       as : `acmeretail/onlineservices/payment/created/v1/*/*`
@@ -541,7 +571,7 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
   *Order-Service** can also receive the _Shipment Created_ events. This is done by updating the subscription list of the
   _all-order-updates_ queue with the topic pattern of the Shipment Created events.
 * You can do this by :
-    * Open the queue configuration for the all-orders-confirmed queue
+    * Open the queue configuration for the _all-order-updates_ queue
     * Click on Subscription tab
     * Click on + Subscription and add in an additional topic subscription
       as : `acmeretail/shipping/shipment/created/v1/*/*`
@@ -552,8 +582,8 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
 
 #### Testing
 
-To do a complete end-to-end test of the current flow, you can quickly publish a few more orders from the **
-Order-Service ** and see the following events being produced and consumed across the 4 applications :
+To do a complete end-to-end test of the current flow, you can quickly publish a few more orders from the 
+**Order-Service** and see the following events being produced and consumed across the 4 applications :
 
 * Order Created
 * Order Confirmed
@@ -632,7 +662,7 @@ Confirmed_ and corresponding _Account Suspended_ events.
 
 #### How to run ?
 
-- Navigate to the directory : <mark>**Solace-masterclass/Banking/account-management**</mark>
+- Navigate to the directory : **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management**
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
   url : [http://localhost:8080/](http://localhost:8080/)
@@ -676,7 +706,7 @@ The Core Banking Application randomly generates the above transactions on all th
 #### How to run ?
 
 * Open up a new terminal window, make sure not to close the earlier window running the Account Management application
-* Navigate to the directory : <mark>**Solace-masterclass/Banking/core-banking**</mark>
+* Navigate to the directory : **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking**
 * Run the command : `mvn clean install`
 * Run the
   command : `java -jar core-banking/target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
@@ -762,9 +792,9 @@ by the broker were lost as the broker could not find an active consumer for them
 Now that you have created the queue, newly published orders will lie in the queue till a consumer processes and
 acknowledges the event.
 
-So trigger a few more Account creation requests from the **Account Management Application** and see the **Account Opened
-** events being triggered. Once this happens, the **Core-Banking** application should receive those events and start
-publishing transaction events for the active accounts.
+So trigger a few more Account creation requests from the **Account Management Application** and see the
+**Account Opened** events being triggered. Once this happens, the **Core-Banking** application should receive those
+events and start publishing transaction events for the active accounts.
 
 ### 3. Fraud Detection
 
@@ -779,7 +809,7 @@ transactions by publishing a _Fraud Detected_ event.
 #### How to run ?
 
 * Open up a new terminal window, make sure not to close the earlier window running the earlier applications
-* Navigate to the directory : <mark>**Solace-masterclass/Banking/fraud-detection**</mark>
+* Navigate to the directory : **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/fraud-detection**
 * Before starting the application, we need to create the queue that the **Fraud Detection** service requires to start.
 * Follow the steps from the previous **Core-Banking** section and create a new queue similarly with the
   following name and subscription:
@@ -820,8 +850,6 @@ Let's start with implementing this feature flow across multiple applications in 
 
 #### 4.1 Account Management application
 
-##### New feature
-
 The **Account Management** application subscribes to the _Fraud Detected_ event and validates if the transaction is
 actually fraudulent. If found fraudulent, a corresponding _Fraud Confirmed_ event is triggered and the linked account is
 suspended by publishing an _Account Suspended_ event.
@@ -836,8 +864,14 @@ suspended by publishing an _Account Suspended_ event.
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
 
-* Open the file named SolaceEventPublisher.java in the path :
-  account-management/src/main/java/com/solace/acme/bank/accountmanagement/service/SolaceEventPublisher.java
+* Import the **account-management** as a project into an IDE of your choice :Intellij, Eclipse or SpringSource Tool
+  Suite.
+  All the 3 tools are installed on the VM and are available on the desktop for your use.
+* The code for importing is available at the location :
+  **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management**
+> aside negative If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.
+
+* Open the file named SolaceEventPublisher.java in the IDE project :
     * Add the following code block in the method **connectToBroker** :
       ```Java
           final PersistentMessageReceiver fraudDetectedEventReceiver = messagingService.createPersistentMessageReceiverBuilder().build(Queue.durableExclusiveQueue(configProperties.getSolaceFraudDetectedEventQueue()));
@@ -898,8 +932,7 @@ suspended by publishing an _Account Suspended_ event.
                 }
             }
           ```
-* Open the file named FraudService.java in the path :
-  account-management/src/main/java/com/solace/acme/bank/accountmanagement/service/FraudService.java
+* Open the file named FraudService.java in the project :
     * Introduce the following three new method as below in the file :
         ```Java
               public boolean processFraudDetectedEvent(final String incomingFraudDetectedEventJson) {
@@ -941,8 +974,7 @@ suspended by publishing an _Account Suspended_ event.
               .create();
               }
       ```
-* Open the file named AccountService.java in the path :
-  account-management/src/main/java/com/solace/acme/bank/accountmanagement/service/AccountService.java
+* Open the file named AccountService.java in the project :
     * Introduce the following 2 methods in the class :
       ```Java
           public void processAccountSuspensionRequest(final String accountNumber) {
@@ -976,12 +1008,17 @@ stops all transactions on that account number immediately.
   subscription:
   | Queue name | Subscription | | ---- | ----- |
   | accounts-suspended | `acmebank/solace/account/suspended/v1/*` |
-
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
 
-* Open the file SolaceEventHandler.java at the location :
-  core-banking/src/main/java/com/solace/acme/bank/corebanking/service/SolaceEventHandler.java
+* Import the **core-banking** as a project into an IDE of your choice :Intellij, Eclipse or SpringSource Tool
+  Suite.
+  All the 3 tools are installed on the VM and are available on the desktop for your use.
+* The code for importing is available at the location :
+  **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking**
+> aside negative If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.
+
+* Open the file SolaceEventHandler.java in the new IDE project :
     * Add in the following code snippet in the **connectAndConfigureConsumers** method :
       ```Java
           final PersistentMessageReceiver accountSuspendedEventReceiver = messagingService.createPersistentMessageReceiverBuilder().build(Queue.durableExclusiveQueue(configProperties.getAccountsSuspendedQueueName()));
@@ -1007,8 +1044,7 @@ stops all transactions on that account number immediately.
             });
           }
       ```
-* Open the file AccountsEventProcessor.java at the location :
-  core-banking/src/main/java/com/solace/acme/bank/corebanking/service/AccountsEventProcessor.java
+* Open the file AccountsEventProcessor.java in the project :
     * Add in the following two methods in the same file :
       ```Java
           public boolean processAccountOpenedEvent(final String accountOpenedActionEventPayload) {
@@ -1046,6 +1082,7 @@ stops all transactions on that account number immediately.
 * In the terminal where you were building the **Core-Banking** application, run the commands :
     * `mvn clean install`
     * `java -jar core-banking/target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
+* Make sure that the **fraud-detection** service is also running.
 * Start with a clean flow and kick off the flow by creating multiple new accounts in the **Account Management**
   application
 * As the accounts get confirmed, transactions will start flowing through the **Core-Banking** and **Fraud-Detection**
@@ -1060,31 +1097,40 @@ stops all transactions on that account number immediately.
 As a result of this POC, Acme Bank has achieved a number of benefits including :
 
 * **Improved Efficiency**: By automating tasks and streamlining processes, event-driven architectures can help banks to
-improve efficiency and reduce costs. For example, in the diagram you sent, the event of an account being applied for
-could trigger a series of automated tasks, such as verifying the applicant's identity and running a credit check. This
-would eliminate the need for manual intervention and could significantly speed up the account opening process.
-* **Enhanced Customer Experience**: Event-driven architectures can also help banks to improve the customer experience. For
-example, if a customer deposits a check, the bank could use an event-driven architecture to send them a notification
-that the deposit has been received and credited to their account. This would provide customers with real-time
-information about their accounts and help to improve their overall satisfaction with the bank.
-* **Reduced Risk**: Event-driven architectures can also help banks to reduce risk. For example, in the diagram you sent, the
-event of a fraud attempt could trigger a series of automated actions, such as blocking the transaction and notifying the
-customer. This would help to prevent fraudulent transactions from being completed and could save the bank money.
+  improve efficiency and reduce costs. For example, in the diagram you sent, the event of an account being applied for
+  could trigger a series of automated tasks, such as verifying the applicant's identity and running a credit check. This
+  would eliminate the need for manual intervention and could significantly speed up the account opening process.
+* **Enhanced Customer Experience**: Event-driven architectures can also help banks to improve the customer experience.
+  For
+  example, if a customer deposits a check, the bank could use an event-driven architecture to send them a notification
+  that the deposit has been received and credited to their account. This would provide customers with real-time
+  information about their accounts and help to improve their overall satisfaction with the bank.
+* **Reduced Risk**: Event-driven architectures can also help banks to reduce risk. For example, in the diagram you sent,
+  the
+  event of a fraud attempt could trigger a series of automated actions, such as blocking the transaction and notifying
+  the
+  customer. This would help to prevent fraudulent transactions from being completed and could save the bank money.
 
 ## 6. Takeaways and benefits
 
 Below are some of the key takeaways from this masterclass :
-* **Understanding Event-Driven Architecture (EDA)**: Gain insights into the principles, patterns, and benefits of event-driven architecture, and learn how it enables organizations to build scalable, resilient, and responsive systems.
+
+* **Understanding Event-Driven Architecture (EDA)**: Gain insights into the principles, patterns, and benefits of
+  event-driven architecture, and learn how it enables organizations to build scalable, resilient, and responsive
+  systems.
 
 * **Hands-on Experience with Solace**:
-  * Learn how to set up and configure Solace messaging infrastructure to support event-driven applications.
-  * Explore Solace's features and capabilities, including message routing, topic-based subscriptions, and event-driven integration. 
+    * Learn how to set up and configure Solace messaging infrastructure to support event-driven applications.
+    * Explore Solace's features and capabilities, including message routing, topic-based subscriptions, and event-driven
+      integration.
 * Practical Application Development:
-  * Acquire practical skills in designing, developing, and testing event-driven applications using Solace messaging. 
-  * Understand the end-to-end event flow and learn how to implement business logic within event-driven microservices.
+    * Acquire practical skills in designing, developing, and testing event-driven applications using Solace messaging.
+    * Understand the end-to-end event flow and learn how to implement business logic within event-driven microservices.
 * Unlocking Business Value with EDA and Solace:
-  * Discover the business benefits of adopting event-driven architecture and leveraging Solace messaging for various use cases.
-  * Learn how EDA and Solace enable organizations to innovate faster, respond to market changes more effectively, and deliver superior customer experiences.
+    * Discover the business benefits of adopting event-driven architecture and leveraging Solace messaging for various
+      use cases.
+    * Learn how EDA and Solace enable organizations to innovate faster, respond to market changes more effectively, and
+      deliver superior customer experiences.
 
 ![Soly Image Caption](img/commons/soly.gif)
 
