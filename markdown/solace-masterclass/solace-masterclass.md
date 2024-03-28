@@ -251,7 +251,7 @@ relevant events which it uses for showing realtime status updates on the order l
 
 #### How to run ?
 
-- Navigate to the directory : <mark>**Solace-masterclass/retail-domain/order-service**</mark>
+- Navigate to the directory : **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service**
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
   url : [http://localhost:9002/](http://localhost:9002/)
@@ -302,7 +302,7 @@ _Order-Confirmed_ event for further processing.
 #### How to run ?
 
 * Open up a new terminal window, make sure not to close the earlier window running the **Order-Service**
-* Navigate to the location : <mark>**Solace-masterclass/retail-domain/inventory-fraudcheck-service**</mark>
+* Navigate to the location : **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/inventory-fraudcheck-service**
 * Run the command : `mvn clean install`
 * Run the command : `java -jar target/inventory-fraudcheck-service-0.0.1-SNAPSHOT.jar -h
   HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
@@ -497,7 +497,7 @@ The _Payment Created_ event is in-turn subscribed by the **Order Service** for u
 #### How to run ?
 
 * Open up a new terminal window, make sure not to close the earlier window running the earlier applications
-* Navigate to the location : Solace-masterclass/retail-domain/payment-service
+* Navigate to the location : **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/payment-service**
 * Before starting the application, we need to create the queue that the **payment-service** requires to start.
 * Follow the steps from the previous **inventory-fraudcheck-service** section and create a new queue similarly with the
   following name and subscription:
@@ -532,8 +532,8 @@ To do a complete end-to-end test of the current flow, you can quickly publish a 
 3. Payment Created
 4. Payment Updated
 
-You can also see that the status of the order in the **Order Service** changes from **Validated** to **PAYMENT_PROCESSED
-**
+You can also see that the status of the order in the **Order Service** changes from **Validated** to 
+**PAYMENT_PROCESSED**
 
 ### 4. Shipping Service
 
@@ -558,7 +558,7 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
 #### How to run ?
 
 * Open up a new terminal window, make sure not to close the earlier window running the earlier applications
-* Navigate to the location : Solace-masterclass/retail-domain/shipping-service
+* Navigate to the location : **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/shipping-service**
 * Before starting the application, we need to create the queue that the **Shipping service** requires to start.
 * Follow the steps from the previous sections and create a new queue similarly with the following name and subscription:
   | Queue name | Subscription | | ---- | ----- |
@@ -567,8 +567,8 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
 
-* Now that we have configured the queue for feeding the **Shipping Service**, we have to make sure that the *
-  *Order-Service** can also receive the _Shipment Created_ events. This is done by updating the subscription list of the
+* Now that we have configured the queue for feeding the **Shipping Service**, we have to make sure that the 
+ **Order-Service** can also receive the _Shipment Created_ events. This is done by updating the subscription list of the
   _all-order-updates_ queue with the topic pattern of the Shipment Created events.
 * You can do this by :
     * Open the queue configuration for the _all-order-updates_ queue
@@ -665,7 +665,7 @@ Confirmed_ and corresponding _Account Suspended_ events.
 - Navigate to the directory : **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management**
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
-  url : [http://localhost:8080/](http://localhost:8080/)
+  url : [http://localhost:9092/](http://localhost:9092/)
 - You should see a page which looks like this :
   ![Account-management-application.png](img/banking-domain-usecase/Account-management-application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
@@ -857,7 +857,7 @@ suspended by publishing an _Account Suspended_ event.
 * Start with creating a new queue for subscribing to the _Fraud Detected event_
 * Follow the steps from the previous sections and create two new queues similarly with the following name and
   subscription:
-  | Queue name | Subscription | | ---- | ----- |
+  | Queue name | Subscription | 
   | fraud-detected-events | `acmebank/solace/fraud/detected/v1/*/*/*` |
   | accounts-suspended | `acmebank/solace/account/suspended/v1/*` |
 
@@ -1006,7 +1006,7 @@ stops all transactions on that account number immediately.
 * Start with creating a new queue for subscribing to the _Account Suspended_ event
 * Follow the steps from the previous sections and create two new queues similarly with the following name and
   subscription:
-  | Queue name | Subscription | | ---- | ----- |
+  | Queue name | Subscription | 
   | accounts-suspended | `acmebank/solace/account/suspended/v1/*` |
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
