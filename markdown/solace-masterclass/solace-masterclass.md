@@ -857,7 +857,8 @@ suspended by publishing an _Account Suspended_ event.
 * Start with creating a new queue for subscribing to the _Fraud Detected event_
 * Follow the steps from the previous sections and create two new queues similarly with the following name and
   subscription:
-  | Queue name | Subscription | 
+  | Queue name | Subscription |
+  | ---- | ----- |
   | fraud-detected-events | `acmebank/solace/fraud/detected/v1/*/*/*` |
   | accounts-suspended | `acmebank/solace/account/suspended/v1/*` |
 
@@ -1006,7 +1007,8 @@ stops all transactions on that account number immediately.
 * Start with creating a new queue for subscribing to the _Account Suspended_ event
 * Follow the steps from the previous sections and create two new queues similarly with the following name and
   subscription:
-  | Queue name | Subscription | 
+  | Queue name | Subscription |
+  | ---- | ----- |
   | accounts-suspended | `acmebank/solace/account/suspended/v1/*` |
 > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
 > here to understand the Solace topic routing concept better.
