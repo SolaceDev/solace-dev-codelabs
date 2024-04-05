@@ -156,10 +156,10 @@ Make sure that you enable the following permissions during the process :
 - Event Portal—Read and Write
 - Environments—Read and Write
 - Account Management—Read and Write
-Below are some screenshots of the required permissions :
-![ep-token-rights-1.png](img/commons/ep-token-rights-1.png)
-![ep-token-rights-2.png](img/commons/ep-token-rights-2.png)
-![ep-token-rights-3.png](img/commons/ep-token-rights-3.png)
+  Below are some screenshots of the required permissions :
+  ![ep-token-rights-1.png](img/commons/ep-token-rights-1.png)
+  ![ep-token-rights-2.png](img/commons/ep-token-rights-2.png)
+  ![ep-token-rights-3.png](img/commons/ep-token-rights-3.png)
 
 > aside negative **Keep this token safe as it will not be available again**
 
@@ -230,7 +230,7 @@ The dependency between the applications and events are described as below :
     * **Order service** subscribes to _Order-Confirmed_ event for user status updates
 * **Payment service** subscribes to _Order-Confirmed_ event and integrates with PSP/Gateway for payment transaction
   processing
-* _Order-Confirmed_:
+* **Payment service**
     * Publishes _Payment Created_ event
     * Publishes _Payment Updated_ event
     * **Order service** subscribes to the _Payment Created_ event for user updates
@@ -270,7 +270,7 @@ relevant events which it uses for showing realtime status updates on the order l
 - Navigate to the directory: **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service**
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
-  url: [http://localhost:9002/](http://localhost:9002/)
+  url: [http://localhost:9002/](http://localhost:9002/) in the Chrome browser (or any one available in the VM)
 - You should see a page which looks like this :
   ![Order-Service-Application.png](img/retail-domain-usecase/Order-Service-Application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
@@ -435,6 +435,11 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
         orderUpdatesEventReceiver.start();
         orderUpdatesEventReceiver.receiveAsync(buildOrdersUpdatesEventHandler(orderUpdatesEventReceiver));
         ```
+
+> aside positive This code snippet creates and configures a receiver for subscribing to the persistent messages
+> attracted in the **all-order-updates** queue.
+> The receiver links an asynchronous callback handler which processes the event
+
 * Introduce the below two methods in the same class :
     ```Java 
     private MessageReceiver.MessageHandler buildOrdersUpdatesEventHandler(final PersistentMessageReceiver orderUpdatesEventReceiver) {
@@ -452,6 +457,9 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
       });
     }
     ```
+
+> aside positive This code snippet is the handler for the events which are being consumed by the above-configured
+> receiver.
 
   ```Java
   private boolean processOrderUpdate(final String eventTopic, final String eventJson) {
@@ -482,6 +490,9 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
       }
   }
   ```
+
+> aside positive This code snippet identifies the topic which the event from the queue was published on and depending on
+> the **object type (Order, Payment or Shipment)** implements an appropriate business logic
 
 * In the terminal for the **Order Service**, stop the service if running and execute the command:
   **mvn clean spring-boot:run**
@@ -723,7 +734,7 @@ The Core Banking Application randomly generates the above transactions on all th
 * Navigate to the directory: **/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking**
 * Run the command : `mvn clean install`
 * Run the
-  command : `java -jar core-banking/target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
+  command : `java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
 
 > aside positive You would have used the above connection parameters in the earlier step for the Account Management
 > application
@@ -791,7 +802,7 @@ To fix the error encountered above, you need to manually create the Queue object
 
 Now that the missing queue has been created with the proper subscription, restart/rerun the **Core Banking**
 application using the same command :
-`java -jar core-banking/target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
+`java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
 
 #### Output
 
@@ -893,6 +904,8 @@ suspended by publishing an _Account Suspended_ event.
           fraudDetectedEventReceiver.start();
           fraudDetectedEventReceiver.receiveAsync(buildFraudDetectedEventHandler(fraudDetectedEventReceiver));
       ```
+      > aside positive This code snippet builds a subscriber which will receive persistent messages published to the
+      queue **fraud-detected-events**
         * Introduce the below new methods in the SolaceEventPublisher.java file :
             ```Java
                   private MessageReceiver.MessageHandler buildFraudDetectedEventHandler(PersistentMessageReceiver fraudDetectedEventReceiver) {
@@ -910,6 +923,8 @@ suspended by publishing an _Account Suspended_ event.
                       });
                   }
           ```
+          > aside positive This defines a handler which processes the incoming event from the **fraud-detected-events**
+          queue.
 * Open the file named **com.solace.acme.bank.accountmanagement.service.FraudService.java** in the same project :
     * Introduce the following new method as below in the file :
         ```Java
@@ -930,6 +945,8 @@ suspended by publishing an _Account Suspended_ event.
                 }
               }
         ```
+      > aside positive This code snippet contains the business logic for processing the Fraud Detected event payload
+      queue.
 * Open the file named **com.solace.acme.bank.accountmanagement.service.AccountService.java** in the same project :
     * Introduce the following method in the class :
       ```Java
@@ -943,6 +960,8 @@ suspended by publishing an _Account Suspended_ event.
             AccountsList.getInstance().getAccountsList().put(accountNumber, account);
           }
       ```
+      > aside positive This code snippet contains the business logic for instantiating
+      > and publishing an _Account Suspended_ event in response to the _Fraud Detected_ transaction
 
 #### 4.2 Core Banking
 
@@ -972,6 +991,9 @@ stops all transactions on that account number immediately.
           accountSuspendedEventReceiver.start();
           accountSuspendedEventReceiver.receiveAsync(buildAccountsSuspendedEventHandler(accountSuspendedEventReceiver)); 
       ```
+      > aside positive This code snippet builds a subscriber which will receive persistent messages published to the
+      queue **accounts-suspended**
+
     * Add in the following method in the same file :
       ```Java
           private MessageReceiver.MessageHandler buildAccountsSuspendedEventHandler(PersistentMessageReceiver accountOpenedEventReceiver) {
@@ -990,22 +1012,10 @@ stops all transactions on that account number immediately.
             });
           }
       ```
-* Open the file **com.solace.acme.bank.corebanking.service.AccountsEventProcessor.java** in the same project :
-    * Add in the following two methods in the file :
-      ```Java
-          public boolean processAccountOpenedEvent(final String accountOpenedActionEventPayload) {
-              try {
-                  AccountAction accountOpenedEvent = objectMapper.readValue(accountOpenedActionEventPayload, AccountAction.class);
-                  Account openedAccount = Account.builder().accountNumber(accountOpenedEvent.getAccountNum()).currentStatus(Account.Status.OPENED).build();
-                  AccountsList.getInstance().getAccountsList().put(openedAccount.getAccountNumber(), openedAccount);
-                  return true;
-              } catch (JsonProcessingException jsonProcessingException) {
-                  log.error("Error encountered while processing AccountOpened event:{}, exception:", accountOpenedActionEventPayload, jsonProcessingException);
-                  return false;
-              }
-          }
-      ```
+      > aside positive This code snippet builds a handler for processing the events attracted to the queue **accounts-suspended**
 
+* Open the file **com.solace.acme.bank.corebanking.service.AccountsEventProcessor.java** in the same project :
+    * Add in the following method in the file :
       ```Java
           public boolean processAccountSuspendedEvent(final String accountSuspendedActionEventPayload) {
               try {
@@ -1020,6 +1030,7 @@ stops all transactions on that account number immediately.
               }
          }
       ```
+      > aside positive This code snippet implements the business logic for handling the suspension of an account
 
 #### 4.3 Testing the flow
 
@@ -1029,7 +1040,7 @@ stops all transactions on that account number immediately.
 * In the terminal where you were building the **Core-Banking** application, stop the application (if running) run the
   commands :
     * `mvn clean install`
-    * `java -jar core-banking/target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
+    * `java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
 * Make sure that the **Fraud-Detection** service is also running.
 * Start with a clean flow and kick off the flow by creating multiple new accounts in the **Account Management**
   application
@@ -1086,6 +1097,6 @@ Thanks for participating in this masterclass! Let us know what you thought in
 the [Solace Community Forum](https://solace.community/)! If you found any issues along the way, we'd appreciate it if
 you'd raise them by clicking the Report a mistake button at the bottom left of this Codelab.
 
-
 ## Appendix and references
+
 - Link for the Solace Cloud Account: [Solace Cloud Account](https://console.solace.cloud/home?login=true)
