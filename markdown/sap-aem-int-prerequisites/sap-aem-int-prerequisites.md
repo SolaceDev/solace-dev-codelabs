@@ -28,9 +28,7 @@ As part of the workshop we will be deploying a couple of event driven scenarios 
 Please note that in order to participate you will need to be ready to use the following services in your own landscape:
 - SAP Integration Suite, advanced event Mesh
 - SAP Integration Suite
-- SAP Build Workzone, standard edition
-- SAP Workflow Management
-- SAP Business Application Studio
+- SAP Build Process Automation
 - SAP Cloud Foundry
 - Asapio Cloud Integration with Advanced Event Mesh or Solace connector
 
@@ -53,7 +51,25 @@ Asapio are offering free 30-day trials for those participating in the AEM Rapid 
 
 Duration: 0:10:00
 
-TODO: explain steps.
+You will need access to the following services during the workshop.
+Please make sure you follow the necessary steps to activate either a free tier (where available) or ensure all participants have access to an instance of these services if your company has already subscribed to them.
+
+### SAP Integration Suite, advanced event mesh
+
+![Advanced Event Mesh](img/DiscoveryCenter-AEM.png)
+
+### SAP Integration Suite
+
+![Integration Suite](img/DiscoveryCenter-IS.png)
+
+### SAP Build Process Automation
+
+![Build Process Automation](img/DiscoveryCenter-BuildProcessAutomation.png)
+
+### SAP BTP, Cloud Foundry Runtime
+
+![Cloud Foundry](img/DiscoveryCenter-CloudFoundry.png)
+
 
 ## Testing Connectivity/Access to AEM
 
