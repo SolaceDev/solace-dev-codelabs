@@ -4,7 +4,7 @@ id: ep-connect-ep-broker
 tags: eventportal
 categories: eventportal
 environments: Web
-status: Hidden
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker
 
 # Connecting Event Portal to a runtime Event Broker
