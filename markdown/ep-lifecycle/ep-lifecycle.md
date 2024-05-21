@@ -4,7 +4,7 @@ id: ep-lifecycle
 tags:
 categories: eventportal
 environments: Web
-status: Hidden
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle
 
 # Event Portal: event-driven innovation that's faster, easier, more resilient
