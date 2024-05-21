@@ -3,7 +3,7 @@ summary: This Codelab describes the whole
 technical hands-on part of the Solace Masterclass session
 id: solace-masterclass
 tags: Solace-Masterclass, Java, Springboot
-categories:
+categories: solace
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-masterclass
@@ -14,7 +14,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ![Solace Masterclass](img/commons/Solace-masterclass.jpeg)
 
-This Codelab contains the technical hands-on section of the **Solace Masterclass : Implementing
+This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing
 Event-Driven-Architectures**
 The participants of this masterclass will be implementing this Codelab in the Strigo virtual machine provided as a part
 of the masterclass session.
@@ -47,14 +47,16 @@ Due to time limit considerations, we will be implementing only a selected subset
 
 ## Solace Cloud Account and broker provisioning
 
-### Step 1 : Solace Cloud Account
+### Step 1: Solace Cloud Account
 
 In case you do not have an active Solace cloud account, you can register for one via the
-link :  [Solace trial account registration](https://console.solace.cloud/login/new-account?product=event-streaming)
+link: [Solace trial account registration](https://console.solace.cloud/login/new-account?product=event-streaming)
+You can log in to the newly created Solace cloud account using the
+link : [Solace Cloud Account](https://console.solace.cloud/home?login=true)
 Once you have registered and logged in to the Solace cloud account, you can get started with provisioning a Solace
 developer grade broker which will be used in the next sections.
 
-### Step 2 : Solace broker provisioning
+### Step 2: Solace broker provisioning
 
 - Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like
   this:
@@ -110,83 +112,30 @@ The Event Portal is a cloud-based tool that simplifies the design of your event-
 Event Portal, you can:
 
 * Define and track relationships between applications in a highly decoupled EDA.
-* Easily create and manage events using a user-friendly GUI.
+* Create and manage events using a user-friendly GUI.
 
 In summary, the Event Portal streamlines event management, making it an essential part of your EDA toolkit.
 
-### Step 1 : Import Postman objects
+### Step 1 : Import Event Portal designs
 
-In the virtual machine box provided to you for this masterclass session, a GitHub repository has been checked out.
-
-- Navigate to the folder in a file explorer : `/home/ubuntu/GitHub/solace-masterclass-code/postman-collections`
-- Start Postman application from the desktop by right-clicking on the Postman icon and click _Execute_
-- Click on the **Workspaces** button the menu which will display a list of all workspaces under this account. Create a
-  new one for you to work with for this hands-on exercise as below :
-  ![create-workspace.png](img/commons/create-workspace.png)
-- Select **Blank workspace**, enter your first name and **Only me** as the access type and click **Create** as below :
-  ![blank-workspace-step1.png](img/commons/blank-workspace-step1.png)
-  ![blank-workspace-step2.png](img/commons/blank-workspace-step2.png)
-
-> aside negative Please make sure to select and work only within this workspace as this is a shared account, and you
-> can access and disrupt other's activities mistakenly
-
-- Import the file with the name **Solace-masterclass-collection.json** as a Postman collection from the location:
-  /home/ubuntu/GitHub/solace-masterclass-code/postman-collections
-  ![postman-collection-import.png](img/commons/postman-collection-import.png)
-
-- Once imported, you should be able to see a Postman collection as below :
-  ![collection-imported.png](img/commons/collection-imported.png)
-- Similarly, import the file with the name **Solace-masterclass-environment.json** from the location:
-  /home/ubuntu/GitHub/solace-masterclass-code/postman-collections
-  ![Postman-environment-import.png](img/commons/Postman-environment-import.png)
-
-- Once imported, you should be able to see a Postman environment as below :
-  ![environment-imported.png](img/commons/environment-imported.png)
-
-### Step 2 : Create Event Portal token
-
-Follow the steps detailed in the link over
-here: [Creating an API Token](https://docs.solace.com/Cloud/ght_api_tokens.htm#Create)
-Make sure that you enable the following permissions during the process :
-
-- Event Portal 2.0
-    - Designer - Read and Write
-    - Runtime Event Manager - Read and Write
-    - API Management / Dev Portal - Read and Write
-- Event Portal—Read and Write
-- Environments—Read and Write
-- Account Management—Read and Write
-  Below are some screenshots of the required permissions :
-  ![ep-token-rights-1.png](img/commons/ep-token-rights-1.png)
-  ![ep-token-rights-2.png](img/commons/ep-token-rights-2.png)
-  ![ep-token-rights-3.png](img/commons/ep-token-rights-3.png)
-
-> aside negative **Keep this token safe as it will not be available again**
-
-### Step 3 : Import Event Portal design
-
-- Open the Postman **environment** that you had imported earlier.
-- Paste the token created earlier into the Current value column of the **api_key** variable.
-  ![ep-token-setup.png](img/commons/ep-token-setup.png)
+- From the Solace cloud account screen, click on the **Designer** button and enter the Event Portal's Designer page as
+  below : ![ep-designer-button.png](img/commons/ep-designer-button.png)
+- Click on the **Import Application Domains** button by clicking on the three dots in the top right corner as below :
+  ![ep-app-domain-import.png](img/commons/ep-app-domain-import.png)
+- A file selector dialog box will be displayed so that you can select the application domain file of your choice.
+- Navigate to the folder : `/home/ubuntu/GitHub/solace-masterclass-code/ep-app-domains`
 - As described in **Section 2 - Use case introduction**, you can choose to implement from multiple industry domains.
-  Based on your choice, change the value of the variable
-  **epSampleDomain** to refer to the industry that you want to work with You can choose any of the below values :
-    - Retail Industry : `masterclass-retail`
-    - Banking industry : `acme-bank`
+  Based on your choice, you can select one of the two domains files as below :
+    - Banking Industry : `Acme_Bank_App_Domain.json`
+    - Retail industry : `Acme_Retail_App_Domain`
+      ![ep-app-domain-files.png](img/commons/ep-app-domain-files.png)
+- Select on a file and click  **Open**, this will result in the application domain being imported as below :
+  ![ep-app-domain-imported.png](img/commons/ep-app-domain-imported.png)
 
-> aside negative **Please make sure to copy the above codes carefully**.
+> aside positive you can import as many application domains as you wish,
+> but for time considerations its advisable to choose one example for implementation.
 
-- Make sure to save the changes to the environment file by clicking on the **Save** button as shown :
-  ![postman-env-save.png](img/commons/postman-env-save.png)
-- Open the Postman **collection** that you had imported earlier (as marked by the red bubble numbered 1)
-- Choose the **Training Environment Definition** from the dropdown (as marked by the red bubble numbered 2)
-- Click on the **Runs** tab and then **Run Collection** button as below (as marked by the red bubble numbered 3)
-  ![collection-execution.png](img/commons/collection-execution.png)
-- Click on the **Run Establish Demo Environment** button on the right side without changing any of the scripts or order
-  as below :
-  ![run-collection.png](img/commons/run-collection.png)
-- Once the script has finished execution, switch over to the Solace Cloud Console and Open Event Portal. You should be
-  able to see the objects from your selected industry as below :
+- Inside the application domain, you should be able to see the objects from your selected industry as below :
     - Retail industry :
       ![retail-domain-ep.png](img/retail-domain-usecase/retail-domain-ep.png)
     - Banking industry :
@@ -1012,7 +961,8 @@ stops all transactions on that account number immediately.
             });
           }
       ```
-      > aside positive This code snippet builds a handler for processing the events attracted to the queue **accounts-suspended**
+      > aside positive This code snippet builds a handler for processing the events attracted to the queue *
+      *accounts-suspended**
 
 * Open the file **com.solace.acme.bank.corebanking.service.AccountsEventProcessor.java** in the same project :
     * Add in the following method in the file :
