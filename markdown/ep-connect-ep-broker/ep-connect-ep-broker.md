@@ -36,16 +36,16 @@ Follow the instructions here: [Getting Started with PubSub+ Standard Edition](ht
 ### Get an Event Portal Access Token
 Duration: 0:07:00
 1. Log into your newly created Solace Platform Account
-1. Go to Token Management in Event Portal <br><![Image](img/1.png)
-1. Create a token<br>![Image](img/2.png)
+1. Go to Token Management in Event Portal <br><![Image](img/1.png)<br><br>
+1. Create a token<br>![Image](img/2.png)<br><br>
 1. Name the token ```Demo Setup```
 1. Give the token full Read and Write access to:<br>
 Event Portal 2.0<br>
 Event Portal<br>
 Account Management<br>
 Environments
-1. Click on Create Token <br><br>![Image](img/4.png)
-1. Confirm that your token has the following permissions:<br>![Image](img/5.png)
+1. Click on Create Token <br><br>![Image](img/4.png)<br><br>
+1. Confirm that your token has the following permissions:<br>![Image](img/5.png)<br><br>
 1. Copy the token value and save it in a text file on your desktop. 
 > aside positive
 > This token will be used multiple times through the demo, so keep it handy.
@@ -58,45 +58,46 @@ Duration: 0:03:00
 [Environment file](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/EventPortalEnvironment.postman_environment.json)<br>
 [Script to populate Event Portal](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/PopulateEventPortaldemo.postman_collection.json)<br>
 [Script to remove all objects from  Event Portal](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/TearDownEventPortal.postman_collection.json)
-1. Drag the files from your hard drive to the left-hand column of Postman to import<br>![Image](img/6.png)
+1. Drag the files from your hard drive to the left-hand column of Postman to import<br>![Image](img/6.png)<br><br>
 
 ### Configure Postman with your Event Portal token
 Duration: 0:05:00
-1. Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variable set.<br>![Image](img/7.png)
-1. Fill in the CURRENT VALUE column for  api_key with the token you generated in Event Portal and saved in a text file.<br>![Image](img/8.png)
-1. Save the environment variables.<br>![Image](img/9.png)
+1. Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br>![Image](img/7.png)<br><br>
+1. Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br>![Image](img/8.png)<br><br>
+1. Save the environment variables.<br>![Image](img/9.png)<br><br>
 
 ### Run the Postman script
 Duration: 0:10:00
-1. Switch back to the Collections tab, hit the three dots next to “Generate and populate Event Portal demo”, then click “Run collection”<br>![Image](img/10.png)
-1. On the next screen, click on Run Generate and populate Event Portal<br>![Image](img/11.png)
-1. Wait for the script to complete. Be Patient, there is a lot of commands to run! 
+1. Switch back to the Collections tab, hit the three dots next to “Generate and populate Event Portal demo”, then click “Run collection”<br>![Image](img/10.png)<br><br>
+1. On the next screen, click on Run Generate and populate Event Portal<br>![Image](img/11.png)<br><br>
+1. Wait for the script to complete. Be patient, there are a lot of commands to run! 
 
 
-## Connect Event Management Agent to Event Portal
+## Enable runtime configuration for your environments
 Duration: 0:03:00
-1. To guide application promotion, Event Portal models all of your runtime environments.  To do this, go to the profile icon in the lower left hand side, then click on Environments.<br>![Image](img/12.png)
-1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13.png)
+1. To guide application promotion, Event Portal models all of your runtime environments.  To do this, go to the profile icon in the lower left hand side, then click on Environments.<br>![Image](img/12.png)<br><br>
+1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13.png)<br><br>
 ## Update the event management agent to connect to your local broker
 Duration: 0:10:00
-1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)
-1. On the next screen, click on the three dots next to the PROD-solace event broker, then click on “Edit Connection Details”<br>![Image](img/15.png)
+1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)<br><br>
+1. On the next screen, click on the three dots next to the PROD-solace event broker, then click on “Edit Connection Details”<br>![Image](img/15.png)<br><br>
 1. Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br>
 Message VPN (1) is typically: ```default```<br>
 SEMP username (2) is typically: ```admin```<br>
 SEMP URL (3) can be found, if using docker by finding the brokers ip address using the following command:<br> ```docker inspect  -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' solace```
 
-Once you have the ip address, the SEMP_URL is typically port 8080, thus ```http://<BROKER-IP>:8080```  <br><br> Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)
+Once you have the ip address, the SEMP_URL is typically port 8080, thus ```http://BROKER-IP:8080```  <br><br> Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
 
 ## Run the Event Management Agent
 Duration: 0:10:00
 
 > aside positive
 > These instructions are also on the Event Portal once you create the Event Management Agent.
+
 Now it’s time to connect the Event Portal model and the runtime broker using the Event Management Agent.
 
-1. From the main Runtime Event Manager tab, click on the three dots and go to Install Event Management Agent<br>![Image](img/emainstall.png)
-1. Click on the download button and save the file to your hard drive. <br>![Image](img/18.png)
+1. From the main Runtime Event Manager tab, click on the three dots and go to Install Event Management Agent<br>![Image](img/emainstall.png)<br><br>
+1. Click on the download button and save the file to your hard drive. <br>![Image](img/18.png)<br><br>
 1. Execute the following commands at the command line:
 ```
 export PASSWORD_ENV_VAR_1=envVarPassword1
@@ -111,18 +112,18 @@ where ```PASSWORD_ENV_VAR_1``` is the password for your locally running broker a
 4. Confirm the connection by running:<br>
 ```docker logs -f event-management-agent```<br>
 
-The last line should be: ```Started event-management agent```<br>![Image](img/19.png)
-5. Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green “Connected” label<br>![Image](img/20.png)
+The last line should be: ```Started event-management agent```<br>![Image](img/19.png)<br><br>
+5. Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green “Connected” label<br>![Image](img/20.png)<br><br>
 
 
 ## Confirm EMA Connection to Broker using an Audit
 Duration: 0:05:00
 
 Since the EMA is used for both audit and for config push, we will confirm broker connectivity by running an audit.
-1. Go to Runtime Event Manager, then click on the ```us-central-solace-Prod``` modelled event mesh.<br>![Image](img/21.png)
-1. Click on Audit, then “Run Discovery Scan”<br>![Image](img/22.png)
-1. Confirm you want to run a Discovery Scan<br>![Image](img/23.png)
-1. If you see this message, you’ve successfully created a connection between the EMA and your event broker.<br>![Image](img/24.png)
+1. Go to Runtime Event Manager, then click on the ```us-central-solace-Prod``` modelled event mesh.<br>![Image](img/21.png)<br><br>
+1. Click on Audit, then “Run Discovery Scan”<br>![Image](img/22.png)<br><br>
+1. Confirm you want to run a Discovery Scan<br>![Image](img/23.png)<br><br>
+1. If you see this message, you’ve successfully created a connection between the EMA and your event broker.<br>![Image](img/24.png)<br><br>
 
 You are done!
 

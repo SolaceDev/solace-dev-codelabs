@@ -11,13 +11,15 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
-Duration: 0:05:00
+Duration: 0:03:00
 
-Enter a codelab overview here: what & why and github repo link where you can find related code if applicable
+Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.
+
+This code lab takes you through the lifecycle of a new event-driven application, from finding relevant events to jump start development, to generating rock-solid code, to automated event configuration with your existing CICD pipeline.
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+Duration: 0:02:00
 
 **For all sections, you'll need to:**
 - Complete the *Connecting Event Portal to a runtime Event Broker* code lab
@@ -27,30 +29,40 @@ Duration: 0:07:00
 - A GitHub account.  If you don’t have one, you can [get one free](https://github.com/signup). 
 
 ## Discover event-driven stuff you didn’t know existed
+Duration: 0:04:00
 ### Find interesting events to use in your solution
 1. In the home screen of Solace Cloud, click on Catalog.<br>![Image](img/1.png)<br><br>
 1. Within Catalog, click on the Events tab, then search for ```customer``` in the search box.  You’ll note that there are two existing customer events that would be perfect.<br>![Image](img/2.png)<br><br>
 1. Also, look for order related events by searching for ```order```<br>![Image](img/3.png)<br><br>
 
 ## Easily design EDA solutions, together 
+Duration: 0:15:00
 ### Create an Application Domain to house your application, event and schema
 1. Now that we have candidate events, click on the Designer icon in the left bar (1), then Create Application Domain. (2)<br>![Image](img/4.png)<br><br>
 1. Configure the domain:<br>
 Name (1):  ```Customer360```<br>
-Description (2): ```360 view of customer```<br>
-Select all 3 checkboxes, enforcing topic uniqueness (3), enforcing topic domain (4) and allowing descriptions to be edited  (5)<br>
-Add a Solace (6) topic domain of ``acmeretail/c360`` (7)<br>
+Description (2): ```collect customer behavior from across domains```<br>
+Add a Solace (3) topic domain of ``acmeretail/c360`` (4)<br>
+Select all 3 checkboxes, enforcing topic uniqueness (5), enforcing topic domain (6) and allowing descriptions to be edited  (7)<br>
+
 Then click on OK
 <br>![Image](img/5.png)<br><br>
 ### Graphically create your application
+1. Go into the newly created Customer360 domain.<br><br>
 1. Click on Add Objects and drag “New Application” to the canvas and name it `Customer 360`.<br>![Image](img/6.png)<br><br>
 1. Again click on Add Objects, and drag a Shared Event to the canvas<br>![Image](img/7.png)<br><br>
-1. In the popup, select *Order Created*, then click on Add. <br>![Image](img/8.png)<br><br>
-1. Repeat this process to add two more shared events. For the events, select *Customer Updated* and *Customer Created*, which you discovered in the catalog earlier. 
-1. To define which events Customer 360 subscribe to, hover over the *Order Created* event and drag the arrow to the *Customer360* application.  Repeat for *Customer Created* and *Customer Updated* events.<br>![Image](img/10.png)<br><br>
-
+1. In the popup, select *Customer Updated*, then click on Add.
+1. Repeat this process to add the *Customer Created* shared event, which you discovered in the catalog earlier. 
+1. To define which events Customer 360 subscribes to, hover over the *Order Created* event and drag the arrow to the *Customer360* application.  Repeat for *Customer Created* and *Customer Updated* events.<br>![Image](img/10.png)<br><br>
+1. Drag a “New Event” onto the canvas and call it ```Customer Insight Generated```.
+1. To define the event Customer 360 publishes, hover over the Customer360 application and drag the arrow to the Customer Insight Generated event.<br>![Image](img/published.png)<br><br>
+### Add an event directly from the catalog
+1. Navigate back to the catalog (1), click on the Events tab (2), select *Order Created* (3). <br>![Image](img/000086.png)<br><br>
+1. In the right hand column, click on the latest version  <br>![Image](img/000087.png)<br><br>
+1. Click on Associate with Application<br>![Image](img/000088.png)<br><br>
+1. Select the Customer360 domain (1), the latest Customer360 version (2), and specify that you want to subscribe to the event (3).  Then click on Save.<br>![Image](img/000089.png)<br><br>
 ### Create consumers for your application
-1. Click on the Customer 360 application and in the resulting pop up, click on Open Application<br>![Image](img/12.png)<br><br>
+1. In the resulting screen, scroll down to the Referenced By section, click on the three dots next to Customer 360, and then Open Application<br>![Image](img/000091.png)<br><br>
 1. Click on Edit This Version<br>![Image](img/13.png)<br><br>
 1. Click on the Consumers tab (1), then on Add Consumer (2)<br>![Image](img/14.png)<br><br>
 1. Name the queue ```C360.ORDERS``` (1)<br>
@@ -61,8 +73,25 @@ Then click on Add Subscriptions (4) <br>![Image](img/15.png)<br><br>
 1. Repeat the process to create the consumer for the two Customer events, naming the queue ```C360.CUSTOMERS```   When you click on Add Subscriptions, select both of the Customer events and a subscription for both.<br>![Image](img/17.png)<br><br>
 1. To save your changes, click on Save & Close.<br>![Image](img/18.png)<br><br>
 
+### Create a new Customer Insight Generated event
+1. You will use this schema file for the payload of the event.  Download it and save it to your hard drive. [Schema file](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/customerinsight.json)<br>
+1. Click on the Schemas tab (1)for the Customer360 domain, then click on Create Schema(2)<br>![Image](img/19.png)
+1. Name the schema ```Customer Insight```, then the Import from File button.  Navigate to the ```customerinsight.json``` schema file you just downloaded.<br>![Image](img/20.png)
+1. Click on Save and Close.
+1. Click on the Events tab (1) at the top of the screen, then click on Customer Insight Generated (2). <br>![Image](img/21.png)
+1. Click on Edit This Version<br>![Image](img/22.png)
+1. Define the Topic Address.  Start by clicking on the field and selecting the ```acmeretail/c360``` topic domain<br>![Image](img/23.png)
+1. Type in the remainder of the topic address, using brackets for parameters.  The final result should be: ```acmeretail/c360/customerinsight/generated/v1/{insighttype}/{customerid}```<br>![Image](img/24.png)
+
+1. Scroll down further and click on Select Schema.<br>![Image](img/schema.png)
+1. Select the Customer Insight schema you just created.<br>![Image](img/25.png)
+> aside positive
+> In a more production-ready use case, you would likely use an enumeration for {insighttype}.  For speed you will use an unbounded variable in this lab. 
+
+
 ## Give your developers a headstart with code generation
 ### AsyncAPI export
+Duration: 0:05:00
 1. Click on Applications (1) in the top menu, then on Customer360(2)<br>![Image](img/26.png)<br><br>
 1. Click on the three dots next to version 0.1.0 and click on Download AsyncAPI.  Save the file on your hard drive.<br>![Image](img/27.png)<br><br>
 1. In a web browser, navigate to AsyncAPI Studio at  ```https://studio.asyncapi.com```<br>![Image](img/28.png)<br><br>
@@ -76,6 +105,7 @@ Then click on Add Subscriptions (4) <br>![Image](img/15.png)<br><br>
 > aside positive
 >You’ll use the source code zip file in the CICD/GitHub Actions portion of the lab.
 ## Provide exactly the events you need, when you need them
+Duration: 0:15:00
 ### Assign your application to an environment/event broker
 1. Click on Applications, then on Customer360.<br>![Image](img/32.png)<br><br>
 1. Click on the Runtime tab.<br>![Image](img/48.png)<br><br>
@@ -106,6 +136,7 @@ Then click on Add Subscriptions (4) <br>![Image](img/15.png)<br><br>
 1. In the popup, review the details of what queues will be removed.  Then click on Remove<br>![Image](img/50.png)<br><br>
 
 ## Make your existing CICD even better
+Duration: 0:20:00
 > aside positive
 >You need to have a GitHub account for this portion.  If you don’t have one, you can [get one free](https://github.com/signup). 
 
@@ -142,9 +173,9 @@ Then click on Add Subscriptions (4) <br>![Image](img/15.png)<br><br>
 
 Duration: 0:07:00
 
-✅ < Fill IN TAKEAWAY 1>   
-✅ < Fill IN TAKEAWAY 2>   
-✅ < Fill IN TAKEAWAY 3>   
+- Finding relevant events to jump start development
+- Generating rock-solid code
+- Automated event configuration with your existing CICD pipeline.
 
 ![Soly Image Caption](img/soly.gif)
 
