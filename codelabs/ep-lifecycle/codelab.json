@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-05-22T16:24:19Z",
+  "id": "ep-lifecycle",
+  "duration": 71,
+  "title": "Event Portal: event-driven innovation that's faster, easier, more resilient",
+  "summary": "See how Event Portal can guide you on a smooth path from fantastic idea to the hands of your users",
+  "source": "main/markdown/ep-lifecycle/ep-lifecycle.md",
+  "theme": "",
+  "status": [
+    "hidden"
+  ],
+  "category": [
+    "eventportal"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle",
+  "url": "ep-lifecycle"
+}

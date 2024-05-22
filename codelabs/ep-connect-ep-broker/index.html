@@ -1,0 +1,165 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Connecting Event Portal to a runtime Event Broker</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="ep-connect-ep-broker"
+                  title="Connecting Event Portal to a runtime Event Broker"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.</p>
+<p>This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push, which we will explore in the next Codelab.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="7">
+        <ul>
+<li>Postman installed on a local machine, you can <a href="https://www.postman.com/downloads/" target="_blank">download it for free</a>.</li>
+<li>Docker installed on a local machine.</li>
+<li>A completely fresh installation of Event Portal.  Trainers and SEs should request a new Solace Platform account. Others can get a <a href="https://console.solace.cloud/login/new-account?product=event-streaming" target="_blank">free trial</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Start a local event broker in a Docker container" duration="0">
+        <p>Follow the instructions here: <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">Getting Started with PubSub+ Standard Edition</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Postman to populate Event Portal Environments and MEMs" duration="10">
+        <h2 is-upgraded>Get an Event Portal Access Token</h2>
+<ol type="1">
+<li>Log into your newly created Solace Platform Account</li>
+<li>Go to Token Management in Event Portal <br>&lt;<img alt="Image" src="img/ab0797a7e1af34de.png"><br><br></li>
+<li>Create a token<br><img alt="Image" src="img/d40fe8d16d4d8a1e.png"><br><br></li>
+<li>Name the token <code>Demo Setup</code></li>
+<li>Give the token full Read and Write access to:<br> Event Portal 2.0<br> Event Portal<br> Account Management<br> Environments</li>
+<li>Click on Create Token <br><br><img alt="Image" src="img/6e2e573afd5eb882.png"><br><br></li>
+<li>Confirm that your token has the following permissions:<br><img alt="Image" src="img/151f911ca6ed9a8c.png"><br><br></li>
+<li>Copy the token value and save it in a text file on your desktop.</li>
+</ol>
+<aside class="special"><p> This token will be used multiple times through the demo, so keep it handy.</p>
+</aside>
+<h2 is-upgraded>Import scripts into Postman</h2>
+<ol type="1">
+<li>Launch the desktop Postman applicatication</li>
+<li>Download the Postman Collection and Environment files below:<br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/EventPortalEnvironment.postman_environment.json" target="_blank">Environment file</a><br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/PopulateEventPortaldemo.postman_collection.json" target="_blank">Script to populate Event Portal</a><br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/TearDownEventPortal.postman_collection.json" target="_blank">Script to remove all objects from  Event Portal</a></li>
+<li>Drag the files from your hard drive to the left-hand column of Postman to import<br><img alt="Image" src="img/74eb622af73b83ee.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Configure Postman with your Event Portal token</h2>
+<ol type="1">
+<li>Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br><img alt="Image" src="img/ee17bd7beeb48610.png"><br><br></li>
+<li>Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br><img alt="Image" src="img/c602076eca3bdab8.png"><br><br></li>
+<li>Save the environment variables.<br><img alt="Image" src="img/d50a135d405cb909.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Run the Postman script</h2>
+<ol type="1">
+<li>Switch back to the Collections tab, hit the three dots next to &#34;Generate and populate Event Portal demo&#34;, then click &#34;Run collection&#34;<br><img alt="Image" src="img/b5b70e4539c3292a.png"><br><br></li>
+<li>On the next screen, click on Run Generate and populate Event Portal<br><img alt="Image" src="img/2fba6ff189407105.png"><br><br></li>
+<li>Wait for the script to complete. Be patient, there are a lot of commands to run!</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Enable runtime configuration for your environments" duration="3">
+        <ol type="1">
+<li>To guide application promotion, Event Portal models all of your runtime environments.  To do this, go to the profile icon in the lower left hand side, then click on Environments.<br><img alt="Image" src="img/24128d44be60d9d1.png"><br><br></li>
+<li>To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br><img alt="Image" src="img/c13dcb7cf15bf0b8.png"><br><br></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Update the event management agent to connect to your local broker" duration="10">
+        <ol type="1">
+<li>Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br><img alt="Image" src="img/6a1e5c2d3dc3f3e.png"><br><br></li>
+<li>On the next screen, click on the three dots next to the PROD-solace event broker, then click on &#34;Edit Connection Details&#34;<br><img alt="Image" src="img/fc261df67c816ac5.png"><br><br></li>
+<li>Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br> Message VPN (1) is typically: <code>default</code><br> SEMP username (2) is typically: <code>admin</code><br> SEMP URL (3) can be found, if using docker by finding the brokers ip address using the following command:<br> <code>docker inspect  -f '&#123;&#123;range.NetworkSettings.Networks}}&#123;&#123;.IPAddress}}&#123;&#123;end}}' solace</code></li>
+</ol>
+<p>Once you have the ip address, the SEMP_URL is typically port 8080, thus <code>http://BROKER-IP:8080</code>  <br><br> Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the Event Management Agent" duration="10">
+        <aside class="special"><p> These instructions are also on the Event Portal once you create the Event Management Agent.</p>
+</aside>
+<p>Now it&#39;s time to connect the Event Portal model and the runtime broker using the Event Management Agent.</p>
+<ol type="1">
+<li>From the main Runtime Event Manager tab, click on the three dots and go to Install Event Management Agent<br><img alt="Image" src="img/988e2f385b27d15c.png"><br><br></li>
+<li>Click on the download button and save the file to your hard drive. <br><img alt="Image" src="img/db0733ae1b8a522f.png"><br><br></li>
+<li>Execute the following commands at the command line:</li>
+</ol>
+<pre><code>export PASSWORD_ENV_VAR_1=envVarPassword1
+export PASSWORD_ENV_VAR_2=envVarPassword2
+docker run -d -p 8180:8180 -v /absolute/path/to/your/ema/config.yml:/config/ema.yml \
+--env PRODsolace_SOLACE_SEMP_PASSWORD=${PASSWORD_ENV_VAR_1} \
+--env TESTsolace_SOLACE_SEMP_PASSWORD=${PASSWORD_ENV_VAR_2} \
+--name event-management-agent solace/event-management-agent:latest
+</code></pre>
+<p>where <code>PASSWORD_ENV_VAR_1</code> is the password for your locally running broker and <code>/absolute/path/to/your/ema/config.yml</code>  points to your downloaded EMA configuration.</p>
+<ol type="1" start="4">
+<li>Confirm the connection by running:<br><code>docker logs -f event-management-agent</code><br></li>
+</ol>
+<p>The last line should be: <code>Started event-management agent</code><br><img alt="Image" src="img/ac671c39e4af26d3.png"><br><br> 5. Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green &#34;Connected&#34; label<br><img alt="Image" src="img/4d2c013e2cdf06cd.png"><br><br></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Confirm EMA Connection to Broker using an Audit" duration="5">
+        <p>Since the EMA is used for both audit and for config push, we will confirm broker connectivity by running an audit.</p>
+<ol type="1">
+<li>Go to Runtime Event Manager, then click on the <code>us-central-solace-Prod</code> modelled event mesh.<br><img alt="Image" src="img/967b8e81145dd7d3.png"><br><br></li>
+<li>Click on Audit, then &#34;Run Discovery Scan&#34;<br><img alt="Image" src="img/52a34201b45f1865.png"><br><br></li>
+<li>Confirm you want to run a Discovery Scan<br><img alt="Image" src="img/f4adb3b2e3f1cd20.png"><br><br></li>
+<li>If you see this message, you&#39;ve successfully created a connection between the EMA and your event broker.<br><img alt="Image" src="img/79206bc54af0b2d8.png"><br><br></li>
+</ol>
+<p>You are done!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="3">
+        <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production. That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.</p>
+<p>This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent. This in turn enables config push, which we will explore in the next Codelab. <img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

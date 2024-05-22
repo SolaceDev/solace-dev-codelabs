@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-05-22T16:24:19Z",
+  "id": "ep-connect-ep-broker",
+  "duration": 68,
+  "title": "Connecting Event Portal to a runtime Event Broker",
+  "summary": "Establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push",
+  "source": "main/markdown/ep-connect-ep-broker/ep-connect-ep-broker.md",
+  "theme": "",
+  "status": [
+    "hidden"
+  ],
+  "category": [
+    "eventportal"
+  ],
+  "tags": [
+    "eventportal",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker",
+  "url": "ep-connect-ep-broker"
+}
