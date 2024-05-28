@@ -17,6 +17,9 @@ Delivering innovative event-driven features to the hands of users means moving m
 
 This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push, which we will explore in the next Codelab.
 
+> aside positive
+> If you run into issues, please utilize the Slack channel #techmesh-troubleshooting
+
 
 ## What you need: Prerequisites
 
@@ -26,13 +29,11 @@ Duration: 0:07:00
 * Docker installed on a local machine.
 * A completely fresh installation of Event Portal.  Trainers and SEs should request a new Solace Platform account. Others can get a [free trial](https://console.solace.cloud/login/new-account?product=event-streaming ) 
 
-## Start a local event broker in a Docker container
+## Start a local event broker
 
-Follow the instructions here: [Getting Started with PubSub+ Standard Edition](https://solace.com/products/event-broker/software/getting-started/)
+Follow the instructions for [Setting Up Container Images](https://docs.solace.com/Software-Broker/SW-Broker-Set-Up/Containers/Set-Up-Container-Image.htm)
 
 ## Use Postman to populate Event Portal Environments and MEMs
-
-
 ### Get an Event Portal Access Token
 Duration: 0:07:00
 1. Log into your newly created Solace Platform Account
@@ -49,7 +50,6 @@ Environments
 1. Copy the token value and save it in a text file on your desktop. 
 > aside positive
 > This token will be used multiple times through the demo, so keep it handy.
-
 
 ### Import scripts into Postman
 Duration: 0:03:00
@@ -79,6 +79,11 @@ Duration: 0:03:00
 1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13.png)<br><br>
 ## Update the event management agent to connect to your local broker
 Duration: 0:10:00
+
+> aside positive
+> If you are using Podman instead of Docker, you'll need to replace ```docker``` with ```podman``` in all command line entries.
+
+
 1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)<br><br>
 1. On the next screen, click on the three dots next to the PROD-solace event broker, then click on “Edit Connection Details”<br>![Image](img/15.png)<br><br>
 1. Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br>
@@ -93,6 +98,9 @@ Duration: 0:10:00
 
 > aside positive
 > These instructions are also on the Event Portal once you create the Event Management Agent.
+
+> aside positive
+> If you are using Podman instead of Docker, you'll need to replace ```docker``` with ```podman``` in all command line entries.
 
 Now it’s time to connect the Event Portal model and the runtime broker using the Event Management Agent.
 
