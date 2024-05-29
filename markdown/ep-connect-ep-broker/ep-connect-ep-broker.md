@@ -26,8 +26,8 @@ This code lab establishes connectivity between Event Portal, Pub Sub+ Event Brok
 Duration: 0:07:00
 
 * Postman installed on a local machine, you can [download it for free](https://www.postman.com/downloads/).
-* Docker installed on a local machine.
-* A completely fresh installation of Event Portal.  Trainers and SEs should request a new Solace Platform account. Others can get a [free trial](https://console.solace.cloud/login/new-account?product=event-streaming ) 
+* Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.
+* A completely empty Event Portal account.  Do **not** use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please contact Mark Barrington-Little at Mark.Barrington-Little@solace.com
 
 ## Start a local event broker
 
