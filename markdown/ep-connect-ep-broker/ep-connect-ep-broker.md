@@ -102,6 +102,12 @@ Duration: 0:10:00
 > aside positive
 > If you are using Podman instead of Docker, you'll need to replace ```docker``` with ```podman``` in all command line entries.
 
+> aside negative
+> If you are using a Mac with an m chip, you may get the error<br>
+>``` WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested ```
+><br>You can ignore this warning.
+
+
 Now it’s time to connect the Event Portal model and the runtime broker using the Event Management Agent.
 
 1. From the main Runtime Event Manager tab, click on the three dots and go to Install Event Management Agent<br>![Image](img/emainstall.png)<br><br>
