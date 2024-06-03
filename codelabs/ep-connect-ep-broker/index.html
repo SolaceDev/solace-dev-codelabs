@@ -104,9 +104,12 @@
 <ol type="1">
 <li>Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br><img alt="Image" src="img/6a1e5c2d3dc3f3e.png"><br><br></li>
 <li>On the next screen, click on the three dots next to the PROD-solace event broker, then click on &#34;Edit Connection Details&#34;<br><img alt="Image" src="img/fc261df67c816ac5.png"><br><br></li>
-<li>Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br> Message VPN (1) is typically: <code>default</code><br> SEMP username (2) is typically: <code>admin</code><br> SEMP URL (3) can be found, if using docker by finding the brokers ip address using the following command:<br> <code>docker inspect  -f '&#123;&#123;range.NetworkSettings.Networks}}&#123;&#123;.IPAddress}}&#123;&#123;end}}' solace</code></li>
+<li>Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br> Message VPN (1) is typically: <code>default</code><br> SEMP username (2) is typically: <code>admin</code><br> Assuming the port is typically 8080, you can form the SEMP_URL as below :</li>
 </ol>
-<p>Once you have the ip address, the SEMP_URL is typically port 8080, thus <code>http://BROKER-IP:8080</code>  <br><br> Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></p>
+<ul>
+<li>If using Docker, use <code>http://host.docker.internal:8080</code></li>
+<li>If using Podman, use <code>http://host.containers.internal:8080</code> <br><br> Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></li>
+</ul>
 <p>Click on the <strong>Save &amp; Create connection file</strong> button as shown : <img alt="16.a.png" src="img/f0ce240df6deffec.png"></p>
 
 
