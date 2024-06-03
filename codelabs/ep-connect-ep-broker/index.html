@@ -76,7 +76,7 @@
 <h2 is-upgraded>Configure Postman with your Event Portal token</h2>
 <ol type="1">
 <li>Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br><img alt="Image" src="img/ee17bd7beeb48610.png"><br><br></li>
-<li>Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br><img alt="Image" src="img/c602076eca3bdab8.png"><br><br></li>
+<li>Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br><img alt="Image" src="img/d8a1c70cfa9f8b31.png"><br><br></li>
 <li>Save the environment variables.<br><img alt="Image" src="img/d50a135d405cb909.png"><br><br></li>
 </ol>
 <h2 is-upgraded>Run the Postman script</h2>
@@ -85,6 +85,8 @@
 <li>On the next screen, click on Run Generate and populate Event Portal<br><img alt="Image" src="img/2fba6ff189407105.png"><br><br></li>
 <li>Wait for the script to complete. Be patient, there are a lot of commands to run!</li>
 </ol>
+<aside class="warning"><p> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br><code>POST http://&#123;&#123;baseurl}}/api/v2/architecture/addressSpaces</code><br><code>Error: getaddrinfo ENOTFOUND &#123;&#123;baseurl}}</code></p>
+</aside>
 
 
       </google-codelab-step>
@@ -139,7 +141,12 @@ docker run -d -p 8180:8180 -v /absolute/path/to/your/ema/config.yml:/config/ema.
 <ol type="1" start="4">
 <li>Confirm the connection by running:<br><code>docker logs -f event-management-agent</code><br></li>
 </ol>
-<p>The last line should be: <code>Started event-management agent</code><br><img alt="Image" src="img/ac671c39e4af26d3.png"><br><br> 5. Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green &#34;Connected&#34; label<br><img alt="Image" src="img/4d2c013e2cdf06cd.png"><br><br></p>
+<p>The last line should be: <code>Started event-management agent</code><br><img alt="Image" src="img/ac671c39e4af26d3.png"><br><br></p>
+<aside class="warning"><p> The following error is caused by giving an incorrect path to the EMA file in the Docker command.<br><code>Failed to instantiate com.solace.maas.ep.event.management.agent.plugin.manager.client.KafkaClientConfigImpl: Constructor threw exception</code></p>
+</aside>
+<ol type="1" start="5">
+<li>Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green &#34;Connected&#34; label<br><img alt="Image" src="img/4d2c013e2cdf06cd.png"><br><br></li>
+</ol>
 
 
       </google-codelab-step>
