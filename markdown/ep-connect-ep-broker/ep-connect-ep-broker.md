@@ -89,9 +89,10 @@ Duration: 0:10:00
 1. Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br>
 Message VPN (1) is typically: ```default```<br>
 SEMP username (2) is typically: ```admin```<br>
-SEMP URL (3) can be found, if using docker by finding the brokers ip address using the following command:<br> ```docker inspect  -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' solace```
-
-Once you have the ip address, the SEMP_URL is typically port 8080, thus ```http://BROKER-IP:8080```  <br><br> Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
+Assuming the port is typically 8080, you can form the SEMP_URL as below :
+- If using Docker, use ```http://host.docker.internal:8080```
+- If using Podman, use ```http://host.containers.internal:8080``` <br><br>
+Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
 
 Click on the **Save & Create connection file** button as shown : ![16.a.png](img/16.a.png)
 ## Run the Event Management Agent
