@@ -27,7 +27,7 @@ Duration: 0:07:00
 
 * Postman installed on a local machine, you can [download it for free](https://www.postman.com/downloads/).
 * Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.
-* A completely empty Event Portal account.  Do **not** use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please contact Mark Barrington-Little at Mark.Barrington-Little@solace.com
+* A completely empty Event Portal account.  Do **not** use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please reach out in the Slack channel **#techmesh-troubleshooting**
 
 ## Start a local event broker
 
@@ -76,7 +76,7 @@ Duration: 0:10:00
 ## Enable runtime configuration for your environments
 Duration: 0:03:00
 1. To guide application promotion, Event Portal models all of your runtime environments.  To do this, go to the profile icon in the lower left hand side, then click on Environments.<br>![Image](img/12.png)<br><br>
-1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13.png)<br><br>
+1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13-new.png)<br><br>
 ## Update the event management agent to connect to your local broker
 Duration: 0:10:00
 
@@ -93,6 +93,7 @@ SEMP URL (3) can be found, if using docker by finding the brokers ip address usi
 
 Once you have the ip address, the SEMP_URL is typically port 8080, thus ```http://BROKER-IP:8080```  <br><br> Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
 
+Click on the **Save & Create connection file** button as shown : ![16.a.png](img/16.a.png)
 ## Run the Event Management Agent
 Duration: 0:10:00
 
