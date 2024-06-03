@@ -72,6 +72,11 @@ Duration: 0:10:00
 1. On the next screen, click on Run Generate and populate Event Portal<br>![Image](img/11.png)<br><br>
 1. Wait for the script to complete. Be patient, there are a lot of commands to run! 
 
+> aside negative
+> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br>
+```POST http://{{baseurl}}/api/v2/architecture/addressSpaces```<br>
+```Error: getaddrinfo ENOTFOUND {{baseurl}}```
+
 
 ## Enable runtime configuration for your environments
 Duration: 0:03:00
@@ -129,6 +134,12 @@ where ```PASSWORD_ENV_VAR_1``` is the password for your locally running broker a
 ```docker logs -f event-management-agent```<br>
 
 The last line should be: ```Started event-management agent```<br>![Image](img/19.png)<br><br>
+
+> aside negative
+> The following error is caused by giving an incorrect path to the EMA file in the Docker command.<br>
+```Failed to instantiate com.solace.maas.ep.event.management.agent.plugin.manager.client.KafkaClientConfigImpl: Constructor threw exception```
+
+
 5. Further confirm by going back to the Event Management Agents tab.  Look to see your EMA has a green “Connected” label<br>![Image](img/20.png)<br><br>
 
 
