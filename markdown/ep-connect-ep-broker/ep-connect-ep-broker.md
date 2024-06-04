@@ -63,6 +63,9 @@ Duration: 0:03:00
 ### Configure Postman with your Event Portal token
 Duration: 0:05:00
 1. Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br>![Image](img/7.png)<br><br>
+> aside negative
+> Make sure to set the active environment variables (step 2 above)! 
+
 1. Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br>![Image](img/8.png)<br><br>
 1. Save the environment variables.<br>![Image](img/9.png)<br><br>
 
