@@ -43,6 +43,13 @@
 <li>Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.</li>
 <li>A completely empty Event Portal account.  Do <strong>not</strong> use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please reach out in the Slack channel <strong>#techmesh-troubleshooting</strong></li>
 </ul>
+<aside class="special"><p> If you&#39;d rather use Newman, an open-source, non-cloud CLI alternative to Postman: <br></p>
+<ul>
+<li>Install nodeJS (on MacOS with homebrew: <code>brew install node</code> <br></li>
+<li>Install Newman CLI:  <code>npm install -g newman</code></li>
+<li>Use the &#34;Alternative instructions for Newman&#34; located at the end of Section 4</li>
+</ul>
+</aside>
 
 
       </google-codelab-step>
@@ -91,6 +98,15 @@
 </ol>
 <aside class="warning"><p> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br><code>POST http://&#123;&#123;baseurl}}/api/v2/architecture/addressSpaces</code><br><code>Error: getaddrinfo ENOTFOUND &#123;&#123;baseurl}}</code></p>
 </aside>
+<h2 is-upgraded>Alternative Instructions for Newman– only for those using Newman instead of Postman</h2>
+<aside class="warning"><p> These instructions are only for those who want to use Newman instead of Postman.  If you used Postman, skip this and continue onwards to the next section.</p>
+</aside>
+<ol type="1">
+<li>Create API key as documented above</li>
+<li>Download the environment and collection files as documented above.</li>
+<li>Using a text editor, insert the API key into the downloaded environment file.</li>
+<li>Run the ‘Populate&#39; collection with the modified environment file:<br><code>newman run -e ./EventPortalEnvironment.postman_environment.json ./PopulateEventPortaldemo.postman_collection.json</code></li>
+</ol>
 
 
       </google-codelab-step>

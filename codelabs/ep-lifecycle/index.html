@@ -74,7 +74,7 @@
 <li>Again click on Add Objects, and drag a Shared Event to the canvas<br><img alt="Image" src="img/45845665c652df8b.png"><br><br></li>
 <li>In the popup, select <em>Customer Updated</em>, then click on Add.</li>
 <li>Repeat this process to add the <em>Customer Created</em> shared event, which you discovered in the catalog earlier.</li>
-<li>To define which events Customer 360 subscribes to, hover over the <em>Order Created</em> event and drag the arrow to the <em>Customer360</em> application.  Repeat for <em>Customer Created</em> and <em>Customer Updated</em> events.<br><img alt="Image" src="img/d11457e94cb10feb.png"><br><br></li>
+<li>To define which events Customer 360 subscribes to, hover over the <em>Customer Created</em> event and drag the arrow to the <em>Customer360</em> application.  Repeat for the <em>Customer Updated</em> event.<br><img alt="Image" src="img/77ea68c336e1f4ca.png"><br><br></li>
 <li>Drag a &#34;New Event&#34; onto the canvas and call it <code>Customer Insight Generated</code>.</li>
 <li>To define the event Customer 360 publishes, hover over the Customer360 application and drag the arrow to the Customer Insight Generated event.<br><img alt="Image" src="img/f2918fbe04d96cb8.png"><br><br></li>
 </ol>
@@ -127,7 +127,7 @@
 <li>In the popup window, select Java Spring Cloud Stream Project, then click on Generate.</li>
 <li>Save the resulting .zip file to your hard drive.</li>
 </ol>
-<aside class="special"><p> You&#39;ll use the source code zip file in the CICD/GitHub Actions portion of the lab.</p>
+<aside class="special"><p> You&#39;ll use the source code zip file in the CICD/GitHub Actions portion of the lab, so save it in a place you can remember.</p>
 </aside>
 
 
@@ -140,7 +140,7 @@
 <li>Click on the Runtime tab.<br><img alt="Image" src="img/d7ef471b9fd0a054.png"><br><br></li>
 <li>Expand the Prod environment, then click on the three dots next to PROD-solace, then on Manage Credentials.<br><img alt="Image" src="img/e90b36a4225f8f60.png"><br><br></li>
 <li>For the Username enter <code>c360</code> (1).  For the Password enter <code>c360</code> (2). Click on Save. (3)<br><img alt="Image" src="img/b05c2a11bd7ff6d7.png"><br><br></li>
-<li>Back in the main screen, again click on the three dots, and then &#34;Add Application&#34;<br><img alt="Image" src="img/e90b36a4225f8f60.png"><br><br></li>
+<li>Back in the main screen, expand the Prod environment (1) again click on the three dots, and then &#34;Add Application&#34; (2) <br><img alt="Image" src="img/93de13a57e3dfa49.png"><br><br></li>
 <li>The resulting popup previews the changes that will occur.  Expand out the credentials (1) and queues (2) to see more details.  Then click on Add (3)<br><img alt="Image" src="img/b4e02fca4e3213a5.png"><br><br></li>
 </ol>
 <aside class="warning"><p> If the config push fails, ensure that your EMA and your local broker are running.</p>
@@ -177,8 +177,10 @@
 <ol type="1">
 <li>Make sure you are logged into GitHub and go to the <a href="https://github.com/new/import" target="_blank">Import Existing Repository page</a>.</li>
 <li>Use <code>https://github.com/SolaceLabs/ep-scs-workflow</code> for the URL, list yourself as the owner, and name the new repository <code>customer360</code>. Click on Begin Import.<br><img alt="Image" src="img/81400a01072c8c1e.png"><br><br></li>
-<li>Wait for the import to complete, usually around 4 minutes. Then click on the link to open the repository.</li>
+<li>Wait for the import to complete, usually around 3 minutes. Then click on the link to open the repository.</li>
 </ol>
+<aside class="warning"><p> Cloning through GitHub occassionally takes a bit of time.  After 3 minutes, try refreshing the page to see if it&#39;s done.</p>
+</aside>
 <h2 is-upgraded>Configure GitHub Actions</h2>
 <ol type="1">
 <li>In the top menu of the repository, select Settings.<br><img alt="Image" src="img/6d9bc4480858f78a.png"><br><br></li>
