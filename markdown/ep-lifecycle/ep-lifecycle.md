@@ -53,7 +53,7 @@ Then click on OK
 1. Again click on Add Objects, and drag a Shared Event to the canvas<br>![Image](img/7.png)<br><br>
 1. In the popup, select *Customer Updated*, then click on Add.
 1. Repeat this process to add the *Customer Created* shared event, which you discovered in the catalog earlier. 
-1. To define which events Customer 360 subscribes to, hover over the *Order Created* event and drag the arrow to the *Customer360* application.  Repeat for *Customer Created* and *Customer Updated* events.<br>![Image](img/10.png)<br><br>
+1. To define which events Customer 360 subscribes to, hover over the *Customer Created* event and drag the arrow to the *Customer360* application.  Repeat for the *Customer Updated* event.<br>![Image](img/000096.png)<br><br>
 1. Drag a “New Event” onto the canvas and call it ```Customer Insight Generated```.
 1. To define the event Customer 360 publishes, hover over the Customer360 application and drag the arrow to the Customer Insight Generated event.<br>![Image](img/published.png)<br><br>
 ### Add an event directly from the catalog
@@ -103,7 +103,7 @@ Duration: 0:05:00
 1.  Save the resulting .zip file to your hard drive.  
 
 > aside positive
->You’ll use the source code zip file in the CICD/GitHub Actions portion of the lab.
+>You’ll use the source code zip file in the CICD/GitHub Actions portion of the lab, so save it in a place you can remember.
 ## Provide exactly the events you need, when you need them
 Duration: 0:15:00
 ### Assign your application to an environment/event broker
@@ -111,7 +111,7 @@ Duration: 0:15:00
 1. Click on the Runtime tab.<br>![Image](img/48.png)<br><br>
 1. Expand the Prod environment, then click on the three dots next to PROD-solace, then on Manage Credentials.<br>![Image](img/000083.png)<br><br>
 1. For the Username enter ```c360``` (1).  For the Password enter ```c360``` (2). Click on Save. (3)<br>![Image](img/36.png)<br><br>
-1. Back in the main screen, again click on the three dots, and then “Add Application”<br>![Image](img/000083.png)<br><br>
+1. Back in the main screen, expand the Prod environment (1) again click on the three dots, and then “Add Application” (2) <br>![Image](img/000095.png)<br><br>
 1. The resulting popup previews the changes that will occur.  Expand out the credentials (1) and queues (2) to see more details.  Then click on Add (3)<br>![Image](img/38.png)<br><br>
 
 > aside negative
@@ -143,7 +143,10 @@ Duration: 0:20:00
 ### Create new repository with Event Portal GitHub Actions
 1. Make sure you are logged into GitHub and go to the [Import Existing Repository page](https://github.com/new/import). 
 1. Use ```https://github.com/SolaceLabs/ep-scs-workflow``` for the URL, list yourself as the owner, and name the new repository ```customer360```. Click on Begin Import.<br>![Image](img/51.png)<br><br>
-1. Wait for the import to complete, usually around 4 minutes. Then click on the link to open the repository.
+1. Wait for the import to complete, usually around 3 minutes. Then click on the link to open the repository.
+
+> aside negative
+>Cloning through GitHub occassionally takes a bit of time.  After 3 minutes, try refreshing the page to see if it's done.
 
 ### Configure GitHub Actions
 1. In the top menu of the repository, select Settings.<br>![Image](img/52.png)<br><br>
