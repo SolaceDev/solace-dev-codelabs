@@ -25,9 +25,16 @@ This code lab establishes connectivity between Event Portal, Pub Sub+ Event Brok
 
 Duration: 0:07:00
 
-* Postman installed on a local machine, you can [download it for free](https://www.postman.com/downloads/).
+* Postman installed on a local machine, you can [download it for free](https://www.postman.com/downloads/). 
 * Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.
 * A completely empty Event Portal account.  Do **not** use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please reach out in the Slack channel **#techmesh-troubleshooting**
+
+> aside positive
+> If you'd rather use Newman, an open-source, non-cloud CLI alternative to Postman: <br>
+> - Install nodeJS (on MacOS with homebrew: ```brew install node``` <br>
+> - Install Newman CLI:  ```npm install -g newman```
+> - Use the "Alternative instructions for Newman" located at the end of Section 4
+
 
 ## Start a local event broker
 
@@ -80,6 +87,15 @@ Duration: 0:10:00
 ```POST http://{{baseurl}}/api/v2/architecture/addressSpaces```<br>
 ```Error: getaddrinfo ENOTFOUND {{baseurl}}```
 
+### Alternative Instructions for Newman-- only for those using Newman instead of Postman
+> aside negative
+> These instructions are only for those who want to use Newman instead of Postman.  If you used Postman, skip this and continue onwards to the next section.
+
+1. Create API key as documented above
+1. Download the environment and collection files as documented above.
+1. Using a text editor, insert the API key into the downloaded environment file.
+1. Run the 'Populate' collection with the modified environment file:<br>
+```newman run -e ./EventPortalEnvironment.postman_environment.json ./PopulateEventPortaldemo.postman_collection.json```
 
 ## Enable runtime configuration for your environments
 Duration: 0:03:00
