@@ -51,7 +51,7 @@ Before you start, make sure:
 
 - You have your favourite IDE fired up and ready to go
   ![Everyone's favourite IDE](./img/edlin.png)
-- You have a "broker" set up and ready to go. A "broker" could be [Solace Cloud](https://console.solace.cloud/) plan, local PubSub+ software running under [Docker](https://products.solace.com/download/PUBSUB_DOCKER_STAND) or a [VM](https://products.solace.com/download/PUBSUB_STAND_OVA), or even a hardware appliance if you're lucky. Just make sure you have the client credentials, for instance "client_username@messag-vpn" and the password.
+- You have a "broker" set up and ready to go. A "broker" could be [Solace Cloud](https://console.solace.cloud/) plan, local PubSub+ software running under [Docker](https://products.solace.com/download/PUBSUB_DOCKER_STAND) or a [VM](https://solace.com/downloads/?fwp_downloads=images), or even a hardware appliance if you're lucky. Just make sure you have the client credentials, for instance "client_username@messag-vpn" and the password.
 - You have "no" or "basic" authentication configured on the broker you're connecting to. Of course we can do TLS, but that's waaaaay beyond the scope of this one...
 - You've [downloaded](https://solace.com/downloads/), installed or included in your dependency manager the native API of your choice
 - You know that [github.com/SolaceSamples](https://github.com/SolaceSamples) exists, and, even better, you've cloned it
