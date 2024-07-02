@@ -4,7 +4,7 @@ id: ep-connect-ep-broker
 tags: eventportal
 categories: eventportal
 environments: Web
-status: Hidden
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker
 
 # Connecting Event Portal to a runtime Event Broker
@@ -13,12 +13,12 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 Duration: 0:05:00
 
-Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.
+Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. The PubSub+ Event Portal makes that easier, faster and more resilient.
 
-This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push, which we will explore in the next Codelab.
+This code lab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events aroudn ) and the Event Management Agent.  Once you've established that connectivity, the next codelab explores [reusing events you already have, automating event access and auto-generating code for Event Driven applications.](https://codelabs.solace.dev/codelabs/ep-lifecycle).
 
 > aside positive
-> If you run into issues, please utilize the Slack channel #techmesh-troubleshooting
+> If you run into issues, please reach out on the [Solace Community site](https://solace.community/).
 
 
 ## What you need: Prerequisites
@@ -26,19 +26,36 @@ This code lab establishes connectivity between Event Portal, Pub Sub+ Event Brok
 Duration: 0:07:00
 
 * Postman installed on a local machine, you can [download it for free](https://www.postman.com/downloads/). 
-* Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.
-* A completely empty Event Portal account.  Do **not** use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please reach out in the Slack channel **#techmesh-troubleshooting**
-
-> aside positive
-> If you'd rather use Newman, an open-source, non-cloud CLI alternative to Postman: <br>
-> - Install nodeJS (on MacOS with homebrew: ```brew install node``` <br>
-> - Install Newman CLI:  ```npm install -g newman```
-> - Use the "Alternative instructions for Newman" located at the end of Section 4
+* Docker installed on a local machine.  If you prefer to use Podman, please note that you will need to use different commands later in the lab.
+* An empty Event Portal account.   Don't have an Event Portal account?  [Get one for free.](https://console.solace.cloud/login/new-account?product=event-management) 
 
 
-## Start a local event broker
+## Start a cloud event broker and get connection info
+Duration: 0:15:00
 
-Follow the instructions for [Setting Up Container Images](https://docs.solace.com/Software-Broker/SW-Broker-Set-Up/Containers/Set-Up-Container-Image.htm)
+### Start a cloud event broker
+1. Login to PubSub+ Cloud and click on Cluster Manager <br><br>![Image](img/cloud1.png)<br><br>
+1. Click on Create Service <br><br>![Image](img/cloud2.png)<br><br>
+1.  In the Create Service window, name your service ```aks-centralus-prod``` and pick the developer service type. Then click on the green Create Service button. <br><br>![Image](img/cloud3.png)<br><br>
+1. After a few minutes, the deployment of the service completes and you should see something like this.  <br><br>![Image](img/cloud4.png)<br><br>
+That’s all it takes to create a running event broker.  
+
+### Get connection info
+To connect your runtime event broker to your design time model in Event Portal you'll need some information later. It's easier to get it now.
+1.  Click on the newly created ```aks-centralus-prod``` Service button
+1. Click on the Manage tab (1), then expand the SEMP - REST API section (2) <br><br>![Image](img/cloud000099.png)<br><br> 
+1. Copy the following values into a text editor
+URL to the SEMP API (1)
+Message VPN name (2)
+Username (3)
+Password (4)
+<br><br>![Image](img/000100.png)
+
+> aside negative
+> Make sure to only copy the first part of the SEMP URL (shown highlighted in the image)<br>
+For example ```https:/mr-connection-hu34983498.messaging.solace.cloud:943```<br>
+
+
 
 ## Use Postman to populate Event Portal Environments and MEMs
 ### Get an Event Portal Access Token
@@ -87,21 +104,11 @@ Duration: 0:10:00
 ```POST http://{{baseurl}}/api/v2/architecture/addressSpaces```<br>
 ```Error: getaddrinfo ENOTFOUND {{baseurl}}```
 
-### Alternative Instructions for Newman-- only for those using Newman instead of Postman
-> aside negative
-> These instructions are only for those who want to use Newman instead of Postman.  If you used Postman, skip this and continue onwards to the next section.
-
-1. Create API key as documented above
-1. Download the environment and collection files as documented above.
-1. Using a text editor, insert the API key into the downloaded environment file.
-1. Run the 'Populate' collection with the modified environment file:<br>
-```newman run -e ./EventPortalEnvironment.postman_environment.json ./PopulateEventPortaldemo.postman_collection.json```
-
 ## Enable runtime configuration for your environments
 Duration: 0:03:00
 1. To guide application promotion, Event Portal models all of your runtime environments.  To do this, go to the profile icon in the lower left hand side, then click on Environments.<br>![Image](img/12.png)<br><br>
 1. To allow Event Portal to configure the runtime environment, click on the three dots, then select Enable Runtime Configuration. Do this for both Test and Prod.<br>![Image](img/13-new.png)<br><br>
-## Update the event management agent to connect to your local broker
+## Update the event management agent to connect to your cloud broker
 Duration: 0:10:00
 
 > aside positive
@@ -110,12 +117,7 @@ Duration: 0:10:00
 
 1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)<br><br>
 1. On the next screen, click on the three dots next to the PROD-solace event broker, then click on “Edit Connection Details”<br>![Image](img/15.png)<br><br>
-1. Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br>
-Message VPN (1) is typically: ```default```<br>
-SEMP username (2) is typically: ```admin```<br>
-Assuming the port is typically 8080, you can form the SEMP_URL as below :
-- If using Docker, use ```http://host.docker.internal:8080```
-- If using Podman, use ```http://host.containers.internal:8080``` <br><br>
+1. Update the Message VPN (1), SEMP username (2) and SEMP URL (3) to point to your cloud broker. You will recall you saved them to a text pad in a previous step.  You will use the admin password later.
 Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
 
 Click on the **Save & Create connection file** button as shown : ![16.a.png](img/16.a.png)
@@ -147,7 +149,7 @@ docker run -d -p 8180:8180 -v /absolute/path/to/your/ema/config.yml:/config/ema.
 --env TESTsolace_SOLACE_SEMP_PASSWORD=${PASSWORD_ENV_VAR_2} \
 --name event-management-agent solace/event-management-agent:latest
 ```
-where ```PASSWORD_ENV_VAR_1``` is the password for your locally running broker and ```/absolute/path/to/your/ema/config.yml```  points to your downloaded EMA configuration.
+where ```PASSWORD_ENV_VAR_1``` is the password for your cloud broker and ```/absolute/path/to/your/ema/config.yml```  points to your downloaded EMA configuration.
 
 4. Confirm the connection by running:<br>
 ```docker logs -f event-management-agent```<br>
@@ -179,7 +181,8 @@ Duration: 0:03:00
 
 Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production. That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.
 
-This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent. This in turn enables config push, which we will explore in the next Codelab.
+Now that you've established that connectivity, you can explore how Event Portal [reuses events you already have, automates event access and auto-generates code for Event Driven applications.](https://codelabs.solace.dev/codelabs/ep-lifecycle).
+
 ![Soly Image Caption](img/soly.gif)
 
 Thanks for participating in this codelab! Let us know what you thought in the [Solace Community Forum](https://solace.community/)! If you found any issues along the way we'd appreciate it if you'd raise them by clicking the Report a mistake button at the bottom left of this codelab.
