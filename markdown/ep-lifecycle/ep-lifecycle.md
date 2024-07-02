@@ -4,7 +4,7 @@ id: ep-lifecycle
 tags:
 categories: eventportal
 environments: Web
-status: Hidden
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle
 
 # Event Portal: event-driven innovation that's faster, easier, more resilient
@@ -22,10 +22,10 @@ This code lab takes you through the lifecycle of a new event-driven application,
 Duration: 0:02:00
 
 **For all sections, you'll need to:**
-- Complete the *Connecting Event Portal to a runtime Event Broker* code lab
+- Complete the [Connecting Event Portal to a runtime Event Broker](https://codelabs.solace.dev/codelabs/ep-connect-ep-broker) code lab. 
 
 **For config push and CICD integration sections, you will also need to:**
-- Have a running Event Management Agent connected to an Event Broker
+- Have a running Event Management Agent connected to a cloud Event Broker (That's also covered in the [Connecting Event Portal to a runtime Event Broker](https://codelabs.solace.dev/codelabs/ep-connect-ep-broker) code lab.)
 - A GitHub account.  If you don’t have one, you can [get one free](https://github.com/signup). 
 
 ## Discover event-driven stuff you didn’t know existed
@@ -115,10 +115,11 @@ Duration: 0:15:00
 1. The resulting popup previews the changes that will occur.  Expand out the credentials (1) and queues (2) to see more details.  Then click on Add (3)<br>![Image](img/38.png)<br><br>
 
 > aside negative
->If the config push fails, ensure that your EMA and your local broker are running.
+>If the config push fails, ensure that your EMA is running.
 
 ### Confirm EP provisioned your queues and access
-1. Go to the management console of your local broker. Click on the Manage tab (1), then Queues (2).<br>![Image](img/39.png)<br><br>
+1. Go to the management console of your cloud broker by clicking Cluster Manager in the left hand column, then clicking on your Event Broker. <br>![Image](img/000101.png)<br><br>  
+1. Click on the Manage tab (1), then Queues (2).<br>![Image](img/39.png)<br><br>
 1. You should see the two queues you defined earlier, ```C360.CUSTOMERS``` and ```C360.ORDERS```.  Clicking on each, you should see that they are owned by c360, only the owner is allowed to access the queue and the subscriptions you defined are in place. <br>![Image](img/40.png)<br><br>
 1. Click on Access Control (1), the Client Usernames tab (2), and you should see the c360 client username. (3) <br>![Image](img/41.png)<br><br>
 1. Click on the ACL Profiles tab (1) and you should see the ACL associated with your user. (2) <br>![Image](img/42.png)<br><br>
@@ -171,7 +172,7 @@ Duration: 0:20:00
 1.  In the next screen, click on Create pull request.<br>![Image](img/62.png)<br><br>
 1. The GitHub Actions kick off.  When they are finished, there should be a list of changes that will occur should the pull request be approved.<br>![Image](img/63.png)<br><br>
 1.  Scroll down to the bottom of the pull request and click on Merge pull request.  Then click on Confirm merge.<br>![Image](img/64.png)<br><br>
-1.  Using the management console of your local broker, confirm that the CICD process created the same queues, subscriptions, ACLs as manual promotion.
+1.  Using the management console of your cloud broker, confirm that the CICD process created the same queues, subscriptions, ACLs as manual promotion.
 ## Takeaways
 
 Duration: 0:07:00
