@@ -29,9 +29,9 @@
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.</p>
-<p>This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push, which we will explore in the next Codelab.</p>
-<aside class="special"><p> If you run into issues, please utilize the Slack channel #techmesh-troubleshooting</p>
+        <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. The PubSub+ Event Portal makes that easier, faster and more resilient.</p>
+<p>This code lab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events aroudn ) and the Event Management Agent.  Once you&#39;ve established that connectivity, the next codelab explores <a href="https://codelabs.solace.dev/codelabs/ep-lifecycle" target="_blank">reusing events you already have, automating event access and auto-generating code for Event Driven applications.</a>.</p>
+<aside class="special"><p> If you run into issues, please reach out on the <a href="https://solace.community/" target="_blank">Solace Community site</a>.</p>
 </aside>
 
 
@@ -40,22 +40,30 @@
       <google-codelab-step label="What you need: Prerequisites" duration="7">
         <ul>
 <li>Postman installed on a local machine, you can <a href="https://www.postman.com/downloads/" target="_blank">download it for free</a>.</li>
-<li>Docker installed on a local machine.  If you are using Podman, please note that you will need to use different commands later in the lab.</li>
-<li>A completely empty Event Portal account.  Do <strong>not</strong> use accounts like se-demo or se-all.  All TechMesh attendees should have received a dedicated account.   If you have not, please reach out in the Slack channel <strong>#techmesh-troubleshooting</strong></li>
+<li>Docker installed on a local machine.  If you prefer to use Podman, please note that you will need to use different commands later in the lab.</li>
+<li>An empty Event Portal account.   Don&#39;t have an Event Portal account?  <a href="https://console.solace.cloud/login/new-account?product=event-management" target="_blank">Get one for free.</a></li>
 </ul>
-<aside class="special"><p> If you&#39;d rather use Newman, an open-source, non-cloud CLI alternative to Postman: <br></p>
-<ul>
-<li>Install nodeJS (on MacOS with homebrew: <code>brew install node</code> <br></li>
-<li>Install Newman CLI:  <code>npm install -g newman</code></li>
-<li>Use the &#34;Alternative instructions for Newman&#34; located at the end of Section 4</li>
-</ul>
-</aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Start a local event broker" duration="0">
-        <p>Follow the instructions for <a href="https://docs.solace.com/Software-Broker/SW-Broker-Set-Up/Containers/Set-Up-Container-Image.htm" target="_blank">Setting Up Container Images</a></p>
+      <google-codelab-step label="Start a cloud event broker and get connection info" duration="15">
+        <h2 is-upgraded>Start a cloud event broker</h2>
+<ol type="1">
+<li>Login to PubSub+ Cloud and click on Cluster Manager <br><br><img alt="Image" src="img/e30b7cbb0cd4f8a3.png"><br><br></li>
+<li>Click on Create Service <br><br><img alt="Image" src="img/d4e9cb042ed73a13.png"><br><br></li>
+<li>In the Create Service window, name your service <code>aks-centralus-prod</code> and pick the developer service type. Then click on the green Create Service button. <br><br><img alt="Image" src="img/71beac5b37e5a024.png"><br><br></li>
+<li>After a few minutes, the deployment of the service completes and you should see something like this.  <br><br><img alt="Image" src="img/2065b4e743188980.png"><br><br> That&#39;s all it takes to create a running event broker.</li>
+</ol>
+<h2 is-upgraded>Get connection info</h2>
+<p>To connect your runtime event broker to your design time model in Event Portal you&#39;ll need some information later. It&#39;s easier to get it now.</p>
+<ol type="1">
+<li>Click on the newly created <code>aks-centralus-prod</code> Service button</li>
+<li>Click on the Manage tab (1), then expand the SEMP - REST API section (2) <br><br><img alt="Image" src="img/2de2daf031ffdfe4.png"><br><br></li>
+<li>Copy the following values into a text editor URL to the SEMP API (1) Message VPN name (2) Username (3) Password (4) <br><br><img alt="Image" src="img/dd2a4855a8f7d870.png"></li>
+</ol>
+<aside class="warning"><p> Make sure to only copy the first part of the SEMP URL (shown highlighted in the image)<br> For example <code>https:/mr-connection-hu34983498.messaging.solace.cloud:943</code><br></p>
+</aside>
 
 
       </google-codelab-step>
@@ -98,15 +106,6 @@
 </ol>
 <aside class="warning"><p> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br><code>POST http://&#123;&#123;baseurl}}/api/v2/architecture/addressSpaces</code><br><code>Error: getaddrinfo ENOTFOUND &#123;&#123;baseurl}}</code></p>
 </aside>
-<h2 is-upgraded>Alternative Instructions for Newman– only for those using Newman instead of Postman</h2>
-<aside class="warning"><p> These instructions are only for those who want to use Newman instead of Postman.  If you used Postman, skip this and continue onwards to the next section.</p>
-</aside>
-<ol type="1">
-<li>Create API key as documented above</li>
-<li>Download the environment and collection files as documented above.</li>
-<li>Using a text editor, insert the API key into the downloaded environment file.</li>
-<li>Run the ‘Populate&#39; collection with the modified environment file:<br><code>newman run -e ./EventPortalEnvironment.postman_environment.json ./PopulateEventPortaldemo.postman_collection.json</code></li>
-</ol>
 
 
       </google-codelab-step>
@@ -120,18 +119,14 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Update the event management agent to connect to your local broker" duration="10">
+      <google-codelab-step label="Update the event management agent to connect to your cloud broker" duration="10">
         <aside class="special"><p> If you are using Podman instead of Docker, you&#39;ll need to replace <code>docker</code> with <code>podman</code> in all command line entries.</p>
 </aside>
 <ol type="1">
 <li>Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br><img alt="Image" src="img/6a1e5c2d3dc3f3e.png"><br><br></li>
 <li>On the next screen, click on the three dots next to the PROD-solace event broker, then click on &#34;Edit Connection Details&#34;<br><img alt="Image" src="img/fc261df67c816ac5.png"><br><br></li>
-<li>Update the Message VPN, SEMP username and SEMP URL to point to your local broker.<br> Message VPN (1) is typically: <code>default</code><br> SEMP username (2) is typically: <code>admin</code><br> Assuming the port is typically 8080, you can form the SEMP_URL as below :</li>
+<li>Update the Message VPN (1), SEMP username (2) and SEMP URL (3) to point to your cloud broker. You will recall you saved them to a text pad in a previous step.  You will use the admin password later. Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></li>
 </ol>
-<ul>
-<li>If using Docker, use <code>http://host.docker.internal:8080</code></li>
-<li>If using Podman, use <code>http://host.containers.internal:8080</code> <br><br> Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></li>
-</ul>
 <p>Click on the <strong>Save &amp; Create connection file</strong> button as shown : <img alt="16.a.png" src="img/f0ce240df6deffec.png"></p>
 
 
@@ -157,7 +152,7 @@ docker run -d -p 8180:8180 -v /absolute/path/to/your/ema/config.yml:/config/ema.
 --env TESTsolace_SOLACE_SEMP_PASSWORD=${PASSWORD_ENV_VAR_2} \
 --name event-management-agent solace/event-management-agent:latest
 </code></pre>
-<p>where <code>PASSWORD_ENV_VAR_1</code> is the password for your locally running broker and <code>/absolute/path/to/your/ema/config.yml</code>  points to your downloaded EMA configuration.</p>
+<p>where <code>PASSWORD_ENV_VAR_1</code> is the password for your cloud broker and <code>/absolute/path/to/your/ema/config.yml</code>  points to your downloaded EMA configuration.</p>
 <ol type="1" start="4">
 <li>Confirm the connection by running:<br><code>docker logs -f event-management-agent</code><br></li>
 </ol>
@@ -186,7 +181,8 @@ docker run -d -p 8180:8180 -v /absolute/path/to/your/ema/config.yml:/config/ema.
     
       <google-codelab-step label="Takeaways" duration="3">
         <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production. That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.</p>
-<p>This code lab establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent. This in turn enables config push, which we will explore in the next Codelab. <img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Now that you&#39;ve established that connectivity, you can explore how Event Portal <a href="https://codelabs.solace.dev/codelabs/ep-lifecycle" target="_blank">reuses events you already have, automates event access and auto-generates code for Event Driven applications.</a>.</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 

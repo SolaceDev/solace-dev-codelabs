@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2024-06-05T15:20:27Z",
+  "updated": "2024-07-02T19:47:59Z",
   "id": "ep-lifecycle",
   "duration": 71,
   "title": "Event Portal: event-driven innovation that's faster, easier, more resilient",
@@ -11,7 +11,7 @@
   "source": "main/markdown/ep-lifecycle/ep-lifecycle.md",
   "theme": "",
   "status": [
-    "hidden"
+    "published"
   ],
   "category": [
     "eventportal"

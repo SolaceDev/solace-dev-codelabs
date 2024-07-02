@@ -38,11 +38,11 @@
       <google-codelab-step label="What you need: Prerequisites" duration="2">
         <p><strong>For all sections, you&#39;ll need to:</strong></p>
 <ul>
-<li>Complete the <em>Connecting Event Portal to a runtime Event Broker</em> code lab</li>
+<li>Complete the <a href="https://codelabs.solace.dev/codelabs/ep-connect-ep-broker" target="_blank">Connecting Event Portal to a runtime Event Broker</a> code lab.</li>
 </ul>
 <p><strong>For config push and CICD integration sections, you will also need to:</strong></p>
 <ul>
-<li>Have a running Event Management Agent connected to an Event Broker</li>
+<li>Have a running Event Management Agent connected to a cloud Event Broker (That&#39;s also covered in the <a href="https://codelabs.solace.dev/codelabs/ep-connect-ep-broker" target="_blank">Connecting Event Portal to a runtime Event Broker</a> code lab.)</li>
 <li>A GitHub account.  If you don&#39;t have one, you can <a href="https://github.com/signup" target="_blank">get one free</a>.</li>
 </ul>
 
@@ -143,11 +143,12 @@
 <li>Back in the main screen, expand the Prod environment (1) again click on the three dots, and then &#34;Add Application&#34; (2) <br><img alt="Image" src="img/93de13a57e3dfa49.png"><br><br></li>
 <li>The resulting popup previews the changes that will occur.  Expand out the credentials (1) and queues (2) to see more details.  Then click on Add (3)<br><img alt="Image" src="img/b4e02fca4e3213a5.png"><br><br></li>
 </ol>
-<aside class="warning"><p> If the config push fails, ensure that your EMA and your local broker are running.</p>
+<aside class="warning"><p> If the config push fails, ensure that your EMA is running.</p>
 </aside>
 <h2 is-upgraded>Confirm EP provisioned your queues and access</h2>
 <ol type="1">
-<li>Go to the management console of your local broker. Click on the Manage tab (1), then Queues (2).<br><img alt="Image" src="img/9253a58dc34a70db.png"><br><br></li>
+<li>Go to the management console of your cloud broker by clicking Cluster Manager in the left hand column, then clicking on your Event Broker. <br><img alt="Image" src="img/7b5c691d210d1902.png"><br><br></li>
+<li>Click on the Manage tab (1), then Queues (2).<br><img alt="Image" src="img/9253a58dc34a70db.png"><br><br></li>
 <li>You should see the two queues you defined earlier, <code>C360.CUSTOMERS</code> and <code>C360.ORDERS</code>.  Clicking on each, you should see that they are owned by c360, only the owner is allowed to access the queue and the subscriptions you defined are in place. <br><img alt="Image" src="img/1957279cbbe4b7a6.png"><br><br></li>
 <li>Click on Access Control (1), the Client Usernames tab (2), and you should see the c360 client username. (3) <br><img alt="Image" src="img/b99a319bc01c88d2.png"><br><br></li>
 <li>Click on the ACL Profiles tab (1) and you should see the ACL associated with your user. (2) <br><img alt="Image" src="img/7c43288445fdd720.png"><br><br></li>
@@ -206,7 +207,7 @@
 <li>In the next screen, click on Create pull request.<br><img alt="Image" src="img/ffd44ada7f57a5f9.png"><br><br></li>
 <li>The GitHub Actions kick off.  When they are finished, there should be a list of changes that will occur should the pull request be approved.<br><img alt="Image" src="img/a730bde567da17aa.png"><br><br></li>
 <li>Scroll down to the bottom of the pull request and click on Merge pull request.  Then click on Confirm merge.<br><img alt="Image" src="img/6cc75765efa9c122.png"><br><br></li>
-<li>Using the management console of your local broker, confirm that the CICD process created the same queues, subscriptions, ACLs as manual promotion.</li>
+<li>Using the management console of your cloud broker, confirm that the CICD process created the same queues, subscriptions, ACLs as manual promotion.</li>
 </ol>
 
 
