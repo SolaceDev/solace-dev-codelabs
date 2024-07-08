@@ -30,7 +30,7 @@
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
         <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. The PubSub+ Event Portal makes that easier, faster and more resilient.</p>
-<p>This code lab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events aroudn ) and the Event Management Agent.  Once you&#39;ve established that connectivity, the next codelab explores <a href="https://codelabs.solace.dev/codelabs/ep-lifecycle" target="_blank">reusing events you already have, automating event access and auto-generating code for Event Driven applications.</a>.</p>
+<p>This codelab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events around) and the Event Management Agent.  Once you&#39;ve established that connectivity, the next codelab explores <a href="https://codelabs.solace.dev/codelabs/ep-lifecycle" target="_blank">reusing events you already have, automating event access and auto-generating code for Event Driven applications.</a>.</p>
 <aside class="special"><p> If you run into issues, please reach out on the <a href="https://solace.community/" target="_blank">Solace Community site</a>.</p>
 </aside>
 
@@ -62,7 +62,7 @@
 <li>Click on the Manage tab (1), then expand the SEMP - REST API section (2) <br><br><img alt="Image" src="img/2de2daf031ffdfe4.png"><br><br></li>
 <li>Copy the following values into a text editor URL to the SEMP API (1) Message VPN name (2) Username (3) Password (4) <br><br><img alt="Image" src="img/dd2a4855a8f7d870.png"></li>
 </ol>
-<aside class="warning"><p> Make sure to only copy the first part of the SEMP URL (shown highlighted in the image)<br> For example <code>https:/mr-connection-hu34983498.messaging.solace.cloud:943</code><br></p>
+<aside class="warning"><p> Make sure to only copy the first part of the SEMP URL (shown highlighted in the image)<br> For example <code>https://mr-connection-hu34983498.messaging.solace.cloud:943</code><br></p>
 </aside>
 
 
@@ -84,15 +84,15 @@
 </aside>
 <h2 is-upgraded>Import scripts into Postman</h2>
 <ol type="1">
-<li>Launch the desktop Postman applicatication</li>
+<li>Launch the desktop Postman application</li>
 <li>Download the Postman Collection and Environment files below:<br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/EventPortalEnvironment.postman_environment.json" target="_blank">Environment file</a><br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/PopulateEventPortaldemo.postman_collection.json" target="_blank">Script to populate Event Portal</a><br><a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/TearDownEventPortal.postman_collection.json" target="_blank">Script to remove all objects from  Event Portal</a></li>
 <li>Drag the files from your hard drive to the left-hand column of Postman to import<br><img alt="Image" src="img/74eb622af73b83ee.png"><br><br></li>
 </ol>
 <h2 is-upgraded>Configure Postman with your Event Portal token</h2>
 <ol type="1">
-<li>Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br><img alt="Image" src="img/ee17bd7beeb48610.png"><br><br></li>
+<li>Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environment.<br><img alt="Image" src="img/ee17bd7beeb48610.png"><br><br></li>
 </ol>
-<aside class="warning"><p> Make sure to set the active environment variables (step 2 above)!</p>
+<aside class="warning"><p> Make sure to set the correct active Environment (step 2 above)!</p>
 </aside>
 <ol type="1">
 <li>Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br><img alt="Image" src="img/d8a1c70cfa9f8b31.png"><br><br></li>
@@ -104,7 +104,7 @@
 <li>On the next screen, click on Run Generate and populate Event Portal<br><img alt="Image" src="img/2fba6ff189407105.png"><br><br></li>
 <li>Wait for the script to complete. Be patient, there are a lot of commands to run!</li>
 </ol>
-<aside class="warning"><p> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br><code>POST http://&#123;&#123;baseurl}}/api/v2/architecture/addressSpaces</code><br><code>Error: getaddrinfo ENOTFOUND &#123;&#123;baseurl}}</code></p>
+<aside class="warning"><p> If you get this error when running the script, you likely have not set the Event Portal Environment as the active Environment.<br><code>POST http://&#123;&#123;baseurl}}/api/v2/architecture/addressSpaces</code><br><code>Error: getaddrinfo ENOTFOUND &#123;&#123;baseurl}}</code></p>
 </aside>
 
 
@@ -123,7 +123,7 @@
         <aside class="special"><p> If you are using Podman instead of Docker, you&#39;ll need to replace <code>docker</code> with <code>podman</code> in all command line entries.</p>
 </aside>
 <ol type="1">
-<li>Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br><img alt="Image" src="img/6a1e5c2d3dc3f3e.png"><br><br></li>
+<li>Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Management Agent (the script created one for you).  Then click on Edit Connection Details (4).<br><img alt="Image" src="img/6a1e5c2d3dc3f3e.png"><br><br></li>
 <li>On the next screen, click on the three dots next to the PROD-solace event broker, then click on &#34;Edit Connection Details&#34;<br><img alt="Image" src="img/fc261df67c816ac5.png"><br><br></li>
 <li>Update the Message VPN (1), SEMP username (2) and SEMP URL (3) to point to your cloud broker. You will recall you saved them to a text pad in a previous step.  You will use the admin password later. Once properly configured, click on Save Changes (4)<br><img alt="Image" src="img/318a6c4730d78659.png"><br><br></li>
 </ol>

@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2024-07-02T19:47:58Z",
+  "updated": "2024-07-08T13:21:47Z",
   "id": "ep-connect-ep-broker",
   "duration": 83,
   "title": "Connecting Event Portal to a runtime Event Broker",
