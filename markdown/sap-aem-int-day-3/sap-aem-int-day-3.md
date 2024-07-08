@@ -69,7 +69,7 @@ That's it, we should now be good to proceed.
 >aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. <br>
 **Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant or if you want to use the preview version (provided) instead.** <br>
 	In that case, follow the steps in this section to get a preview of the AEM adapter:<br>
-	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip)<br>
+	- Download the Integration Suite AEM Adapter<br>
 	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
 
 Import the adapter into your package.
