@@ -15,7 +15,7 @@ Duration: 0:05:00
 
 Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. The PubSub+ Event Portal makes that easier, faster and more resilient.
 
-This code lab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events aroudn ) and the Event Management Agent.  Once you've established that connectivity, the next codelab explores [reusing events you already have, automating event access and auto-generating code for Event Driven applications.](https://codelabs.solace.dev/codelabs/ep-lifecycle).
+This codelab establishes connectivity between Event Portal, PubSub+ Event Broker (the runtime event broker that moves events around) and the Event Management Agent.  Once you've established that connectivity, the next codelab explores [reusing events you already have, automating event access and auto-generating code for Event Driven applications.](https://codelabs.solace.dev/codelabs/ep-lifecycle).
 
 > aside positive
 > If you run into issues, please reach out on the [Solace Community site](https://solace.community/).
@@ -53,7 +53,7 @@ Password (4)
 
 > aside negative
 > Make sure to only copy the first part of the SEMP URL (shown highlighted in the image)<br>
-For example ```https:/mr-connection-hu34983498.messaging.solace.cloud:943```<br>
+For example ```https://mr-connection-hu34983498.messaging.solace.cloud:943```<br>
 
 
 
@@ -77,7 +77,7 @@ Environments
 
 ### Import scripts into Postman
 Duration: 0:03:00
-1. Launch the desktop Postman applicatication
+1. Launch the desktop Postman application
 1. Download the Postman Collection and Environment files below:<br>
 [Environment file](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/EventPortalEnvironment.postman_environment.json)<br>
 [Script to populate Event Portal](https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/PopulateEventPortaldemo.postman_collection.json)<br>
@@ -86,9 +86,9 @@ Duration: 0:03:00
 
 ### Configure Postman with your Event Portal token
 Duration: 0:05:00
-1. Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environmental variables.<br>![Image](img/7.png)<br><br>
+1. Open the environment variables tab (1), select the Event Portal Environment and (2) set it as the active Environment.<br>![Image](img/7.png)<br><br>
 > aside negative
-> Make sure to set the active environment variables (step 2 above)! 
+> Make sure to set the correct active Environment (step 2 above)! 
 
 1. Fill in the CURRENT VALUE column for  api_key with the token you just generated in Event Portal.<br>![Image](img/8.png)<br><br>
 1. Save the environment variables.<br>![Image](img/9.png)<br><br>
@@ -100,7 +100,7 @@ Duration: 0:10:00
 1. Wait for the script to complete. Be patient, there are a lot of commands to run! 
 
 > aside negative
-> If you get this error when running the script, you likely have not set the Event Portal Environment as the active environmental variables.<br>
+> If you get this error when running the script, you likely have not set the Event Portal Environment as the active Environment.<br>
 ```POST http://{{baseurl}}/api/v2/architecture/addressSpaces```<br>
 ```Error: getaddrinfo ENOTFOUND {{baseurl}}```
 
@@ -115,7 +115,7 @@ Duration: 0:10:00
 > If you are using Podman instead of Docker, you'll need to replace ```docker``` with ```podman``` in all command line entries.
 
 
-1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Managment Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)<br><br>
+1. Open the Runtime Event Manager (1), then go to the Event Management Agent tab (2).   Click on the 3 dots next to your Event Management Agent (the script created one for you).  Then click on Edit Connection Details (4).<br>![Image](img/14.png)<br><br>
 1. On the next screen, click on the three dots next to the PROD-solace event broker, then click on “Edit Connection Details”<br>![Image](img/15.png)<br><br>
 1. Update the Message VPN (1), SEMP username (2) and SEMP URL (3) to point to your cloud broker. You will recall you saved them to a text pad in a previous step.  You will use the admin password later.
 Once properly configured, click on Save Changes (4)<br>![Image](img/16.png)<br><br>
