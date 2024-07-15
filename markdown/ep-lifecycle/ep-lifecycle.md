@@ -2,7 +2,7 @@ author: jessemenning
 summary: See how Event Portal can guide you on a smooth path from fantastic idea to the hands of your users
 id: ep-lifecycle
 tags:
-categories: eventportal
+categories: solace,eventportal
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle
