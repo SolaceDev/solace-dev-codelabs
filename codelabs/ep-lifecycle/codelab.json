@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2024-07-02T19:47:59Z",
+  "updated": "2024-07-15T11:13:36Z",
   "id": "ep-lifecycle",
   "duration": 71,
   "title": "Event Portal: event-driven innovation that's faster, easier, more resilient",
@@ -14,9 +14,11 @@
     "published"
   ],
   "category": [
+    "solace",
     "eventportal"
   ],
   "tags": [
+    "eventportal",
     "web"
   ],
   "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle",
