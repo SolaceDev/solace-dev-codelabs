@@ -1,7 +1,7 @@
 author: jessemenning
 summary: See how Event Portal can guide you on a smooth path from fantastic idea to the hands of your users
 id: ep-lifecycle
-tags:
+tags: eventportal
 categories: solace, eventportal
 environments: Web
 status: Published
