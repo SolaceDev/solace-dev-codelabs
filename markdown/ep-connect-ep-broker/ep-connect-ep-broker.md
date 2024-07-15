@@ -1,8 +1,8 @@
 author: jessemenning
 summary: Establishes connectivity between Event Portal, Pub Sub+ Event Broker (the runtime component) and the Event Management Agent.  This in turn enables config push
 id: ep-connect-ep-broker
-tags: solace, eventportal
-categories: eventportal
+tags: eventportal
+categories: solace, eventportal
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-connect-ep-broker
