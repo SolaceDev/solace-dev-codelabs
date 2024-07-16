@@ -523,7 +523,7 @@ Lastly, the AEM Receiver adapter is configured to persistently (to avoid message
 
 
 #### 2. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:
-![DQM service configuration](img/CIDQMServiceConfiguration.png)You
+![DQM service configuration](img/CIDQMServiceConfiguration.png)
 - Populate the connection details for the DQM service call out with the ones for your own DQM service instance. (You don't need to change the address, if you are using our DQM service. If you are using your own DQM service, you'll need to take the API URL from your token and append `/dq/addressCleanse/batch` to the end of it. It should look something like `https://api.dqmmicro.cfapps.eu10.hana.ondemand.com/dq/addressCleanse/batch`).
 - Hit configure at the top right and fill in the details to connect to your AEM broker service:
 
@@ -633,6 +633,7 @@ As you can see, broker ACLs are a quite powerful tool to tightly control access 
 In addition to topic ACLs, remember that queue access is controlled by the queue ownership model and the "other permission".
 
 ## Troubleshooting
+Duration: 0:05:00
 
 #### Checking that your flow was deployed successfully.
 - Go to Monitor Artifacts -> Manage Integration Content -> All. <br>
