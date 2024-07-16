@@ -61,24 +61,14 @@
 <aside class="warning"><p> A new Advanced Event Mesh specific adapter was made available in January 2024. If you haven&#39;t used this adatper in your CI tenant before, you may need to import it once. Follow these steps to get the official adapter from SAP. <br></p>
 </aside>
 <ul>
-<li>Navigate to your newly imported package: AEM-Rapid-Pilot-day3.</li>
-<li>Take a copy of the AEMLegacyOutputAdapter flow. <img alt="CI Copy flow" src="img/51f44b324884dba8.png"></li>
-<li>Choose a new name. (Accepting the default of <code>AEMLegacyOutputAdapter_copy</code> will do.)</li>
-<li>Then open and edit your copy named  <code>AEMLegacyOutputAdapter_copy</code> or similar. <img alt="CI Edit flow" src="img/6cef95fc21afb9fd.png"></li>
-<li>Select the line named AdvancedEventMesh and delete it by clicking on the rubbish bin icon that appears. <img alt="CI delete adapter" src="img/11c258625b174e17.png"></li>
-<li>After deletion, select the connector tool from the top and reconnect the Sender box to the Start icon. <img alt="CI connector tool" src="img/d995d48a5e3c8220.png"></li>
-<li>You should see a pop up appear in which you can select the AdvancedEventMesh adapter. Selecting this should pull the SAP version of this adapter into your CI tenant.</li>
+<li>Navigate to &#34;Discover&#34; -&gt; &#34;Integrations&#34; in the left hand menu:<br><img alt="CI Discover Integrations" src="img/981b4902e802e924.png"></li>
+<li>Search for &#34;advanced&#34; to find the &#34;Advanced Event Mesh Adapter for SAP Integration Suite&#34;:<br><img alt="CI Discover Adapter" src="img/57f4500daa287971.png"></li>
+<li>Select the adapter package by clicking on it, then click on &#34;Copy&#34; on the top right.<br><img alt="CI Copy Adapter" src="img/fcde8b198508ea07.png"></li>
+<li>Go to &#34;Design&#34; -&gt; &#34;Integrations and APIs&#34; in the left hand menu and click on the newly created &#34;Advanced Event Mesh Adapter for SAP Integration Suite&#34; package.<br><img alt="CI AEM package" src="img/2795551808c30567.png"></li>
+<li>Navigate to &#34;Artifacts&#34; to see the Integration Adapter and click on and select &#34;Deploy&#34; from the &#34;Actions&#34; menu.<br><img alt="CI Deploy Adapter" src="img/aafd7cbb85bf60db.png"></li>
+<li>Select the &#34;Cloud Integration&#34; Runtime Profile.<br><img alt="CI Deploy CI Runtime" src="img/aba0967970ce1a76.png"></li>
+<li>You should now be able to see the AdvancedEventMesh Integration Adapter if you navigate to &#34;Monitor&#34; -&gt; &#34;Integrations and APIs&#34; and click on the tile &#34;All&#34; under &#34;Manage Integration Content&#34; with a status of &#34;Started&#34; if everything went well:<br><img alt="CI Adapter Monitor" src="img/afb669105adb0415.png"></li>
 </ul>
-<p>That&#39;s it, we should now be good to proceed. (You can cancel the changes in your copy <code>AEMLegacyOutputAdapter_copy</code> or similar and delete the copy of the flow now.)</p>
-<aside class="warning"><p> Skip over C) if you have successfully completed this step.</p>
-</aside>
-<h2 is-upgraded>C) Download and import the AEM adapter for Integration Suite</h2>
-<aside class="warning"><p> A new Advanced Event Mesh specific adapter was made available in January 2024. <br><strong>Only follow this step if you can&#39;t see the AdvancedEventMesh adapter in your Integration Suite tenant or if you want to use the preview version (provided) instead. <br></strong> In that case, follow the steps in this section to get a preview of the AEM adapter:<br> - Download the Integration Suite AEM Adapter<br> - Import the AEM adapter into your Integration Suite tenant and deploy this adapter.</p>
-</aside>
-<p>Import the adapter into your package. <img alt="CI Adapter import" src="img/e27a876d26769930.png"></p>
-<p>Extract the downloaded zip and select the .esa file in the upload dialog. Runtime Profile should be Cloud Integration. (You should not be seeing the warning message <code>Integration adapter with the ID 'AdvancedEventMesh' already exists</code>. If you do, then you can skip this step as the adapter has already been made available to you.) <img alt="CI Adapter import" src="img/6e850082abe05775.png"></p>
-<p>Deploy the adapter after import. <img alt="CI Adapter deploy" src="img/5f567b5457e1fe8c.png"></p>
-<p>See  <a href="https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure" target="_blank">SAP documentation</a> for more detailed instructions</p>
 
 
       </google-codelab-step>
@@ -399,7 +389,7 @@
 <p><img alt="AEMBusinessPartnerAddressCheck_flow" src="img/850c4d221a30107e.png"> This flow receives Business Partner Create and Change events and invokes the Data Quality Management Service in BTP to check and correct the addresses inside the Business Partner event payload. It does this by<br> a) Storing the original event payload in an environment variable.<br> b) Populating the DQM request payload with the addresses in the input event.<br> c) Invoking the DQM service over REST and<br> d) Parsing the response, checking whether the DQM service evaluated the input addresses to be Valid, Invalid, Blank or has Corrected them.<br> e) Merging any corrected addresses back into the original payload.<br> f) And finally publishing the result back as a new event to the AEM broker with an updated topic in the format:<br><code>sap.com/businesspartner/addressChecked/V1/{businessPartnerType}/{partnerId}/{addressCheckStatus}</code></p>
 <p>Let&#39;s also look at what happens in order to publish a new event back to the Advanced Event Mesh broker. First of all, on the integration flow overall configuration settings, we are preserving the destination header field to have access to the original topic that this event was published on. This matters, because the event may contain valuable meta-data that helps us and downstream consumers filter for events relevant to them and it saves us from reparsing the payload, which can be CPU and I/O intensive. <img alt="AEMBusinessPartnerAddressCheck flow settings" src="img/ad23f169d749c108.png"> Secondly we are using a couple of lines in the script that is evaluating the DQM service result and merging the corrected addresses back into the original payload to retrieve and parse the original topic, replace one level (the verb) to create a new event and amend another extra meta-data level that contains the result of the address check (either Valid, Corrected, Invalid or Blank), which can be used by downstream systems to filter for specific outcomes. We are storing the newly created topic in the Destination field of the message header. <img alt="AEMBusinessPartnerAddressCheck topic processing" src="img/34b75b7451b0e15a.png"> Lastly, the AEM Receiver adapter is configured to persistently (to avoid message loss) publish to a topic, taking the value from the header field that we set in the previous step/script. <img alt="AEM Publisher settings" src="img/10eeb30c7c1b616b.png"></p>
 <h3 is-upgraded>2. Configuring and deploying the AEMBusinessPartnerAddressCheck iflow:</h3>
-<p><img alt="DQM service configuration" src="img/500def0a5eb92ab0.png">You</p>
+<p class="image-container"><img alt="DQM service configuration" src="img/500def0a5eb92ab0.png"></p>
 <ul>
 <li>Populate the connection details for the DQM service call out with the ones for your own DQM service instance. (You don&#39;t need to change the address, if you are using our DQM service. If you are using your own DQM service, you&#39;ll need to take the API URL from your token and append <code>/dq/addressCleanse/batch</code> to the end of it. It should look something like <code>https://api.dqmmicro.cfapps.eu10.hana.ondemand.com/dq/addressCleanse/batch</code>).</li>
 <li>Hit configure at the top right and fill in the details to connect to your AEM broker service:</li>
@@ -467,7 +457,7 @@ Client Password: ******** &lt;- provided during the course
 
       </google-codelab-step>
     
-      <google-codelab-step label="Troubleshooting" duration="0">
+      <google-codelab-step label="Troubleshooting" duration="5">
         <h3 is-upgraded>Checking that your flow was deployed successfully.</h3>
 <ul>
 <li>Go to Monitor Artifacts -&gt; Manage Integration Content -&gt; All. <br> You should be seeing your flow as Started, similar to this view: <img alt="CPI flow monitoring" src="img/4d5ab6f75a2b4c3a.png"></li>
