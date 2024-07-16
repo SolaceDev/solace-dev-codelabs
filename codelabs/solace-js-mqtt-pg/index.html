@@ -20,8 +20,9 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="solace-js-mqtt-pg"
                   title="Tech Stack Tutorial: Wiring Together Solace PubSub&#43;, JavaScript, MQTT, and PostgreSQL"
                   environment="web"
@@ -115,7 +116,7 @@ cd solace-js-mqtt-postgres-blog
 <ul>
 <li><a href="https:/github.com/solacese/solace-js-mqtt-postgres-blog/tree/master/mqtt-producer" target="_blank">GitHub repo - producer</a></li>
 </ul>
-<p>JavaScript is becoming a lingua franca for newly minted programmers coming out of university programs, and the ecosystem is full of innovative libraries that solve many categories of problems. The language is becoming increasingly expressive thanks to <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-262/" target="_blank">ECMAScript</a> and today&#39;s ESNext (the latest version of the ECMAScript specification), and build tools are becoming easier and easier to use thanks to <a href="https://babeljs.io/" target="_blank">Babel</a> and low touch bundlers like <a href="https://parceljs.org/" target="_blank">Parcel</a>.</p>
+<p>JavaScript is becoming a lingua franca for newly minted programmers coming out of university programs, and the ecosystem is full of innovative libraries that solve many categories of problems. The language is becoming increasingly expressive thanks to <a href="https://tc39.es/ecma262/" target="_blank">ECMAScript</a> and today&#39;s ESNext (the latest version of the ECMAScript specification), and build tools are becoming easier and easier to use thanks to <a href="https://babeljs.io/" target="_blank">Babel</a> and low touch bundlers like <a href="https://parceljs.org/" target="_blank">Parcel</a>.</p>
 <p>JavaScript paired with MQTT provides a versatile foundation for systems programming, event-driven microservices, event-driven frontends, and more.</p>
 <p>In the resources I&#39;ll be covering in this section, you&#39;ll find skeleton code for a basic JavaScript MQTT producer. At a high level, what this code does is initialize an MQTT client, connect the client to your MQTT broker using the credentials you fill into the <code>.env</code> file, and publish a single mock user registration event on topic <code>User/Registration/Add</code>. The included MQTT client is a wrapper I wrote around MQTT.js.</p>
 <p>I&#39;m not going to cover any MQTT or messaging basics in this blog post, so if you want to learn about topics or need a refresher, follow along with <a href="https://docs.solace.com/PubSub-Basics/Understanding-Topics.htm" target="_blank">our documentation</a>.</p>

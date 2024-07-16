@@ -1,0 +1,855 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Solace Masterclass</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="solace-masterclass"
+                  title="Solace Masterclass"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-masterclass">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
+        <p class="image-container"><img alt="Solace Masterclass" src="img/b2ffae1eb8e18d25.jpeg"></p>
+<p>This Codelab contains the technical hands-on section of the <strong>Solace Masterclass: Implementing Event-Driven-Architectures</strong> The participants of this masterclass will be implementing this Codelab in the Strigo virtual machine provided as a part of the masterclass session. The Strigo virtual machine contains all the software packages required for implementing the hands-on Codelab.</p>
+<p>The agenda of the hands-on is as below :</p>
+<ul>
+<li>Use case introduction</li>
+<li>Cloud account and broker setup</li>
+<li>Event Portal design import</li>
+<li>Application development and testing: <ul>
+<li>Explore the selected use case and understand the interactions between applications and events</li>
+<li>Implement each application with business code logic as described in the Codelab</li>
+<li>Test the end to end event flow</li>
+</ul>
+</li>
+<li>Understand the benefits of EDA and Solace in these use cases</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use case introduction" duration="0">
+        <p>As a part of the event storming session earlier you would have discussed and brainstormed on few use cases. In this brainstorming you have identified systems, events and processes involved in the flow(s) and also designed the topic taxonomy following Solace best practices and recommendations.</p>
+<p>In the hands-on section of this masterclass, you can choose one of the below industry domains :</p>
+<ol type="1">
+<li>Retail</li>
+<li>Banking</li>
+</ol>
+<p>and follow it for implementing. Due to time limit considerations, we will be implementing only a selected subset of the whole design.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace Cloud Account and broker provisioning" duration="0">
+        <h2 is-upgraded>Step 1: Solace Cloud Account</h2>
+<p>In case you do not have an active Solace cloud account, you can register for one via the link: <a href="https://console.solace.cloud/login/new-account?product=event-streaming" target="_blank">Solace trial account registration</a> You can log in to the newly created Solace cloud account using the link : <a href="https://console.solace.cloud/home?login=true" target="_blank">Solace Cloud Account</a> Once you have registered and logged in to the Solace cloud account, you can get started with provisioning a Solace developer grade broker which will be used in the next sections.</p>
+<h2 is-upgraded>Step 2: Solace broker provisioning</h2>
+<ul>
+<li>Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like this: <img alt="mission-control.png" src="img/55cf7b7d79664e5.png"></li>
+<li>Click on &#34;Cluster Manager&#34; to go into where you create and manage your broker services.</li>
+<li>Then click the &#34;Create service&#34; button to create a new Solace cloud broker instance.</li>
+<li>Ensure you have selected Developer Service, Amazon Web Services as the cloud service provider,</li>
+<li>and then click the map to find a region close to you: <img alt="broker_create_service.jpg" src="img/c2a16615a02dc4ea.jpg"></li>
+</ul>
+<p>Give your Solace PubSub+ Cloud service instance a name of your choice and then let it start!.</p>
+<aside class="warning"><p> As a guide, try to keep your broker name short for this session</p>
+</aside>
+<p>Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc. It takes about 5 minutes, and then you&#39;ll be ready!</p>
+<p>It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud. Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
+<p>Once the Solace broker is up and running, click on the broker name and enter it.</p>
+<ul>
+<li>Once your service is deployed and ready, click on it to go into it and look at some basic configuration information: <img alt="broker_console.png" src="img/317f41284b791582.png"></li>
+<li>Notice some buttons across the top:</li>
+<li>The &#34;Connect&#34; tab shows you all the required connection information for your messaging pub/sub applications (e.g. host, username, password, etc.), which we&#39;ll need in later steps. The info can be grouped either by protocol or by programming language.</li>
+<li>At the top-right, there should be a button saying &#34;Open PubSub+ Broker Manager&#34;. Click on that to go into the Manager GUI.</li>
+<li>From this webapp, you&#39;ll be able to view configured and runtime information, create new queues, create usernames and profiles, and other various administrative tasks for the Solace broker. <img alt="pubsubManager.png" src="img/86c89b5a3abc3e13.png"></li>
+<li>On the left side of the screen are the main sections to navigate through:</li>
+<li><strong>Message VPN</strong>: VPN-level stats and config (a Message VPN is a virtual partition of a single broker... one Solace broker can host multiple Message VPNs, and each VPN can have different authorization schemes and topic spaces; client/messaging application activity happens within the scope of a VPN)</li>
+<li><strong>Clients</strong>: information about connected and configured client applications</li>
+<li><strong>Queues</strong>: used for Guaranteed / persistent messaging</li>
+<li><strong>Connectors</strong>: helpful wizards to connect to a variety of web services</li>
+<li><strong>Access Control</strong>: where you create new client usernames, ACL profiles, and client profiles</li>
+<li><strong>Replay</strong>: where you can enable replay, to allow the broker to send previous messages again</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Event Portal design" duration="0">
+        <p>The Event Portal is a cloud-based tool that simplifies the design of your event-driven architecture (EDA). With the Event Portal, you can:</p>
+<ul>
+<li>Define and track relationships between applications in a highly decoupled EDA.</li>
+<li>Create and manage events using a user-friendly GUI.</li>
+</ul>
+<p>In summary, the Event Portal streamlines event management, making it an essential part of your EDA toolkit.</p>
+<h2 is-upgraded>Step 1 : Import Event Portal designs</h2>
+<ul>
+<li>From the Solace cloud account screen, click on the <strong>Designer</strong> button and enter the Event Portal&#39;s Designer page as below : <img alt="ep-designer-button.png" src="img/226e1d31765e6cd5.png"></li>
+<li>Click on the <strong>Import Application Domains</strong> button by clicking on the three dots in the top right corner as below : <img alt="ep-app-domain-import.png" src="img/80d2fa6931ed06de.png"></li>
+<li>A file selector dialog box will be displayed so that you can select the application domain file of your choice.</li>
+<li>Navigate to the folder : <code>/home/ubuntu/GitHub/solace-masterclass-code/ep-app-domains</code></li>
+<li>As described in <strong>Section 2 - Use case introduction</strong>, you can choose to implement from multiple industry domains. Based on your choice, you can select one of the two domains files as below : <ul>
+<li>Banking Industry : <code>Acme_Bank_App_Domain.json</code></li>
+<li>Retail industry : <code>Acme_Retail_App_Domain</code><img alt="ep-app-domain-files.png" src="img/3338d83735204566.png"></li>
+</ul>
+</li>
+<li>Select on a file and click  <strong>Open</strong>, this will result in the application domain being imported as below : <img alt="ep-app-domain-imported.png" src="img/77cfd424d87d6acf.png"></li>
+</ul>
+<aside class="special"><p> you can import as many application domains as you wish, but for time considerations its advisable to choose one example for implementation.</p>
+</aside>
+<ul>
+<li>Inside the application domain, you should be able to see the objects from your selected industry as below :<ul>
+<li>Retail industry : <img alt="retail-domain-ep.png" src="img/9d1a9d510636d717.png"></li>
+<li>Banking industry : <img alt="banking-industry.png" src="img/3958ef256b43aeca.png"></li>
+</ul>
+</li>
+<li>Explore the various EDA artifacts like schemas, events, applications, their relationships and dependencies.</li>
+</ul>
+<aside class="special"><p> This is an interesting step from an architecture perspective as the Event Portal is a unique tool which helps you visualize the state of your EDA landscape, identify dependencies and versions, etc.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use case implementation" duration="0">
+        <p>Based on use case of your choice, please follow the appropriate chapter below :</p>
+<ul>
+<li>Retail: Sections 6 and 7</li>
+<li>Banking: Sections 8 and 9</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Part-A : Retail Domain" duration="0">
+        <h2 is-upgraded>Use case explanation</h2>
+<p>For the retail domain use case, we will be considering a fictitious company called Acme Retail which has been consistently recognized as the leader in Ecommerce website. Unfortunately, due to legacy and outdated architecture choices and implementation, Acme Retail is encountering major challenges in expanding their operations as below :</p>
+<ul>
+<li>Order processing errors</li>
+<li>Inventory management issues</li>
+<li>Fraudulent orders</li>
+</ul>
+<p>This has impacted their customer&#39;s experience, and they are at risk of losing their customers. As a solution, they have defined a POC to event enable the Order-to-Cash (OTC) flow.</p>
+<p>The dependency between the applications and events are described as below :</p>
+<ul>
+<li>User orders via <strong>Order service</strong></li>
+<li><strong>Order service</strong> publishes <em>Order-Created</em> event</li>
+<li><strong>Inventory-Fraud-Service</strong> subscribes to <em>Order-Created</em>, reserves stock and conducts fraud check</li>
+<li><strong>Inventory-Fraud-Service</strong>: <ul>
+<li>Publishes <em>Order-Confirmed</em> event</li>
+<li><strong>Order service</strong> subscribes to <em>Order-Confirmed</em> event for user status updates</li>
+</ul>
+</li>
+<li><strong>Payment service</strong> subscribes to <em>Order-Confirmed</em> event and integrates with PSP/Gateway for payment transaction processing</li>
+<li><strong>Payment service</strong><ul>
+<li>Publishes <em>Payment Created</em> event</li>
+<li>Publishes <em>Payment Updated</em> event</li>
+<li><strong>Order service</strong> subscribes to the <em>Payment Created</em> event for user updates</li>
+</ul>
+</li>
+<li><strong>Shipping service</strong> subscribes to <em>Payment Created</em> integrates with 3PL or the logistics provider</li>
+<li><strong>Shipping service</strong>: <ul>
+<li>Publishes <em>Shipment created</em> event</li>
+<li>Publishes <em>Shipment updated</em> event</li>
+<li><strong>Order service</strong> subscribes to the <em>Shipment created</em> for user updates</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img alt="retail-domain-usecase.png" src="img/7b3dcc92d54c1aaa.png"></p>
+<p>This POC leverages the following architectural principles and practices :</p>
+<ul>
+<li><strong>Microservices Architecture</strong>: The system is broken down into smaller, independent services that communicate with each other through messages. This makes the system more scalable, resilient, and easier to maintain.</li>
+<li><strong>Event-Driven Architecture</strong>: Events are used to trigger actions in different parts of the system. For example, placing an order triggers an event is subscribed by multiple interested consumers. This makes the system more flexible and responsive to changes.</li>
+<li><strong>Publish-Subscribe Pattern</strong>: Services publish events to a central message broker, and other services can subscribe to those events. This allows for loose coupling between services, as they don&#39;t need to know about each other directly.</li>
+</ul>
+<p>As a part of the workshop, you will have access to prebuilt applications and artifacts which you will be using in this segment of the workshop.</p>
+<h2 is-upgraded>1. Order Service</h2>
+<h3 is-upgraded>Introduction</h3>
+<p>The Order-Service acts as the entry point to the whole flow and emulates the user experience of creating a basket and converting it into an Order. As described earlier in the over-all flow definition, it creates the <em>Order-Created</em> events and subscribes to other relevant events which it uses for showing realtime status updates on the order level.</p>
+<h3 is-upgraded>How to run ?</h3>
+<ul>
+<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service</strong></li>
+<li>Open a terminal in this folder and run the command : <code>mvn clean spring-boot:run</code></li>
+<li>Once the application is up and running, open the application using the url: <a href="http://localhost:9002/" target="_blank">http://localhost:9002/</a> in the Chrome browser (or any one available in the VM)</li>
+<li>You should see a page which looks like this : <img alt="Order-Service-Application.png" src="img/a9e0187a4d4c4f0a.png"></li>
+<li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
+<li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/5263e29cb746dec3.png"></li>
+<li>Make a note of the following properties in a separate file as they will be required for the following steps:<ul>
+<li>Public Endpoint</li>
+<li>Username</li>
+<li>Password</li>
+<li>Message VPN<br><img alt="brokerconsole_connect_creds_java_highlighted.png" src="img/76bb965d88c4bdd.png"></li>
+</ul>
+</li>
+<li>Fill in the connection details in the appropriate text box and click on the <strong>Connect to broker</strong> button</li>
+<li>You should see a screen as below with the appropriate connection status : <img alt="order-service-broker-connected.png" src="img/d4d35cd6d236f44f.png"></li>
+<li>Click on the <strong>Create a new basket for ordering</strong> button to simulate a new basket as below: <img alt="order-service-basket-init.png" src="img/2d3b9fd0a9148c9f.png"></li>
+<li>In the background after 10–15 seconds, the basket is converted into an order and an <em>Order-Created</em> event is automatically triggered, and the status of the order is automatically updated to CREATED as below : <img alt="order-created.png" src="img/1b9f18fce6cc668c.png"></li>
+<li>The <em>Order-Created</em> is published to the topic defined in the Event Portal design as below : <img alt="ep-Order-created-event.png" src="img/136b64ddd4cb1aca.png"></li>
+<li>If you observe the logs closely, you will see that the broker sends back an <strong>ACK or Acknowledge</strong> for every <strong>Order-Created</strong> event that is being published. This is because we are publishing these events as <strong>Persistent</strong> events.</li>
+<li>You can also verify this quickly by using the <strong>Try-Me</strong> tab. How to do this would have been shown in the earlier half of the day when we discussed the Solace Broker features.</li>
+<li>Feel free to trigger a few more orders using the UI and observe the payload and topics on which the events are published.<aside class="special"><p> If you need help using the <strong>Try-me</strong> then feel free to ask any of the Solace members running the masterclass for assistance.</p>
+</aside>
+</li>
+</ul>
+<h2 is-upgraded>2. Inventory-FraudCheck-Service</h2>
+<h3 is-upgraded>Introduction</h3>
+<p>As Acme-Retail has been facing major challenges with fraudulent orders and realtime stock management, the stakeholders want to ensure that the system is not over committing to orders for which there is no stock. Additionally, they also want to do a fraud check on the customer and order to ensure that only legitimate orders are processed and shipped.</p>
+<p>This requirement has been implemented in the <strong>Inventory-FraudCheck-Service</strong> which subscribes to each incoming <em>Order-Created</em> event and performs the inventory reservation and fraud check. Once this is completed, it triggers an <em>Order-Confirmed</em> event for further processing.</p>
+<h3 is-upgraded>How to run?</h3>
+<ul>
+<li>Open up a new terminal window, make sure not to close the earlier window running the <strong>Order-Service</strong></li>
+<li>Navigate to the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/inventory-fraudcheck-service</strong></li>
+<li>Run the command : <code>mvn clean install</code></li>
+<li>Run the command : <code>java -jar target/inventory-fraudcheck-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
+</ul>
+<aside class="special"><p> You would have used the above connection parameters in the earlier step for the <strong>Order-Service</strong>.</p>
+</aside>
+<ul>
+<li>Keep an eye out on the logs to see if the application is starting up properly as expected.</li>
+</ul>
+<h3 is-upgraded>Error?</h3>
+<p class="image-container"><img alt="Oops.png" src="img/22223cf4a3c311b2.png"></p>
+<p>Did you get an error as below complaining about the absence of a queue object :</p>
+<pre><code language="language-Java" class="language-Java">2024-03-22T12:42:19.725+01:00  INFO 69425 --- [1_ReactorThread] c.s.jcsmp.impl.flow.BindRequestTask  : Client-1: Got BIND (&#39;#P2P/QUE/all-orders-placed&#39;) Error Response (503) - Unknown Queue
+com.solace.messaging.PubSubPlusClientException$MissingResourceException: 503: Unknown Queue
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.createSolaceConsumer(PersistentMessageReceiverImpl.java:1359)
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.onStart(PersistentMessageReceiverImpl.java:1169)
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(PersistentMessageReceiverImpl.java:436)
+</code></pre>
+<p>If you remember about Solace Queue which we discussed earlier, we differentiated them into two types :</p>
+<ol type="1">
+<li>Durable: Mostly created by an administrator and always exists on the broker unless explicitly deleted by an administrator</li>
+<li>Non-Durable: Temporary in nature, created only by an application and its lifespan is linked to the client that created it.</li>
+</ol>
+<p>Since in the case of Acme Retail, it is critical that no messages are lost during application downtime and also no subscribing application should be able to delete the queue object; an architectural choice was made to use <strong>Durable - Exclusive</strong> queue configurations.</p>
+<p>To fix the error encountered above, you need to manually create the Queue object as below :</p>
+<ul>
+<li>Navigate to the <strong>PubSub+ Broker Manager</strong> as below : <img alt="Open-broker-manager.png" src="img/26022409a2e37f28.png"></li>
+<li>Click on the <strong>Queues</strong> on the left menu to view a listing of the existing queues and then create a new queue by clicking on the <strong>+ Queue</strong> button on the right side as below : <img alt="broker-Queues-screen.png" src="img/692659b8b6bba58e.png"></li>
+<li>Enter the name of the queue : <code>all-orders-placed</code>, click create and keeping the default queue settings click <strong>Apply</strong> as below : <img alt="queue-creation-default-settings.png" src="img/407958fb18b274a6.png"></li>
+</ul>
+<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
+</aside>
+<ul>
+<li>Once the queue is created, go into the newly created queue and click on the <strong>Subscriptions</strong> button on the top : <img alt="new-created-queue.png" src="img/87ab9ea0234aa54f.png"></li>
+<li>Click on the <strong>+ Subscription</strong> button on the queue and start adding in the topic patterns which you want to be attracted in this queue: <img alt="queue-add-subscription.png" src="img/b3bd7254ec2ebf5e.png"></li>
+<li>Enter the pattern : <code>acmeretail/onlineservices/order/created/*/*/*</code> as shown below and click <strong>Create</strong></li>
+</ul>
+<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries</p>
+</aside>
+<ul>
+<li>With the above steps, a new queue has been created with the required subscription which can now be connected to by the <strong>Inventory-FraudCheck-Service</strong></li>
+</ul>
+<aside class="special"><p> Make a note of the above steps as you will be creating multiple queues with similar configuration for the other applications.</p>
+</aside>
+<h3 is-upgraded>Retry deployment</h3>
+<p>Now that the missing queue has been created with the proper subscription, restart/rerun the <strong>Inventory-FraudCheck-Service</strong> application using the same command : <code>java -jar target/inventory-fraudcheck-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></p>
+<h3 is-upgraded>Output</h3>
+<p>As you closely observe the logging being displayed on the console, you can see no events coming in from the queue. But how could that be when you clearly created multiple orders from the <strong>Order-Service</strong> ? <img alt="where-did-the-events-go.png" src="img/576ed5e325911bd7.png"></p>
+<p>If you think closely, you would realize that when you created those orders, the queue <strong>all-orders-placed</strong> had not been created yet. So all the <strong>Order-created</strong> events even though they were marked as persistent and acknowledged by the broker were lost as the broker could not find an active consumer for them.</p>
+<p>Now that you have created the queue, newly published orders will lie in the queue till a consumer processes and acknowledge the event.</p>
+<p>Let&#39;s test out the flow again till now by building and deploying the Order-Service and observing the logs on the * <em>Inventory-FraudCheck-Service</em>* to see incoming order created events.</p>
+<h3 is-upgraded>New feature enhancement</h3>
+<p>For each incoming <strong>Order-Created</strong> event, an <strong>Order-Confirmed</strong> event will be published as the stock reservation and fraud check passes.</p>
+<p>This <strong>Order-Confirmed</strong> needs to be subscribed by the <strong>Order Service</strong>. Follow the below steps to enable this flow :</p>
+<ul>
+<li>Create a new queue with the required subscription to ensure that the event is being persisted and made available to the <strong>Order-Service</strong> for processing. <ul>
+<li>Follow the above steps for creating a new queue with the below name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>all-order-updates</p>
+</td><td colspan="1" rowspan="1"><p><code>acmeretail/onlineservices/order/confirmed/v2/*/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+<aside class="special"><p> As we incorporate new features, we will update this queue&#39;s subscriptions with additional event topics.</p>
+</aside>
+<ul>
+<li>Import the <strong>Order-Service</strong> as a project into VS Code IDE by simply selecting the folder at the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service</strong></li>
+</ul>
+<aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
+</aside>
+<ul>
+<li>Open the file: <strong>com.solace.acme.store.orderservice.service.SolaceEventPublisher.java</strong> and make the below updates to the file : <ul>
+<li>In the method <strong>connectToBroker</strong>, add in the code snippet before the return statement : <pre><code language="language-Java" class="language-Java">final PersistentMessageReceiver orderUpdatesEventReceiver = messagingService.createPersistentMessageReceiverBuilder().build(Queue.durableExclusiveQueue(configProperties.getOrderUpdatesQueueName()));
+orderUpdatesEventReceiver.setReceiveFailureListener(failedReceiveEvent -&gt; System.out.println(&#34;### FAILED RECEIVE EVENT &#34; + failedReceiveEvent));
+orderUpdatesEventReceiver.start();
+orderUpdatesEventReceiver.receiveAsync(buildOrdersUpdatesEventHandler(orderUpdatesEventReceiver));
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<aside class="special"><p> This code snippet creates and configures a receiver for subscribing to the persistent messages attracted in the <strong>all-order-updates</strong> queue. The receiver links an asynchronous callback handler which processes the event</p>
+</aside>
+<ul>
+<li>Introduce the below two methods in the same class : <pre><code language="language-Java" class="language-Java">private MessageReceiver.MessageHandler buildOrdersUpdatesEventHandler(final PersistentMessageReceiver orderUpdatesEventReceiver) {
+  return (inboundMessage -&gt; {
+    try {
+        final String inboundTopic = inboundMessage.getDestinationName();
+        log.info(&#34;Processing message on incoming topic :{} with payload:{}&#34;, inboundTopic, inboundMessage.getPayloadAsString());
+        boolean eventProcessed = processOrderUpdate(inboundTopic, inboundMessage.getPayloadAsString());
+        if (eventProcessed) {
+          orderUpdatesEventReceiver.ack(inboundMessage);
+        }
+    } catch (RuntimeException runtimeException) {
+      log.error(&#34;Runtime exception encountered while processing incoming event payload :{} on topic:{}. Error is :&#34;, inboundMessage.getPayloadAsString(), inboundMessage.getDestinationName(), runtimeException);
+    }
+  });
+}
+</code></pre>
+</li>
+</ul>
+<aside class="special"><p> This code snippet is the handler for the events which are being consumed by the above-configured receiver.</p>
+</aside>
+<pre><code language="language-Java" class="language-Java">private boolean processOrderUpdate(final String eventTopic, final String eventJson) {
+    try {
+        if (eventTopic.contains(&#34;order&#34;)) {
+            final Order order = objectMapper.readValue(eventJson, Order.class);
+            final String incomingOrderId = order.getId();
+            Order orderObjectFromCache = OrderCache.getInstance().getOrderMap().get(incomingOrderId);
+            orderObjectFromCache.setState(Order.OrderState.VALIDATED);
+            OrderCache.getInstance().getOrderMap().put(incomingOrderId, orderObjectFromCache);
+        } else if (eventTopic.contains(&#34;payment&#34;)) {
+            final Payment payment = objectMapper.readValue(eventJson, Payment.class);
+            final String incomingOrderId = payment.getOrderId();
+            Order orderObjectFromCache = OrderCache.getInstance().getOrderMap().get(incomingOrderId);
+            orderObjectFromCache.setState(Order.OrderState.PAYMENT_PROCESSED);
+            OrderCache.getInstance().getOrderMap().put(incomingOrderId, orderObjectFromCache);
+        } else if (eventTopic.contains(&#34;shipment&#34;)) {
+            final Shipping shipment = objectMapper.readValue(eventJson, Shipping.class);
+            final String incomingOrderId = shipment.getOrderId();
+            Order orderObjectFromCache = OrderCache.getInstance().getOrderMap().get(incomingOrderId);
+            orderObjectFromCache.setState(Order.OrderState.SHIPPED);
+            OrderCache.getInstance().getOrderMap().put(incomingOrderId, orderObjectFromCache);
+        }
+        return true;
+    } catch (JsonProcessingException jsonProcessingException) {
+        log.error(&#34;Error encountered while processing event:{}, exception:&#34;, eventJson, jsonProcessingException);
+        return false;
+    }
+}
+</code></pre>
+<aside class="special"><p> This code snippet identifies the topic which the event from the queue was published on and depending on the <strong>object type (Order, Payment or Shipment)</strong> implements an appropriate business logic</p>
+</aside>
+<ul>
+<li>In the terminal for the <strong>Order Service</strong>, stop the service if running and execute the command: <strong>mvn clean spring-boot:run</strong></li>
+<li>Publish a few more orders from the <strong>Order-Service</strong> and see it being processed in the console logs.</li>
+<li>Go back to the <strong>Order-Service,</strong> and you will observe that the status of the newly created order is showing as VALIDATED as the orders are processed by the <strong>Inventory-FraudCheck-Service</strong></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Part-A: Retail Domain—Continued" duration="0">
+        <p>Let us continue with the next applications in the OTC flow :</p>
+<h2 is-upgraded>3. Payment Service</h2>
+<p>Payment-Service-Provider (PSP) or Payment Gateway integrations are inherently complex due to error handling and transaction management, asynchronous communication, scalability, etc. Due to legacy architectural choices, Acme shop has faced considerable challenges in having a stable payment integration leading to revenue loss and customer dissatisfaction in many cases. Hence, PSP integration has been a major component of this POC for validating that Solace and EDA are a viable solution to this problem statement.</p>
+<h3 is-upgraded>Introduction</h3>
+<p>The Payment-Service subscribes to the <em>Order-Confirmed</em> event being published by the <strong>Inventory-Fraudcheck-Service</strong> and processes the payment integration for that order.<br> To denote that the payment processing has begun, it publishes a <em>Payment Created</em> event initially and once the payment authorization and confirmation comes in, an additional <em>Payment Updated</em> event is published.<br> The <em>Payment Created</em> event is in-turn subscribed by the <strong>Order Service</strong> for user status updates</p>
+<h3 is-upgraded>How to run?</h3>
+<ul>
+<li>Open up a new terminal window, make sure not to close the earlier window running the earlier applications</li>
+<li>Navigate to the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/payment-service</strong></li>
+<li>Before starting the application, we need to create the queue that the <strong>payment-service</strong> requires to start.</li>
+<li>Follow the steps from the previous <strong>inventory-fraudcheck-service</strong> section and create a new queue similarly with the following name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>all-orders-confirmed</p>
+</td><td colspan="1" rowspan="1"><p><code>acmeretail/onlineservices/order/confirmed/*/*/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
+</aside>
+<ul>
+<li>Now that we have configured the queue for feeding the <strong>Payment Service</strong>, we have to make sure that the <strong>Order-Service</strong> can also receive the <em>Payment Created</em> events. This is done by updating the subscription list of the <em>all-order-updates</em> queue with the topic pattern of the <em>Payment Created</em> events.</li>
+<li>You can do this by :<ul>
+<li>Open the queue configuration for the <em>all-order-updates</em> queue</li>
+<li>Click on the <strong>Subscription</strong> tab</li>
+<li>Click on <strong>+ Subscription</strong> and add in an additional topic subscription as : <code>acmeretail/onlineservices/payment/created/v1/*/*</code></li>
+</ul>
+</li>
+<li>Once the above queue is created with the proper subscription, run the command : <code>mvn clean install</code></li>
+<li>Run the command : <code>java -jar target/payment-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code> and observe the console to see what events are getting processed and subsequently produced</li>
+</ul>
+<h3 is-upgraded>Testing</h3>
+<p>To do a complete end-to-end test of the current flow, you can quickly publish a few more orders from the <strong>Order-Service</strong> and see the following events being produced and consumed across the three applications :</p>
+<ol type="1">
+<li>Order Created</li>
+<li>Order Confirmed</li>
+<li>Payment Created</li>
+<li>Payment Updated</li>
+</ol>
+<p>You can also see that the status of the order in the <strong>Order Service</strong> changes from <strong>Validated</strong> to <strong>PAYMENT_PROCESSED</strong></p>
+<h2 is-upgraded>4. Shipping Service</h2>
+<p>Similar to the PSP and payment gateway, integrations with third-party logistics (3PL) forms an integral part of the OTC flow and is responsible for warehousing, inventory, shipping, tracking, reverse logistics etc. Considering the criticality of the use case, Acme Retail is opting to include 3PL integration as a part of the POC for the following reasons :</p>
+<ol type="1">
+<li>Real time updates</li>
+<li>Scalability</li>
+<li>Decoupling of systems</li>
+<li>Fault tolerance</li>
+<li>Extensibility</li>
+</ol>
+<h3 is-upgraded>Introduction</h3>
+<p>The <strong>Shipping Service</strong> is the final leg of this POC flow. It subscribes to the <em>Payment Created</em> event, integrates with the 3PL services and publishes the <em>Shipment Created</em> and <em>Shipment Updated</em> events.<br> The <strong>Order Service</strong> subscribes to the <em>Shipment Created</em> for user status updates</p>
+<h3 is-upgraded>How to run?</h3>
+<ul>
+<li>Open up a new terminal window, make sure not to close the earlier window running the earlier applications</li>
+<li>Navigate to the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/shipping-service</strong></li>
+<li>Before starting the application, we need to create the queue that the <strong>Shipping service</strong> requires to start.</li>
+<li>Follow the steps from the previous sections and create a new queue similarly with the following name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>all-payments-confirmed</p>
+</td><td colspan="1" rowspan="1"><p><code>acmeretail/onlineservices/payment/*/v1/*/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
+</aside>
+<ul>
+<li>Now that we have configured the queue for feeding the <strong>Shipping Service</strong>, we have to make sure that the <strong>Order-Service</strong> can also receive the <em>Shipment Created</em> events. This is done by updating the subscription list of the <em>all-order-updates</em> queue with the topic pattern of the Shipment Created events.</li>
+<li>You can do this by : <ul>
+<li>Open the queue configuration for the <em>all-order-updates</em> queue</li>
+<li>Click on the Subscription tab</li>
+<li>Click on + Subscription and add in an additional topic subscription as : <code>acmeretail/shipping/shipment/created/v1/*/*</code></li>
+</ul>
+</li>
+<li>Once the above queue is created with the proper subscription, run the command : <code>mvn clean install</code></li>
+<li>Run the command : <code>java -jar target/shipping-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code> and observe the console to see what events are getting processed and subsequently produced.</li>
+</ul>
+<h3 is-upgraded>Testing</h3>
+<p>To do a complete end-to-end test of the current flow, you can quickly publish a few more orders from the <strong>Order-Service</strong> and see the following events being produced and consumed across the 4 applications :</p>
+<ul>
+<li>Order Created</li>
+<li>Order Confirmed</li>
+<li>Payment Created</li>
+<li>Payment Updated</li>
+<li>Shipment created</li>
+<li>Shipment updated</li>
+</ul>
+<p>You can also see that the status of the order in the Order Service changes from <strong>PAYMENT_PROCESSED</strong> to <strong>SHIPPED</strong></p>
+<h2 is-upgraded>Benefits realized</h2>
+<p>As a result of this POC, Acme Retail has achieved a number of benefits including :</p>
+<ul>
+<li><strong>Improved scalability</strong>: Event-driven architectures can be more easily scaled than traditional architectures because they are loosely coupled. This means that different parts of the system can be scaled independently without affecting other parts.</li>
+<li><strong>Improved resilience</strong>: Event-driven architectures are more resilient to failures than traditional architectures. This is because if one part of the system fails, it will not bring down the entire system. Other parts of the system can continue to process events and eventually catch up when the failed part comes back online.</li>
+<li><strong>Improved agility</strong>: Event-driven architectures can make it easier to develop and deploy new features. This is because changes can be made to one part of the system without affecting other parts.</li>
+<li><strong>Improved visibility</strong>: Event-driven architectures can provide better visibility into what is happening in the system. This is because events are a record of what has happened, and they can be used to track the progress of orders, identify errors, and audit activity.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Part-B : Banking domain" duration="0">
+        <h2 is-upgraded>Use case explanation</h2>
+<p>For the banking domain, we will be working with one of the major banks in the world <strong>Acme Bank</strong> which has been a leader in online banking and customer journey. They have a large customer base which leads to a humungous load of transactions.<br> As the importance of preventing fraudulent transactions and money laundering grows, Acme Bank is compelled to adhere to stringent legal and security standards. This necessitates thorough transaction monitoring across its systems to ensure compliance with regulatory mandates</p>
+<p>On the roadmap to comply with these requirements, Acme Bank is currently facing the following challenges :</p>
+<ul>
+<li>Integration Complexity</li>
+<li>Data Silos</li>
+<li>Legacy Systems</li>
+<li>Real time processing</li>
+</ul>
+<p>As a solution, Acme Bank has defined a POC to event enable account handling, transaction management and fraud detection systems. The application and event dependencies are defined as below :</p>
+<ul>
+<li>The <strong>Account Management</strong> application triggers off an <em>Account Applied</em> event based on user request.</li>
+<li>After background processing, the flow completes with an account being opened and a corresponding <em>Account Opened</em> event being triggered.</li>
+<li>The <strong>Core Banking</strong> application subscribes to the Account related events and publishes events related to various transactions (<em>Transfer</em>, <em>Withdrawal</em> and <em>Deposit</em> ) being performed on the accounts</li>
+<li>The account&#39;s transaction related events are subscribed to by the <strong>Fraud Detection</strong> application which performs due diligence on these transactions and flags potential fraudulent transactions by triggering a <em>Fraud Detected</em> event</li>
+<li>The <strong>Account Management</strong> application subscribes to this <em>Fraud Detected</em> event, and after background processing triggers a <em>Fraud Confirmed</em> event and suspends the corresponding account by triggering an <em>Account Suspended</em> event</li>
+</ul>
+<p class="image-container"><img alt="banking-domain-usecase.png" src="img/2d8b8add0958eb66.png"></p>
+<h2 is-upgraded>1. Account Management application</h2>
+<h3 is-upgraded>Introduction</h3>
+<p>The <strong>Account Management</strong> application acts as the entry point for the whole flow and emulates the user experience of applying for a bank account and the background processing associated with that account. As described earlier in the overall flow, it starts with triggering an <em>Account Applied</em> followed by a corresponding <em>Account Opened</em> event. It also subscribes to other relevant Account related events namely the <em>Fraud Detected</em> event and triggers a <em>Fraud Confirmed</em> and corresponding <em>Account Suspended</em> events.</p>
+<h3 is-upgraded>How to run ?</h3>
+<ul>
+<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management</strong></li>
+<li>Open a terminal in this folder and run the command : <code>mvn clean spring-boot:run</code></li>
+<li>Once the application is up and running, open the application using the url: <a href="http://localhost:9092/" target="_blank">http://localhost:9092/</a></li>
+<li>You should see a page which looks like this : <img alt="Account-management-application.png" src="img/8c96cf3d8e76bd3f.png"></li>
+<li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
+<li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/5263e29cb746dec3.png"></li>
+<li>Make a note of the following properties in a separate file as they will be required for the following steps:<ul>
+<li>Public Endpoint</li>
+<li>Username</li>
+<li>Password</li>
+<li>Message VPN<br><img alt="brokerconsole_connect_creds_java_highlighted.png" src="img/76bb965d88c4bdd.png"></li>
+</ul>
+</li>
+<li>Fill in the connection details in the appropriate text box and click on the <strong>Connect to broker</strong> button</li>
+<li>You should see a screen as below with the appropriate connection status : <img alt="acnt-mgt-broker-connected.png" src="img/d2fcad0a712c0a03.png"></li>
+<li>Click on the <strong>Apply for a new Acme Bank account</strong> to generate a new account application and trigger an <strong>Account applied</strong> event and see a screen as below : <img alt="acnt-mgt-account-applied.png" src="img/2b713a65c2d9e031.png"></li>
+<li>In the background after 10 seconds, a second <strong>Account opened</strong> event is automatically triggered and the status of the new account is automatically updated to OPENED as below : <img alt="acnt-mgt-account-opened.png" src="img/168686236c5147c3.png"></li>
+<li>All the account related events are published to the topics defined in the Event Portal design as below : <img alt="ep-account-events.png" src="img/f35b9260edffe9da.png"></li>
+<li>You can also verify this quickly by using the <strong>Try-Me</strong> tab. How to do this would have been shown in the earlier half of the day when we discussed the Solace Broker features.</li>
+</ul>
+<aside class="warning"><p> If you need help using the <strong>Try-me</strong> then feel free to ask any of the Solace members running the masterclass for assistance.</p>
+</aside>
+<h2 is-upgraded>2. Core Banking</h2>
+<h3 is-upgraded>Introduction</h3>
+<p>The Core Banking application is responsible for the execution of all the transactions being performed on the bank accounts like transfers, deposits and withdrawals. The Core Banking Application randomly generates the above transactions on all the accounts which are active.</p>
+<h3 is-upgraded>How to run?</h3>
+<ul>
+<li>Open up a new terminal window, make sure not to close the earlier window running the Account Management application</li>
+<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking</strong></li>
+<li>Run the command : <code>mvn clean install</code></li>
+<li>Run the command : <code>java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
+</ul>
+<aside class="special"><p> You would have used the above connection parameters in the earlier step for the Account Management application</p>
+</aside>
+<ul>
+<li>Keep an eye out on the logs to see if the application is starting up properly as expected.</li>
+</ul>
+<h3 is-upgraded>Error?</h3>
+<p class="image-container"><img alt="Oops.png" src="img/22223cf4a3c311b2.png"></p>
+<p>Did you get an error as below complaining about the absence of a queue object :</p>
+<pre><code language="language-Java" class="language-Java">2024-03-22T12:42:19.725+01:00  INFO 69425 --- [1_ReactorThread] c.s.jcsmp.impl.flow.BindRequestTask  : Client-1: Got BIND (&#39;#P2P/QUE/accounts-opened&#39;) Error Response (503) - Unknown Queue
+com.solace.messaging.PubSubPlusClientException$MissingResourceException: 503: Unknown Queue
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.createSolaceConsumer(PersistentMessageReceiverImpl.java:1359)
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.onStart(PersistentMessageReceiverImpl.java:1169)
+at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(PersistentMessageReceiverImpl.java:436)
+</code></pre>
+<p>If you remember about Solace Queue which we discussed earlier, we differentiated them into 2 types :</p>
+<ol type="1">
+<li>Durable: Mostly created by an administrator and always exists on the broker unless explicitly deleted by an administrator</li>
+<li>Non-Durable: Temporary in nature, created only by an application and its lifespan is linked to the client that created it.</li>
+</ol>
+<p>Given the criticality for Acme Bank to maintain message integrity during application downtime, alongside the imperative that subscribing applications cannot delete queue objects, an architectural decision was made to implement <strong>Durable-Exclusive</strong> queue configurations.</p>
+<p>To fix the error encountered above, you need to manually create the Queue object as below :</p>
+<ul>
+<li>Navigate to the <strong>PubSub+ Broker Manager</strong> as below : <img alt="Open-broker-manager.png" src="img/26022409a2e37f28.png"></li>
+<li>Click on the <strong>Queues</strong> on the left menu, to view a listing of the existing queues and then create a new queue by clicking on the <strong>+ Queue</strong> button on the right side as below : <img alt="broker-Queues-screen.png" src="img/692659b8b6bba58e.png"></li>
+<li>Enter the name of the queue : <code>accounts-opened</code>, click create and keeping the default queue settings click <strong>Apply</strong> as below : <img alt="queue-creation-default-settings.png" src="img/407958fb18b274a6.png"></li>
+</ul>
+<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions ?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
+</aside>
+<ul>
+<li>Once the queue is created, go into the newly created queue and click on the <strong>Subscriptions</strong> button on the top : <img alt="new-created-queue.png" src="img/87ab9ea0234aa54f.png"></li>
+<li>Click on the <strong>+ Subscription</strong> button on the queue and start adding in the topic patterns which you want to be attracted in this queue: <img alt="queue-add-subscription.png" src="img/b3bd7254ec2ebf5e.png"></li>
+<li>Enter the pattern : <code>acmebank/solace/account/opened/v1/*</code> as shown below and click <strong>Create</strong></li>
+</ul>
+<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries</p>
+</aside>
+<ul>
+<li>With the above steps, a new queue has been created with the required subscription which can now be connected to by the <strong>Core-Banking</strong></li>
+</ul>
+<aside class="special"><p> Make a note of the above steps as you will be creating multiple queues with similar configuration for the other applications.</p>
+</aside>
+<h3 is-upgraded>Retry deployment</h3>
+<p>Now that the missing queue has been created with the proper subscription, restart/rerun the <strong>Core Banking</strong> application using the same command : <code>java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></p>
+<h3 is-upgraded>Output</h3>
+<p>As you closely observe the logging being displayed on the console, you can see no events coming in from the queue. But how could that be when you clearly created multiple orders from the <strong>Account Management Application</strong> ? <img alt="where-did-the-events-go.png" src="img/576ed5e325911bd7.png"></p>
+<p>If you think closely, you would realize that when you created those orders the queue <strong>accounts-opened</strong> had not been created yet. So all the <strong>Account Opened</strong> events even though they were marked as persistent and acknowledged by the broker were lost as the broker could not find an active consumer for them.</p>
+<p>Now that you have created the queue, newly published orders will lie in the queue till a consumer processes and acknowledge the event.</p>
+<p>So trigger a few more Account creation requests from the <strong>Account Management Application</strong> and see the <strong>Account Opened</strong> events being triggered. Once this happens, the <strong>Core-Banking</strong> application should receive those events and start publishing transaction events for the active accounts.</p>
+<h2 is-upgraded>3. Fraud Detection</h2>
+<p>As the need to prevent fraudulent transactions and money laundering intensifies, Acme Bank is obligated to adhere to stringent legal and security standards. This entails conducting comprehensive transaction checks across its system to ensure compliance with regulatory mandates.</p>
+<p>This realtime monitoring of transactions is being handled by the <strong>Fraud Detection</strong> service. It subscribes to all the transaction events being published by the <strong>Core Banking</strong> application and flags suspicious/potentially fraudulent transactions by publishing a <em>Fraud Detected</em> event.</p>
+<h3 is-upgraded>How to run?</h3>
+<ul>
+<li>Open up a new terminal window, make sure not to close the earlier window running the earlier applications</li>
+<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/fraud-detection</strong></li>
+<li>Before starting the application, we need to create the queue that the <strong>Fraud Detection</strong> service requires to start.</li>
+<li>Follow the steps from the previous <strong>Core-Banking</strong> section and create a new queue similarly with the following name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>all-transactions</p>
+</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/core/*/v1/*/*/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+<aside class="warning"><p> Make sure to compare the above subscription with the Event Portal design and understand what exactly are the events that you are subscribing to in this queue. If you have any questions, feel free to confer with the fellow participants or one of the Solace team members.</p>
+</aside>
+<ul>
+<li>Now that you have created the queue object for feeding the <strong>Fraud Detection</strong> service, we can build and start the application.</li>
+<li>Run the command : <code>mvn clean install</code></li>
+<li>Run the command : <code>java -jar target/fraud-detection-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
+</ul>
+<h3 is-upgraded>Testing and output</h3>
+<ul>
+<li>As the application starts, you should be able to see various transaction events like <em>Transfers</em>, <em>Deposit</em> and <em>Withdrawals</em> being published on the active accounts.</li>
+<li>The <strong>Fraud Detection</strong> application will start flagging potential fraudulent transactions as per its business logic.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Part-B: Banking domain-Continued" duration="0">
+        <h2 is-upgraded>4. Completing the flow</h2>
+<p>Event-Driven Architecture enables modular, iterative development, and fosters innovation by providing a scalable, resilient, and flexible framework for building modern software systems. By embracing EDA principles and practices, organizations can drive agility, responsiveness, and innovation in their software development processes.</p>
+<p>Till now, we have :</p>
+<ol type="1">
+<li>Opened new accounts</li>
+<li>Performed transactions on these active accounts</li>
+<li>Performed fraud detection checks on these transactions and flagged suspicious transactions</li>
+</ol>
+<p>The next steps are performing a validation of those suspicious transactions and taking action on the linked accounts. Let&#39;s start with implementing this feature flow across multiple applications in a modular fashion :</p>
+<h3 is-upgraded>4.1 Account Management application</h3>
+<p>The <strong>Account Management</strong> application subscribes to the <em>Fraud Detected</em> event and validates if the transaction is actually fraudulent. If found fraudulent, a corresponding <em>Fraud Confirmed</em> event is triggered and the linked account is suspended by publishing an <em>Account Suspended</em> event.</p>
+<ul>
+<li>Start with creating a new queue for subscribing to the <em>Fraud Detected</em> event</li>
+<li>Follow the steps from the previous sections and create a new queue similarly with the following name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>fraud-detected-events</p>
+</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/fraud/detected/v1/*/*/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
+</aside>
+<ul>
+<li>Import the <strong>account-management</strong> as a project into VS Code IDE by simply selecting the folder at the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management</strong></li>
+</ul>
+<aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
+</aside>
+<ul>
+<li>Open the file named <strong>com.solace.acme.bank.accountmanagement.service.SolaceEventPublisher.java</strong> in the IDE project : <ul>
+<li>Add the following code block in the method <strong>connectToBroker</strong> : <pre><code language="language-Java" class="language-Java">    final PersistentMessageReceiver fraudDetectedEventReceiver = messagingService.createPersistentMessageReceiverBuilder().build(Queue.durableExclusiveQueue(configProperties.getSolaceFraudDetectedEventQueue()));
+    fraudDetectedEventReceiver.setReceiveFailureListener(failedReceiveEvent -&gt; log.error(&#34;### FAILED RECEIVE EVENT &#34; + failedReceiveEvent));
+    fraudDetectedEventReceiver.start();
+    fraudDetectedEventReceiver.receiveAsync(buildFraudDetectedEventHandler(fraudDetectedEventReceiver));
+</code></pre>
+<aside class="special"><p> This code snippet builds a subscriber which will receive persistent messages published to the queue <strong>fraud-detected-events</strong></p>
+</aside>
+<ul>
+<li>Introduce the below new methods in the SolaceEventPublisher.java file : <pre><code language="language-Java" class="language-Java">      private MessageReceiver.MessageHandler buildFraudDetectedEventHandler(PersistentMessageReceiver fraudDetectedEventReceiver) {
+          return (inboundMessage -&gt; {
+              try {
+                  final String inboundTopic = inboundMessage.getDestinationName();
+                  log.info(&#34;Processing message on incoming topic :{} with payload:{}&#34;, inboundTopic, inboundMessage.getPayloadAsString());
+                  boolean eventProcessed = fraudService.processFraudDetectedEvent(inboundMessage.getPayloadAsString());
+                  if (eventProcessed) {
+                      fraudDetectedEventReceiver.ack(inboundMessage);
+                  }
+              } catch (RuntimeException runtimeException) {
+                  log.error(&#34;Runtime exception encountered while processing incoming event payload :{} on topic:{}. Error is :&#34;, inboundMessage.getPayloadAsString(), inboundMessage.getDestinationName(), runtimeException);
+              }
+          });
+      }
+</code></pre>
+<aside class="special"><p> This defines a handler which processes the incoming event from the <strong>fraud-detected-events</strong> queue.</p>
+</aside>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Open the file named <strong>com.solace.acme.bank.accountmanagement.service.FraudService.java</strong> in the same project : <ul>
+<li>Introduce the following new method as below in the file : <pre><code language="language-Java" class="language-Java">      public boolean processFraudDetectedEvent(final String incomingFraudDetectedEventJson) {
+        try {
+            final FraudDetected fraudDetectedEvent = objectMapper.readValue(incomingFraudDetectedEventJson, FraudDetected.class);
+
+            boolean isFraud = random.nextBoolean();
+            if (isFraud) {
+                log.info(&#34;Flagging potential fraud as confirmed :{}&#34;, fraudDetectedEvent);
+                createAndPublishFraudConfirmedEvent(fraudDetectedEvent);
+                accountService.processAccountSuspensionRequest(fraudDetectedEvent.getAccountNum());
+            }
+            return true;
+        } catch (JsonProcessingException jsonProcessingException) {
+            log.error(&#34;Error encountered while processing FraudDetected event:{}, exception:&#34;, incomingFraudDetectedEventJson, jsonProcessingException);
+            return false;
+        }
+      }
+</code></pre>
+<aside class="special"><p> This code snippet contains the business logic for processing the Fraud Detected event payload queue.</p>
+</aside>
+</li>
+</ul>
+</li>
+<li>Open the file named <strong>com.solace.acme.bank.accountmanagement.service.AccountService.java</strong> in the same project : <ul>
+<li>Introduce the following method in the class : <pre><code language="language-Java" class="language-Java">    public void processAccountSuspensionRequest(final String accountNumber) {
+      log.info(&#34;Processing account suspension&#34;);
+      final AccountAction accountSuspendedAction = createAccountSuspendedEventPayload(accountNumber);
+      solaceEventPublisher.publishAccountSuspendedEvent(accountSuspendedAction);
+      Account account = AccountsList.getInstance().getAccountsList().get(accountNumber);
+      account.setCurrentStatus(Account.Status.SUSPENDED);
+      account.setComment(&#34;Account suspended due to potential suspicious/fraudulent transaction(s)&#34;);
+      AccountsList.getInstance().getAccountsList().put(accountNumber, account);
+    }
+</code></pre>
+<aside class="special"><p> This code snippet contains the business logic for instantiating and publishing an <em>Account Suspended</em> event in response to the <em>Fraud Detected</em> transaction</p>
+</aside>
+</li>
+</ul>
+</li>
+</ul>
+<h3 is-upgraded>4.2 Core Banking</h3>
+<p>The <em>Account Suspended</em> event published in the previous step is subscribed to by the <strong>Core Banking</strong> application which stops all transactions on that account number immediately.</p>
+<ul>
+<li>Start with creating a new queue for subscribing to the <em>Account Suspended</em> event</li>
+<li>Follow the steps from the previous sections and create a new queue similarly with the following name and subscription: <table>
+<tr><td colspan="1" rowspan="1"><p>Queue name</p>
+</td><td colspan="1" rowspan="1"><p>Subscription</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>accounts-suspended</p>
+</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/account/suspended/v1/*</code></p>
+</td></tr>
+</table>
+</li>
+</ul>
+<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
+</aside>
+<ul>
+<li>Import the <strong>core-banking</strong> as a project into VS Code IDE by simply selecting the folder at the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking</strong></li>
+</ul>
+<aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
+</aside>
+<ul>
+<li>Open the file <strong>com.solace.acme.bank.corebanking.service.SolaceEventHandler.java</strong> in the project :<ul>
+<li>Add in the following code snippet in the <strong>connectAndConfigureConsumers</strong> method :<pre><code language="language-Java" class="language-Java">    final PersistentMessageReceiver accountSuspendedEventReceiver = messagingService.createPersistentMessageReceiverBuilder().build(Queue.durableExclusiveQueue(configProperties.getAccountsSuspendedQueueName()));
+    accountSuspendedEventReceiver.setReceiveFailureListener(failedReceiveEvent -&gt; System.out.println(&#34;### FAILED RECEIVE EVENT &#34; + failedReceiveEvent));
+    accountSuspendedEventReceiver.start();
+    accountSuspendedEventReceiver.receiveAsync(buildAccountsSuspendedEventHandler(accountSuspendedEventReceiver)); 
+</code></pre>
+<aside class="special"><p> This code snippet builds a subscriber which will receive persistent messages published to the queue <strong>accounts-suspended</strong></p>
+</aside>
+</li>
+<li>Add in the following method in the same file :<pre><code language="language-Java" class="language-Java">    private MessageReceiver.MessageHandler buildAccountsSuspendedEventHandler(PersistentMessageReceiver accountOpenedEventReceiver) {
+      return (inboundMessage -&gt; {
+          try {
+              final String inboundTopic = inboundMessage.getDestinationName();
+              log.info(&#34;Processing message on incoming topic :{} with payload:{}&#34;, inboundTopic, inboundMessage.getPayloadAsString());
+              boolean eventProcessed = accountsEventProcessor.processAccountSuspendedEvent(inboundMessage.getPayloadAsString());
+              if (eventProcessed) {
+                  accountOpenedEventReceiver.ack(inboundMessage);
+              }
+          } catch (RuntimeException runtimeException) {
+              log.error(&#34;Runtime exception encountered while processing incoming event payload :{} on topic:{}. Error is :&#34;,
+                      inboundMessage.getPayloadAsString(), inboundMessage.getDestinationName(), runtimeException);
+          }
+      });
+    }
+</code></pre>
+<aside class="special"><p> This code snippet builds a handler for processing the events attracted to the queue * <em>accounts-suspended</em>*</p>
+</aside>
+</li>
+</ul>
+</li>
+<li>Open the file <strong>com.solace.acme.bank.corebanking.service.AccountsEventProcessor.java</strong> in the same project :<ul>
+<li>Add in the following method in the file : <pre><code language="language-Java" class="language-Java">    public boolean processAccountSuspendedEvent(final String accountSuspendedActionEventPayload) {
+        try {
+            AccountAction accountSuspendedEvent = objectMapper.readValue(accountSuspendedActionEventPayload, AccountAction.class);
+            Account suspendedAccount = Account.builder().accountNumber(accountSuspendedEvent.getAccountNum()).currentStatus(Account.Status.SUSPENDED).build();
+            AccountsList.getInstance().getAccountsList().put(suspendedAccount.getAccountNumber(), suspendedAccount);
+            log.info(&#34;After processing the updated map is :{}&#34;, AccountsList.getInstance().getAccountsList());
+            return true;
+        } catch (JsonProcessingException jsonProcessingException) {
+            log.error(&#34;Error encountered while processing AccountOpened event:{}, exception:&#34;, accountSuspendedActionEventPayload, jsonProcessingException);
+            return false;
+        }
+   }
+</code></pre>
+<aside class="special"><p> This code snippet implements the business logic for handling the suspension of an account</p>
+</aside>
+</li>
+</ul>
+</li>
+</ul>
+<h3 is-upgraded>4.3 Testing the flow</h3>
+<ul>
+<li>In the terminal where you were building the <strong>Account-Management</strong> application, stop the application (if running) and run the command  : <code>mvn clean spring-boot:run</code></li>
+<li>In the terminal where you were building the <strong>Core-Banking</strong> application, stop the application (if running) run the commands : <ul>
+<li><code>mvn clean install</code></li>
+<li><code>java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
+</ul>
+</li>
+<li>Make sure that the <strong>Fraud-Detection</strong> service is also running.</li>
+<li>Start with a clean flow and kick off the flow by creating multiple new accounts in the <strong>Account Management</strong> application</li>
+<li>As the accounts get confirmed, transactions will start flowing through the <strong>Core-Banking</strong> and <strong>Fraud-Detection</strong> applications.</li>
+<li>The <strong>Fraud-Detection</strong> application will flag some of these transactions as fraudulent</li>
+<li>The <strong>Account Management</strong> will verify the report of these fraudulent transactions and where applicable will suspend the linked accounts, and you can see the status of these accounts being updated in the accounts&#39; table.</li>
+<li>Once the accounts are suspended, the <strong>Core-Banking</strong> application will not allow transactions on these accounts</li>
+</ul>
+<h2 is-upgraded>Benefits realized</h2>
+<p>As a result of this POC, Acme Bank has achieved a number of benefits including :</p>
+<ul>
+<li><strong>Improved Efficiency</strong>: By automating tasks and streamlining processes, event-driven architectures can help banks to improve efficiency and reduce costs. For example, in the diagram you sent, the event of an account being applied for could trigger a series of automated tasks, such as verifying the applicant&#39;s identity and running a credit check. This would eliminate the need for manual intervention and could significantly speed up the account opening process.</li>
+<li><strong>Enhanced Customer Experience</strong>: Event-driven architectures can also help banks to improve the customer experience. For example, if a customer deposits a check, the bank could use an event-driven architecture to send them a notification that the deposit has been received and credited to their account. This would provide customers with real-time information about their accounts and help to improve their overall satisfaction with the bank.</li>
+<li><strong>Reduced Risk</strong>: Event-driven architectures can also help banks to reduce risk. For example, in the diagram you sent, the event of a fraud attempt could trigger a series of automated actions, such as blocking the transaction and notifying the customer. This would help to prevent fraudulent transactions from being completed and could save the bank money.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways and benefits" duration="0">
+        <p>Below are some of the key takeaways from this masterclass :</p>
+<ul>
+<li><strong>Understanding Event-Driven Architecture (EDA)</strong>: Gain insights into the principles, patterns, and benefits of event-driven architecture, and learn how it enables organizations to build scalable, resilient, and responsive systems.</li>
+<li><strong>Hands-on Experience with Solace</strong>:<ul>
+<li>Learn how to set up and configure Solace messaging infrastructure to support event-driven applications.</li>
+<li>Explore Solace&#39;s features and capabilities, including message routing, topic-based subscriptions, and event-driven integration.</li>
+</ul>
+</li>
+<li>Practical Application Development:<ul>
+<li>Acquire practical skills in designing, developing, and testing event-driven applications using Solace messaging.</li>
+<li>Understand the end-to-end event flow and learn how to implement business logic within event-driven microservices.</li>
+</ul>
+</li>
+<li>Unlocking Business Value with EDA and Solace:<ul>
+<li>Discover the business benefits of adopting event-driven architecture and leveraging Solace messaging for various use cases.</li>
+<li>Learn how EDA and Solace enable organizations to innovate faster, respond to market changes more effectively, and deliver superior customer experiences.</li>
+</ul>
+</li>
+</ul>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this masterclass! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way, we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this Codelab.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Appendix and references" duration="0">
+        <ul>
+<li>Link for the Solace Cloud Account: <a href="https://console.solace.cloud/home?login=true" target="_blank">Solace Cloud Account</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

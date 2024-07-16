@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Current Commit
         uses: actions/checkout@master
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           path: main
 
