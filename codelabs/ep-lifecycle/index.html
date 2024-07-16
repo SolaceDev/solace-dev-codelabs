@@ -1,0 +1,237 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Event Portal: event-driven innovation that&#39;s faster, easier, more resilient</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="ep-lifecycle"
+                  title="Event Portal: event-driven innovation that&#39;s faster, easier, more resilient"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/ep-lifecycle">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="3">
+        <p>Delivering innovative event-driven features to the hands of users means moving micro-integrations from development to production.  That means getting the right event infrastructure in the right environment at the right time. Event Portal makes that easier, faster and more resilient.</p>
+<p>This code lab takes you through the lifecycle of a new event-driven application, from finding relevant events to jump start development, to generating rock-solid code, to automated event configuration with your existing CICD pipeline.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="2">
+        <p><strong>For all sections, you&#39;ll need to:</strong></p>
+<ul>
+<li>Complete the <a href="https://codelabs.solace.dev/codelabs/ep-connect-ep-broker" target="_blank">Connecting Event Portal to a runtime Event Broker</a> code lab.</li>
+</ul>
+<p><strong>For config push and CICD integration sections, you will also need to:</strong></p>
+<ul>
+<li>Have a running Event Management Agent connected to a cloud Event Broker (That&#39;s also covered in the <a href="https://codelabs.solace.dev/codelabs/ep-connect-ep-broker" target="_blank">Connecting Event Portal to a runtime Event Broker</a> code lab.)</li>
+<li>A GitHub account.  If you don&#39;t have one, you can <a href="https://github.com/signup" target="_blank">get one free</a>.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Discover event-driven stuff you didn&#39;t know existed" duration="4">
+        <h2 is-upgraded>Find interesting events to use in your solution</h2>
+<ol type="1">
+<li>In the home screen of Solace Cloud, click on Catalog.<br><img alt="Image" src="img/3663fe923281af2e.png"><br><br></li>
+<li>Within Catalog, click on the Events tab, then search for <code>customer</code> in the search box.  You&#39;ll note that there are two existing customer events that would be perfect.<br><img alt="Image" src="img/b5f64b5a5c8ec2b8.png"><br><br></li>
+<li>Also, look for order related events by searching for <code>order</code><br><img alt="Image" src="img/ac81d0a15233f367.png"><br><br></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Easily design EDA solutions, together" duration="15">
+        <h2 is-upgraded>Create an Application Domain to house your application, event and schema</h2>
+<ol type="1">
+<li>Now that we have candidate events, click on the Designer icon in the left bar (1), then Create Application Domain. (2)<br><img alt="Image" src="img/72752449d31f6e23.png"><br><br></li>
+<li>Configure the domain:<br> Name (1):  <code>Customer360</code><br> Description (2): <code>collect customer behavior from across domains</code><br> Add a Solace (3) topic domain of <code>acmeretail/c360</code> (4)<br> Select all 3 checkboxes, enforcing topic uniqueness (5), enforcing topic domain (6) and allowing descriptions to be edited  (7)<br></li>
+</ol>
+<p>Then click on OK <br><img alt="Image" src="img/7ba297766a146259.png"><br><br></p>
+<h2 is-upgraded>Graphically create your application</h2>
+<ol type="1">
+<li>Go into the newly created Customer360 domain.<br><br></li>
+<li>Click on Add Objects and drag &#34;New Application&#34; to the canvas and name it <code>Customer 360</code>.<br><img alt="Image" src="img/55d14220f35a54fc.png"><br><br></li>
+<li>Again click on Add Objects, and drag a Shared Event to the canvas<br><img alt="Image" src="img/45845665c652df8b.png"><br><br></li>
+<li>In the popup, select <em>Customer Updated</em>, then click on Add.</li>
+<li>Repeat this process to add the <em>Customer Created</em> shared event, which you discovered in the catalog earlier.</li>
+<li>To define which events Customer 360 subscribes to, hover over the <em>Customer Created</em> event and drag the arrow to the <em>Customer360</em> application.  Repeat for the <em>Customer Updated</em> event.<br><img alt="Image" src="img/77ea68c336e1f4ca.png"><br><br></li>
+<li>Drag a &#34;New Event&#34; onto the canvas and call it <code>Customer Insight Generated</code>.</li>
+<li>To define the event Customer 360 publishes, hover over the Customer360 application and drag the arrow to the Customer Insight Generated event.<br><img alt="Image" src="img/f2918fbe04d96cb8.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Add an event directly from the catalog</h2>
+<ol type="1">
+<li>Navigate back to the catalog (1), click on the Events tab (2), select <em>Order Created</em> (3). <br><img alt="Image" src="img/de68f31ebe50ebdb.png"><br><br></li>
+<li>In the right hand column, click on the latest version  <br><img alt="Image" src="img/8b6fff5cc1162a08.png"><br><br></li>
+<li>Click on Associate with Application<br><img alt="Image" src="img/babddc5fef3b6600.png"><br><br></li>
+<li>Select the Customer360 domain (1), the latest Customer360 version (2), and specify that you want to subscribe to the event (3).  Then click on Save.<br><img alt="Image" src="img/ddcea2555636e59a.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Create consumers for your application</h2>
+<ol type="1">
+<li>In the resulting screen, scroll down to the Referenced By section, click on the three dots next to Customer 360, and then Open Application<br><img alt="Image" src="img/84e519bc8f391e2.png"><br><br></li>
+<li>Click on Edit This Version<br><img alt="Image" src="img/6758deaa5e458a7c.png"><br><br></li>
+<li>Click on the Consumers tab (1), then on Add Consumer (2)<br><img alt="Image" src="img/a37a27ca0d1395fa.png"><br><br></li>
+<li>Name the queue <code>C360.ORDERS</code> (1)<br> give it a type of Solace Event Queue (2)<br> Click on Set Configuration (3) to use the default configuration Then click on Add Subscriptions (4) <br><img alt="Image" src="img/788e417964665cba.png"><br><br></li>
+<li>In the resulting screen, select the Order Created event, which will prefill the subscription.  Then click on Add Subscription<br><img alt="Image" src="img/c6602818e35f2f98.png"><br><br></li>
+<li>Repeat the process to create the consumer for the two Customer events, naming the queue <code>C360.CUSTOMERS</code>   When you click on Add Subscriptions, select both of the Customer events and a subscription for both.<br><img alt="Image" src="img/e1006862542e84ec.png"><br><br></li>
+<li>To save your changes, click on Save &amp; Close.<br><img alt="Image" src="img/1e318c0daed7f9ac.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Create a new Customer Insight Generated event</h2>
+<ol type="1">
+<li>You will use this schema file for the payload of the event.  Download it and save it to your hard drive. <a href="https://raw.githubusercontent.com/SolaceLabs/PostmanScripts/main/customerinsight.json" target="_blank">Schema file</a><br></li>
+<li>Click on the Schemas tab (1)for the Customer360 domain, then click on Create Schema(2)<br><img alt="Image" src="img/40d226b48da3c9fc.png"></li>
+<li>Name the schema <code>Customer Insight</code>, then the Import from File button.  Navigate to the <code>customerinsight.json</code> schema file you just downloaded.<br><img alt="Image" src="img/e9dcd70ee5db90ce.png"></li>
+<li>Click on Save and Close.</li>
+<li>Click on the Events tab (1) at the top of the screen, then click on Customer Insight Generated (2). <br><img alt="Image" src="img/4803dd349d035167.png"></li>
+<li>Click on Edit This Version<br><img alt="Image" src="img/6a5d14e6e1059385.png"></li>
+<li>Define the Topic Address.  Start by clicking on the field and selecting the <code>acmeretail/c360</code> topic domain<br><img alt="Image" src="img/2e47349569e9e01a.png"></li>
+<li>Type in the remainder of the topic address, using brackets for parameters.  The final result should be: <code>acmeretail/c360/customerinsight/generated/v1/{insighttype}/{customerid}</code><br><img alt="Image" src="img/9d0e79a073179cb.png"></li>
+<li>Scroll down further and click on Select Schema.<br><img alt="Image" src="img/f89539c6296a49f0.png"></li>
+<li>Select the Customer Insight schema you just created.<br><img alt="Image" src="img/a47a45c90ec29441.png"></li>
+</ol>
+<aside class="special"><p> In a more production-ready use case, you would likely use an enumeration for {insighttype}.  For speed you will use an unbounded variable in this lab.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Give your developers a headstart with code generation" duration="5">
+        <h2 is-upgraded>AsyncAPI export</h2>
+<ol type="1">
+<li>Click on Applications (1) in the top menu, then on Customer360(2)<br><img alt="Image" src="img/b7a472d3ead7d064.png"><br><br></li>
+<li>Click on the three dots next to version 0.1.0 and click on Download AsyncAPI.  Save the file on your hard drive.<br><img alt="Image" src="img/9abc3041cad5cec8.png"><br><br></li>
+<li>In a web browser, navigate to AsyncAPI Studio at  <code>https://studio.asyncapi.com</code><br><img alt="Image" src="img/b36f4136605e5aff.png"><br><br></li>
+<li>Click on the three dots in main panel (1), then on Import File. (2)<br><img alt="Image" src="img/8ef3b966a07f490e.png"><br><br></li>
+<li>In the resulting pop up, change the conversion to version 2.6.0, then click on Convert.<br><img alt="Image" src="img/c5e164e0967289ae.png"><br><br></li>
+<li>Now that the AsyncAPI is loaded you can browse it, and also look through the autocreated documentation.</li>
+<li>When you&#39;re finished browsing, click again on the three dots (1), then click on Generate code/docs.(2)<br><img alt="Image" src="img/d99b0caa38a9d74.png"><br><br></li>
+<li>In the popup window, select Java Spring Cloud Stream Project, then click on Generate.</li>
+<li>Save the resulting .zip file to your hard drive.</li>
+</ol>
+<aside class="special"><p> You&#39;ll use the source code zip file in the CICD/GitHub Actions portion of the lab, so save it in a place you can remember.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Provide exactly the events you need, when you need them" duration="15">
+        <h2 is-upgraded>Assign your application to an environment/event broker</h2>
+<ol type="1">
+<li>Click on Applications, then on Customer360.<br><img alt="Image" src="img/b7a472d3ead7d064.png"><br><br></li>
+<li>Click on the Runtime tab.<br><img alt="Image" src="img/d7ef471b9fd0a054.png"><br><br></li>
+<li>Expand the Prod environment, then click on the three dots next to PROD-solace, then on Manage Credentials.<br><img alt="Image" src="img/e90b36a4225f8f60.png"><br><br></li>
+<li>For the Username enter <code>c360</code> (1).  For the Password enter <code>c360</code> (2). Click on Save. (3)<br><img alt="Image" src="img/b05c2a11bd7ff6d7.png"><br><br></li>
+<li>Back in the main screen, expand the Prod environment (1) again click on the three dots, and then &#34;Add Application&#34; (2) <br><img alt="Image" src="img/93de13a57e3dfa49.png"><br><br></li>
+<li>The resulting popup previews the changes that will occur.  Expand out the credentials (1) and queues (2) to see more details.  Then click on Add (3)<br><img alt="Image" src="img/b4e02fca4e3213a5.png"><br><br></li>
+</ol>
+<aside class="warning"><p> If the config push fails, ensure that your EMA is running.</p>
+</aside>
+<h2 is-upgraded>Confirm EP provisioned your queues and access</h2>
+<ol type="1">
+<li>Go to the management console of your cloud broker by clicking Cluster Manager in the left hand column, then clicking on your Event Broker. <br><img alt="Image" src="img/7b5c691d210d1902.png"><br><br></li>
+<li>Click on the Manage tab (1), then Queues (2).<br><img alt="Image" src="img/9253a58dc34a70db.png"><br><br></li>
+<li>You should see the two queues you defined earlier, <code>C360.CUSTOMERS</code> and <code>C360.ORDERS</code>.  Clicking on each, you should see that they are owned by c360, only the owner is allowed to access the queue and the subscriptions you defined are in place. <br><img alt="Image" src="img/1957279cbbe4b7a6.png"><br><br></li>
+<li>Click on Access Control (1), the Client Usernames tab (2), and you should see the c360 client username. (3) <br><img alt="Image" src="img/b99a319bc01c88d2.png"><br><br></li>
+<li>Click on the ACL Profiles tab (1) and you should see the ACL associated with your user. (2) <br><img alt="Image" src="img/7c43288445fdd720.png"><br><br></li>
+</ol>
+<h2 is-upgraded>View the updated event flow for Production</h2>
+<ol type="1">
+<li>Click on the Runtime Event Manager icon on the left hand side (1), then on the us-central-solace-Prod event mesh. (2)<br><img alt="Image" src="img/102b52ace447c71a.png"><br><br></li>
+<li>Scroll down the list of applications in the left column to find Customer360, then click on the three dots (1).  Then select Center on Graph. (2)  This highlights the Customer360 on the graph.<br><img alt="Image" src="img/c72b5c990c5c1a09.png"><br><br></li>
+<li>To highlight only the direct dependencies  for Customer360 in Production, click on the three dots (1), then Show Relationships(2).<br><img alt="Image" src="img/90b4d605d8af0802.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Remove application from runtime event broker and modelled event Mesh</h2>
+<ol type="1">
+<li>Click on the Customer360 link in the left hand column.<br><img alt="Image" src="img/e5b5d6710fbf8d8f.png"><br><br></li>
+<li>In the resulting popup, click on Open in Designer.<br><img alt="Image" src="img/62fca0935cdf69d7.png"><br><br></li>
+<li>Click on the Runtime tab.<br><img alt="Image" src="img/d7ef471b9fd0a054.png"><br><br></li>
+<li>Expand the Prod tab (1), click the three dots(2), the click on Remove Application.(3)<br><img alt="Image" src="img/f6350c4e9b2be11c.png"><br><br></li>
+<li>In the popup, review the details of what queues will be removed.  Then click on Remove<br><img alt="Image" src="img/2e66b21246e885f4.png"><br><br></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Make your existing CICD even better" duration="20">
+        <aside class="special"><p> You need to have a GitHub account for this portion.  If you don&#39;t have one, you can <a href="https://github.com/signup" target="_blank">get one free</a>.</p>
+</aside>
+<h2 is-upgraded>Create new repository with Event Portal GitHub Actions</h2>
+<ol type="1">
+<li>Make sure you are logged into GitHub and go to the <a href="https://github.com/new/import" target="_blank">Import Existing Repository page</a>.</li>
+<li>Use <code>https://github.com/SolaceLabs/ep-scs-workflow</code> for the URL, list yourself as the owner, and name the new repository <code>customer360</code>. Click on Begin Import.<br><img alt="Image" src="img/81400a01072c8c1e.png"><br><br></li>
+<li>Wait for the import to complete, usually around 3 minutes. Then click on the link to open the repository.</li>
+</ol>
+<aside class="warning"><p> Cloning through GitHub occassionally takes a bit of time.  After 3 minutes, try refreshing the page to see if it&#39;s done.</p>
+</aside>
+<h2 is-upgraded>Configure GitHub Actions</h2>
+<ol type="1">
+<li>In the top menu of the repository, select Settings.<br><img alt="Image" src="img/6d9bc4480858f78a.png"><br><br></li>
+<li>In the left hand column, select Actions(1), then General (2).<br><img alt="Image" src="img/ee476ad18f9a8639.png"><br><br></li>
+<li>Scroll to the bottom of the page, and click on the radio button next to Read and write permissions (1).  Then click on Save.(2)<br><img alt="Image" src="img/d660b25ba821037.png"><br><br></li>
+<li>Again in the left hand column, scroll down, expand Secrets and variables (1), then click on Actions (2).<br><img alt="Image" src="img/7dbde4c236f5e050.png"><br><br></li>
+<li>In the main panel, click on New Repository Secret.<br><img alt="Image" src="img/834967177754e04c.png"><br><br></li>
+<li>Name the secret <code>SOLACE_CLOUD_TOKEN</code>.   The value of the secret should be the token you created for Postman when initially populating your account.<br><img alt="Image" src="img/3cd61532045d8f80.png"><br><br></li>
+</ol>
+<h2 is-upgraded>Upload micro-integration to GitHub</h2>
+<ol type="1">
+<li>Unzip the Spring Cloud Stream source code you downloaded from studio.asyncapi.com on your hard drive.<br></li>
+<li>In the root directory, move the <code>asyncapi.yml</code> file to the template directory. <br><img alt="Image" src="img/78d3721cf1042ad6.png"><br><br></li>
+<li>Navigate to the template directory.  It should look like this: <br><img alt="Image" src="img/8e49785f6ff483f0.png"><br><br></li>
+<li>In your browser go to the new repository, click on the plus sign (1), then on Upload files. (2)<br><img alt="Image" src="img/59cd71233a8d1e3b.png"><br><br></li>
+<li>Select all 4 of files/subdirectories in the template directory, then click on OK</li>
+</ol>
+<aside class="warning"><p> Do <em>not</em> upload the template directory.  You need to upload the 4 files/subdirectories.</p>
+</aside>
+<h2 is-upgraded>Commit the files and open a pull request</h2>
+<ol type="1">
+<li>In the resulting window, change the radio button to Create a new branch for this commit.   Then click on Propose changes.<br><img alt="Image" src="img/125cf0adc0cc19ff.png"><br><br></li>
+<li>In the next screen, click on Create pull request.<br><img alt="Image" src="img/ffd44ada7f57a5f9.png"><br><br></li>
+<li>The GitHub Actions kick off.  When they are finished, there should be a list of changes that will occur should the pull request be approved.<br><img alt="Image" src="img/a730bde567da17aa.png"><br><br></li>
+<li>Scroll down to the bottom of the pull request and click on Merge pull request.  Then click on Confirm merge.<br><img alt="Image" src="img/6cc75765efa9c122.png"><br><br></li>
+<li>Using the management console of your cloud broker, confirm that the CICD process created the same queues, subscriptions, ACLs as manual promotion.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <ul>
+<li>Finding relevant events to jump start development</li>
+<li>Generating rock-solid code</li>
+<li>Automated event configuration with your existing CICD pipeline.</li>
+</ul>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

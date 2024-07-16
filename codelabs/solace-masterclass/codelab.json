@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-05-21T13:46:23Z",
+  "id": "solace-masterclass",
+  "duration": 0,
+  "title": "Solace Masterclass",
+  "summary": "This Codelab describes the whole",
+  "source": "main/markdown/solace-masterclass/solace-masterclass.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace"
+  ],
+  "tags": [
+    "java",
+    "solace-masterclass",
+    "springboot",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-masterclass",
+  "url": "solace-masterclass"
+}
