@@ -47,43 +47,20 @@ Download [AEM-Rapid-Pilot-day3.zip](https://github.com/SolaceLabs/aem-sap-integr
 ### B) Importing the official SAP AdvancedEventMesh Adapter into your CI tenant
 >aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. If you haven't used this adatper in your CI tenant before, you may need to import it once. Follow these steps to get the official adapter from SAP. <br>
 
-- Navigate to your newly imported package: AEM-Rapid-Pilot-day3.
-- Take a copy of the AEMLegacyOutputAdapter flow.
-![CI Copy flow](img/CICopyFlow.png)
-- Choose a new name. (Accepting the default of `AEMLegacyOutputAdapter_copy` will do.)
-- Then open and edit your copy named  `AEMLegacyOutputAdapter_copy` or similar.
-![CI Edit flow](img/CICopyflowEdit.png)
-- Select the line named AdvancedEventMesh and delete it by clicking on the rubbish bin icon that appears.
-![CI delete adapter](img/CICopyflowDeleteAdapter.png)
-- After deletion, select the connector tool from the top and reconnect the Sender box to the Start icon.
-![CI connector tool](img/CICopyFlowConnectorTool.png)
-- You should see a pop up appear in which you can select the AdvancedEventMesh adapter. Selecting this should pull the SAP version of this adapter into your CI tenant.
-
-That's it, we should now be good to proceed.
-(You can cancel the changes in your copy `AEMLegacyOutputAdapter_copy` or similar and delete the copy of the flow now.)
-
->aside negative Skip over C) if you have successfully completed this step.
-
-### C) Download and import the AEM adapter for Integration Suite
-
->aside negative A new Advanced Event Mesh specific adapter was made available in January 2024. <br>
-**Only follow this step if you can't see the AdvancedEventMesh adapter in your Integration Suite tenant or if you want to use the preview version (provided) instead.** <br>
-	In that case, follow the steps in this section to get a preview of the AEM adapter:<br>
-	- Download [Integration Suite AEM Adapter](https://github.com/SolaceLabs/aem-sap-integration/blob/main/deployable/IS-artifacts/AEM-Adapter-EA-10-16.zip)<br>
-	- Import the AEM adapter into your Integration Suite tenant and deploy this adapter.
-
-Import the adapter into your package.
-![CI Adapter import](img/CIAdapterImport.png)
-
-Extract the downloaded zip and select the .esa file in the upload dialog. Runtime Profile should be Cloud Integration. (You should not be seeing the warning message `Integration adapter with the ID 'AdvancedEventMesh' already exists`. If you do, then you can skip this step as the adapter has already been made available to you.)
-![CI Adapter import](img/CIAdapterImportWizard.png)
-
-Deploy the adapter after import.
-![CI Adapter deploy](img/CIAdapterDeploy.png)
-
-
-See  [SAP documentation](https://help.sap.com/docs/integration-suite/sap-integration-suite/importing-custom-integration-adapter-in-cloud-foundry-environment#procedure) for more detailed instructions
-
+- Navigate to "Discover" -> "Integrations" in the left hand menu:<br>
+![CI Discover Integrations](img/CIDiscoverIntegrations.png)
+- Search for “advanced” to find the “Advanced Event Mesh Adapter for SAP Integration Suite”:<br>
+![CI Discover Adapter](img/CIDiscoverAdapter.png)
+- Select the adapter package by clicking on it, then click on “Copy” on the top right.<br>
+![CI Copy Adapter](img/CICopyAdapter.png)
+- Go to “Design” -> “Integrations and APIs” in the left hand menu and click on the newly created “Advanced Event Mesh Adapter for SAP Integration Suite” package.<br>
+![CI AEM package](img/CIAEMPackage.png)
+- Navigate to “Artifacts” to see the Integration Adapter and click on and select “Deploy” from the “Actions” menu.<br>
+![CI Deploy Adapter](img/CIDeployAdapter.png)
+- Select the “Cloud Integration” Runtime Profile.<br>
+![CI Deploy CI Runtime](img/CIDeployRuntime.png)
+- You should now be able to see the AdvancedEventMesh Integration Adapter if you navigate to “Monitor” -> “Integrations and APIs” and click on the tile “All” under “Manage Integration Content” with a status of “Started” if everything went well:<br>
+![CI Adapter Monitor](img/CIAdapterMonitor.png)
 
 ## Scenario 1 - SalesOrder: AEMLegacyOutputAdapter (mandatory)
 Duration: 0:30:00
