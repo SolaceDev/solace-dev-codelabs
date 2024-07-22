@@ -36,7 +36,7 @@ Even tho Terraform modules promote best practices, enhance collaboration, and ma
 ## Essential Terraform Modules Concepts
 Duration: 0:10:00
 
-Before talking about the new Solace PubSub+ Terraform Modules, lets cover some key concepts of Terraform Modules
+Before talking about the new [Solace PubSub+ Terraform Modules](https://registry.terraform.io/namespaces/SolaceProducts), lets cover some key concepts of Terraform Modules
 
 ### Module Structure
 
