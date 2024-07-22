@@ -68,19 +68,45 @@ Duration: 0:10:00
 
 As of July 2024, Solace has released 10 modules that are a combination of the following five: 
 
-1. `client module` - The Client module represents a client user entity, either a client username or authorization group.
+1. `client module` - The Client module is designed to represent a client user entity. This can either be a specific client username or an authorization group, essentially acting as the identity for different client users accessing the system. It plays a critical role in managing and securing user access. Examples of what could be configured on the broker using this module:
+    - [acl-profile-exceptions](https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/acl-profile-exceptions)
+    - [authorization-group](https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/authorization-group)
+    - [basic-client-username](https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/basic-client-username)
+    - [client-username-attributes](https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/client-username-attributes)
 
-1. `jndi module` - The JNDI module provides a wrapper for a JMS connection factory event broker object. More specifically, this module enables an application team member to create a connection factory object in the JNDI store of an event broker with minimal insight into all of the necessary Solace configuration components by only providing the resource-specific information.
+1. `jndi module` - The JNDI module serves as a wrapper for a JMS (Java Message Service) connection factory event broker object. This module simplifies the creation and management of connection factory objects within the JNDI (Java Naming and Directory Interface) store of an event broker. It allows application team members to set up these objects with minimal knowledge of the intricate Solace configuration components, needing only to provide resource-specific details. Examples include:
+    - [basic](https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/basic)
+    - [local-transactions-support](https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/local-transactions-support)
+    - [xa-transactions-support](https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/xa-transactions-support)
 
-1. `queue_endpoint module` - This feature simplifies the establishment of queues and endpoints by encompassing many of their potential dependencies as a single resource. The Queue Endpoint module represents a durable event broker endpoint to publish to, or consume from. In addition, it can also represent an endpoint template.
+1. `queue_endpoint module` - The Queue Endpoint module streamlines the process of establishing queues and endpoints by bundling many of their dependencies into a single resource. It represents a durable event broker endpoint that can be used for publishing messages to, or consuming messages from. Additionally, it can be configured to act as an endpoint template, providing a reusable configuration for multiple endpoints. With this module, you can configure the following:
+    - [exclusive-queue](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/exclusive-queue)
+    - [non-exclusive-queue](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/non-exclusive-queue)
+    - [partitioned-queue](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/partitioned-queue)
+    - [queue-template](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-template)
+    - [queue-with-jndi](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-with-jndi)
+    - [queue-with-topic-subscriptions](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-with-topic-subscriptions)
+    - [topic-endpoint](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint)
+    - [topic-endpoint-template](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint-template)
+    - [topic-endpoint-with-jndi](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint-with-jndi)
 
-1. `rest_delivery module` - The Rest Delivery module represents REST delivery point (RDP), REST consumer, and queue binding configuration. More specifically, this module enables an application team member to create an RDP that connects to a consumer (for example, a public cloud) with minimal insight into all of the necessary Solace configuration components by only providing the resource-specific information.
+1. `rest_delivery module` - The REST Delivery module handles the configuration for REST delivery points (RDPs), REST consumers, and queue bindings. This module allows application team members to create an RDP that connects to a REST consumer (such as a service in a public cloud) with minimal need for detailed knowledge of the Solace system configuration. It focuses on providing the necessary resource-specific information to set up these connections effectively. You can choose one of the following RDP configurations using this module
+    - [adding-headers](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/adding-headers)
+    - [basic](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/basic)
+    - [using-substitution-expressions](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/using-substitution-expressions)
 
-1. `service module` - The Service module encapsulates Message VPN-level service configuration, including protocols, authentication and authorization settings, and resource limits. It defines and makes ACL and client profiles available for use.
+1. `service module` - The Service module encapsulates the configuration of services at the Message VPN level. This includes defining protocols, setting up authentication and authorization parameters, and establishing resource limits. It also manages Access Control Lists (ACLs) and client profiles, making these configurations available for use across the system. The Service module ensures that the foundational service settings are properly managed and consistently applied. using this module, you can configure the following:
+    - [basic-vpn](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/basic-vpn)
+    - [client-certificate-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/client-certificate-authentication)
+    - [customized-acl-and-client-profiles](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/customized-acl-and-client-profiles)
+    - [oauth-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/oauth-authentication)
+    - [services-and-listen-ports](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/services-and-listen-ports)
 
 ## Example Usage
 
-There are multiple ways the Solace PubSub+ Terraform Modules could be used, depending on the conventions followed by your team. One potential common practice is to reference the module in your `main.tf` file as follows: 
+There are multiple ways the Solace PubSub+ Terraform Modules could be used, depending on the conventions followed by your team. One potential common practice is to reference the module in your `main.tf` file.
+
+For example, to create an `exclusive queue` with the [queue-endpoint module](https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebrokerappliance/latest), include the following in your `main.tf` file
 
 ```
 module "exclusive_queue" {
@@ -108,7 +134,7 @@ output "provisioned_queue" {
 }
 
 ```
-With the following providers.tf file 
+With the following in your `providers.tf` file 
 
 ```
 terraform {
