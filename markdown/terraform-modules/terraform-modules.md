@@ -66,7 +66,36 @@ Additionally, modules can be sourced from URLs, providing a way to directly refe
 ## Solace PubSub+ Terraform Modules
 Duration: 0:10:00
 
-As of July 2024, Solace has released 10 modules that are a combination of the following five: 
+The Solace PubSub+ Software and Appliance Terraform Modules have been designed to achieve two primary objectives:
+
+1. Facilitate effective utilization of the Solace PubSub+ Providers by ensuring the efficient use of the provider. By providing a structured and well-documented approach, the modules help streamline the deployment and management of Solace PubSub+ resources, ensuring that users can maximize the benefits of the Solace messaging platform.
+
+1. Enable Customization and Self-Service Across Teams: The modules are crafted to support a dual-level configuration approach. Middleware teams are empowered to set enterprise-level defaults, establishing a consistent and secure baseline for the deployment of Solace resources. Concurrently, Application teams are granted the flexibility to configure specific attributes as needed, promoting a self-service model. This balance ensures that while core enterprise requirements are adhered to, individual application teams can tailor configurations to meet their unique needs without compromising on governance or security.
+ 
+### Collaboration between the Middleware and Application teams
+
+The Solace Terraform modules adeptly address the principle of separation of concerns, ensuring a clear and efficient delineation of responsibilities between Middleware and Application teams.
+
+**Middleware Team Responsibilities:**
+The Middleware team defines and sets global configuration. This includes establishing and enforcing security measures and resource limits by setting default parameters. For instance, they manage critical settings such as authentication to the broker and message spool limits, ensuring a secure and controlled messaging environment. By setting these enterprise-wide defaults, the Middleware team provides a consistent and robust foundation that aligns with organizational policies and standards.
+
+**Application Team Responsibilities:**
+Conversely, Application teams benefit from a simplified and streamlined process for integrating their applications with the Solace broker. Their primary focus is on connecting their applications and configuring messaging objects such as queues. These queues are essential for supporting the message producer and consumer functionalities inherent to their applications. The Solace Terraform modules facilitate this by abstracting the complexities of the underlying infrastructure, enabling Application teams to efficiently set up the necessary messaging components without delving into the intricacies of global configurations or security settings.
+
+> aside positive
+> By leveraging the Solace Terraform modules, organizations can achieve a harmonious balance between centralized control and decentralized flexibility. This separation of concerns not only enhances operational efficiency but also promotes a secure and scalable messaging infrastructure, fostering collaboration and innovation across different teams.
+
+### Available Modules
+
+As of July 2024, Solace has released 5 modules for the Solace PubSub+ software broker and another 5 of the same variants for the PubSub+ hardware appliance. Note that the appliance module will have the same name as the software broker module but with `solacebroker` replaced with `solacebrokerappliance`. The following modules is whats currently available:
+
+1. `service module` - The Service module encapsulates the configuration of services at the Message VPN level. This includes defining protocols, setting up authentication and authorization parameters, and establishing resource limits. It also manages Access Control Lists (ACLs) and client profiles, making these configurations available for use across the system. The Service module ensures that the foundational service settings are properly managed and consistently applied. using this module, you can configure the following:
+    - [basic-vpn](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/basic-vpn)
+    - [client-certificate-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/client-certificate-authentication)
+    - [customized-acl-and-client-profiles](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/customized-acl-and-client-profiles)
+    - [oauth-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/oauth-authentication)
+    - [services-and-listen-ports](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/services-and-listen-ports)
+
 
 1. `client module` - The Client module is designed to represent a client user entity. This can either be a specific client username or an authorization group, essentially acting as the identity for different client users accessing the system. It plays a critical role in managing and securing user access. Examples of what could be configured on the broker using this module:
     - [acl-profile-exceptions](https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/acl-profile-exceptions)
@@ -94,13 +123,6 @@ As of July 2024, Solace has released 10 modules that are a combination of the fo
     - [adding-headers](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/adding-headers)
     - [basic](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/basic)
     - [using-substitution-expressions](https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/using-substitution-expressions)
-
-1. `service module` - The Service module encapsulates the configuration of services at the Message VPN level. This includes defining protocols, setting up authentication and authorization parameters, and establishing resource limits. It also manages Access Control Lists (ACLs) and client profiles, making these configurations available for use across the system. The Service module ensures that the foundational service settings are properly managed and consistently applied. using this module, you can configure the following:
-    - [basic-vpn](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/basic-vpn)
-    - [client-certificate-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/client-certificate-authentication)
-    - [customized-acl-and-client-profiles](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/customized-acl-and-client-profiles)
-    - [oauth-authentication](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/oauth-authentication)
-    - [services-and-listen-ports](https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/services-and-listen-ports)
 
 ## Example Usage
 
