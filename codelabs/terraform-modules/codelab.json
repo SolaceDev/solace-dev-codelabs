@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-07-23T13:08:30Z",
+  "id": "terraform-modules",
+  "duration": 37,
+  "title": "Solace Terraform Modules",
+  "summary": "",
+  "source": "main/markdown/terraform-modules/terraform-modules.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "terraform",
+    "solace"
+  ],
+  "tags": [
+    "terraform",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/terraform-modules",
+  "url": "terraform-modules"
+}

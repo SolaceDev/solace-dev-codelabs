@@ -1,0 +1,209 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Solace Terraform Modules</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="terraform-modules"
+                  title="Solace Terraform Modules"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/terraform-modules">
+    
+      <google-codelab-step label="Unpacking the Power of Modules" duration="10">
+        <p class="image-container"><img alt="Solace Terraformm Modules" src="img/396ef3d5d0c73281.png"></p>
+<p><a href="https://developer.hashicorp.com/terraform/language/modules" target="_blank">Terraform modules</a> are a way to organize and reuse code in your Terraform configurations. They allow you to encapsulate a group of resources and their configuration into a single, reusable unit. This helps in managing infrastructure as code more efficiently, promoting DRY (Don&#39;t Repeat Yourself) principles, and making your Terraform codebase more manageable and scalable.</p>
+<p>Terraform modules are versatile tools that can be used to define reusable configurations for various aspects of infrastructure. Let&#39;s say you want to abstract a broker queue or topic endpoint or an endpoint template configuration, or a rest delivery point configuration, or even broker VPN, authentication and authorization configuration then a module would be a perfect fit for this.</p>
+<h2 is-upgraded>Benefits of using Terraform Modules</h2>
+<p>Like all things DRY, Terraform Modules has a lot of benefits including:</p>
+<ol type="1">
+<li>Reusability - Modules can be reused across different projects and environments, saving time and effort. For instance, if you have a standard broker setup that you use in multiple environments, you can encapsulate this configuration into a module and use it wherever needed</li>
+<li>Consistency - Using modules ensures that best practices and standards are consistently applied across your infrastructure reducing the risk of misconfigurations and enhances security</li>
+<li>Manageability - Breaking down complex infrastructure into smaller, manageable pieces makes it easier to understand and maintain. Each module can be developed, tested, and debugged independently, leading to more reliable infrastructure</li>
+<li>Encapsulation - By exposing only the necessary inputs and outputs, modules encapsulate the details of the underlying resources. This abstraction simplifies the use of complex resources, making the overall configuration cleaner and more user-friendly.</li>
+<li>Collaboration - Teams can work on different modules independently, enabling parallel development and faster delivery</li>
+</ol>
+<p>Even tho Terraform modules promote best practices, enhance collaboration, and make your infrastructure more scalable and maintainable, it is critical to keep in mind the drawbacks from the introduced complexity to manage and handle these modules. By understanding both their benefits and potential drawbacks, you can effectively leverage Terraform modules to build robust and efficient infrastructure.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Essential Terraform Modules Concepts" duration="10">
+        <p>Before talking about the new <a href="https://registry.terraform.io/namespaces/SolaceProducts" target="_blank">Solace PubSub+ Terraform Modules</a>, lets cover some key concepts of Terraform Modules</p>
+<h2 is-upgraded>Module Structure</h2>
+<ol type="1">
+<li>Root Module: This is the main module, typically the directory where terraform init is run. It serves as the entry point for defining the overall infrastructure</li>
+<li>Child Modules: These are modules called by the root module or other modules. These child modules can be referenced by the root module or even by other modules, promoting a hierarchical and organized approach to managing complex infrastructure setups. This structure allows for efficient reuse, easier management, and greater modularity in your Terraform codebase</li>
+</ol>
+<h2 is-upgraded>Module Composition</h2>
+<ol type="1">
+<li>Input Variables: Allow you to pass different values to the module, making it flexible and adaptable to various environments and use cases</li>
+<li>Output Values: Allow you to expose specific values from the module facilitating the integration and reuse of these outputs in other parts of your configuration.</li>
+<li>Resources: The actual infrastructure components that the module will manage.</li>
+<li>Local Values: Intermediate values used within the module for simplification and readability.</li>
+</ol>
+<aside class="special"><p> This comprehensive approach to module composition ensures that your Terraform configurations are both robust and easy to maintain.</p>
+</aside>
+<h2 is-upgraded>Module Sources</h2>
+<p>Terraform module sources provide various options for sourcing modules, enhancing flexibility and collaboration in managing infrastructure. Modules can be sourced from local file paths, allowing you to use modules stored on your local machine or within your organization&#39;s internal network. Versioned repositories, such as GitHub or Bitbucket, enable you to maintain modules in a version-controlled environment, facilitating collaborative development and easy updates. The Terraform Registry offers a vast collection of publicly available modules, such as the <a href="https://registry.terraform.io/namespaces/SolaceProducts" target="_blank">Solace Pubsub+ Terraform Modules</a>, that can be readily used, promoting best practices and reducing development time.</p>
+<p>Additionally, modules can be sourced from URLs, providing a way to directly reference modules hosted on web servers or other remote locations. These diverse sourcing options make it easy to integrate, reuse, and manage Terraform modules across different environments and teams.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solace PubSub&#43; Terraform Modules" duration="10">
+        <p>The Solace PubSub+ Software and Appliance Terraform Modules have been designed to achieve two primary objectives:</p>
+<ol type="1">
+<li>Facilitate effective utilization of the Solace PubSub+ Providers by ensuring the efficient use of the provider. By providing a structured and well-documented approach, the modules help streamline the deployment and management of Solace PubSub+ resources, ensuring that users can maximize the benefits of the Solace messaging platform.</li>
+<li>Enable Customization and Self-Service Across Teams: The modules are crafted to support a dual-level configuration approach. Middleware teams are empowered to set enterprise-level defaults, establishing a consistent and secure baseline for the deployment of Solace resources. Concurrently, Application teams are granted the flexibility to configure specific attributes as needed, promoting a self-service model. This balance ensures that while core enterprise requirements are adhered to, individual application teams can tailor configurations to meet their unique needs without compromising on governance or security.</li>
+</ol>
+<h2 is-upgraded>Collaboration between the Middleware and Application teams</h2>
+<p>The Solace Terraform modules adeptly address the principle of separation of concerns, ensuring a clear and efficient delineation of responsibilities between Middleware and Application teams.</p>
+<p><strong>Middleware Team Responsibilities:</strong> The Middleware team defines and sets global configuration. This includes establishing and enforcing security measures and resource limits by setting default parameters. For instance, they manage critical settings such as authentication to the broker and message spool limits, ensuring a secure and controlled messaging environment. By setting these enterprise-wide defaults, the Middleware team provides a consistent and robust foundation that aligns with organizational policies and standards.</p>
+<p><strong>Application Team Responsibilities:</strong> Conversely, Application teams benefit from a simplified and streamlined process for integrating their applications with the Solace broker. Their primary focus is on connecting their applications and configuring messaging objects such as queues. These queues are essential for supporting the message producer and consumer functionalities inherent to their applications. The Solace Terraform modules facilitate this by abstracting the complexities of the underlying infrastructure, enabling Application teams to efficiently set up the necessary messaging components without delving into the intricacies of global configurations or security settings.</p>
+<aside class="special"><p> By leveraging the Solace Terraform modules, organizations can achieve a harmonious balance between centralized control and decentralized flexibility. This separation of concerns not only enhances operational efficiency but also promotes a secure and scalable messaging infrastructure, fostering collaboration and innovation across different teams.</p>
+</aside>
+<h2 is-upgraded>Available Modules</h2>
+<p>As of July 2024, Solace has released 5 modules for the Solace PubSub+ software broker and another 5 of the same variants for the PubSub+ hardware appliance. Note that the appliance module will have the same name as the software broker module but with <code>solacebroker</code> replaced with <code>solacebrokerappliance</code>. The following modules is whats currently available:</p>
+<ol type="1">
+<li><code>service module</code> - The Service module encapsulates the configuration of services at the Message VPN level. This includes defining protocols, setting up authentication and authorization parameters, and establishing resource limits. It also manages Access Control Lists (ACLs) and client profiles, making these configurations available for use across the system. The Service module ensures that the foundational service settings are properly managed and consistently applied. using this module, you can configure the following:<ul>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/basic-vpn" target="_blank">basic-vpn</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/client-certificate-authentication" target="_blank">client-certificate-authentication</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/customized-acl-and-client-profiles" target="_blank">customized-acl-and-client-profiles</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/oauth-authentication" target="_blank">oauth-authentication</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/service/solacebroker/latest/examples/services-and-listen-ports" target="_blank">services-and-listen-ports</a></li>
+</ul>
+</li>
+<li><code>client module</code> - The Client module is designed to represent a client user entity. This can either be a specific client username or an authorization group, essentially acting as the identity for different client users accessing the system. It plays a critical role in managing and securing user access. Examples of what could be configured on the broker using this module:<ul>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/acl-profile-exceptions" target="_blank">acl-profile-exceptions</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/authorization-group" target="_blank">authorization-group</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/basic-client-username" target="_blank">basic-client-username</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/client/solacebroker/latest/examples/client-username-attributes" target="_blank">client-username-attributes</a></li>
+</ul>
+</li>
+<li><code>jndi module</code> - The JNDI module serves as a wrapper for a JMS (Java Message Service) connection factory event broker object. This module simplifies the creation and management of connection factory objects within the JNDI (Java Naming and Directory Interface) store of an event broker. It allows application team members to set up these objects with minimal knowledge of the intricate Solace configuration components, needing only to provide resource-specific details. Examples include:<ul>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/basic" target="_blank">basic</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/local-transactions-support" target="_blank">local-transactions-support</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/jndi/solacebrokerappliance/latest/examples/xa-transactions-support" target="_blank">xa-transactions-support</a></li>
+</ul>
+</li>
+<li><code>queue_endpoint module</code> - The Queue Endpoint module streamlines the process of establishing queues and endpoints by bundling many of their dependencies into a single resource. It represents a durable event broker endpoint that can be used for publishing messages to, or consuming messages from. Additionally, it can be configured to act as an endpoint template, providing a reusable configuration for multiple endpoints. With this module, you can configure the following:<ul>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/exclusive-queue" target="_blank">exclusive-queue</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/non-exclusive-queue" target="_blank">non-exclusive-queue</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/partitioned-queue" target="_blank">partitioned-queue</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-template" target="_blank">queue-template</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-with-jndi" target="_blank">queue-with-jndi</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/queue-with-topic-subscriptions" target="_blank">queue-with-topic-subscriptions</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint" target="_blank">topic-endpoint</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint-template" target="_blank">topic-endpoint-template</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebroker/latest/examples/topic-endpoint-with-jndi" target="_blank">topic-endpoint-with-jndi</a></li>
+</ul>
+</li>
+<li><code>rest_delivery module</code> - The REST Delivery module handles the configuration for REST delivery points (RDPs), REST consumers, and queue bindings. This module allows application team members to create an RDP that connects to a REST consumer (such as a service in a public cloud) with minimal need for detailed knowledge of the Solace system configuration. It focuses on providing the necessary resource-specific information to set up these connections effectively. You can choose one of the following RDP configurations using this module<ul>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/adding-headers" target="_blank">adding-headers</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/basic" target="_blank">basic</a></li>
+<li><a href="https://registry.terraform.io/modules/SolaceProducts/rest-delivery/solacebroker/latest/examples/using-substitution-expressions" target="_blank">using-substitution-expressions</a></li>
+</ul>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Example Usage" duration="0">
+        <p>There are multiple ways the Solace PubSub+ Terraform Modules could be used, depending on the conventions followed by your team. One potential common practice is to reference the module in your <code>main.tf</code> file.</p>
+<p>For example, to create an <code>exclusive queue</code> with the <a href="https://registry.terraform.io/modules/SolaceProducts/queue-endpoint/solacebrokerappliance/latest" target="_blank">queue-endpoint module</a>, include the following in your <code>main.tf</code> file</p>
+<pre><code>module &#34;exclusive_queue&#34; {
+  # update with the module location
+  source = &#34;SolaceProducts/queue-endpoint/solacebroker&#34;
+
+  msg_vpn_name  = &#34;default&#34;
+  endpoint_type = &#34;queue&#34;
+  endpoint_name = &#34;testEQ&#34;
+
+  # permission &#34;consume&#34; enables a messaging client to connect, read and consume messages to/from the queue
+  permission = &#34;consume&#34;
+
+  # access_type &#34;exclusive&#34; is the default queue access type. While it has been specified here for clarity, it is not strictly required.
+  access_type = &#34;exclusive&#34;
+
+  # ingress and egress are enabled by default in the module, no need to enable here
+  # ingress_enabled = true
+  # egress_enabled = true
+}
+
+output &#34;provisioned_queue&#34; {
+  value       = module.exclusive_queue.queue
+  description = &#34;The provisioned queue resource&#34;
+}
+
+</code></pre>
+<p>With the following in your <code>providers.tf</code> file</p>
+<pre><code>terraform {
+  required_providers {
+    solacebroker = {
+      source = &#34;registry.terraform.io/solaceproducts/solacebroker&#34;
+    }
+  }
+}
+
+# Configure the Solace provider
+provider &#34;solacebroker&#34; {
+  username = var.semp_username
+  password = var.semp_password
+  url      = var.solace_url
+}
+</code></pre>
+<p>run the following:</p>
+<pre><code>terraform init
+terraform apply
+</code></pre>
+<p>And observe a couple of things:</p>
+<ol type="1">
+<li>Terraform will install the <code>solacebroker</code> provider defined in the <code>providers.tf</code> file</li>
+<li>Terraform will install the <code>exclusive_queue</code> module defined in the <code>main.tf</code> file and configure it based on the input variables defined</li>
+<li>Terraform will apply the configuration on the target broker</li>
+</ol>
+<aside class="special"><p> For a list of Solace Modules visit this page <a href="https://registry.terraform.io/namespaces/SolaceProducts" target="_blank">https://registry.terraform.io/namespaces/SolaceProducts</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <p>✅ Terraform modules are helpful for code reuse and scalability<br> ✅ Keep an eye on the solace community and the Solace terraform registry for the latest updates on the SolaceTerraform Modules</p>
+<p>To participate in the discussion on the Solace Community, feel free to comment on <a href="https://solace.community/discussion/3515/solace-terraform-appliance-provider-modules-declarative-semp-now-generally-available" target="_blank">this discussion post</a></p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
