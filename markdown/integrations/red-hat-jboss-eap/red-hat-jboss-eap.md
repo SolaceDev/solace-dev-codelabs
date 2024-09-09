@@ -720,7 +720,7 @@ This example uses a Message-Driven-Bean to receive messages from the Solace JMS 
 
 In JBoss EAP, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace event broker as well as other configuration options.  
 
-Note: the actual values for the attributes ("propertyValue") can take the form of a variable like "${propertyName}" where JBoss replaces the values if the "spec-descriptor-property-replacement" or "jboss-descriptor-property-replacement" JBoss server configuration properties are set to "true" in the "urn:jboss:domain:ee" subsystem (Refer to the [JBoss documentation](https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/6.2/html/security_guide/https://docs.redhat.com/en/documentation/jboss_enterprise_application_platform_common_criteria_certification/6.2.2/html/security_guide/enablingdisabling_descriptor_based_property_replacement1) for further details).
+Note: the actual values for the attributes ("propertyValue") can take the form of a variable like "${propertyName}" where JBoss replaces the values if the "spec-descriptor-property-replacement" or "jboss-descriptor-property-replacement" JBoss server configuration properties are set to "true" in the "urn:jboss:domain:ee" subsystem (Refer to the [JBoss documentation](https://docs.redhat.com/en/documentation/jboss_enterprise_application_platform_common_criteria_certification/6.2.2/html/security_guide/enablingdisabling_descriptor_based_property_replacement1) for further details).
 
 ```
 @MessageDriven(
