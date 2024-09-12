@@ -20,8 +20,9 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="helm-environment-setup"
                   title="Windows 10 Helm / Kubernetes Development Environment Setup"
                   environment="web"
@@ -104,7 +105,7 @@ $ sudo mv linux-amd64/helm /usr/local/bin/helm
 <h2 is-upgraded>Step 3.2: Install Helm Repos</h2>
 <p>Finally install the Helm repos, both the Helm &#34;stable&#34; repo and the solacecharts repo with its PubSub chart:</p>
 <pre><code language="language-bash" class="language-bash">$ helm repo add stable https://charts.helm.sh/stable
-$ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
+$ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/helm-charts
 </code></pre>
 <p class="image-container"><img alt="Helm Repos" src="img/a7501b6fd75e0a0a.png"></p>
 <p>It is also possible to install Helm in Windows if you prefer to work in PowerShell. If you use Chocolatey, there is a <a href="https://community.chocolatey.org/packages/kubernetes-helm" target="_blank">Helm package</a> available there.</p>
