@@ -1,4 +1,4 @@
-helm repo addauthor: Paul Kondrat
+author: Paul Kondrat
 summary: Windows 10 Helm / Kubernetes Development Environment Setup using WSL, Docker Desktop and VSC
 id: helm-environment-setup
 tags:
