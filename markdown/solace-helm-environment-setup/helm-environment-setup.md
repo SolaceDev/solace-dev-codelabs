@@ -1,4 +1,4 @@
-author: Paul Kondrat
+helm repo addauthor: Paul Kondrat
 summary: Windows 10 Helm / Kubernetes Development Environment Setup using WSL, Docker Desktop and VSC
 id: helm-environment-setup
 tags:
@@ -136,7 +136,7 @@ Finally install the Helm repos, both the Helm "stable" repo and the solacecharts
 
 ```bash
 $ helm repo add stable https://charts.helm.sh/stable
-$ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
+$ helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/helm-charts
 ```
 
 ![Helm Repos](./img/Step-3-2-Helm-Repos.png)
