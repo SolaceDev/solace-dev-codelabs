@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-06T14:24:39-08:00",
+  "updated": "2024-10-01T18:25:13Z",
   "id": "weblogic-app-server",
   "duration": 195,
   "title": "Integration Guide: WebLogic Application Server 12c",
   "summary": "The WebLogic Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the WebLogic application server providing enterprise applications with connectivity to the Solace event broker.",
-  "source": "weblogic-app-server.md",
+  "source": "main/markdown/integrations/weblogic-app-server/weblogic-app-server.md",
   "theme": "",
   "status": [
     "published"
