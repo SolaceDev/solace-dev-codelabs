@@ -38,7 +38,7 @@ These links contain information related to this guide:
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
-* [WebLogic Application Server Information Library](http://www.oracle.com/technetwork/middleware/weblogic/documentation/index.html)
+* [WebLogic Application Server Information Library](https://www.oracle.com/ca-en/middleware/technologies/weblogic.html)
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112)
 
 ## Get Solace Messaging
