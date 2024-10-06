@@ -33,7 +33,8 @@ These links contain information related to this guide:
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
 * [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html)
-* [Flink SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html)
+* [Flink SourceFunction Class Documentation](https://nightlies.apache.org/flink/flink-docs-release-1.13/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html)
+* [Appache Flink](https://flink.apache.org/)
 
 ## Get Solace Messaging
 Duration: 0:10:00
