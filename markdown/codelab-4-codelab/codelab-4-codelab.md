@@ -11,7 +11,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/tree/master/mark
 
 ## Codelab Overview
 
-Duration: 0:02:00
+Duration: 0:03:00
 
 This Codelab will show you how to quickly create your own Google Codelab just like the one you're using right now!
 
