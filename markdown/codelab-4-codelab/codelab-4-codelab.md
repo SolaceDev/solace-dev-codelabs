@@ -25,6 +25,11 @@ Here is an example image of another Codelab that I created:
 - [Google Codelabs Tools Github](https://github.com/googlecodelabs/tools) - The repo that contains the claat tool we'll be using today
 - [Google Group for Codelab Authors](https://groups.google.com/forum/#!forum/codelab-authors) - great forum for asking questions about codelabs and discussing future functionality
 
+### Video
+You can also watch a video on how you can contribute to authoring a codelab by visiting this [YouTube link](https://youtu.be/g4_ruWzlpAY) or watching the video below
+
+<video id="vSpY97Moelg"></video>
+
 ## Environment Setup
 
 Duration: 0:04:00
