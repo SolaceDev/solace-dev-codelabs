@@ -4,7 +4,7 @@
   "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch codelab-4-codelab.md --exec 'claat export codelab-4-codelab.md && lsof -i :9090 -t | xargs kill && cd codelab-4-codelab && claat serve'"
+    "watch": "nodemon --watch codelab-4-codelab.md --exec 'claat export -o temp/ codelab-4-codelab.md && lsof -i :9090 -t | xargs kill && cd temp/codelab-4-codelab && claat serve'"
   },
   "repository": {
     "type": "git",

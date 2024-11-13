@@ -11,7 +11,7 @@ command_exists() {
     # check if command exists and fail otherwise
     command -v "$1" >/dev/null 2>&1
     if [[ $? -ne 0 ]]; then
-        echo "Note: $1 Does not exist. Please install it first!"
+        echo "Note: $1 Does not exist. Please install it if you would like to run the codelab locally"
     fi
 }
 
@@ -80,6 +80,7 @@ if [ -f "$backup_package_json" ]; then
 fi
 
 echo "Markdown file created! Find it at $PWD/markdown/$CODELAB_NAME"
-
 command_exists claat
 command_exists go
+
+cd $PWD/markdown/$CODELAB_NAME
