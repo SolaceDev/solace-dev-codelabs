@@ -1,10 +1,10 @@
 author: gaspareuan155@gmail.com
-summary:
-id:
+summary: "Este es un portafolio responsivo desarrollado con Flutter."
+id: portafolio-responsivo
 tags: Flutter, Responsive, Portafolio
 categories: web
 environments: Web
-status:
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/portafolio
 
 # Portafolio Flutter
