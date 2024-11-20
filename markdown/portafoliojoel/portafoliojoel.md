@@ -74,7 +74,7 @@ Crear una aplicación móvil que funcione como clon de Spotify, utilizando Flutt
 <img src="imagen3.jpeg" width="200">
 4. Crear una carpeta llamada `navigation` que contenga el archivo `.dart` de `tabbar`.
 <img src="imagen4.jpeg" width="200">
-5. luego en archivo tabbar, se le creara una clase que nos ayudara a concertar los demás módulos de inicio, búsqueda, librería y perfil. Luego en el archivo main importo las bibliotecas necesarias. material.dart trae los componentes básicos de Flutter, y tabbar.dart es un archivo que creé para la barra de navegación de la app.
+5. luego en archivo tabbar, se le creara una clase que nos ayudara a concertar los demás módulos de inicio, búsqueda, librería y perfil. Luego en el archivo main importo las bibliotecas necesarias. material.dart trae los componentes básicos de Flutter, y tabbar.dart es un a  rchivo que creé para la barra de navegación de la app.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -977,8 +977,6 @@ Este proyecto fue una buena práctica para aplicar animaciones y estructurar una
 [14] Rive Team, "Rive - Create and ship interactive animations," rive.app, 2024. [Online]. Available: https://rive.app/ 
 
 [15] Freepik Company, "Flaticon - The largest database of free icons," flaticon.es, 2024. [Online]. Available: https://www.flaticon.es/ 
-
-
 
 ---
 
