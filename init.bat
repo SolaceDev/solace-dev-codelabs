@@ -48,11 +48,11 @@ powershell -Command "(Get-Content '%CODELAB_MARKDOWN_FILE%') | ForEach-Object { 
 powershell -Command "(Get-Content '%CODELAB_PACKAGE_JSON%') | ForEach-Object { $_ -replace 'CODELAB_NAME', '%CODELAB_NAME%' } | Set-Content '%CODELAB_PACKAGE_JSON%'"
 
 :: Use PowerShell to update the "watch" script in package.json
-powershell -Command ^
-    "$packageJsonPath = '%CODELAB_PACKAGE_JSON%'; ^
-    $content = Get-Content -Path $packageJsonPath -Raw; ^
-    $updatedContent = $content -replace '\"watch\":\s*\"nodemon --watch CODELAB_NAME\\.md --exec \\\""claat export -o temp/ CODELAB_NAME\\.md && ./node_modules/kill-port/cli\\.js --port 9090 && cd temp/CODELAB_NAME && claat serve\\\""', ^
-    '\"watch\": \"nodemon --watch CODELAB_NAME.md --exec \\\""npx claat export -o temp/ CODELAB_NAME.md; npx kill-port --port 9090; cd temp\\\\CODELAB_NAME; npx claat serve\\\""'; ^
+powershell -Command `
+    "$packageJsonPath = '%CODELAB_PACKAGE_JSON%'; `
+    $content = Get-Content -Path $packageJsonPath -Raw; `
+    $updatedContent = $content -replace '\"watch\":\s*\"nodemon --watch CODELAB_NAME\\.md --exec \\\""claat export -o temp/ CODELAB_NAME\\.md && ./node_modules/kill-port/cli\\.js --port 9090 && cd temp/CODELAB_NAME && claat serve\\\""', `
+    '\"watch\": \"nodemon --watch CODELAB_NAME.md --exec \\\""npx claat export -o temp/ CODELAB_NAME.md; npx kill-port --port 9090; cd temp\\\\CODELAB_NAME; npx claat serve\\\""'; `
     $updatedContent | Set-Content -Path $packageJsonPath"
     
 echo Markdown file created! Find it at %CD%\markdown\%CODELAB_NAME%
