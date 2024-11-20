@@ -210,27 +210,27 @@ Figura 10
 
 Luego de la misma manera vamos a envolver container en un center (Wrap with center) quedando un codigo así. Nota: Se corrigió la parte marcada en rojo.  
 Figura 11    
-![Soly Image Caption](img/figura11.png)
+![Soly Image Caption](img/Figura11.png)
 En el primer expanded quitaremos el container y en su lugar tendremos Drawer con la siguiente configuración ver figura 12 donde se tendrá el siguiente resultado ver figura 13.
 
 Figura 12    
-![Soly Image Caption](img/figura12.png)
+![Soly Image Caption](img/Figura12.png)
 
 Figura 13    
-![Soly Image Caption](img/figura13.png)
+![Soly Image Caption](img/Figura13.png)
 
 Continuando con lo anterior se va poner debajo de color un child dentro un colum ver Figura 14.
 
 Figura 14    
-![Soly Image Caption](img/figura14.png)  
+![Soly Image Caption](img/Figura14.png)  
 En assetName se pone la ruta de la imagen que tenemos en la carpeta images, la ruta lo sacamos presionando sobre la imagen un click derecho y la opción copiar ruta de acceso relativa y lo pegamos en donde esta assetName entre las comillas simples quedando algo así, se puede cambiar por otra imagen pero por motivos prácticos ese está bien.
 backgroundImage: AssetImage('assets/images/IMG_7344.jpg'), agregaremos nuestro nombre y una descripcion con los widgets de text ademas de otras configuraciones como el mainAxisAligment dejando un codigo como este ver figura 15, con el siguiente resultado ver figura 16.
 figura 15.  
 Figura 15    
-![Soly Image Caption](img/figura15.png)
+![Soly Image Caption](img/Figura15.png)
 
 Figura 16    
-![Soly Image Caption](img/figura16.png)  
+![Soly Image Caption](img/Figura16.png)  
 Ahora nos vamos a parar sobre el Drawer y presionamos ctrl+ . y daremos en la opción Extract Widget ver figura 17, nos saldrá para escribir para escribir el nombre del nuevo widget escribimos SideMenu ver figura 18 lo cual nos formará el siguiente widget con ese nombre en el mismo archivo donde estamos trabajando, pero hasta el final del codigo ver figura 19.
 
 Figura 17    
