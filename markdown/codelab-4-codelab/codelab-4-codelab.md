@@ -156,6 +156,8 @@ Duration: 0:05:00
 ### Steps
 
 1. After cloning your fork of the repository and checking out a new branch as per the earlier step, from the root directory, run the init script as follows `source init.sh < name-of-codelab >`
+    1. Note: If you're on WSL: `init.sh < name-of-codelab >`
+    1. Note: If you're on Windows `init.bat < name-of-codelab >`
 1. You should now be in your `/markdown/< name-of-codelab >` directory
 1. [Optional] Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal `npm install`
 1. [Optional] Compile and start the `claat` server by running `npm run watch`. Note: This will open a tab in your browser and serve your markdown file

@@ -124,7 +124,11 @@ git checkout -b add-codelab-&lt;name_of_codelab&gt;
 </ul>
 <h2 is-upgraded>Steps</h2>
 <ol type="1">
-<li>After cloning your fork of the repository and checking out a new branch as per the earlier step, from the root directory, run the init script as follows <code>source init.sh < name-of-codelab ></code></li>
+<li>After cloning your fork of the repository and checking out a new branch as per the earlier step, from the root directory, run the init script as follows <code>source init.sh < name-of-codelab ></code><ol type="1">
+<li>Note: If you&#39;re on WSL: <code>init.sh < name-of-codelab ></code></li>
+<li>Note: If you&#39;re on Windows <code>init.bat < name-of-codelab ></code></li>
+</ol>
+</li>
 <li>You should now be in your <code>/markdown/< name-of-codelab ></code> directory</li>
 <li>[Optional] Install the required dependencies for watching any changes you make in your markdown file by running the following from terminal <code>npm install</code></li>
 <li>[Optional] Compile and start the <code>claat</code> server by running <code>npm run watch</code>. Note: This will open a tab in your browser and serve your markdown file</li>
