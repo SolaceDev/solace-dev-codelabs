@@ -20,8 +20,9 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="red-hat-jboss-fuse-v6"
                   title="Integration Guide: Red Hat JBoss Fuse v6"
                   environment="web"
@@ -258,7 +259,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 </ul>
 <p>Using the Blueprint dependency injection framework requires modifications to the root element of the XML code from above reference. The JBoss Fuse document [JBoss Fuse – CONTAINER], section &#34;The Blueprint Container&#34;, subsection &#34;Blueprint Configuration&#34; describes this. The following is a direct link to the Red Hat documentation related to Blueprint configuration.</p>
 <ul>
-<li><a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/deploying_into_apache_karaf/deploysimple-blueprint" target="_blank">DeploySimple-Blueprint-Config</a></li>
+<li><a href="https://docs.redhat.com/en/documentation/red_hat_fuse/6.0/html/deploying_into_the_container/deploysimple#DeploySimple-Blueprint" target="_blank">DeploySimple-Blueprint-Config</a></li>
 </ul>
 <p>Setting up JBoss Fuse requires two steps to be completed. First, the Solace JMS libraries must be deployed in JBoss Fuse. Then either the correct Spring or Blueprint XML configuration file must be deployed. See the following sections for details.</p>
 <h3 is-upgraded>Install the Solace JMS libraries in JBoss Fuse</h3>
