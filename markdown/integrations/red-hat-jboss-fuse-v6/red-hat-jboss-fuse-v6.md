@@ -289,7 +289,7 @@ For more details refer to the JBoss Fuse document [JBoss Fuse – JMS] and see t
 
 Using the Blueprint dependency injection framework requires modifications to the root element of the XML code from above reference. The JBoss Fuse document [JBoss Fuse – CONTAINER], section "The Blueprint Container", subsection "Blueprint Configuration" describes this. The following is a direct link to the Red Hat documentation related to Blueprint configuration.
 
-* [DeploySimple-Blueprint-Config](https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/deploying_into_apache_karaf/deploysimple-blueprint)
+* [DeploySimple-Blueprint-Config](https://docs.redhat.com/en/documentation/red_hat_fuse/6.0/html/deploying_into_the_container/deploysimple#DeploySimple-Blueprint)
 
 Setting up JBoss Fuse requires two steps to be completed. First, the Solace JMS libraries must be deployed in JBoss Fuse. Then either the correct Spring or Blueprint XML configuration file must be deployed. See the following sections for details.
 
