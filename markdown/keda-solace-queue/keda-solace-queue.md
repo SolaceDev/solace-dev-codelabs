@@ -137,7 +137,7 @@ Follow the instructions to install a Solace PubSub+ Event Broker to your Kuberne
 
 ### Add Helm repo
 ```bash
-helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
+helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/helm-charts
 ```
 
 ### Update Helm repo
