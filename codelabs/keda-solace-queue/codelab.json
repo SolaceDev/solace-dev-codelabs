@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2022-05-24T18:18:04-04:00",
+  "updated": "2025-01-28T18:01:08Z",
   "id": "keda-solace-queue",
   "duration": 180,
   "title": "KEDA with Solace PubSub+ Event Queues",
   "summary": "Deploy KEDA and Scale an Application on Kubernetes by Monitoring a Solace PubSub+ Queue",
-  "source": "keda-solace-queue.md",
+  "source": "main/markdown/keda-solace-queue/keda-solace-queue.md",
   "theme": "",
   "status": [
     "draft"

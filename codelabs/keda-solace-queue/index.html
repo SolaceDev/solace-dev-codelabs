@@ -20,8 +20,9 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="keda-solace-queue"
                   title="KEDA with Solace PubSub&#43; Event Queues"
                   environment="web"
@@ -141,7 +142,7 @@ kubectl get pods -n keda
         <p class="image-container"><img alt="Solace PubSub+ Event Broker" src="img/b988d6019600508f.png"></p>
 <p>Follow the instructions to install a Solace PubSub+ Event Broker to your Kubernetes cluster. The broker will be installed to <code>namespace=solace</code>. The broker will be created with an administrative user=<strong>admin</strong> and password=<strong>KedaLabAdminPwd1</strong>. We will configure the broker subsequently in the next section.</p>
 <h2 is-upgraded>Add Helm repo</h2>
-<pre><code language="language-bash" class="language-bash">helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-quickstart/helm-charts
+<pre><code language="language-bash" class="language-bash">helm repo add solacecharts https://solaceproducts.github.io/pubsubplus-kubernetes-helm-quickstart/helm-charts
 </code></pre>
 <h2 is-upgraded>Update Helm repo</h2>
 <pre><code language="language-bash" class="language-bash">helm repo update
