@@ -171,7 +171,7 @@
 <li>Create a new folder called <code>lib</code> and copy the contents of <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip/lib</code> and <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338/lib</code> into this new folder.</li>
 <li>Open a command window or terminal in the <code>Schema-Registry-Beta-Package/jcsmp</code> directory.</li>
 </ol>
-<p>NOTE: For winows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code> in the below steps.</p>
+<p>NOTE: For winows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code> in the below steps. For non-Windows users, you will have to run <code>chmod +ux gradelw</code> to change permissions on <code>gradelw</code>.</p>
 <ol type="1" start="5">
 <li>Run the following command to build the sample on Windows <code>./gradlew.bat build</code> and . You should see a <code>BUILD SUCCESSFUL</code> message.</li>
 <li>Run the sample application and provide the broker connection details like so <code>./gradlew.bat runHelloWorldJCSMPAvroSerde --args="localhost:55555 default default"</code>.</li>
