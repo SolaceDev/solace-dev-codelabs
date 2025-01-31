@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-01-31T20:17:51Z",
+  "id": "schema-registry-beta",
+  "duration": 99,
+  "title": "Introduction to Schema Registry using the Solace Messaging API for Java (JCSMP) and Apicurio Registry",
+  "summary": "This codelab will walk you through getting started with the Apicurio Registry and the Solace SERDEs components using the Solace Messaging API for Java (JCSMP).",
+  "source": "main/markdown/schema-registry-beta/schema-registry-beta.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry-beta",
+  "url": "schema-registry-beta"
+}

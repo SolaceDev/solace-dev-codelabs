@@ -1,0 +1,271 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Introduction to Schema Registry using the Solace Messaging API for Java (JCSMP) and Apicurio Registry</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="schema-registry-beta"
+                  title="Introduction to Schema Registry using the Solace Messaging API for Java (JCSMP) and Apicurio Registry"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry-beta">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <p>In today&#39;s data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we&#39;ll explore how to use a schema registry (Apicurio Registry) with the Solace JCSMP API, focusing on the Apache Avro format for schema definition.</p>
+<p>You&#39;ll learn about:</p>
+<p>✔️ What a schema registry is and why it&#39;s important<br> ✔️ What a Serializer and Deserializer (SERDEs) is and the role they play<br> ✔️ How to set up an instance of the Apicurio Registry using Docker Compose<br> ✔️ How to create and register schemas<br> ✔️ How to use schemas in your event-driven applications with Solace&#39;s JCSMP API<br> ✔️ Best practices for schema evolution</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="7">
+        <ol type="1">
+<li>A general understanding of <a href="https://docs.solace.com/#Messaging" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
+<li>A locally running PubSub+ Broker or a free trial account of Solace PubSub+ Cloud. Don&#39;t have one? <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a><ul>
+<li>Along with the connection information for the broker</li>
+</ul>
+</li>
+<li>Basic knowledge of Apache <a href="https://avro.apache.org/docs/1.12.0/specification/" target="_blank">Avro schema format</a></li>
+<li><a href="https://docs.docker.com/get-started/get-docker/" target="_blank">Docker</a> installed on your system</li>
+<li><a href="https://openjdk.org/" target="_blank">Java Development Kit (JDK) version 11+</a> installed on your system</li>
+<li>An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)</li>
+<li>Download the provided BETA zip package named <code>Schema-Registry-Beta-Package_0.1.0.zip</code> that contains all the necessary pieces you will need. This is available on the <a href="https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/" target="_blank">Solace Product Portal</a> and unzip it to your preferred directory.</li>
+</ol>
+<p>NOTE: If you cannot access the <a href="https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/" target="_blank">Solace Product Portal</a>, please click the <code>Report a mistake</code> at the bottom left of the codelab and open an issue asking for access.</p>
+<aside class="special"><p> This walkthrough uses Apicurio Registry for schema management, which we&#39;ll set up using Docker Compose.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What Is A Schema Registry" duration="10">
+        <p>A schema registry is a central repository for managing and storing schemas. It helps ensure data consistency, enables data governance, and supports schema evolution. Here&#39;s why it&#39;s important:</p>
+<ol type="1">
+<li><strong>Data Consistency</strong>: Ensures that producers and consumers agree on the data format.</li>
+<li><strong>Interoperability</strong>: Allows different systems to communicate effectively.</li>
+<li><strong>Schema Evolution</strong>: Supports versioning and compatibility checks as schemas change over time.</li>
+<li><strong>Data Governance</strong>: Centralizes schema management for better control and auditing.</li>
+</ol>
+<aside class="special"><p> In this walkthrough, we&#39;ll use the Apicurio Registry as our schema registry, which provides a comprehensive solution for managing schemas in your event-driven architecture.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What Is A SERDEs" duration="5">
+        <p>A SERDEs (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:</p>
+<ol type="1">
+<li><strong>Serialization</strong>: Converting data objects from their native format (like Java objects) into a binary format suitable for transmission or storage.</li>
+<li><strong>Deserialization</strong>: Converting the binary data back into its original format for processing.</li>
+</ol>
+<p>In a schema registry system, SERDEs work closely with schemas to:</p>
+<ul>
+<li>Ensure data consistency during serialization/deserialization</li>
+<li>Validate that messages conform to the registered schema</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li>A serializer might take a Java object and convert it to Avro binary format using a schema from the registry</li>
+<li>A deserializer would then use the same schema to correctly reconstruct the object from the binary data</li>
+</ul>
+<p>This is a fundamental concept in message-based systems where data needs to be:</p>
+<ul>
+<li>Efficiently transmitted between different services</li>
+<li>Properly validated against defined schemas</li>
+<li>Correctly interpreted by different applications that might be written in different programming languages</li>
+</ul>
+<aside class="special"><p> In this walkthrough, we&#39;ll use the PubSub+ Java Avro SERDEs along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the Avro format.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setting up Apicurio Registry" duration="15">
+        <p>We&#39;ll use Docker Compose to set up the Apicurio Registry quickly and easily. We&#39;ve prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.</p>
+<ol type="1">
+<li>In these subsequent steps we will use the package that came from the downloaded zip from the prerequisites section. Navigate to the extracted folder called <code>Schema-Registry-Beta-Package</code>. You should see the following files and folders:</li>
+</ol>
+<p class="image-container"><img src="img/a8e88af8691ee4ee.jpg"></p>
+<ol type="1" start="2">
+<li>Extract the tar folder named <code>solace-schema-registry-dist.tar</code>.</li>
+<li>Open a terminal or command prompt window and navigate to the extracted location of the folder called <code>solace-schema-registry-dist</code>.</li>
+<li>Optionally you can make changes to the <code>.env</code> file to change things such as default login or ports. We will leave everything to defaults for this codelab.</li>
+</ol>
+<p class="image-container"><img src="img/7fc4225c303820be.jpg"></p>
+<ol type="1" start="5">
+<li>Run the following command: <code>docker compose up -d</code> and all the components will start up with the default values configured.</li>
+<li>Once the script is done running, you should now be able to go to your browser and navigate to <code>localhost:8888</code> which should re-direct you to the Apicurio Registry login screen.</li>
+</ol>
+<p class="image-container"><img src="img/43e621476bd04394.jpg"></p>
+<p>That&#39;s it, you have now installed an instance of the Apicurio Registry with the Postgres storage option!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating and Registering Schemas" duration="15">
+        <p>Let&#39;s create a simple schema for a <code>User</code> event:</p>
+<ol type="1">
+<li>Open the Apicurio Registry UI in your web browser by going to <code>localhost:8888</code>.</li>
+<li>Login with the predefined credentials for a developer. In this case the username is <code>sr-developer</code> and password is <code>devPassword</code>.</li>
+</ol>
+<p class="image-container"><img src="img/c2aa56b2a7de61ea.jpg"></p>
+<ol type="1" start="3">
+<li>Click on <code>Create artifact</code> button. Once the dialogue opens enter the following as shown below: <ul>
+<li>Group Id: Set to <code>com.solace.samples.serdes.avro.schema</code></li>
+<li>Artifact Id: Set to <code>User</code></li>
+<li>Type: Set to <code>Avro Schema</code></li>
+</ul>
+</li>
+</ol>
+<p class="image-container"><img src="img/354f8ca343e7f6cb.jpg"></p>
+<p class="image-container"><img src="img/19a409a4b68aefec.jpg"></p>
+<ol type="1" start="4">
+<li>We will skip the <code>Artifact Metadata</code> step as it is optional and will click <code>Next</code>.</li>
+<li>For the &#34;Version Content&#34; section, copy the Avro schema from below and either paste directly or save it into a file and upload it and click <code>Next</code> when done.</li>
+</ol>
+<pre><code language="language-json" class="language-json">{
+  &#34;namespace&#34;: &#34;com.solace.samples.serdes.avro.schema&#34;,
+  &#34;type&#34;: &#34;record&#34;,
+  &#34;name&#34;: &#34;User&#34;,
+  &#34;fields&#34;: [
+    {&#34;name&#34;: &#34;id&#34;, &#34;type&#34;: &#34;string&#34;},
+    {&#34;name&#34;: &#34;name&#34;, &#34;type&#34;: &#34;string&#34;},
+    {&#34;name&#34;: &#34;email&#34;, &#34;type&#34;: &#34;string&#34;}
+  ]
+}
+</code></pre>
+<p class="image-container"><img src="img/8fdfc83641421597.jpg"></p>
+<ol type="1" start="6">
+<li>We will skip the <code>Version Metadata</code> step as it is optional and will simply click the <code>Create</code> button.</li>
+<li>Finally after you have successfully created the new schema you should see the following:</li>
+</ol>
+<p class="image-container"><img src="img/afb336b29e671007.jpg"></p>
+<p>You&#39;ve now created and registered your first schema!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)" duration="30">
+        <p>Now, let&#39;s see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):</p>
+<ol type="1">
+<li>Extract the SERDEs zip called <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip</code> and extract the JCSMP zip called <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338.zip</code></li>
+<li>In a new window, navigate to the <code>Schema-Registry-Beta-Package/jcsmp</code> folder. This is where you will find the sample application.</li>
+<li>Create a new folder called <code>lib</code> and copy the contents of <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip/lib</code> and <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338/lib</code> into this new folder.</li>
+<li>Open a command window or terminal in the <code>Schema-Registry-Beta-Package/jcsmp</code> directory.</li>
+</ol>
+<p>NOTE: For winows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code> in the below steps.</p>
+<ol type="1" start="5">
+<li>Run the following command to build the sample on Windows <code>./gradlew.bat build</code> and . You should see a <code>BUILD SUCCESSFUL</code> message.</li>
+<li>Run the sample application and provide the broker connection details like so <code>./gradlew.bat runHelloWorldJCSMPAvroSerde --args="localhost:55555 default default"</code>.</li>
+</ol>
+<p>This sample talks to the locally deployed Apicurio Schema Registry and retrieves the schema along with the schema ID. It will then do the following:</p>
+<p>Configures the Serializer and Deserializer:</p>
+<pre><code language="language-java" class="language-java">// Create and configure Avro serializer and deserializer
+        try (Serializer&lt;GenericRecord&gt; serializer = new AvroSerializer&lt;&gt;();
+             Deserializer&lt;GenericRecord&gt; deserializer = new AvroDeserializer&lt;&gt;()) {
+
+            serializer.configure(getConfig());
+            deserializer.configure(getConfig());
+</code></pre>
+<pre><code language="language-java" class="language-java">   /**
+     * Returns a configuration map for the Avro serializer and deserializer.
+     *
+     * @return A Map containing configuration properties
+     */
+    private static Map&lt;String, Object&gt; getConfig() {
+        Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+        config.put(SchemaResolverProperties.REGISTRY_URL, REGISTRY_URL);
+        config.put(SchemaResolverProperties.AUTH_USERNAME, REGISTRY_USERNAME);
+        config.put(SchemaResolverProperties.AUTH_PASSWORD, REGISTRY_PASSWORD);
+        return config;
+    }
+</code></pre>
+<p>Serializes the message payload and publishes the message to the connected broker on <code>test/topic</code> destination with the serialized payload and schema ID:</p>
+<pre><code language="language-java" class="language-java">   // Create and populate a GenericRecord with sample data
+            GenericRecord user = initEmptyUserRecord();
+            user.put(&#34;name&#34;, &#34;John Doe&#34;);
+            user.put(&#34;id&#34;, &#34;123&#34;);
+            user.put(&#34;email&#34;, &#34;support@solace.com&#34;);
+
+            // Serialize and send the message
+            BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
+            SerdeMessage.serialize(serializer, msg, user);
+            System.out.printf(&#34;Sending Message:%n%s%n&#34;, msg.dump());
+            producer.send(msg, topic);
+</code></pre>
+<p>It will then receive the published message and deserialize it by looking up the schema ID and retrieving the schema and print it out to console:</p>
+<pre><code language="language-java" class="language-java">  // Set up the message consumer with a deserialization callback
+            XMLMessageConsumer cons = session.getMessageConsumer(Consumed.with(deserializer, (msg, genericRecord) -&gt; {
+                System.out.printf(&#34;Got record: %s%n&#34;, genericRecord);
+                latch.countDown(); // Signal the main thread that a message has been received
+            }, (msg, deserializationException) -&gt; {
+                System.out.printf(&#34;Got exception: %s%n&#34;, deserializationException);
+                System.out.printf(&#34;But still have access to the message: %s%n&#34;, msg.dump());
+                latch.countDown();
+            }, jcsmpException -&gt; {
+                System.out.printf(&#34;Got exception: %s%n&#34;, jcsmpException);
+                latch.countDown();
+            }));
+            cons.start();
+</code></pre>
+<p>The sourcecode can be further looked at by opening the <code>HelloWorldJCSMPAvroSerde.java</code> file.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Best Practices for Schema Evolution" duration="10">
+        <p>As your data model evolves, you&#39;ll need to update your schemas. Here are some best practices:</p>
+<ol type="1">
+<li><strong>Backward Compatibility</strong>: Ensure new schema versions can read old data.</li>
+<li><strong>Forward Compatibility</strong>: Ensure old schema versions can read new data (ignoring new fields).</li>
+<li><strong>Full Compatibility</strong>: Aim for both backward and forward compatibility.</li>
+<li><strong>Versioning</strong>: Use semantic versioning for your schemas.</li>
+<li><strong>Default Values</strong>: Provide default values for new fields to maintain backward compatibility.</li>
+<li><strong>Avoid Renaming</strong>: Instead of renaming fields, add new fields and deprecate old ones.</li>
+</ol>
+<p>When updating a schema in Apicurio Registry:</p>
+<ol type="1">
+<li>Create a new version of the existing schema.</li>
+<li>Make your changes, following the best practices above.</li>
+<li>Use the compatibility rule in the registry to ensure your changes don&#39;t break existing consumers.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="2">
+        <p>✔️ Schema registries are crucial for maintaining data consistency in event-driven architectures.<br> ✔️ Apicurio Registry provides a powerful platform for managing schemas.<br> ✔️ Apache Avro is a popular choice for schema definition due to its compact binary format and schema evolution capabilities.<br> ✔️ Solace&#39;s JCSMP API can be used effectively with the Apicurio Registry for robust event-driven applications.<br> ✔️ Proper schema evolution practices ensure smooth updates without breaking existing systems.<br> ✔️ Using schemas in your applications helps catch data issues early and improves overall system reliability.<br> ✔️ More schema SERDEs will be made available in the future including JSON.</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
