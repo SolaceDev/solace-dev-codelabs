@@ -2,7 +2,7 @@ author: Murat Vuniqi
 summary: This codelab will walk you through getting started with the Apicurio Registry and the Solace SERDEs components using the Solace Messaging API for Java (JCSMP).
 id: schema-registry-beta
 tags:
-categories: SchemaRegistry, Solace, SERDEs, JCSMP
+categories: Solace
 environments: Web
 status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry-beta
@@ -35,8 +35,9 @@ Duration: 0:07:00
 4. [Docker](https://docs.docker.com/get-started/get-docker/) installed on your system
 5. [Java Development Kit (JDK) version 11+](https://openjdk.org/) installed on your system
 6. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
-7. Download the provided BETA zip package named ```Schema-Registry-Beta-Package.zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta) and unzip it to your prefered directory.
+7. Download the provided BETA zip package named ```Schema-Registry-Beta-Package_0.1.0.zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/) and unzip it to your preferred directory.
 
+NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
 > aside positive
 > This walkthrough uses Apicurio Registry for schema management, which we'll set up using Docker Compose.
 
@@ -84,7 +85,7 @@ Duration: 0:15:00
 
 We'll use Docker Compose to set up the Apicurio Registry quickly and easily. We've prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.
 
-1. In these subsequent steps we will use the package that came from the downloaded zip from step #8 in the prerequisities section. Navigate to the extracted folder called ```Schema-Registry-Beta-Package```. You should see the following files and folders:
+1. In these subsequent steps we will use the package that came from the downloaded zip from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-Beta-Package```. You should see the following files and folders:
 <p align="center">
   <img src="img/SrBetaPackageFolderView.jpg" />
 </p>
@@ -188,22 +189,61 @@ NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` 
 This sample talks to the locally deployed Apicurio Schema Registry and retrieves the schema along with the schema ID. It will then do the following:
 
 Configures the Serializer and Deserializer:
-<p align="center">
-  <img src="img/SrSerializeSourceCode.jpg" />
-</p>
-<p align="center">
-  <img src="img/SrSerializeSourceCodeConfig.jpg" />
-</p>
+```java
+// Create and configure Avro serializer and deserializer
+        try (Serializer<GenericRecord> serializer = new AvroSerializer<>();
+             Deserializer<GenericRecord> deserializer = new AvroDeserializer<>()) {
+
+            serializer.configure(getConfig());
+            deserializer.configure(getConfig());
+```
+```java
+   /**
+     * Returns a configuration map for the Avro serializer and deserializer.
+     *
+     * @return A Map containing configuration properties
+     */
+    private static Map<String, Object> getConfig() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(SchemaResolverProperties.REGISTRY_URL, REGISTRY_URL);
+        config.put(SchemaResolverProperties.AUTH_USERNAME, REGISTRY_USERNAME);
+        config.put(SchemaResolverProperties.AUTH_PASSWORD, REGISTRY_PASSWORD);
+        return config;
+    }
+```
+
 
 Serializes the message payload and publishes the message to the connected broker on ```test/topic``` destination with the serialized payload and schema ID:
-<p align="center">
-  <img src="img/SrSerializeSourceCodeProducer.jpg" />
-</p>
+```java
+   // Create and populate a GenericRecord with sample data
+            GenericRecord user = initEmptyUserRecord();
+            user.put("name", "John Doe");
+            user.put("id", "123");
+            user.put("email", "support@solace.com");
 
-It will then receive the published message and deserialize it by looking up the schema ID and retrieveing the schema and print it out to console:
-<p align="center">
-  <img src="img/SrSerializeSourceCodeConsumer.jpg" />
-</p>
+            // Serialize and send the message
+            BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
+            SerdeMessage.serialize(serializer, msg, user);
+            System.out.printf("Sending Message:%n%s%n", msg.dump());
+            producer.send(msg, topic);
+```
+
+It will then receive the published message and deserialize it by looking up the schema ID and retrieving the schema and print it out to console:
+```java
+  // Set up the message consumer with a deserialization callback
+            XMLMessageConsumer cons = session.getMessageConsumer(Consumed.with(deserializer, (msg, genericRecord) -> {
+                System.out.printf("Got record: %s%n", genericRecord);
+                latch.countDown(); // Signal the main thread that a message has been received
+            }, (msg, deserializationException) -> {
+                System.out.printf("Got exception: %s%n", deserializationException);
+                System.out.printf("But still have access to the message: %s%n", msg.dump());
+                latch.countDown();
+            }, jcsmpException -> {
+                System.out.printf("Got exception: %s%n", jcsmpException);
+                latch.countDown();
+            }));
+            cons.start();
+```
 
 The sourcecode can be further looked at by opening the ```HelloWorldJCSMPAvroSerde.java``` file.
 
