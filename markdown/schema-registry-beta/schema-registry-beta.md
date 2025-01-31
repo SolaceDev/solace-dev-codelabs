@@ -180,7 +180,7 @@ Now, let's see how to use this schema in Java using the Solace Messaging API for
 
 4. Open a command window or terminal in the ```Schema-Registry-Beta-Package/jcsmp``` directory.
 
-NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` in the below steps.
+NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` in the below steps. For non-Windows users, you will have to run ```chmod +ux gradelw``` to change permissions on ```gradelw```.
 
 5. Run the following command to build the sample on Windows ```./gradlew.bat build``` and . You should see a ```BUILD SUCCESSFUL``` message.          
 
