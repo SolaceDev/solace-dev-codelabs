@@ -28,7 +28,7 @@
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry-beta">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
         <p>In today&#39;s data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we&#39;ll explore how to use a schema registry (Apicurio Registry) with the Solace JCSMP API, focusing on the Apache Avro format for schema definition.</p>
 <p>You&#39;ll learn about:</p>
 <p>✔️ What a schema registry is and why it&#39;s important<br> ✔️ What a Serializer and Deserializer (SERDEs) is and the role they play<br> ✔️ How to set up an instance of the Apicurio Registry using Docker Compose<br> ✔️ How to create and register schemas<br> ✔️ How to use schemas in your event-driven applications with Solace&#39;s JCSMP API<br> ✔️ Best practices for schema evolution</p>
@@ -36,7 +36,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="What you need: Prerequisites" duration="7">
+      <google-codelab-step label="What you need: Prerequisites" duration="1">
         <ol type="1">
 <li>A general understanding of <a href="https://docs.solace.com/#Messaging" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
 <li>A locally running PubSub+ Broker or a free trial account of Solace PubSub+ Cloud. Don&#39;t have one? <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a><ul>
@@ -56,7 +56,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="What Is A Schema Registry" duration="10">
+      <google-codelab-step label="What Is A Schema Registry" duration="2">
         <p>A schema registry is a central repository for managing and storing schemas. It helps ensure data consistency, enables data governance, and supports schema evolution. Here&#39;s why it&#39;s important:</p>
 <ol type="1">
 <li><strong>Data Consistency</strong>: Ensures that producers and consumers agree on the data format.</li>
@@ -70,7 +70,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="What Is A SERDEs" duration="5">
+      <google-codelab-step label="What Is A SERDEs" duration="2">
         <p>A SERDEs (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:</p>
 <ol type="1">
 <li><strong>Serialization</strong>: Converting data objects from their native format (like Java objects) into a binary format suitable for transmission or storage.</li>
@@ -98,7 +98,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Setting up Apicurio Registry" duration="15">
+      <google-codelab-step label="Setting up Apicurio Registry" duration="7">
         <p>We&#39;ll use Docker Compose to set up the Apicurio Registry quickly and easily. We&#39;ve prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.</p>
 <ol type="1">
 <li>In these subsequent steps we will use the package that came from the downloaded zip from the prerequisites section. Navigate to the extracted folder called <code>Schema-Registry-Beta-Package</code>. You should see the following files and folders:</li>
@@ -120,7 +120,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Creating and Registering Schemas" duration="15">
+      <google-codelab-step label="Creating and Registering Schemas" duration="5">
         <p>Let&#39;s create a simple schema for a <code>User</code> event:</p>
 <ol type="1">
 <li>Open the Apicurio Registry UI in your web browser by going to <code>localhost:8888</code>.</li>
@@ -163,7 +163,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)" duration="30">
+      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)" duration="10">
         <p>Now, let&#39;s see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):</p>
 <ol type="1">
 <li>Extract the SERDEs zip called <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip</code> and extract the JCSMP zip called <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338.zip</code></li>
@@ -231,7 +231,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Best Practices for Schema Evolution" duration="10">
+      <google-codelab-step label="Best Practices for Schema Evolution" duration="2">
         <p>As your data model evolves, you&#39;ll need to update your schemas. Here are some best practices:</p>
 <ol type="1">
 <li><strong>Backward Compatibility</strong>: Ensure new schema versions can read old data.</li>
