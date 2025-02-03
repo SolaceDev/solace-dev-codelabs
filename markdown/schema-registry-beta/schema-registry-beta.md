@@ -81,7 +81,7 @@ This is a fundamental concept in message-based systems where data needs to be:
 
 ## Setting up Apicurio Registry
 
-Duration: 0:07:00
+Duration: 0:06:00
 
 We'll use Docker Compose to set up the Apicurio Registry quickly and easily. We've prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.
 
@@ -113,7 +113,7 @@ That's it, you have now installed an instance of the Apicurio Registry with the 
 
 ## Creating and Registering Schemas
 
-Duration: 0:05:00
+Duration: 0:04:00
 
 Let's create a simple schema for a ```User``` event:
 
@@ -168,7 +168,7 @@ You've now created and registered your first schema!
 
 ## Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)
 
-Duration: 0:10:00
+Duration: 0:09:00
 
 Now, let's see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):
 
