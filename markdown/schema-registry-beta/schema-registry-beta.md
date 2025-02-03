@@ -11,7 +11,7 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
-Duration: 0:05:00
+Duration: 0:01:00
 
 In today's data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we'll explore how to use a schema registry (Apicurio Registry) with the Solace JCSMP API, focusing on the Apache Avro format for schema definition.
 
@@ -26,7 +26,7 @@ You'll learn about:
 
 ## What you need: Prerequisites
 
-Duration: 0:07:00
+Duration: 0:01:00
 
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messaging).
 2. A locally running PubSub+ Broker or a free trial account of Solace PubSub+ Cloud. Don't have one? [Sign up here.](https://console.solace.cloud/login/new-account)
@@ -43,7 +43,7 @@ NOTE: If you cannot access the [Solace Product Portal](https://products.solace.c
 
 ## What Is A Schema Registry
 
-Duration: 0:10:00
+Duration: 0:02:00
 
 A schema registry is a central repository for managing and storing schemas. It helps ensure data consistency, enables data governance, and supports schema evolution. Here's why it's important:
 
@@ -57,7 +57,7 @@ A schema registry is a central repository for managing and storing schemas. It h
 
 ## What Is A SERDEs
 
-Duration: 0:05:00
+Duration: 0:02:00
 
 A SERDEs (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:
 1. **Serialization**: Converting data objects from their native format (like Java objects) into a binary format suitable for transmission or storage.
@@ -81,7 +81,7 @@ This is a fundamental concept in message-based systems where data needs to be:
 
 ## Setting up Apicurio Registry
 
-Duration: 0:15:00
+Duration: 0:07:00
 
 We'll use Docker Compose to set up the Apicurio Registry quickly and easily. We've prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.
 
@@ -113,7 +113,7 @@ That's it, you have now installed an instance of the Apicurio Registry with the 
 
 ## Creating and Registering Schemas
 
-Duration: 0:15:00
+Duration: 0:05:00
 
 Let's create a simple schema for a ```User``` event:
 
@@ -168,7 +168,7 @@ You've now created and registered your first schema!
 
 ## Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)
 
-Duration: 0:30:00
+Duration: 0:10:00
 
 Now, let's see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):
 
@@ -249,7 +249,7 @@ The sourcecode can be further looked at by opening the ```HelloWorldJCSMPAvroSer
 
 ## Best Practices for Schema Evolution
 
-Duration: 0:10:00
+Duration: 0:02:00
 
 As your data model evolves, you'll need to update your schemas. Here are some best practices:
 
