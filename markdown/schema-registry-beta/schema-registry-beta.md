@@ -125,8 +125,8 @@ Let's create a simple schema for a ```User``` event:
 </p>
 
 3. Click on ```Create artifact``` button. Once the dialogue opens enter the following as shown below:
-    * Group Id: Set to ```com.solace.samples.serdes.avro.schema```
-    * Artifact Id: Set to ```User```
+    * Group Id: Leave it empty (default)
+    * Artifact Id: Set to ```solace/samples```
     * Type: Set to ```Avro Schema```   
 
 <p align="center">
