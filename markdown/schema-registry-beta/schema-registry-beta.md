@@ -164,7 +164,7 @@ Let's create a simple schema for a ```User``` event:
 
 You've now created and registered your first schema!
 
-## Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)
+## Using Schemas with the Solace Messaging API for Java (JCSMP)
 
 Duration: 0:30:00
 
