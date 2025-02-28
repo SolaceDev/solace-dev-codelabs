@@ -215,7 +215,7 @@ Serializes the message payload and publishes the message to the connected broker
 
             // Serialize and send the message
             BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
-            SerdeMessage.serialize(serializer, msg, user);
+            SerdeMessage.serialize(serializer, topic, msg, user);
             System.out.printf("Sending Message:%n%s%n", msg.dump());
             producer.send(msg, topic);
 ```
