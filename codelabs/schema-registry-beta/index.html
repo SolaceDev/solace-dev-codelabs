@@ -47,9 +47,9 @@
 <li><a href="https://docs.docker.com/get-started/get-docker/" target="_blank">Docker</a> installed on your system</li>
 <li><a href="https://openjdk.org/" target="_blank">Java Development Kit (JDK) version 11+</a> installed on your system</li>
 <li>An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)</li>
-<li>Download the provided BETA zip package named <code>Schema-Registry-Beta-Package_0.1.0.zip</code> that contains all the necessary pieces you will need. This is available on the <a href="https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/" target="_blank">Solace Product Portal</a> and unzip it to your preferred directory.</li>
+<li>Download the provided BETA zip package named <code>Schema-Registry-Beta-Package_(latest-version).zip</code> that contains all the necessary pieces you will need. This is available on the <a href="https://products.solace.com/prods/Schema_Registry_Beta/" target="_blank">Solace Product Portal</a> and unzip it to your preferred directory.</li>
 </ol>
-<p>NOTE: If you cannot access the <a href="https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/" target="_blank">Solace Product Portal</a>, please click the <code>Report a mistake</code> at the bottom left of the codelab and open an issue asking for access.</p>
+<p>NOTE: If you cannot access the <a href="https://products.solace.com/prods/Schema_Registry_Beta/" target="_blank">Solace Product Portal</a>, please click the <code>Report a mistake</code> at the bottom left of the codelab and open an issue asking for access.</p>
 <aside class="special"><p> This walkthrough uses Apicurio Registry for schema management, which we&#39;ll set up using Docker Compose.</p>
 </aside>
 
@@ -103,14 +103,13 @@
 <ol type="1">
 <li>In these subsequent steps we will use the package that came from the downloaded zip from the prerequisites section. Navigate to the extracted folder called <code>Schema-Registry-Beta-Package</code>. You should see the following files and folders:</li>
 </ol>
-<p class="image-container"><img src="img/a8e88af8691ee4ee.jpg"></p>
+<p class="image-container"><img src="img/55f2ea66a1cb12f2.jpg"></p>
 <ol type="1" start="2">
-<li>Extract the tar folder named <code>solace-schema-registry-dist.tar</code>.</li>
 <li>Open a terminal or command prompt window and navigate to the extracted location of the folder called <code>solace-schema-registry-dist</code>.</li>
 <li>Optionally you can make changes to the <code>.env</code> file to change things such as default login or ports. We will leave everything to defaults for this codelab.</li>
 </ol>
 <p class="image-container"><img src="img/7fc4225c303820be.jpg"></p>
-<ol type="1" start="5">
+<ol type="1" start="4">
 <li>Run the following command: <code>docker compose up -d</code> and all the components will start up with the default values configured.</li>
 <li>Once the script is done running, you should now be able to go to your browser and navigate to <code>localhost:8888</code> which should re-direct you to the Apicurio Registry login screen.</li>
 </ol>
@@ -129,14 +128,14 @@
 <p class="image-container"><img src="img/c2aa56b2a7de61ea.jpg"></p>
 <ol type="1" start="3">
 <li>Click on <code>Create artifact</code> button. Once the dialogue opens enter the following as shown below: <ul>
-<li>Group Id: Set to <code>com.solace.samples.serdes.avro.schema</code></li>
-<li>Artifact Id: Set to <code>User</code></li>
+<li>Group Id: Leave it empty (default)</li>
+<li>Artifact Id: Set to <code>solace/samples</code></li>
 <li>Type: Set to <code>Avro Schema</code></li>
 </ul>
 </li>
 </ol>
 <p class="image-container"><img src="img/354f8ca343e7f6cb.jpg"></p>
-<p class="image-container"><img src="img/19a409a4b68aefec.jpg"></p>
+<p class="image-container"><img src="img/ae2ff71ecc0caf62.jpg"></p>
 <ol type="1" start="4">
 <li>We will skip the <code>Artifact Metadata</code> step as it is optional and will click <code>Next</code>.</li>
 <li>For the &#34;Version Content&#34; section, copy the Avro schema from below and either paste directly or save it into a file and upload it and click <code>Next</code> when done.</li>
@@ -157,22 +156,19 @@
 <li>We will skip the <code>Version Metadata</code> step as it is optional and will simply click the <code>Create</code> button.</li>
 <li>Finally after you have successfully created the new schema you should see the following:</li>
 </ol>
-<p class="image-container"><img src="img/afb336b29e671007.jpg"></p>
+<p class="image-container"><img src="img/fd43c225f39e0486.jpg"></p>
 <p>You&#39;ve now created and registered your first schema!</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)" duration="9">
+      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP)" duration="10">
         <p>Now, let&#39;s see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):</p>
 <ol type="1">
-<li>Extract the SERDEs zip called <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip</code> and extract the JCSMP zip called <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338.zip</code></li>
-<li>In a new window, navigate to the <code>Schema-Registry-Beta-Package/jcsmp</code> folder. This is where you will find the sample application.</li>
-<li>Create a new folder called <code>lib</code> and copy the contents of <code>pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip/lib</code> and <code>sol-jcsmp-10.25.3-jcsmp_schema_registry.44338/lib</code> into this new folder.</li>
-<li>Open a command window or terminal in the <code>Schema-Registry-Beta-Package/jcsmp</code> directory.</li>
+<li>Open a command window or terminal in the <code>Schema-Registry-Beta-Package/jcsmp-samples</code> directory.</li>
 </ol>
-<p>NOTE: For winows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code> in the below steps. For non-Windows users, you will have to run <code>chmod +ux gradelw</code> to change permissions on <code>gradelw</code>.</p>
-<ol type="1" start="5">
+<p>NOTE: For winows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code> in the below steps.</p>
+<ol type="1" start="2">
 <li>Run the following command to build the sample on Windows <code>./gradlew.bat build</code> and . You should see a <code>BUILD SUCCESSFUL</code> message.</li>
 <li>Run the sample application and provide the broker connection details like so <code>./gradlew.bat runHelloWorldJCSMPAvroSerde --args="localhost:55555 default default"</code>.</li>
 </ol>
@@ -198,7 +194,7 @@
         return config;
     }
 </code></pre>
-<p>Serializes the message payload and publishes the message to the connected broker on <code>test/topic</code> destination with the serialized payload and schema ID:</p>
+<p>Serializes the message payload and publishes the message to the connected broker on <code>solace/samples</code> destination with the serialized payload and schema ID:</p>
 <pre><code language="language-java" class="language-java">   // Create and populate a GenericRecord with sample data
             GenericRecord user = initEmptyUserRecord();
             user.put(&#34;name&#34;, &#34;John Doe&#34;);
@@ -207,7 +203,7 @@
 
             // Serialize and send the message
             BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
-            SerdeMessage.serialize(serializer, msg, user);
+            SerdeMessage.serialize(serializer, topic, msg, user);
             System.out.printf(&#34;Sending Message:%n%s%n&#34;, msg.dump());
             producer.send(msg, topic);
 </code></pre>
@@ -231,7 +227,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Best Practices for Schema Evolution" duration="2">
+      <google-codelab-step label="Best Practices for Schema Evolution" duration="10">
         <p>As your data model evolves, you&#39;ll need to update your schemas. Here are some best practices:</p>
 <ol type="1">
 <li><strong>Backward Compatibility</strong>: Ensure new schema versions can read old data.</li>
