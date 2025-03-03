@@ -35,9 +35,9 @@ Duration: 0:01:00
 4. [Docker](https://docs.docker.com/get-started/get-docker/) installed on your system
 5. [Java Development Kit (JDK) version 11+](https://openjdk.org/) installed on your system
 6. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
-7. Download the provided BETA zip package named ```Schema-Registry-Beta-Package_0.1.0.zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/) and unzip it to your preferred directory.
+7. Download the provided BETA zip package named ```Schema-Registry-Beta-Package_(latest-version).zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/) and unzip it to your preferred directory.
 
-NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/products/0.1Beta/Schema_Registry_Beta/Current/0.1.0/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
+NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
 > aside positive
 > This walkthrough uses Apicurio Registry for schema management, which we'll set up using Docker Compose.
 
@@ -91,19 +91,17 @@ We'll use Docker Compose to set up the Apicurio Registry quickly and easily. We'
 </p>
 
 
-2. Extract the tar folder named ```solace-schema-registry-dist.tar```.
+2. Open a terminal or command prompt window and navigate to the extracted location of the folder called ```solace-schema-registry-dist```.
 
-3. Open a terminal or command prompt window and navigate to the extracted location of the folder called ```solace-schema-registry-dist```.
-
-4. Optionally you can make changes to the ```.env``` file to change things such as default login or ports. We will leave everything to defaults for this codelab.
+3. Optionally you can make changes to the ```.env``` file to change things such as default login or ports. We will leave everything to defaults for this codelab.
 
 <p align="center">
   <img src="img/EnvFile.jpg" />
 </p>
 
-5. Run the following command: ```docker compose up -d``` and all the components will start up with the default values configured.
+4. Run the following command: ```docker compose up -d``` and all the components will start up with the default values configured.
 
-6. Once the script is done running, you should now be able to go to your browser and navigate to ```localhost:8888``` which should re-direct you to the Apicurio Registry login screen.
+5. Once the script is done running, you should now be able to go to your browser and navigate to ```localhost:8888``` which should re-direct you to the Apicurio Registry login screen.
 
 <p align="center">
   <img src="img/SrLoginEmpty.jpg" />
@@ -125,8 +123,8 @@ Let's create a simple schema for a ```User``` event:
 </p>
 
 3. Click on ```Create artifact``` button. Once the dialogue opens enter the following as shown below:
-    * Group Id: Set to ```com.solace.samples.serdes.avro.schema```
-    * Artifact Id: Set to ```User```
+    * Group Id: Leave it empty (default)
+    * Artifact Id: Set to ```solace/samples```
     * Type: Set to ```Avro Schema```   
 
 <p align="center">
@@ -166,25 +164,19 @@ Let's create a simple schema for a ```User``` event:
 
 You've now created and registered your first schema!
 
-## Using Schemas with the Solace Messaging API for Java (JCSMP) (Work in Progress)
+## Using Schemas with the Solace Messaging API for Java (JCSMP)
 
-Duration: 0:09:00
+Duration: 0:10:00
 
 Now, let's see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):
 
-1. Extract the SERDEs zip called ```pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip``` and extract the JCSMP zip called ```sol-jcsmp-10.25.3-jcsmp_schema_registry.44338.zip```
+1. Open a command window or terminal in the ```Schema-Registry-Beta-Package/jcsmp-samples``` directory.
 
-2. In a new window, navigate to the ```Schema-Registry-Beta-Package/jcsmp``` folder. This is where you will find the sample application.
+NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` in the below steps.
 
-3. Create a new folder called ```lib``` and copy the contents of ```pubsubplus-schema-registry-avro-serde-0.1.0-beta-release.zip/lib``` and ```sol-jcsmp-10.25.3-jcsmp_schema_registry.44338/lib``` into this new folder.
+2. Run the following command to build the sample on Windows ```./gradlew.bat build``` and . You should see a ```BUILD SUCCESSFUL``` message.          
 
-4. Open a command window or terminal in the ```Schema-Registry-Beta-Package/jcsmp``` directory.
-
-NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` in the below steps. For non-Windows users, you will have to run ```chmod +ux gradelw``` to change permissions on ```gradelw```.
-
-5. Run the following command to build the sample on Windows ```./gradlew.bat build``` and . You should see a ```BUILD SUCCESSFUL``` message.          
-
-6. Run the sample application and provide the broker connection details like so ```./gradlew.bat runHelloWorldJCSMPAvroSerde --args="localhost:55555 default default"```. 
+3. Run the sample application and provide the broker connection details like so ```./gradlew.bat runHelloWorldJCSMPAvroSerde --args="localhost:55555 default default"```. 
 
 This sample talks to the locally deployed Apicurio Schema Registry and retrieves the schema along with the schema ID. It will then do the following:
 
@@ -213,7 +205,7 @@ Configures the Serializer and Deserializer:
 ```
 
 
-Serializes the message payload and publishes the message to the connected broker on ```test/topic``` destination with the serialized payload and schema ID:
+Serializes the message payload and publishes the message to the connected broker on ```solace/samples``` destination with the serialized payload and schema ID:
 ```java
    // Create and populate a GenericRecord with sample data
             GenericRecord user = initEmptyUserRecord();
@@ -223,7 +215,7 @@ Serializes the message payload and publishes the message to the connected broker
 
             // Serialize and send the message
             BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
-            SerdeMessage.serialize(serializer, msg, user);
+            SerdeMessage.serialize(serializer, topic, msg, user);
             System.out.printf("Sending Message:%n%s%n", msg.dump());
             producer.send(msg, topic);
 ```
@@ -249,7 +241,7 @@ The sourcecode can be further looked at by opening the ```HelloWorldJCSMPAvroSer
 
 ## Best Practices for Schema Evolution
 
-Duration: 0:02:00
+Duration: 0:10:00
 
 As your data model evolves, you'll need to update your schemas. Here are some best practices:
 
