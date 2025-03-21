@@ -24,6 +24,11 @@ You'll learn about:
 ✔️ How to use schemas in your event-driven applications with Solace's JCSMP API   
 ✔️ Best practices for schema evolution   
 
+You can also check out Aaron's office hours covering the schema registry here:
+
+<video id="z2kSpU4QGU8"></video>
+
+
 ## What you need: Prerequisites
 
 Duration: 0:01:00
