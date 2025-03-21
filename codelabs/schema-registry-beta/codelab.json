@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-03-03T03:42:24Z",
+  "updated": "2025-03-21T21:50:10Z",
   "id": "schema-registry-beta",
   "duration": 38,
   "title": "Introduction to Schema Registry using the Solace Messaging API for Java (JCSMP) and Apicurio Registry",
