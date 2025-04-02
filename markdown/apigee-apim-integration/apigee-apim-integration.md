@@ -250,7 +250,7 @@ You'll find the zipped API Proxy Bundle for upload to apigee in `< CLONED_REPO_R
 
 ### Build and deploy API Proxies using Maven
 
-See the (readme)[https://github.com/apigee/apigee-deploy-maven-plugin] for full instructions on how to use the maven plugin for deployment to apigee. 
+See the [readme](https://github.com/apigee/apigee-deploy-maven-plugin) for full instructions on how to use the maven plugin for deployment to apigee. 
 
 For each of the API Proxies listed above:
 ```
