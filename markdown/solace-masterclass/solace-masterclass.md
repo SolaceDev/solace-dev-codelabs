@@ -16,9 +16,9 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing
 Event-Driven-Architectures**
-The participants of this masterclass will be implementing this Codelab in the Strigo virtual machine provided as a part
+The participants of this masterclass will be implementing this Codelab in a Github Codespace environment provided as a part
 of the masterclass session.
-The Strigo virtual machine contains all the software packages required for implementing the hands-on Codelab.
+The codespace contains all the software packages required for implementing the hands-on Codelab.
 
 The agenda of the hands-on is as below :
 
