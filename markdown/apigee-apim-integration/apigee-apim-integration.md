@@ -221,7 +221,7 @@ When you follow the steps to install the [Drupal patch and module](https://www.d
 
 Duration 0:10:00
 
-You can either import [API Proxies from API Proxy Bundles](https://cloud.google.com/Apigee/docs/api-platform/fundamentals/build-simple-api-proxy#importinganapiproxyfromanapiproxybundle) or use the [Apigee-deploy-maven-plugin](https://github.com/Apigee/Apigee-deploy-maven-plugin) to build and deploy the API Proxies.
+You can either import [API Proxies from API Proxy Bundles](https://cloud.google.com/apigee/docs/api-platform/fundamentals/build-simple-api-proxy#importinganapiproxyfromanapiproxybundle) or use the [Apigee-deploy-maven-plugin](https://github.com/apigee/apigee-deploy-maven-plugin) to build and deploy the API Proxies.
 
 You need to build and deploy the API proxies found in `src/gateway` within the repository:
 * `src/gateway/Apigee-Platform-Proxy`
