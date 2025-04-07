@@ -442,7 +442,7 @@ The blog ["Take Event APIs to where your Apigee APIs are …"](http:todo.com) wa
 
 ![Explore AsyncAPI and Documentation](img/devx_02.png)
 
-### Create an App and Gain Access to an Eent API
+### Create an App and Gain Access to an Event API
 
 ![Create  an app with access to the Event API Product](img/devx_03.png)
 
