@@ -5,7 +5,7 @@ tags: iguide
 categories: Apigee, solace
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Apigee-apim-integration
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/apigee-apim-integration
 
 # Unified APIM: Integrating Solace Event Portal with Apigee Platform and Developer Portal 
 
@@ -56,7 +56,7 @@ You can always regenerate the API token if it gets lost.
 
 #### Start Apigee API Gateway 
 
-If you haven't got a working Apigee environment you can go to the [Apigee console](https://console.cloud.google.com/Apigee/welcome) and either start the free trial or use the "Setup with Defaults" option.
+If you haven't got a working Apigee environment you can go to the [Apigee console](https://console.cloud.google.com/apigee/welcome) and either start the free trial or use the "Setup with Defaults" option.
 
 > aside positive
 > Enable external network access via HTTPS so you can easily access the APigee API Proxies later on in this codelab.
@@ -76,7 +76,7 @@ In the Google Cloud Console go to [Service Accounts](https://console.cloud.googl
 
 ### Apigee Developer Portal Kickstart
 
-Set up the Developer Portal via the [Kickstart solution](https://console.cloud.google.com/marketplace/product/bap-marketplace/Apigee-drupal-devportal).
+Set up the Developer Portal via the [Kickstart solution](https://console.cloud.google.com/marketplace/product/bap-marketplace/apigee-drupal-devportal).
 
 When launching the Kickstart, enable HTPS connectivity:
 ![Enable HTTPS](img/devportal_https.png)
@@ -103,7 +103,7 @@ You can also use any other tool that you use to connect to Solace brokers.
 
 You will use the `Apigee-deploy-maven-plugin` to package API Proxies.
 
-See the prerequisites for running the maven plugin in the [README](https://github.com/Apigee/Apigee-deploy-maven-plugin/blob/main/README.md#Prerequisites)
+See the prerequisites for running the maven plugin in the [README](https://github.com/apigee/apigee-deploy-maven-plugin/blob/main/README.md#Prerequisites)
 
 ### Clone github project
 
@@ -158,33 +158,33 @@ The patch is contained in the github repo you cloned earlier in the folder `asyn
 Connect to one of the portal VMs in the Kickstart Deployment using SSH - you cna do this form within the Google Compute Engine console.
 
 1. Upload the `asyncapi.patch` file from the location given above to the home directory on one of the the Kickstart VMs 
-1. In the SSH console change the directory to `$> cd /var/www/devportal/code/web/modules/contrib/Apigee_api_catalog`
+1. In the SSH console change the directory to `$> cd /var/www/devportal/code/web/modules/contrib/apigee_api_catalog`
 1. Then apply the patch `$> sudo patch -p1 < ~/asyncapi.patch`.
 
 In the Dev Portal admin user interface enable the "AsyncAPI" module (if not already enabled):
 
 ### Point the Portal at your Apigee Gateway Host 
 
-We need to patch the Apigee Platform API so the Developer Portal URL to point to API Proxy setup. You need to amend `ClientInterface.php` in `/var/www/devportal/code/vendor/Apigee/Apigee-client-php/src/`.
+We need to patch the Apigee Platform API so the Developer Portal URL to point to API Proxy setup. You need to amend `ClientInterface.php` in `/var/www/devportal/code/vendor/apigee/apigee-client-php/src/`.
 
 Please replace the link to `googleapis.com` with a link to your Apigee API Gateway in line 57 and line 64
 
 > aside positive
-> You can find the hostname of your API Gateway in the [Apigee Google Cloud Console](https://console.cloud.google.com/Apigee/overview). It is probably listed in the "Test your Apigee runtime" tile.
+> You can find the hostname of your API Gateway in the [Apigee Google Cloud Console](https://console.cloud.google.com/apigee/overview). It is probably listed in the "Test your Apigee runtime" tile.
 > ![Test your Apigee runtime](img/test_your_runtime.png)
 
 #### Example:
 
 Original `ClientInterface.php` line 57-46:
 ```
-public const HYBRID_ENDPOINT = 'https://Apigee.googleapis.com/v1';
+public const HYBRID_ENDPOINT = 'https://apigee.googleapis.com/v1';
 
 /**
  * Default endpoint for Apigee Management API on GCP
  *
  * @var string
  */
-public const APIGEE_ON_GCP_ENDPOINT = 'https://Apigee.googleapis.com/v1';
+public const APIGEE_ON_GCP_ENDPOINT = 'https://apigee.googleapis.com/v1';
 ```
 Example of amended `ClientInterface.php`:
 ```
@@ -201,10 +201,10 @@ public const APIGEE_ON_GCP_ENDPOINT = 'https://34.54.13.157.nip.io/v1';
 
 ### Enable Dev Portal REST APIs
 
-The integration with Event Portal requires that Apigee Dev Portal [REST APIs are enabled to interact with API Docs](https://www.drupal.org/docs/contributed-modules/Apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs
+The integration with Event Portal requires that Apigee Dev Portal [REST APIs are enabled to interact with API Docs](https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs
 ). Please follow all the steps in this guide up to and including "Create a new role and a service account". 
 
-When you follow the steps to install the [Drupal patch and module](https://www.drupal.org/docs/contributed-modules/Apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#install-patch-and-module
+When you follow the steps to install the [Drupal patch and module](https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#install-patch-and-module
 ):
 1. You can do this installation by connecting to one of the Google Compute VMs in the Kickstart deployment a
 2. The composer config file you need to update is at `/var/www/devportal/code/composer.json`
@@ -214,7 +214,7 @@ When you follow the steps to install the [Drupal patch and module](https://www.d
 
 
 > aside positive
-> Take note of the credentials you create in ["Create a new role and service account"](https://www.drupal.org/docs/contributed-modules/Apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#create-new-role-and%20account)
+> Take note of the credentials you create in ["Create a new role and service account"](https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#create-new-role-and%20account)
 > You need these to configure the Event Portal Integration.
 
 ## Import and Deploy API Proxies
@@ -250,7 +250,7 @@ You'll find the zipped API Proxy Bundle for upload to Apigee in `< CLONED_REPO_R
 
 ### Build and deploy API Proxies using Maven
 
-See the [readme](https://github.com/Apigee/Apigee-deploy-maven-plugin) for full instructions on how to use the maven plugin for deployment to Apigee. 
+See the [readme](https://github.com/apigee/apigee-deploy-maven-plugin) for full instructions on how to use the maven plugin for deployment to Apigee. 
 
 For each of the API Proxies listed above:
 ```
@@ -455,12 +455,12 @@ The blog ["Take Event APIs to where your Apigee APIs are …"](http:todo.com) wa
 
 Duration: 0:02:00
 
-The Event API Product that we imported from Solace Event Portal is listed on [API Product](https://console.cloud.google.com/Apigee/apiproducts)
+The Event API Product that we imported from Solace Event Portal is listed on [API Product](https://console.cloud.google.com/apigee/apiproducts)
 
 > aside positive
 > Note the custom attributes in the screenshot - they correlate to the Apigee API Product with the source in Event Portal.
 
-![Imported Event API Product](img/Apigee_apiproduct.png)
+![Imported Event API Product](img/apigee_apiproduct.png)
 
 
 
