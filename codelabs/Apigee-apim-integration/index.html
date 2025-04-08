@@ -1,0 +1,421 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Unified APIM: Integrating Solace Event Portal with Apigee Platform and Developer Portal</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="Apigee-apim-integration"
+                  title="Unified APIM: Integrating Solace Event Portal with Apigee Platform and Developer Portal"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/apigee-apim-integration">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>The blog <a href="http:todo.com/" target="_blank">&#34;Take Event APIs to where your Apigee APIs are ...&#34;</a> introduced an integration between the Google Apigee and Solace Platforms.</p>
+<p>In this codelab we walk you through the steps that enable the developer experience for event APIs demonstrated in the blog.</p>
+<p>The overall solution looks like this: <img alt="Solution Overview" src="img/d63666aed9d7a446.png"></p>
+<p>Let&#39;s look at all the components involved:</p>
+<ul>
+<li>Apigee Dev Portal: the developer portal that developer interact with to find APIs and register their apps</li>
+<li>App: the application that the developer creates. We simulated this app with postman in the sections above.</li>
+<li>PubSub+ Broker: the event broker that the event API is accessible on. As it acts similarly to an API Gateway, we could also call it an &#34;Event Gateway&#34;.</li>
+<li>Google Apigee API Gateway: the API gateway hosting all the required API Proxies for the integration (more on these later)</li>
+<li>Solace Event Portal: the event governance platform that allows to manage Events, Event APIs an Event API Products.</li>
+<li>Apigee Platform: the API management back office</li>
+</ul>
+<p>As you can see the interactions flow through the Apigee gateway as we chose to implement the integration completely in Apigee:</p>
+<ul>
+<li>The integration provides a REST API for Discovery of Event API Products and to subsequently import these to the Dev Portal and Apigee platform. This includes uploading AsyncAPI specs to the developer portal as well as creating Apigee API Products that represent Event API Products</li>
+<li>Dev Portal requests to the core Apigee platform are proxied via the gateway – this allows us to hook our integration into requests such as adding an API Product to an app or deletion of apps. So we can create and manage app registrations and access requests in Solace Event Portal – which are required for the configuration of runtime access on the &#34;Event Gateway&#34;.</li>
+</ul>
+<p>Head over to the blog to learn more if you haven&#39;t read it yet.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="15">
+        <h2 is-upgraded>Solace Cloud Account &amp; PubSub+ Broker</h2>
+<p>You need access to a Solace Cloud account  - including Event Portal -  and a PubSub+ Event Broker.</p>
+<p>No problem if you haven&#39;t got that yet, simply follow step 3 in the <a href="https://codelabs.solace.dev/codelabs/get-started-basics/#2" target="_blank">A Solace Primer - Getting Started with Solace PubSub+ Event Broker</a> codelab</p>
+<h2 is-upgraded>Solace Cloud API Token</h2>
+<p>You need to supply a Solace API Token to the API Proxies you&#39;ll deploy in Apigee.</p>
+<p>Follow the steps at <a href="https://api.solace.dev/cloud/reference/apim-getting-started#api-authentication" target="_blank">API Authentication</a> in the Solace Platform API documentation to create the token and store it in a place that you can refer to it again.</p>
+<p>You can always regenerate the API token if it gets lost.</p>
+<h2 is-upgraded>Apigee</h2>
+<h3 is-upgraded>Start Apigee API Gateway</h3>
+<p>If you haven&#39;t got a working Apigee environment you can go to the <a href="https://console.cloud.google.com/apigee/welcome" target="_blank">Apigee console</a> and either start the free trial or use the &#34;Setup with Defaults&#34; option.</p>
+<aside class="special"><p> Enable external network access via HTTPS so you can easily access the APigee API Proxies later on in this codelab. <strong>Take note of your API Gateway hostname as you will need it when you configure the Apigee DevPortal Kickstart.</strong> If you launched the free trial it&#39;ll probably look similar to <code>34.54.246.147.nip.io</code>.</p>
+</aside>
+<aside class="warning"><p> The duration of this step depends on how long the Google Cloud deployment and activation processes take.</p>
+</aside>
+<h3 is-upgraded>Create a Service Account with Full Access to Apigee APIs</h3>
+<p>In the Google Cloud Console go to <a href="https://console.cloud.google.com/iam-admin/serviceaccounts" target="_blank">Service Accounts</a> and create a new service account, name it &#34;Apigee-eventportal-integration&#34;, add the &#34;Apigee API Admin&#34; role and save it.</p>
+<aside class="special"><p> Once the account is created save the account email. You will need this later when deploying Apigee API Proxies.</p>
+</aside>
+<h2 is-upgraded>Apigee Developer Portal Kickstart</h2>
+<p>Set up the Developer Portal via the <a href="https://console.cloud.google.com/marketplace/product/bap-marketplace/apigee-drupal-devportal" target="_blank">Kickstart solution</a>.</p>
+<p>When launching the Kickstart, enable HTPS connectivity: <img alt="Enable HTTPS" src="img/9fd713a04c3e9e43.png"></p>
+<aside class="special"><p> Take note of the service account&#39;s email address when configuring the service account. You can re-use this account later when deploying the Apigee API Proxies</p>
+</aside>
+<aside class="warning"><p> Startup can take some time beyond completion of the infrastructure deployment. We would recommend to wait 30-45 min for the software initialisation to finish before starting the Dev Portal configuration.</p>
+</aside>
+<h2 is-upgraded>curl</h2>
+<p>REST API calls in this codelab are given as <a href="https://curl.se/" target="_blank">curl</a> commands.</p>
+<h2 is-upgraded>MQTT Client</h2>
+<p>You can use MQTT to test developer access to Event APIs on the Solace PubSub+ Broker - a suitable tool is <a href="https://mqttx.app/" target="_blank">MQTTX</a>.</p>
+<p>You can also use any other tool that you use to connect to Solace brokers.</p>
+<h2 is-upgraded>Java &amp; Maven</h2>
+<p>You will use the <code>Apigee-deploy-maven-plugin</code> to package API Proxies.</p>
+<p>See the prerequisites for running the maven plugin in the <a href="https://github.com/apigee/apigee-deploy-maven-plugin/blob/main/README.md#Prerequisites" target="_blank">README</a></p>
+<h2 is-upgraded>Clone github project</h2>
+<ol type="1">
+<li>Fork the solace-Apigee-sample repo from <a href="https://github.com/solace-iot-team/solace-Apigee-sample" target="_blank">https://github.com/solace-iot-team/solace-Apigee-sample</a></li>
+<li>Clone your fork</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">git clone git@github.com:&lt;YOUR_GITHUB_USER&gt;/solace-Apigee-sample.git
+cd solace-dev-codelabs
+git checkout -b &lt;BRANCH_NAME&gt;
+</code></pre>
+<aside class="special"><p> Replace <code>< YOUR_GITHUB_USER ></code> with your github username and <code>< BRANCH_NAME ></code> with a suitable name.</p>
+</aside>
+<aside class="special"><p> If you do not have <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank">SSH setup</a> on your machine and got an error cloning the repo, you can clone the https link instead as follows:</p>
+<pre><code>git clone https://github.com/&lt;YOUR_GITHUB_USER&gt;/solace-Apigee-sample.git
+</code></pre>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure the Drupal Developer Portal" duration="0">
+        <p>Duration 0:15:00</p>
+<h2 is-upgraded>Complete Portal Setup</h2>
+<p>When viewing your Dev Portal deployment in the Google Cloud console click &#34;CONFIGURE YOUR SITE&#34;  to finish the Dev Portal Setup <img src="img/5fed86845a6b92f5.png"></p>
+<h2 is-upgraded>Remove HTTP Basic Authentication</h2>
+<p>The steps to remove HTTP Basic Authentication are described on the deployment page of the Dev Portal in the Google Cloud Console.</p>
+<p class="image-container"><img alt="HTTP Basic Auth removal" src="img/c0cc757736a5b13b.png"></p>
+<aside class="special"><p> This step requires the gcloud CLI. If you have not installed it locally you can connect to one of the Dev Portal VMs via SSH in <a href="https://console.cloud.google.com/compute/instances" target="_blank">Compute Engine</a><img alt="Connect with SSH" src="img/2b13ab660522e855.png"></p>
+</aside>
+<aside class="warning"><p> The google account executing these commands needs to have <code>Compute Admin</code> and <code>Service Account User</code> roles.</p>
+</aside>
+<h2 is-upgraded>Patch AsyncAPI Support</h2>
+<p>The patch is contained in the github repo you cloned earlier in the folder <code>asyncapi-patch</code>.</p>
+<p>Connect to one of the portal VMs in the Kickstart Deployment using SSH - you cna do this form within the Google Compute Engine console.</p>
+<ol type="1">
+<li>Upload the <code>asyncapi.patch</code> file from the location given above to the home directory on one of the the Kickstart VMs</li>
+<li>In the SSH console change the directory to <code>$> cd /var/www/devportal/code/web/modules/contrib/apigee_api_catalog</code></li>
+<li>Then apply the patch <code>$> sudo patch -p1 < ~/asyncapi.patch</code>.</li>
+</ol>
+<p>In the Dev Portal admin user interface enable the &#34;AsyncAPI&#34; module (if not already enabled):</p>
+<h2 is-upgraded>Point the Portal at your Apigee Gateway Host</h2>
+<p>We need to patch the Apigee Platform API so the Developer Portal URL to point to API Proxy setup. You need to amend <code>ClientInterface.php</code> in <code>/var/www/devportal/code/vendor/apigee/apigee-client-php/src/</code>.</p>
+<p>Please replace the link to <code>googleapis.com</code> with a link to your Apigee API Gateway in line 57 and line 64</p>
+<aside class="special"><p> You can find the hostname of your API Gateway in the <a href="https://console.cloud.google.com/apigee/overview" target="_blank">Apigee Google Cloud Console</a>. It is probably listed in the &#34;Test your Apigee runtime&#34; tile. <img alt="Test your Apigee runtime" src="img/8cf9a93b48ca38c2.png"></p>
+</aside>
+<h3 is-upgraded>Example:</h3>
+<p>Original <code>ClientInterface.php</code> line 57-46:</p>
+<pre><code>public const HYBRID_ENDPOINT = &#39;https://apigee.googleapis.com/v1&#39;;
+
+/**
+ * Default endpoint for Apigee Management API on GCP
+ *
+ * @var string
+ */
+public const APIGEE_ON_GCP_ENDPOINT = &#39;https://apigee.googleapis.com/v1&#39;;
+</code></pre>
+<p>Example of amended <code>ClientInterface.php</code>:</p>
+<pre><code>public const HYBRID_ENDPOINT = &#39;https://34.54.13.157.nip.io/v1&#39;;
+
+/**
+ * Default endpoint for Apigee Management API on GCP
+ *
+ * @var string
+ */
+public const APIGEE_ON_GCP_ENDPOINT = &#39;https://34.54.13.157.nip.io/v1&#39;;
+
+</code></pre>
+<h2 is-upgraded>Enable Dev Portal REST APIs</h2>
+<p>The integration with Event Portal requires that Apigee Dev Portal <a href="https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs" target="_blank">REST APIs are enabled to interact with API Docs</a>. Please follow all the steps in this guide up to and including &#34;Create a new role and a service account&#34;.</p>
+<p>When you follow the steps to install the <a href="https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#install-patch-and-module" target="_blank">Drupal patch and module</a>:</p>
+<ol type="1">
+<li>You can do this installation by connecting to one of the Google Compute VMs in the Kickstart deployment a</li>
+<li>The composer config file you need to update is at <code>/var/www/devportal/code/composer.json</code></li>
+<li>Follow the steps documented in section 3 Option B of &#34;Install Drupal patch and additional module&#34; to install the <code>JSON:API Extras</code> and <code>HTTP Basic Authentication</code></li>
+<li>Once you enabled CRUD operations on the JSON API in section 4, select the &#34;JSON:API Extras&#34; tab then  the &#34;Resource overrides&#34; tab. Check that the <code>node--asyncapi_doc</code> resource is enabled. (see screenshot below) <img alt="Enable asyncapi_doc resource" src="img/4f2fd5e77bafa421.png"></li>
+</ol>
+<aside class="special"><p> Take note of the credentials you create in <a href="https://www.drupal.org/docs/contributed-modules/apigee-api-catalog/expose-rest-apis-to-interact-with-api-docs#create-new-role-and%20account" target="_blank">&#34;Create a new role and service account&#34;</a> You need these to configure the Event Portal Integration.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Import and Deploy API Proxies" duration="0">
+        <p>Duration 0:10:00</p>
+<p>You can either import <a href="https://cloud.google.com/apigee/docs/api-platform/fundamentals/build-simple-api-proxy#importinganapiproxyfromanapiproxybundle" target="_blank">API Proxies from API Proxy Bundles</a> or use the <a href="https://github.com/apigee/apigee-deploy-maven-plugin" target="_blank">Apigee-deploy-maven-plugin</a> to build and deploy the API Proxies.</p>
+<p>You need to build and deploy the API proxies found in <code>src/gateway</code> within the repository:</p>
+<ul>
+<li><code>src/gateway/Apigee-Platform-Proxy</code></li>
+<li><code>src/gateway/EventPortalIntegration</code></li>
+<li><code>src/gateway/hello</code></li>
+<li><code>src/gateway/OAuth</code></li>
+</ul>
+<p>The <code>hello</code> proxy is optional, its purpose is to demonstrate use of the same access token / JWT for authn and authz across REST and Event APIs.</p>
+<aside class="special"><p><code>Apigee-Platform-Proxy</code> and <code>EventPortalIntegration</code> require a Service Account on deployment. Use the email address of the service account you created in Google IAM in the prerequisites section.</p>
+</aside>
+<h2 is-upgraded>Package API Proxies for Manual Import using Maven</h2>
+<p>For each of the API Proxies listed above:</p>
+<pre><code>$&gt; cd &lt;CLONED_REPO_ROOT&gt;/src/gateway/&lt;API_PROXY_DIRECTORY&gt; 
+$&gt; mvn package
+</code></pre>
+<p>Replace <code>< CLONED_REPO_ROOT ></code> with the location of the cloned repo and <code>< API_PROXY_DIRECTORY ></code> with the directory of the API Proxy as listed in the previous section.</p>
+<p>You&#39;ll find the zipped API Proxy Bundle for upload to Apigee in <code>< CLONED_REPO_ROOT >/src/gateway< API_PROXY_DIRECTORY >/target</code></p>
+<h2 is-upgraded>Build and deploy API Proxies using Maven</h2>
+<p>See the <a href="https://github.com/apigee/apigee-deploy-maven-plugin" target="_blank">readme</a> for full instructions on how to use the maven plugin for deployment to Apigee.</p>
+<p>For each of the API Proxies listed above:</p>
+<pre><code>$&gt; cd &lt;CLONED_REPO_ROOT&gt;/src/gateway/&lt;API_PROXY_DIRECTORY&gt; 
+$&gt; mvn install
+</code></pre>
+<p>Replace <code>< CLONED_REPO_ROOT ></code> with the location of the cloned repo and <code>< API_PROXY_DIRECTORY ></code> with the directory of the API Proxy as listed in the previous section.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure the API Proxies" duration="5">
+        <h2 is-upgraded>Configure the OAuth API Proxy</h2>
+<h3 is-upgraded>Generate a JWK</h3>
+<p>First generate private and public key and a JSON Web Key.</p>
+<p>There are multiple web tools that can do this</p>
+<ol type="1">
+<li>Let&#39;s use <a href="https://jwkset.com/generate" target="_blank">https://jwkset.com/generate</a>:</li>
+<li>Scroll down to the &#34;Generate a new key&#34; section and set it up as in the screenshot below.</li>
+<li>Click generate and either keep the tab open or save JSON Web Key, Private Key and Public Key to separate files.</li>
+</ol>
+<p class="image-container"><img alt="Settings to generate JWK" src="img/bb7db07ffeb8caa5.png"></p>
+<aside class="special"><p> We will refer to the generated keys below as <code>PUBLIC_KEY</code> - PKIX (Public Key) <code>PRIVATE_KEY</code> - PKCS #8 (Private Key) <code>JWK</code> - JSON Web Key</p>
+</aside>
+<h3 is-upgraded>Upload keys to the OAuth API</h3>
+<p>First upload the <code>PRIVATE_KEY</code> that you just created:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/oauth/keys&#39; \
+--header &#39;Content-Type: text/plain&#39; \
+--data &#39;&lt;PRIVATE_KEY&gt;&#39;
+</code></pre>
+<p>Then upload the <code>JWK</code>:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/oauth/jwks&#39; \
+--header &#39;Content-Type: application/json&#39; \
+--data &#39;&lt;JWK&gt;&#39;
+</code></pre>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+<h2 is-upgraded>Configure the Solace Integration API Proxy</h2>
+<h3 is-upgraded>Upload Solace Cloud API Token</h3>
+<p>You have created the API Token in the &#34;Prerequisites&#34; section, it is referred to as <code>API_TOKEN</code> in the command below:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/ep-bootstrap/token&#39; \
+--header &#39;Content-Type: text/plain&#39; \
+--data &#39;&lt;API_TOKEN&#39;
+</code></pre>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+<h3 is-upgraded>Configure the API with Dev Portal Connection Details</h3>
+<p>When you are importing Event API Products this API Proxy also uploads the associated AsyncAPI specs to the Apigee Dev Portal - you&#39;ll need to supply the endpoint and credentials for this connection.</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/ep-bootstrap/devportal&#39; \
+--header &#39;Content-Type: application/json&#39; \
+--data &#39;{
+    &#34;host&#34;: &#34;https://&lt;DEV_PORTAL_HOST&gt;&#34;,
+    &#34;user&#34;: &#34;&lt;DEV_PORTAL_API_USER?&#34;,
+    &#34;password&#34;:&#34;&lt;DEV_PORTAL_API_PASSWORD&gt;&#34;
+}&#39;
+</code></pre>
+<p>You have created a user when you configured the Dev Portal. Replace <code>< DEV_PORTAL_API_USER ></code> and <code>< DEV_PORTAL_API_PASSWORD ></code> with the user credentials.</p>
+<p><code>DEV_PORTAL_HOST</code> refers to the public host name that was assigned to your Dev Portal when you ran the Kickstart deployment.</p>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Design Your Event APIs in Event Portal" duration="15">
+        <aside class="special"><p> Instead of modeling your own Event API and Event API Product, you can import a sample application domain.</p>
+</aside>
+<p>Once you have access to Event Portal you&#39;ll need to do some initial configuration and create some assets:</p>
+<ol type="1">
+<li>Configure a modeled event mesh and add your event broker.</li>
+<li>Create Schemas, Events, Event API and Event API Product in Event Portal Designer</li>
+<li>Alternatively, you can import an Application Domain from a file. If you do this you still need to execute the following step.</li>
+<li>Make the Event API Product available to API Management systems.</li>
+</ol>
+<h3 is-upgraded>Configure a modeled event mesh and add your event broker</h3>
+<p>Follow the steps described <a href="https://api.solace.dev/cloud/reference/apim-getting-started#configure-solace-event-brokers-in-runtime-event-manager" target="_blank">here</a></p>
+<h3 is-upgraded>Create Event API Products and required objects</h3>
+<p>You can skip steps if you already have created some of these objects - such as schemas, events-  in Event Portal that you intend to reuse.</p>
+<aside class="special"><p> Ensure that all objects you create in an application domain are marked as &#34;shared&#34; and that you set the lifecycle state to &#34;released&#34;. Where applicable all objects&#39; &#34;Broker Type&#34; must be set to &#34;Solace&#34;</p>
+</aside>
+<ul>
+<li>Open the Event Portal Designer, see <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-tool.htm#Using_Designer" target="_blank">here</a></li>
+<li>Create an application domain for broker type &#34;Solace&#34;, see <a href="hhttps://docs.solace.com/Cloud/Event-Portal/event-portal-designer-application-domains.htm#CreateAppDomain" target="_blank">here</a></li>
+<li>Create a schema, skip if you want to define simple events with primitive payloads such as string). See <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-schemas.htm#create-schema" target="_blank">here</a>. Remember to <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-schemas.htm#state_change_schema" target="_blank">set the state</a> of the schema version to released.</li>
+<li>Create an event, see <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-events.htm#create-event" target="_blank">here</a>. Remember to <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-events.htm#state_change_event" target="_blank">set the state</a> of the event version to released.</li>
+<li>Create an Event API , see <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-event-apis.htm#Creating_an_Event_API" target="_blank">here</a>. Remember to <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-event-apis.htm#Changing_the_State" target="_blank">set the state</a> of the event version to released.</li>
+<li>Create an Event API Product, see <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-event-api-products.htm#Creating_an_EAP" target="_blank">here</a></li>
+</ul>
+<h3 is-upgraded>Alternative: Import a Sample Application Domain</h3>
+<p>The sample domain is stored in the github repo that you have cloned. It&#39;s calles <code>retail-demo.json</code> and is located in the <code>eventportal</code> directory.</p>
+<p>Follow the instructions to <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-application-domains.htm#importing-application-domains" target="_blank">import an Application Domain</a> into Event Portal.</p>
+<h3 is-upgraded>Make the Event API Product available to API Management systems</h3>
+<p>Once you have an Event API Product - either imported or designed by you - you need to <a href="https://docs.solace.com/Cloud/Event-Portal/event-portal-designer-event-api-products.htm#adding-an-event-api-product-to-an-environment" target="_blank">assign it to an environment</a> and make it visible to APIM solutions: see <a href="https://api.solace.dev/cloud/reference/apim-getting-started#make-event-api-products-publicly-available" target="_blank">Make Event API Products Publicly Available</a> in the Solace Platform API documentation.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Import Event API Products and Event APIs into Apigee" duration="5">
+        <h2 is-upgraded>List Available Event API Products</h2>
+<aside class="warning"><p> Each Plan of an Event API Product is treated as a separate importable apgeeX API Product. Apigee API Products do not have &#34;Plans&#34;.</p>
+</aside>
+<p>Retrieve a list of importable API Products (i.e. Event API Product Plans):</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/ep-bootstrap/eventApiProducts?where=applicationDomainId%3D%3Dgfjt1r5b8db&#39;
+</code></pre>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+<h2 is-upgraded>Import an Event API Product Plan into Apigee</h2>
+<p>Pick an API Product from the <code>importableApiProducts</code> element of the response you retrieved in the previous step and use it in the command below. Set <code>--data</code> payload replacing <code>< IMPORTABLE_API_PRODUCT ></code>:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/ep-bootstrap/eventApiProducts&#39; \
+--header &#39;Content-Type: application/json&#39; \
+--data &#39;&lt;IMPORTABLE_API_PRODUCT&gt;&#39;
+</code></pre>
+<p>For example:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/ep-bootstrap/eventApiProducts&#39; \
+--header &#39;Content-Type: application/json&#39; \
+--data &#39;{
+                &#34;apiProductName&#34;: &#34;Order Event API-default&#34;,
+                &#34;planId&#34;: &#34;u3r88l0pxk7&#34;,
+                &#34;eventApiProductId&#34;: &#34;rezt2caps5s&#34;
+            }&#39;
+</code></pre>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Testing the Developer Portal" duration="5">
+        <p>The blog <a href="http:todo.com" target="_blank">&#34;Take Event APIs to where your Apigee APIs are ...&#34;</a> walks you through the developer experience in more detail.</p>
+<h2 is-upgraded>Find and Explore Your Event API in the Developer Portal</h2>
+<p class="image-container"><img alt="Filter API Catalog for AsyncAPIs" src="img/34bec3f490a8769a.png"></p>
+<p class="image-container"><img alt="Explore AsyncAPI and Documentation" src="img/abdbde12b2db6f47.png"></p>
+<h2 is-upgraded>Create an App and Gain Access to an Event API</h2>
+<p class="image-container"><img alt="Create  an app with access to the Event API Product" src="img/f1ce3db3e7a68c2e.png"></p>
+<p class="image-container"><img alt="Review the app details and credentials" src="img/4a3f2749ed80342d.png"></p>
+<aside class="special"><p> If you want to follow the optional section to connect an API client to a Solace broker take note of the credentials - consumer key and secret - issued for the app.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Review Apigee API Product" duration="2">
+        <p>The Event API Product that we imported from Solace Event Portal is listed on <a href="https://console.cloud.google.com/apigee/apiproducts" target="_blank">API Product</a></p>
+<aside class="special"><p> Note the custom attributes in the screenshot - they correlate to the Apigee API Product with the source in Event Portal.</p>
+</aside>
+<p class="image-container"><img alt="Imported Event API Product" src="img/e2708ef396ae2a30.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Optional: Testing Developer Access to Solace Cloud Broker" duration="10">
+        <aside class="warning"><p> The Configure OAuth provider on PubSub+ Broker is applicable to all protocols supported by the PubSub+ Broker. The rest of the section documents access using the MQTT protocol. Of course you can also use other protocols that you are familiar with instead.</p>
+</aside>
+<p>You need admin access to the Solace PubSub+ broker as you set up an OAuth provider in the broker in this section. This enables developers to use JWT issued by Apigee to connect to the broker.</p>
+<p>Prerequisites to follow the MQTT connection steps:</p>
+<ul>
+<li>MQTTS (Secure MQTT) protocol must be enabled on the broker</li>
+<li>The Event API Product that you imported to Apigee must have MQTT included in the list of protocols.</li>
+</ul>
+<h2 is-upgraded>Configure OAuth provider on PubSub+ Broker</h2>
+<p>Follow the steps on <a href="https://docs.solace.com/Cloud/enable_oauth_for_broker.htm" target="_blank">Configuring an Event Broker Service to Use OAuth Identity Provider Authorization</a></p>
+<p>The OAuth Profile should look like the screenshot below, please note:</p>
+<ul>
+<li>Take note of the OAuth profile name you use, we will refer to this later as <code>< OAUTH_PROFILE_NAME ></code></li>
+<li>OAuth client id and secret: use dummy values or leave empty. These values are not used when the broker assumes the &#34;Resource Server&#34; role.</li>
+<li>OAuth Role: must be set to &#34;Resource Server&#34;</li>
+<li>Issuer Identifier: provide a dummy HTTPS URL, this value is not validated in the configuraiton below</li>
+<li>JWKS Endpoint: set to <code>https://< API_GATEWAY_HOSTNAME >/oauth/jwks</code></li>
+</ul>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+<p class="image-container"><img alt="OAuth Profile" src="img/540bb6afbe97166f.png"></p>
+<h2 is-upgraded>Connect to the Broker using MQTT</h2>
+<h3 is-upgraded>Obtain a JWT</h3>
+<p>Use the credentials associated with the app you created in the Developer Portal:</p>
+<ul>
+<li><code>CLIENT_ID</code>: the app&#39;s consumer key</li>
+<li><code>CLIENT_SECRET</code>: the app&#39;s consumer secret</li>
+</ul>
+<p>Exchange your credentials for an access token:</p>
+<pre><code>curl --location &#39;https://&lt;API_GATEWAY_HOSTNAME&gt;/oauth/jwt&#39; \
+--header &#39;Content-Type: application/x-www-form-urlencoded&#39; \
+-u &#39;&lt;CLIENT_ID&gt;:&lt;CLIENT_SECRET&gt;&#39; \
+--data-urlencode &#39;grant_type=client_credentials&#39;
+</code></pre>
+<p>Save the value of the <code>access_token</code> element of the response. You need it for your establishing the MQTT connection, we refer to it later as <code>TOKEN</code>.</p>
+<aside class="special"><p><code>< API_GATEWAY_HOSTNAME ></code> is the hostname that is assigned to your gateway - if you launched an Apigee trial it will look something like this: <code>34.54.246.147.nip.io</code></p>
+</aside>
+<h3 is-upgraded>Gather Connection Information</h3>
+<p>You also need the broker URL and you might want to test that you can start a subscription (receive) once connected. All of this information is contained in the AsyncAPI spec available on the Developer Portal:</p>
+<ul>
+<li>In the Developer Portal, view the AsyncAPI spec you previously imported</li>
+<li>Choose an appropriate entry from the server section and take note of the URL, we refer to this as <code>MQTTS_URL</code> below</li>
+<li>Choose a &#34;Receive&#34; operation and take note of the channel information we refer to this as <code>MQTT_TOPIC</code> below</li>
+</ul>
+<p>The screenshot below highlights examples for the values you need to take note of: <img alt="AsyncAPI Document" src="img/4651e76653cfb8a8.png"></p>
+<h3 is-upgraded>Connect using MQTTX</h3>
+<p>Start MQTTX (you can use another MQTT client that you prefer and are familiar with) and configure a new connection.</p>
+<p class="image-container"><img alt="Create a connection" src="img/63ff5e5949860842.png"></p>
+<p>Use the following values in the connection details:</p>
+<ul>
+<li>Choose a name for the conneciton</li>
+<li>Select the <code>mqtts://</code> option (if you use a secure MQTT port)</li>
+<li>Host: use the hostname part of <code>MQTTS_URL</code></li>
+<li>Port: use the port part of <code>MQTTS_URL</code></li>
+<li>Username: this value is ignored, you can use anything you like e.g. &#34;notused&#34;</li>
+<li>Password: Concatenate <code>OAUTH~< OAUTH_PROFILE_NAME >~< TOKEN ></code></li>
+</ul>
+<p class="image-container"><img alt="Provide Connection Details" src="img/3b3a1dff791919a5.png"></p>
+<h3 is-upgraded>Subscribe to a Topic</h3>
+<p>Once connected add a subscription, use <code>MQTT_TOPIC</code> and replace any variables - enclosed in &#34;{}&#34;&#34;}&#34; with suitable values or MQTT wildcards. <img alt="Add a subscription" src="img/a5243ce66711095d.png"></p>
+<p class="image-container"><img alt="A Successful subscription" src="img/dd961a56a90d4c19.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="3">
+        <p>Congratulations, you now have a working custom integration between Google Apigee and Solace.</p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

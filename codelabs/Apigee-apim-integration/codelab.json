@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-04-07T15:49:11Z",
+  "id": "Apigee-apim-integration",
+  "duration": 75,
+  "title": "Unified APIM: Integrating Solace Event Portal with Apigee Platform and Developer Portal",
+  "summary": "",
+  "source": "main/markdown/apigee-apim-integration/apigee-apim-integration.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "apigee",
+    "solace"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/apigee-apim-integration",
+  "url": "Apigee-apim-integration"
+}
