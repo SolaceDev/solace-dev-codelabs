@@ -12,6 +12,8 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
+Duration: 0:01:00
+
 ![Solace Masterclass](img/commons/Solace-masterclass.jpeg)
 
 This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing
@@ -33,6 +35,8 @@ The agenda of the hands-on is as below :
 
 ## Use case introduction
 
+Duration: 0:01:00
+
 As a part of the event storming session earlier you would have discussed and brainstormed on few use cases. In this
 brainstorming you have identified systems, events and processes involved in the flow(s) and also
 designed the topic taxonomy following Solace best practices and recommendations.
@@ -46,6 +50,8 @@ and follow it for implementing.
 Due to time limit considerations, we will be implementing only a selected subset of the whole design.
 
 ## Solace Cloud Account and broker provisioning
+
+Duration: 0:25:00
 
 ### Step 1: Solace Cloud Account
 
@@ -134,6 +140,8 @@ Once the Solace broker is up and running, click on the broker name and enter it.
 
 ## Event Portal design
 
+Duration: 0:10:00
+
 The Event Portal is a cloud-based tool that simplifies the design of your event-driven architecture (EDA). With the
 Event Portal, you can:
 * Define and track relationships between applications in a highly decoupled EDA.
@@ -169,12 +177,16 @@ In summary, the Event Portal streamlines event management, making it an essentia
 
 ## Use case implementation
 
+Duration: 0:01:00
+
 Based on use case of your choice, please follow the appropriate chapter below :
 
 - Retail: Sections 6 and 7
 - Banking: Sections 8 and 9
 
 ## Part-A : Retail Domain
+
+Duration: 0:45:00
 
 ### Use case explanation
 
@@ -519,6 +531,8 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
 
 ## Part-A: Retail Domain—Continued
 
+Duration: 0:30:00
+
 Let us continue with the next applications in the OTC flow :
 
 ### 3. Payment Service
@@ -690,6 +704,8 @@ As a result of this POC, Acme Retail has achieved a number of benefits including
   identify errors, and audit activity.
 
 ## Part-B : Banking domain
+
+Duration: 0:45:00
 
 ### Use case explanation
 
@@ -909,6 +925,8 @@ transactions by publishing a _Fraud Detected_ event.
 
 ## Part-B: Banking domain-Continued
 
+Duration: 0:25:00
+
 ### 4. Completing the flow
 
 Event-Driven Architecture enables modular, iterative development, and fosters innovation by providing a scalable,
@@ -1122,6 +1140,8 @@ As a result of this POC, Acme Bank has achieved a number of benefits including :
 
 ## Takeaways and benefits
 
+Duration: 0:05:00
+
 Below are some of the key takeaways from this masterclass :
 
 * **Understanding Event-Driven Architecture (EDA)**: Gain insights into the principles, patterns, and benefits of
@@ -1148,5 +1168,7 @@ the [Solace Community Forum](https://solace.community/)! If you found any issues
 you'd raise them by clicking the Report a mistake button at the bottom left of this Codelab.
 
 ## Appendix and references
+
+Duration: 0:01:00
 
 - Link for the Solace Cloud Account: [Solace Cloud Account](https://console.solace.cloud/home?login=true)
