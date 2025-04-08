@@ -12,13 +12,15 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
+Duration: 0:01:00
+
 ![Solace Masterclass](img/commons/Solace-masterclass.jpeg)
 
 This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing
 Event-Driven-Architectures**
-The participants of this masterclass will be implementing this Codelab in the Strigo virtual machine provided as a part
+The participants of this masterclass will be implementing this Codelab in a Github Codespace environment provided as a part
 of the masterclass session.
-The Strigo virtual machine contains all the software packages required for implementing the hands-on Codelab.
+The codespace contains all the software packages required for implementing the hands-on Codelab.
 
 The agenda of the hands-on is as below :
 
@@ -32,6 +34,8 @@ The agenda of the hands-on is as below :
 * Understand the benefits of EDA and Solace in these use cases
 
 ## Use case introduction
+
+Duration: 0:01:00
 
 As a part of the event storming session earlier you would have discussed and brainstormed on few use cases. In this
 brainstorming you have identified systems, events and processes involved in the flow(s) and also
@@ -47,24 +51,34 @@ Due to time limit considerations, we will be implementing only a selected subset
 
 ## Solace Cloud Account and broker provisioning
 
+Duration: 0:25:00
+
 ### Step 1: Solace Cloud Account
 
 In case you do not have an active Solace cloud account, you can register for one via the
-link: [Solace trial account registration](https://console.solace.cloud/login/new-account?product=event-streaming)
+link: [Solace trial account registration](https://console.solace.cloud/login/new-account?product=event-streaming). \
 You can log in to the newly created Solace cloud account using the
-link : [Solace Cloud Account](https://console.solace.cloud/home?login=true)
+link : [Solace Cloud Account Login](https://console.solace.cloud/home?login=true). 
 Once you have registered and logged in to the Solace cloud account, you can get started with provisioning a Solace
 developer grade broker which will be used in the next sections.
 
-### Step 2: Solace broker provisioning
+### Step 2 : Environment setup
+Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like
+this:
+  ![cloud-console-home.png](img/broker-setup/cloud-console-home.png)
 
-- Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like
-  this:
-  ![mission-control.png](img/broker-setup/mission-control.png)
+- Click on the **Environments** button as shown below : \
+  ![settings-environment.png](img/broker-setup/settings-environment.png)
+- Click on the **...** of the default created environment as below and click **Enable Runtime Configuration** as below:
+  ![env-enable-runtime-config.png](img/broker-setup/env-enable-runtime-config.png)
+  This will allow you to push configuration objects for Solace queues, ACL profiles, and credentials to the broker directly from the Event Portal
 
-- Click on "Cluster Manager" to go into where you create and manage your broker services.
-- Then click the "Create service" button to create a new Solace cloud broker instance.
-- Ensure you have selected Developer Service, Amazon Web Services as the cloud service provider,
+### Step 3: Solace broker provisioning
+
+- Click on "Cluster Manager" to go into where you create and manage your broker services as below :
+  ![cluster-manager-sidebar.png](img/broker-setup/cluster-manager-sidebar.png)
+- Then click the "Create service" button to create a new Solace cloud broker instance. You can see that this service is associated with the **Default** environment that is available.
+- Ensure you have selected Developer Service, your choice as the cloud service provider,
 - and then click the map to find a region close to you:
   ![broker_create_service.jpg](img/broker-setup/broker_create_service.jpg)
 
@@ -106,34 +120,49 @@ Once the Solace broker is up and running, click on the broker name and enter it.
 * **Access Control**: where you create new client usernames, ACL profiles, and client profiles
 * **Replay**: where you can enable replay, to allow the broker to send previous messages again
 
+### Step 4: Runtime Event Manager
+
+- In the main cloud console, click on the **Runtime Event Manager** as shown : \
+  ![runtime-event-mgr-sidebar.png](img/broker-setup/runtime-event-mgr-sidebar.png)
+- Click on the **Create Modeled Event Mesh** button and create a new Modeled Event Mesh (MEM) as shown : \
+  ![create-mem-popup.png](img/broker-setup/create-mem-popup.png)
+> aside positive Note the environment associated with each MEM that you create. This groups EDA artefacts and their deployments across all brokers associated with a particular environment.
+
+- Enter the newly create MEM and navigate to the **Event Broker Connections** tab and click on the **Connect Event Broker** button as below : \
+![new-mem.png](img/broker-setup/new-mem.png)
+- Select the newly created broker, and you should be able to see a screen as below : \
+![mem-to-broker-assoc.png](img/broker-setup/mem-to-broker-assoc.png)
+> aside positive You will see that :
+> 1. The broker is connected to the MEM
+> 2. The connection between the broker, MEM and the Event Portal is automatically managed by the Event Portal using a cloud hosted Event Management Agent (EMA)
+> 3. To test the connection, click on the **Run Discovery Scan** button which will trigger a scan of your broker
+> 4. The status of the scan is displayed under the **Discovery Scans** section
+
 ## Event Portal design
+
+Duration: 0:10:00
 
 The Event Portal is a cloud-based tool that simplifies the design of your event-driven architecture (EDA). With the
 Event Portal, you can:
-
 * Define and track relationships between applications in a highly decoupled EDA.
 * Create and manage events using a user-friendly GUI.
-
 In summary, the Event Portal streamlines event management, making it an essential part of your EDA toolkit.
 
 ### Step 1 : Import Event Portal designs
 
 - From the Solace cloud account screen, click on the **Designer** button and enter the Event Portal's Designer page as
   below : ![ep-designer-button.png](img/commons/ep-designer-button.png)
+- Based on the choice of your domain, you can select one of the two domain files as below and download it from the links : \
+      - Banking Industry : [Download Banking Industry App Domain File](https://github.com/SolaceLabs/solace-masterclass-code/blob/main/ep-app-domains/Acme_Bank_App_Domain.json) \
+      - Retail industry : [Download Retail Industry App Domain File](https://github.com/SolaceLabs/solace-masterclass-code/blob/main/ep-app-domains/Acme_Retail_App_Domain.json)
 - Click on the **Import Application Domains** button by clicking on the three dots in the top right corner as below :
   ![ep-app-domain-import.png](img/commons/ep-app-domain-import.png)
 - A file selector dialog box will be displayed so that you can select the application domain file of your choice.
-- Navigate to the folder : `/home/ubuntu/GitHub/solace-masterclass-code/ep-app-domains`
-- As described in **Section 2 - Use case introduction**, you can choose to implement from multiple industry domains.
-  Based on your choice, you can select one of the two domains files as below :
-    - Banking Industry : `Acme_Bank_App_Domain.json`
-    - Retail industry : `Acme_Retail_App_Domain`
-      ![ep-app-domain-files.png](img/commons/ep-app-domain-files.png)
 - Select on a file and click  **Open**, this will result in the application domain being imported as below :
   ![ep-app-domain-imported.png](img/commons/ep-app-domain-imported.png)
 
 > aside positive you can import as many application domains as you wish,
-> but for time considerations its advisable to choose one example for implementation.
+> but for time considerations it's advisable to choose one example for implementation.
 
 - Inside the application domain, you should be able to see the objects from your selected industry as below :
     - Retail industry :
@@ -148,12 +177,16 @@ In summary, the Event Portal streamlines event management, making it an essentia
 
 ## Use case implementation
 
+Duration: 0:01:00
+
 Based on use case of your choice, please follow the appropriate chapter below :
 
 - Retail: Sections 6 and 7
 - Banking: Sections 8 and 9
 
 ## Part-A : Retail Domain
+
+Duration: 0:45:00
 
 ### Use case explanation
 
@@ -216,22 +249,43 @@ relevant events which it uses for showing realtime status updates on the order l
 
 #### How to run ?
 
-- Navigate to the directory: **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service**
+##### **Part 1 : Broker Configuration**
+- Click on the **Designer** button and enter the Designer screen where you should be able to see the newly imported Application Domain.
+  ![designer-app-domain-imported.png](img/retail-domain-usecase/designer-app-domain-imported.png)
+- Click on the **Acme Retail** application domain, where you can visualise the events, applications and their interactions as below :
+  ![formatted-app-domain.png](img/retail-domain-usecase/formatted-app-domain.png)
+> aside positive Do note that the first time visualization of the events and their interactions might differ from what you see in the screenshot. \
+> You can reorder the objects as per your preference
+- Click on the **Order Service**, and then on the **Open Application** which pops up as below :
+  ![edit-order-service-1.png](img/retail-domain-usecase/edit-order-service-1.png)
+- The **Order Service** application screen displays you the various events that are published and subscribed by this version of the application. It also describes the various environments this application is deployed on :
+  ![editing-order-service-1.png](img/retail-domain-usecase/editing-order-service-1.png)
+- Click on the **Runtime** tab at the top of the application, and you can see the various environments, brokers and the status of the application configuration deployment as below :
+  ![order-service-runtime-tab.png](img/retail-domain-usecase/order-service-runtime-tab.png)
+> aside positive You can see the **dev** broker associated with the **default** environment and the MEM that you created earlier. In case of multiple brokers and environments they would be listed here as available
+- Click on the **+** button by the broker which will show a modal window to set up credentials for the application to connect to the broker. **Make sure to keep a note of these credentials as they will be required in the following steps.**
+  ![order-service-creds.png](img/retail-domain-usecase/order-service-creds.png)
+- Clicking on the **Save Credentials and Continue** button generates a preview of the configuration that will be deployed to the broker as below :
+  ![order-service-preview-1.png](img/retail-domain-usecase/order-service-preview-1.png)
+- You will see a **Configuring** status for a short duration during which the EMA deploys the configuration onto the broker.
+- Once the deployment is completed, you can see the deployed application version on the broker as below :
+  ![order-service-creds-deployed.png](img/retail-domain-usecase/order-service-creds-deployed.png)
+
+##### **Part 2 : Application build and deployment**
+- Navigate to the directory: **solace-masterclass/retail-domain/order-service**
 - Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
   url: [http://localhost:9002/](http://localhost:9002/) in the Chrome browser (or any one available in the VM)
 - You should see a page which looks like this :
   ![Order-Service-Application.png](img/retail-domain-usecase/Order-Service-Application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
-- The connection parameters for the Account management application can be captured from below :
+- The connection parameters for the Order Service application can be captured from below :
   ![brokerconsole_connect_creds_java.png](img/commons/brokerconsole_connect_creds_java.png)
 - Make a note of the following properties in a separate file as they will be required for the following steps:
     - Public Endpoint
-    - Username
-    - Password
     - Message VPN \
       ![brokerconsole_connect_creds_java_highlighted.png](img/commons/brokerconsole_connect_creds_java_highlighted.png)
-
+- The credentials (username and password) were configured in the previous step.
 - Fill in the connection details in the appropriate text box and click on the **Connect to broker** button
 - You should see a screen as below with the appropriate connection status :
   ![order-service-broker-connected.png](img/retail-domain-usecase/order-service-broker-connected.png)
@@ -266,13 +320,22 @@ _Order-Confirmed_ event for further processing.
 
 #### How to run?
 
+##### **Part 1 : Broker Configuration**
+- Similar to how you deployed the credentials for the **Order Service** in the previous step, you will need to deploy the application and credentials for the **Inventory-FraudCheck-Service** as well.
+- In the **Designer** screen, enter the Acme Retail application domain
+- Click on the **Inventory and FraudCheck Service** and open the application
+- Navigate to the **Runtime** tab on the application and add credentials for the application and deploy them to the broker.
+> aside positive Make a note of the credentials (username and password) that you enter as they will be used in the following steps for deploying and running the application
+
+##### **Part 2 : Application build and deployment**
 * Open up a new terminal window, make sure not to close the earlier window running the **Order-Service**
-* Navigate to the location: **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/inventory-fraudcheck-service**
+* Navigate to the location: **solace-masterclass/retail-domain/inventory-fraudcheck-service**
 * Run the command : `mvn clean install`
 * Run the command : `java -jar target/inventory-fraudcheck-service-0.0.1-SNAPSHOT.jar -h
   HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
 
-> aside positive You would have used the above connection parameters in the earlier step for the **Order-Service**.
+> aside positive You would have used the host url and vpn name parameters in the earlier step for the **Order-Service**. \
+> The credentials (username and password) should be the same as you set up in the broker configuration section of this application
 
 * Keep an eye out on the logs to see if the application is starting up properly as expected.
 
@@ -301,30 +364,38 @@ Since in the case of Acme Retail, it is critical that no messages are lost durin
 subscribing application should be
 able to delete the queue object; an architectural choice was made to use **Durable - Exclusive** queue configurations.
 
-To fix the error encountered above, you need to manually create the Queue object as below :
+To fix the error encountered above, you need to create the Queue object as below :
 
-* Navigate to the **PubSub+ Broker Manager** as below :
-  ![Open-broker-manager.png](img/commons/queue-creation/Open-broker-manager.png)
-* Click on the **Queues** on the left menu to view a listing of the existing queues and then create a new queue by
-  clicking on the **+ Queue** button on the right side as below :
-  ![broker-Queues-screen.png](img/commons/queue-creation/broker-Queues-screen.png)
-* Enter the name of the queue : `all-orders-placed`, click create and keeping the default queue settings click **Apply**
-  as below :
-  ![queue-creation-default-settings.png](img/commons/queue-creation/queue-creation-default-settings.png)
-
+* Open the **Inventory and FraudCheck Service** and click **Edit This Version** on the top right as below :
+  ![consumer-config-inventory-service.png](img/retail-domain-usecase/consumer-config-inventory-service.png)
+* Click on the **Runtime Configuration** sub-tab and then **Add Consumer** as below :
+  ![consumer-config-inventory-service-step2.png](img/retail-domain-usecase/consumer-config-inventory-service-step2.png)
+* Fill in the follwing details in the form :
+  * Name : `all-orders-placed`
+  * Type : Solace Event Queue
+* Click on the **Add Subscriptions** button which will open up a sidebar. Select the **Order Created** event and its associated subscription as below :
+  ![inventory-serivice-subscriptions-step1.png](img/retail-domain-usecase/inventory-serivice-subscriptions-step1.png)
+> aside negative Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace
+> presenters if you have any queries
+* Click on the **Manage Queue Configuration** button which opens up a sidebar, fill in the below configuration in the configuration pane :
+  ```JSON
+  {
+  "accessType": "exclusive",
+  "maxMsgSpoolUsage": 5000,
+  "queueName": "all-orders-placed"
+  }
+  ```
 > aside negative Does the **Access Type** parameter ring any bells and how it influences the consumption of events
 > from the queue, benefits, limitations, alternative solutions? \
 > Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.
 
-* Once the queue is created, go into the newly created queue and click on the **Subscriptions** button on the top :
-  ![new-created-queue.png](img/commons/queue-creation/new-created-queue.png)
-* Click on the **+ Subscription** button on the queue and start adding in the topic patterns which you want to be
-  attracted in this queue:
-  ![queue-add-subscription.png](img/commons/queue-creation/queue-add-subscription.png)
-* Enter the pattern : `acmeretail/onlineservices/order/created/*/*/*` as shown below and click **Create**
-
-> aside negative Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace
-> presenters if you have any queries
+* At the end you should have something like this :
+  ![inventory-service-consumer-1.png](img/retail-domain-usecase/inventory-service-consumer-1.png)
+* Click **Save Version** and navigate to the **Runtime** tab.
+* You should see the status as **Update Required** on the broker
+* Click **Push Updates to Event Broker**, which shows a preview of all the changes that will be pushed to the broker
+  ![inventory-service-update-broker.png](img/retail-domain-usecase/inventory-service-update-broker.png)
+* Click **Push Changes** which will trigger the configuration push to the broker
 
 * With the above steps, a new queue has been created with the required subscription which can now be connected to by the
   **Inventory-FraudCheck-Service**
@@ -351,8 +422,8 @@ by the broker were lost as the broker could not find an active consumer for them
 Now that you have created the queue, newly published orders will lie in the queue till a consumer processes and
 acknowledge the event.
 
-Let's test out the flow again till now by building and deploying the Order-Service and observing the logs on the *
-*Inventory-FraudCheck-Service** to see incoming order created events.
+Let's test out the flow again till now by building and deploying the Order-Service and observing the logs on the 
+**Inventory-FraudCheck-Service** to see incoming order created events.
 
 #### New feature enhancement
 
@@ -361,18 +432,27 @@ fraud check passes.
 
 This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow the below steps to enable this flow :
 
-* Create a new queue with the required subscription to ensure that the event is being persisted and made
-  available to the **Order-Service** for processing.
-    * Follow the above steps for creating a new queue with the below name and subscription:
-      | Queue name | Subscription |
-      | ---- | ----- |
-      | all-order-updates | `acmeretail/onlineservices/order/confirmed/v2/*/*`  |
-
+* Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
+* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+  * Name : all-order-updates
+  * Type : Solace Event Queue
+  * Event and subscriptions : Select the **Order Confirmed** event and confirm the suggested subscription
+  * Queue configuration :
+  ```JSON
+    {
+    "accessType": "exclusive",
+    "maxMsgSpoolUsage": 5000,
+    "queueName": "all-order-updates"
+    }
+  ```
+  * You should have a consumer setup which looks like this :
+  ![order-service-all-order-updates-queue.png](img/retail-domain-usecase/order-service-all-order-updates-queue.png)
 > aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
 
-* Import the **Order-Service** as a project into VS Code IDE by simply selecting the folder at the location:
-  **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/order-service**
+* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
 
+* Navigate to the **Order-Service** by simply selecting the folder at the location:
+  **solace-masterclass/retail-domain/order-service**
 > aside negative If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.
 
 * Open the file: **com.solace.acme.store.orderservice.service.SolaceEventPublisher.java** and make the below updates to
@@ -451,6 +531,8 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
 
 ## Part-A: Retail Domain—Continued
 
+Duration: 0:30:00
+
 Let us continue with the next applications in the OTC flow :
 
 ### 3. Payment Service
@@ -471,31 +553,47 @@ The _Payment Created_ event is in-turn subscribed by the **Order Service** for u
 
 #### How to run?
 
-* Open up a new terminal window, make sure not to close the earlier window running the earlier applications
-* Navigate to the location: **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/payment-service**
-* Before starting the application, we need to create the queue that the **payment-service** requires to start.
-* Follow the steps from the previous **inventory-fraudcheck-service** section and create a new queue similarly with the
-  following name and subscription:
-  | Queue name | Subscription |
-  | ---- | ----- |
-  | all-orders-confirmed | `acmeretail/onlineservices/order/confirmed/*/*/*`  |
+##### **Part 1 : Broker Configuration**
 
-> aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
-> here to understand the Solace topic routing concept better.
-
+* Navigate to the Designer screen and open the **Payment Service** application. Click on the **Edit this Version** button.
+* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+  * Name : all-orders-confirmed
+  * Type : Solace Event Queue
+  * Event and subscriptions : Select the **Order Confirmed** event and confirm the suggested subscription
+  * Queue configuration :
+  ```JSON
+  {
+  "accessType": "exclusive",
+  "maxMsgSpoolUsage": 5000,
+  "queueName": "all-orders-confirmed"
+  }
+  ```
+  * You should have a consumer setup which looks like this :
+   ![payment-service-all-orders-confirmed-queue.png](img/retail-domain-usecase/payment-service-all-orders-confirmed-queue.png)
+> aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
+* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
 * Now that we have configured the queue for feeding the **Payment Service**, we have to make sure that the
   **Order-Service** can also receive the _Payment Created_ events. This is done by updating the subscription list of the
   _all-order-updates_ queue with the topic pattern of the _Payment Created_ events.
 * You can do this by :
-    * Open the queue configuration for the _all-order-updates_ queue
-    * Click on the **Subscription** tab
-    * Click on **+ Subscription** and add in an additional topic subscription
-      as : `acmeretail/onlineservices/payment/created/v1/*/*`
+  * Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
+  * Click on the **Runtime Configuration** sub-section and in the consumer named **all-order-updates** click on **Add Subscriptions** button
+  * Make sure to select only the **Payment Created** and **Payment Updated** events as below :
+  ![order-service-update-queue-subscription-paymentEvents.png](img/retail-domain-usecase/order-service-update-queue-subscription-paymentEvents.png)
+  * Add the subscription and close the sidebar
+  * At this stage, you should have a queue with the following subscriptions :
+  ![order-service-all-order-updates-queue-v2.png](img/retail-domain-usecase/order-service-all-order-updates-queue-v2.png)
+  * Save the version, navigate to the **Runtime** tab and push the updates to the event broker
 
-* Once the above queue is created with the proper subscription, run the command : `mvn clean install`
+##### **Part 2 : Application build and deployment**
+* Open up a new terminal window, make sure not to close the earlier window running the earlier applications
+* Navigate to the location: **solace-masterclass/retail-domain/payment-service**
+
+* Run the command : `mvn clean install`
 * Run the
   command : `java -jar target/payment-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD` and
   observe the console to see what events are getting processed and subsequently produced
+> aside positive The credentials (username and password) for the Payment Service are the same as you configured on the Runtime tab for this application
 
 #### Testing
 
@@ -531,30 +629,46 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
 
 #### How to run?
 
-* Open up a new terminal window, make sure not to close the earlier window running the earlier applications
-* Navigate to the location: **/home/ubuntu/GitHub/solace-masterclass-code/retail-domain/shipping-service**
-* Before starting the application, we need to create the queue that the **Shipping service** requires to start.
-* Follow the steps from the previous sections and create a new queue similarly with the following name and subscription:
-  | Queue name | Subscription |
-  | ---- | ----- |
-  | all-payments-confirmed | `acmeretail/onlineservices/payment/*/v1/*/*` |
-
-> aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
-> here to understand the Solace topic routing concept better.
+##### **Part 1 : Broker Configuration**
+* Navigate to the Designer screen and open the **Shipping Service** application. Click on the **Edit this Version** button.
+* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+  * Name : all-payments-confirmed
+  * Type : Solace Event Queue
+  * Event and subscriptions : Select the **Payment Updated** event and confirm the suggested subscription
+  > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
+  > here to understand the Solace topic routing concept better.
+  * Queue configuration :
+  ```JSON
+  {
+  "accessType": "exclusive",
+  "maxMsgSpoolUsage": 5000,
+  "queueName": "all-payments-confirmed"
+  }
+  ```
+  * You should have a consumer setup which looks like this :
+    ![shipping-service-all-payments-confirmed-queue.png](img/retail-domain-usecase/shipping-service-all-payments-confirmed-queue.png)
+* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
 
 * Now that we have configured the queue for feeding the **Shipping Service**, we have to make sure that the
   **Order-Service** can also receive the _Shipment Created_ events. This is done by updating the subscription list of
-  the
-  _all-order-updates_ queue with the topic pattern of the Shipment Created events.
+  the _all-order-updates_ queue with the topic pattern of the Shipment Created events.
 * You can do this by :
-    * Open the queue configuration for the _all-order-updates_ queue
-    * Click on the Subscription tab
-    * Click on + Subscription and add in an additional topic subscription
-      as : `acmeretail/shipping/shipment/created/v1/*/*`
-* Once the above queue is created with the proper subscription, run the command : `mvn clean install`
-* Run the
-  command : `java -jar target/shipping-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
+  * Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
+  * Click on the **Runtime Configuration** sub-section and in the consumer named **all-order-updates** click on **Add Subscriptions** button
+  * Make sure to select only the **Shipment Created** event as below :
+    [order-service-update-queue-subscription-shipmentEvents](img/retail-domain-usecase/order-service-update-queue-subscription-shipmentEvents)
+  * Add the subscription and close the sidebar
+  * At this stage, you should have a queue with the following subscriptions :
+    ![order-service-all-order-updates-queue-v2.png](img/retail-domain-usecase/order-service-all-order-updates-queue-v3.png)
+  * Save the version, navigate to the **Runtime** tab and push the updates to the event broker
+
+##### **Part 2 : Application build and deployment**
+* Open up a new terminal window, make sure not to close the earlier window running the earlier applications
+* Navigate to the location: **solace-masterclass/retail-domain/shipping-service**
+* Run the command : `mvn clean install`
+* Run the command : `java -jar target/shipping-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD`
   and observe the console to see what events are getting processed and subsequently produced.
+> aside positive The credentials (username and password) for the Shipping Service are the same as you configured on the Runtime tab for this application
 
 #### Testing
 
@@ -590,6 +704,8 @@ As a result of this POC, Acme Retail has achieved a number of benefits including
   identify errors, and audit activity.
 
 ## Part-B : Banking domain
+
+Duration: 0:45:00
 
 ### Use case explanation
 
@@ -809,6 +925,8 @@ transactions by publishing a _Fraud Detected_ event.
 
 ## Part-B: Banking domain-Continued
 
+Duration: 0:25:00
+
 ### 4. Completing the flow
 
 Event-Driven Architecture enables modular, iterative development, and fosters innovation by providing a scalable,
@@ -1022,6 +1140,8 @@ As a result of this POC, Acme Bank has achieved a number of benefits including :
 
 ## Takeaways and benefits
 
+Duration: 0:05:00
+
 Below are some of the key takeaways from this masterclass :
 
 * **Understanding Event-Driven Architecture (EDA)**: Gain insights into the principles, patterns, and benefits of
@@ -1048,5 +1168,7 @@ the [Solace Community Forum](https://solace.community/)! If you found any issues
 you'd raise them by clicking the Report a mistake button at the bottom left of this Codelab.
 
 ## Appendix and references
+
+Duration: 0:01:00
 
 - Link for the Solace Cloud Account: [Solace Cloud Account](https://console.solace.cloud/home?login=true)
