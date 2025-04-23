@@ -16,8 +16,7 @@ Duration: 0:01:00
 
 ![Solace Masterclass](img/commons/Solace-masterclass.jpeg)
 
-This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing
-Event-Driven-Architectures**
+This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing Event-Driven-Architectures**
 The participants of this masterclass will be implementing this Codelab in a Github Codespace environment provided as a part
 of the masterclass session.
 The codespace contains all the software packages required for implementing the hands-on Codelab.
@@ -450,7 +449,6 @@ This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow
 > aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
 
 * Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
-
 * Navigate to the **Order-Service** by simply selecting the folder at the location:
   **solace-masterclass/retail-domain/order-service**
 > aside negative If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.
