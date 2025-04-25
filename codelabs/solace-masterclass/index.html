@@ -591,25 +591,45 @@ orderUpdatesEventReceiver.receiveAsync(buildOrdersUpdatesEventHandler(orderUpdat
 <li>The account&#39;s transaction related events are subscribed to by the <strong>Fraud Detection</strong> application which performs due diligence on these transactions and flags potential fraudulent transactions by triggering a <em>Fraud Detected</em> event</li>
 <li>The <strong>Account Management</strong> application subscribes to this <em>Fraud Detected</em> event, and after background processing triggers a <em>Fraud Confirmed</em> event and suspends the corresponding account by triggering an <em>Account Suspended</em> event</li>
 </ul>
-<p class="image-container"><img alt="banking-domain-usecase.png" src="img/2d8b8add0958eb66.png"></p>
+<p class="image-container"><img alt="banking-domain-flowchart.png" src="img/e7ccf8ce747fc384.png"></p>
 <h2 is-upgraded>1. Account Management application</h2>
 <h3 is-upgraded>Introduction</h3>
 <p>The <strong>Account Management</strong> application acts as the entry point for the whole flow and emulates the user experience of applying for a bank account and the background processing associated with that account. As described earlier in the overall flow, it starts with triggering an <em>Account Applied</em> followed by a corresponding <em>Account Opened</em> event. It also subscribes to other relevant Account related events namely the <em>Fraud Detected</em> event and triggers a <em>Fraud Confirmed</em> and corresponding <em>Account Suspended</em> events.</p>
 <h3 is-upgraded>How to run ?</h3>
+<h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
 <ul>
-<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management</strong></li>
+<li>Click on the <strong>Designer</strong> button and enter the Designer screen where you should be able to see the newly imported Application Domain. <img alt="designer-app-domain-imported.png" src="img/3733556b7723cb59.png"></li>
+<li>Click on the <strong>Acme Bank</strong> application domain, where you can visualise the events, applications and their interactions as below : <img alt="formatted-app-domain.png" src="img/79454e068f375e63.png"></li>
+</ul>
+<aside class="special"><p> Do note that the first time visualization of the events and their interactions might differ from what you see in the screenshot.<br> You can reorder the objects as per your preference</p>
+</aside>
+<ul>
+<li>Click on the <strong>Account Management</strong>, and then on the <strong>Open Application</strong> which pops up as below : <img alt="edit-account-management-1.png" src="img/8ad4f993c880a158.png"></li>
+<li>The <strong>Account Management</strong> application screen displays you the various events that are published and subscribed by this version of the application. It also describes the various environments this application is deployed on : <img alt="editing-acc-management-1.png" src="img/d9811548bb94bf22.png"></li>
+<li>Click on the <strong>Runtime</strong> tab at the top of the application, and you can see the various environments, brokers and the status of the application configuration deployment as below : <img alt="acc-mgt-runtime-tab.png" src="img/e59c0cf4026b051c.png"></li>
+</ul>
+<aside class="special"><p> You can see the <strong>dev</strong> broker associated with the <strong>default</strong> environment and the MEM that you created earlier. In case of multiple brokers and environments they would be listed here as available</p>
+</aside>
+<ul>
+<li>Click on the <strong>Add Application</strong> button by the broker which will show a modal window to set up credentials for the application to connect to the broker. <strong>Make sure to keep a note of these credentials as they will be required in the following steps.</strong><img alt="acc-mgt-creds.png" src="img/80023edd61fc0d63.png"></li>
+<li>Clicking on the <strong>Save Credentials and Continue</strong> button generates a preview of the configuration that will be deployed to the broker as below : <img alt="acc-mgt-preview1.png" src="img/4db22f0396c623e.png"></li>
+<li>You will see a <strong>Configuring</strong> status for a short duration during which the EMA deploys the configuration onto the broker.</li>
+<li>Once the deployment is completed, you can see the deployed application version on the broker as below : <img alt="acc-mgt-creds-deployed.png" src="img/f8f0b5ee3e5d2263.png"></li>
+</ul>
+<h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
+<ul>
+<li>Navigate to the directory: <strong>solace-masterclass/banking-domain/account-management</strong></li>
 <li>Open a terminal in this folder and run the command : <code>mvn clean spring-boot:run</code></li>
 <li>Once the application is up and running, open the application using the url: <a href="http://localhost:9092/" target="_blank">http://localhost:9092/</a></li>
 <li>You should see a page which looks like this : <img alt="Account-management-application.png" src="img/8c96cf3d8e76bd3f.png"></li>
 <li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
 <li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/5263e29cb746dec3.png"></li>
-<li>Make a note of the following properties in a separate file as they will be required for the following steps:<ul>
+<li>Make a note of the following properties in a separate file as they will be required for the following steps: <ul>
 <li>Public Endpoint</li>
-<li>Username</li>
-<li>Password</li>
 <li>Message VPN<br><img alt="brokerconsole_connect_creds_java_highlighted.png" src="img/ac24f5fa0ca5bfb7.png"></li>
 </ul>
 </li>
+<li>The credentials (username and password) were configured in the previous step.</li>
 <li>Fill in the connection details in the appropriate text box and click on the <strong>Connect to broker</strong> button</li>
 <li>You should see a screen as below with the appropriate connection status : <img alt="acnt-mgt-broker-connected.png" src="img/d2fcad0a712c0a03.png"></li>
 <li>Click on the <strong>Apply for a new Acme Bank account</strong> to generate a new account application and trigger an <strong>Account applied</strong> event and see a screen as below : <img alt="acnt-mgt-account-applied.png" src="img/2b713a65c2d9e031.png"></li>
@@ -623,13 +643,23 @@ orderUpdatesEventReceiver.receiveAsync(buildOrdersUpdatesEventHandler(orderUpdat
 <h3 is-upgraded>Introduction</h3>
 <p>The Core Banking application is responsible for the execution of all the transactions being performed on the bank accounts like transfers, deposits and withdrawals. The Core Banking Application randomly generates the above transactions on all the accounts which are active.</p>
 <h3 is-upgraded>How to run?</h3>
+<h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
+<ul>
+<li>Similar to how you deployed the credentials for the <strong>Account Management</strong> in the previous step, you will need to deploy the application and credentials for the <strong>Core Banking</strong> as well.</li>
+<li>In the <strong>Designer</strong> screen, enter the Acme Bank application domain</li>
+<li>Click on the <strong>Core Banking</strong> and open the application</li>
+<li>Navigate to the <strong>Runtime</strong> tab on the application and add credentials for the application and deploy them to the broker.</li>
+</ul>
+<aside class="special"><p> Make a note of the credentials (username and password) that you enter as they will be used in the following steps for deploying and running the application</p>
+</aside>
+<h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
 <li>Open up a new terminal window, make sure not to close the earlier window running the Account Management application</li>
-<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking</strong></li>
+<li>Navigate to the directory: <strong>solace-masterclass/banking-domain/core-banking</strong></li>
 <li>Run the command : <code>mvn clean install</code></li>
 <li>Run the command : <code>java -jar target/core-banking-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
 </ul>
-<aside class="special"><p> You would have used the above connection parameters in the earlier step for the Account Management application</p>
+<aside class="special"><p> You would have used the host url and vpn name parameters in the earlier step for the <strong>Account Management</strong>.<br> The credentials (username and password) should be the same as you set up in the broker configuration section of this application</p>
 </aside>
 <ul>
 <li>Keep an eye out on the logs to see if the application is starting up properly as expected.</li>
@@ -651,20 +681,34 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>Given the criticality for Acme Bank to maintain message integrity during application downtime, alongside the imperative that subscribing applications cannot delete queue objects, an architectural decision was made to implement <strong>Durable-Exclusive</strong> queue configurations.</p>
 <p>To fix the error encountered above, you need to manually create the Queue object as below :</p>
 <ul>
-<li>Navigate to the <strong>PubSub+ Broker Manager</strong> as below : <img alt="Open-broker-manager.png" src="img/26022409a2e37f28.png"></li>
-<li>Click on the <strong>Queues</strong> on the left menu, to view a listing of the existing queues and then create a new queue by clicking on the <strong>+ Queue</strong> button on the right side as below : <img alt="broker-Queues-screen.png" src="img/692659b8b6bba58e.png"></li>
-<li>Enter the name of the queue : <code>accounts-opened</code>, click create and keeping the default queue settings click <strong>Apply</strong> as below : <img alt="queue-creation-default-settings.png" src="img/407958fb18b274a6.png"></li>
+<li>Open the <strong>Core Banking</strong> and click <strong>Edit This Version</strong> on the top right as below : <img alt="consumer-config-core-banking.png" src="img/ada43ed4e33bc24b.png"></li>
+<li>Click on the <strong>Runtime Configuration</strong> sub-tab and then <strong>Add Consumer</strong> as below : <img alt="consumer-config-core-banking-step2.png" src="img/a6cecff2ac774e7.png"></li>
+<li>Fill in the follwing details in the form : <ul>
+<li>Name : <code>accounts-opened</code></li>
+<li>Type : Solace Event Queue</li>
 </ul>
-<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions ?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
-</aside>
-<ul>
-<li>Once the queue is created, go into the newly created queue and click on the <strong>Subscriptions</strong> button on the top : <img alt="new-created-queue.png" src="img/87ab9ea0234aa54f.png"></li>
-<li>Click on the <strong>+ Subscription</strong> button on the queue and start adding in the topic patterns which you want to be attracted in this queue: <img alt="queue-add-subscription.png" src="img/b3bd7254ec2ebf5e.png"></li>
-<li>Enter the pattern : <code>acmebank/solace/account/opened/v1/*</code> as shown below and click <strong>Create</strong></li>
+</li>
+<li>Click on the <strong>Add Subscriptions</strong> button which will open up a sidebar. Select the <strong>Account Opened</strong> event and its associated subscription as below : <img alt="core-banking-subscriptions-step1.png" src="img/42e4da6110fb115f.png"></li>
 </ul>
 <aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries</p>
 </aside>
 <ul>
+<li>Click on the <strong>Manage Queue Configuration</strong> button which opens up a sidebar, fill in the below configuration in the configuration pane : <pre><code language="language-JSON" class="language-JSON">{
+&#34;accessType&#34;: &#34;exclusive&#34;,
+&#34;maxMsgSpoolUsage&#34;: 5000,
+&#34;queueName&#34;: &#34;accounts-opened&#34;
+}
+</code></pre>
+</li>
+</ul>
+<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
+</aside>
+<ul>
+<li>At the end you should have something like this : <img alt="core-banking-consumer-1.png" src="img/7b3ced2e6b21acc0.png"></li>
+<li>Click <strong>Save Version</strong> and navigate to the <strong>Runtime</strong> tab.</li>
+<li>You should see the status as <strong>Update Required</strong> on the broker</li>
+<li>Click <strong>Push Updates to Event Broker</strong>, which shows a preview of all the changes that will be pushed to the broker <img alt="core-banking-update-broker.png" src="img/6a88820ad1085f37.png"></li>
+<li>Click <strong>Push Changes</strong> which will trigger the configuration push to the broker</li>
 <li>With the above steps, a new queue has been created with the required subscription which can now be connected to by the <strong>Core-Banking</strong></li>
 </ul>
 <aside class="special"><p> Make a note of the above steps as you will be creating multiple queues with similar configuration for the other applications.</p>
@@ -680,24 +724,32 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>As the need to prevent fraudulent transactions and money laundering intensifies, Acme Bank is obligated to adhere to stringent legal and security standards. This entails conducting comprehensive transaction checks across its system to ensure compliance with regulatory mandates.</p>
 <p>This realtime monitoring of transactions is being handled by the <strong>Fraud Detection</strong> service. It subscribes to all the transaction events being published by the <strong>Core Banking</strong> application and flags suspicious/potentially fraudulent transactions by publishing a <em>Fraud Detected</em> event.</p>
 <h3 is-upgraded>How to run?</h3>
+<h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
+<ul>
+<li>Navigate to the Designer screen and open the <strong>Fraud Detection</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
+<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
+<li>Name : all-transactions</li>
+<li>Type : Solace Event Queue</li>
+<li>Event and subscriptions : Select the <strong>Deposit</strong>, <strong>Transfer</strong> and <strong>Withdrawal</strong> events and confirm the suggested subscription</li>
+<li>Queue configuration :</li>
+</ul>
+<pre><code language="language-JSON" class="language-JSON">  {
+  &#34;accessType&#34;: &#34;exclusive&#34;,
+  &#34;maxMsgSpoolUsage&#34;: 5000,
+  &#34;queueName&#34;: &#34;all-transactions&#34;
+  }
+</code></pre>
+<ul>
+<li>You should have a consumer setup which looks like this : <img alt="fraud-detection-consumer.png" src="img/3ace30671325b92b.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Now that you have created the queue object for feeding the <strong>Fraud Detection</strong> service, we can build and start the application.</li>
+</ul>
+<h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
 <li>Open up a new terminal window, make sure not to close the earlier window running the earlier applications</li>
-<li>Navigate to the directory: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/fraud-detection</strong></li>
-<li>Before starting the application, we need to create the queue that the <strong>Fraud Detection</strong> service requires to start.</li>
-<li>Follow the steps from the previous <strong>Core-Banking</strong> section and create a new queue similarly with the following name and subscription: <table>
-<tr><td colspan="1" rowspan="1"><p>Queue name</p>
-</td><td colspan="1" rowspan="1"><p>Subscription</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>all-transactions</p>
-</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/core/*/v1/*/*/*</code></p>
-</td></tr>
-</table>
-</li>
-</ul>
-<aside class="warning"><p> Make sure to compare the above subscription with the Event Portal design and understand what exactly are the events that you are subscribing to in this queue. If you have any questions, feel free to confer with the fellow participants or one of the Solace team members.</p>
-</aside>
-<ul>
-<li>Now that you have created the queue object for feeding the <strong>Fraud Detection</strong> service, we can build and start the application.</li>
+<li>Navigate to the directory: <strong>solace-masterclass/banking-domain/fraud-detection</strong></li>
 <li>Run the command : <code>mvn clean install</code></li>
 <li>Run the command : <code>java -jar target/fraud-detection-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code></li>
 </ul>
@@ -724,20 +776,25 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>The <strong>Account Management</strong> application subscribes to the <em>Fraud Detected</em> event and validates if the transaction is actually fraudulent. If found fraudulent, a corresponding <em>Fraud Confirmed</em> event is triggered and the linked account is suspended by publishing an <em>Account Suspended</em> event.</p>
 <ul>
 <li>Start with creating a new queue for subscribing to the <em>Fraud Detected</em> event</li>
-<li>Follow the steps from the previous sections and create a new queue similarly with the following name and subscription: <table>
-<tr><td colspan="1" rowspan="1"><p>Queue name</p>
-</td><td colspan="1" rowspan="1"><p>Subscription</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>fraud-detected-events</p>
-</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/fraud/detected/v1/*/*/*</code></p>
-</td></tr>
-</table>
-</li>
+<li>Navigate to the Designer screen and open the <strong>Account Management</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
+<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
+<li>Name : fraud-detected-events</li>
+<li>Type : Solace Event Queue</li>
+<li>Event and subscriptions : Select the <strong>Fraud Detected</strong> event and confirm the suggested subscription</li>
+<li>Queue configuration :</li>
 </ul>
-<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
-</aside>
+<pre><code language="language-JSON" class="language-JSON">  {
+  &#34;accessType&#34;: &#34;exclusive&#34;,
+  &#34;maxMsgSpoolUsage&#34;: 5000,
+  &#34;queueName&#34;: &#34;fraud-detected-events&#34;
+  }
+</code></pre>
 <ul>
-<li>Import the <strong>account-management</strong> as a project into VS Code IDE by simply selecting the folder at the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/account-management</strong></li>
+<li>You should have a consumer setup which looks like this : <img alt="acnt-mgt-fraud-detected-queue-config.png" src="img/9942212b3ef29621.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Navigate to the folder : <strong>solace-masterclass/banking-domain/account-management</strong></li>
 </ul>
 <aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
 </aside>
@@ -817,20 +874,25 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>The <em>Account Suspended</em> event published in the previous step is subscribed to by the <strong>Core Banking</strong> application which stops all transactions on that account number immediately.</p>
 <ul>
 <li>Start with creating a new queue for subscribing to the <em>Account Suspended</em> event</li>
-<li>Follow the steps from the previous sections and create a new queue similarly with the following name and subscription: <table>
-<tr><td colspan="1" rowspan="1"><p>Queue name</p>
-</td><td colspan="1" rowspan="1"><p>Subscription</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>accounts-suspended</p>
-</td><td colspan="1" rowspan="1"><p><code>acmebank/solace/account/suspended/v1/*</code></p>
-</td></tr>
-</table>
-</li>
+<li>Navigate to the Designer screen and open the <strong>Core Banking</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
+<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
+<li>Name : accounts-suspended</li>
+<li>Type : Solace Event Queue</li>
+<li>Event and subscriptions : Select the <strong>Account Suspended</strong> event and confirm the suggested subscription</li>
+<li>Queue configuration :</li>
 </ul>
-<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
-</aside>
+<pre><code language="language-JSON" class="language-JSON">  {
+  &#34;accessType&#34;: &#34;exclusive&#34;,
+  &#34;maxMsgSpoolUsage&#34;: 5000,
+  &#34;queueName&#34;: &#34;accounts-suspended&#34;
+  }
+</code></pre>
 <ul>
-<li>Import the <strong>core-banking</strong> as a project into VS Code IDE by simply selecting the folder at the location: <strong>/home/ubuntu/GitHub/solace-masterclass-code/banking-domain/core-banking</strong></li>
+<li>You should have a consumer setup which looks like this : <img alt="core-banking-account-suspended-consumer.png" src="img/44f8eb3885ff1abc.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Navigate to the location :<strong>solace-masterclass/banking-domain/core-banking</strong></li>
 </ul>
 <aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
 </aside>
