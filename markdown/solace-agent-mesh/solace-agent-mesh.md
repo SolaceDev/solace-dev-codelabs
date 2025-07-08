@@ -57,16 +57,24 @@ Duration: 0:05:00
 Duration: 0:05:00
 
 ### 1. Orchestrator
+<video id="EAZcKkkfn-U"></video>
 
 ### 2. Agents
+<video id="Sw3fKRcAbXo"></video>
+
 
 ### 3. Gateways
+<video id="vZsdxAVW3Kg"></video>
+
 
 ### 4. Event Mesh
 
 ### 5. Plugins
 
+
 ### 6. Services & Tools
+<video id="0_y5lDj7R8A"></video>
+
 
 ## Getting Started with Solace Agent Mesh
 Duration: 0:05:00
@@ -84,7 +92,10 @@ Duration: 0:05:00
 ## Built-in Agents
 Duration: 0:05:00
 
-## MCP Agents
+## Connecting Google Maps via MCP
+Duration: 0:05:00
+
+## Connecting Google Search via MCP
 Duration: 0:05:00
 
 ## A2A Agents
