@@ -34,13 +34,15 @@ Duration: 0:05:00
 
 ### Use Cases and Applications
 
-## Google A2A
+## Google Agent-to-Agent Protocol (A2A)
 Duration: 0:05:00
 
 ### What is Agent-Agent-Communication
 
-## Google ADK
+## Agent Development Kit (ADK)
 Duration: 0:05:00
+
+[Docs](https://google.github.io/adk-docs/#what-is-agent-development-kit)
 
 ### Key components of ADK
 
