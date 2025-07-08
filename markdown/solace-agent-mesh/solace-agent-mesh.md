@@ -34,10 +34,17 @@ Duration: 0:05:00
 
 ### Use Cases and Applications
 
+### Resources
+[Docs](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/)
+<video id="_4IdRPBM2y8"></video>
+
+
 ## Google Agent-to-Agent Protocol (A2A)
 Duration: 0:05:00
 
 ### What is Agent-Agent-Communication
+
+[Docs](https://a2aproject.github.io/A2A/latest/)
 
 ## Agent Development Kit (ADK)
 Duration: 0:05:00
