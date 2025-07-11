@@ -11,32 +11,146 @@ feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/mark
 
 ## What you'll learn: Overview
 
+In this codelab, you'll gain a foundational understanding of the Solace Agent Mesh and its integration with Google's Agent-to-Agent (A2A) Protocol. You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
+
+You'll dive into the details of the A2A Protocol, discovering its design principles, core concepts, and how it standardizes agent communication for interoperability and extensibility. The codelab explains essential constructs such as Agent Cards, Tasks, Events, and Artifacts, providing insight into how agents discover each other, delegate tasks, and collaborate asynchronously. You'll also learn about the Agent Development Kit (ADK) and how it works with A2A to build and deploy advanced AI agents.
+
+By the end of this codelab, you'll be equipped to get started with Solace Agent Mesh, including installation prerequisites, running built-in agents, and connecting external services like Google Maps and Search. You'll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.
+
 Duration: 0:05:00
 
 ## Introduction to the Solace Agent Mesh
-Duration: 0:05:00
+Duration: 0:15:00
 
+Welcome to this workshop on Solace Agent Mesh! In this session, you'll learn about a powerful framework that addresses one of modern AI development's biggest challenges: connecting AI models to real-world data and systems. Let's dive in!
 
 > aside negative
-> This will appear in a yellow info box.
-
-
-> aside positive
-> This will appear in a green info box.
+> Without a framework like Solace Agent Mesh, connecting AI systems to disparate data sources can be extremely complex, requiring custom integration code and creating maintenance challenges.
 
 ### What is Solace Agent Mesh?
 
+Solace Agent Mesh is an open-source framework that integrates Google's Agent Development Kit (ADK) with the Solace AI Connector to create a "Universal A2A Agent Host." This enables scalable, distributed AI agent communication through the Solace Event Broker. 
+
+At its core, Solace Agent Mesh addresses a fundamental challenge in modern AI development: while powerful AI models are readily available, the real complexity lies in connecting them to the data and systems where they can provide value. Data exists in isolated silos - spread across databases, SaaS platforms, APIs, and legacy systems - making it difficult to build AI applications that work across these boundaries.
+
+Solace Agent Mesh provides developers with:
+- A standardized A2A (Agent-to-Agent) protocol for AI communication
+- Tools to connect AI agents to real-world data sources
+- The ability to orchestrate complex workflows across multiple specialized agents
+- Built-in extensibility through a modular plugin architecture
+
+> aside positive
+> Solace Agent Mesh follows an event-driven architecture that decouples components, allowing them to be developed, deployed, and scaled independently.
+
 ### Key Components and Architecture
+
+Solace Agent Mesh consists of several interconnected components that work together through the standardized A2A protocol:
+
+1. **Solace Event Broker/Event Mesh**:
+   - Acts as the central nervous system of the framework
+   - Provides the messaging fabric for all asynchronous communication
+   - Utilizes topic-based routing for the Agent-to-Agent (A2A) protocol
+   - Ensures message delivery even during component failures
+
+2. **Agents**:
+   - Specialized processing units built around Google's ADK
+   - Provide domain-specific knowledge and capabilities
+   - Features include ADK integration, dynamic discovery, access to tools
+   - Can operate independently and be deployed separately
+
+3. **Gateways**:
+   - Act as bridges between external systems and the agent mesh
+   - Handle protocol translation, authentication, and session management
+   - Support various interfaces (REST, HTTP SSE, webhooks, event mesh)
+
+4. **Orchestrator**:
+   - A specialized agent that breaks down complex requests into manageable tasks
+   - Manages workflow across multiple agents
+   - Coordinates task delegation and response aggregation
+
+> aside negative
+> Without proper planning and understanding of the component roles, you might create overly complex architectures or miss opportunities to leverage the full power of the distributed agent ecosystem.
 
 ### Evolution of Event-Driven Architecture
 
+Solace Agent Mesh represents the next step in the evolution of event-driven architecture:
+
+1. **Traditional EDA**: Focused on decoupling services and enabling asynchronous communication through events.
+
+2. **Event Mesh**: Extended EDA with dynamic routing across cloud boundaries and geographic regions.
+
+3. **Event-Driven Microservices**: Applied EDA principles to microservice architectures for greater resilience and scalability.
+
+4. **Event-Driven AI/ML**: Integrated AI capabilities with event streams for real-time intelligence.
+
+5. **Solace Agent Mesh**: Combines EDA with agent-based AI to create collaborative, distributed intelligence systems connected through an event mesh.
+
+The architecture of Solace Agent Mesh builds on these foundations with several key principles:
+- **Event-Driven Architecture**: All interactions between major components are asynchronous and mediated by the event broker
+- **Component Decoupling**: Components communicate through standardized A2A protocol messages over the event mesh
+- **Scalability and Resilience**: The architecture supports horizontal scaling and provides fault tolerance
+
+> aside positive
+> This evolution makes Solace Agent Mesh particularly well-suited for complex, distributed systems that need to process information from multiple sources in real-time.
+
 ### Key Benefits of Solace Agent Mesh
 
-### Use Cases and Applications
+1. **Simplified Integration**: Connect AI agents to disparate data sources through a standardized protocol.
+
+2. **Decoupled Architecture**: Components communicate asynchronously, allowing independent development, deployment, and scaling.
+
+3. **Scalability**: Horizontal scaling of Agent Hosts and Gateways to handle increasing workloads.
+
+4. **Resilience**: Fault tolerance and guaranteed message delivery even if individual components fail.
+
+5. **Extensibility**: Modular design with plugins for customizing and extending functionality.
+
+6. **Multi-Modal Intelligence**: Support for various AI models and capabilities through specialized agents.
+
+7. **Real-Time Processing**: Event-driven architecture enables immediate processing of information as it becomes available.
+
+> aside negative
+> Keep in mind that implementing a distributed agent system requires careful consideration of data governance, security, and monitoring to ensure reliable and trustworthy operation.
+
+This workshop will help you understand how to leverage Solace Agent Mesh for your own AI applications, whether you're an AI enthusiast experimenting with new models or an enterprise developer building production systems.
 
 ### Resources
-[Docs](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/)
+
+For more information and a deep dive on the Solace Agent Mesh, you can check out this video series 
 <video id="_4IdRPBM2y8"></video>
+
+## Use Cases and Applications
+Duration: 0:05:00
+
+Solace Agent Mesh is versatile and can be applied to various domains:
+
+1. **Customer Service Augmentation**:
+   - Intelligent chatbots that can access multiple backend systems
+   - Real-time response generation based on customer data and history
+   - Seamless handoff between AI agents and human agents
+
+2. **Supply Chain Optimization**:
+   - Monitoring and analyzing events across the supply chain
+   - Predictive maintenance and inventory management
+   - Automated decision-making based on real-time data
+
+3. **Financial Services**:
+   - Fraud detection through pattern analysis across multiple data streams
+   - Personalized financial advice based on customer portfolio and market events
+   - Regulatory compliance monitoring and reporting
+
+4. **Healthcare**:
+   - Patient monitoring and alert generation
+   - Clinical decision support by accessing medical records and research data
+   - Healthcare workflow optimization
+
+5. **Smart Cities**:
+   - Traffic management through real-time data analysis
+   - Utility optimization based on usage patterns
+   - Emergency response coordination
+
+> aside positive
+> By building on Solace Agent Mesh, you can focus on creating domain-specific agent intelligence rather than spending time on integration and communication infrastructure.
 
 
 ## Google Agent-to-Agent Protocol (A2A)
@@ -138,41 +252,93 @@ The A2A Protocol works seamlessly with Google's Agent Development Kit (ADK):
 
 For more information on ADK integration, see the [ADK documentation](https://google.github.io/adk-docs/).
 
-## Solace Agent Mesh Components: Deep Dive
-Duration: 0:05:00
-
-### 1. Orchestrator
-<video id="EAZcKkkfn-U"></video>
-
-### 2. Agents
-<video id="Sw3fKRcAbXo"></video>
-
-
-### 3. Gateways
-<video id="vZsdxAVW3Kg"></video>
-
-
-### 4. Event Mesh
-
-### 5. Plugins
-
-
-### 6. Services & Tools
-<video id="0_y5lDj7R8A"></video>
-
-
 ## Getting Started with Solace Agent Mesh
 Duration: 0:05:00
 
 ### Prerequisites 
 
-- Solace Event Broker
+- [Optional] [Solace Event Broker](https://solace.com/products/event-broker/software/getting-started/)
 - Python 3.11+
 - LLM Key
 
 ### Installation 
 
-### Run
+#### Create and activate a Python virtual environment
+
+MacOS/Linux
+```
+mkdir solace-agent-mesh-demo
+cd solace-agent-mesh-demo
+python3 -m venv venv
+source venv/bin/activate
+```
+Windows
+```
+venv/Scripts/activate
+```
+
+> aside positive
+> Note: on a Linux machine, depending on the distribution you might need to `apt-get install python3-venvinstead`. Alternatively, you can use `pyenv` to manage multiple versions of python
+
+#### Install the Solace Agent Mesh Community Edition
+
+```
+pip install https://github.com/SolaceDev/solace-dev-codelabs/raw/master/markdown/solace-agent-mesh/solace_agent_mesh-1.0.0-py3-none-any.whl
+
+```
+
+### Initialize Solace Agent Mesh
+
+> aside positive 
+> To use the solace agent mesh, you can activate it by typing `solace-agent-mesh` or simply `sam`
+
+In the newly created directory, initialize a new instance of an agent mesh project
+
+```
+sam init
+```
+You will then be presented with the following output 
+```
+Initializing Solace Application Project...
+Would you like to configure your project through a web interface in your browser? [Y/n]:
+
+```
+Press `Y` and proceed with the frontend initialize interface
+
+![SAM Init](img/saminit.png)
+
+From here, you have two options
+
+1. Get started quick - spin up an instance of the Agent Mesh without the Solace Broker   
+1. Advanced Setup, walk through the Agent Mesh configuration with the Solace Broker
+
+In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues
+
+> aside negative
+> Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions
+
+![SAM provider](img/aiprovider.png)
+
+Select the following:
+
+- LLM Provider: Google Gemini
+- LLM API Key: `Insert Key Here`
+- LLM Model Name: `Choose model name`
+
+Review and Initialize
+
+![SAM final](img/finalinit.png)
+
+### Run Solace Agent Mesh
+
+Now back to your terminal and execute the following command
+
+```
+sam run
+```
+![SAM Intro](img/samintro.png)
+
+Viola! You are up and running with the Solace Agent Mesh!
 
 ## Built-in Agents
 Duration: 0:05:00
