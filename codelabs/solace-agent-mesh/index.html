@@ -1,0 +1,356 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Getting started with Solace Agent Mesh over A2A</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="solace-agent-mesh"
+                  title="Getting started with Solace Agent Mesh over A2A"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
+        <p>In this codelab, you&#39;ll gain a foundational understanding of the Solace Agent Mesh and its integration with Google&#39;s Agent-to-Agent (A2A) Protocol. You&#39;ll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.</p>
+<p>You&#39;ll dive into the details of the A2A Protocol, discovering its design principles, core concepts, and how it standardizes agent communication for interoperability and extensibility. The codelab explains essential constructs such as Agent Cards, Tasks, Events, and Artifacts, providing insight into how agents discover each other, delegate tasks, and collaborate asynchronously. You&#39;ll also learn about the Agent Development Kit (ADK) and how it works with A2A to build and deploy advanced AI agents.</p>
+<p>By the end of this codelab, you&#39;ll be equipped to get started with Solace Agent Mesh, including installation prerequisites, running built-in agents, and connecting external services like Google Maps and Search. You&#39;ll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Introduction to the Solace Agent Mesh" duration="15">
+        <p>Welcome to this workshop on Solace Agent Mesh! In this session, you&#39;ll learn about a powerful framework that addresses one of modern AI development&#39;s biggest challenges: connecting AI models to real-world data and systems. Let&#39;s dive in!</p>
+<aside class="warning"><p> Without a framework like Solace Agent Mesh, connecting AI systems to disparate data sources can be extremely complex, requiring custom integration code and creating maintenance challenges.</p>
+</aside>
+<h2 is-upgraded>What is Solace Agent Mesh?</h2>
+<p>Solace Agent Mesh is an open-source framework that integrates Google&#39;s Agent Development Kit (ADK) with the Solace AI Connector to create a &#34;Universal A2A Agent Host.&#34; This enables scalable, distributed AI agent communication through the Solace Event Broker.</p>
+<p>At its core, Solace Agent Mesh addresses a fundamental challenge in modern AI development: while powerful AI models are readily available, the real complexity lies in connecting them to the data and systems where they can provide value. Data exists in isolated silos - spread across databases, SaaS platforms, APIs, and legacy systems - making it difficult to build AI applications that work across these boundaries.</p>
+<p>Solace Agent Mesh provides developers with:</p>
+<ul>
+<li>A standardized A2A (Agent-to-Agent) protocol for AI communication</li>
+<li>Tools to connect AI agents to real-world data sources</li>
+<li>The ability to orchestrate complex workflows across multiple specialized agents</li>
+<li>Built-in extensibility through a modular plugin architecture</li>
+</ul>
+<aside class="special"><p> Solace Agent Mesh follows an event-driven architecture that decouples components, allowing them to be developed, deployed, and scaled independently.</p>
+</aside>
+<h2 is-upgraded>Key Components and Architecture</h2>
+<p>Solace Agent Mesh consists of several interconnected components that work together through the standardized A2A protocol:</p>
+<ol type="1">
+<li><strong>Solace Event Broker/Event Mesh</strong>:<ul>
+<li>Acts as the central nervous system of the framework</li>
+<li>Provides the messaging fabric for all asynchronous communication</li>
+<li>Utilizes topic-based routing for the Agent-to-Agent (A2A) protocol</li>
+<li>Ensures message delivery even during component failures</li>
+</ul>
+</li>
+<li><strong>Agents</strong>:<ul>
+<li>Specialized processing units built around Google&#39;s ADK</li>
+<li>Provide domain-specific knowledge and capabilities</li>
+<li>Features include ADK integration, dynamic discovery, access to tools</li>
+<li>Can operate independently and be deployed separately</li>
+</ul>
+</li>
+<li><strong>Gateways</strong>:<ul>
+<li>Act as bridges between external systems and the agent mesh</li>
+<li>Handle protocol translation, authentication, and session management</li>
+<li>Support various interfaces (REST, HTTP SSE, webhooks, event mesh)</li>
+</ul>
+</li>
+<li><strong>Orchestrator</strong>:<ul>
+<li>A specialized agent that breaks down complex requests into manageable tasks</li>
+<li>Manages workflow across multiple agents</li>
+<li>Coordinates task delegation and response aggregation</li>
+</ul>
+</li>
+</ol>
+<aside class="warning"><p> Without proper planning and understanding of the component roles, you might create overly complex architectures or miss opportunities to leverage the full power of the distributed agent ecosystem.</p>
+</aside>
+<h2 is-upgraded>Evolution of Event-Driven Architecture</h2>
+<p>Solace Agent Mesh represents the next step in the evolution of event-driven architecture:</p>
+<ol type="1">
+<li><strong>Traditional EDA</strong>: Focused on decoupling services and enabling asynchronous communication through events.</li>
+<li><strong>Event Mesh</strong>: Extended EDA with dynamic routing across cloud boundaries and geographic regions.</li>
+<li><strong>Event-Driven Microservices</strong>: Applied EDA principles to microservice architectures for greater resilience and scalability.</li>
+<li><strong>Event-Driven AI/ML</strong>: Integrated AI capabilities with event streams for real-time intelligence.</li>
+<li><strong>Solace Agent Mesh</strong>: Combines EDA with agent-based AI to create collaborative, distributed intelligence systems connected through an event mesh.</li>
+</ol>
+<p>The architecture of Solace Agent Mesh builds on these foundations with several key principles:</p>
+<ul>
+<li><strong>Event-Driven Architecture</strong>: All interactions between major components are asynchronous and mediated by the event broker</li>
+<li><strong>Component Decoupling</strong>: Components communicate through standardized A2A protocol messages over the event mesh</li>
+<li><strong>Scalability and Resilience</strong>: The architecture supports horizontal scaling and provides fault tolerance</li>
+</ul>
+<aside class="special"><p> This evolution makes Solace Agent Mesh particularly well-suited for complex, distributed systems that need to process information from multiple sources in real-time.</p>
+</aside>
+<h2 is-upgraded>Key Benefits of Solace Agent Mesh</h2>
+<ol type="1">
+<li><strong>Simplified Integration</strong>: Connect AI agents to disparate data sources through a standardized protocol.</li>
+<li><strong>Decoupled Architecture</strong>: Components communicate asynchronously, allowing independent development, deployment, and scaling.</li>
+<li><strong>Scalability</strong>: Horizontal scaling of Agent Hosts and Gateways to handle increasing workloads.</li>
+<li><strong>Resilience</strong>: Fault tolerance and guaranteed message delivery even if individual components fail.</li>
+<li><strong>Extensibility</strong>: Modular design with plugins for customizing and extending functionality.</li>
+<li><strong>Multi-Modal Intelligence</strong>: Support for various AI models and capabilities through specialized agents.</li>
+<li><strong>Real-Time Processing</strong>: Event-driven architecture enables immediate processing of information as it becomes available.</li>
+</ol>
+<aside class="warning"><p> Keep in mind that implementing a distributed agent system requires careful consideration of data governance, security, and monitoring to ensure reliable and trustworthy operation.</p>
+</aside>
+<p>This workshop will help you understand how to leverage Solace Agent Mesh for your own AI applications, whether you&#39;re an AI enthusiast experimenting with new models or an enterprise developer building production systems.</p>
+<h2 is-upgraded>Resources</h2>
+<p>For more information and a deep dive on the Solace Agent Mesh, you can check out this video series </p>
+<iframe class="youtube-video" src="https://www.youtube.com/embed/_4IdRPBM2y8?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use Cases and Applications" duration="5">
+        <p>Solace Agent Mesh is versatile and can be applied to various domains:</p>
+<ol type="1">
+<li><strong>Customer Service Augmentation</strong>:<ul>
+<li>Intelligent chatbots that can access multiple backend systems</li>
+<li>Real-time response generation based on customer data and history</li>
+<li>Seamless handoff between AI agents and human agents</li>
+</ul>
+</li>
+<li><strong>Supply Chain Optimization</strong>:<ul>
+<li>Monitoring and analyzing events across the supply chain</li>
+<li>Predictive maintenance and inventory management</li>
+<li>Automated decision-making based on real-time data</li>
+</ul>
+</li>
+<li><strong>Financial Services</strong>:<ul>
+<li>Fraud detection through pattern analysis across multiple data streams</li>
+<li>Personalized financial advice based on customer portfolio and market events</li>
+<li>Regulatory compliance monitoring and reporting</li>
+</ul>
+</li>
+<li><strong>Healthcare</strong>:<ul>
+<li>Patient monitoring and alert generation</li>
+<li>Clinical decision support by accessing medical records and research data</li>
+<li>Healthcare workflow optimization</li>
+</ul>
+</li>
+<li><strong>Smart Cities</strong>:<ul>
+<li>Traffic management through real-time data analysis</li>
+<li>Utility optimization based on usage patterns</li>
+<li>Emergency response coordination</li>
+</ul>
+</li>
+</ol>
+<aside class="special"><p> By building on Solace Agent Mesh, you can focus on creating domain-specific agent intelligence rather than spending time on integration and communication infrastructure.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Google Agent-to-Agent Protocol (A2A)" duration="7">
+        <p>The Agent-to-Agent (A2A) Protocol is Google&#39;s standardized communication protocol designed to enable seamless interaction between AI agents, regardless of their underlying implementation or hosting environment. It provides a common language for agents to discover each other, exchange information, delegate tasks, and collaborate on complex problems. This document explores the A2A protocol in detail, including its design principles, components, and implementation approaches.</p>
+<aside class="special"><p> A2A is an open-source protocol, available for any developer or organization to implement. This open nature fosters a rich ecosystem of interoperable agents across different platforms and frameworks.</p>
+</aside>
+<h2 is-upgraded>Core Concepts</h2>
+<p>The A2A Protocol is built around several foundational concepts that define its structure and behavior:</p>
+<h3 is-upgraded>Protocol Design Principles</h3>
+<p>A2A was designed with the following principles in mind:</p>
+<ol type="1">
+<li><strong>Standardization</strong>: Provide a common interface for agent communication</li>
+<li><strong>Interoperability</strong>: Enable agents from different systems to work together</li>
+<li><strong>Extensibility</strong>: Support evolving agent capabilities</li>
+<li><strong>Asynchronicity</strong>: Handle long-running tasks and parallel operations</li>
+<li><strong>Discoverability</strong>: Allow agents to find and understand each other&#39;s capabilities</li>
+<li><strong>Security</strong>: Implement robust authentication and authorization</li>
+</ol>
+<p>These principles ensure that A2A serves as a reliable foundation for building multi-agent systems.</p>
+<h3 is-upgraded>Agent Cards</h3>
+<p>Agent Cards are metadata structures that describe an agent&#39;s capabilities, allowing other agents and systems to discover and understand how to interact with them. Key components include:</p>
+<ol type="1">
+<li><strong>Name</strong>: A unique identifier for the agent</li>
+<li><strong>Description</strong>: A human-readable explanation of the agent&#39;s purpose</li>
+<li><strong>Capabilities</strong>: The specific tasks the agent can perform</li>
+<li><strong>Input/Output Formats</strong>: The data structures the agent expects and produces</li>
+<li><strong>Authentication Requirements</strong>: Security information for accessing the agent</li>
+</ol>
+<p>Agent Cards are published to discovery endpoints, making them available to other agents in the ecosystem.</p>
+<aside class="warning"><p> Always validate Agent Cards from external sources, as malicious actors could potentially publish misleading Agent Cards to trick systems into inappropriate delegations.</p>
+</aside>
+<h3 is-upgraded>Tasks</h3>
+<p>Tasks represent the work that agents perform. They include:</p>
+<ol type="1">
+<li><strong>Task ID</strong>: A unique identifier for tracking</li>
+<li><strong>Input</strong>: The information provided to the agent</li>
+<li><strong>Context</strong>: Additional information about the task environment</li>
+<li><strong>Artifacts</strong>: Files or binary data associated with the task</li>
+<li><strong>Delegation Path</strong>: Information about how the task was routed</li>
+</ol>
+<p>Tasks follow a lifecycle from creation through processing to completion or failure.</p>
+<h3 is-upgraded>Events</h3>
+<p>Events represent the state changes and progress updates that occur during task execution:</p>
+<ol type="1">
+<li><strong>Status Updates</strong>: Progress information about ongoing tasks</li>
+<li><strong>Artifact Updates</strong>: Notifications about new or modified files</li>
+<li><strong>Error Events</strong>: Information about failures or issues</li>
+<li><strong>Completion Events</strong>: Signals that a task has finished</li>
+</ol>
+<p>Events enable asynchronous monitoring of task progress, which is essential for long-running operations.</p>
+<h3 is-upgraded>Artifacts</h3>
+<p>Artifacts are files or binary data that agents can exchange:</p>
+<ol type="1">
+<li><strong>Content</strong>: The actual data (text, image, audio, etc.)</li>
+<li><strong>Metadata</strong>: Information about the artifact (type, creation time, etc.)</li>
+<li><strong>Versioning</strong>: Tracking changes to artifacts over time</li>
+<li><strong>References</strong>: Ways to refer to artifacts across the system</li>
+</ol>
+<p>Artifacts enable agents to share rich, structured data beyond simple text messages.</p>
+<aside class="special"><p> The A2A Protocol continues to evolve with the needs of the agent ecosystem.</p>
+</aside>
+<h2 is-upgraded>Where to learn more</h2>
+<p>The Agent-to-Agent (A2A) Protocol provides a standardized foundation for building interconnected AI agent systems. By enabling discovery, task delegation, and asynchronous communication, A2A facilitates the creation of sophisticated multi-agent workflows that can tackle complex problems through collaboration.</p>
+<p>As the ecosystem of AI agents continues to grow, A2A offers a common language that allows these agents to work together seamlessly, regardless of their underlying implementation or hosting environment. This interoperability is key to unlocking the full potential of agent-based AI systems.</p>
+<p>To learn more about A2A, navigate to the <a href="https://a2aproject.github.io/A2A/latest/" target="_blank">A2A Documentation</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Agent Development Kit (ADK)" duration="5">
+        <p>Google&#39;s Agent Development Kit (ADK) offers developers a comprehensive framework to build, evaluate, and deploy sophisticated AI agents with minimal friction. ADK provides the essential building blocks—from LLM integration and tool execution to session management and artifact handling—that enable both conversational and non-conversational agents capable of complex reasoning, planning, and task execution.</p>
+<p>The A2A Protocol works seamlessly with Google&#39;s Agent Development Kit (ADK):</p>
+<ol type="1">
+<li><strong>ADK A2A Tools</strong>: Built-in tools for A2A communication</li>
+<li><strong>Protocol Translation</strong>: Converting between ADK events and A2A messages</li>
+<li><strong>Agent Deployment</strong>: Exposing ADK agents through A2A endpoints</li>
+<li><strong>Multi-Agent Systems</strong>: Building networks of ADK agents communicating via A2A</li>
+</ol>
+<p>For more information on ADK integration, see the <a href="https://google.github.io/adk-docs/" target="_blank">ADK documentation</a>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Getting Started with Solace Agent Mesh" duration="5">
+        <h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>[Optional] <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">Solace Event Broker</a></li>
+<li>Python 3.11+</li>
+<li>LLM Key</li>
+</ul>
+<h2 is-upgraded>Installation</h2>
+<h3 is-upgraded>Create and activate a Python virtual environment</h3>
+<p>MacOS/Linux</p>
+<pre><code>mkdir solace-agent-mesh-demo
+cd solace-agent-mesh-demo
+python3 -m venv venv
+source venv/bin/activate
+</code></pre>
+<p>Windows</p>
+<pre><code>venv/Scripts/activate
+</code></pre>
+<aside class="special"><p> Note: on a Linux machine, depending on the distribution you might need to <code>apt-get install python3-venvinstead</code>. Alternatively, you can use <code>pyenv</code> to manage multiple versions of python</p>
+</aside>
+<h3 is-upgraded>Install the Solace Agent Mesh Community Edition</h3>
+<pre><code>pip install https://github.com/SolaceDev/solace-dev-codelabs/raw/master/markdown/solace-agent-mesh/solace_agent_mesh-1.0.0-py3-none-any.whl
+
+</code></pre>
+<h2 is-upgraded>Initialize Solace Agent Mesh</h2>
+<aside class="special"><p> To use the solace agent mesh, you can activate it by typing <code>solace-agent-mesh</code> or simply <code>sam</code></p>
+</aside>
+<p>In the newly created directory, initialize a new instance of an agent mesh project</p>
+<pre><code>sam init
+</code></pre>
+<p>You will then be presented with the following output</p>
+<pre><code>Initializing Solace Application Project...
+Would you like to configure your project through a web interface in your browser? [Y/n]:
+
+</code></pre>
+<p>Press <code>Y</code> and proceed with the frontend initialize interface</p>
+<p class="image-container"><img alt="SAM Init" src="img/e3f102ccf72fd873.png"></p>
+<p>From here, you have two options</p>
+<ol type="1">
+<li>Get started quick - spin up an instance of the Agent Mesh without the Solace Broker</li>
+<li>Advanced Setup, walk through the Agent Mesh configuration with the Solace Broker</li>
+</ol>
+<p>In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues</p>
+<aside class="warning"><p> Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions</p>
+</aside>
+<p class="image-container"><img alt="SAM provider" src="img/deac30659907f27d.png"></p>
+<p>Select the following:</p>
+<ul>
+<li>LLM Provider: Google Gemini</li>
+<li>LLM API Key: <code>Insert Key Here</code></li>
+<li>LLM Model Name: <code>Choose model name</code></li>
+</ul>
+<p>Review and Initialize</p>
+<p class="image-container"><img alt="SAM final" src="img/d661f7611b3d9ea.png"></p>
+<h2 is-upgraded>Run Solace Agent Mesh</h2>
+<p>Now back to your terminal and execute the following command</p>
+<pre><code>sam run
+</code></pre>
+<p class="image-container"><img alt="SAM Intro" src="img/2f338cbec8696884.png"></p>
+<p>Viola! You are up and running with the Solace Agent Mesh!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Built-in Agents" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connecting Google Maps via MCP" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connecting Google Search via MCP" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="A2A Agents" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Custom Agents" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="5">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="7">
+        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
