@@ -279,12 +279,8 @@ Would you like to configure your project through a web interface in your browser
 </code></pre>
 <p>Press <code>Y</code> and proceed with the frontend initialize interface</p>
 <p class="image-container"><img alt="SAM Init" src="img/e3f102ccf72fd873.png"></p>
-<p>From here, you have two options</p>
-<ol type="1">
-<li>Get started quick - spin up an instance of the Agent Mesh without the Solace Broker</li>
-<li>Advanced Setup, walk through the Agent Mesh configuration with the Solace Broker</li>
-</ol>
-<p>In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues</p>
+<p>From here, choose option 1: &#34;Get started quick&#34; to spin up an instance of the Agent Mesh without the Solace Broker</p>
+<p>In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues.</p>
 <aside class="warning"><p> Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions</p>
 </aside>
 <p class="image-container"><img alt="SAM provider" src="img/deac30659907f27d.png"></p>
@@ -307,7 +303,27 @@ Would you like to configure your project through a web interface in your browser
       </google-codelab-step>
     
       <google-codelab-step label="Built-in Agents" duration="5">
-        
+        <p>As mentioned earlier, Agents are specialized processing units built around Google&#39;s ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.</p>
+<p>In Solace Agent Mesh, there are multiple ways to write an agent:</p>
+<ol type="1">
+<li>Using built-in templates,</li>
+<li>via MCP, or</li>
+<li>custom built</li>
+</ol>
+<p>Adding new agent could be done in one of the following ways</p>
+<ol type="1">
+<li>Using cli command <code>sam add agent</code></li>
+<li>Using the GUI</li>
+</ol>
+<p>Lets go ahead and add a general purpose agent</p>
+<p>In this tutorial we will be using the GUI. To spin up the agent building interface, execute this command from your terminal</p>
+<pre><code>sam add agent --gui
+</code></pre>
+<p class="image-container"><img alt="SAM final" src="img/3d84e2fe2367b032.png"></p>
+<p>Fill in the required fields as per the screenshot below.</p>
+<p>Use the following prompt in the <code>Instructions</code> section</p>
+<pre><code></code></pre>
+
 
       </google-codelab-step>
     

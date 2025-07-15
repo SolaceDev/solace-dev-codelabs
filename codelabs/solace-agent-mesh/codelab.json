@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-07-11T06:20:50Z",
+  "updated": "2025-07-15T14:40:24Z",
   "id": "solace-agent-mesh",
   "duration": 79,
   "title": "Getting started with Solace Agent Mesh over A2A",
@@ -11,7 +11,7 @@
   "source": "main/markdown/solace-agent-mesh/solace-agent-mesh.md",
   "theme": "",
   "status": [
-    "published"
+    "hidden"
   ],
   "category": [
     "solace",
