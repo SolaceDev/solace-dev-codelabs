@@ -4,7 +4,7 @@ id: solace-agent-mesh
 tags: 
 categories: Solace, Agent Mesh, AI
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
 # Getting started with Solace Agent Mesh over A2A
@@ -307,12 +307,9 @@ Press `Y` and proceed with the frontend initialize interface
 
 ![SAM Init](img/saminit.png)
 
-From here, you have two options
+From here, choose option 1: "Get started quick" to spin up an instance of the Agent Mesh without the Solace Broker   
 
-1. Get started quick - spin up an instance of the Agent Mesh without the Solace Broker   
-1. Advanced Setup, walk through the Agent Mesh configuration with the Solace Broker
-
-In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues
+In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues. 
 
 > aside negative
 > Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions
@@ -342,6 +339,38 @@ Viola! You are up and running with the Solace Agent Mesh!
 
 ## Built-in Agents
 Duration: 0:05:00
+
+As mentioned earlier, Agents are specialized processing units built around Google's ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
+
+In Solace Agent Mesh, there are multiple ways to write an agent:
+1. Using built-in templates,
+1. via MCP, or 
+1. custom built
+
+Adding new agent could be done in one of the following ways
+1. Using cli command `sam add agent` 
+1. Using the GUI
+
+
+Lets go ahead and add a general purpose agent
+
+In this tutorial we will be using the GUI. To spin up the agent building interface, execute this command from your terminal
+
+```
+sam add agent --gui
+```
+
+![SAM final](img/addagentinit.png)
+
+Fill in the required fields as per the screenshot below. 
+
+Use the following prompt in the `Instructions` section
+
+```
+
+
+```
+
 
 ## Connecting Google Maps via MCP
 Duration: 0:05:00
