@@ -17,7 +17,7 @@ Duration: 0:01:00
 ![Solace Masterclass](img/commons/Solace-masterclass.jpeg)
 
 This Codelab contains the technical hands-on section of the **Solace Masterclass: Implementing Event-Driven-Architectures**
-The participants of this masterclass will be implementing this Codelab in a Github Codespace environment provided as a part
+Participants of this masterclass will be implementing this Codelab in a Github Codespace environment provided as a part
 of the masterclass session.
 The codespace contains all the software packages required for implementing the hands-on Codelab.
 
