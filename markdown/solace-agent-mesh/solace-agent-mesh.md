@@ -7,7 +7,7 @@ environments: Web
 status: Published 
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
-# Getting started with Solace Agent Mesh over A2A
+# Getting started with Solace Agent Mesh
 
 ## What you'll learn: Overview
 
