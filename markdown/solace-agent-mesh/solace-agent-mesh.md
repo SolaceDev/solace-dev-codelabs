@@ -630,10 +630,10 @@ Duration: 0:05:00
 
 As mentioned earlier, Agents are specialized processing units built around Google's ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
 
-In Solace Agent Mesh, there are multiple ways to write an agent:
+In Solace Agent Mesh, Agents are configuration driven vial YAML files and there are multiple ways to develop an agent:
 1. Using built-in templates,
 1. via MCP, or 
-1. custom built
+1. custom 
 
 Adding new agent could be done in one of the following ways
 1. Using cli command `sam add agent` 
