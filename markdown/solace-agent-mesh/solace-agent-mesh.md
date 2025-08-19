@@ -308,7 +308,7 @@ The A2A Protocol works seamlessly with Google's Agent Development Kit (ADK):
 For more information on ADK integration, see the [ADK documentation](https://google.github.io/adk-docs/).
 
 ## Getting Started with Solace Agent Mesh
-Duration: 0:05:00
+Duration: 0:15:00
 
 ### Prerequisites 
 
@@ -317,6 +317,17 @@ Duration: 0:05:00
 - LLM Key
 
 ### Installation 
+
+#### Install Python 3.11+
+
+To install a specific version of python, we would recommend using brew
+```
+brew install python@3.12
+```
+
+> aside positive
+> Depending on how you install your python version, the following commands will be executed as per the python version installed
+> For example, you might need to run `python3.12 [command]` to run python version 3.12 or just simply `python3 [command]`
 
 #### Create and activate a Python virtual environment
 
@@ -335,12 +346,24 @@ venv/Scripts/activate
 > aside positive
 > Note: on a Linux machine, depending on the distribution you might need to `apt-get install python3-venvinstead`. Alternatively, you can use `pyenv` to manage multiple versions of python
 
+
+After activating the virtual environment you can now simply just use `python` which will use whatever python version used to initialize the virtual environment.
+
 #### Install the Solace Agent Mesh Community Edition
 
 ```
-pip install https://github.com/SolaceDev/solace-dev-codelabs/raw/master/markdown/solace-agent-mesh/solace_agent_mesh-1.0.0-py3-none-any.whl
+pip install solace-agent-mesh
 
 ```
+
+
+### [Optional] Solace Broker
+
+You have two options to run and connect to a Solace Broker
+1. Software: using a docker image to run it locally
+2. Cloud: using self served cloud instance
+
+Follow the steps defined in the [getting started with Solace](https://solace.com/products/event-broker/software/getting-started/) page 
 
 ### Initialize Solace Agent Mesh
 
@@ -350,47 +373,257 @@ pip install https://github.com/SolaceDev/solace-dev-codelabs/raw/master/markdown
 In the newly created directory, initialize a new instance of an agent mesh project
 
 ```
-sam init
+sam init --gui
 ```
-You will then be presented with the following output 
-```
-Initializing Solace Application Project...
-Would you like to configure your project through a web interface in your browser? [Y/n]:
-
-```
-Press `Y` and proceed with the frontend initialize interface
 
 ![SAM Init](img/saminit.png)
 
-From here, choose option 1: "Get started quick" to spin up an instance of the Agent Mesh without the Solace Broker   
+From here, choose "Advanced Setup" to spin up an instance of the Agent Mesh that uses the Solace Broker as the communication backbone. 
 
-In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues. 
 
 > aside negative
-> Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions
+> Note that the simple setup "Getting Started Quickly" spins up Agent Mesh without the Solace Broker and uses in-memory queues instead. This is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions
 
-![SAM provider](img/aiprovider.png)
+Choose a namespace for your project
 
-Select the following:
+![Namespace](img/init_namespace.png)
 
-- LLM Provider: Google Gemini
-- LLM API Key: `Insert Key Here`
-- LLM Model Name: `Choose model name`
+Configure connection to the Solace Broker
 
-Review and Initialize
+![Broker](img/broker_setup.png)
+
+Configure your LLM
+
+![LLM Endpoint](img/ai_provider.png)
+
+Configure your main orchestrator
+
+![orchestrator](img/orchestrator.png)
+
+> aside positive
+> You can keep all the configuration parameters as default
+
+Note: You can explore the other options for configuring the orchestrator agent to see what you have available for fine tuning the behaviour
+
+Configure the WebUI Gateway
+![gateway](img/gateway.png)
+
+Note: Choose any Session Secret Key needed for the WebUI. Keep the remaining configurations as default. 
+
+Review and Initialize the final configuration
 
 ![SAM final](img/finalinit.png)
 
 ### Run Solace Agent Mesh
 
-Now back to your terminal and execute the following command
+Now back to your terminal, you will realize the following has been created
+
+```bash
+.
+├── .env
+├── .sam
+├── configs
+│   ├── agents
+│   │   └── main_orchestrator.yaml
+│   ├── gateways
+│   │   └── webui.yaml
+│   ├── logging_config.ini
+│   └── shared_config.yaml
+├── requirements.txt
+└── src
+    └── __init__.py
+```
+
+
+Execute the following command to run Solace Agent Mesh
 
 ```
 sam run
 ```
+
+Access the WebUI Gateway through `http://127.0.0.1:8000/`
+
 ![SAM Intro](img/samintro.png)
 
 Viola! You are up and running with the Solace Agent Mesh!
+
+Now run the following prompt in the chat window
+
+```
+What are your capabilities?
+```
+and click the "Agent Workflow" icon
+
+![flow](img/flow.png)
+
+Explore the command flow
+![simpleFlow](img/simpleFlow.png)
+
+For the remaining of any prompts you execute to Solace Agent Mesh, you can always click this Agent Workflow icon to get a better understanding on what is happening
+
+## Solace Agent Mesh Components
+
+Duration: 00:25:00
+
+Solace Agent Mesh represents a sophisticated enterprise-grade platform that orchestrates AI agents. At its core, the **Orchestrator** serves as the intelligent brain that decomposes complex tasks and routes them to specialized **Agents** built using the Agent Development Kit (ADK), while **Gateways** created with the Gateway Development Kit (GDK) provide secure multi-protocol entry points. The platform's foundation rests on the **Solace Broker** for enterprise messaging, complemented by essential Services including **LLM integration**, **embeddings management**, **artifact storage**, and **conversation history tracking**. This unified architecture creates a robust, enterprise-ready platform for deploying and managing AI agent ecosystems at scale.
+
+### 1. Orchestrator: The planner
+
+The Orchestrator serves as the central intelligence hub of the Solace Agent Mesh, responsible for task analysis, agent coordination, and workflow management across the entire ecosystem.
+
+> aside positive
+> Provides intelligent task decomposition and dynamic agent routing, ensuring optimal resource utilization and enabling complex multi-agent workflows without manual intervention.
+
+**Key Capabilities:**
+- **Task Analysis & Decomposition**: Breaks down complex user requests into manageable sub-tasks
+- **Agent Discovery & Selection**: Dynamically identifies and selects the most appropriate agents based on capabilities and current availability
+- **Workflow Orchestration**: Manages both simple single-agent delegations and complex multi-agent coordination patterns
+- **Load Balancing**: Distributes workload across available agent instances to prevent overload
+- **Progress Tracking**: Monitors task execution across multiple agents and provides status updates
+- **Error Handling**: Implements retry logic, fallback strategies, and graceful failure recovery
+- **Authorization Management**: Enforces security policies and access controls for agent interactions
+- **Performance Optimization**: Continuously optimizes routing decisions based on historical performance data
+
+### 2. Agents: The Goal Setters
+
+Agents are specialized AI components built using the Agent Development Kit (ADK) that perform specific tasks within the mesh, each designed with focused capabilities and clear operational boundaries.
+
+> aside positive
+> The ADK provides standardized development patterns and tools, enabling rapid creation of specialized agents with consistent interfaces and built-in best practices for enterprise deployment.
+
+**Agent Development Kit (ADK) Features:**
+- **Standardized Framework**: Consistent development patterns for agent creation and deployment
+- **Built-in Integrations**: Pre-configured connections to mesh services and infrastructure
+- **Tool Integration**: Seamless integration with external APIs, databases, and enterprise systems
+- **State Management**: Built-in session and context management capabilities
+- **Error Handling**: Standardized error reporting and recovery mechanisms
+- **Testing Framework**: Comprehensive testing tools for agent validation and quality assurance
+- **Documentation Tools**: Automatic generation of agent capability descriptions and usage documentation
+
+**Agent Types:**
+- **Functional Agents**: Task-specific agents (e.g., WebAgent, MarkitdownAgent, MermaidAgent)
+- **Domain Agents**: Knowledge-area specialists (e.g., CustomerDocuments, Employee, JIRA)
+- **Integration Agents**: System connectors and data processors
+- **Utility Agents**: Support functions like image editing and multi-modal processing
+
+### 3. Gateways: Entry and Exit points
+
+Gateways serve as controlled entry points into the Agent Mesh, built using the Gateway Development Kit (GDK) to provide secure, protocol-aware interfaces for external systems and users.
+
+> aside positive
+> The GDK enables rapid development of custom gateways with built-in security, protocol handling, and integration patterns, supporting diverse client requirements and enterprise standards.
+
+**Gateway Development Kit (GDK) Capabilities:**
+- **Protocol Abstraction**: Simplified development for multiple communication protocols
+- **Security Integration**: Built-in authentication, authorization, and encryption handling
+- **Request Transformation**: Automatic conversion between different message formats and protocols
+- **Rate Limiting**: Configurable throttling and traffic management capabilities
+- **Monitoring Integration**: Built-in observability and performance tracking
+- **Configuration Management**: Dynamic configuration updates without service restart
+- **Error Handling**: Standardized error responses and fault tolerance mechanisms
+
+**Example Gateways:**
+- **REST API Gateway**: HTTP/HTTPS endpoints for web and mobile applications
+- **MQTT Gateway**: Lightweight messaging for IoT devices and embedded systems
+- **WebSocket Gateway**: Real-time bidirectional communication for interactive applications
+- **Teams Gateway**: Microsoft Teams integration for enterprise collaboration
+- **Slack Gateway**: Slack integration for developer-focused workflows
+- **Custom Protocol Gateways**: Extensible framework for proprietary or specialized protocols
+
+### 4. Services: Modular Components
+
+The Services layer provides essential infrastructure capabilities that support agent operations, data management, and AI model integration across the mesh.
+
+> aside positive
+> Centralized services reduce redundancy and ensure consistent behavior across all agents while providing enterprise-grade scalability and reliability for core functions.
+
+#### 5. LLM Service
+
+Provides centralized access to Large Language Model capabilities with intelligent routing and cost optimization.
+
+**Features:**
+- **Multi-Provider Support**: Integration with OpenAI, Anthropic, Google, and other LLM providers
+- **Intelligent Routing**: Automatic selection of optimal models based on task requirements and cost considerations
+- **Cost Management**: Usage tracking, budget controls, and cost optimization strategies
+- **Rate Limiting**: Protection against quota exhaustion and cost overruns
+- **Model Versioning**: Support for multiple model versions with A/B testing capabilities
+- **Caching**: Intelligent response caching to reduce API calls and improve performance
+
+#### 6. Embeddings Service
+
+Manages vector embeddings for semantic search, similarity matching, and knowledge retrieval operations.
+
+**Features:**
+- **Vector Database Integration**: Support for Pinecone, Weaviate, ChromaDB, and other vector stores
+- **Multi-Model Support**: Integration with various embedding models (OpenAI, Sentence Transformers, etc.)
+- **Semantic Search**: High-performance similarity search and retrieval capabilities
+- **Index Management**: Automatic index creation, optimization, and maintenance
+- **Batch Processing**: Efficient bulk embedding generation and updates
+- **Metadata Filtering**: Advanced filtering capabilities for targeted search operations
+
+#### 7. Artifact Management Service
+
+Handles storage, versioning, and lifecycle management of files, documents, and data artifacts across agent interactions.
+
+**Features:**
+- **Version Control**: Complete versioning history with diff capabilities and rollback support
+- **Metadata Management**: Automatic extraction and indexing of file metadata
+- **Cross-Agent Sharing**: Secure artifact sharing between agents with access controls
+- **Format Conversion**: Automatic conversion between different file formats
+- **Storage Optimization**: Intelligent storage tiering and compression
+- **Backup & Recovery**: Automated backup with point-in-time recovery capabilities
+- **Integration APIs**: RESTful APIs for external system integration
+
+#### 8. History Management Service
+
+Maintains conversation history, session context, and interaction logs for continuity and analysis.
+
+**Features:**
+- **Session Persistence**: Long-term storage of conversation context and user preferences
+- **Cross-Session Continuity**: Ability to resume conversations across different sessions and channels
+- **Searchable History**: Full-text search across conversation history with contextual relevance
+- **Analytics Integration**: Data pipeline for conversation analysis and insights
+- **Privacy Controls**: Configurable retention policies and data anonymization
+- **Export Capabilities**: Data export for compliance and external analysis
+- **Real-time Sync**: Live synchronization across multiple client sessions
+
+### 9. Solace Broker: Central Nervous System
+
+The Solace Broker serves as the foundational messaging infrastructure, providing enterprise-grade event streaming and messaging capabilities that power all communication within the Agent Mesh.
+
+> aside positive
+> Enterprise-grade reliability with 99.999% uptime SLA, supporting millions of concurrent connections and guaranteed message delivery with advanced routing and transformation capabilities.
+
+
+**Core Messaging Capabilities:**
+- **Multi-Protocol Support**: Native support for MQTT, AMQP, JMS, REST, WebSocket, and proprietary protocols
+- **Message Persistence**: Guaranteed message delivery with configurable persistence levels
+- **Dynamic Routing**: Content-based routing with complex topic hierarchies and wildcards
+- **Message Transformation**: Real-time message transformation and enrichment capabilities
+- **Quality of Service**: Multiple QoS levels from fire-and-forget to exactly-once delivery
+- **Message Ordering**: Guaranteed message ordering within defined contexts
+
+**Enterprise Features:**
+- **High Availability**: Active-passive and active-active clustering with automatic failover
+- **Disaster Recovery**: Cross-datacenter replication with RPO/RTO guarantees
+- **Security**: End-to-end encryption, OAuth 2.0, LDAP integration, and fine-grained ACLs
+- **Monitoring**: Comprehensive metrics, alerting, and distributed tracing capabilities
+- **Scalability**: Horizontal scaling with automatic load balancing and partition management
+- **Compliance**: SOC 2, HIPAA, and other regulatory compliance certifications
+
+**Deployment Options:**
+- **Software Broker**: Containerized deployment for cloud-native environments with Kubernetes orchestration
+- **Appliance Broker**: High-performance hardware appliances for mission-critical workloads
+- **Cloud Broker**: Fully managed service with automatic scaling, patching, and maintenance
+- **Hybrid Deployment**: Seamless connectivity between on-premises and cloud deployments
+
+**Advanced Capabilities:**
+- **Event Mesh**: Global event distribution across multiple brokers and geographic regions
+- **Stream Processing**: Built-in stream processing capabilities for real-time analytics
+- **Message Replay**: Ability to replay historical messages for recovery and testing
+- **Dead Letter Queues**: Sophisticated error handling with configurable retry policies
+- **Rate Limiting**: Advanced throttling and flow control mechanisms
+- **Message Compression**: Automatic message compression to optimize bandwidth usage
 
 ## Built-in Agents
 Duration: 0:05:00
