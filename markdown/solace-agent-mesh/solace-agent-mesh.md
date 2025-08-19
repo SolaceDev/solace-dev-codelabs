@@ -4,113 +4,168 @@ id: solace-agent-mesh
 tags: 
 categories: Solace, Agent Mesh, AI
 environments: Web
-status: Hidden
+status: Hidden 
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
 # Getting started with Solace Agent Mesh over A2A
 
 ## What you'll learn: Overview
 
-In this codelab, you'll gain a foundational understanding of the Solace Agent Mesh and its integration with Google's Agent-to-Agent (A2A) Protocol. You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
+In this codelab, you'll gain a foundational understanding of the [Solace Agent Mesh](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/). You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
 
-You'll dive into the details of the A2A Protocol, discovering its design principles, core concepts, and how it standardizes agent communication for interoperability and extensibility. The codelab explains essential constructs such as Agent Cards, Tasks, Events, and Artifacts, providing insight into how agents discover each other, delegate tasks, and collaborate asynchronously. You'll also learn about the Agent Development Kit (ADK) and how it works with A2A to build and deploy advanced AI agents.
+You'll dive into the details of the [A2A Protocol](https://a2a-protocol.org/latest/), discovering its design principles, core concepts, and how it standardizes agent communication for interoperability and extensibility. You'll also learn about the [Agent Development Kit (ADK)](https://google.github.io/adk-docs/) and how it works with A2A to build and deploy advanced AI agents.
 
-By the end of this codelab, you'll be equipped to get started with Solace Agent Mesh, including installation prerequisites, running built-in agents, and connecting external services like Google Maps and Search. You'll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.
+You'll then dive into the [Solace AI Connector](https://github.com/SolaceLabs/solace-ai-connector), a powerful tool designed to seamlessly integrate AI capabilities into your event-driven architecture, enabling you to create efficient pipelines that process events from your event mesh using AI and other components.
+
+By the end of this codelab, you'll be equipped to get started with Solace Agent Mesh, including installation prerequisites, running built-in agents, and connecting external services through MCP. You'll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.
+
+![SAM Arch](img/SAM_arch.png)
 
 Duration: 0:05:00
 
 ## Introduction to the Solace Agent Mesh
 Duration: 0:15:00
 
-Welcome to this workshop on Solace Agent Mesh! In this session, you'll learn about a powerful framework that addresses one of modern AI development's biggest challenges: connecting AI models to real-world data and systems. Let's dive in!
+### Problem statement
+Building effective agentic systems presents a complex challenge that extends far beyond simply deploying AI models. AI Agents are siloed that operate in isolation, and are unable to effectively communicate or share capabilities across organizational boundaries. By definition and design, Agents are inherently domain-specific, designed to excel in narrow use cases but struggling to collaborate or leverage expertise from other specialized agents, creating fragmented AI ecosystems that fail to realize their collective potential.
+
+To make intelligent decisions and respond to dynamic conditions, agentic systems must rely on event-driven actions that flow into the organization. While solving the core AI challenge represents only 20% of the effort, the remaining 80% involves the much more complex task of connecting AI models to the disparate data sources, legacy systems, APIs, and organizational knowledge that exist across isolated silos—making data accessibility and integration the true bottleneck in delivering practical AI value
 
 > aside negative
-> Without a framework like Solace Agent Mesh, connecting AI systems to disparate data sources can be extremely complex, requiring custom integration code and creating maintenance challenges.
+> Without a framework like Solace Agent Mesh, connecting AI systems to siloed data sources can be extremely complex, requiring custom integration code and creating maintenance challenges.
 
 ### What is Solace Agent Mesh?
 
-Solace Agent Mesh is an open-source framework that integrates Google's Agent Development Kit (ADK) with the Solace AI Connector to create a "Universal A2A Agent Host." This enables scalable, distributed AI agent communication through the Solace Event Broker. 
+Solace Agent Mesh is a comprehensive open-source framework that empowers developers to build sophisticated, distributed AI systems. On a high level, Agent mesh provides developers with the following:
 
-At its core, Solace Agent Mesh addresses a fundamental challenge in modern AI development: while powerful AI models are readily available, the real complexity lies in connecting them to the data and systems where they can provide value. Data exists in isolated silos - spread across databases, SaaS platforms, APIs, and legacy systems - making it difficult to build AI applications that work across these boundaries.
+**Core Communication & Protocol**
 
-Solace Agent Mesh provides developers with:
-- A standardized A2A (Agent-to-Agent) protocol for AI communication
-- Tools to connect AI agents to real-world data sources
-- The ability to orchestrate complex workflows across multiple specialized agents
-- Built-in extensibility through a modular plugin architecture
+- **Standardized A2A (Agent-to-Agent) Protocol**: A unified communication standard that enables seamless interaction between AI agents, regardless of their underlying implementation or deployment location
+- **Event-Driven Architecture**: Built on the Solace Event Broker for asynchronous, scalable, and resilient agent communication
+- **Topic-Based Routing**: Intelligent message routing that enables agents to discover and communicate with each other dynamically
+- **Session Management**: Persistent conversation context across multi-turn interactions and complex workflows
 
+**Data Integration & Connectivity**
+
+- **Real-World Data Source Integration**: Pre-built connectors and tools to seamlessly connect AI agents to databases, APIs, file systems, and enterprise applications
+- **Universal Gateway Support**: Multiple interface types including REST APIs, WebSockets, webhooks, and direct event mesh integration
+- **Enterprise System Compatibility**: Native integration with HR systems (BambooHR, Workday), CRMs (Salesforce), collaboration tools (Confluence, Jira), and identity providers
+- **Streaming Data Processing**: Real-time event processing capabilities for handling live data streams and IoT sensor feeds
+- **Multi-Protocol Support**: Connect to systems using HTTP, MQTT, AMQP, WebSocket, and custom protocols
+
+**Workflow Orchestration & Management**
+
+- **Complex Workflow Orchestration**: Coordinate sophisticated multi-agent workflows with dependency management and parallel execution
+- **Task Decomposition**: Automatically break down complex requests into manageable subtasks for specialized agents
+- **Result Aggregation**: Intelligent collection and synthesis of results from multiple agents into cohesive responses
+- **Error Handling & Recovery**: Built-in retry logic, circuit breakers, and graceful degradation for robust production deployments
+- **Workflow Templates**: Pre-configured workflow patterns for common use cases like data analysis, document processing, and customer service
+
+**Extensibility & Plugin Architecture**
+
+- **Modular Plugin System**: Easily extend functionality through a rich ecosystem of community and commercial plugins
+- **Custom Agent Development**: Comprehensive tools and templates for building domain-specific agents with specialized capabilities
+- **Gateway Plugins**: Create custom external interfaces for unique integration requirements
+- **Service Provider Plugins**: Standardized abstractions for integrating with backend systems and data sources
+- **Tool Framework**: Extensible tool system that allows agents to perform actions and interact with external services
+
+**AI Model & Provider Support**
+
+- **Multi-Model Compatibility**: Support for all major AI providers including OpenAI, Anthropic, Google, Azure OpenAI, and local models
+- **Model Abstraction**: Switch between different AI models without changing agent logic
+- **Provider Failover**: Automatic failover between AI providers for high availability
+- **Cost Optimization**: Intelligent model selection based on task complexity and cost considerations
+- **Custom Model Integration**: Support for proprietary and fine-tuned models through flexible provider interfaces
+
+**Development Tools & Framework**
+
+- **Comprehensive CLI**: Full-featured command-line interface for project creation, management, and deployment
+- **Configuration Management**: YAML-based configuration system with environment variable support and validation
+- **Development Environment**: Hot-reload capabilities, debugging tools, and comprehensive logging for efficient development
+- **Testing Framework**: Built-in testing utilities for unit testing, integration testing, and end-to-end workflow validation
+- **Documentation Generation**: Automatic API documentation and configuration reference generation
+
+**Security & Enterprise Features**
+
+- **Multi-Authentication Support**: JWT, OAuth, API keys, and custom authentication mechanisms
+- **Role-Based Access Control**: Fine-grained permissions and authorization for agents and resources
+- **Identity Service Integration**: Seamless integration with enterprise identity providers and HR systems
+- **Audit Trail**: Comprehensive logging and monitoring for compliance and security auditing
+- **Data Encryption**: End-to-end encryption for data in transit and at rest
+
+**Monitoring & Observability**
+
+- **Real-Time Metrics**: Comprehensive performance monitoring with custom dashboards and alerting
+- **Distributed Tracing**: End-to-end request tracing across the entire agent mesh
+- **Health Monitoring**: Automatic health checks and status reporting for all components
+- **Performance Analytics**: Detailed insights into agent performance, resource utilization, and workflow efficiency
+- **Log Aggregation**: Centralized logging with correlation IDs for easy debugging and troubleshooting
+
+**Scalability & Performance**
+
+- **Horizontal Scaling**: Easily scale individual agents or entire agent meshes based on demand
+- **Load Balancing**: Automatic distribution of tasks across multiple agent instances
+- **Resource Management**: Intelligent resource allocation and optimization for optimal performance
+- **Caching Strategies**: Built-in caching mechanisms for frequently accessed data and computations
+- **Async Processing**: Non-blocking, asynchronous operations for maximum throughput
+
+**Deployment & Operations**
+
+- **Multi-Environment Support**: Seamless deployment across development, staging, and production environments
+- **Container-Ready**: Docker and Kubernetes support for modern containerized deployments
+- **Cloud-Native**: Native support for AWS, Azure, GCP, and hybrid cloud deployments
+- **Infrastructure as Code**: Terraform and CloudFormation templates for automated infrastructure provisioning
+- **CI/CD Integration**: Built-in support for continuous integration and deployment pipelines
+
+**Use Case Enablement**
+
+- **Conversational AI**: Build sophisticated chatbots and virtual assistants with multi-turn conversation support
+- **Document Processing**: Automated document analysis, extraction, and processing workflows
+- **Data Analytics**: Complex data analysis and reporting across multiple data sources
+- **Customer Service**: Intelligent customer support systems with escalation and knowledge management
+- **Business Process Automation**: End-to-end automation of complex business workflows
+- **IoT & Real-Time Processing**: Real-time processing and analysis of IoT sensor data and events
+
+**Developer Experience**
+
+- **Rich Documentation**: Comprehensive guides, tutorials, and API references
+- **Community Support**: Active community forums, Discord channels, and regular office hours
+- **Example Projects**: Ready-to-run examples and templates for common use cases
+- **Migration Tools**: Utilities for migrating existing AI applications to the SAM framework
+- **IDE Integration**: Extensions and plugins for popular development environments
+
+This comprehensive feature set makes Solace Agent Mesh the ideal choice for developers looking to build production-ready, scalable AI applications that can seamlessly integrate with existing enterprise infrastructure while providing the flexibility to grow and evolve with changing requirements.
 > aside positive
 > Solace Agent Mesh follows an event-driven architecture that decouples components, allowing them to be developed, deployed, and scaled independently.
 
 ### Key Components and Architecture
 
-Solace Agent Mesh consists of several interconnected components that work together through the standardized A2A protocol:
+Solace Agent Mesh consists of several interconnected components that work together to create a distributed, event-driven ecosystem of collaborative AI agents.
 
-1. **Solace Event Broker/Event Mesh**:
-   - Acts as the central nervous system of the framework
-   - Provides the messaging fabric for all asynchronous communication
-   - Utilizes topic-based routing for the Agent-to-Agent (A2A) protocol
-   - Ensures message delivery even during component failures
+1. **Solace Event Broker**
+The central messaging backbone that provides intelligent topic-based routing, fault-tolerant delivery, and horizontal scaling for all Agent-to-Agent (A2A) protocol communications across the entire system.
 
-2. **Agents**:
-   - Specialized processing units built around Google's ADK
-   - Provide domain-specific knowledge and capabilities
-   - Features include ADK integration, dynamic discovery, access to tools
-   - Can operate independently and be deployed separately
+2. **Gateways**
+External interface bridges that translate diverse protocols (HTTP, WebSockets, Slack) into standardized A2A messages while handling authentication, authorization, and session management for outside systems.
 
-3. **Gateways**:
-   - Act as bridges between external systems and the agent mesh
-   - Handle protocol translation, authentication, and session management
-   - Support various interfaces (REST, HTTP SSE, webhooks, event mesh)
+3. **Agents**
+Specialized AI processing units built on Google's Agent Development Kit that provide domain-specific intelligence, self-register for dynamic discovery, and access comprehensive tool ecosystems for complex task execution.
 
-4. **Orchestrator**:
-   - A specialized agent that breaks down complex requests into manageable tasks
-   - Manages workflow across multiple agents
-   - Coordinates task delegation and response aggregation
+4. **Solace AI Connector**
+The universal runtime environment that hosts and manages the complete lifecycle of all system components while bridging Google ADK capabilities with Solace event infrastructure through YAML-driven configuration.
+
+5. **Google Agent Development Kit (ADK)**
+The core AI framework that powers individual agents with LLM interactions, conversation memory management, artifact processing capabilities, and an extensible tool integration system.
+
+6. **A2A Protocol & Agent Registry**
+The standardized communication protocol and service discovery mechanism that enables seamless interaction, dynamic routing, and lifecycle management across all mesh components.
+
+7. **Backend Services & Tools**
+The foundational infrastructure layer providing multi-provider LLM access, extensible integrations for custom tools and APIs, persistent data storage, and cloud-native artifact management services.
 
 > aside negative
 > Without proper planning and understanding of the component roles, you might create overly complex architectures or miss opportunities to leverage the full power of the distributed agent ecosystem.
 
-### Evolution of Event-Driven Architecture
-
-Solace Agent Mesh represents the next step in the evolution of event-driven architecture:
-
-1. **Traditional EDA**: Focused on decoupling services and enabling asynchronous communication through events.
-
-2. **Event Mesh**: Extended EDA with dynamic routing across cloud boundaries and geographic regions.
-
-3. **Event-Driven Microservices**: Applied EDA principles to microservice architectures for greater resilience and scalability.
-
-4. **Event-Driven AI/ML**: Integrated AI capabilities with event streams for real-time intelligence.
-
-5. **Solace Agent Mesh**: Combines EDA with agent-based AI to create collaborative, distributed intelligence systems connected through an event mesh.
-
-The architecture of Solace Agent Mesh builds on these foundations with several key principles:
-- **Event-Driven Architecture**: All interactions between major components are asynchronous and mediated by the event broker
-- **Component Decoupling**: Components communicate through standardized A2A protocol messages over the event mesh
-- **Scalability and Resilience**: The architecture supports horizontal scaling and provides fault tolerance
-
-> aside positive
-> This evolution makes Solace Agent Mesh particularly well-suited for complex, distributed systems that need to process information from multiple sources in real-time.
-
-### Key Benefits of Solace Agent Mesh
-
-1. **Simplified Integration**: Connect AI agents to disparate data sources through a standardized protocol.
-
-2. **Decoupled Architecture**: Components communicate asynchronously, allowing independent development, deployment, and scaling.
-
-3. **Scalability**: Horizontal scaling of Agent Hosts and Gateways to handle increasing workloads.
-
-4. **Resilience**: Fault tolerance and guaranteed message delivery even if individual components fail.
-
-5. **Extensibility**: Modular design with plugins for customizing and extending functionality.
-
-6. **Multi-Modal Intelligence**: Support for various AI models and capabilities through specialized agents.
-
-7. **Real-Time Processing**: Event-driven architecture enables immediate processing of information as it becomes available.
-
-> aside negative
-> Keep in mind that implementing a distributed agent system requires careful consideration of data governance, security, and monitoring to ensure reliable and trustworthy operation.
 
 This workshop will help you understand how to leverage Solace Agent Mesh for your own AI applications, whether you're an AI enthusiast experimenting with new models or an enterprise developer building production systems.
 
