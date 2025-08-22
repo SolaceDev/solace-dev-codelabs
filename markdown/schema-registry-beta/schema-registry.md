@@ -1,32 +1,32 @@
-author: Murat Vuniqi
-summary: This codelab will walk you through getting started with the Apicurio Registry and the Solace SERDEs components using the Solace Messaging API for Java (JCSMP).
-id: schema-registry-beta
+author: Supreet Mann
+summary: This codelab will walk you through getting started with the Solace Schema Registry and the Solace SERDES Collection using the Solace Messaging API for Java (JCSMP) or with REST messaging.
+id: schema-registry
 tags:
 categories: Solace
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry-beta
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry
 
-# Introduction to Schema Registry using the Solace Messaging API for Java (JCSMP) and Apicurio Registry
+# Introduction to Solace Schema Registry using the Solace Messaging API for Java (JCSMP) and REST Messaging
 
 ## What you'll learn: Overview
 
 Duration: 0:01:00
 
-In today's data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we'll explore how to use a schema registry (Apicurio Registry) with the Solace JCSMP API, focusing on the Apache Avro format for schema definition.
+In today's data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we'll explore how to use Solace Schema Registry with the Solace JCSMP API or REST applications, focusing on the JSON format for schema definition.
 
 You'll learn about:
 
 ✔️ What a schema registry is and why it's important   
-✔️ What a Serializer and Deserializer (SERDEs) is and the role they play   
-✔️ How to set up an instance of the Apicurio Registry using Docker Compose   
-✔️ How to create and register schemas   
-✔️ How to use schemas in your event-driven applications with Solace's JCSMP API   
+✔️ What a Serializer and Deserializer (SERDES) is and the role they play   
+✔️ How to deploy and configure Solace Schema Registry using either Docker Compose or Kubernetes   
+✔️ How to create and manage schema artifacts in Solace Schema Registry web console   
+✔️ How to use schemas in your event-driven applications with Solace's JCSMP API or with REST messaging   
 ✔️ Best practices for schema evolution   
 
-You can also check out Aaron's office hours covering the schema registry here:
+You can also check out our demo video covering the Solace Schema Registry here:
 
-<video id="z2kSpU4QGU8"></video>
+Video TBD
 
 
 ## What you need: Prerequisites
@@ -34,13 +34,14 @@ You can also check out Aaron's office hours covering the schema registry here:
 Duration: 0:01:00
 
 1. A general understanding of [event-driven architecture (EDA) terms and concepts](https://docs.solace.com/#Messaging).
-2. A locally running PubSub+ Broker or a free trial account of Solace PubSub+ Cloud. Don't have one? [Sign up here.](https://console.solace.cloud/login/new-account)
+2. A locally running Solace Broker or a free trial account of Solace Cloud. Don't have one? [Sign up here.](https://console.solace.cloud/login/new-account)
     * Along with the connection information for the broker
-3. Basic knowledge of Apache [Avro schema format](https://avro.apache.org/docs/1.12.0/specification/)
-4. [Docker](https://docs.docker.com/get-started/get-docker/) installed on your system
-5. [Java Development Kit (JDK) version 11+](https://openjdk.org/) installed on your system
-6. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
-7. Download the provided BETA zip package named ```Schema-Registry-Beta-Package_(latest-version).zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/) and unzip it to your preferred directory.
+3. Basic knowledge of [JSON schema format](https://json-schema.org/draft-07)
+4. [Docker](https://docs.docker.com/get-started/get-docker/) installed on your system (for standalone deployment)
+5. [Kubernetes](https://kubernetes.io/docs/tasks/tools/) with [Helm](https://helm.sh/docs/intro/install/) (for high availability deployments)
+6. [Java Development Kit (JDK) version 11+](https://openjdk.org/) installed on your system
+7. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
+8. Download the provided GA tarball package named ```Schema-Registry-Beta-Package_(latest-version).zip``` that contains all the necessary pieces you will need. This is available on the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/) and unzip it to your preferred directory.
 
 NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
 > aside positive
@@ -57,23 +58,20 @@ A schema registry is a central repository for managing and storing schemas. It h
 3. **Schema Evolution**: Supports versioning and compatibility checks as schemas change over time.
 4. **Data Governance**: Centralizes schema management for better control and auditing.
 
-> aside positive
-> In this walkthrough, we'll use the Apicurio Registry as our schema registry, which provides a comprehensive solution for managing schemas in your event-driven architecture.
-
 ## What Is A SERDEs
 
 Duration: 0:02:00
 
-A SERDEs (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:
+A SERDES (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:
 1. **Serialization**: Converting data objects from their native format (like Java objects) into a binary format suitable for transmission or storage.
 2. **Deserialization**: Converting the binary data back into its original format for processing.   
 
-In a schema registry system, SERDEs work closely with schemas to:
+In a schema registry system, SERDES works closely with schemas to:
 - Ensure data consistency during serialization/deserialization
 - Validate that messages conform to the registered schema
 
 For example:
-- A serializer might take a Java object and convert it to Avro binary format using a schema from the registry
+- A serializer might take a Java object and convert it to binary format using a schema from the registry
 - A deserializer would then use the same schema to correctly reconstruct the object from the binary data
 
 This is a fundamental concept in message-based systems where data needs to be:
@@ -82,45 +80,82 @@ This is a fundamental concept in message-based systems where data needs to be:
 - Correctly interpreted by different applications that might be written in different programming languages
 
 > aside positive
-> In this walkthrough, we'll use the PubSub+ Java Avro SERDEs along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the Avro format.
+> In this walkthrough, we'll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format.
 
-## Setting up Apicurio Registry
+## Setting up Solace Schema Registry with Docker
 
 Duration: 0:06:00
 
-We'll use Docker Compose to set up the Apicurio Registry quickly and easily. We've prepared a Docker Compose file that will launch an instance of the Apicurio Registry and all the necessary components with a pre-defined configuration.
+We'll use Docker Compose to set up the Solace Schema Registry, for local development or standalone use cases with minimal resource and networking requirements. We've prepared a Docker Compose file that will launch an instance of the Solace Schema Registry and all the necessary components with a pre-defined configuration.
 
-1. In these subsequent steps we will use the package that came from the downloaded zip from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-Beta-Package```. You should see the following files and folders:
+1. In these subsequent steps we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-V1.0```. You should see the following files and folders:
 <p align="center">
   <img src="img/SrBetaPackageFolderView.jpg" />
 </p>
 
 
 2. Open a terminal or command prompt window and navigate to the extracted location of the folder called ```solace-schema-registry-dist```.
-
-3. Optionally you can make changes to the ```.env``` file to change things such as default login or ports. We will leave everything to defaults for this codelab.
+3. Run the command ```for img in {docker-images}/*.tar.gz; do docker load -i "$img"; done``` to load docker images. For Window use this instead ```for %i in (docker-images\*.tar.gz \*.tar.gz) do docker load -i "%i"```.
+4. You can make changes to the ```.env``` file to change things such as default login or ports. While using the built-in identity provider, we can leave everything to defaults for this codelab.
 
 <p align="center">
   <img src="img/EnvFile.jpg" />
 </p>
 
-4. Run the following command: ```docker compose up -d``` and all the components will start up with the default values configured.
+5. Run the following command and all the components will start up with the specified values configured: ```docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.embedded.yaml -f compose.embedded.yaml up -d```. 
 
-5. Once the script is done running, you should now be able to go to your browser and navigate to ```localhost:8888``` which should re-direct you to the Apicurio Registry login screen.
+6. Once the script is done running, you should now be able to go to your browser and navigate to ```localhost:8888``` which should re-direct you to the Solace Schema Registry login screen.
 
 <p align="center">
   <img src="img/SrLoginEmpty.jpg" />
 </p>
 
-That's it, you have now installed an instance of the Apicurio Registry with the Postgres storage option!
+That's it, you have now installed an instance of the Solace Schema Registry with the Postgres storage option!
+
+Alternatively, for enterprise-grade security features, Solace Schema Registry supports external identity providers. For that, make the necessary configurations in your IdP and set the environment variables in your ```.env``` file:
+
+Insert image 
+
+Run the following command ```docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.external.yaml -f compose.external.multiple.issuers.yaml up -d```.
+
+## Setting up Solace Schema Registry with Kubernetes
+
+Duration: 0:06:00
+
+Alternatively, we can set up Solace Schema Registry on a Kubernetes cluster using Helm.
+
+NOTE: You must have an existing Kubernetes cluster available (for example, Amazon EKS, Google GKE, Microsoft AKS, or an on-prem/self-managed cluster).
+
+1. Configure ```kubectl``` to communicate with your cluster.
+2. In this method of deployment also, we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-V1.0```.
+3. Open the commonad and run this command to load docker images at your preferred location:
+
+```bash
+export REGISTRY="your-registry.com/project"
+for img in {docker-images}/*.tar.gz; do
+  LOADED=$(docker load -i "$img" | grep "Loaded image:" | cut -d' ' -f3)
+  NEW_NAME="$REGISTRY/$(basename "$img" .tar.gz)"
+  docker tag "$LOADED" "$NEW_NAME"
+  docker push "$NEW_NAME"
+done
+```
+
+4. Install the CloudNative PostgreSQL Operator for database management:
+```kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.26/releases/cnpg-1.26.0.yaml```.
+5. Update a values.yaml file with your environment-specific configuration, database, authentication, ingress and TLS configuration:
+Insert image
+6. Install Solace Schema Registry using Helm: ```helm upgrade --install schema-registry ./solace-schema-registry```
+7. Verify the deployment: ```kubectl get pods -n solace```
+
+8. To access the deployed services, replace <ingress.hostNameSuffix> with the actual hostname or IP address you configured for your ingress: ```https://ui.<ingress.hostNameSuffix>```
 
 ## Creating and Registering Schemas
 
 Duration: 0:04:00
 
-Let's create a simple schema for a ```User``` event:
+Let's create a simple schema for a ```Clock-in-out``` event:
 
-1. Open the Apicurio Registry UI in your web browser by going to ```localhost:8888```.
+1. Open the Solace Schema Registry UI in your web browser by going to ```localhost:8888```.
 2. Login with the predefined credentials for a developer. In this case the username is ```sr-developer``` and password is ```devPassword```.   
 
 <p align="center">
@@ -129,8 +164,8 @@ Let's create a simple schema for a ```User``` event:
 
 3. Click on ```Create artifact``` button. Once the dialogue opens enter the following as shown below:
     * Group Id: Leave it empty (default)
-    * Artifact Id: Set to ```solace/samples```
-    * Type: Set to ```Avro Schema```   
+    * Artifact Id: Set to ```RetailMore/payroll```
+    * Type: Set to ```JSON Schema```   
 
 <p align="center">
   <img src="img/SrCreateArtifact.jpg" />
@@ -146,11 +181,31 @@ Let's create a simple schema for a ```User``` event:
 {
   "namespace": "com.solace.samples.serdes.avro.schema",
   "type": "record",
-  "name": "User",
+  "name": "ClockInOut",
   "fields": [
-    {"name": "id", "type": "string"},
-    {"name": "name", "type": "string"},
-    {"name": "email", "type": "string"}
+    {
+      "name": "region_code",
+      "type": "string",
+      "doc": "region code for clock in or out"
+    },
+    {
+      "name": "store_id",
+      "type": "string",
+      "doc": "Store identifier"
+    },
+    {
+      "name": "employee_id",
+      "type": "string",
+      "doc": "Employee ID for who clocked in or out"
+    },
+    {
+      "name": "datetime",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      },
+      "doc": "Clock time"
+    }
   ]
 }
 ```  
@@ -175,7 +230,9 @@ Duration: 0:10:00
 
 Now, let's see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):
 
-1. Open a command window or terminal in the ```Schema-Registry-Beta-Package/jcsmp-samples``` directory.
+1. Open a command window or terminal and clone this GitHub repository, and go to ```solace-samples-java-jcsmp```:
+```git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp```
+```cd solace-samples-java-jcsmp```
 
 NOTE: For winows users, use the ```gradlew.bat``` file instead of ```gradlew``` in the below steps.
 
