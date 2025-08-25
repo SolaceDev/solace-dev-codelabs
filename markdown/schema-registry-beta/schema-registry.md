@@ -41,7 +41,7 @@ Duration: 0:01:00
 5. [Kubernetes](https://kubernetes.io/docs/tasks/tools/) with [Helm](https://helm.sh/docs/intro/install/) (for high availability deployments)
 6. [Java Development Kit (JDK) version 11+](https://openjdk.org/) installed on your system
 7. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
-8. Download the provided GA tarball package named ```Schema-Registry-V1.0.0``` that contains all the necessary pieces you will need. This is available on the Solace Product Portal (link to be added).
+8. Download the provided GA tarball package named ```schema-registry-v1.0.0.tar.gz``` that contains all the necessary pieces you will need. This is available on the Solace Product Portal (link to be added).
    
 NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
 > aside positive
