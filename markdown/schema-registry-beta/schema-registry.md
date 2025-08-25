@@ -231,9 +231,7 @@ Duration: 0:10:00
 
 Now, let's see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):
 
-1. Open a command window or terminal and clone this GitHub repository, and open the ```solace-samples-java-jcsmp``` directory:
-```git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp```
-```cd solace-samples-java-jcsmp```
+1. Open a command window or terminal and clone this GitHub repository, and open the ```solace-samples-java-jcsmp``` directory. With `git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp` and `cd solace-samples-java-jcsmp`
 
 2. Run the command ```./gradlew assemble``` to build the sample.          
 
