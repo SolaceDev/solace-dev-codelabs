@@ -310,7 +310,7 @@ Duration: 0:10:00
 
 We can also use this schema with Solace Schema Registry in REST-based messaging environments.
 
-> aside negative 
+> aside positive 
 > Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs).
 For more detailed documentation, refer to the [Solace Documentation on REST Delivery Points](https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points).
 
@@ -351,8 +351,7 @@ Let's build a Publisher and Consumer sample.
 ```git clone https://github.com/SolaceSamples/solace-samples-rest-messaging```
 
 2. Run the command to build the sample  ```./gradlew build```. You should see a ```BUILD SUCCESSFUL``` message.
-> aside positive 
-> For windows users, use the `gradlew.bat` file instead of `gradlew`
+Note: For windows users, use the `gradlew.bat` file instead of `gradlew`
 
 3. Run the sample application and provide the broker connection details like:
 ```./gradlew runJsonSchemaRestPublisherHttpClient --args="brokerUrl 38080"```
