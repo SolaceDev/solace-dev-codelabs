@@ -74,7 +74,7 @@ This is a fundamental concept in message-based systems where data needs to be:
 - Properly validated against defined schemas
 - Correctly interpreted by different applications that might be written in different programming languages
 
-> aside postive
+> aside positive
 > In this walkthrough, we'll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format. We will also how how to leverage REST messaging to serialize and deserialize messages. 
 
 ## Setting up Solace Schema Registry with Docker
@@ -150,7 +150,7 @@ Insert image
 
 Duration: 0:04:00
 
-Let's create a simple schema for a ```Clock-in-out``` event:
+Let's create a simple schema for a ```clock-in-out``` event:
 
 1. Open the Solace Schema Registry UI in your web browser by going to ```localhost:8888```.
 2. Login with the predefined credentials for a developer. In this case the username is ```sr-developer``` and password is ```devPassword```.   
