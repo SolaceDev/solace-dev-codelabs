@@ -174,11 +174,11 @@ Let's create a simple schema for a ```Clock-in-out``` event:
 
 4. We will skip the ```Artifact Metadata``` step as it is optional and will click ```Next```. 
 
-5. For the "Version Content" section, copy the Avro schema from below and either paste directly or save it into a file and upload it and click ```Next``` when done. 
+5. For the "Version Content" section, copy the Json schema from below and either paste directly or save it into a file and upload it and click ```Next``` when done. 
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "ClockInOut",
+  "title": "clock-in-out",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -233,8 +233,7 @@ Now, let's see how to use this schema in Java using the Solace Messaging API for
 
 2. Run the command ```./gradlew assemble``` to build the sample.          
 
-3. Open the ```build/staged``` directory and run the sample application with the broker connection details:
-```cd build/staged```
+3. Open the ```build/staged``` directory by running ```cd build/staged``` and run the sample application with the broker connection details:
 ```bin/HelloWorldJCSMPJsonSchemaSerde localhost:55555 default default``` 
 
 This sample talks to the locally deployed Solace Schema Registry and retrieves the schema along with the schema ID. It will then do the following:
@@ -265,7 +264,7 @@ Configures the Serializer and Deserializer:
 ```
 
 
-Serializes the message payload and publishes the message to the connected broker on ```solace/samples``` destination with the serialized payload and schema ID:
+Serializes the message payload and publishes the message to the connected broker on ```solace/samples/clock-in-out/json``` destination with the serialized payload and schema ID:
 ```java
    // Create and populate a ClockInOut JsonNode with sample data
             ObjectMapper mapper = new ObjectMapper();
@@ -316,7 +315,7 @@ We can also use this schema with Solace Schema Registry in REST-based messaging 
 > Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs).
 For more detailed documentation, refer to the [Solace Documentation on REST Delivery Points](https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points).
 
-With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry - "Version Content" section, similar to as shown in Step 6.
+With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry - "Version Content" section, similar to as shown in Step 7.
 
 ```json
 {
