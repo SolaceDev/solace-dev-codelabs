@@ -4,11 +4,11 @@
   "description": "use nodemon to watch changes on md file, rebuild codelab on saves",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch schema-registry-beta.md --exec \"claat export -o temp/ schema-registry-beta.md ; ./node_modules/kill-port/cli.js --port 9090 ; cd temp/schema-registry-beta ; claat serve\""
+    "watch": "nodemon --watch schema-registry.md --exec \"claat export -o temp/ schema-registry.md ; ./node_modules/kill-port/cli.js --port 9090 ; cd temp/schema-registry ; claat serve\""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/schema-registry-beta"
+    "url": "https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/schema-registry"
   },
   "keywords": [
     "codelab"
