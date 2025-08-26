@@ -85,7 +85,7 @@ We'll use Docker Compose to set up the Solace Schema Registry, for local develop
 
 1. In these subsequent steps we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-V1.0```. You should see the following files and folders:
 <p align="center">
-  <img src="img/SrBetaPackageFolderView.png" />
+  <img src="img/schemaRegistryZip.png" />
 </p>
 
 
@@ -217,7 +217,7 @@ Let's create a simple schema for a ```clock-in-out``` event:
 7. Finally after you have successfully created the new schema you should see the following:   
 
 <p align="center">
-  <img src="img/SrCreateArtifactDone.png" />
+  <img src="img/SrCreateArtifact3.png" />
 </p>
 
 You've now created and registered your first schema!
@@ -314,7 +314,7 @@ We can also use this schema with Solace Schema Registry in REST-based messaging 
 > Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs).
 For more detailed documentation, refer to the [Solace Documentation on REST Delivery Points](https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points).
 
-With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry - "Version Content" section, similar to as shown in Step 7.
+With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry as a new artifact with an `Artifact Id` of `solace/samples/json` - Refer to Step 7 Creating and Registering Schemas if you need to review the steps.
 
 ```json
 {
@@ -423,6 +423,23 @@ Publishes the message to specific topic:
 ```
 
 4. For a Consumer Application, create a queue subscribed to `solace/samples/json` and configure RDP client as mentioned above. REST consumer samples start a local HTTP server that listens for incoming POST requests from a Solace broker's REST Delivery Point (RDP).
+<details close>
+  <summary>Configure Solace Rest Delivery Point</summary>
+  1. Create Queue
+
+  ![Create queue](img/serdesQueue.png)
+  2. Create Rest Delivery Point
+  ![Rest Delivery Point](img/serdesRDP.png)
+  3. Create REST Consumer
+  ![REST Consumer](img/serdesRESTConsumer.png)
+  4. Create Queue Binding
+  ![Queue Binding](img/serdesQueueBinding.png)
+  5. Specify Queue Binding Endpoint
+  ![Queue Binding Endpoint](img/serdesQueueBindingEndpoint.png)
+  Make sure all of the RDP components are enabled. 
+</details>
+
+
 5. Run the consumer sample like: ```./gradlew runJsonSchemaRestConsumer --args="/my-rest-endpoint 8080 X-Solace-Topic"```
 
 Configures the Deserializer:
