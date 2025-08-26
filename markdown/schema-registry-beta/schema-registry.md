@@ -24,10 +24,6 @@ You'll learn about:
 ✔️ How to use schemas in your event-driven applications with Solace's JCSMP API or with REST messaging   
 ✔️ Best practices for schema evolution   
 
-You can also check out our demo video covering the Solace Schema Registry here:
-
-Video TBD
-
 
 ## What you need: Prerequisites
 
@@ -43,7 +39,7 @@ Duration: 0:01:00
 7. An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)
 8. Download the provided GA tarball package named ```schema-registry-v1.0.0.tar.gz``` that contains all the necessary pieces you will need. This is available on the Solace Product Portal.
    
-NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry_Beta/), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
+NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry/solace-schema-registry), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
 > aside positive
 > This walkthrough uses Apicurio Registry for schema management, which we'll set up using Docker Compose.
 
@@ -110,11 +106,13 @@ We'll use Docker Compose to set up the Solace Schema Registry, for local develop
   <img src="img/SrLoginEmpty.jpg" />
 </p>
 
-That's it, you have now installed an instance of the Solace Schema Registry with the Postgres storage option!
+That's it, you have now installed an instance of the Solace Schema Registry!
 
 Alternatively, for enterprise-grade security features, Solace Schema Registry supports external identity providers. For that, make the necessary configurations in your IdP and set the environment variables in your ```.env``` file:
 
-Insert image 
+<p align="center">
+  <img src="img/ExternalAuthEnv.jpg" />
+</p>
 
 Run the following command ```docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.external.yaml -f compose.external.multiple.issuers.yaml up -d```.
 
