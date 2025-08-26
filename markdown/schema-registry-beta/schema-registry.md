@@ -75,7 +75,7 @@ This is a fundamental concept in message-based systems where data needs to be:
 - Correctly interpreted by different applications that might be written in different programming languages
 
 > aside postive
-> In this walkthrough, we'll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format.
+> In this walkthrough, we'll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format. We will also how how to leverage REST messaging to serialize and deserialize messages. 
 
 ## Setting up Solace Schema Registry with Docker
 
