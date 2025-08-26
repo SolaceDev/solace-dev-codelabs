@@ -144,7 +144,7 @@ Insert image
 6. Install Solace Schema Registry using Helm: ```helm upgrade --install schema-registry ./solace-schema-registry```
 7. Verify the deployment: ```kubectl get pods -n solace```
 
-8. To access the deployed services, replace <ingress.hostNameSuffix> with the actual hostname or IP address you configured for your ingress: ```https://ui.<ingress.hostNameSuffix>```
+8. To access the deployed services, replace <ingress.hostNameSuffix> with the actual hostname or IP address you configured for your ingress: `https://ui.<ingress.hostNameSuffix>`
 
 ## Creating and Registering Schemas
 
