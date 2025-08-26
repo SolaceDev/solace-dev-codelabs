@@ -40,8 +40,7 @@ Duration: 0:01:00
 8. Download the provided GA tarball package named ```schema-registry-v1.0.0.tar.gz``` that contains all the necessary pieces you will need. This is available on the Solace Product Portal.
    
 NOTE: If you cannot access the [Solace Product Portal](https://products.solace.com/prods/Schema_Registry/solace-schema-registry), please click the ```Report a mistake``` at the bottom left of the codelab and open an issue asking for access.
-> aside positive
-> This walkthrough uses Apicurio Registry for schema management, which we'll set up using Docker Compose.
+
 
 ## What Is A Schema Registry
 
@@ -75,7 +74,7 @@ This is a fundamental concept in message-based systems where data needs to be:
 - Properly validated against defined schemas
 - Correctly interpreted by different applications that might be written in different programming languages
 
-> aside positive
+> aside postive
 > In this walkthrough, we'll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format.
 
 ## Setting up Solace Schema Registry with Docker
@@ -311,7 +310,7 @@ Duration: 0:10:00
 
 We can also use this schema with Solace Schema Registry in REST-based messaging environments.
 
-[!NOTE] 
+> aside negative 
 > Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs).
 For more detailed documentation, refer to the [Solace Documentation on REST Delivery Points](https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points).
 
@@ -352,7 +351,7 @@ Let's build a Publisher and Consumer sample.
 ```git clone https://github.com/SolaceSamples/solace-samples-rest-messaging```
 
 2. Run the command to build the sample  ```./gradlew build```. You should see a ```BUILD SUCCESSFUL``` message.
-[!NOTE] 
+> aside positive 
 > For windows users, use the `gradlew.bat` file instead of `gradlew`
 
 3. Run the sample application and provide the broker connection details like:
