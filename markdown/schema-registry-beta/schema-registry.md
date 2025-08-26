@@ -54,7 +54,7 @@ A schema registry is a central repository for managing and storing schemas. It h
 3. **Schema Evolution**: Supports versioning and compatibility checks as schemas change over time.
 4. **Data Governance**: Centralizes schema management for better control and auditing.
 
-## What Is A SERDEs
+## What Is A SERDES
 
 Duration: 0:02:00
 
@@ -162,7 +162,7 @@ Let's create a simple schema for a ```Clock-in-out``` event:
 
 3. Click on ```Create artifact``` button. Once the dialogue opens enter the following as shown below:
     * Group Id: Leave it empty (default)
-    * Artifact Id: Set to ```RetailMore/payroll```
+    * Artifact Id: Set to ```solace/samples/clock-in-out/json```
     * Type: Set to ```JSON Schema```   
 
 <p align="center">
