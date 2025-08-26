@@ -86,7 +86,7 @@ We'll use Docker Compose to set up the Solace Schema Registry, for local develop
 
 1. In these subsequent steps we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called ```Schema-Registry-V1.0```. You should see the following files and folders:
 <p align="center">
-  <img src="img/SrBetaPackageFolderView.jpg" />
+  <img src="img/SrBetaPackageFolderView.png" />
 </p>
 
 
@@ -95,7 +95,7 @@ We'll use Docker Compose to set up the Solace Schema Registry, for local develop
 4. You can make changes to the ```.env``` file to change things such as default login or ports. While using the built-in identity provider, we can leave everything to defaults for this codelab.
 
 <p align="center">
-  <img src="img/EnvFile.jpg" />
+  <img src="img/EnvFile.png" />
 </p>
 
 5. Run the following command and all the components will start up with the specified values configured: ```docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.embedded.yaml -f compose.embedded.yaml up -d```. 
@@ -103,7 +103,7 @@ We'll use Docker Compose to set up the Solace Schema Registry, for local develop
 6. Once the script is done running, you should now be able to go to your browser and navigate to ```localhost:8888``` which should re-direct you to the Solace Schema Registry login screen.
 
 <p align="center">
-  <img src="img/SrLoginEmpty.jpg" />
+  <img src="img/SrLoginEmpty.png" />
 </p>
 
 That's it, you have now installed an instance of the Solace Schema Registry!
@@ -111,7 +111,7 @@ That's it, you have now installed an instance of the Solace Schema Registry!
 Alternatively, for enterprise-grade security features, Solace Schema Registry supports external identity providers. For that, make the necessary configurations in your IdP and set the environment variables in your ```.env``` file:
 
 <p align="center">
-  <img src="img/ExternalAuthEnv.jpg" />
+  <img src="img/ExternalAuthEnv.png" />
 </p>
 
 Run the following command ```docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.external.yaml -f compose.external.multiple.issuers.yaml up -d```.
@@ -157,7 +157,7 @@ Let's create a simple schema for a ```Clock-in-out``` event:
 2. Login with the predefined credentials for a developer. In this case the username is ```sr-developer``` and password is ```devPassword```.   
 
 <p align="center">
-  <img src="img/SrLogin.jpg" />
+  <img src="img/SrLogin.png" />
 </p>
 
 3. Click on ```Create artifact``` button. Once the dialogue opens enter the following as shown below:
@@ -166,10 +166,10 @@ Let's create a simple schema for a ```Clock-in-out``` event:
     * Type: Set to ```JSON Schema```   
 
 <p align="center">
-  <img src="img/SrCreateArtifact.jpg" />
+  <img src="img/SrCreateArtifact.png" />
 </p>
 <p align="center">
-  <img src="img/SrCreateArtifact1.jpg" />
+  <img src="img/SrCreateArtifact1.png" />
 </p>
 
 4. We will skip the ```Artifact Metadata``` step as it is optional and will click ```Next```. 
@@ -210,7 +210,7 @@ Let's create a simple schema for a ```Clock-in-out``` event:
 ```  
 
 <p align="center">
-  <img src="img/SrCreateArtifact2.jpg" />
+  <img src="img/SrCreateArtifact2.png" />
 </p>
 
 6. We will skip the ```Version Metadata``` step as it is optional and will simply click the ```Create``` button. 
@@ -218,7 +218,7 @@ Let's create a simple schema for a ```Clock-in-out``` event:
 7. Finally after you have successfully created the new schema you should see the following:   
 
 <p align="center">
-  <img src="img/SrCreateArtifactDone.jpg" />
+  <img src="img/SrCreateArtifactDone.png" />
 </p>
 
 You've now created and registered your first schema!
