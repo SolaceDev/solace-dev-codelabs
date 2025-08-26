@@ -1,0 +1,465 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Introduction to Solace Schema Registry using the Solace Messaging API for Java (JCSMP) and REST Messaging</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="schema-registry"
+                  title="Introduction to Solace Schema Registry using the Solace Messaging API for Java (JCSMP) and REST Messaging"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/schema-registry">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
+        <p>In today&#39;s data-driven world, ensuring data consistency and interoperability across different systems is crucial. This is where a schema registry comes into play. In this walkthrough, we&#39;ll explore how to use Solace Schema Registry with the Solace JCSMP API or REST applications, focusing on the JSON format for schema definition.</p>
+<p>You&#39;ll learn about:</p>
+<p>✔️ What a schema registry is and why it&#39;s important<br> ✔️ What a Serializer and Deserializer (SERDES) is and the role they play<br> ✔️ How to deploy and configure Solace Schema Registry using either Docker Compose or Kubernetes<br> ✔️ How to create and manage schema artifacts in Solace Schema Registry web console<br> ✔️ How to use schemas in your event-driven applications with Solace&#39;s JCSMP API or with REST messaging<br> ✔️ Best practices for schema evolution</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you need: Prerequisites" duration="1">
+        <ol type="1">
+<li>A general understanding of <a href="https://docs.solace.com/#Messaging" target="_blank">event-driven architecture (EDA) terms and concepts</a>.</li>
+<li>A locally running Solace Broker or a free trial account of Solace Cloud. Don&#39;t have one? <a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up here.</a><ul>
+<li>Along with the connection information for the broker</li>
+</ul>
+</li>
+<li>Basic knowledge of <a href="https://json-schema.org/draft-07" target="_blank">JSON schema format</a></li>
+<li><a href="https://docs.docker.com/get-started/get-docker/" target="_blank">Docker</a> installed on your system (for standalone deployment)</li>
+<li><a href="https://kubernetes.io/docs/tasks/tools/" target="_blank">Kubernetes</a> with <a href="https://helm.sh/docs/intro/install/" target="_blank">Helm</a> (for high availability deployments)</li>
+<li><a href="https://openjdk.org/" target="_blank">Java Development Kit (JDK) version 11+</a> installed on your system</li>
+<li>An IDE of your choice (e.g., IntelliJ IDEA, Eclipse, Visual Studio Code)</li>
+<li>Download the provided GA tarball package named <code>schema-registry-v1.0.0.tar.gz</code> that contains all the necessary pieces you will need. This is available on the Solace Product Portal.</li>
+</ol>
+<p>NOTE: If you cannot access the <a href="https://products.solace.com/prods/Schema_Registry/solace-schema-registry" target="_blank">Solace Product Portal</a>, please click the <code>Report a mistake</code> at the bottom left of the codelab and open an issue asking for access.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What Is A Schema Registry" duration="2">
+        <p>A schema registry is a central repository for managing and storing schemas. It helps ensure data consistency, enables data governance, and supports schema evolution. Here&#39;s why it&#39;s important:</p>
+<ol type="1">
+<li><strong>Data Consistency</strong>: Ensures that producers and consumers agree on the data format.</li>
+<li><strong>Interoperability</strong>: Allows different systems to communicate effectively.</li>
+<li><strong>Schema Evolution</strong>: Supports versioning and compatibility checks as schemas change over time.</li>
+<li><strong>Data Governance</strong>: Centralizes schema management for better control and auditing.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What Is A SERDES" duration="2">
+        <p>A SERDES (Serializer/Deserializer) in the context of a schema registry is a component that handles two key functions:</p>
+<ol type="1">
+<li><strong>Serialization</strong>: Converting data objects from their native format (like Java objects) into a binary format suitable for transmission or storage.</li>
+<li><strong>Deserialization</strong>: Converting the binary data back into its original format for processing.</li>
+</ol>
+<p>In a schema registry system, SERDES works closely with schemas to:</p>
+<ul>
+<li>Ensure data consistency during serialization/deserialization</li>
+<li>Validate that messages conform to the registered schema</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li>A serializer might take a Java object and convert it to binary format using a schema from the registry</li>
+<li>A deserializer would then use the same schema to correctly reconstruct the object from the binary data</li>
+</ul>
+<p>This is a fundamental concept in message-based systems where data needs to be:</p>
+<ul>
+<li>Efficiently transmitted between different services</li>
+<li>Properly validated against defined schemas</li>
+<li>Correctly interpreted by different applications that might be written in different programming languages</li>
+</ul>
+<aside class="special"><p> In this walkthrough, we&#39;ll use the Solace JSON Schema SERDES for Java along with the Solace Messaging API for Java (JCSMP) to serialize and deserialize messages in the JSON format. We will also how how to leverage REST messaging to serialize and deserialize messages.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setting up Solace Schema Registry with Docker" duration="6">
+        <p>We&#39;ll use Docker Compose to set up the Solace Schema Registry, for local development or standalone use cases with minimal resource and networking requirements. We&#39;ve prepared a Docker Compose file that will launch an instance of the Solace Schema Registry and all the necessary components with a pre-defined configuration.</p>
+<ol type="1">
+<li>In these subsequent steps we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called <code>Schema-Registry-V1.0</code>. You should see the following files and folders:</li>
+</ol>
+<p class="image-container"><img src="img/57321296ef7ab5fe.png"></p>
+<ol type="1" start="2">
+<li>Open a terminal or command prompt window and navigate to the extracted location of the folder called <code>solace-schema-registry-dist</code>.</li>
+<li>Run the command <code>for img in {docker-images}/*.tar.gz; do docker load -i "$img"; done</code> to load docker images. For Window use this instead <code>for %i in (docker-images\*.tar.gz \*.tar.gz) do docker load -i "%i"</code>.</li>
+<li>You can make changes to the <code>.env</code> file to change things such as default login or ports. While using the built-in identity provider, we can leave everything to defaults for this codelab.</li>
+</ol>
+<p class="image-container"><img src="img/2102ac06805143bf.png"></p>
+<ol type="1" start="5">
+<li>Run the following command and all the components will start up with the specified values configured: <code>docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.embedded.yaml -f compose.embedded.yaml up -d</code>.</li>
+<li>Once the script is done running, you should now be able to go to your browser and navigate to <code>localhost:8888</code> which should re-direct you to the Solace Schema Registry login screen.</li>
+</ol>
+<p class="image-container"><img src="img/4429ba3a9a93ef03.png"></p>
+<p>That&#39;s it, you have now installed an instance of the Solace Schema Registry!</p>
+<p>Alternatively, for enterprise-grade security features, Solace Schema Registry supports external identity providers. For that, make the necessary configurations in your IdP and set the environment variables in your <code>.env</code> file:</p>
+<p class="image-container"><img src="img/f0a21d1cd9778ae6.png"></p>
+<p>Run the following command <code>docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.external.yaml -f compose.external.multiple.issuers.yaml up -d</code>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setting up Solace Schema Registry with Kubernetes" duration="6">
+        <p>Alternatively, we can set up Solace Schema Registry on a Kubernetes cluster using Helm.</p>
+<p>NOTE: You must have an existing Kubernetes cluster available (for example, Amazon EKS, Google GKE, Microsoft AKS, or an on-prem/self-managed cluster).</p>
+<ol type="1">
+<li>Configure <code>kubectl</code> to communicate with your cluster.</li>
+<li>In this method of deployment also, we will use the package that came from the downloaded tarball package from the prerequisites section. Navigate to the extracted folder called <code>Schema-Registry-V1.0</code>.</li>
+<li>Open the commonad and run this command to load docker images at your preferred location:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">export REGISTRY=&#34;your-registry.com/project&#34;
+for img in {docker-images}/*.tar.gz; do
+  LOADED=$(docker load -i &#34;$img&#34; | grep &#34;Loaded image:&#34; | cut -d&#39; &#39; -f3)
+  NEW_NAME=&#34;$REGISTRY/$(basename &#34;$img&#34; .tar.gz)&#34;
+  docker tag &#34;$LOADED&#34; &#34;$NEW_NAME&#34;
+  docker push &#34;$NEW_NAME&#34;
+done
+</code></pre>
+<ol type="1" start="4">
+<li>Install the CloudNative PostgreSQL Operator for database management: <code>kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.26/releases/cnpg-1.26.0.yaml</code>.</li>
+<li>Update a values.yaml file with your environment-specific configuration, database, authentication, ingress and TLS configuration: Insert image</li>
+<li>Install Solace Schema Registry using Helm: <code>helm upgrade --install schema-registry ./solace-schema-registry</code></li>
+<li>Verify the deployment: <code>kubectl get pods -n solace</code></li>
+<li>To access the deployed services, replace &lt;ingress.hostNameSuffix&gt; with the actual hostname or IP address you configured for your ingress: <code>https://ui.<ingress.hostNameSuffix></code></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating and Registering Schemas" duration="4">
+        <p>Let&#39;s create a simple schema for a <code>clock-in-out</code> event:</p>
+<ol type="1">
+<li>Open the Solace Schema Registry UI in your web browser by going to <code>localhost:8888</code>.</li>
+<li>Login with the predefined credentials for a developer. In this case the username is <code>sr-developer</code> and password is <code>devPassword</code>.</li>
+</ol>
+<p class="image-container"><img src="img/b92182bdb2aa8a90.png"></p>
+<ol type="1" start="3">
+<li>Click on <code>Create artifact</code> button. Once the dialogue opens enter the following as shown below: <ul>
+<li>Group Id: Leave it empty (default)</li>
+<li>Artifact Id: Set to <code>solace/samples/clock-in-out/json</code></li>
+<li>Type: Set to <code>JSON Schema</code></li>
+</ul>
+</li>
+</ol>
+<p class="image-container"><img src="img/445fbe96f4560f60.png"></p>
+<p class="image-container"><img src="img/134b2dcf881816d7.png"></p>
+<ol type="1" start="4">
+<li>We will skip the <code>Artifact Metadata</code> step as it is optional and will click <code>Next</code>.</li>
+<li>For the &#34;Version Content&#34; section, copy the Json schema from below and either paste directly or save it into a file and upload it and click <code>Next</code> when done.</li>
+</ol>
+<pre><code language="language-json" class="language-json">{
+  &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema#&#34;,
+  &#34;title&#34;: &#34;clock-in-out&#34;,
+  &#34;type&#34;: &#34;object&#34;,
+  &#34;additionalProperties&#34;: false,
+  &#34;properties&#34;: {
+    &#34;region_code&#34;: {
+      &#34;description&#34;: &#34;region code for clock in or out&#34;,
+      &#34;type&#34;: &#34;string&#34;
+    },
+    &#34;store_id&#34;: {
+      &#34;description&#34;: &#34;Store identifier&#34;,
+      &#34;type&#34;: &#34;string&#34;
+    },
+    &#34;employee_id&#34;: {
+      &#34;description&#34;: &#34;Employee ID for who clocked in or out&#34;,
+      &#34;type&#34;: &#34;string&#34;
+    },
+    &#34;datetime&#34;: {
+      &#34;description&#34;: &#34;Clock time&#34;,
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;format&#34;: &#34;date-time&#34;
+    }
+  },
+  &#34;required&#34;: [
+    &#34;region_code&#34;,
+    &#34;store_id&#34;,
+    &#34;employee_id&#34;,
+    &#34;datetime&#34;
+  ]
+}
+</code></pre>
+<p class="image-container"><img src="img/d97c4089aefc1da.png"></p>
+<ol type="1" start="6">
+<li>We will skip the <code>Version Metadata</code> step as it is optional and will simply click the <code>Create</code> button.</li>
+<li>Finally after you have successfully created the new schema you should see the following:</li>
+</ol>
+<p class="image-container"><img src="img/9e1429bc511f4660.png"></p>
+<p>You&#39;ve now created and registered your first schema!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using Schemas with the Solace Messaging API for Java (JCSMP)" duration="10">
+        <p>Now, let&#39;s see how to use this schema in Java using the Solace Messaging API for Java (JCSMP):</p>
+<ol type="1">
+<li>Open a command window or terminal and clone this GitHub repository, and open the <code>solace-samples-java-jcsmp</code> directory. With <code>git clone https://github.com/SolaceSamples/solace-samples-java-jcsmp</code> and <code>cd solace-samples-java-jcsmp</code></li>
+<li>Run the command <code>./gradlew assemble</code> to build the sample.</li>
+<li>Open the <code>build/staged</code> directory by running <code>cd build/staged</code> and run the sample application with the broker connection details: <code>bin/HelloWorldJCSMPJsonSchemaSerde localhost:55555 default default</code></li>
+</ol>
+<p>This sample talks to the locally deployed Solace Schema Registry and retrieves the schema along with the schema ID. It will then do the following:</p>
+<p>Configures the Serializer and Deserializer:</p>
+<pre><code language="language-java" class="language-java">// Create and configure JSON Schema serializer and deserializer
+        try (Serializer&lt;JsonNode&gt; serializer = new JsonSchemaSerializer&lt;&gt;();
+             Deserializer&lt;JsonNode&gt; deserializer = new JsonSchemaDeserializer&lt;&gt;()) {
+
+            serializer.configure(getConfig());
+            deserializer.configure(getConfig());
+</code></pre>
+<pre><code language="language-java" class="language-java">  /**
+     * Returns a configuration map for the JSON Schema serializer and deserializer.
+     *
+     * @return A Map containing configuration properties
+     */
+    private static Map&lt;String, Object&gt; getConfig() {
+        Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+        config.put(SchemaResolverProperties.REGISTRY_URL, REGISTRY_URL);
+        config.put(SchemaResolverProperties.AUTH_USERNAME, REGISTRY_USERNAME);
+        config.put(SchemaResolverProperties.AUTH_PASSWORD, REGISTRY_PASSWORD);
+        return config;
+    }
+
+</code></pre>
+<p>Serializes the message payload and publishes the message to the connected broker on <code>solace/samples/clock-in-out/json</code> destination with the serialized payload and schema ID:</p>
+<pre><code language="language-java" class="language-java">   // Create and populate a ClockInOut JsonNode with sample data
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode clockInOut = mapper.createObjectNode();
+            clockInOut.put(&#34;region_code&#34;, &#34;NA-WEST&#34;);
+            clockInOut.put(&#34;store_id&#34;, &#34;STORE-001&#34;);
+            clockInOut.put(&#34;employee_id&#34;, &#34;EMP-12345&#34;);
+            clockInOut.put(&#34;datetime&#34;, &#34;2025-01-20T15:30:00Z&#34;);
+
+            // Serialize and send the message
+            BytesMessage msg = JCSMPFactory.onlyInstance().createMessage(BytesMessage.class);
+            SerdeMessage.serialize(serializer, topic, msg, clockInOut);
+            System.out.printf(&#34;Sending ClockInOut Message:%n%s%n&#34;, msg.dump());
+             producer.send(msg, topic);
+</code></pre>
+<p>It will then receive the published message and deserialize it by looking up the schema ID and retrieving the schema and print it out to console:</p>
+<pre><code language="language-java" class="language-java">   // Set up the message consumer with a deserialization callback
+            XMLMessageConsumer cons = session.getMessageConsumer(Consumed.with(deserializer, (msg, clockInOutData) -&gt; {
+                System.out.printf(&#34;Got a ClockInOut JsonNode: %s%n&#34;, clockInOutData);
+                System.out.printf(&#34;Employee %s clocked in/out at store %s in region %s at %s%n&#34;,
+                        clockInOutData.get(&#34;employee_id&#34;).asText(),
+                        clockInOutData.get(&#34;store_id&#34;).asText(),
+                        clockInOutData.get(&#34;region_code&#34;).asText(),
+                        clockInOutData.get(&#34;datetime&#34;).asText());
+                latch.countDown(); // Signal the main thread that a message has been received
+            }, (msg, deserializationException) -&gt; {
+                System.out.printf(&#34;Got exception: %s%n&#34;, deserializationException);
+                System.out.printf(&#34;But still have access to the message: %s%n&#34;, msg.dump());
+                latch.countDown();
+            }, jcsmpException -&gt; {
+                System.out.printf(&#34;Got exception: %s%n&#34;, jcsmpException);
+                latch.countDown();
+            }));
+            cons.start();
+</code></pre>
+<p>The sourcecode can be further looked at by opening the <code>HelloWorldJCSMPJsonSchemaSerde.java</code> file.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using schemas with REST messaging" duration="10">
+        <p>We can also use this schema with Solace Schema Registry in REST-based messaging environments.</p>
+<aside class="special"><p> Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs). For more detailed documentation, refer to the <a href="https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points" target="_blank">Solace Documentation on REST Delivery Points</a>.</p>
+</aside>
+<p>With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry as a new artifact with an <code>Artifact Id</code> of <code>solace/samples/json</code> - Refer to Step 7 Creating and Registering Schemas if you need to review the steps.</p>
+<pre><code language="language-json" class="language-json">{
+  &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema#&#34;,
+  &#34;title&#34;: &#34;User&#34;,
+  &#34;type&#34;: &#34;object&#34;,
+  &#34;customJavaType&#34;: &#34;com.solace.samples.serdes.jsonschema.User&#34;,
+  &#34;additionalProperties&#34;: false,
+  &#34;properties&#34;: {
+    &#34;name&#34;: {
+      &#34;description&#34;: &#34;Name of the user&#34;,
+      &#34;type&#34;: &#34;string&#34;
+    },
+    &#34;id&#34;: {
+      &#34;description&#34;: &#34;Id of the user&#34;,
+      &#34;type&#34;: &#34;string&#34;
+    },
+    &#34;email&#34;: {
+      &#34;description&#34;: &#34;Email of the user&#34;,
+      &#34;type&#34;: &#34;string&#34;,
+      &#34;format&#34;: &#34;email&#34;
+    }
+  },
+  &#34;required&#34;: 
+  [  &#34;name&#34;,
+    &#34;id&#34;,
+    &#34;email&#34;
+  ]}
+</code></pre>
+<p>Let&#39;s build a Publisher and Consumer sample.</p>
+<ol type="1">
+<li>Open a command window or terminal and clone this GitHub repository: <code>git clone https://github.com/SolaceSamples/solace-samples-rest-messaging</code></li>
+<li>Run the command to build the sample  <code>./gradlew build</code>. You should see a <code>BUILD SUCCESSFUL</code> message. Note: For windows users, use the <code>gradlew.bat</code> file instead of <code>gradlew</code></li>
+<li>Run the sample application and provide the broker connection details like: <code>./gradlew runJsonSchemaRestPublisherHttpClient --args="brokerUrl 38080"</code></li>
+</ol>
+<p>This sample serializes and publishes by doing the following: Configures the Serializer:</p>
+<pre><code language="language-java" class="language-java">// Create and configure Json serializer
+ try (Serializer&lt;JsonNode&gt; serializer = new JsonSchemaSerializer&lt;&gt;()) {
+                serializer.configure(getConfig());
+</code></pre>
+<pre><code language="language-java" class="language-java"> /**
+     * Gets the configuration for the serializer.
+     * @return A map of configuration properties.
+     */
+    private static Map&lt;String, Object&gt; getConfig() {
+        Map&lt;String, Object&gt; config = new HashMap&lt;&gt;();
+        config.put(SchemaResolverProperties.REGISTRY_URL, REGISTRY_URL);
+        config.put(SchemaResolverProperties.AUTH_USERNAME, REGISTRY_USERNAME);
+        config.put(SchemaResolverProperties.AUTH_PASSWORD, REGISTRY_PASSWORD);
+        // This configuration property will populate the SERDES header with a schema ID that is of type String
+        config.put(SerdeProperties.SCHEMA_HEADER_IDENTIFIERS, SchemaHeaderId.SCHEMA_ID_STRING);
+        return config;
+</code></pre>
+<p>Serializes the HTTP message with payload and headers:</p>
+<pre><code language="language-java" class="language-java"> * Serializes the HTTP message with the given payload and headers.
+ Map&lt;String, Object&gt; headers = new HashMap&lt;&gt;();
+        byte[] payloadBytes = serializer.serialize(topic, payload, headers);
+
+        for (String key : headers.keySet()) {
+            Object value = headers.get(key);
+            // No Integer/Long to String mapping is needed, as the SERDES schema ID header is already configured as a String.
+            // The type parameter is optional. By default all Solace User Properties in a REST message are assumed to have a type &#34;string&#34;
+            httpBuilder.header(String.format(&#34;%s%s&#34;, &#34;Solace-User-Property-&#34;, key), value.toString());
+        }
+
+        if (&#34;JSON&#34;.equals(CONTENT_TYPE)) {
+            httpBuilder.header(&#34;Content-Type&#34;, &#34;application/json&#34;);
+        } else if (&#34;BINARY&#34;.equals(CONTENT_TYPE)) {
+            httpBuilder.header(&#34;Content-Type&#34;, &#34;application/octet-stream&#34;);
+        } else {
+            httpBuilder.header(&#34;Content-Type&#34;, CONTENT_TYPE);
+        }
+        return httpBuilder.POST(HttpRequest.BodyPublishers.ofByteArray(payloadBytes));
+
+</code></pre>
+<p>Publishes the message to specific topic:</p>
+<pre><code language="language-java" class="language-java">//Publishes a message to a specific topic
+   ObjectNode user = new ObjectMapper().createObjectNode();
+        try {
+            String url = String.format(&#34;http://%s:%d/TOPIC/%s&#34;, brokerHost, port, topic);
+            HttpRequest.Builder httpBuilder = HttpRequest.newBuilder().uri(URI.create(url));
+
+            user.put(&#34;name&#34;, &#34;John Doe&#34;);
+            user.put(&#34;id&#34;, id);
+            user.put(&#34;email&#34;, &#34;support@solace.com&#34;);
+
+            HttpRequest request = serializeHttpMessage(httpBuilder, serializer, topic, user).build();
+
+            HttpResponse&lt;String&gt; response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println(&#34;Published message with status: &#34; + response.statusCode());
+            System.out.println(&#34;Published message with record: &#34; + user);
+</code></pre>
+<ol type="1" start="4">
+<li>For a Consumer Application, create a queue subscribed to <code>solace/samples/json</code> and configure RDP client as mentioned above. REST consumer samples start a local HTTP server that listens for incoming POST requests from a Solace broker&#39;s REST Delivery Point (RDP).</li>
+</ol>
+<p>   Configure Solace Rest Delivery Point   1. Create Queue </p>
+<p><img alt="Create queue" src="img/7fd0a0a88c387e48.png"> 2. Create Rest Delivery Point <img alt="Rest Delivery Point" src="img/3b37e2a12d4f7660.png"> 3. Create REST Consumer <img alt="REST Consumer" src="img/b490b0bb89d37a5f.png"> 4. Create Queue Binding <img alt="Queue Binding" src="img/f4f9351c0828add0.png"> 5. Specify Queue Binding Endpoint <img alt="Queue Binding Endpoint" src="img/a04532457850c591.png"> Make sure all of the RDP components are enabled.</p>
+<ol type="1" start="5">
+<li>Run the consumer sample like: <code>./gradlew runJsonSchemaRestConsumer --args="/my-rest-endpoint 8080 X-Solace-Topic"</code></li>
+</ol>
+<p>Configures the Deserializer:</p>
+<pre><code language="language-java" class="language-java">// Create and configure Json deserializer
+Deserializer&lt;User&gt; deserializer = new JsonSchemaDeserializer&lt;&gt;()) {
+            deserializer.configure(getDeserializerConfig());
+</code></pre>
+<pre><code language="language-java" class="language-java">Returns a map of configuration properties for the deserializer.
+     *
+     * @return a map of configuration properties for the deserializer
+     */
+    private static Map&lt;String, Object&gt; getDeserializerConfig() {
+        HashMap&lt;String,Object&gt; config = new HashMap&lt;&gt;();
+        config.put(SchemaResolverProperties.REGISTRY_URL, REGISTRY_URL);
+        config.put(SchemaResolverProperties.AUTH_USERNAME, REGISTRY_USERNAME);
+        config.put(SchemaResolverProperties.AUTH_PASSWORD, REGISTRY_PASSWORD);
+        config.put(JsonSchemaProperties.TYPE_PROPERTY, &#34;customJavaType&#34;);
+        return config;
+</code></pre>
+<p>It will receive the published message from http headers and deserialize it and retrieving the schema and print it out:</p>
+<pre><code language="language-java" class="language-java">   // Handles a SERDES message.
+            Headers httpHeaders = exchange.getRequestHeaders();
+
+            // Read the message body
+            InputStream is = exchange.getRequestBody();
+            byte[] messagePayload = is.readAllBytes();
+
+            // extract SERDES headers from http headers
+            Map&lt;String, Object&gt; serdesHeaders = getSerdesHeaders(httpHeaders);
+            // deserialize with topic, payload and SERDES headers
+            T object = deserializer.deserialize(optionalTopic.orElse(&#34;&#34;), messagePayload, serdesHeaders);
+
+            System.out.printf(&#34;%n- - - - - - - - - - RECEIVED SERDES MESSAGE - - - - - - - - - -%n&#34;);
+            printAllHeaders(httpHeaders);
+            System.out.println(&#34;BodyBytesLength: &#34; + messagePayload.length);
+            System.out.println(&#34;Body: &#34; + objectToStringFunc.apply(object));
+            System.out.printf(&#34;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -%n&#34;);
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Best Practices for Schema Evolution" duration="2">
+        <p>As your data model evolves, you&#39;ll need to update your schemas. Here are some best practices:</p>
+<ol type="1">
+<li><strong>Backward Compatibility</strong>: Ensure new schema versions can read old data.</li>
+<li><strong>Forward Compatibility</strong>: Ensure old schema versions can read new data (ignoring new fields).</li>
+<li><strong>Full Compatibility</strong>: Aim for both backward and forward compatibility.</li>
+<li><strong>Versioning</strong>: Use semantic versioning for your schemas.</li>
+<li><strong>Default Values</strong>: Provide default values for new fields to maintain backward compatibility.</li>
+<li><strong>Avoid Renaming</strong>: Instead of renaming fields, add new fields and deprecate old ones.</li>
+</ol>
+<p>When updating a schema in Solace Schema Registry:</p>
+<ol type="1">
+<li>Create a new version of the existing schema.</li>
+<li>Make your changes, following the best practices above.</li>
+<li>Use the compatibility rule in the registry to ensure your changes don&#39;t break existing consumers.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Takeaways" duration="2">
+        <p>✔️ Schema registries are crucial for maintaining data consistency in event-driven architectures.<br> ✔️ Solace Schema Registry provides a powerful platform for managing schemas.<br> ✔️ Solace&#39;s JCSMP API can be used effectively with the Solace Schema Registry for robust event-driven applications.<br> ✔️ Proper schema evolution practices ensure smooth updates without breaking existing systems.<br> ✔️ Using schemas in your applications helps catch data issues early and improves overall system reliability.<br> ✔️ Solace Schema Registry supports built-in authentication as well as external identity providers for enterprise environments. ✔️ Solace Schema Registry currently supports Avro and JSON Schema. More schema SERDES will be made available in the future.</p>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
