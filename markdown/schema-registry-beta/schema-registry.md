@@ -316,6 +316,37 @@ We can also use this schema with Solace Schema Registry in REST-based messaging 
 > Before running the REST samples, you need to configure the Solace broker with the appropriate queues and REST Delivery Points (RDPs).
 For more detailed documentation, refer to the [Solace Documentation on REST Delivery Points](https://docs.solace.com/Services/Managing-RDPs.htm?Highlight=rest#configuring-REST-delivery-points).
 
+With this REST messaging, we will use the following Schema example. You can upload it on Solace Schema Registry - "Version Content" section, similar to as shown in Step 6.
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "type": "object",
+  "customJavaType": "com.solace.samples.serdes.jsonschema.User",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "description": "Name of the user",
+      "type": "string"
+    },
+    "id": {
+      "description": "Id of the user",
+      "type": "string"
+    },
+    "email": {
+      "description": "Email of the user",
+      "type": "string",
+      "format": "email"
+    }
+  },
+  "required": 
+  [  "name",
+    "id",
+    "email"
+  ]}
+```
+
 Let's build a Publisher and Consumer sample.
 
 1. Open a command window or terminal and clone this GitHub repository:
