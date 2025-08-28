@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-08-26T19:09:02Z",
+  "updated": "2025-08-28T16:19:05Z",
   "id": "schema-registry",
   "duration": 46,
   "title": "Introduction to Solace Schema Registry using the Solace Messaging API for Java (JCSMP) and REST Messaging",
   "summary": "This codelab will walk you through getting started with the Solace Schema Registry and the Solace SERDES Collection using the Solace Messaging API for Java (JCSMP) or with REST messaging.",
-  "source": "main/markdown/schema-registry-beta/schema-registry.md",
+  "source": "main/markdown/schema-registry/schema-registry.md",
   "theme": "",
   "status": [
     "published"
