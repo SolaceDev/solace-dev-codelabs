@@ -149,12 +149,12 @@ The central messaging backbone that provides intelligent topic-based routing, fa
 External interface bridges that translate diverse protocols (HTTP, WebSockets, Slack) into standardized A2A messages while handling authentication, authorization, and session management for outside systems.
 
 3. **Agents**
-Specialized AI processing units built on Google's Agent Development Kit that provide domain-specific intelligence, self-register for dynamic discovery, and access comprehensive tool ecosystems for complex task execution.
+Specialized AI processing units built on Agent Development Kit that provide domain-specific intelligence, self-register for dynamic discovery, and access comprehensive tool ecosystems for complex task execution.
 
 4. **Solace AI Connector**
 The universal runtime environment that hosts and manages the complete lifecycle of all system components while bridging Google ADK capabilities with Solace event infrastructure through YAML-driven configuration.
 
-5. **Google Agent Development Kit (ADK)**
+5. **Agent Development Kit (ADK)**
 The core AI framework that powers individual agents with LLM interactions, conversation memory management, artifact processing capabilities, and an extensible tool integration system.
 
 6. **A2A Protocol & Agent Registry**
@@ -208,10 +208,10 @@ Solace Agent Mesh is versatile and can be applied to various domains:
 > By building on Solace Agent Mesh, you can focus on creating domain-specific agent intelligence rather than spending time on integration and communication infrastructure.
 
 
-## Google Agent-to-Agent Protocol (A2A)
+## Agent-to-Agent Protocol (A2A)
 Duration: 0:07:00
 
-The Agent-to-Agent (A2A) Protocol is Google's standardized communication protocol designed to enable seamless interaction between AI agents, regardless of their underlying implementation or hosting environment. It provides a common language for agents to discover each other, exchange information, delegate tasks, and collaborate on complex problems. This document explores the A2A protocol in detail, including its design principles, components, and implementation approaches.
+The Agent-to-Agent (A2A) Protocol is a standardized communication protocol designed to enable seamless interaction between AI agents, regardless of their underlying implementation or hosting environment. It provides a common language for agents to discover each other, exchange information, delegate tasks, and collaborate on complex problems. This document explores the A2A protocol in detail, including its design principles, components, and implementation approaches.
 
 > aside positive
 > A2A is an open-source protocol, available for any developer or organization to implement. This open nature fosters a rich ecosystem of interoperable agents across different platforms and frameworks.
@@ -296,9 +296,9 @@ To learn more about A2A, navigate to the [A2A Documentation](https://a2aproject.
 ## Agent Development Kit (ADK)
 Duration: 0:05:00
 
-Google's Agent Development Kit (ADK) offers developers a comprehensive framework to build, evaluate, and deploy sophisticated AI agents with minimal friction. ADK provides the essential building blocks—from LLM integration and tool execution to session management and artifact handling—that enable both conversational and non-conversational agents capable of complex reasoning, planning, and task execution. 
+The Agent Development Kit (ADK) offers developers a comprehensive framework to build, evaluate, and deploy sophisticated AI agents with minimal friction. ADK provides the essential building blocks—from LLM integration and tool execution to session management and artifact handling—that enable both conversational and non-conversational agents capable of complex reasoning, planning, and task execution. 
 
-The A2A Protocol works seamlessly with Google's Agent Development Kit (ADK):
+The A2A Protocol works seamlessly with Agent Development Kit (ADK):
 
 1. **ADK A2A Tools**: Built-in tools for A2A communication
 2. **Protocol Translation**: Converting between ADK events and A2A messages
@@ -628,7 +628,7 @@ The Solace Broker serves as the foundational messaging infrastructure, providing
 ## Built-in Agents
 Duration: 0:05:00
 
-As mentioned earlier, Agents are specialized processing units built around Google's ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
+As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
 
 In Solace Agent Mesh, Agents are configuration driven vial YAML files and there are multiple ways to develop an agent:
 1. Using built-in templates,
@@ -658,14 +658,6 @@ Use the following prompt in the `Instructions` section
 
 
 ```
-
-
-## Connecting Google Maps via MCP
-Duration: 0:05:00
-
-## Connecting Google Search via MCP
-Duration: 0:05:00
-
 ## A2A Agents
 Duration: 0:05:00
 
