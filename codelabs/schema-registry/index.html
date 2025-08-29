@@ -102,13 +102,14 @@
 </ol>
 <p class="image-container"><img src="img/57321296ef7ab5fe.png"></p>
 <ol type="1" start="2">
-<li>Open a terminal or command prompt window and navigate to the extracted location of the folder called <code>solace-schema-registry-dist</code>.</li>
+<li>Open a terminal or command prompt window in the above folder location.</li>
 <li>Run the command <code>for img in {docker-images}/*.tar.gz; do docker load -i "$img"; done</code> to load docker images. For Window use this instead <code>for %i in (docker-images\*.tar.gz \*.tar.gz) do docker load -i "%i"</code>.</li>
+<li>We also need to update tags for docker images by running the command <code>docker tag solace-registry:1.0.0 solace-registry:latest</code> for each docker image.</li>
 <li>You can make changes to the <code>.env</code> file to change things such as default login or ports. While using the built-in identity provider, we can leave everything to defaults for this codelab.</li>
 </ol>
 <p class="image-container"><img src="img/2102ac06805143bf.png"></p>
 <ol type="1" start="5">
-<li>Run the following command and all the components will start up with the specified values configured: <code>docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.embedded.yaml -f compose.embedded.yaml up -d</code>.</li>
+<li>Navigate to the extracted location of the folder called <code>solace-schema-registry-dist</code> and Run the following command. All the components will start up with the specified values configured: <code>docker compose -f compose.yaml -f compose.nginx.yaml -f compose.nginx.for.embedded.yaml -f compose.embedded.yaml up -d</code>.</li>
 <li>Once the script is done running, you should now be able to go to your browser and navigate to <code>localhost:8888</code> which should re-direct you to the Solace Schema Registry login screen.</li>
 </ol>
 <p class="image-container"><img src="img/4429ba3a9a93ef03.png"></p>
