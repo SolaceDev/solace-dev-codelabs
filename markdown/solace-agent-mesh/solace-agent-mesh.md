@@ -7,7 +7,7 @@ environments: Web
 status: Published 
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
-# Getting started with Solace Agent Mesh
+# Getting started with Solace Agent Mesh - An Agent Orchestration Framework
 
 ## What you'll learn: Overview
 Duration: 0:02:00
@@ -502,7 +502,7 @@ apps:
 > aside positive
 > The `sam run` command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations expect the agent of your choice `sam run -s configs/agents/markitdown.yaml` and in another terminal you can run `sam run configs/agents/markitdown.yaml` that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals. 
 
-5. Observe the agent in the WebGUi Gateway
+5. Observe the agent in the WebGUI Gateway
 
 ![markitdown](img/markitdown.png)
 
@@ -981,42 +981,42 @@ Duration: 0:05:00
 
 Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:
 
-### Explore the Documentation
+### 📚 Explore the Documentation
 Visit the [Solace Agent Mesh Documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/) for comprehensive guides, API references, and advanced concepts. The documentation provides in-depth information on:
 - Creating custom agents with specific capabilities
 - Understanding the A2A protocol in detail
 - Advanced deployment patterns
 
-### Join the Community
+### 🤝 Join the Community
 - Star and watch the [Solace Agent Mesh Repository](https://github.com/SolaceLabs/solace-agent-mesh) to stay updated with the latest developments
 - Explore community plugins in the [Solace Community Plugins Repository](https://github.com/solacecommunity/solace-agent-mesh-plugins)
 - Join the [Solace Community Forum](https://solace.community/) to connect with other developers and get support
 
-### Enhance Your Deployment
+### 🚀 Enhance Your Deployment
 - Add more specialized agents to your mesh using `sam add agent`
 - Try different LLM providers to compare performance and capabilities
 - Create agent workflows that solve specific business problems in your organization
 - Integrate with your existing systems and data sources
 
-### Develop Custom Plugins
+### 🧩 Develop Custom Plugins
 Consider creating your own plugins to extend the functionality of Solace Agent Mesh:
 1. Use the `sam plugin create` command to scaffold a new plugin
 2. Follow the plugin development guide in the documentation
 3. Share your plugin with the community through the [Solace Community Plugins Repository](https://github.com/solacecommunity/solace-agent-mesh-plugins)
 
-### Stay Updated
+### 📰 Stay Updated
 - Follow the [Solace Blog](https://solace.com/blog) for articles about Agent Mesh and event-driven architectures
 - Subscribe to webinars and events featuring Solace Agent Mesh implementations
 - Check out technical deep dives and tutorials on the Solace YouTube channel
 
-### Production Deployment
+### 🏭 Production Deployment
 As you move towards production use cases:
 - Implement proper security measures with authentication and authorization
 - Set up monitoring and observability for your agent mesh
 - Consider scaling strategies for high-traffic environments
 - Deploy with containerization using Docker and Kubernetes
 
-### Check out our youtube playlists!
+### 📺 Check out our youtube playlists!
 
 <video id="_4IdRPBM2y8"></video>
 <video id="Tpy_8RVLPNU"></video>
