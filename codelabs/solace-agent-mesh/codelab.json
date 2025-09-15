@@ -3,15 +3,15 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-07-15T14:40:24Z",
+  "updated": "2025-09-15T16:43:03Z",
   "id": "solace-agent-mesh",
-  "duration": 79,
-  "title": "Getting started with Solace Agent Mesh over A2A",
+  "duration": 88,
+  "title": "Getting started with Solace Agent Mesh - An Agent Orchestration Framework",
   "summary": "",
   "source": "main/markdown/solace-agent-mesh/solace-agent-mesh.md",
   "theme": "",
   "status": [
-    "hidden"
+    "published"
   ],
   "category": [
     "solace",

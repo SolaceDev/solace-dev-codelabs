@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Getting started with Solace Agent Mesh over A2A</title>
+  <title>Getting started with Solace Agent Mesh - An Agent Orchestration Framework</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -24,96 +24,89 @@
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="solace-agent-mesh"
-                  title="Getting started with Solace Agent Mesh over A2A"
+                  title="Getting started with Solace Agent Mesh - An Agent Orchestration Framework"
                   environment="web"
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>In this codelab, you&#39;ll gain a foundational understanding of the Solace Agent Mesh and its integration with Google&#39;s Agent-to-Agent (A2A) Protocol. You&#39;ll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.</p>
-<p>You&#39;ll dive into the details of the A2A Protocol, discovering its design principles, core concepts, and how it standardizes agent communication for interoperability and extensibility. The codelab explains essential constructs such as Agent Cards, Tasks, Events, and Artifacts, providing insight into how agents discover each other, delegate tasks, and collaborate asynchronously. You&#39;ll also learn about the Agent Development Kit (ADK) and how it works with A2A to build and deploy advanced AI agents.</p>
-<p>By the end of this codelab, you&#39;ll be equipped to get started with Solace Agent Mesh, including installation prerequisites, running built-in agents, and connecting external services like Google Maps and Search. You&#39;ll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.</p>
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="2">
+        <p>In this codelab, you&#39;ll gain a foundational understanding of the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh</a>. You&#39;ll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.</p>
+<p>By the end of this codelab, you&#39;ll be equipped to get started with Solace Agent Mesh, including learning the building blocks, installation prerequisites, running built-in agents, and connecting different types of agents. You&#39;ll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.</p>
+<p class="image-container"><img alt="SAM Arch" src="img/3d4bcaab27b64893.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Introduction to the Solace Agent Mesh" duration="15">
-        <p>Welcome to this workshop on Solace Agent Mesh! In this session, you&#39;ll learn about a powerful framework that addresses one of modern AI development&#39;s biggest challenges: connecting AI models to real-world data and systems. Let&#39;s dive in!</p>
-<aside class="warning"><p> Without a framework like Solace Agent Mesh, connecting AI systems to disparate data sources can be extremely complex, requiring custom integration code and creating maintenance challenges.</p>
+      <google-codelab-step label="Introduction to the Solace Agent Mesh" duration="7">
+        <h2 is-upgraded>Problem statement</h2>
+<p>Building effective agentic systems presents a complex challenge that extends far beyond simply deploying AI models. AI Agents are siloed systems that operate in isolation, and are unable to effectively communicate or share capabilities across organizational boundaries. <strong>By definition and design, Agents are inherently domain-specific, designed to excel in narrow use cases but struggling to collaborate or leverage expertise from other specialized agents, creating fragmented AI ecosystems that fail to realize their collective potential.</strong></p>
+<p class="image-container"><img alt="Fragmented" src="img/a3864d5d59ef93ff.png"></p>
+<p>To make intelligent decisions and respond to dynamic conditions, agentic systems must rely on event-driven actions that flow into the organization. While solving the core AI challenge represents only 20% of the effort, the remaining 80% involves the much more complex task of connecting AI models to the disparate data sources, legacy systems, APIs, and organizational knowledge that exist across isolated silos—making data accessibility and integration the true bottleneck in delivering practical AI value</p>
+<aside class="warning"><p> Without a framework like Solace Agent Mesh, connecting AI systems to siloed data sources can be extremely complex, requiring custom integration code and pointing to point connections resulting in maintenance challenges.</p>
 </aside>
 <h2 is-upgraded>What is Solace Agent Mesh?</h2>
-<p>Solace Agent Mesh is an open-source framework that integrates Google&#39;s Agent Development Kit (ADK) with the Solace AI Connector to create a &#34;Universal A2A Agent Host.&#34; This enables scalable, distributed AI agent communication through the Solace Event Broker.</p>
-<p>At its core, Solace Agent Mesh addresses a fundamental challenge in modern AI development: while powerful AI models are readily available, the real complexity lies in connecting them to the data and systems where they can provide value. Data exists in isolated silos - spread across databases, SaaS platforms, APIs, and legacy systems - making it difficult to build AI applications that work across these boundaries.</p>
-<p>Solace Agent Mesh provides developers with:</p>
-<ul>
-<li>A standardized A2A (Agent-to-Agent) protocol for AI communication</li>
-<li>Tools to connect AI agents to real-world data sources</li>
-<li>The ability to orchestrate complex workflows across multiple specialized agents</li>
-<li>Built-in extensibility through a modular plugin architecture</li>
+<p>Solace Agent Mesh is a comprehensive open-source framework that empowers developers to build sophisticated, distributed AI systems. On a high level, Agent mesh provides developers with the following:</p>
+<ol type="1">
+<li><strong>Core Communication &amp; Protocol</strong><ul>
+<li><strong>Standardized </strong><a href="https://a2a-protocol.org/dev/specification/" target="_blank"><strong>A2A</strong></a><strong> (Agent-to-Agent) Protocol</strong>: A unified communication standard that enables seamless interaction between AI agents, regardless of their underlying implementation or deployment location</li>
+<li><strong>Event-Driven Architecture</strong>: Built on the Solace Event Broker for asynchronous, scalable, and resilient agent communication</li>
+<li><strong>Topic-Based Routing</strong>: Intelligent message routing that enables agents to discover and communicate with each other dynamically</li>
 </ul>
+</li>
+<li><strong>Data Integration &amp; Connectivity</strong><ul>
+<li><strong>Real-World Data Source Integration</strong>: Access to real-time data and integrations from the event mesh allows AI agents access to different business events</li>
+<li><strong>Universal Gateway Support</strong>: Multiple interface types including REST APIs, WebSockets, webhooks, and direct event mesh integration</li>
+<li><strong>Streaming Data Processing</strong>: Real-time event processing capabilities for handling live data streams and IoT sensor feeds</li>
+<li><strong>Multi-Protocol Support</strong>: Connect to systems using HTTP, MQTT, AMQP, WebSocket, and custom protocols</li>
+</ul>
+</li>
+<li><strong>Workflow Orchestration &amp; Management</strong><ul>
+<li><strong>Complex Workflow Orchestration</strong>: Coordinate sophisticated multi-agent workflows with dependency management and parallel execution</li>
+<li><strong>Task Decomposition</strong>: Automatically break down complex requests into manageable subtasks for specialized agents</li>
+<li><strong>Result Aggregation</strong>: Intelligent collection and synthesis of results from multiple agents into cohesive responses</li>
+</ul>
+</li>
+<li><strong>Extensibility &amp; Plugin Architecture</strong><ul>
+<li><strong>Modular Plugin System</strong>: Easily extend functionality through a rich ecosystem of <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">community</a> and <a href="https://github.com/SolaceLabs/solace-agent-mesh-core-plugins" target="_blank">commercial plugins</a></li>
+<li><strong>Custom Agent Development</strong>: Comprehensive tools and templates for building domain-specific agents with specialized capabilities</li>
+<li><strong>Gateway Plugins</strong>: Create custom external interfaces for unique integration requirements with the Gateway Development Kit (GDK)</li>
+<li><strong>Service Provider Plugins</strong>: Standardized abstractions for integrating with backend systems and data sources</li>
+<li><strong>Tool Framework</strong>: Extensible tool system that allows agents to perform actions and interact with external services</li>
+</ul>
+</li>
+<li><strong>AI Model &amp; Provider Support</strong><ul>
+<li><strong>Multi-Model Compatibility</strong>: Support for all major AI providers including OpenAI, Anthropic, Google, Azure OpenAI, and local models</li>
+<li><strong>Model Abstraction</strong>: Switch between different AI models without changing agent logic</li>
+<li><strong>Custom Model Integration</strong>: Support for proprietary and fine-tuned models through flexible provider interfaces</li>
+</ul>
+</li>
+<li><strong>Development Tools &amp; Framework</strong><ul>
+<li><strong>Comprehensive CLI</strong>: Full-featured command-line interface for project creation, management, and deployment</li>
+<li><strong>Configuration Management</strong>: YAML-based configuration system with environment variable support and validation</li>
+</ul>
+</li>
+<li><strong>Security &amp; Enterprise Features</strong><ul>
+<li><strong>Multi-Authentication Support</strong>: JWT, OAuth, API keys, and custom authentication mechanisms</li>
+<li><strong>Role-Based Access Control</strong>: Fine-grained permissions and authorization for agents and resources</li>
+<li><strong>Identity Service Integration</strong>: Integration with enterprise identity providers and HR systems</li>
+</ul>
+</li>
+<li><strong>Scalability &amp; Performance</strong><ul>
+<li><strong>Horizontal Scaling</strong>: Easily scale individual agents or entire agent meshes based on demand</li>
+<li><strong>Resource Management</strong>: Intelligent resource allocation and optimization for optimal performance</li>
+<li><strong>Async Processing</strong>: Non-blocking, asynchronous operations for maximum throughput</li>
+<li><strong>Shock Absorbing</strong>: Built on top of an advanced message broker, Solace Event Broker, that leverages queues for guaranteed messaging</li>
+</ul>
+</li>
+<li><strong>Deployment &amp; Operations</strong><ul>
+<li><strong>Multi-Environment Support</strong>: Seamless deployment across development, staging, and production environments</li>
+<li><strong>Container-Ready</strong>: Docker and Kubernetes support for modern containerized deployments</li>
+<li><strong>Cloud-Native</strong>: Native support for AWS, Azure, GCP, and hybrid cloud deployments</li>
+</ul>
+</li>
+</ol>
 <aside class="special"><p> Solace Agent Mesh follows an event-driven architecture that decouples components, allowing them to be developed, deployed, and scaled independently.</p>
 </aside>
-<h2 is-upgraded>Key Components and Architecture</h2>
-<p>Solace Agent Mesh consists of several interconnected components that work together through the standardized A2A protocol:</p>
-<ol type="1">
-<li><strong>Solace Event Broker/Event Mesh</strong>:<ul>
-<li>Acts as the central nervous system of the framework</li>
-<li>Provides the messaging fabric for all asynchronous communication</li>
-<li>Utilizes topic-based routing for the Agent-to-Agent (A2A) protocol</li>
-<li>Ensures message delivery even during component failures</li>
-</ul>
-</li>
-<li><strong>Agents</strong>:<ul>
-<li>Specialized processing units built around Google&#39;s ADK</li>
-<li>Provide domain-specific knowledge and capabilities</li>
-<li>Features include ADK integration, dynamic discovery, access to tools</li>
-<li>Can operate independently and be deployed separately</li>
-</ul>
-</li>
-<li><strong>Gateways</strong>:<ul>
-<li>Act as bridges between external systems and the agent mesh</li>
-<li>Handle protocol translation, authentication, and session management</li>
-<li>Support various interfaces (REST, HTTP SSE, webhooks, event mesh)</li>
-</ul>
-</li>
-<li><strong>Orchestrator</strong>:<ul>
-<li>A specialized agent that breaks down complex requests into manageable tasks</li>
-<li>Manages workflow across multiple agents</li>
-<li>Coordinates task delegation and response aggregation</li>
-</ul>
-</li>
-</ol>
-<aside class="warning"><p> Without proper planning and understanding of the component roles, you might create overly complex architectures or miss opportunities to leverage the full power of the distributed agent ecosystem.</p>
-</aside>
-<h2 is-upgraded>Evolution of Event-Driven Architecture</h2>
-<p>Solace Agent Mesh represents the next step in the evolution of event-driven architecture:</p>
-<ol type="1">
-<li><strong>Traditional EDA</strong>: Focused on decoupling services and enabling asynchronous communication through events.</li>
-<li><strong>Event Mesh</strong>: Extended EDA with dynamic routing across cloud boundaries and geographic regions.</li>
-<li><strong>Event-Driven Microservices</strong>: Applied EDA principles to microservice architectures for greater resilience and scalability.</li>
-<li><strong>Event-Driven AI/ML</strong>: Integrated AI capabilities with event streams for real-time intelligence.</li>
-<li><strong>Solace Agent Mesh</strong>: Combines EDA with agent-based AI to create collaborative, distributed intelligence systems connected through an event mesh.</li>
-</ol>
-<p>The architecture of Solace Agent Mesh builds on these foundations with several key principles:</p>
-<ul>
-<li><strong>Event-Driven Architecture</strong>: All interactions between major components are asynchronous and mediated by the event broker</li>
-<li><strong>Component Decoupling</strong>: Components communicate through standardized A2A protocol messages over the event mesh</li>
-<li><strong>Scalability and Resilience</strong>: The architecture supports horizontal scaling and provides fault tolerance</li>
-</ul>
-<aside class="special"><p> This evolution makes Solace Agent Mesh particularly well-suited for complex, distributed systems that need to process information from multiple sources in real-time.</p>
-</aside>
-<h2 is-upgraded>Key Benefits of Solace Agent Mesh</h2>
-<ol type="1">
-<li><strong>Simplified Integration</strong>: Connect AI agents to disparate data sources through a standardized protocol.</li>
-<li><strong>Decoupled Architecture</strong>: Components communicate asynchronously, allowing independent development, deployment, and scaling.</li>
-<li><strong>Scalability</strong>: Horizontal scaling of Agent Hosts and Gateways to handle increasing workloads.</li>
-<li><strong>Resilience</strong>: Fault tolerance and guaranteed message delivery even if individual components fail.</li>
-<li><strong>Extensibility</strong>: Modular design with plugins for customizing and extending functionality.</li>
-<li><strong>Multi-Modal Intelligence</strong>: Support for various AI models and capabilities through specialized agents.</li>
-<li><strong>Real-Time Processing</strong>: Event-driven architecture enables immediate processing of information as it becomes available.</li>
-</ol>
-<aside class="warning"><p> Keep in mind that implementing a distributed agent system requires careful consideration of data governance, security, and monitoring to ensure reliable and trustworthy operation.</p>
-</aside>
-<p>This workshop will help you understand how to leverage Solace Agent Mesh for your own AI applications, whether you&#39;re an AI enthusiast experimenting with new models or an enterprise developer building production systems.</p>
+<p>This codelab will help you understand how to leverage Solace Agent Mesh for your own AI applications, whether you&#39;re an AI enthusiast experimenting with new models or an enterprise developer building production systems.</p>
 <h2 is-upgraded>Resources</h2>
 <p>For more information and a deep dive on the Solace Agent Mesh, you can check out this video series </p>
 <iframe class="youtube-video" src="https://www.youtube.com/embed/_4IdRPBM2y8?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -121,135 +114,113 @@
 
       </google-codelab-step>
     
+      <google-codelab-step label="Key Components and Architecture" duration="15">
+        <p>Solace Agent Mesh represents a sophisticated enterprise-grade platform that orchestrates AI agents. At its core, the <strong>Orchestrator</strong> serves as the intelligent brain that decomposes complex tasks and routes them to specialized <strong>Agents</strong> built using the Agent Development Kit (ADK), while <strong>Gateways</strong> created with the Gateway Development Kit (GDK) provide secure multi-protocol entry points. The platform&#39;s foundation rests on the <strong>Solace Broker</strong> for enterprise messaging, complemented by essential Services including <strong>LLM integration</strong>, <strong>embeddings management</strong>, <strong>artifact storage</strong>, and <strong>conversation history tracking</strong>. This unified architecture creates a robust, enterprise-ready platform for deploying and managing AI agent ecosystems at scale.</p>
+<p class="image-container"><img alt="SAM Component" src="img/8228332dfdef0e1b.jpg"></p>
+<h2 is-upgraded>Solace Event Broker / Event Mesh</h2>
+<p>The central messaging backbone that provides intelligent topic-based routing, fault-tolerant delivery, and horizontal scaling for all Agent-to-Agent (A2A) protocol communications across the entire system.</p>
+<p>The <a href="https://solace.com/products/event-broker/" target="_blank">Solace Event Broker</a> serves as the central nervous system of the entire Solace Agent Mesh framework, providing:</p>
+<ul>
+<li><strong>Intelligent Topic-Based Routing</strong>: Directs messages between components using hierarchical topic structures, enabling sophisticated messaging patterns like request/reply and publish/subscribe</li>
+<li><strong>Fault-Tolerant Delivery</strong>: Ensures guaranteed message delivery even during component failures or network instability</li>
+<li><strong>Asynchronous Communication Layer</strong>: Creates a fluid communication foundation where messages flow naturally between all mesh components</li>
+<li><strong>Horizontal Scaling</strong>: Supports seamless expansion as the mesh grows through distributed broker architecture</li>
+<li><strong>Real-Time Message Delivery</strong>: Processes messages with ultra-low latency to maintain responsive agent interactions</li>
+</ul>
+<h2 is-upgraded>Gateways: Entry and Exit Points</h2>
+<p>External interface bridges that translate diverse protocols (HTTP, WebSocket, Slack RTM, Solace Event Mesh...etc) into standardized A2A messages while handling authentication, authorization, and session management for outside systems.</p>
+<p>Important functionalities of gateways include:</p>
+<ul>
+<li><strong>Protocol Translation</strong>: Convert external protocols (HTTP, WebSockets, Slack RTM) into standardized A2A protocol messages</li>
+<li><strong>Authentication &amp; Authorization</strong>: Authenticate incoming requests and enforce permission scopes</li>
+<li><strong>Session Management</strong>: Map external user sessions to A2A task lifecycles</li>
+<li><strong>Response Handling</strong>: Deliver agent responses back to external clients</li>
+<li><strong>Interface Variety</strong>: Include REST API gateways, WebUI gateways, Slack gateways, CLI gateways, and custom interface adapters</li>
+<li><strong>Gateway Development Kit (GDK)</strong>: Provides base classes that abstract common gateway logic</li>
+</ul>
+<h2 is-upgraded>Orchestrator - The Planner</h2>
+<p>A specialized agent that coordinates complex workflows. The main functionality of the orchestrator boils down to:</p>
+<ul>
+<li><strong>Request Decomposition</strong>: Breaks down complex requests into manageable tasks</li>
+<li><strong>Task Distribution</strong>: Assigns tasks to appropriate specialized agents</li>
+<li><strong>Workflow Management</strong>: Tracks progress and handles dependencies between tasks</li>
+<li><strong>Result Aggregation</strong>: Combines outputs from multiple agents into coherent responses</li>
+<li><strong>Error Handling</strong>: Manages failures and retries or alternative approaches</li>
+</ul>
+<h2 is-upgraded>Agents - Goal Setters</h2>
+<p>Specialized AI processing units built on Agent Development Kit that provide domain-specific intelligence, self-register for dynamic discovery, and access comprehensive tool ecosystems for complex task execution.</p>
+<ul>
+<li><strong>Self-Registration Capabilities</strong>: Agents automatically discover and connect to the mesh network upon initialization, eliminating the need for manual configuration and setup processes. They broadcast their available services, capabilities, and resource requirements to the network, creating a dynamic marketplace of agent functions. The agents maintain real-time service catalogs that update automatically as their capabilities evolve or change through learning and adaptation. They handle all necessary authentication and authorization protocols to ensure secure integration with the mesh infrastructure. The system supports hot-swapping and seamless updates, allowing agents to be modified or replaced without disrupting ongoing network operations.</li>
+<li><strong>Specialized Domain Functions</strong>: Each agent is designed with narrow AI expertise tailored to specific industries, use cases, or functional domains, ensuring deep competency in their areas of specialization. They implement comprehensive domain-specific knowledge bases and reasoning patterns that reflect expert-level understanding of their target fields. The agents maintain specialized vocabularies, ontologies, and semantic understanding that enable precise communication and task execution within their domains. They provide expert-level performance in targeted functional areas, often exceeding human capabilities in speed and consistency. The specialization framework supports customizable configuration through training and fine-tuning processes.</li>
+<li><strong>Comprehensive Tool Access</strong>: Agents interface seamlessly with extensive APIs, databases, and external service ecosystems, providing them with broad operational capabilities beyond their core AI functions. They utilize both proprietary and open-source tool libraries for task execution, ensuring flexibility and adaptability across different technological environments. The system supports dynamic tool discovery and integration during runtime, allowing agents to adapt their capabilities based on emerging requirements. Secure tool authentication and access control mechanisms protect sensitive resources while enabling authorized functionality. The agents enable sophisticated tool chaining and workflow orchestration for executing complex, multi-step operations.</li>
+<li><strong>Stateful Operation Management</strong>: Agents maintain persistent memory and context across extended interaction sessions, enabling them to build upon previous conversations and maintain continuity in complex, long-term engagements. They implement sophisticated conversation history tracking and relationship building capabilities that allow for personalized and contextually appropriate interactions. The system supports continuous learning and adaptation based on interaction patterns, enabling agents to improve their performance and better serve user needs over time. Agents manage state synchronization across distributed instances, ensuring consistency when multiple copies of an agent are operating simultaneously. They provide robust checkpoint and recovery mechanisms that maintain operation continuity even in the face of system failures or interruptions.</li>
+</ul>
+<h2 is-upgraded>Solace AI Connector</h2>
+<p>The universal runtime environment that hosts and manages the complete lifecycle of all system components while bridging Google ADK capabilities with Solace event infrastructure through YAML-driven configuration. Main capabilities include:</p>
+<ul>
+<li><strong>Component Lifecycle Management</strong>: Handles startup, monitoring, and graceful shutdown of all components</li>
+<li><strong>Configuration Management</strong>: Processes YAML-driven configuration for flexible deployment</li>
+<li><strong>Bridge Between Technologies</strong>: Connects Google ADK capabilities with Solace event infrastructure</li>
+<li><strong>Host Environment</strong>: Provides the execution environment for agents and gateways</li>
+<li><strong>Resource Management</strong>: Controls allocation of computing resources for optimal performance</li>
+</ul>
+<h2 is-upgraded>Backend Services &amp; Tools</h2>
+<p>The foundational infrastructure layer providing multi-provider LLM access, extensible integrations for custom tools and APIs, persistent data storage, and cloud-native artifact management services. Solace Agent Mesh is built on a modular foundation with the following tools:</p>
+<ul>
+<li><strong>Large Language Models</strong>: Multiple LLM providers for varied AI capabilities</li>
+<li><strong>Databases &amp; Vector Stores</strong>: Persistent data storage and efficient vector search</li>
+<li><strong>Custom Tool Integration</strong>: Framework for adding specialized functionality</li>
+<li><strong>API Connectors</strong>: Bridges to external services and systems</li>
+<li><strong>Artifact Service</strong>: File management through filesystem or cloud storage systems</li>
+<li><strong>Observability Framework</strong>: Monitoring, logging, and debugging infrastructure</li>
+</ul>
+<aside class="warning"><p> Without proper planning and understanding of the component roles, you might create overly complex architectures or miss opportunities to leverage the full power of the distributed agent ecosystem.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Use Cases and Applications" duration="5">
-        <p>Solace Agent Mesh is versatile and can be applied to various domains:</p>
-<ol type="1">
-<li><strong>Customer Service Augmentation</strong>:<ul>
-<li>Intelligent chatbots that can access multiple backend systems</li>
-<li>Real-time response generation based on customer data and history</li>
-<li>Seamless handoff between AI agents and human agents</li>
-</ul>
-</li>
-<li><strong>Supply Chain Optimization</strong>:<ul>
-<li>Monitoring and analyzing events across the supply chain</li>
-<li>Predictive maintenance and inventory management</li>
-<li>Automated decision-making based on real-time data</li>
-</ul>
-</li>
-<li><strong>Financial Services</strong>:<ul>
-<li>Fraud detection through pattern analysis across multiple data streams</li>
-<li>Personalized financial advice based on customer portfolio and market events</li>
-<li>Regulatory compliance monitoring and reporting</li>
-</ul>
-</li>
-<li><strong>Healthcare</strong>:<ul>
-<li>Patient monitoring and alert generation</li>
-<li>Clinical decision support by accessing medical records and research data</li>
-<li>Healthcare workflow optimization</li>
-</ul>
-</li>
-<li><strong>Smart Cities</strong>:<ul>
-<li>Traffic management through real-time data analysis</li>
-<li>Utility optimization based on usage patterns</li>
-<li>Emergency response coordination</li>
-</ul>
-</li>
-</ol>
+        <p>Solace Agent Mesh is versatile and can be applied to various domains. Here are some examples of where Agent Mesh could be very helpful</p>
+<h2 is-upgraded>Intelligent Enterprise Automation</h2>
+<p>Agent orchestration through Solace Agent mesh excels in customer service systems that intelligently route inquiries to specialized agents based on intent and context, dramatically improving response times and customer satisfaction. The event-driven architecture allows service representatives to handle complex queries by delegating specialized aspects to purpose-built AI agents while maintaining conversation continuity. Organizations deploy these systems to provide consistent, 24/7 customer support that combines human expertise with AI capabilities, reducing resolution times and improving service quality while scaling efficiently to handle peak demand periods without degradation in performance.</p>
+<h2 is-upgraded>Event-Triggered Analysis</h2>
+<p>The event-driven foundation of Solace Agent Mesh makes it particularly effective for systems that automatically respond to system events with appropriate data analysis and reporting. These implementations listen for significant events across enterprise systems and trigger specialized analysis workflows based on event type, context, and criticality. Organizations deploy these capabilities for automated incident response, where security events trigger investigation workflows involving multiple specialized agents, or for business operations monitoring, where unusual patterns in operational metrics automatically initiate root cause analysis across multiple connected systems without requiring manual intervention.</p>
+<h2 is-upgraded>Data Processing Pipelines</h2>
+<p>The mesh architecture is effective for implementing sophisticated data processing pipelines where specialized agents transform, analyze, and enrich information from multiple sources. In these implementations, data flows seamlessly between agents that each contribute their unique processing capabilities—one agent might extract structured data from documents, another might classify content, while others translate or summarize findings. The event-driven backbone ensures resilient processing even when individual components experience delays or failures, making it ideal for enterprise environments processing mission-critical data that requires multiple specialized AI capabilities applied in sequence or parallel.</p>
+<h2 is-upgraded>Document Intelligence Systems</h2>
+<p>Document processing systems that extract text, summarize content, translate materials, and categorize information—with each specialized function handled by purpose-built agents working in orchestration is a big use-case for Solace Agent Mesh. These systems tackle complex document workflows where multiple AI capabilities must be coordinated, such as legal contract analysis, regulatory compliance review, or technical documentation management. The modular design allows organizations to easily enhance specific capabilities (like adding specialized extraction for particular document types) without disrupting the overall workflow, creating increasingly sophisticated document intelligence that evolves with organizational needs.</p>
+<h2 is-upgraded>Human-AI Collaboration</h2>
+<p>Solace Agent Mesh provides a robust foundation for implementing approval workflows where agents perform complex tasks while keeping humans in the loop for approvals, clarifications, or expert guidance via web interfaces, Slack, or other communication channels. These implementations balance automation efficiency with human oversight, ideal for scenarios requiring judgment calls or regulatory compliance. Organizations deploy these systems for contract approval workflows, content moderation processes, and complex decision support systems where AI provides recommendations but humans make final determinations, ensuring responsible AI deployment while still gaining significant efficiency improvements.</p>
+<h2 is-upgraded>Decision Support Systems</h2>
+<p>Organizations leverage the mesh to provide AI-powered decision support while maintaining human oversight for critical business determinations. These systems aggregate information from multiple sources, analyze options using specialized agents with different expertise domains, and present synthesized recommendations to human decision-makers. The event-driven design facilitates asynchronous information gathering and analysis that mirrors how human teams collaborate on complex decisions. Businesses implement these systems for investment analysis, strategic planning, risk assessment, and other scenarios where multiple factors must be considered from different perspectives to reach optimal conclusions.</p>
+<h2 is-upgraded>Multi-Agent Research Platform</h2>
+<p>Researchers and AI development teams utilize Solace Agent Mesh as a production-ready platform for exploring agent collaboration patterns, delegation strategies, and distributed AI problem-solving approaches. The system&#39;s comprehensive observability allows teams to analyze interaction patterns between agents, measure performance of different collaboration strategies, and identify bottlenecks or failure modes in complex multi-agent systems. Academic and commercial research groups implement these environments to develop new frameworks for agent cooperation, test emergent behaviors in multi-agent systems, and evaluate different approaches to task decomposition and delegation between specialized AI capabilities.</p>
+<h2 is-upgraded>Natural Language Data Intelligence</h2>
+<p>Data analysis teams implement agents that query databases, transform results, and generate visualizations based on natural language requests, making complex data accessible to non-technical users throughout organizations. These implementations translate ambiguous human queries into precise database operations, apply appropriate transformations to the retrieved data, and automatically select visualization approaches that best communicate the insights. Organizations deploy these systems to democratize data access, allowing business users to interact with complex data warehouses through conversational interfaces while maintaining governance controls through the mesh&#39;s robust permission system and generating consistent, properly formatted outputs regardless of query complexity.</p>
+<h2 is-upgraded>Enterprise Integration</h2>
+<p>Solace Agent Mesh demonstrates significant value in providing AI-powered integration between enterprise systems like Jira, Confluence, and other corporate knowledge bases and workflow tools. These implementations connect previously siloed information systems through intelligent agents that understand cross-system relationships, can translate between different data models, and maintain context across system boundaries. Organizations implement these integrations to reduce manual data transfer between systems, ensure consistency of information across platforms, and provide unified natural language interfaces to multiple backend systems, significantly improving knowledge worker productivity and information accuracy across the enterprise.</p>
 <aside class="special"><p> By building on Solace Agent Mesh, you can focus on creating domain-specific agent intelligence rather than spending time on integration and communication infrastructure.</p>
 </aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Google Agent-to-Agent Protocol (A2A)" duration="7">
-        <p>The Agent-to-Agent (A2A) Protocol is Google&#39;s standardized communication protocol designed to enable seamless interaction between AI agents, regardless of their underlying implementation or hosting environment. It provides a common language for agents to discover each other, exchange information, delegate tasks, and collaborate on complex problems. This document explores the A2A protocol in detail, including its design principles, components, and implementation approaches.</p>
-<aside class="special"><p> A2A is an open-source protocol, available for any developer or organization to implement. This open nature fosters a rich ecosystem of interoperable agents across different platforms and frameworks.</p>
-</aside>
-<h2 is-upgraded>Core Concepts</h2>
-<p>The A2A Protocol is built around several foundational concepts that define its structure and behavior:</p>
-<h3 is-upgraded>Protocol Design Principles</h3>
-<p>A2A was designed with the following principles in mind:</p>
-<ol type="1">
-<li><strong>Standardization</strong>: Provide a common interface for agent communication</li>
-<li><strong>Interoperability</strong>: Enable agents from different systems to work together</li>
-<li><strong>Extensibility</strong>: Support evolving agent capabilities</li>
-<li><strong>Asynchronicity</strong>: Handle long-running tasks and parallel operations</li>
-<li><strong>Discoverability</strong>: Allow agents to find and understand each other&#39;s capabilities</li>
-<li><strong>Security</strong>: Implement robust authentication and authorization</li>
-</ol>
-<p>These principles ensure that A2A serves as a reliable foundation for building multi-agent systems.</p>
-<h3 is-upgraded>Agent Cards</h3>
-<p>Agent Cards are metadata structures that describe an agent&#39;s capabilities, allowing other agents and systems to discover and understand how to interact with them. Key components include:</p>
-<ol type="1">
-<li><strong>Name</strong>: A unique identifier for the agent</li>
-<li><strong>Description</strong>: A human-readable explanation of the agent&#39;s purpose</li>
-<li><strong>Capabilities</strong>: The specific tasks the agent can perform</li>
-<li><strong>Input/Output Formats</strong>: The data structures the agent expects and produces</li>
-<li><strong>Authentication Requirements</strong>: Security information for accessing the agent</li>
-</ol>
-<p>Agent Cards are published to discovery endpoints, making them available to other agents in the ecosystem.</p>
-<aside class="warning"><p> Always validate Agent Cards from external sources, as malicious actors could potentially publish misleading Agent Cards to trick systems into inappropriate delegations.</p>
-</aside>
-<h3 is-upgraded>Tasks</h3>
-<p>Tasks represent the work that agents perform. They include:</p>
-<ol type="1">
-<li><strong>Task ID</strong>: A unique identifier for tracking</li>
-<li><strong>Input</strong>: The information provided to the agent</li>
-<li><strong>Context</strong>: Additional information about the task environment</li>
-<li><strong>Artifacts</strong>: Files or binary data associated with the task</li>
-<li><strong>Delegation Path</strong>: Information about how the task was routed</li>
-</ol>
-<p>Tasks follow a lifecycle from creation through processing to completion or failure.</p>
-<h3 is-upgraded>Events</h3>
-<p>Events represent the state changes and progress updates that occur during task execution:</p>
-<ol type="1">
-<li><strong>Status Updates</strong>: Progress information about ongoing tasks</li>
-<li><strong>Artifact Updates</strong>: Notifications about new or modified files</li>
-<li><strong>Error Events</strong>: Information about failures or issues</li>
-<li><strong>Completion Events</strong>: Signals that a task has finished</li>
-</ol>
-<p>Events enable asynchronous monitoring of task progress, which is essential for long-running operations.</p>
-<h3 is-upgraded>Artifacts</h3>
-<p>Artifacts are files or binary data that agents can exchange:</p>
-<ol type="1">
-<li><strong>Content</strong>: The actual data (text, image, audio, etc.)</li>
-<li><strong>Metadata</strong>: Information about the artifact (type, creation time, etc.)</li>
-<li><strong>Versioning</strong>: Tracking changes to artifacts over time</li>
-<li><strong>References</strong>: Ways to refer to artifacts across the system</li>
-</ol>
-<p>Artifacts enable agents to share rich, structured data beyond simple text messages.</p>
-<aside class="special"><p> The A2A Protocol continues to evolve with the needs of the agent ecosystem.</p>
-</aside>
-<h2 is-upgraded>Where to learn more</h2>
-<p>The Agent-to-Agent (A2A) Protocol provides a standardized foundation for building interconnected AI agent systems. By enabling discovery, task delegation, and asynchronous communication, A2A facilitates the creation of sophisticated multi-agent workflows that can tackle complex problems through collaboration.</p>
-<p>As the ecosystem of AI agents continues to grow, A2A offers a common language that allows these agents to work together seamlessly, regardless of their underlying implementation or hosting environment. This interoperability is key to unlocking the full potential of agent-based AI systems.</p>
-<p>To learn more about A2A, navigate to the <a href="https://a2aproject.github.io/A2A/latest/" target="_blank">A2A Documentation</a></p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Agent Development Kit (ADK)" duration="5">
-        <p>Google&#39;s Agent Development Kit (ADK) offers developers a comprehensive framework to build, evaluate, and deploy sophisticated AI agents with minimal friction. ADK provides the essential building blocks—from LLM integration and tool execution to session management and artifact handling—that enable both conversational and non-conversational agents capable of complex reasoning, planning, and task execution.</p>
-<p>The A2A Protocol works seamlessly with Google&#39;s Agent Development Kit (ADK):</p>
-<ol type="1">
-<li><strong>ADK A2A Tools</strong>: Built-in tools for A2A communication</li>
-<li><strong>Protocol Translation</strong>: Converting between ADK events and A2A messages</li>
-<li><strong>Agent Deployment</strong>: Exposing ADK agents through A2A endpoints</li>
-<li><strong>Multi-Agent Systems</strong>: Building networks of ADK agents communicating via A2A</li>
-</ol>
-<p>For more information on ADK integration, see the <a href="https://google.github.io/adk-docs/" target="_blank">ADK documentation</a>.</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Getting Started with Solace Agent Mesh" duration="5">
+      <google-codelab-step label="Getting Started with Solace Agent Mesh" duration="10">
         <h2 is-upgraded>Prerequisites</h2>
 <ul>
 <li>[Optional] <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">Solace Event Broker</a></li>
 <li>Python 3.11+</li>
+<li>LLM Endpoint</li>
 <li>LLM Key</li>
 </ul>
 <h2 is-upgraded>Installation</h2>
+<h3 is-upgraded>Install Python 3.11+</h3>
+<p>To install a specific version of python, we would recommend using brew</p>
+<pre><code>brew install python@3.12
+</code></pre>
+<aside class="special"><p> Depending on how you install your python version, the following commands will be executed as per the python version installed For example, you might need to run <code>python3.12 [command]</code> to run python version 3.12 or just simply <code>python3 [command]</code></p>
+</aside>
 <h3 is-upgraded>Create and activate a Python virtual environment</h3>
 <p>MacOS/Linux</p>
 <pre><code>mkdir solace-agent-mesh-demo
@@ -260,101 +231,679 @@ source venv/bin/activate
 <p>Windows</p>
 <pre><code>venv/Scripts/activate
 </code></pre>
-<aside class="special"><p> Note: on a Linux machine, depending on the distribution you might need to <code>apt-get install python3-venvinstead</code>. Alternatively, you can use <code>pyenv</code> to manage multiple versions of python</p>
+<aside class="special"><p> Note: on a Linux machine, depending on the distribution you might need to <code>apt-get install python3-venv</code> instead. Alternatively, you can use <code>pyenv</code> to manage multiple versions of python</p>
 </aside>
+<p>After activating the virtual environment you can now simply just use <code>python</code> which will use whatever python version used to initialize the virtual environment. To confirm, you can execute the following after activating your virtual environment</p>
+<pre><code>python --version
+</code></pre>
 <h3 is-upgraded>Install the Solace Agent Mesh Community Edition</h3>
-<pre><code>pip install https://github.com/SolaceDev/solace-dev-codelabs/raw/master/markdown/solace-agent-mesh/solace_agent_mesh-1.0.0-py3-none-any.whl
+<pre><code>pip install solace-agent-mesh
 
 </code></pre>
+<h2 is-upgraded>[Optional] Solace Broker</h2>
+<p>You have two options to run and connect to a Solace Broker</p>
+<ol type="1">
+<li>Software: using a docker image to run it locally</li>
+<li>Cloud: using self served cloud instance</li>
+</ol>
+<p>Follow the steps defined in the <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">getting started with Solace</a> page</p>
 <h2 is-upgraded>Initialize Solace Agent Mesh</h2>
 <aside class="special"><p> To use the solace agent mesh, you can activate it by typing <code>solace-agent-mesh</code> or simply <code>sam</code></p>
 </aside>
 <p>In the newly created directory, initialize a new instance of an agent mesh project</p>
-<pre><code>sam init
+<pre><code>sam init --gui
 </code></pre>
-<p>You will then be presented with the following output</p>
-<pre><code>Initializing Solace Application Project...
-Would you like to configure your project through a web interface in your browser? [Y/n]:
-
-</code></pre>
-<p>Press <code>Y</code> and proceed with the frontend initialize interface</p>
-<p class="image-container"><img alt="SAM Init" src="img/e3f102ccf72fd873.png"></p>
-<p>From here, choose option 1: &#34;Get started quick&#34; to spin up an instance of the Agent Mesh without the Solace Broker</p>
-<p>In this tutorial, we will choose to configure the agent mesh without the Solace Broker which will use in-memory queues.</p>
-<aside class="warning"><p> Note that The simple setup with the recommended setup is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions</p>
+<p class="image-container"><img alt="SAM Init" src="img/99ed3b471249c035.png"></p>
+<p>From here, choose &#34;Advanced Setup&#34; to spin up an instance of the Agent Mesh that uses the Solace Broker as the communication backbone.</p>
+<aside class="warning"><p> Note that the simple setup &#34;Getting Started Quickly&#34; spins up Agent Mesh without the Solace Broker and uses in-memory queues instead. This is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions.</p>
 </aside>
-<p class="image-container"><img alt="SAM provider" src="img/deac30659907f27d.png"></p>
-<p>Select the following:</p>
+<p>Choose a namespace for your project</p>
+<p class="image-container"><img alt="Namespace" src="img/46a4e662f777fe66.png"></p>
+<p>Configure connection to the Solace Broker</p>
+<p class="image-container"><img alt="Broker" src="img/5eee67a4eed5e444.png"></p>
+<aside class="special"><p> Note: If you are using a Solace Cloud instance, you can get the connection parameters from the connect tab after spinning up a Broker Service. Use the Solace Web Messaging Protocol</p>
+</aside>
+<p>Configure your LLM endpoint, API Key, and Model name</p>
+<p class="image-container"><img alt="LLM Endpoint" src="img/15466a6a62fe3719.png"></p>
+<aside class="special"><p> The model of choice impact the performance of your results and system behaviour. A performative model is recommended for advanced use-cases</p>
+</aside>
+<p>Configure your main orchestrator</p>
+<p class="image-container"><img alt="orchestrator" src="img/5e94f0f5ef157c0a.png"></p>
+<aside class="special"><p> Keep all the configuration parameters as default. You can explore the other options for configuring the orchestrator agent to see what you have available for fine tuning the behaviour</p>
+</aside>
+<p>Configure the WebUI Gateway <img alt="gateway" src="img/80457de2c9d0c31f.png"></p>
+<aside class="special"><p> Note: Choose any Session Secret Key needed for the WebUI. Keep the remaining configurations as default.</p>
+</aside>
+<p>Review and Initialize the final configuration</p>
+<p class="image-container"><img alt="SAM final" src="img/1dcaaaf762dfd6a6.png"></p>
+<p>🎉 You have now successfully configured your Solace Agent Mesh environment! Now go back to terminal and continue with the next steps to run the Agent Mesh</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Running Solace Solace Agent Mesh" duration="5">
+        <p>After initializing your Solace Agent Mesh instance, you will find out the following files and directories has been created in your project folder</p>
+<pre><code language="language-bash" class="language-bash">.
+├── .env
+├── .sam
+├── configs
+│   ├── agents
+│   │   └── main_orchestrator.yaml
+│   ├── gateways
+│   │   └── webui.yaml
+│   ├── logging_config.ini
+│   └── shared_config.yaml
+├── requirements.txt
+└── src
+    └── __init__.py
+</code></pre>
+<p>Here is a quick explanation on what this folder structure reflects:</p>
 <ul>
-<li>LLM Provider: Google Gemini</li>
-<li>LLM API Key: <code>Insert Key Here</code></li>
-<li>LLM Model Name: <code>Choose model name</code></li>
+<li><code>.env</code> - Contains environment variables used for configuration flexibility across different environments. Such variables include API keys, LLM endpoints, and any secret needed and accessed by the agent runtime. Note that when solace agent mesh runs, it injects the contents of this file to the agent runtime thread.</li>
+<li><code>.sam</code> - This directory contains framework-specific settings such as plugin configurations</li>
+<li><code>config</code> - Houses all configuration YAML files for your SAM project, organized into several key components such as agents, gateways,logging settings, and common configuration settings shared across all agents and gateways (e.g. broker connection settings, model definitions, and service configurations)</li>
 </ul>
-<p>Review and Initialize</p>
-<p class="image-container"><img alt="SAM final" src="img/d661f7611b3d9ea.png"></p>
-<h2 is-upgraded>Run Solace Agent Mesh</h2>
-<p>Now back to your terminal and execute the following command</p>
+<aside class="special"><p> The shared configuration file employs YAML anchors (&amp; and *) for referencing common elements throughout the configuration structure.</p>
+</aside>
+<p><strong>Key Configuration Files</strong></p>
+<p><code>main_orchestrator.yaml</code></p>
+<p>This file configures the main orchestrator agent, which manages tasks and coordinates workflows between agents.</p>
+<p><code>webui.yaml</code></p>
+<p>This file configures the web user interface gateway, which provides a browser-based interface for interacting with the agent mesh.</p>
+<p><strong>Configuration Management</strong></p>
+<ul>
+<li>Each configuration file defines one or more applications that can run independently</li>
+<li>The SAM framework supports agent applications, gateway applications, and plugin applications</li>
+<li>Configuration files are automatically generated by commands like <code>sam add agent</code>, <code>sam add gateway</code>, or <code>sam plugin add</code></li>
+<li>You can run individual configuration files using sam run </li>
+</ul>
+<h2 is-upgraded>Running the Solace Agent Mesh</h2>
+<p>Execute the following command to run Solace Agent Mesh</p>
 <pre><code>sam run
 </code></pre>
+<p>Access the WebUI Gateway through <code>http://127.0.0.1:8000/</code></p>
 <p class="image-container"><img alt="SAM Intro" src="img/2f338cbec8696884.png"></p>
-<p>Viola! You are up and running with the Solace Agent Mesh!</p>
+<p>🚀 Voilà! You are up and running with the Solace Agent Mesh!</p>
+<p>Now run the following prompt in the chat window</p>
+<pre><code>What are your capabilities?
+</code></pre>
+<p>and click the &#34;Agent Workflow&#34; icon</p>
+<p class="image-container"><img alt="flow" src="img/de96d2ab2a7f3e04.png"></p>
+<p>Explore the command flow <img alt="simpleFlow" src="img/792f94318576a173.png"></p>
+<p>For the remaining of any prompts you execute to Solace Agent Mesh, you can always click this Agent Workflow icon to get a better understanding on what is happening</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Built-in Agents" duration="5">
-        <p>As mentioned earlier, Agents are specialized processing units built around Google&#39;s ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.</p>
-<p>In Solace Agent Mesh, there are multiple ways to write an agent:</p>
+      <google-codelab-step label="Adding Agents" duration="5">
+        <p>As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.</p>
+<p>In Solace Agent Mesh, Agents are configuration driven vial YAML files and there are multiple ways to develop an agent:</p>
 <ol type="1">
 <li>Using built-in templates,</li>
-<li>via MCP, or</li>
-<li>custom built</li>
+<li>Using the <code>sam add agent</code> cli command</li>
+<li>Using the GUI interface <code>sam add agent --gui</code></li>
+<li>custom using Python</li>
 </ol>
-<p>Adding new agent could be done in one of the following ways</p>
+<p>Lets add a simple agent that converts any document to markdown leveraging the Solace Agent Mesh built-in tools.</p>
 <ol type="1">
-<li>Using cli command <code>sam add agent</code></li>
-<li>Using the GUI</li>
+<li>Stop your solace agent mesh instance if its already running</li>
+<li>Create a new file under <code>configs/agents/</code> and name it <code>markitdown.yaml</code></li>
+<li>Add the following content</li>
 </ol>
-<p>Lets go ahead and add a general purpose agent</p>
-<p>In this tutorial we will be using the GUI. To spin up the agent building interface, execute this command from your terminal</p>
+<pre><code language="language-yaml" class="language-yaml">log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG # Changed from INFO to DEBUG to capture ADK INFO logs
+  log_file: markitdown.log
+
+# Shared SAM config
+!include ../shared_config.yaml
+
+apps:
+
+# ---  Markitdown Agent ---
+  - name: markitdown_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      &lt;&lt;: *broker_connection
+
+    # --- App Level Config ---
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: &#34;MarkitdownAgent&#34;
+      display_name: &#34;Markdown&#34;
+      model: *multimodal_model # Or *planning_model, choose as appropriate
+      instruction: |
+        The MarkitdownAgent has the following capability:
+        * convert various file types (like PDF, DOCX, XLSX, HTML, CSV, PPTX, ZIP) to Markdown.
+        Any files you get that might be useful should be saved using create_artifact.
+        There is no need to provide a preview of the content in the response.
+
+      # --- Tools Definition ---
+      tools:
+        - tool_type: builtin
+          tool_name: &#34;convert_file_to_markdown&#34;
+        - tool_type: builtin-group
+          group_name: &#34;artifact_management&#34;
+
+      session_service:
+        type: &#34;memory&#34;
+        default_behavior: &#34;PERSISTENT&#34; # Or &#34;RUN_BASED&#34;
+
+      artifact_service:
+        type: &#34;filesystem&#34;
+        base_path: &#34;/tmp/samv2&#34;
+        artifact_scope: namespace
+      artifact_handling_mode: &#34;reference&#34;
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      # --- Agent Card Definition ---
+      agent_card:
+        description: &#34;An agent that converts various file types (like PDF, DOCX, XLSX, HTML, CSV, PPTX, ZIP) to Markdown format.&#34;
+        defaultInputModes: [&#34;text&#34;, &#34;file&#34;] # Can take files as input
+        defaultOutputModes: [&#34;text&#34;, &#34;file&#34;] # Outputs markdown file
+        skills:
+        - id: &#34;convert_file_to_markdown&#34;
+          name: &#34;Markdown Converter&#34;
+          description: &#34;Converts various file types to Markdown format.&#34;
+
+      # --- Discovery &amp; Communication ---
+      agent_card_publishing: { interval_seconds: 10 }
+      agent_discovery: { enabled: false }
+      inter_agent_communication:
+        allow_list: []
+        request_timeout_seconds: 60
+</code></pre>
+<ol type="1" start="4">
+<li>Run solace agent mesh <code>sam run</code></li>
+</ol>
+<aside class="special"><p> The <code>sam run</code> command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations expect the agent of your choice <code>sam run -s configs/agents/markitdown.yaml</code> and in another terminal you can run <code>sam run configs/agents/markitdown.yaml</code> that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals.</p>
+</aside>
+<ol type="1" start="5">
+<li>Observe the agent in the WebGUI Gateway</li>
+</ol>
+<p class="image-container"><img alt="markitdown" src="img/3e982872adf51086.png"></p>
+<aside class="special"><p> Check out the <a href="https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents" target="_blank">examples</a> directory for other agent yaml configuration with the</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Understanding the YAML configuration of agents" duration="5">
+        <p>The Solace Agent Mesh framework is controlled by YAML configuration files that define agents, gateways, and plugins, allowing for configuration-driven development without code changes.</p>
+<p>Agent configuration files in Solace Agent Mesh are stored in the <code>configs/agents/</code> directory. Each agent has its own YAML file that defines its behavior, capabilities, and integration settings.</p>
+<h2 is-upgraded>Key Components of Agent YAML Files</h2>
+<p>A typical agent configuration YAML file includes these key sections:</p>
+<ol type="1">
+<li><strong>Basic Agent Information</strong><ul>
+<li>Name and description of the agent</li>
+<li>Version information</li>
+<li>Type of agent (e.g., assistant, orchestrator)</li>
+</ul>
+</li>
+<li><strong>Model Configuration (Note: Could be shared)</strong><ul>
+<li>LLM provider and model selection</li>
+<li>Temperature and other model parameters</li>
+<li>System prompt/instructions for the agent</li>
+</ul>
+</li>
+<li><strong>Security and Authorization</strong><ul>
+<li>Authentication methods (API key, OAuth2, etc.)</li>
+<li>Role-based access control settings</li>
+<li>Permission definitions</li>
+</ul>
+</li>
+<li><strong>Tools and Capabilities</strong><ul>
+<li>Available tools and functions</li>
+<li>Tool parameters and configurations</li>
+<li>Built-in tool groups</li>
+</ul>
+</li>
+<li><strong>Integration Settings</strong><ul>
+<li>Connections to external services (Jira, databases, etc.)</li>
+<li>API endpoints and credentials</li>
+<li>Connection parameters</li>
+</ul>
+</li>
+<li><strong>Event Handling</strong><ul>
+<li>Event triggers and handlers</li>
+<li>Timeout settings</li>
+<li>Recovery mechanisms</li>
+</ul>
+</li>
+<li><strong>Agent Card Definition</strong><ul>
+<li>Description of capabilities for other agents to discover</li>
+<li>Input/output modes</li>
+<li>Skills listing</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Example Agent Configuration</h2>
+<p>Here&#39;s an example of a basic agent configuration YAML file:</p>
+<pre><code language="language-yaml" class="language-yaml">log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG # Changed from INFO to DEBUG to capture ADK INFO logs
+  log_file: name-agent.log
+
+# Shared config
+!include ../shared_config.yaml
+
+apps:
+  - name: name-agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      &lt;&lt;: *broker_connection # References a broker connection defined in shared_config.yaml
+  
+  app_config:
+    # Basic agent identity
+    namespace: ${namespace}
+    supports_streaming: true
+    agent_name: &#34;example-agent&#34;
+    display_name: &#34;Example Agent&#34;
+    
+    # LLM model configuration
+    model: *general_model  # References a model defined in shared_config.yaml
+    
+    # Agent instructions (system prompt)
+    instruction: |
+      You are a helpful assistant specialized in answering questions about Solace Agent Mesh.
+      Always provide accurate and concise information.
+    
+    # Tools configuration
+    tools:
+      - tool_type: python
+        component_module: &#34;example_agent.tools&#34;
+        component_base_path: .
+        function_name: &#34;search_documentation&#34;
+        tool_name: &#34;search_docs&#34;
+        tool_config:
+          search_depth: 3
+      
+      # Built-in artifact tools for file operations
+      - tool_type: builtin-group
+        group_name: &#34;artifact_management&#34;
+    
+    # Agent card definition (A2A specification)
+    agent_card:
+      description: &#34;A helpful assistant for Solace Agent Mesh documentation&#34;
+      defaultInputModes: [&#34;text&#34;]
+      defaultOutputModes: [&#34;text&#34;]
+      skills:
+        - id: &#34;search_docs&#34;
+          name: &#34;Search Documentation&#34;
+          description: &#34;Searches through Solace Agent Mesh documentation&#34;
+</code></pre>
+<h2 is-upgraded>Agent Cards in the A2A Specification</h2>
+<p>Agent Cards are a critical component of the Agent-to-Agent (A2A) protocol specification. They serve as the &#34;identity&#34; and capability declaration for agents in a distributed system.</p>
+<h2 is-upgraded>What Are Agent Cards?</h2>
+<p>An Agent Card is a document (in JSON format) that describes an agent&#39;s:</p>
+<ul>
+<li>Identity (name, description, version)</li>
+<li>Capabilities (what the agent can do)</li>
+<li>Skills (specific functions or abilities)</li>
+<li>Service endpoint URL (how to reach the agent)</li>
+<li>Authentication requirements (how to authenticate)</li>
+<li>Interaction protocols (how to communicate)</li>
+</ul>
+<p>Agent Cards enable agents to discover each other and understand how to interact appropriately. They are the foundation of the A2A (Agent-to-Agent) protocol that Solace Agent Mesh implements.</p>
+<h2 is-upgraded>Agent Card Structure</h2>
+<p>In the Solace Agent Mesh YAML configuration, the agent card is defined within the <code>agent_card</code> section of the agent&#39;s configuration file. Internally, this is translated to a JSON document that follows the A2A specification.</p>
+<p>The agent card includes:</p>
+<ol type="1">
+<li><strong>Basic Metadata</strong><ul>
+<li><code>description</code>: A human-readable description of the agent&#39;s purpose</li>
+<li><code>defaultInputModes</code>: Formats the agent accepts as input (e.g., &#34;text&#34;, &#34;image&#34;)</li>
+<li><code>defaultOutputModes</code>: Formats the agent produces as output</li>
+</ul>
+</li>
+<li><strong>Skills Section</strong><ul>
+<li>Lists the specific capabilities or services the agent offers</li>
+<li>Each skill has an ID, name, and description</li>
+<li>Skills are discoverable by other agents for delegation and collaboration</li>
+</ul>
+</li>
+<li><strong>Authentication Information</strong> (optional)<ul>
+<li>Methods for authenticating with the agent</li>
+<li>Required scopes or permissions</li>
+</ul>
+</li>
+<li><strong>Capabilities Declaration</strong> (optional)<ul>
+<li>Special features the agent supports (streaming, attachments, etc.)</li>
+<li>Extension capabilities beyond core A2A functionality</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Benefits of the YAML Configuration Approach</h2>
+<p>The YAML-based configuration approach in Solace Agent Mesh provides several key benefits:</p>
+<ol type="1">
+<li><strong>Configuration-driven:</strong> Precise control over agent behavior, service integrations, and security settings without code changes</li>
+<li><strong>Security-first approach:</strong> Built-in authorization framework with fine-grained access control</li>
+<li><strong>Resilient by nature:</strong> Event-driven design creates responsive, self-healing interactions</li>
+<li><strong>Standardized discovery:</strong> A2A-compliant agent cards enable seamless agent integration and collaboration</li>
+</ol>
+<p>This configuration approach is particularly valuable for building complex multi-agent systems where agents need to discover and collaborate with each other based on their respective capabilities and skills.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Built-in tools" duration="7">
+        <p>Built-in tools in the Solace Agent Mesh are a comprehensive set of capabilities that enable agents to perform complex tasks, interact with various systems, and collaborate effectively within the mesh ecosystem. These tools extends the native capabilities offered by the <a href="https://google.github.io/adk-docs/" target="_blank">Agent Development Kit (ADK)</a>. This of these tool as native functionalities that agents have access to like &#34;functions&#34; instead of building these from scratch.</p>
+<p>The Solace Agent Mesh comes with a series of built-in tools natively to the platform. Each built-in tool name is defined in the <code>tools</code> section of the application configuration for the agent in the yaml config file as follows</p>
+<pre><code language="language-yaml" class="language-yaml">tools:
+   - tool_type: builtin
+     tool_name: &#34;tool_name&#34;
+</code></pre>
+<aside class="special"><p> Note that this is a developing open source framework and more built-in tools will be developed and introduced. Learn more about the available tools from the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/user-guide/builtin-tools/" target="_blank">Built-in Tool documentation</a></p>
+</aside>
+<p><strong>1. Artifact Management Tools</strong></p>
+<p>Artifact management tools handle the creation, storage, and retrieval of content and data objects across the agent ecosystem. They ensure artifacts such as documents, code, or structured data can be versioned, shared, and persistently stored while also supporting format conversion for interoperability. These tools make it easier for agents to generate and reuse artifacts seamlessly.</p>
+<p><strong>2. Data Analysis Tools</strong></p>
+<p>Data analysis tools allow agents to process, transform, and analyze data from a variety of sources. They support statistical analysis, natural language processing, and visualization generation, enabling agents to extract insights from both structured and unstructured data. With built-in query functions, these tools can also handle natural language queries against different data stores.</p>
+<p><strong>3. Web Tools</strong></p>
+<p>Web tools empower agents to interact directly with web-based resources and services. They support sending HTTP requests, retrieving and parsing content, and integrating with APIs while managing authentication methods like OAuth or API keys. In permitted cases, they also enable web scraping and structured response handling.</p>
+<p><strong>4. Peer Agent Delegation Tools</strong></p>
+<p>Peer agent delegation tools make collaboration among agents more efficient by supporting the distribution of tasks across specialized agents. They allow context to be shared, results to be aggregated, and coordination strategies to be applied, whether sequential, parallel, or conditional. These tools also enable agents to discover expertise and provide feedback to one another.</p>
+<p><strong>5. Developer Tools</strong></p>
+<p>Developer tools help streamline the development, deployment, and maintenance of the agent mesh. They include command-line utilities for management, debugging interfaces for real-time monitoring, and configuration management systems for precise control. Additionally, observability and testing frameworks provide insights into system health and validation of agent performance.</p>
+<p><strong>6. System Integration Tools</strong></p>
+<p>System integration tools connect agents with external backend systems and enterprise platforms. They provide connectors to databases, event streams, and message queues while also allowing controlled file system access. These tools extend the mesh&#39;s capabilities by integrating AI models and external enterprise applications into agent workflows.</p>
+<p>Lets take an example for a <code>web-request</code> agent</p>
+<pre><code language="language-yaml" class="language-yaml">- name: web_agent_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      &lt;&lt;: *broker_connection
+
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: &#34;WebAgent&#34;
+      display_name: &#34;Web Content&#34;
+      model: *planning_model # Or another appropriate model from shared_config.yaml
+      instruction: |
+        You are an agent that can fetch content from web URLs using the &#39;web_request&#39; tool.
+        You can make various types of HTTP requests (GET, POST, etc.) and include custom headers or a body.
+        The tool will return the fetched content (HTML converted to Markdown, other text types as is, or raw binary data).
+        You will then need to process this content based on the user&#39;s request.
+        Always save useful fetched content as an artifact.
+
+      tools:
+        - tool_type: builtin
+          tool_name: &#34;web_request&#34;
+        - tool_type: builtin-group
+          group_name: &#34;artifact_management&#34;
+</code></pre>
+<p>This yaml configuration of a Web Agent uses two types of tools: a built-in tool <code>web_request</code> that handles web requests and a group of built-in tools <code>artifact_management</code> that handles artifact access</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Plugins Ecosystem" duration="10">
+        <p>Plugins serve as the backbone of the Solace Agent Mesh extensible architecture, providing a structured way to package, distribute, and incorporate new features into any SAM deployment. They are modular Python packages that extend the agent mesh&#39;s capabilities through specialized components that integrate seamlessly with the A2A protocol.</p>
+<p>To spin up the list of the core plugins offered by the Solace Agent Mesh, execute the following</p>
+<pre><code>sam plugin catalog
+</code></pre>
+<p class="image-container"><img alt="simpleFlow" src="img/b81a38a6fb8c21eb.png"></p>
+<h2 is-upgraded>Types of plugins</h2>
+<p>Solace Agent Mesh supports three primary categories of plugins, each serving different purposes within the ecosystem:</p>
+<p><strong>Agent Plugins</strong> These contain specialized agents with domain-specific capabilities. They extend the system&#39;s ability to perform specific tasks or interact with particular data sources or services. For example, an agent plugin might specialize in processing financial data or analyzing medical imagery.</p>
+<p><strong>Gateway Plugins</strong> These provide new interface types for external system integration, enabling SAM to connect with various user interfaces, APIs, or communication channels. Gateway plugins might add support for channels like Slack, Microsoft Teams, or custom web interfaces.</p>
+<p><strong>Custom Plugins</strong> These implement specialized integrations that don&#39;t fit neatly into the agent or gateway categories. Examples include connectors for specific enterprise systems, data transformation services, or security extensions.</p>
+<h2 is-upgraded>Where to get plugins?</h2>
+<p>The Solace Agent Mesh ecosystem encompasses both official and community-developed plugins:</p>
+<h3 is-upgraded>Official Core Plugins</h3>
+<p>These are developed and maintained by the Solace team, providing essential capabilities for common use cases. The official plugins are available in the Solace repository at <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">https://github.com/solacecommunity/solace-agent-mesh-plugins</a>.</p>
+<h3 is-upgraded>Community Plugins</h3>
+<p>Solace Agent Mesh plugins ecosystem also encourages community contributions through the plugin system. These plugins extend the platform in numerous ways and can be discovered through the same plugin catalog as official plugins. to learn more about the existing plugins, check the github repository <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">https://github.com/solacecommunity/solace-agent-mesh-plugins</a></p>
+<aside class="special"><p> Community plugins can be seamlessly integrated alongside official plugins, providing a unified experience while expanding the capabilities of your Solace Agent Mesh deployment.</p>
+</aside>
+<h2 is-upgraded>Adding custom plugins repository to the catalog</h2>
+<ol type="1">
+<li>Click on the <code>Add Registry</code> button</li>
+</ol>
+<p class="image-container"><img alt="add_reg" src="img/80733863f7225fba.png"></p>
+<ol type="1" start="2">
+<li>Input the information in the dialog <img alt="add_reg_dialog" src="img/8cb4eb5193fc9c24.png"><ul>
+<li>Registry URL: <code>https://github.com/solacecommunity/solace-agent-mesh-plugins</code></li>
+<li>Registry Name: Community</li>
+</ul>
+</li>
+<li>Install the plugin of choice</li>
+</ol>
+<p>To learn more about plugins, the differences between plugins and agents, and how to create your first plugin check out the Solace Agent Mesh <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/concepts/plugins" target="_blank">Plugins documentation</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding MCP Agents" duration="5">
+        <p>As mentioned earlier, the Solace Agent Mesh is an agent agnostic framework. Agents are YAML configuration driven and can be authored using</p>
+<p>In this step, we are going to add an MCP agent using the graphical user interface.</p>
+<p>From your terminal instance, execute this command from your terminal</p>
 <pre><code>sam add agent --gui
 </code></pre>
-<p class="image-container"><img alt="SAM final" src="img/3d84e2fe2367b032.png"></p>
-<p>Fill in the required fields as per the screenshot below.</p>
-<p>Use the following prompt in the <code>Instructions</code> section</p>
-<pre><code></code></pre>
+<p>Let&#39;s go ahead and add an MCP agent that executes filesystem operations such as read/write, create files, get list of files, and searching directories. Learn more about this MCP agent from the <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank">Filesystem MCP Server</a> found in the official list of open source MCP servers</p>
+<p>Fill in the following information</p>
+<p class="image-container"><img alt="SAM final" src="img/6be2bea01d191658.png"></p>
+<p>Select the service. Note you can leave everything default here <img alt="service" src="img/303b1732b9c5c7ee.png"></p>
+<p>Features is a list of A2A specific features that can extend the functionalities of your agent (in this example an MCP agent) to expose A2A features to it. Keep everything default here <img alt="features" src="img/cee0a2ad610d1002.png"></p>
+<p>In this step, you will have to define the list of tools and skills this agent has. As mentioned in a previous step, tools could be built-in from the Solace Agent Mesh or you can specify a list of tools that are exposed from an MCP serve. <img alt="customtools" src="img/3e87f21343addae6.png"></p>
+<p>Go ahead and click the <code>Add Tool</code> button <img alt="addtool" src="img/ee36d450ebed5243.png"></p>
+<p>You can see here there a list of different kind of tools to add. Go ahead and click on the MCP Tool</p>
+<p class="image-container"><img alt="MCPTool" src="img/b2d40358e7d47174.png"></p>
+<p>Under the Connection Parameters, add the following</p>
+<pre><code language="language-JSON" class="language-JSON">{
+  &#34;type&#34;: &#34;stdio&#34;,
+  &#34;command&#34;: &#34;npx&#34;,
+  &#34;args&#34;: [&#34;-y&#34;, &#34;@modelcontextprotocol/server-filesystem&#34;, &#34;/tmp/samv2&#34;]
+}
 
+</code></pre>
+<aside class="special"><p> In this example, we are using a stdio connection as the <code>type</code> to connect to an MCP server running as a local process. There are different types of connections including SSE (server sent events) to a remote MCP server, docker for a containerized MCP server, and other types as this connection evolves</p>
+</aside>
+<aside class="special"><p> Note: you can replace <code>/tmp/samv2</code> with any directory of your choice</p>
+</aside>
+<p>Click the <code>Add Tool</code>. Notice how this new agent now has two types of custom tools</p>
+<ol type="1">
+<li>Artifact Management: This is a group of Solace Agent Mesh built-in tools that extends the capabilities of the custom agent</li>
+<li>MCP: All the tools that are defined in the MCP server exposed as custom tools for the agent</li>
+</ol>
+<p>Click <code>Next</code></p>
+<p>You are then prompted with the Agent Card dialog. <img alt="agentCard" src="img/94bcfcfc8ab74100.png"></p>
+<p>Add the following Agent Card Description</p>
+<pre><code>An agent that interacts with the local filesystem via MCP.
+</code></pre>
+<p>Leave everything else as the default. Click <code>Next</code>.</p>
+<p class="image-container"><img alt="agentReview" src="img/ae11505c245934ad.png"></p>
+<p>🎉 Click <code>Save Agent & Finish</code> and you&#39;re done! You now have a custom MCP Agent configured.</p>
+<p>This process created a yaml configuration file under <code>configs/agents/file_system_agent.yaml</code>. I want to point to your attention to this section of the configuration</p>
+<pre><code language="language-yaml" class="language-yaml">tools: 
+   - group_name: artifact_management
+      tool_type: builtin-group
+   - connection_params:
+      args:
+      - -y
+      - &#39;@modelcontextprotocol/server-filesystem&#39;
+      - /tmp/samv2
+      command: npx
+      timeout: 30
+      type: stdio
+      tool_type: mcp
+</code></pre>
+<p>You can see here that this agent has two types of tools: the built-in tools and an MCP configuration.</p>
+<p>The full yaml configuration for the agent should look like this</p>
+<pre><code language="language-yaml" class="language-yaml"># Solace Agent Mesh Agent Configuration
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Connecting Google Maps via MCP" duration="5">
-        
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: a2a_agent.log
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Connecting Google Search via MCP" duration="5">
-        
+!include ../shared_config.yaml
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="A2A Agents" duration="5">
-        
+apps:
+  - name: &#34;FileSystem__app&#34;
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      &lt;&lt;: *broker_connection
 
-      </google-codelab-step>
-    
-      <google-codelab-step label="Custom Agents" duration="5">
-        
+    app_config:
+      namespace: &#34;${NAMESPACE}&#34;
+      supports_streaming: true
+      agent_name: &#34;FileSystem&#34;
+      display_name: &#34;File System Agent&#34;
+      model: *general_model 
+
+      instruction: |
+        You can interact with the local filesystem using MCP tools. Use the available tools to read, write, and manage files as requested.
+      
+      tools: 
+        - group_name: artifact_management
+          tool_type: builtin-group
+        - connection_params:
+            args:
+            - -y
+            - &#39;@modelcontextprotocol/server-filesystem&#39;
+            - /tmp/samv2
+            command: npx
+            timeout: 30
+            type: stdio
+          tool_type: mcp
+
+      session_service: 
+        type: &#34;sql&#34;
+        default_behavior: &#34;PERSISTENT&#34;
+        database_url: &#34;${FILE_SYSTEM_DATABASE_URL}&#34;
+      artifact_service: *default_artifact_service
+      
+      artifact_handling_mode: &#34;reference&#34;
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+      data_tools_config: *default_data_tools_config
+
+      # Agent Card Definition
+      agent_card:
+        description: |
+          An agent that interacts with the local filesystem via MCP.
+        defaultInputModes: [text] 
+        defaultOutputModes: [text, file] 
+        skills: []
+      
+      # Discovery &amp; Communication
+      agent_card_publishing: 
+        interval_seconds: 10
+      agent_discovery: 
+        enabled: true
+      inter_agent_communication:
+        allow_list: [&#34;*&#34;] 
+        deny_list: [] 
+        request_timeout_seconds: 600
+</code></pre>
+<p>Now go ahead and run an instance of the solace agent mesh from your terminal in your root project directory</p>
+<pre><code>sam run
+</code></pre>
+<p>Navigate to the Agents tab and see the new agent in the list</p>
+<p class="image-container"><img alt="fileagent" src="img/5916d740b7892693.png"></p>
+<p>Now that you have hte File Agent up and running, you can run any of the following prompts to see it in action</p>
+<pre><code>&#34;List the files in the directory&#34;
+&#34;Create a simple text file with some content&#34;
+&#34;Read the contents of test.txt&#34;
+</code></pre>
+<p>To learn more about MCP integrations with the Solace Agent mesh, refer to the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/tutorials/mcp-integration" target="_blank">MCP Integration</a> section in the documentation</p>
+
 
       </google-codelab-step>
     
       <google-codelab-step label="Next Steps" duration="5">
-        
+        <p>Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:</p>
+<h2 is-upgraded>📚 Explore the Documentation</h2>
+<p>Visit the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh Documentation</a> for comprehensive guides, API references, and advanced concepts. The documentation provides in-depth information on:</p>
+<ul>
+<li>Creating custom agents with specific capabilities</li>
+<li>Understanding the A2A protocol in detail</li>
+<li>Advanced deployment patterns</li>
+</ul>
+<h2 is-upgraded>🤝 Join the Community</h2>
+<ul>
+<li>Star and watch the <a href="https://github.com/SolaceLabs/solace-agent-mesh" target="_blank">Solace Agent Mesh Repository</a> to stay updated with the latest developments</li>
+<li>Explore community plugins in the <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">Solace Community Plugins Repository</a></li>
+<li>Join the <a href="https://solace.community/" target="_blank">Solace Community Forum</a> to connect with other developers and get support</li>
+</ul>
+<h2 is-upgraded>🚀 Enhance Your Deployment</h2>
+<ul>
+<li>Add more specialized agents to your mesh using <code>sam add agent</code></li>
+<li>Try different LLM providers to compare performance and capabilities</li>
+<li>Create agent workflows that solve specific business problems in your organization</li>
+<li>Integrate with your existing systems and data sources</li>
+</ul>
+<h2 is-upgraded>🧩 Develop Custom Plugins</h2>
+<p>Consider creating your own plugins to extend the functionality of Solace Agent Mesh:</p>
+<ol type="1">
+<li>Use the <code>sam plugin create</code> command to scaffold a new plugin</li>
+<li>Follow the plugin development guide in the documentation</li>
+<li>Share your plugin with the community through the <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">Solace Community Plugins Repository</a></li>
+</ol>
+<h2 is-upgraded>📰 Stay Updated</h2>
+<ul>
+<li>Follow the <a href="https://solace.com/blog" target="_blank">Solace Blog</a> for articles about Agent Mesh and event-driven architectures</li>
+<li>Subscribe to webinars and events featuring Solace Agent Mesh implementations</li>
+<li>Check out technical deep dives and tutorials on the Solace YouTube channel</li>
+</ul>
+<h2 is-upgraded>🏭 Production Deployment</h2>
+<p>As you move towards production use cases:</p>
+<ul>
+<li>Implement proper security measures with authentication and authorization</li>
+<li>Set up monitoring and observability for your agent mesh</li>
+<li>Consider scaling strategies for high-traffic environments</li>
+<li>Deploy with containerization using Docker and Kubernetes</li>
+</ul>
+<h2 is-upgraded>📺 Check out our youtube playlists!</h2>
+<iframe class="youtube-video" src="https://www.youtube.com/embed/_4IdRPBM2y8?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe class="youtube-video" src="https://www.youtube.com/embed/Tpy_8RVLPNU?rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<aside class="special"><p> Remember that Solace Agent Mesh is an evolving framework with active development and community contributions. Regular updates bring new features, optimizations, and capabilities to enhance your AI agent ecosystem.</p>
+</aside>
+
 
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="7">
-        <p>✅ &lt; Fill IN TAKEAWAY 1&gt;<br> ✅ &lt; Fill IN TAKEAWAY 2&gt;<br> ✅ &lt; Fill IN TAKEAWAY 3&gt;</p>
-<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+        <p>Throughout this codelab, you&#39;ve gained valuable insights into Solace Agent Mesh and its capabilities. Here are the key takeaways to remember:</p>
+<h2 is-upgraded>Architectural Benefits</h2>
+<ul>
+<li><strong>Event-Driven Foundation</strong>: Solace Agent Mesh leverages event-driven architecture to create resilient, scalable agent communication patterns based on the Solace Event Broker.</li>
+<li><strong>Standardized Protocol</strong>: The A2A (Agent-to-Agent) protocol provides a common language for agents to communicate, regardless of their implementation or location.</li>
+<li><strong>Decoupled Components</strong>: The mesh architecture allows components to be developed, deployed, and scaled independently, reducing system complexity.</li>
+</ul>
+<h2 is-upgraded>Development Advantages</h2>
+<ul>
+<li><strong>Configuration-Driven</strong>: Most agent capabilities can be defined through YAML configuration without requiring code changes.</li>
+<li><strong>Plugin Ecosystem</strong>: The extensible plugin architecture allows for rapid capability expansion through both official and community plugins from the <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">Solace Agent Mesh Plugins Repository</a>.</li>
+<li><strong>Multi-Provider Support</strong>: Freedom to use different LLM providers including OpenAI, Anthropic, Google, and others based on your specific needs.</li>
+</ul>
+<h2 is-upgraded>Integration Capabilities</h2>
+<ul>
+<li><strong>Event Mesh Connectivity</strong>: Native integration with Solace PubSub+ Event Broker provides enterprise-grade messaging infrastructure.</li>
+<li><strong>Multi-Protocol Gateways</strong>: Support for multiple communication protocols allows for flexible integration with existing systems.</li>
+<li><strong>MCP Integration</strong>: Model Context Protocol support enables connection to various specialized tools and capabilities.</li>
+</ul>
+<h2 is-upgraded>Business Value</h2>
+<ul>
+<li><strong>Reduced Integration Complexity</strong>: The standardized communication layer drastically reduces the effort needed to connect AI systems with enterprise data sources.</li>
+<li><strong>Specialized Agent Collaboration</strong>: Domain-specific agents can work together to solve complex problems that would be difficult for a single agent to address.</li>
+<li><strong>Scalable Architecture</strong>: The event-driven foundation allows the system to scale horizontally as demand increases.</li>
+</ul>
+<h2 is-upgraded>Getting Support and Resources</h2>
+<ul>
+<li>The <a href="https://github.com/SolaceLabs/solace-agent-mesh" target="_blank">Solace Agent Mesh GitHub repository</a> contains the core framework code, examples, and documentation.</li>
+<li>The <a href="https://github.com/solacecommunity/solace-agent-mesh-plugins" target="_blank">Solace Community Plugins Repository</a> offers extensibility through community-developed plugins.</li>
+<li>The <a href="https://solace.com/blog" target="_blank">Solace Blog</a> regularly features articles about Agent Mesh use cases and best practices.</li>
+<li>The comprehensive <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh documentation</a> provides detailed guides and reference materials.</li>
+</ul>
+<p>Solace Agent Mesh represents a significant advancement in building enterprise-grade agentic systems that can collaborate effectively at scale. By combining the power of event-driven architecture with modern AI capabilities, it provides a robust foundation for building the next generation of intelligent applications.</p>
+<p>As the ecosystem continues to evolve, stay connected with the community through the repositories and forums to leverage the collective knowledge and contribute to this growing platform.</p>
 <p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
 
 
