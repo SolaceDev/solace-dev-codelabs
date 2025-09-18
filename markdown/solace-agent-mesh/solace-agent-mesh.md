@@ -808,7 +808,10 @@ sam add agent --gui
 
 Let's go ahead and add an MCP agent that executes filesystem operations such as read/write, create files, get list of files, and searching directories. Learn more about this MCP agent from the [Filesystem MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) found in the official list of open source MCP servers
 
-Fill in the following information
+Fill in the following information with the following instructions
+```
+You can interact with the local filesystem using MCP tools. Use the available tools to read, write, and manage files as requested.
+```
 
 ![SAM final](img/addagentinit.png)
 
