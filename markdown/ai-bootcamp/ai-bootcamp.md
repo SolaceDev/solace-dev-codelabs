@@ -1,4 +1,4 @@
-author: Tamimi A
+author: Tamimi
 summary:
 id: ai-bootcamp
 tags:
@@ -539,7 +539,7 @@ apps:
       agent_discovery: 
         enabled: true
       inter_agent_communication:
-        allow_list: ["*"] 
+        allow_list: [] 
         deny_list: [] 
         request_timeout_seconds: 180
 ```
