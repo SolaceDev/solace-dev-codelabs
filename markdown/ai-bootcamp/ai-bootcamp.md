@@ -32,6 +32,9 @@ docker load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
 > docker tag <original_name>:<original_tag> solace-agent-mesh-enterprise:1.0.37
 > ```
 
+> aside positive 
+> If you don't have `docker` you can use `podman` and replace every docker command with podman
+
 ## Install SAM CLI
 Duration: 00:05:00
 
@@ -174,7 +177,7 @@ This step is involved with running SAM enterprise with the new files generated.
             networks:
             - sam-network
             ports:
-            - "0.0.0.0:8001:8001"        # expose container port 8000 as port 8000 on host IP 0.0.0.0
+            - "0.0.0.0:8001:8001"        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
         networks:
         sam-network:
@@ -561,7 +564,7 @@ Now navigate to your SAM instance on [http://localhost:8001/](http://localhost:8
 
 
 ## Adding Agent with Web GUI 
-Duration 00:05:00
+Duration: 00:05:00
 
 ```
 sam add agent --gui
