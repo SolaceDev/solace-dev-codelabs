@@ -549,7 +549,7 @@ apps:
 Edit your .env file to add a `GOOGLE_MAPS_API_KEY`
 
 ```yaml
-GOOGLE_MAPS_API_KEY="AIzaSyAxDYYTiX-RNcgEhai-nxxqDUMiKsv5Euw"
+GOOGLE_MAPS_API_KEY="YOUR_API_KEY"
 ```
 
 ### Restart Enterprise docker
