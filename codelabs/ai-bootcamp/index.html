@@ -46,6 +46,8 @@
 <pre><code>docker tag &lt;original_name&gt;:&lt;original_tag&gt; solace-agent-mesh-enterprise:1.0.37
 </code></pre>
 </aside>
+<aside class="special"><p> If you don&#39;t have <code>docker</code> you can use <code>podman</code> and replace every docker command with podman</p>
+</aside>
 
 
       </google-codelab-step>
@@ -152,7 +154,7 @@ cd sam-bootcamp
         networks:
         - sam-network
         ports:
-        - &#34;0.0.0.0:8001:8001&#34;        # expose container port 8000 as port 8000 on host IP 0.0.0.0
+        - &#34;0.0.0.0:8001:8001&#34;        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
     networks:
     sam-network:
@@ -517,9 +519,8 @@ apps:
 
       </google-codelab-step>
     
-      <google-codelab-step label="Adding Agent with Web GUI" duration="0">
-        <p>Duration 00:05:00</p>
-<pre><code>sam add agent --gui
+      <google-codelab-step label="Adding Agent with Web GUI" duration="5">
+        <pre><code>sam add agent --gui
 </code></pre>
 
 
