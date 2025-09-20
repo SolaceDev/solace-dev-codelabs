@@ -26,6 +26,11 @@ Duration: 0:02:00
 docker load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
 ```
 
+On successful loading, check the list of existing images
+```
+docker images 
+```
+
 > aside positive
 > Tip: you can rename the image and tag as follows
 > ```
