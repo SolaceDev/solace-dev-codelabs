@@ -388,7 +388,7 @@ Notes:
     ```
 
 ## Adding MCP Agent 
-Duration 00:05:00
+Duration: 00:05:00
 
 To add an MCP agent, we will simply define an agent yaml file with the basic configuration. In this step, we will go ahead and add a [Google Maps MCP Agent](https://github.com/cablate/mcp-google-map).
 
