@@ -274,6 +274,14 @@ This step is involved with running SAM enterprise with the new files generated.
 1. Open your browser and navigate to [http://localhost:8001/](http://localhost:8001/)
     ![chat](img/chat.png)
 
+Try the following prompts:
+
+```
+Give me a list of all the agents in the system
+What are the tools you have access to
+
+```
+
 ## What is happening in the broker? 
 Duration: 00:01:00
 
