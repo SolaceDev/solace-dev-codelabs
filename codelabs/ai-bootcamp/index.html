@@ -145,6 +145,11 @@ cd sam-bootcamp
       <google-codelab-step label="Start SAM Enterprise" duration="10">
         <p>This step is involved with running SAM enterprise with the new files generated.</p>
 <ol type="1">
+<li>Create a docker network bridge such that your SAM container can communicate with your Solace Broker container<pre><code>docker network connect sam-network solace
+</code></pre>
+<aside class="special"><p>aside Positive skip this step if you are connecting to a cloud hosted broker</p>
+</aside>
+</li>
 <li>Create a <code>docker-compose.yaml</code> file with the following content<pre><code language="language-yaml" class="language-yaml">services:
     sam-ent:
         image: solace-agent-mesh-enterprise:1.0.37
@@ -174,6 +179,7 @@ Notes:<ul>
 <li><code>networks: sam-network</code> if you are attempting to connect to a local solace broker running on docker</li>
 <li>We are passing the <code>configs</code> directory and <code>.env</code> file as volumes to the container</li>
 <li>We are placing all the sam logs created in the container to a local directory called <code>enterprise-logs</code></li>
+<li>the <code>networks</code> section could be removed if you skipped previous step of creating a docker bridge</li>
 </ul>
 <aside class="special"><p> There are two modes of operation for SAM</p>
 <ol type="1">
