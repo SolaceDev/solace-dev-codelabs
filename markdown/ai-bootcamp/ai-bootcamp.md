@@ -169,6 +169,14 @@ Duration: 00:10:00
 
 This step is involved with running SAM enterprise with the new files generated.
 
+1. Create a docker network bridge such that your SAM container can communicate with your Solace Broker container
+    ```
+    docker network connect sam-network solace
+    ```
+
+    > aside Positive
+    > skip this step if you are connecting to a cloud hosted broker
+
 1. Create a `docker-compose.yaml` file with the following content
     ```yaml
     services:
@@ -201,6 +209,7 @@ This step is involved with running SAM enterprise with the new files generated.
     - `networks: sam-network` if you are attempting to connect to a local solace broker running on docker
     - We are passing the `configs` directory and `.env` file as volumes to the container
     - We are placing all the sam logs created in the container to a local directory called `enterprise-logs`
+    - the `networks` section could be removed if you skipped previous step of creating a docker bridge
 
     > aside positive
     > There are two modes of operation for SAM
