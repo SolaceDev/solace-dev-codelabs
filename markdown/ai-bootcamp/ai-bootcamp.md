@@ -34,7 +34,7 @@ docker images
 > aside positive
 > Tip: you can rename the image and tag as follows
 > ```
-> docker tag <original_name>:<original_tag> solace-agent-mesh-enterprise:1.0.37
+> docker tag <original_name>:<original_tag> solace-agent-mesh-enterprise:<version>
 > ```
 
 > aside positive 
@@ -83,7 +83,10 @@ While you dont technically need the SAM cli to work with the enterprise edition,
     ```
 
     > aside positive
-    > Since you activated the virtual environment, you can use `pip` instead of `pip3` and `python` instead of `python3` since everything is within the virtual env session. You can confirm this by running `python --version`
+    > Since you activated the virtual environment, you can use `pip` instead of `pip3` and `python` instead of `python3` since everything is within the virtual env session. You can confirm this by running 
+    > ```
+    > python --version
+    > ```
 
 ## Initialize SAM
 Duration: 00:10:00
@@ -153,15 +156,15 @@ Now back to your terminal window, lets investigate the directories. Open your di
 
 ![vscode](img/vscode.png)
 
-1. configs: contains yaml config files
+1. `configs`: contains yaml config files
     - agents --> e.g. `main_orchestrator.yaml`
     - gateways --> e.g. `webui.yaml`
-1. venv: contains all python packages
-1. .env: environment variables
-1. .sam: plugins templates
+1. `venv`: contains all python packages
+1. `.env`: environment variables
+1. `.sam`: plugins templates
 
 
-## Init SAM Enterprise
+## Start SAM Enterprise
 Duration: 00:10:00
 
 This step is involved with running SAM enterprise with the new files generated.
@@ -170,7 +173,7 @@ This step is involved with running SAM enterprise with the new files generated.
     ```yaml
     services:
         sam-ent:
-            image: imageName:tag
+            image: solace-agent-mesh-enterprise:1.0.37
             container_name: sam-ent
             platform: linux/amd64
             # entrypoint: /bin/bash
@@ -179,30 +182,39 @@ This step is involved with running SAM enterprise with the new files generated.
             volumes:
             - ./configs:/app/configs
             - ./.env:/app/.env
+            - ./enterprise-logs:/app  # Map the entire /app directory to enterprise-logs
+
             networks:
             - sam-network
             ports:
             - "0.0.0.0:8001:8001"        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
-        networks:
+    networks:
         sam-network:
             external: true          # reuse your existing network
+
     ```
 
     Notes: 
-    - Update the image name:tag to what you your image is called. Execute `docker images` to get a list
+    - Update the image `name:tag` to what you your image is called. Execute `docker images` to get a list. 
     - `platform: linux/amd64` if you are running on mac
     - `networks: sam-network` if you are attempting to connect to a local solace broker running on docker
     - We are passing the `configs` directory and `.env` file as volumes to the container
+    - We are placing all the sam logs created in the container to a local directory called `enterprise-logs`
 
     > aside positive
     > There are two modes of operation for SAM
     > 1. Connect with broker (Cloud or Software)
     > 2. Run without broker (Dev Mode)
 
+1. Create a directory called `enterprise-logs`
+    ```
+    mkdir enterprise-logs
+    ```
+
 1. [Optional] Run local solace broker (alternatively: use Solace Cloud)
     ```
-    docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+    docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
     ```
 1. Add the solace broker container to the same SAM network
     ```
@@ -212,6 +224,33 @@ This step is involved with running SAM enterprise with the new files generated.
     - `SOLACE_BROKER_URL="ws://solace:8008"` - Update hte broker URL to use the solace broker container
     - `FASTAPI_HOST="0.0.0.0"` - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to `0.0.0.0` to make sure its accessed by host IP
     - `FASTAPI_PORT="8001"`- In case your solace broker has port 8000 exposed
+
+    This is the final `.env` file
+    ```
+    LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net"
+    LLM_SERVICE_API_KEY="<llm_token_goes_here>"
+    LLM_SERVICE_PLANNING_MODEL_NAME="openai/azure-gpt-4o"
+    LLM_SERVICE_GENERAL_MODEL_NAME="openai/azure-gpt-4o"
+    NAMESPACE="bootcamp/"
+    SOLACE_BROKER_URL="ws://solace:8008"
+    SOLACE_BROKER_VPN="default"
+    SOLACE_BROKER_USERNAME="default"
+    SOLACE_BROKER_PASSWORD="default"
+    SOLACE_DEV_MODE="false"
+    SESSION_SECRET_KEY="temp"
+    FASTAPI_HOST="0.0.0.0"
+    FASTAPI_PORT="8001"
+    FASTAPI_HTTPS_PORT="8443"
+    SSL_KEYFILE=""
+    SSL_CERTFILE=""
+    SSL_KEYFILE_PASSWORD=""
+    ENABLE_EMBED_RESOLUTION="True"
+    LOGGING_CONFIG_PATH="configs/logging_config.ini"
+    S3_BUCKET_NAME=""
+    S3_ENDPOINT_URL=""
+    S3_REGION="us-east-1"
+    WEB_UI_GATEWAY_DATABASE_URL="sqlite:////Users/tamimi/sam-bootcamp/data/webui_gateway.db"
+    ```
 1. Run docker compose
     ```
     docker compose up 
