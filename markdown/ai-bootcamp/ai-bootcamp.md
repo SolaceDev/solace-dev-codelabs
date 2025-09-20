@@ -279,7 +279,7 @@ Duration: 00:10:00
 
 Now that you have a docker image running the enterprise edition of SAM, lets go ahead and add configuration files. 
 
-1. From terminal, navigate to your configs directory
+1. From a new terminal window, navigate to your configs directory
     ```
     cd sam-bootcamp/configs/agents
     ```
@@ -287,6 +287,7 @@ Now that you have a docker image running the enterprise edition of SAM, lets go 
     ```
     curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_agents_example.yaml -o a2a_agents.yaml
     ```
+
 1. Restart the enterprise container
     ```
     docker restart sam-ent
@@ -294,9 +295,13 @@ Now that you have a docker image running the enterprise edition of SAM, lets go 
 
     > aside positive 
     > This restarts the SAM enterprise image with a new config agent config file
+    > Pro tip: you can interactively go into the by executing the following
+    > ```
+    > docker exec -it sam-ent bash
+    > ```
+
 
 This file contains multiple agent configuration that leverages built-in tools. Go ahead and open this file lets inspect it.
-
 Here is an example section from the file
 
 ```yaml
