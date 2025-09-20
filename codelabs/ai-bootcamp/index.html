@@ -46,7 +46,7 @@
 <pre><code>docker images 
 </code></pre>
 <aside class="special"><p> Tip: you can rename the image and tag as follows</p>
-<pre><code>docker tag &lt;original_name&gt;:&lt;original_tag&gt; solace-agent-mesh-enterprise:1.0.37
+<pre><code>docker tag &lt;original_name&gt;:&lt;original_tag&gt; solace-agent-mesh-enterprise:&lt;version&gt;
 </code></pre>
 </aside>
 <aside class="special"><p> If you don&#39;t have <code>docker</code> you can use <code>podman</code> and replace every docker command with podman</p>
@@ -80,7 +80,9 @@ cd sam-bootcamp
 </li>
 <li>Install solace agent mesh<pre><code>pip install solace-agent-mesh
 </code></pre>
-<aside class="special"><p> Since you activated the virtual environment, you can use <code>pip</code> instead of <code>pip3</code> and <code>python</code> instead of <code>python3</code> since everything is within the virtual env session. You can confirm this by running <code>python --version</code></p>
+<aside class="special"><p> Since you activated the virtual environment, you can use <code>pip</code> instead of <code>pip3</code> and <code>python</code> instead of <code>python3</code> since everything is within the virtual env session. You can confirm this by running</p>
+<pre><code>python --version
+</code></pre>
 </aside>
 </li>
 </ol>
@@ -127,25 +129,25 @@ cd sam-bootcamp
 <p>Now back to your terminal window, lets investigate the directories. Open your directory in your favourite editor</p>
 <p class="image-container"><img alt="vscode" src="img/6dd2627073232e51.png"></p>
 <ol type="1">
-<li>configs: contains yaml config files <ul>
+<li><code>configs</code>: contains yaml config files <ul>
 <li>agents –&gt; e.g. <code>main_orchestrator.yaml</code></li>
 <li>gateways –&gt; e.g. <code>webui.yaml</code></li>
 </ul>
 </li>
-<li>venv: contains all python packages</li>
-<li>.env: environment variables</li>
-<li>.sam: plugins templates</li>
+<li><code>venv</code>: contains all python packages</li>
+<li><code>.env</code>: environment variables</li>
+<li><code>.sam</code>: plugins templates</li>
 </ol>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Init SAM Enterprise" duration="10">
+      <google-codelab-step label="Start SAM Enterprise" duration="10">
         <p>This step is involved with running SAM enterprise with the new files generated.</p>
 <ol type="1">
 <li>Create a <code>docker-compose.yaml</code> file with the following content<pre><code language="language-yaml" class="language-yaml">services:
     sam-ent:
-        image: imageName:tag
+        image: solace-agent-mesh-enterprise:1.0.37
         container_name: sam-ent
         platform: linux/amd64
         # entrypoint: /bin/bash
@@ -154,20 +156,24 @@ cd sam-bootcamp
         volumes:
         - ./configs:/app/configs
         - ./.env:/app/.env
+        - ./enterprise-logs:/app  # Map the entire /app directory to enterprise-logs
+
         networks:
         - sam-network
         ports:
         - &#34;0.0.0.0:8001:8001&#34;        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
-    networks:
+networks:
     sam-network:
         external: true          # reuse your existing network
+
 </code></pre>
 Notes:<ul>
-<li>Update the image name:tag to what you your image is called. Execute <code>docker images</code> to get a list</li>
+<li>Update the image <code>name:tag</code> to what you your image is called. Execute <code>docker images</code> to get a list.</li>
 <li><code>platform: linux/amd64</code> if you are running on mac</li>
 <li><code>networks: sam-network</code> if you are attempting to connect to a local solace broker running on docker</li>
 <li>We are passing the <code>configs</code> directory and <code>.env</code> file as volumes to the container</li>
+<li>We are placing all the sam logs created in the container to a local directory called <code>enterprise-logs</code></li>
 </ul>
 <aside class="special"><p> There are two modes of operation for SAM</p>
 <ol type="1">
@@ -176,7 +182,10 @@ Notes:<ul>
 </ol>
 </aside>
 </li>
-<li>[Optional] Run local solace broker (alternatively: use Solace Cloud)<pre><code>docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+<li>Create a directory called <code>enterprise-logs</code><pre><code>mkdir enterprise-logs
+</code></pre>
+</li>
+<li>[Optional] Run local solace broker (alternatively: use Solace Cloud)<pre><code>docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
 </code></pre>
 </li>
 <li>Add the solace broker container to the same SAM network<pre><code>docker network connect sam-network solace
@@ -187,6 +196,30 @@ Notes:<ul>
 <li><code>FASTAPI_HOST="0.0.0.0"</code> - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to <code>0.0.0.0</code> to make sure its accessed by host IP</li>
 <li><code>FASTAPI_PORT="8001"</code>- In case your solace broker has port 8000 exposed</li>
 </ul>
+This is the final <code>.env</code> file<pre><code>LLM_SERVICE_ENDPOINT=&#34;https://lite-llm.mymaas.net&#34;
+LLM_SERVICE_API_KEY=&#34;&lt;llm_token_goes_here&gt;&#34;
+LLM_SERVICE_PLANNING_MODEL_NAME=&#34;openai/azure-gpt-4o&#34;
+LLM_SERVICE_GENERAL_MODEL_NAME=&#34;openai/azure-gpt-4o&#34;
+NAMESPACE=&#34;bootcamp/&#34;
+SOLACE_BROKER_URL=&#34;ws://solace:8008&#34;
+SOLACE_BROKER_VPN=&#34;default&#34;
+SOLACE_BROKER_USERNAME=&#34;default&#34;
+SOLACE_BROKER_PASSWORD=&#34;default&#34;
+SOLACE_DEV_MODE=&#34;false&#34;
+SESSION_SECRET_KEY=&#34;temp&#34;
+FASTAPI_HOST=&#34;0.0.0.0&#34;
+FASTAPI_PORT=&#34;8001&#34;
+FASTAPI_HTTPS_PORT=&#34;8443&#34;
+SSL_KEYFILE=&#34;&#34;
+SSL_CERTFILE=&#34;&#34;
+SSL_KEYFILE_PASSWORD=&#34;&#34;
+ENABLE_EMBED_RESOLUTION=&#34;True&#34;
+LOGGING_CONFIG_PATH=&#34;configs/logging_config.ini&#34;
+S3_BUCKET_NAME=&#34;&#34;
+S3_ENDPOINT_URL=&#34;&#34;
+S3_REGION=&#34;us-east-1&#34;
+WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:////Users/tamimi/sam-bootcamp/data/webui_gateway.db&#34;
+</code></pre>
 </li>
 <li>Run docker compose<pre><code>docker compose up 
 </code></pre>
