@@ -248,7 +248,7 @@ WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:////Users/tamimi/sam-bootcamp/data/webui
       <google-codelab-step label="Adding agents with built-in tools" duration="10">
         <p>Now that you have a docker image running the enterprise edition of SAM, lets go ahead and add configuration files.</p>
 <ol type="1">
-<li>From terminal, navigate to your configs directory<pre><code>cd sam-bootcamp/configs/agents
+<li>From a new terminal window, navigate to your configs directory<pre><code>cd sam-bootcamp/configs/agents
 </code></pre>
 </li>
 <li>Add an agent file that leverages internal tools<pre><code>curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_agents_example.yaml -o a2a_agents.yaml
@@ -256,12 +256,13 @@ WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:////Users/tamimi/sam-bootcamp/data/webui
 </li>
 <li>Restart the enterprise container<pre><code>docker restart sam-ent
 </code></pre>
-<aside class="special"><p> This restarts the SAM enterprise image with a new config agent config file</p>
+<aside class="special"><p> This restarts the SAM enterprise image with a new config agent config file Pro tip: you can interactively go into the by executing the following</p>
+<pre><code>docker exec -it sam-ent bash
+</code></pre>
 </aside>
 </li>
 </ol>
-<p>This file contains multiple agent configuration that leverages built-in tools. Go ahead and open this file lets inspect it.</p>
-<p>Here is an example section from the file</p>
+<p>This file contains multiple agent configuration that leverages built-in tools. Go ahead and open this file lets inspect it. Here is an example section from the file</p>
 <pre><code language="language-yaml" class="language-yaml"> - name: markitdown_agent_app
     app_base_path: .
     app_module: solace_agent_mesh.agent.sac.app
@@ -345,9 +346,8 @@ WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:////Users/tamimi/sam-bootcamp/data/webui
 
       </google-codelab-step>
     
-      <google-codelab-step label="Adding MCP Agent" duration="0">
-        <p>Duration 00:05:00</p>
-<p>To add an MCP agent, we will simply define an agent yaml file with the basic configuration. In this step, we will go ahead and add a <a href="https://github.com/cablate/mcp-google-map" target="_blank">Google Maps MCP Agent</a>.</p>
+      <google-codelab-step label="Adding MCP Agent" duration="5">
+        <p>To add an MCP agent, we will simply define an agent yaml file with the basic configuration. In this step, we will go ahead and add a <a href="https://github.com/cablate/mcp-google-map" target="_blank">Google Maps MCP Agent</a>.</p>
 <h2 is-upgraded>Add Agent File</h2>
 <ol type="1">
 <li>Create a new file under <code>configs/agents</code><pre><code>cd configs/agents
