@@ -226,6 +226,8 @@ S3_ENDPOINT_URL=&#34;&#34;
 S3_REGION=&#34;us-east-1&#34;
 WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:////Users/tamimi/sam-bootcamp/data/webui_gateway.db&#34;
 </code></pre>
+<aside class="special"><p> Note that the specific model identifier that the endpoint expects in the format of <code>provider/model</code> (e.g., <code>openai/gpt-4</code>, <code>anthropic/claude-3-opus-20240229</code>).</p>
+</aside>
 </li>
 <li>Run docker compose<pre><code>docker compose up 
 </code></pre>
@@ -258,6 +260,7 @@ What are the tools you have access to
     
       <google-codelab-step label="Adding agents with built-in tools" duration="10">
         <p>Now that you have a docker image running the enterprise edition of SAM, lets go ahead and add configuration files.</p>
+<h2 is-upgraded>Basic Agents</h2>
 <ol type="1">
 <li>From a new terminal window, navigate to your configs directory<pre><code>cd sam-bootcamp/configs/agents
 </code></pre>
@@ -353,6 +356,41 @@ What are the tools you have access to
 </code></pre>
 </li>
 </ul>
+<h2 is-upgraded>Adding a multimedia agent</h2>
+<p>Lets add another multi-modal agent. This agent is capable of generating and processing content in both audio and visual formats. It includes features like text-to-speech with tone-based voice selection, multi-speaker conversations, audio transcription, image generation, and image analysis, while providing detailed guidelines for using these features effectively.</p>
+<p>In the <code>configs/agents</code> directory</p>
+<ol type="1">
+<li>Add an agent file that leverages internal tools<pre><code>curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_multimodal_example.yaml -o multimodal.yaml
+</code></pre>
+</li>
+<li>Shared<pre><code>image_describe: &amp;image_description_model
+  # This dictionary structure tells ADK to use the LiteLlm wrapper.
+  # &#39;model&#39; uses the specific model identifier your endpoint expects.
+  model: ${IMAGE_DESCRIPTION_MODEL_NAME} # Use env var for model name
+  # &#39;api_base&#39; tells LiteLLM where to send the request.
+  api_base: ${IMAGE_SERVICE_ENDPOINT} # Use env var for endpoint URL
+  # &#39;api_key&#39; provides authentication.
+  api_key: ${IMAGE_SERVICE_API_KEY} # Use env var for API key
+
+audio_transcription: &amp;audio_transcription_model
+  # This dictionary structure tells ADK to use the LiteLlm wrapper.
+  # &#39;model&#39; uses the specific model identifier your endpoint expects.
+  model: ${AUDIO_TRANSCRIPTION_MODEL_NAME} # Use env var for model name
+  # &#39;api_base&#39; tells LiteLLM where to send the request.
+  api_base: ${AUDIO_TRANSCRIPTION_API_BASE} # Use env var for endpoint URL
+  # &#39;api_key&#39; provides authentication.
+  api_key: ${AUDIO_TRANSCRIPTION_API_KEY} # Use env var for API key
+</code></pre>
+</li>
+<li>Update yor env file with the following environment variable<pre><code>GEMINI_API_KEY=&lt;token&gt;
+</code></pre>
+<aside class="special"><p> Ask your instructor for a Gemini key or generate one from <a href="aistudio.google.com" target="_blank">aistudio.google.com</a></p>
+</aside>
+</li>
+<li>Restart the enterprise container<pre><code>docker restart sam-ent
+</code></pre>
+</li>
+</ol>
 
 
       </google-codelab-step>
