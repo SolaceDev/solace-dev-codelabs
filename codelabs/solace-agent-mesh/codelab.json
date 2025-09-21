@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-09-18T20:57:03Z",
+  "id": "solace-agent-mesh",
+  "duration": 88,
+  "title": "Getting started with Solace Agent Mesh - An Agent Orchestration Framework",
+  "summary": "",
+  "source": "main/markdown/solace-agent-mesh/solace-agent-mesh.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "solace",
+    "agentmesh",
+    "ai"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh",
+  "url": "solace-agent-mesh"
+}
