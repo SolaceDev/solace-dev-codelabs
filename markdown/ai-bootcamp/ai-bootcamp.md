@@ -169,9 +169,9 @@ Duration: 00:10:00
 
 This step is involved with running SAM enterprise with the new files generated.
 
-1. Create a docker network bridge such that your SAM container can communicate with your Solace Broker container
+1. Create a docker network bridge so that your SAM container can communicate with your Solace Broker container
     ```
-    docker network connect sam-network solace
+    docker network create -d bridge sam-network
     ```
 
     > aside Positive
