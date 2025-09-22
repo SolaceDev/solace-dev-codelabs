@@ -145,7 +145,7 @@ cd sam-bootcamp
       <google-codelab-step label="Start SAM Enterprise" duration="10">
         <p>This step is involved with running SAM enterprise with the new files generated.</p>
 <ol type="1">
-<li>Create a docker network bridge such that your SAM container can communicate with your Solace Broker container<pre><code>docker network connect sam-network solace
+<li>Create a docker network bridge so that your SAM container can communicate with your Solace Broker container<pre><code>docker network create -d bridge sam-network
 </code></pre>
 <aside class="special"><p>aside Positive skip this step if you are connecting to a cloud hosted broker</p>
 </aside>
