@@ -487,7 +487,7 @@ In the `configs/agents` directory
     ```
     IMAGE_MODEL_NAME="openai/imagen-3"
     IMAGE_SERVICE_ENDPOINT="https://lite-llm.mymaas.net"
-    IMAGE_SERVICE_API_KEY="sk-GzO1GTvrvAuOXijAlresJg"
+    IMAGE_SERVICE_API_KEY="token"
     GEMINI_API_KEY=<token>
     ```
 
