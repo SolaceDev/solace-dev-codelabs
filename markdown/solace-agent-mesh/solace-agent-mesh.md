@@ -968,7 +968,7 @@ Navigate to the Agents tab and see the new agent in the list
 
 ![fileagent](img/fileagent.png)
 
-Now that you have hte File Agent up and running, you can run any of the following prompts to see it in action
+Now that you have the File Agent up and running, you can run any of the following prompts to see it in action
 
 ```
 "List the files in the directory"
