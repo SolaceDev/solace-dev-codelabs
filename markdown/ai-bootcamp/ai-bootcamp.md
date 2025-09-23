@@ -19,6 +19,9 @@ Follow the steps in this codelab to get started with the Enterprise Image for SA
 ## Load Enterprise Image 
 Duration: 0:02:00
 
+> aside positive 
+> If you don't have `docker` you can use `podman` and replace every docker command with podman
+
 1. Download the enterprise image from [https://products.solace.com/](https://products.solace.com/)
 1. Load the image into your local docker 
 
@@ -26,9 +29,17 @@ Duration: 0:02:00
 docker load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
 ```
 
+```
+podman load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
+```
+
 On successful loading, check the list of existing images
 ```
 docker images 
+```
+
+```
+podman images 
 ```
 
 > aside positive
@@ -36,9 +47,10 @@ docker images
 > ```
 > docker tag <original_name>:<original_tag> solace-agent-mesh-enterprise:<version>
 > ```
+> ```
+> podman tag <original_name>:<original_tag> solace-agent-mesh-enterprise:<version>
+> ```
 
-> aside positive 
-> If you don't have `docker` you can use `podman` and replace every docker command with podman
 
 ## Install SAM CLI
 Duration: 00:05:00
@@ -173,6 +185,9 @@ This step is involved with running SAM enterprise with the new files generated.
     ```
     docker network create -d bridge sam-network
     ```
+    ```
+    podman network create -d bridge sam-network
+    ```
 
     > aside positive
     > skip this step if you are connecting to a cloud hosted broker instead
@@ -225,9 +240,15 @@ This step is involved with running SAM enterprise with the new files generated.
     ```
     docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
     ```
+    ```
+    podman run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+    ```
 1. Add the solace broker container to the same SAM network
     ```
     docker network connect sam-network solace
+    ```
+    ```
+    podman network connect sam-network solace
     ```
 1. Open `.env` file and make the following changes
     - `SOLACE_BROKER_URL="ws://solace:8008"` - Update the broker URL to use the solace broker container
@@ -268,6 +289,16 @@ This step is involved with running SAM enterprise with the new files generated.
 1. Run docker compose
     ```
     docker compose up 
+    ```
+
+    > aside positive 
+    > If you are using `podman compose up` you will have to update your docker-compose.yaml file to make sure you are running podman as root. to do this add the following under your `image` name in the compose file
+    > ```
+    > user: root
+    > ```
+
+    ```
+    podman compose up 
     ```
 
     > aside positive
