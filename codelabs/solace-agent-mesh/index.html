@@ -419,13 +419,13 @@ apps:
 <ol type="1" start="4">
 <li>Run solace agent mesh <code>sam run</code></li>
 </ol>
-<aside class="special"><p> The <code>sam run</code> command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations expect the agent of your choice <code>sam run -s configs/agents/markitdown.yaml</code> and in another terminal you can run <code>sam run configs/agents/markitdown.yaml</code> that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals.</p>
+<aside class="special"><p> The <code>sam run</code> command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations except the agent of your choice <code>sam run -s configs/agents/markitdown.yaml</code> and in another terminal you can run <code>sam run configs/agents/markitdown.yaml</code> that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals.</p>
 </aside>
 <ol type="1" start="5">
 <li>Observe the agent in the WebGUI Gateway</li>
 </ol>
 <p class="image-container"><img alt="markitdown" src="img/3e982872adf51086.png"></p>
-<aside class="special"><p> Check out the <a href="https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents" target="_blank">examples</a> directory for other agent yaml configuration with the</p>
+<aside class="special"><p> Check out the <a href="https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents" target="_blank">examples</a> directory for other agent yaml configurations.</p>
 </aside>
 
 
@@ -809,7 +809,7 @@ apps:
 </code></pre>
 <p>Navigate to the Agents tab and see the new agent in the list</p>
 <p class="image-container"><img alt="fileagent" src="img/5916d740b7892693.png"></p>
-<p>Now that you have hte File Agent up and running, you can run any of the following prompts to see it in action</p>
+<p>Now that you have the File Agent up and running, you can run any of the following prompts to see it in action</p>
 <pre><code>&#34;List the files in the directory&#34;
 &#34;Create a simple text file with some content&#34;
 &#34;Read the contents of test.txt&#34;
