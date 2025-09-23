@@ -507,7 +507,7 @@ apps:
 ![markitdown](img/markitdown.png)
 
 > aside positive
-> Check out the [examples](https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents) directory for other agent yaml configuration with the 
+> Check out the [examples](https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents) directory for other agent yaml configurations.
 
 
 ## Understanding the YAML configuration of agents
