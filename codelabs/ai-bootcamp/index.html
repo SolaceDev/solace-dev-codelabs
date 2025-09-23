@@ -176,6 +176,8 @@ cd sam-bootcamp
         ports:
         - &#34;0.0.0.0:8001:8001&#34;        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
+        command: [&#34;run&#34;,&#34;/app/configs&#34;] # override the default sam run command to specify a directory
+
 networks:
     sam-network:
         external: true          # reuse your existing network
@@ -379,14 +381,14 @@ What are the tools you have access to
 </code></pre>
 </li>
 </ul>
-<h2 is-upgraded>Adding a multimedia agent</h2>
+<h2 is-upgraded>Adding a multimodal agent</h2>
 <p>Lets add another multi-modal agent. This agent is capable of generating and processing content in both audio and visual formats. It includes features like text-to-speech with tone-based voice selection, multi-speaker conversations, audio transcription, image generation, and image analysis, while providing detailed guidelines for using these features effectively.</p>
 <p>In the <code>configs/agents</code> directory</p>
 <ol type="1">
 <li>Add an agent file that leverages internal tools<pre><code>curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_multimodal_example.yaml -o multimodal.yaml
 </code></pre>
 </li>
-<li>Shared<pre><code>image_describe: &amp;image_description_model
+<li>Navigate to <code>shared_config.yaml</code> file and update add the following<pre><code>image_describe: &amp;image_description_model
   # This dictionary structure tells ADK to use the LiteLlm wrapper.
   # &#39;model&#39; uses the specific model identifier your endpoint expects.
   model: ${IMAGE_DESCRIPTION_MODEL_NAME} # Use env var for model name
@@ -403,9 +405,14 @@ audio_transcription: &amp;audio_transcription_model
   api_base: ${AUDIO_TRANSCRIPTION_API_BASE} # Use env var for endpoint URL
   # &#39;api_key&#39; provides authentication.
   api_key: ${AUDIO_TRANSCRIPTION_API_KEY} # Use env var for API key
+
+gemini_pro: &amp;gemini_pro_model &#34;gemini-2.5-pro-exp-03-25&#34;
 </code></pre>
 </li>
-<li>Update yor env file with the following environment variable<pre><code>GEMINI_API_KEY=&lt;token&gt;
+<li>Update yor env file with the following environment variable<pre><code>IMAGE_MODEL_NAME=&#34;openai/imagen-3&#34;
+IMAGE_SERVICE_ENDPOINT=&#34;https://lite-llm.mymaas.net&#34;
+IMAGE_SERVICE_API_KEY=&#34;sk-GzO1GTvrvAuOXijAlresJg&#34;
+GEMINI_API_KEY=&lt;token&gt;
 </code></pre>
 <aside class="special"><p> Ask your instructor for a Gemini key or generate one from <a href="aistudio.google.com" target="_blank">aistudio.google.com</a></p>
 </aside>
