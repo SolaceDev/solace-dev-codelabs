@@ -212,6 +212,8 @@ This step is involved with running SAM enterprise with the new files generated.
             ports:
             - "0.0.0.0:8001:8001"        # expose container port 8001 as port 8001 on host IP 0.0.0.0
 
+            command: ["run","/app/configs"] # override the default sam run command to specify a directory
+
     networks:
         sam-network:
             external: true          # reuse your existing network
@@ -448,7 +450,7 @@ Notes:
         There is no need to provide a preview of the content in the response.
     ```
 
-### Adding a multimedia agent
+### Adding a multimodal agent
 Lets add another multi-modal agent. This agent is capable of generating and processing content in both audio and visual formats. It includes features like text-to-speech with tone-based voice selection, multi-speaker conversations, audio transcription, image generation, and image analysis, while providing detailed guidelines for using these features effectively.
 
 In the `configs/agents` directory
@@ -458,7 +460,7 @@ In the `configs/agents` directory
     curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_multimodal_example.yaml -o multimodal.yaml
     ```
 
-1. Shared 
+1. Navigate to `shared_config.yaml` file and update add the following
     ```
     image_describe: &image_description_model
       # This dictionary structure tells ADK to use the LiteLlm wrapper.
@@ -477,10 +479,15 @@ In the `configs/agents` directory
       api_base: ${AUDIO_TRANSCRIPTION_API_BASE} # Use env var for endpoint URL
       # 'api_key' provides authentication.
       api_key: ${AUDIO_TRANSCRIPTION_API_KEY} # Use env var for API key
+    
+    gemini_pro: &gemini_pro_model "gemini-2.5-pro-exp-03-25"
     ```
 
 1. Update yor env file with the following environment variable
     ```
+    IMAGE_MODEL_NAME="openai/imagen-3"
+    IMAGE_SERVICE_ENDPOINT="https://lite-llm.mymaas.net"
+    IMAGE_SERVICE_API_KEY="sk-GzO1GTvrvAuOXijAlresJg"
     GEMINI_API_KEY=<token>
     ```
 
