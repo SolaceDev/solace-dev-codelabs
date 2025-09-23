@@ -169,13 +169,13 @@ Duration: 00:10:00
 
 This step is involved with running SAM enterprise with the new files generated.
 
-1. Create a docker network bridge so that your SAM container can communicate with your Solace Broker container
+1. [Optional] Create a docker network bridge so that your SAM container can communicate with your Solace Broker container
     ```
     docker network create -d bridge sam-network
     ```
 
-    > aside Positive
-    > skip this step if you are connecting to a cloud hosted broker
+    > aside positive
+    > skip this step if you are connecting to a cloud hosted broker instead
 
 1. Create a `docker-compose.yaml` file with the following content
     ```yaml
@@ -258,7 +258,7 @@ This step is involved with running SAM enterprise with the new files generated.
     S3_BUCKET_NAME=""
     S3_ENDPOINT_URL=""
     S3_REGION="us-east-1"
-    WEB_UI_GATEWAY_DATABASE_URL="sqlite:////Users/tamimi/sam-bootcamp/data/webui_gateway.db"
+    WEB_UI_GATEWAY_DATABASE_URL="sqlite:///data/webui_gateway.db"
     ```
 
     > aside positive
