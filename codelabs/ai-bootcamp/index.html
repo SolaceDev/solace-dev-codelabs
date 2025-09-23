@@ -36,20 +36,26 @@
       </google-codelab-step>
     
       <google-codelab-step label="Load Enterprise Image" duration="2">
-        <ol type="1">
+        <aside class="special"><p> If you don&#39;t have <code>docker</code> you can use <code>podman</code> and replace every docker command with podman</p>
+</aside>
+<ol type="1">
 <li>Download the enterprise image from <a href="https://products.solace.com/" target="_blank">https://products.solace.com/</a></li>
 <li>Load the image into your local docker</li>
 </ol>
 <pre><code>docker load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
 </code></pre>
+<pre><code>podman load -i path/to/solace-agent-mesh-enterprise-{version}.tar.gz
+</code></pre>
 <p>On successful loading, check the list of existing images</p>
 <pre><code>docker images 
+</code></pre>
+<pre><code>podman images 
 </code></pre>
 <aside class="special"><p> Tip: you can rename the image and tag as follows</p>
 <pre><code>docker tag &lt;original_name&gt;:&lt;original_tag&gt; solace-agent-mesh-enterprise:&lt;version&gt;
 </code></pre>
-</aside>
-<aside class="special"><p> If you don&#39;t have <code>docker</code> you can use <code>podman</code> and replace every docker command with podman</p>
+<pre><code>podman tag &lt;original_name&gt;:&lt;original_tag&gt; solace-agent-mesh-enterprise:&lt;version&gt;
+</code></pre>
 </aside>
 
 
@@ -147,6 +153,8 @@ cd sam-bootcamp
 <ol type="1">
 <li>[Optional] Create a docker network bridge so that your SAM container can communicate with your Solace Broker container<pre><code>docker network create -d bridge sam-network
 </code></pre>
+<pre><code>podman network create -d bridge sam-network
+</code></pre>
 <aside class="special"><p> skip this step if you are connecting to a cloud hosted broker instead</p>
 </aside>
 </li>
@@ -193,8 +201,12 @@ Notes:<ul>
 </li>
 <li>[Optional] Run local solace broker (alternatively: use Solace Cloud)<pre><code>docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
 </code></pre>
+<pre><code>podman run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 8000:8000 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=2g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standard
+</code></pre>
 </li>
 <li>Add the solace broker container to the same SAM network<pre><code>docker network connect sam-network solace
+</code></pre>
+<pre><code>podman network connect sam-network solace
 </code></pre>
 </li>
 <li>Open <code>.env</code> file and make the following changes<ul>
@@ -231,6 +243,12 @@ WEB_UI_GATEWAY_DATABASE_URL=&#34;sqlite:///data/webui_gateway.db&#34;
 </aside>
 </li>
 <li>Run docker compose<pre><code>docker compose up 
+</code></pre>
+<aside class="special"><p> If you are using <code>podman compose up</code> you will have to update your docker-compose.yaml file to make sure you are running podman as root. to do this add the following under your <code>image</code> name in the compose file</p>
+<pre><code>user: root
+</code></pre>
+</aside>
+<pre><code>podman compose up 
 </code></pre>
 <aside class="special"><p> When the Solace Enterprise container runs, the entry point command for the container is <code>sam run</code>. What this command does is go through all the yaml configuration files under the configs dir and run them. At this point its only the orchestrator agent and web UI gateway.</p>
 </aside>
