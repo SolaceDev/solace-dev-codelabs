@@ -199,8 +199,9 @@ Notes:<ul>
 </li>
 <li>Open <code>.env</code> file and make the following changes<ul>
 <li><code>SOLACE_BROKER_URL="ws://solace:8008"</code> - Update the broker URL to use the solace broker container</li>
-<li><code>FASTAPI_HOST="0.0.0.0"</code> - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to <code>0.0.0.0</code> to make sure its accessed by host IP</li>
+<li><code>FASTAPI_HOST="0.0.0.0"</code> - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to <code>0.0.0.0</code> to make sure its reachable by host</li>
 <li><code>FASTAPI_PORT="8001"</code>- In case your solace broker has port 8000 exposed</li>
+<li><code>WEB_UI_GATEWAY_DATABASE_URL="sqlite:///data/webui_gateway.db"</code> Change your Web UI Gateway Database to use a relative path on your broker instead</li>
 </ul>
 This is the final <code>.env</code> file<pre><code>LLM_SERVICE_ENDPOINT=&#34;https://lite-llm.mymaas.net&#34;
 LLM_SERVICE_API_KEY=&#34;&lt;llm_token_goes_here&gt;&#34;
