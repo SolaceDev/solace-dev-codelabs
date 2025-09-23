@@ -231,8 +231,9 @@ This step is involved with running SAM enterprise with the new files generated.
     ```
 1. Open `.env` file and make the following changes
     - `SOLACE_BROKER_URL="ws://solace:8008"` - Update the broker URL to use the solace broker container
-    - `FASTAPI_HOST="0.0.0.0"` - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to `0.0.0.0` to make sure its accessed by host IP
+    - `FASTAPI_HOST="0.0.0.0"` - This where the webUI Gateway is hosted on the SAM Enterprise container. We change it to `0.0.0.0` to make sure its reachable by host
     - `FASTAPI_PORT="8001"`- In case your solace broker has port 8000 exposed
+    - `WEB_UI_GATEWAY_DATABASE_URL="sqlite:///data/webui_gateway.db"` Change your Web UI Gateway Database to use a relative path on your broker instead 
 
     This is the final `.env` file
     ```
