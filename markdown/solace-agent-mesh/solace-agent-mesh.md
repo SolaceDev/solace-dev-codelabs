@@ -500,7 +500,7 @@ apps:
 4. Run solace agent mesh `sam run`
 
 > aside positive
-> The `sam run` command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations expect the agent of your choice `sam run -s configs/agents/markitdown.yaml` and in another terminal you can run `sam run configs/agents/markitdown.yaml` that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals. 
+> The `sam run` command will traverse through all the yaml configurations in your directory (agents and gateways) and pass them to the solace agent mesh. If you want to run an agent in isolation, you can run an instance of solace agent mesh with all of configurations except the agent of your choice `sam run -s configs/agents/markitdown.yaml` and in another terminal you can run `sam run configs/agents/markitdown.yaml` that runs that agent in isolation. You can do the same thing with all the yaml configuration files in separate terminals. 
 
 5. Observe the agent in the WebGUI Gateway
 
