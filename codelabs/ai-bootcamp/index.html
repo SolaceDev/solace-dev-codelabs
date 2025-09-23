@@ -289,8 +289,12 @@ What are the tools you have access to
 </li>
 <li>Restart the enterprise container<pre><code>docker restart sam-ent
 </code></pre>
+<pre><code>podman restart sam-ent
+</code></pre>
 <aside class="special"><p> This restarts the SAM enterprise image with a new config agent config file Pro tip: you can interactively go into the by executing the following</p>
 <pre><code>docker exec -it sam-ent bash
+</code></pre>
+<pre><code>podman exec -it sam-ent bash
 </code></pre>
 </aside>
 </li>
@@ -407,6 +411,8 @@ audio_transcription: &amp;audio_transcription_model
 </aside>
 </li>
 <li>Restart the enterprise container<pre><code>docker restart sam-ent
+</code></pre>
+<pre><code>podman restart sam-ent
 </code></pre>
 </li>
 </ol>
@@ -615,8 +621,10 @@ apps:
 <p>Edit your .env file to add a <code>GOOGLE_MAPS_API_KEY</code></p>
 <pre><code language="language-yaml" class="language-yaml">GOOGLE_MAPS_API_KEY=&#34;YOUR_API_KEY&#34;
 </code></pre>
-<h2 is-upgraded>Restart Enterprise docker</h2>
+<h2 is-upgraded>Restart SAM Enterprise container</h2>
 <pre><code>docker restart sam-ent
+</code></pre>
+<pre><code>podman restart sam-ent
 </code></pre>
 <p>Now navigate to your SAM instance on <a href="http://localhost:8001/" target="_blank">http://localhost:8001/</a> and see the new agent added</p>
 
