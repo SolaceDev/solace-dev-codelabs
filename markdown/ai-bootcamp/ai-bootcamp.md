@@ -347,12 +347,18 @@ Now that you have a docker image running the enterprise edition of SAM, lets go 
     ```
     docker restart sam-ent
     ```
+    ```
+    podman restart sam-ent
+    ```
 
     > aside positive 
     > This restarts the SAM enterprise image with a new config agent config file
     > Pro tip: you can interactively go into the by executing the following
     > ```
     > docker exec -it sam-ent bash
+    > ```
+    > ```
+    > podman exec -it sam-ent bash
     > ```
 
 
@@ -484,6 +490,9 @@ In the `configs/agents` directory
 1. Restart the enterprise container
     ```
     docker restart sam-ent
+    ```
+    ```
+    podman restart sam-ent
     ```
 
 ## Adding MCP Agent 
@@ -703,9 +712,12 @@ Edit your .env file to add a `GOOGLE_MAPS_API_KEY`
 GOOGLE_MAPS_API_KEY="YOUR_API_KEY"
 ```
 
-### Restart Enterprise docker
+### Restart SAM Enterprise container
 ```
 docker restart sam-ent
+```
+```
+podman restart sam-ent
 ```
 
 Now navigate to your SAM instance on [http://localhost:8001/](http://localhost:8001/) and see the new agent added
