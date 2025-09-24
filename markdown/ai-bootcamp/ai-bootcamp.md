@@ -669,11 +669,3 @@ podman restart sam-ent
 ```
 
 Now navigate to your SAM instance on [http://localhost:8001/](http://localhost:8001/) and see the new agent added
-
-
-## Adding Agent with Web GUI 
-Duration: 00:05:00
-
-```
-sam add agent --gui
-```
