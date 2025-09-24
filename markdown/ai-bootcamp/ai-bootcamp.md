@@ -288,6 +288,15 @@ This step is involved with running SAM enterprise with the new files generated.
     > aside positive
     > Note that the specific model identifier that the endpoint expects in the format of `provider/model` (e.g., `openai/gpt-4`, `anthropic/claude-3-opus-20240229`).
 
+1. Make sure the database type for the session properties of the webUI gateway is set to `sqlite`
+  ```
+  artifact_service: *default_artifact_service
+  session_service: 
+    type: "sqlite"
+    database_url: "${WEB_UI_GATEWAY_DATABASE_URL}"
+    default_behavior: "PERSISTENT"
+  ```
+
 1. Run docker compose
     ```
     docker compose up 
@@ -332,9 +341,12 @@ When SAM runs, it configures a couple of queues with subscriptions.
 ## Adding agents with built-in tools
 Duration: 00:10:00
 
-Now that you have a docker image running the enterprise edition of SAM, lets go ahead and add configuration files. 
+Now that you have a docker image running the enterprise edition of SAM, lets go ahead and add two different configuration files. 
 
-### Basic Agents
+1. A file with multiple agent configurations
+1. Multimodal Agent
+
+### 1. Basic Agents
 
 1. From a new terminal window, navigate to your configs directory
     ```
@@ -450,7 +462,21 @@ Notes:
         There is no need to provide a preview of the content in the response.
     ```
 
-### Adding a multimodal agent
+
+Now go ahead and restart your docker
+
+ ```
+docker restart sam-ent
+```
+```
+podman restart sam-ent
+```
+
+Navigate to your SAM WebUI Gateway at [http://localhost:8001/](http://localhost:8001/) and observe new agents in the Agents tab
+
+![more](./img/more_agents.png)
+
+### 2. Adding a multimodal agent
 Lets add another multi-modal agent. This agent is capable of generating and processing content in both audio and visual formats. It includes features like text-to-speech with tone-based voice selection, multi-speaker conversations, audio transcription, image generation, and image analysis, while providing detailed guidelines for using these features effectively.
 
 In the `configs/agents` directory
@@ -460,7 +486,12 @@ In the `configs/agents` directory
     curl https://raw.githubusercontent.com/SolaceLabs/solace-agent-mesh/refs/heads/main/examples/agents/a2a_multimodal_example.yaml -o multimodal.yaml
     ```
 
-1. Navigate to `shared_config.yaml` file and update add the following
+1. Open the multimodal.yaml and remove the "src." part before "solace_agent_mesh" in the `app_module` on lines 20 & 250
+    ```
+    app_module: solace_agent_mesh.agent.sac.app
+    ```
+
+1. Navigate to `shared_config.yaml` file and add the following under the `models` section
     ```
     image_describe: &image_description_model
       # This dictionary structure tells ADK to use the LiteLlm wrapper.
@@ -505,7 +536,12 @@ In the `configs/agents` directory
 ## Adding MCP Agent 
 Duration: 00:05:00
 
-To add an MCP agent, we will simply define an agent yaml file with the basic configuration. In this step, we will go ahead and add a [Google Maps MCP Agent](https://github.com/cablate/mcp-google-map).
+
+Adding an MCP agent is done in one of two ways
+1. Using the agent (community edition) builder 
+1. Adding yaml file configuration
+
+In this hands-on, we will simply define an agent yaml file with the basic configuration. In this step, we will go ahead and add a [Google Maps MCP Agent](https://github.com/cablate/mcp-google-map).
 
 ### Add Agent File 
 
@@ -516,208 +552,113 @@ To add an MCP agent, we will simply define an agent yaml file with the basic con
     ```
 1. Open that file and place the following content in the file
     ```yaml
-    # Solace AI Connector: Agent Configuration Template
     log:
     stdout_log_level: INFO
     log_file_level: DEBUG
-    log_file: a2a_agent.log
+    log_file: google_maps_mcp.log
 
     !include ../shared_config.yaml
 
     apps:
-    - name: "GoogleMaps__app"
+      - name: "GoogleMaps__app"
         app_base_path: .
         app_module: solace_agent_mesh.agent.sac.app
         broker:
-        <<: *broker_connection
+          <<: *broker_connection
 
         # App Level Config
         app_config:
-        namespace: "${NAMESPACE}" # Your A2A topic namespace
-        supports_streaming: true # Host capability flag
-        agent_name: "GoogleMaps"
-        # The model will be an alias like *planning_model, *general_model etc.
-        # The python script will replace *general_model with the correct alias string.
-        model: *general_model 
+          namespace: "${NAMESPACE}" # Your A2A topic namespace
+          supports_streaming: true # Host capability flag
+          agent_name: "GoogleMaps"
+          # The model will be an alias like *planning_model, *general_model etc.
+          # The python script will replace *general_model with the correct alias string.
+          model: *general_model 
 
-        instruction: | # User-provided instruction
-            TO BE FILLED
-        
-        tools: 
-            ## TO BE FILLED
+          instruction: | # User-provided instruction
+            You are a Google Maps MCP server with the following capabilities:
 
-        session_service: *default_session_service
-        artifact_service: *default_artifact_service
-        
-        artifact_handling_mode: "embed" # How to handle artifacts
-        enable_embed_resolution: true # Enable embed feature and instruction injection
-        enable_artifact_content_instruction: true # Enable instruction for late-stage embed
-        enable_builtin_artifact_tools: # Enable artifact tools and instruction injection
+            1. retrieve-instructions: A helper tool used by the client to get crucial system instructions on how to best reason about user intent and formulate effective calls to the retrieve-google-maps-platform-docs tool.
+            2. retrieve-google-maps-platform-docs: The primary tool. It takes a natural language query and submits it to a hosted Retrieval Augmented Generation (RAG) engine. The RAG engine searches fresh versions of offici
+          
+          tools: 
+            - group_name: artifact_management
+              tool_type: builtin-group
+            - group_name: general
+              tool_type: builtin-group
+            - connection_params:
+                args:
+                - -y
+                - '@googlemaps/code-assist-mcp@latest'
+                command: npx
+                type: stdio
+              #environment_variables:
+              #  GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY} 
+              tool_type: mcp
+
+          session_service: *default_session_service
+          artifact_service: *default_artifact_service
+          
+          artifact_handling_mode: "reference" # How to handle artifacts
+          enable_embed_resolution: true # Enable embed feature and instruction injection
+          enable_artifact_content_instruction: true # Enable instruction for late-stage embed
+          enable_builtin_artifact_tools: # Enable artifact tools and instruction injection
             enabled: true
-        enable_builtin_data_tools: # Enable data analysis tools and instruction injection
+          enable_builtin_data_tools: # Enable data analysis tools and instruction injection
             enabled: false
-        data_tools_config: *default_data_tools_config # Use the default data tools config
+          data_tools_config: *default_data_tools_config # Use the default data tools config
 
-        # Agent Card Definition
-        agent_card:
-            description: "TO BE FILLED"
+          # Agent Card Definition
+          agent_card:
+            description: "Google Maps MCP server with the following capabilities: Location Search, Geocoding Services, Distance & Directions, Elevation Data."
             defaultInputModes: [text] 
             defaultOutputModes: [text, file] 
             skills: []
-        
-        # Discovery & Communication
-        agent_card_publishing: 
+          
+          # Discovery & Communication
+          agent_card_publishing: 
             interval_seconds: 10
-        agent_discovery: 
+          agent_discovery: 
             enabled: true
-        inter_agent_communication:
-            allow_list: [""] 
+          inter_agent_communication:
+            allow_list: [] 
             deny_list: [] 
             request_timeout_seconds: 180
+
     ```
 
-1. Update the `instruction` section with the following
+
+A couple of notes to point out:
+
+1. The `instruction` section has the following
     ```yaml
         You are a Google Maps MCP server with the following capabilities:
 
-        1. Location Search
-        - Search for places near a specific location with customizable radius and filters
-        - Get detailed place information including ratings, opening hours, and contact details
-
-        2. Geocoding Services
-        - Convert addresses to coordinates (geocoding)
-        - Convert coordinates to addresses (reverse geocoding)
-
-        3. Distance & Directions
-        - Calculate distances and travel times between multiple origins and destinations
-        - Get detailed directions between two points with step-by-step instructions
-        - Support for different travel modes (driving, walking, bicycling, transit)
-
-        4. Elevation Data
-        - Retrieve elevation data for specific locations
+        1. retrieve-instructions: A helper tool used by the client to get crucial system instructions on how to best reason about user intent and formulate effective calls to the retrieve-google-maps-platform-docs tool.
+        2. retrieve-google-maps-platform-docs: The primary tool. It takes a natural language query and submits it to a hosted Retrieval Augmented Generation (RAG) engine. The RAG engine searches fresh versions of offici
     ```
 
-1. Update the tools section with the following: 
+1. The tools section has the following: 
     ```yaml
     tools: 
-        - group_name: artifact_management
-          tool_type: builtin-group
-        - group_name: general
-          tool_type: builtin-group
-        - connection_params:
-            args:
-            - -y
-            - '@cablate/mcp-google-map'
-            command: npx
-            type: stdio
-          environment_variables:
-            GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY} 
-          tool_type: mcp
+      - group_name: artifact_management
+        tool_type: builtin-group
+      - group_name: general
+        tool_type: builtin-group
+      - connection_params:
+          args:
+          - -y
+          - '@googlemaps/code-assist-mcp@latest'
+          command: npx
+          type: stdio
+        #environment_variables:
+        #  GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY} 
+        tool_type: mcp
     ```
 
-    A couple of things to point out: 
     - This Agent leverages two built-in tools `artifact_management` and the `general` builtin-group
     - Also uses tools exposed by a local MCP server as configured via `tool_type: mcp`
-    - The MCP server runs locally as per the [Google Maps MCP Agent Documentation](https://github.com/cablate/mcp-google-map)
-    - An env var is required for this MCP server as defined in `environment_variables`
-
-The final config file looks like this
-```yaml
-
-log:
-  stdout_log_level: INFO
-  log_file_level: DEBUG
-  log_file: a2a_agent.log
-
-!include ../shared_config.yaml
-
-apps:
-  - name: "GoogleMaps__app"
-    app_base_path: .
-    app_module: solace_agent_mesh.agent.sac.app
-    broker:
-      <<: *broker_connection
-
-    # App Level Config
-    app_config:
-      namespace: "${NAMESPACE}" # Your A2A topic namespace
-      supports_streaming: true # Host capability flag
-      agent_name: "GoogleMaps"
-      # The model will be an alias like *planning_model, *general_model etc.
-      # The python script will replace *general_model with the correct alias string.
-      model: *general_model 
-
-      instruction: | # User-provided instruction
-        You are a Google Maps MCP server with the following capabilities:
-
-        1. Location Search
-        - Search for places near a specific location with customizable radius and filters
-        - Get detailed place information including ratings, opening hours, and contact details
-
-        2. Geocoding Services
-        - Convert addresses to coordinates (geocoding)
-        - Convert coordinates to addresses (reverse geocoding)
-
-        3. Distance & Directions
-        - Calculate distances and travel times between multiple origins and destinations
-        - Get detailed directions between two points with step-by-step instructions
-        - Support for different travel modes (driving, walking, bicycling, transit)
-
-        4. Elevation Data
-        - Retrieve elevation data for specific locations
-      
-      tools: 
-        - group_name: artifact_management
-          tool_type: builtin-group
-        - group_name: general
-          tool_type: builtin-group
-        - connection_params:
-            args:
-            - -y
-            - '@cablate/mcp-google-map'
-            command: npx
-            type: stdio
-          environment_variables:
-            GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY} 
-          tool_type: mcp
-
-      session_service: *default_session_service
-      artifact_service: *default_artifact_service
-      
-      artifact_handling_mode: "embed" # How to handle artifacts
-      enable_embed_resolution: true # Enable embed feature and instruction injection
-      enable_artifact_content_instruction: true # Enable instruction for late-stage embed
-      enable_builtin_artifact_tools: # Enable artifact tools and instruction injection
-        enabled: true
-      enable_builtin_data_tools: # Enable data analysis tools and instruction injection
-        enabled: false
-      data_tools_config: *default_data_tools_config # Use the default data tools config
-
-      # Agent Card Definition
-      agent_card:
-        description: "Google Maps MCP server with the following capabilities: Location Search, Geocoding Services, Distance & Directions, Elevation Data."
-        defaultInputModes: [text] 
-        defaultOutputModes: [text, file] 
-        skills: []
-      
-      # Discovery & Communication
-      agent_card_publishing: 
-        interval_seconds: 10
-      agent_discovery: 
-        enabled: true
-      inter_agent_communication:
-        allow_list: [] 
-        deny_list: [] 
-        request_timeout_seconds: 180
-```
-
-### Add Env var
-
-Edit your .env file to add a `GOOGLE_MAPS_API_KEY`
-
-```yaml
-GOOGLE_MAPS_API_KEY="YOUR_API_KEY"
-```
+    - The MCP server runs locally as per the [Google Maps MCP Agent Documentation](https://developers.google.com/maps/ai/mcp#%F0%9F%94%A7-tools-provided)
 
 ### Restart SAM Enterprise container
 ```
