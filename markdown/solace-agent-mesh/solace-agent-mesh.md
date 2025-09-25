@@ -768,7 +768,7 @@ These implement specialized integrations that don't fit neatly into the agent or
 The Solace Agent Mesh ecosystem encompasses both official and community-developed plugins:
 
 #### Official Core Plugins
-These are developed and maintained by the Solace team, providing essential capabilities for common use cases. The official plugins are available in the Solace repository at [https://github.com/solacecommunity/solace-agent-mesh-plugins](https://github.com/solacecommunity/solace-agent-mesh-plugins).
+These are developed and maintained by the Solace team, providing essential capabilities for common use cases. The official plugins are available in the Solace repository at [https://github.com/SolaceLabs/solace-agent-mesh-core-plugins](https://github.com/SolaceLabs/solace-agent-mesh-core-plugins).
 
 #### Community Plugins
 Solace Agent Mesh plugins ecosystem also encourages community contributions through the plugin system. These plugins extend the platform in numerous ways and can be discovered through the same plugin catalog as official plugins. to learn more about the existing plugins, check the github repository [https://github.com/solacecommunity/solace-agent-mesh-plugins](https://github.com/solacecommunity/solace-agent-mesh-plugins)
@@ -1039,7 +1039,7 @@ Throughout this codelab, you've gained valuable insights into Solace Agent Mesh 
 
 ### Development Advantages
 - **Configuration-Driven**: Most agent capabilities can be defined through YAML configuration without requiring code changes.
-- **Plugin Ecosystem**: The extensible plugin architecture allows for rapid capability expansion through both official and community plugins from the [Solace Agent Mesh Plugins Repository](https://github.com/solacecommunity/solace-agent-mesh-plugins).
+- **Plugin Ecosystem**: The extensible plugin architecture allows for rapid capability expansion through both official and community plugins from the [Solace Agent Mesh Plugins Repository](https://github.com/SolaceLabs/solace-agent-mesh-core-plugins).
 - **Multi-Provider Support**: Freedom to use different LLM providers including OpenAI, Anthropic, Google, and others based on your specific needs.
 
 ### Integration Capabilities
