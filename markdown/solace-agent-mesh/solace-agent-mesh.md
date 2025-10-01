@@ -415,8 +415,11 @@ For the remaining of any prompts you execute to Solace Agent Mesh, you can alway
 ## Adding Agents 
 Duration: 0:05:00
 
-
 As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
+
+### Agent Anatomy
+
+![anatomy](./img/agent_anatomy.png)
 
 In Solace Agent Mesh, Agents are configuration driven vial YAML files and there are multiple ways to develop an agent:
 1. Using built-in templates,
