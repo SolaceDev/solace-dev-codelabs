@@ -553,9 +553,9 @@ In this hands-on, we will simply define an agent yaml file with the basic config
 1. Open that file and place the following content in the file
     ```yaml
     log:
-    stdout_log_level: INFO
-    log_file_level: DEBUG
-    log_file: google_maps_mcp.log
+        stdout_log_level: INFO
+        log_file_level: DEBUG
+        log_file: google_maps_mcp.log
 
     !include ../shared_config.yaml
 
