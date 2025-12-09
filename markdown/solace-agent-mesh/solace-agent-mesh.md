@@ -4,7 +4,7 @@ id: solace-agent-mesh
 tags: 
 categories: Solace, Agent Mesh, AI
 environments: Web
-status: Published 
+status: Published
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
 # Getting started with Solace Agent Mesh - An Agent Orchestration Framework
