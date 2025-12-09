@@ -56,7 +56,7 @@ jobs:
             folder="$(basename $file .md)"
             google-tools/claat/claat export -o codelabs-site/site/solace-dev-codelabs/codelabs main/$file
           done
-          cd codelabs-site/site && npm i && npm run dist
+          cd codelabs-site/site && npm ci && npm run dist
 
       - name: Netlify Deploy
         uses: nwtgck/actions-netlify@v1.1.7
