@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-12-09T22:08:30Z",
+  "id": "sierra-digital-workshop",
+  "duration": 130,
+  "title": "Solace Agent Mesh Workshop",
+  "summary": "Solace Agent Mesh workshop created for Sierra Digital",
+  "source": "main/markdown/sierra-digital-workshop/sierra-digital-workshop.md",
+  "theme": "",
+  "status": [
+    "hidden"
+  ],
+  "category": null,
+  "tags": [
+    "sam",
+    "solace",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sierra-digital-workshop",
+  "url": "sierra-digital-workshop"
+}

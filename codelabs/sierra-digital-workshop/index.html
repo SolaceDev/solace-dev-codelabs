@@ -1,0 +1,362 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Solace Agent Mesh Workshop</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="sierra-digital-workshop"
+                  title="Solace Agent Mesh Workshop"
+                  environment="web"
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/sierra-digital-workshop">
+    
+      <google-codelab-step label="Workshop Overview" duration="10">
+        <p>Welcome to the Solace Agent Mesh (SAM) introductory workshop.</p>
+<p>The scenario for this workshop is having a pipeline alert, such as a leak, trigger an AI workflow whereby</p>
+<ol type="1">
+<li>The employee database is searched for a local maintenance technician to service the leak &amp; contact details of that technician are provided</li>
+<li>The Standard Operating Procedures document is referenced and the section relevant to the issue is summarized</li>
+</ol>
+<p>In addition to the above workflow is the ability to ‘talk&#39; to the data via a chat interface. This enables easier access of information and removes the need to be a database query expert or know exactly where the information is.</p>
+<p>The components of the workshop can be depicted as follows:</p>
+<p class="image-container"><img alt="Workshop Architecture" src="img/b71af59b79f517b0.png"></p>
+<p>We&#39;ll be tackling each of the components one-by-one with the above as the final goal.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="10">
+        <p>Please ensure your environment is ready with the following:</p>
+<ul>
+<li>Solace Cloud trial account</li>
+<li>GitHub access</li>
+<li>LLM model &amp; key</li>
+<li>Python 3.10.16+</li>
+<li>pip (usually included with Python)</li>
+<li>Qdrant (either a <a href="https://qdrant.tech/" target="_blank">free-tier managed account</a> or ability to run <a href="https://hub.docker.com/r/qdrant/qdrant" target="_blank">docker</a>)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Installing SAM CLI" duration="10">
+        <p>The SAM CLI provides the scaffolding commands to initialize and create SAM components.</p>
+<ol type="1">
+<li>Create working directory<pre><code>mkdir sam-workshop
+cd sam-workshop
+</code></pre>
+</li>
+<li>Setup Python virtual environment<pre><code>python3.12 -m venv venv
+</code></pre>
+<aside class="special"><p> Depending on how you installed python on your machine, this command could be <code>python3</code></p>
+</aside>
+<aside class="special"><p> Note: If you dont have <code>venv</code> installed you will have to download it as follows <code>python3 -m pip install --user virtualenv</code></p>
+</aside>
+<aside class="special"><p> If you are running this on WSL/Linux you can use <code>python3-venv</code> instead and its installed as follows <code>apt-get install python3-venv</code></p>
+</aside>
+</li>
+<li>Activate virtual environment<pre><code>source venv/bin/activate
+</code></pre>
+<aside class="special"><p> On windows activate it as follows <code>venv/Scripts/activate</code></p>
+</aside>
+<aside class="warning"><p> This virtual environment is session lived; i.e. if you open a new session you will have to activate the virtual environment again</p>
+</aside>
+</li>
+<li>Install solace agent mesh<pre><code>pip install solace-agent-mesh
+</code></pre>
+<aside class="special"><p> Since you activated the virtual environment, you can use <code>pip</code> instead of <code>pip3</code> and <code>python</code> instead of <code>python3</code> since everything is within the virtual env session. You can confirm this by running</p>
+<pre><code>python --version
+</code></pre>
+</aside>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Initialize SAM" duration="20">
+        <p>In the same directory, run the following</p>
+<pre><code>sam init --gui
+</code></pre>
+<p class="image-container"><img alt="SAM Init" src="img/99ed3b471249c035.png"></p>
+<ol type="1">
+<li>From here, choose &#34;Advanced Setup&#34; to spin up an instance of the Agent Mesh that uses the Solace Broker as the communication backbone.<aside class="warning"><p> Note that the simple setup &#34;Getting Started Quickly&#34; spins up Agent Mesh without the Solace Broker and uses in-memory queues instead. This is not meant for production ready development and proof of concept project that require high performance and multiple Agentic workflow interactions.</p>
+</aside>
+</li>
+<li>Choose a namespace for your project<img alt="Namespace" src="img/46a4e662f777fe66.png"><aside class="special"><p> The namespace will act as the topic root for all events in SAM</p>
+</aside>
+</li>
+<li>Configure connection to the Solace Broker<img alt="Broker" src="img/5eee67a4eed5e444.png"><aside class="special"><p> Note: If you are using a Solace Cloud instance, you can get the connection parameters from the connect tab after spinning up a Broker Service. Use the Solace Web Messaging Protocol</p>
+</aside>
+<aside class="special"><p> If you are running a local broker on a docker container with SAM Enterprise in a docker container as well, we will configure this in the following steps to leverage docker network</p>
+</aside>
+</li>
+<li>Configure your LLM endpoint, API Key, and Model name<img alt="LLM Endpoint" src="img/15466a6a62fe3719.png"><aside class="special"><p> The model of choice impact the performance of your results and system behaviour. A performative model is recommended for advanced use-cases</p>
+</aside>
+<ul>
+<li>From the LLM Provider, chose the most appropriate option</li>
+<li>Paste your LLM Provider URL as your LLM Endpoint URL</li>
+<li>Paste your token into the Token field</li>
+<li>Choose a model of choice - you can search for the model</li>
+</ul>
+</li>
+<li>Configure the orchestrator agent<img alt="orchestrator" src="img/5e94f0f5ef157c0a.png"><aside class="special"><p> Keep all the configuration parameters as default. You can explore the other options for configuring the orchestrator agent to see what you have available for fine tuning the behaviour</p>
+</aside>
+</li>
+<li>Configure the WebUI Gateway <img alt="gateway" src="img/80457de2c9d0c31f.png"><aside class="special"><p> Note: Choose any Session Secret Key needed for the WebUI. Keep the remaining configurations as default.</p>
+</aside>
+</li>
+</ol>
+<p>Finalize the last steps and close the browser window when initialization is done.</p>
+<p>Now back to your terminal window, lets investigate the directories. Open your directory in your favourite editor</p>
+<p class="image-container"><img alt="vscode" src="img/6dd2627073232e51.png"></p>
+<ol type="1">
+<li><code>configs</code>: contains yaml config files <ul>
+<li>agents –&gt; e.g. <code>main_orchestrator.yaml</code></li>
+<li>gateways –&gt; e.g. <code>webui.yaml</code></li>
+</ul>
+</li>
+<li><code>venv</code>: contains all python packages</li>
+<li><code>.env</code>: environment variables</li>
+<li><code>.sam</code>: plugins templates</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Running SAM" duration="10">
+        <p>To run SAM, use the run command to execute all components in a single, multi-threaded application:</p>
+<pre><code>sam run
+</code></pre>
+<p>This command starts all configured agents and gateways, creating a complete agent mesh system.</p>
+<aside class="warning"><p> Hitting Errors?</p>
+<pre><code>Unsupported session service type: sqlite
+</code></pre>
+<p>Make sure the session service type is &#34;sql&#34; in main_orchestrator.yaml (line 41) and webui.yaml (line 25)</p>
+</aside>
+<h2 is-upgraded>Phase 1 of our SAM Deployment</h2>
+<p>Right now, we are only running the orchestrator agent &amp; gateway, so our workshop diagram looks something like below.</p>
+<p class="image-container"><img alt="Workshop Architecture Phase 1" src="img/642660bdb7c6e7fe.png"></p>
+<p>Let&#39;s stop running SAM for now as we add in the next component.</p>
+<aside class="special"><p> Use CTRL+C or CMD+C to stop SAM</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding the SQL Database Agent" duration="30">
+        <p>Now it&#39;s time to add our first agent to SAM, for that we&#39;ll be adding a simple SQLite database agent that contains employee information.</p>
+<p>First, we add the SQL Database plugin to our project.</p>
+<pre><code>sam plugin add employee-info --plugin sam-sql-database
+</code></pre>
+<p>This command:</p>
+<ul>
+<li>Installs the sam-sql-database plugin</li>
+<li>Creates a new agent configuration file at configs/agents/employee-info.yaml</li>
+</ul>
+<p>In the configuration file, we need to modify the directory path so the agent can find the CSVs for our database tables. Update line 93-94 with the directory of your CSVs.</p>
+<pre><code>          csv_files: # Optional: List of CSV file paths to import on startup
+            # - &#34;/path/to/your/data/customers.csv&#34;
+            # - &#34;/path/to/your/data/products.csv&#34;
+          csv_directories: # Optional: List of directories to scan for CSVs
+            - &#34;employee-info&#34;             # &lt; Add this line
+</code></pre>
+<p>The SQL database agent will take the CSVs in the configured directory and create a local SQLite database. Let&#39;s put our employees.csv in a directory called employee-info.</p>
+<h2 is-upgraded>Updating the Environment Variables for the SQL Database Agent</h2>
+<p>We next need to update out environment variables; in your .env file, add the following:</p>
+<pre><code>EMPLOYEE_INFO_DB_TYPE=&#34;sqlite&#34;
+EMPLOYEE_INFO_DB_NAME=&#34;employee-info.db&#34;
+EMPLOYEE_INFO_DB_PURPOSE=&#34;Maintenance Technician Employee Database&#34;
+EMPLOYEE_INFO_DB_DESCRIPTION=&#34;Database containing information about Oil &amp; Gas Company&#34;
+</code></pre>
+<h2 is-upgraded>Running SAM with the SQL Database Agent</h2>
+<p>Run SAM again with the newly added agent.</p>
+<pre><code>sam run
+</code></pre>
+<aside class="special"><p> The above command runs all agents represented by a .yaml file in the configs/ directory.</p>
+</aside>
+<p>Let&#39;s take a look at our WebUI now that we have a new agent up. We should see the EmployeeInfo Agent in the ‘Agents&#39; tab.</p>
+<p class="image-container"><img alt="SQL Database Agent Card" src="img/1163518b1290303e.png"></p>
+<p>We can also talk to the data in the database.</p>
+<p class="image-container"><img alt="Which Technician is in Wyoming?" src="img/fc32d1a1342ef8b1.png"></p>
+<p>And we can see the workflow SAM went through to complete the task.</p>
+<p class="image-container"><img alt="Technician Task Workflow" src="img/9159a8c327310f80.png"></p>
+<h2 is-upgraded>Phase 2 of our SAM Deployment</h2>
+<p>Now, we are running the orchestrator agent, SQL database agent, &amp; web gateway, so our workshop diagram can be updated to look something like this.</p>
+<p class="image-container"><img alt="Workshop Architecture Phase 2" src="img/64326d264e4809bb.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding the RAG Agent" duration="40">
+        <p>The RAG (Retrieval Augment Generation) Agent is best for ingesting unstructured documents, such as PDFs, and then later searching those documents. We will be using the RAG Agent to ingest &amp; search for Standard Operating Procedures.</p>
+<p>Let&#39;s install the RAG agent plugin into our SAM deployment</p>
+<pre><code>sam plugin add sop-rag --plugin sam-rag
+</code></pre>
+<p>This command:</p>
+<ul>
+<li>Installs the sam-rag plugin</li>
+<li>Creates a new agent configuration file at configs/agents/sop-rag.yaml</li>
+</ul>
+<p>Next, we need a VectorDB. An easy one to get started with is Qdrant, which has a <a href="https://qdrant.tech/" target="_blank">free managed tier</a>. There is also a <a href="https://hub.docker.com/r/qdrant/qdrant" target="_blank">docker image</a> that could be used for this section.</p>
+<h2 is-upgraded>Using Qdrant Managed Service</h2>
+<p>Create an account on the <a href="https://qdrant.tech/" target="_blank">Qdrant website</a>.</p>
+<p>Once your account is verified, you can create a cluster. You should be able to find your Qdrant URL and API Key once this is done - take note of those.</p>
+<h2 is-upgraded>Using a Qdrant Docker Container</h2>
+<p>Get the Qdrant docker image from <a href="https://hub.docker.com/r/qdrant/qdrant" target="_blank">Docker Hub</a>.</p>
+<pre><code>docker pull qdrant/qdrant:&lt;tag&gt;
+</code></pre>
+<p>Run the Qdrant container using the following run command.</p>
+<pre><code>docker run -it -p 6333:6333 -p 6334:6334 -v qdrant_storage:/qdrant/storage -v ./qdrant_config:/qdrant/config -e QDRANT__SERVICE__GRPC_PORT=6334 --name qdrant qdrant/qdrant:&lt;tag&gt;
+</code></pre>
+<p>Modify line 159 of the configs/agents/sop-rag.yaml file to comment out the API Key.</p>
+<pre><code>          vector_db:
+            db_type: &#34;qdrant&#34;
+            db_params:
+              url: &#34;${QDRANT_URL}&#34;
+              #api_key: &#34;${QDRANT_API_KEY}&#34;
+              collection_name: &#34;${QDRANT_COLLECTION}&#34;
+              embedding_dimension: ${QDRANT_EMBEDDING_DIMENSION}
+</code></pre>
+<p>Your Qdrant URL will likely be http://localhost:6333 - take note of this for the environment variables configuration in the next step.</p>
+<h2 is-upgraded>Updating the Environment Variables for the RAG Agent</h2>
+<p>We next need to update out environment variables; in your .env file, add the following:</p>
+<pre><code>OPENAI_EMBEDDING_MODEL=&#34;&lt;embedding-model&gt;&#34;
+OPENAI_API_KEY=&#34;&lt;llm-key&gt;&#34;
+OPENAI_API_ENDPOINT=&#34;&lt;llm-url&gt;&#34;
+DOCUMENTS_PATH=sop
+QDRANT_URL=&#34;&lt;qdrant-url&gt;&#34;
+QDRANT_API_KEY=&#34;&lt;qdrant-key&gt;&#34;         # This is not needed if using Docker for Qdrant
+QDRANT_COLLECTION=sops
+QDRANT_EMBEDDING_DIMENSION=1536
+</code></pre>
+<aside class="special"><p> It is possible the Open API Key and Open API Endpoint are the same as the previously configured LLM Key/Endpoint (for example, if using LiteLLM).</p>
+</aside>
+<p>Let&#39;s put our Standard Operating Procedures document in a directory called sop.</p>
+<h2 is-upgraded>Running SAM with the RAG Agent</h2>
+<p>Run SAM again with the newly added agent.</p>
+<pre><code>sam run
+</code></pre>
+<p>Let&#39;s take a look at our WebUI now that we have a new agent up. We should see the SopRag Agent in the ‘Agents&#39; tab.</p>
+<p class="image-container"><img alt="RAG Agent Card" src="img/971930ed53c75c3d.png"></p>
+<p>We can now state an emergent situation and see the procedure as outlined in the document.</p>
+<p class="image-container"><img alt="Small Pipeline Leak - Standard Operating Procedure" src="img/7995a8a63af3a7a3.png"></p>
+<p>If we ask SAM what to do for a leak in a specific state, we should see the interaction go to both the SQL database agent and RAG agent.</p>
+<p class="image-container"><img alt="Large Pipeline Leak in North Carolina - Standard Operating Procedure" src="img/705a65d998b89113.png"></p>
+<h2 is-upgraded>Phase 3 of our SAM Deployment</h2>
+<p>Our workshop diagram can be updated further to reflect that we are running the orchestrator agent, SQL database agent, RAG agent &amp; web gateway.</p>
+<p class="image-container"><img alt="Workshop Architecture Phase 3" src="img/35d00647a5265178.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prompt Engineering &amp; Agent Configurations" duration="0">
+        <p>If you want to improve the responses received from SAM, you can do prompt engineering in the agent configurations. Below are some examples.</p>
+<p>In the Orchestrator Agent, you could add prompts to define the course of action when a specific trigger/stimuli is received (example from line 28).</p>
+<pre><code>      instruction: |
+        You are the Orchestrator Agent within an AI agentic system. Your primary responsibilities are to:
+        1. Process tasks received from external sources via the system Gateway.
+        2. Pipeline Alerts should trigger the EmployeeInfo Agent to identify the right person to service the issue based on the location, and the SOP RAG Agent to determine what procedure to follow.
+</code></pre>
+<p>In the RAG Agent at line 61, you could add a specific prompt for the intended document/content (operating procedures) and a prompt to have RAG strictly stick to the facts in the documents and not search elsewhere for information (eg. the internet).</p>
+<pre><code>instruction: |
+        You are a RAG (Retrieval Augmented Generation) agent that can ingest documents and retrieve relevant information.
+        You can search for information in the ingested operating procedures documents and provide augmented responses.
+        Use the &#39;ingest_document&#39; tool to add new documents to the system.
+        Use the &#39;search_documents&#39; tool to find relevant information based on user queries.
+        You strictly stick to the facts in the documents and do not make up information using any external knowledge.
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding the Event Mesh Gateway" duration="0">
+        <p>Thus far, we have been doing Conversational AI where we ‘talk&#39; to our data and to available agents. What if we took the next step towards Event Triggered AI where an event triggers an AI workflow? For our scenario, we could have a pipeline leak detected event trigger our SAM deployment to determine the closest employee &amp; search the Standard Operating Procedure document for the steps to follow. We can do this with the Event Mesh Gateway.</p>
+<p>Let&#39;s install the event mesh gateway plugin into our SAM deployment</p>
+<pre><code>sam plugin add em-gw --plugin sam-event-mesh-gateway
+</code></pre>
+<p>We next need to update our environment variables (.env) file to include the broker that we want to subscribe to our pipeline event on. This could be the same as our SAM broker, but it doesn&#39;t have to be.</p>
+<pre><code>EM_GW_SOLACE_BROKER_URL=&#34;&lt;solace-smf-port&gt;&#34;
+EM_GW_SOLACE_BROKER_VPN=&#34;&lt;vpn&gt;&#34;
+EM_GW_SOLACE_BROKER_USERNAME=&#34;&lt;client-username&gt;&#34;
+EM_GW_SOLACE_BROKER_PASSWORD=&#34;&lt;client-password&gt;&#34;
+</code></pre>
+<p>We then need to modify the configs/gateways/em-gw.yaml file at line 74 to specify the Solace topic to subscribe to and we can prefix the alert payload with a prompt.</p>
+<pre><code>        - name: &#34;generic_json_event_handler&#34;
+          subscriptions:
+            - topic: &#34;pipeline/alert&#34;
+              qos: 1
+          input_expression: &#34;template:What do we do about this pipeline event? Which technician should handle it?: &#123;&#123;json://input.payload}}&#34;
+</code></pre>
+<h2 is-upgraded>Let&#39;s test it!</h2>
+<p>Using the Solace try-me tab in the Solace broker, let&#39;s subscribe to the following:</p>
+<pre><code>&lt;namespace&gt;/a2a/v1/gateway/response/&gt;
+</code></pre>
+<p>Using the Solace try-me tab, let&#39;s publish the following message to pipeline/alert:</p>
+<pre><code>{
+    &#34;timestamp&#34;:1761057405,
+    &#34;alert&#34;:&#34;pipeline-leak-large&#34;,
+    &#34;location&#34;:&#34;NC&#34;
+}
+</code></pre>
+<p class="image-container"><img alt="Publish &amp; Subscribe through Event Mesh Gateway" src="img/ada5b9bebabb29ec.png"></p>
+<p>We can also send the following in our Web Gateway chat to more obviously see the result of the above query.</p>
+<pre><code>What do we do about this pipeline event? Which technician should handle it?: {
+    &#34;timestamp&#34;:1761057405,
+    &#34;alert&#34;:&#34;pipeline-leak-large&#34;,
+    &#34;location&#34;:&#34;NV&#34;
+}
+</code></pre>
+<p class="image-container"><img alt="Large Pipeline Leak in Nevada - Standard Operating Procedure" src="img/c565f9eb02576050.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Conclusion" duration="0">
+        <p>Our SAM workshop deployment is now complete. Our diagram representing the deployment is below with the orchestrator agent, SQL database agent, RAG agent, web gateway and event mesh gateway all running.</p>
+<p class="image-container"><img alt="Workshop Architecture Phase 4" src="img/b71af59b79f517b0.png"></p>
+<p>After completing this workshop, you should have a basic understanding of</p>
+<ul>
+<li>Solace Agent Mesh</li>
+<li>Agents &amp; Gateways</li>
+<li>How to install &amp; configure the agents</li>
+</ul>
+<p>With this deployment, you are able to expand it by adding further agents, or you can fine-tune the responses received with better prompt engineering.</p>
+<p>A final note that this workshop uses Solace Agent Mesh Community Edition. The Enterprise edition provides further capabilities, including:</p>
+<ul>
+<li>Governance &amp; Security</li>
+<li>Data Management which provides more efficient LLM processing and use of fewer tokens</li>
+<li>Further visualizations with the Activites/Task Monitor</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
