@@ -29,7 +29,15 @@ We'll be tackling each of the components one-by-one with the above as the final 
 ## Prerequisites
 Duration: 0:10:00
 
-Please ensure your environment is ready with the following:
+If using GitHub Codespaces, the only requirement is you need a Github account and an LLM model/key. Navigate to this [GitHub Repo](https://github.com/SolaceDev/solace-developer-workshops/tree/main) to start the Codespace.
+
+![GitHub Codespaces](img/github-repo.png)
+
+It will take a moment for the Codespace to start up, so let that run in the background.
+
+
+
+If using your own laptop/environment, please ensure it is ready with the following:
 * Solace Cloud trial account
 * GitHub access
 * LLM model & key
@@ -86,6 +94,7 @@ The SAM CLI provides the scaffolding commands to initialize and create SAM compo
     > ```
     > python --version
     > ```
+
 
 ## Initialize SAM
 Duration: 00:20:00
@@ -157,6 +166,19 @@ Now back to your terminal window, lets investigate the directories. Open your di
 1. `.env`: environment variables
 1. `.sam`: plugins templates
 
+One change we need to make is the artifacts directory. Under your sam-workshop directory, create artifacts.
+```
+mkdir artifacts   # < Create the artifacts directory
+```
+
+In the shared_config.yaml file, change the artifacts base_path on line 105 to our new directory.
+```
+    # Default artifact service configuration
+    artifact_service: &default_artifact_service
+      type: "filesystem"
+      base_path: "artifacts"              # < Modify this line
+      artifact_scope: namespace
+```
 
 ## Running SAM
 Duration: 00:10:00
@@ -199,7 +221,7 @@ This command:
 * Installs the sam-sql-database plugin
 * Creates a new agent configuration file at configs/agents/employee-info.yaml
 
-In the configuration file, we need to modify the directory path so the agent can find the CSVs for our database tables. Update line 93-94 with the directory of your CSVs.
+In the configuration file that was created with plugin installation, we need to modify the directory path so the agent can find the CSVs for our database tables. Update line 93-94 with the directory of your CSVs.
 ```
           csv_files: # Optional: List of CSV file paths to import on startup
             # - "/path/to/your/data/customers.csv"
@@ -208,7 +230,20 @@ In the configuration file, we need to modify the directory path so the agent can
             - "employee-info"             # < Add this line
 ```
 
-The SQL database agent will take the CSVs in the configured directory and create a local SQLite database. Let's put our employees.csv in a directory called employee-info.
+The SQL database agent will take the CSVs in the configured directory and create a local SQLite database. Let's put our employees.csv document in a directory with matching name.
+```
+mkdir employee-info   # < Create the employee-info directory
+cp ../sam-resources/employees.csv ./employee-info/
+```
+
+We also need to change the artifacts base_path on line 43. 
+```
+    # Default artifact service configuration
+    artifact_service: &default_artifact_service
+      type: "filesystem"
+      base_path: "artifacts"                     # < Modify this line
+      artifact_scope: namespace # Or "namespace", "app", "custom"
+```
 
 ### Updating the Environment Variables for the SQL Database Agent
 We next need to update out environment variables; in your .env file, add the following:
@@ -218,6 +253,8 @@ EMPLOYEE_INFO_DB_NAME="employee-info.db"
 EMPLOYEE_INFO_DB_PURPOSE="Maintenance Technician Employee Database"
 EMPLOYEE_INFO_DB_DESCRIPTION="Database containing information about Oil & Gas Company"
 ```
+
+These variables are referenced in the agent configuration file.
 
 ### Running SAM with the SQL Database Agent
 Run SAM again with the newly added agent.
@@ -272,12 +309,12 @@ Once your account is verified, you can create a cluster. You should be able to f
 ### Using a Qdrant Docker Container
 Get the Qdrant docker image from [Docker Hub](https://hub.docker.com/r/qdrant/qdrant).
 ```
-docker pull qdrant/qdrant:<tag>
+docker pull qdrant/qdrant:latest
 ```
 
 Run the Qdrant container using the following run command.
 ```
-docker run -it -p 6333:6333 -p 6334:6334 -v qdrant_storage:/qdrant/storage -v ./qdrant_config:/qdrant/config -e QDRANT__SERVICE__GRPC_PORT=6334 --name qdrant qdrant/qdrant:<tag>
+docker run -it -p 6333:6333 -p 6334:6334 -v qdrant_storage:/qdrant/storage -v ./qdrant_config:/qdrant/config -e QDRANT__SERVICE__GRPC_PORT=6334 --name qdrant qdrant/qdrant:latest
 ```
 Modify line 159 of the configs/agents/sop-rag.yaml file to comment out the API Key.
 ```
@@ -285,12 +322,21 @@ Modify line 159 of the configs/agents/sop-rag.yaml file to comment out the API K
             db_type: "qdrant"
             db_params:
               url: "${QDRANT_URL}"
-              #api_key: "${QDRANT_API_KEY}"
+              #api_key: "${QDRANT_API_KEY}"               # < Comment out this line
               collection_name: "${QDRANT_COLLECTION}"
               embedding_dimension: ${QDRANT_EMBEDDING_DIMENSION}
 ```
 
 Your Qdrant URL will likely be http://localhost:6333 - take note of this for the environment variables configuration in the next step.
+
+We also need to change the artifacts base_path on line 45 of the agent configuration file. 
+```
+    # Default artifact service configuration
+    artifact_service: &default_artifact_service
+      type: "filesystem"
+      base_path: "artifacts"                     # < Modify this line
+      artifact_scope: namespace # Or "namespace", "app", "custom"
+```
 
 ### Updating the Environment Variables for the RAG Agent
 We next need to update out environment variables; in your .env file, add the following:
@@ -298,17 +344,20 @@ We next need to update out environment variables; in your .env file, add the fol
 OPENAI_EMBEDDING_MODEL="<embedding-model>"
 OPENAI_API_KEY="<llm-key>"
 OPENAI_API_ENDPOINT="<llm-url>"
-DOCUMENTS_PATH=sop
+DOCUMENTS_PATH="sop"
 QDRANT_URL="<qdrant-url>"
-QDRANT_API_KEY="<qdrant-key>"         # This is not needed if using Docker for Qdrant
-QDRANT_COLLECTION=sops
+QDRANT_API_KEY="<qdrant-key>"         # This is not needed if using Docker for Qdrant, so you can comment out this entire line
+QDRANT_COLLECTION="sops"
 QDRANT_EMBEDDING_DIMENSION=1536
 ```
-
 > aside positive
 > It is possible the Open API Key and Open API Endpoint are the same as the previously configured LLM Key/Endpoint (for example, if using LiteLLM).
 
-Let's put our Standard Operating Procedures document in a directory called sop.
+Let's put our Standard Operating Procedures document in a directory called sop, as we referenced in the .env file.
+```
+mkdir sop   # < Create the sop directory
+cp ../sam-resources/PipelineOperations.pdf ./sop/
+```
 
 ### Running SAM with the RAG Agent
 Run SAM again with the newly added agent.
