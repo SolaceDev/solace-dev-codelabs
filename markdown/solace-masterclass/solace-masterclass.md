@@ -257,16 +257,24 @@ relevant events which it uses for showing realtime status updates on the order l
 > You can reorder the objects as per your preference
 - Click on the **Order Service**, and then on the **Open Application** which pops up as below :
   ![edit-order-service-1.png](img/retail-domain-usecase/edit-order-service-1.png)
-- The **Order Service** application screen displays you the various events that are published and subscribed by this version of the application. It also describes the various environments this application is deployed on :
+- The **Order Service** application screen displays you the various events that are published and subscribed by this version of the application :
   ![editing-order-service-1.png](img/retail-domain-usecase/editing-order-service-1.png)
-- Click on the **Runtime** tab at the top of the application, and you can see the various environments, brokers and the status of the application configuration deployment as below :
-  ![order-service-runtime-tab.png](img/retail-domain-usecase/order-service-runtime-tab.png)
-> aside positive You can see the **dev** broker associated with the **default** environment and the MEM that you created earlier. In case of multiple brokers and environments they would be listed here as available
-- Click on the **+** button by the broker which will show a modal window to set up credentials for the application to connect to the broker. **Make sure to keep a note of these credentials as they will be required in the following steps.**
-  ![order-service-creds.png](img/retail-domain-usecase/order-service-creds.png)
-- Clicking on the **Save Credentials and Continue** button generates a preview of the configuration that will be deployed to the broker as below :
-  ![order-service-preview-1.png](img/retail-domain-usecase/order-service-preview-1.png)
-- You will see a **Configuring** status for a short duration during which the EMA deploys the configuration onto the broker.
+- Click on the **Configurations** tab on the left sidebar as below :
+  ![configuring-order-service-1.png](img/retail-domain-usecase/configuring-order-service-1.png)
+- This opens up the configuration screen, click on the **Create Configurations** button as shown:
+  ![order-service-create-configuration.png](img/retail-domain-usecase/order-service-create-configuration.png)
+- A modal window opens up as below, first select the environment and the broker that you have created earlier and click on the **Next:Define Event Handling** button :
+  ![order-service-select-env-broker.png](img/retail-domain-usecase/order-service-select-env-broker.png)
+- For now, we are not configuring any consumers (or subscriptions) for this application, so click on the **Next: Define Access Control** button directly.
+  ![order-service-define-event-handling.png](img/retail-domain-usecase/order-service-define-access-control.png)
+- For authentication, select the **Basic** access type and enter a client usename and password of your choice as below. **Make sure to keep a note of these credentials as they will be required in the following steps.**
+  ![order-service-access-control.png](img/retail-domain-usecase/order-service-access-control.png)
+- Review the configuration in both the **Define Event Handling** and **Define Access Control** tabs and if everything looks as expected, click **Start Promotion** as below :
+  ![order-service-start-promotion.png](img/retail-domain-usecase/order-service-start-promotion.png)
+- An intermediate screen is shown as below indicating some design mismatches, but you can safely ignore them for now and click on the **Preview Promotion** button as below :
+  ![order-service-design-mismatches.png](img/retail-domain-usecase/order-service-design-preview-promotion.png)
+- The final promotion preview is shown as below, detailing the various configuration objects that will be created on the broker. Click on the **Promote** button as shown :
+  ![order-service-final-promotion-preview.png](img/retail-domain-usecase/order-service-final-promotion-preview.png)
 - Once the deployment is completed, you can see the deployed application version on the broker as below :
   ![order-service-creds-deployed.png](img/retail-domain-usecase/order-service-creds-deployed.png)
 
@@ -323,7 +331,7 @@ _Order-Confirmed_ event for further processing.
 - Similar to how you deployed the credentials for the **Order Service** in the previous step, you will need to deploy the application and credentials for the **Inventory-FraudCheck-Service** as well.
 - In the **Designer** screen, enter the Acme Retail application domain
 - Click on the **Inventory and FraudCheck Service** and open the application
-- Navigate to the **Runtime** tab on the application and add credentials for the application and deploy them to the broker.
+- Navigate to the **Configuration** tab on the application and add credentials for the application and deploy them to the broker.
 > aside positive Make a note of the credentials (username and password) that you enter as they will be used in the following steps for deploying and running the application
 
 ##### **Part 2 : Application build and deployment**
@@ -365,36 +373,22 @@ able to delete the queue object; an architectural choice was made to use **Durab
 
 To fix the error encountered above, you need to create the Queue object as below :
 
-* Open the **Inventory and FraudCheck Service** and click **Edit This Version** on the top right as below :
+* Open the **Inventory and FraudCheck Service** and click **Advanced Subscription Setup** as below :
   ![consumer-config-inventory-service.png](img/retail-domain-usecase/consumer-config-inventory-service.png)
-* Click on the **Runtime Configuration** sub-tab and then **Add Consumer** as below :
+* Click on the **Add Consumer** as below and enter the following details in the popup window :
   ![consumer-config-inventory-service-step2.png](img/retail-domain-usecase/consumer-config-inventory-service-step2.png)
-* Fill in the follwing details in the form :
   * Name : `all-orders-placed`
   * Type : Solace Event Queue
-* Click on the **Add Subscriptions** button which will open up a sidebar. Select the **Order Created** event and its associated subscription as below :
+* Clicking on the **+** symbol for the subscriptions opens up a modal window offering you a pre-selected topic subscription based on your application design
   ![inventory-serivice-subscriptions-step1.png](img/retail-domain-usecase/inventory-serivice-subscriptions-step1.png)
 > aside negative Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace
-> presenters if you have any queries
-* Click on the **Manage Queue Configuration** button which opens up a sidebar, fill in the below configuration in the configuration pane :
-  ```JSON
-  {
-  "accessType": "exclusive",
-  "maxMsgSpoolUsage": 5000,
-  "queueName": "all-orders-placed"
-  }
-  ```
-> aside negative Does the **Access Type** parameter ring any bells and how it influences the consumption of events
-> from the queue, benefits, limitations, alternative solutions? \
-> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.
+> presenters if you have any queries. You can also explore the modal window which tells you how it has derived the subscription.
 
-* At the end you should have something like this :
-  ![inventory-service-consumer-1.png](img/retail-domain-usecase/inventory-service-consumer-1.png)
-* Click **Save Version** and navigate to the **Runtime** tab.
-* You should see the status as **Update Required** on the broker
-* Click **Push Updates to Event Broker**, which shows a preview of all the changes that will be pushed to the broker
-  ![inventory-service-update-broker.png](img/retail-domain-usecase/inventory-service-update-broker.png)
-* Click **Push Changes** which will trigger the configuration push to the broker
+* Click on the **Configurations** tab on the left sidebar, select the environment and broker selected previously and click on the button **Next:Define Event Handling**.
+* In the **Define Event Handling** tab, you should see the consumer created in the earlier step :
+  ![inventory-service-consumer-setup-1.png](img/retail-domain-usecase/inventory-service-consumer-setup-1.png)
+* Click on the **Next:Define Access Control** button, but no action is requried on this sub-step as the credentials have already been configured for this application.
+* Click **Review** and then **Start Promotion**. This will signal Event Portal to push only the new configuration objects to the broker.
 
 * With the above steps, a new queue has been created with the required subscription which can now be connected to by the
   **Inventory-FraudCheck-Service**
@@ -431,24 +425,16 @@ fraud check passes.
 
 This **Order-Confirmed** needs to be subscribed by the **Order Service**. Follow the below steps to enable this flow :
 
-* Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
-* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+* Navigate to the Designer screen and open the **Order Service** application.
+* In the **Advanced Subscription Setup** tab, create a new consumer with the below settings :
   * Name : all-order-updates
   * Type : Solace Event Queue
-  * Event and subscriptions : Select the **Order Confirmed** event and confirm the suggested subscription
-  * Queue configuration :
-  ```JSON
-    {
-    "accessType": "exclusive",
-    "maxMsgSpoolUsage": 5000,
-    "queueName": "all-order-updates"
-    }
-  ```
-  * You should have a consumer setup which looks like this :
+* Clicking on the **+** symbol for the subscriptions opens up a modal window offering you a pre-selected topic 
+  * You should have a subscription setup which looks like this :
   ![order-service-all-order-updates-queue.png](img/retail-domain-usecase/order-service-all-order-updates-queue.png)
-> aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
+> aside positive We have already incorporated all the subscriptions required for this exercise.
 
-* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker.
+* Once the consumer is created, navigate to the **Configuration** tab and push the updates to the event broker as you have done for the previous applications.
 * Publish a few more orders from the **Order-Service** and see it being processed in the console logs.
 * Go back to the **Order-Service,** and you will observe that the status of the newly created order is showing as
   VALIDATED as the orders are processed by the **Inventory-FraudCheck-Service**
@@ -479,35 +465,15 @@ The _Payment Created_ event is in-turn subscribed by the **Order Service** for u
 
 ##### **Part 1 : Broker Configuration**
 
-* Navigate to the Designer screen and open the **Payment Service** application. Click on the **Edit this Version** button.
-* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+* Navigate to the Designer screen and open the **Payment Service** application.
+
+* In the **Advanced Subscription Setup** tab, create a new consumer with the below settings :
   * Name : all-orders-confirmed
   * Type : Solace Event Queue
-  * Event and subscriptions : Select the **Order Confirmed** event and confirm the suggested subscription
-  * Queue configuration :
-  ```JSON
-  {
-  "accessType": "exclusive",
-  "maxMsgSpoolUsage": 5000,
-  "queueName": "all-orders-confirmed"
-  }
-  ```
-  * You should have a consumer setup which looks like this :
-   ![payment-service-all-orders-confirmed-queue.png](img/retail-domain-usecase/payment-service-all-orders-confirmed-queue.png)
-> aside positive As we incorporate new features, we will update this queue's subscriptions with additional event topics.
-* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
-* Now that we have configured the queue for feeding the **Payment Service**, we have to make sure that the
-  **Order-Service** can also receive the _Payment Created_ events. This is done by updating the subscription list of the
-  _all-order-updates_ queue with the topic pattern of the _Payment Created_ events.
-* You can do this by :
-  * Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
-  * Click on the **Runtime Configuration** sub-section and in the consumer named **all-order-updates** click on **Add Subscriptions** button
-  * Make sure to select only the **Payment Created** and **Payment Updated** events as below :
-  ![order-service-update-queue-subscription-paymentEvents.png](img/retail-domain-usecase/order-service-update-queue-subscription-paymentEvents.png)
-  * Add the subscription and close the sidebar
-  * At this stage, you should have a queue with the following subscriptions :
-  ![order-service-all-order-updates-queue-v2.png](img/retail-domain-usecase/order-service-all-order-updates-queue-v2.png)
-  * Save the version, navigate to the **Runtime** tab and push the updates to the event broker
+* Clicking on the **+** symbol for the subscriptions opens up a modal window offering you a pre-selected topic
+  * You should have a subscription setup which looks like this :
+    ![payment-service-all-orders-confirmed-queue.png](img/retail-domain-usecase/payment-service-all-orders-confirmed-queue.png)
+* Once the consumer is created, navigate to the **Configuration** tab and push the updates to the event broker as you have done for the previous applications.
 
 ##### **Part 2 : Application build and deployment**
 * Open up a new terminal window, make sure not to close the earlier window running the earlier applications
@@ -517,7 +483,7 @@ The _Payment Created_ event is in-turn subscribed by the **Order Service** for u
 * Run the
   command : `java -jar target/payment-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD` and
   observe the console to see what events are getting processed and subsequently produced
-> aside positive The credentials (username and password) for the Payment Service are the same as you configured on the Runtime tab for this application
+> aside positive The credentials (username and password) for the Payment Service are the same as you configured on the Configuration tab for this application
 
 #### Testing
 
@@ -554,37 +520,14 @@ The **Order Service** subscribes to the _Shipment Created_ for user status updat
 #### How to run?
 
 ##### **Part 1 : Broker Configuration**
-* Navigate to the Designer screen and open the **Shipping Service** application. Click on the **Edit this Version** button.
-* Click on the **Runtime Configuration** sub-section and start creating a new consumer with the below settings :
+* Navigate to the Designer screen and open the **Shipping Service** application.
+* In the **Advanced Subscription Setup** tab, create a new consumer with the below settings :
   * Name : all-payments-confirmed
   * Type : Solace Event Queue
-  * Event and subscriptions : Select the **Payment Updated** event and confirm the suggested subscription
-  > aside positive You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play
-  > here to understand the Solace topic routing concept better.
-  * Queue configuration :
-  ```JSON
-  {
-  "accessType": "exclusive",
-  "maxMsgSpoolUsage": 5000,
-  "queueName": "all-payments-confirmed"
-  }
-  ```
-  * You should have a consumer setup which looks like this :
+* Clicking on the **+** symbol for the subscriptions opens up a modal window offering you a pre-selected topic
+  * You should have a subscription setup which looks like this :
     ![shipping-service-all-payments-confirmed-queue.png](img/retail-domain-usecase/shipping-service-all-payments-confirmed-queue.png)
-* Once the consumer is created, navigate to the **Runtime** tab and push the updates to the event broker
-
-* Now that we have configured the queue for feeding the **Shipping Service**, we have to make sure that the
-  **Order-Service** can also receive the _Shipment Created_ events. This is done by updating the subscription list of
-  the _all-order-updates_ queue with the topic pattern of the Shipment Created events.
-* You can do this by :
-  * Navigate to the Designer screen and open the **Order Service** application. Click on the **Edit this Version** button.
-  * Click on the **Runtime Configuration** sub-section and in the consumer named **all-order-updates** click on **Add Subscriptions** button
-  * Make sure to select only the **Shipment Created** event as below :
-    [order-service-update-queue-subscription-shipmentEvents](img/retail-domain-usecase/order-service-update-queue-subscription-shipmentEvents)
-  * Add the subscription and close the sidebar
-  * At this stage, you should have a queue with the following subscriptions :
-    ![order-service-all-order-updates-queue-v2.png](img/retail-domain-usecase/order-service-all-order-updates-queue-v3.png)
-  * Save the version, navigate to the **Runtime** tab and push the updates to the event broker
+* Once the consumer is created, navigate to the **Configuration** tab and push the updates to the event broker as you have done for the previous applications.
 
 ##### **Part 2 : Application build and deployment**
 * Open up a new terminal window, make sure not to close the earlier window running the earlier applications
