@@ -322,7 +322,8 @@ Duration : 15 minutes
       payload structure
     - Click **Save** to save the event details
 > aside negative **Note**: The JSON Schema for the new event will be used in the later steps to create a test message.
-      ![new-event-details-1.png](img/new-event-flow/new-event-details-1.png) \
+
+   ![new-event-details-1.png](img/new-event-flow/new-event-details-1.png) \
       ![new-event-select-schema.png](img/new-event-flow/new-event-select-schema.png) \
       ![new-event-new-schema.png](img/new-event-flow/new-event-new-schema.png) 
 6. Once the event is created, you will see it listed in the **Events** tab of the application domain as well as in the
