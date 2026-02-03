@@ -321,6 +321,7 @@ Duration : 15 minutes
     - Schema : Create a new schema using the **Quick Create Schema** button with a simple JSON schema defining the
       payload structure
     - Click **Save** to save the event details
+> aside negative **Note**: The JSON Schema for the new event will be used in the later steps to create a test message.
       ![new-event-details-1.png](img/new-event-flow/new-event-details-1.png) \
       ![new-event-select-schema.png](img/new-event-flow/new-event-select-schema.png) \
       ![new-event-new-schema.png](img/new-event-flow/new-event-new-schema.png) 
@@ -422,8 +423,8 @@ RDP). You will also push the updated design to the PubSub+ Cloud broker.
    - Once reviewed, click on the **Promote** button to initiate the promotion
    - You can see the promotion status in the **Promotions** tab of the application details page
    ![rdp-promotion-status.png](img/rdp-push-config/rdp-promotion-status.png)
-   > aside negative **Note**: In case there is an error during promotion, you can click on the **Remove Application** button to rever the configuration and fix it again. 
-   > aside negative ![remove-application.png](img/rdp-push-config/remove-application.png)
+   > aside negative **Note**: In case there is an error during promotion, you can click on the **Remove Application** button to revert the configuration and fix it again. 
+ ![remove-application.png](img/rdp-push-config/remove-application.png)
 
 > aside positive **Checkpoint**: You should now have a new event configured, a consuming RDP application set up, and the updated design
 > successfully pushed to the PubSub+ Cloud broker.
@@ -466,7 +467,7 @@ Now, its time to test a single message flow from a producer application to the R
    ![test-message-open-broker-manager.png](img/test-message-flow/test-message-open-broker-manager.png)
 5. In the PubSub+ Broker Manager, navigate to the **Try-Me** tab on the left navigation.
    ![test-message-try-me-tab.png](img/test-message-flow/test-message-try-me-tab.png)
-6. In the **Try-Me** tab, on the **Publisher** side, fill in the copied password for the **solace-cloud-client** username.
+6. In the **Try-Me** tab, on the **Publisher** side, fill in the copied password for the **solace-cloud-client** username and click **Connect**
    ![test-message-try-me-publisher.png](img/test-message-flow/test-message-try-me-publisher.png)
 7. In the **Topic** field, enter the topic address of the new event e.g. `retail/inventory/stock/outofstockalert/v1/SKU-12345/NL-WH-01`
 8. In the **Message Payload** field, paste the sample JSON message you created earlier.
