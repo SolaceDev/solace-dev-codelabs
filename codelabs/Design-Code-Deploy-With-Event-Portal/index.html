@@ -1,0 +1,407 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Design, Code, Deploy with Solace Event Portal</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="Design-Code-Deploy-With-Event-Portal"
+                  title="Design, Code, Deploy with Solace Event Portal"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
+        <p>In this codelab, you&#39;ll experience the complete lifecycle of event-driven architecture design and deployment using Solace Event Portal and PubSub+ Cloud. You&#39;ll learn how to:</p>
+<ul>
+<li>Register for a Solace Cloud trial account</li>
+<li>Provision a PubSub+ Cloud broker service</li>
+<li>Configure environment and modeled event mesh</li>
+<li>Design an EDA model using the AI Designer in Event Portal</li>
+<li>Create and manage application domains</li>
+<li>Design application flows with events and topics</li>
+<li>Customise Event Portal with custom icons and logos</li>
+<li>Configure Runtime Data Policies (RDPs)</li>
+<li>Push configurations from Event Portal to live brokers</li>
+<li>Test end-to-end message flows with REST consumers</li>
+<li>Summmarize key takeaways and next steps</li>
+</ul>
+<h2 is-upgraded>What You&#39;ll Need</h2>
+<ul>
+<li>A valid email address for registration</li>
+<li>A modern web browser (Chrome, Firefox, Safari, or Edge)</li>
+<li>Basic understanding of event-driven architecture concepts</li>
+<li>Access to <a href="https://requestcatcher.com/" target="_blank">requestcatcher.com</a> for testing REST delivery</li>
+</ul>
+<h2 is-upgraded>What You&#39;ll Build</h2>
+<p>By the end of this codelab, you&#39;ll have:</p>
+<ul>
+<li>A fully configured PubSub+ Cloud broker</li>
+<li>An Event Portal design with application domains</li>
+<li>Event schemas and topic hierarchies</li>
+<li>Application flows showing event producers and consumers</li>
+<li>REST Delivery Points configured with queues</li>
+<li>A working end-to-end event flow delivering messages to a REST API</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Register for Solace Cloud Trial" duration="0">
+        <h2 is-upgraded>Create Your Account</h2>
+<ol type="1">
+<li>Navigate to <a href="https://console.solace.cloud/" target="_blank">https://console.solace.cloud/</a></li>
+<li>Click <strong>Sign Up</strong></li>
+<li>Fill in the registration form: <ul>
+<li>Email address</li>
+<li>First and last name</li>
+<li>Company name</li>
+<li>Role</li>
+<li>Reason for trial : Become Solace certified</li>
+<li>Password (must meet complexity requirements)</li>
+</ul>
+</li>
+<li>Accept the Terms of Service</li>
+<li>Click <strong>Sign up</strong><img alt="registration-form.png" src="img/c652ce7f08fe4baf.png"></li>
+<li>A verification email will be sent to your provided email address<br><img alt="email-verification.png" src="img/a971ca7b15a38d84.png"></li>
+</ol>
+<h2 is-upgraded>Verify Your Email</h2>
+<ol type="1">
+<li>Check your email inbox for a verification message from Solace</li>
+<li>Click the <strong>Verify Email</strong> link in the message</li>
+<li>You&#39;ll be redirected to the Solace Cloud Console <img alt="Solace-Cloud-Console-first-time-login.png" src="img/920f2ebce31e85c1.png"></li>
+</ol>
+<aside class="special"><p><strong>Note</strong>: The trial account includes access to both PubSub+ Cloud and Event Portal with full features for 30 days.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Provision Your First PubSub&#43; Broker" duration="0">
+        <h2 is-upgraded>Navigate to Cluster Manager</h2>
+<ol type="1">
+<li>In the Solace Cloud Console, click <strong>Cluster Manager</strong> in the left navigation <img alt="broker-setup-1.png" src="img/58ef0b648d73d459.png"></li>
+<li>Click <strong>Create Service</strong> (or the <strong>+</strong> button if you have existing services) <img alt="broker-setup-2.png" src="img/d187420aeba7e27a.png"></li>
+</ol>
+<h2 is-upgraded>Configure Your Service</h2>
+<ol type="1">
+<li>Fill in the service configuration details:<ul>
+<li>Name : Choose a concise name (e.g., <code>ep-codelab</code>)</li>
+<li>Environment : Leave as <strong>Default</strong></li>
+<li>Cloud : Choose your preferred cloud provider (AWS, Azure, or GCP)</li>
+<li>Region : Select a region closest to your location</li>
+<li>Broker Release : Leave as default (latest stable)</li>
+<li>Service Type : Select <strong>Developer</strong> (free tier) <img alt="broker-setup-3.png" src="img/a5ac69ec9cec6df.png"></li>
+</ul>
+</li>
+<li>Click <strong>Create Service</strong></li>
+</ol>
+<h2 is-upgraded>Wait for Provisioning</h2>
+<ol type="1">
+<li>The service will take 3-5 minutes to provision</li>
+<li>Status will show as <strong>Creating...</strong><img alt="broker-setup-4.png" src="img/ed2f31fedc0c8359.png"></li>
+<li>Once complete, the broker details page will load <img alt="broker-setup-5.png" src="img/6f018e2b8d9a22ac.png"></li>
+</ol>
+<h2 is-upgraded>Explore Your Broker</h2>
+<ol type="1">
+<li>Navigate through the tabs: <ul>
+<li><strong>Connect</strong>: Connection details and credentials <img alt="broker-connect-tab.png" src="img/f3d7986db71045f7.png"></li>
+<li><strong>Manage</strong>: Service management and configuration <img alt="broker-manage-tab.png" src="img/a55e7ed38a844642.png"></li>
+</ul>
+</li>
+</ol>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have a running PubSub+ broker service with status &#34;Running&#34; in your Cluster Manager.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure environment and modelled event mesh" duration="0">
+        <h2 is-upgraded>Environment Setup</h2>
+<p>Environments in Solace Cloud represent the runtime environments within your organisation. For example, you may have</p>
+<ul>
+<li>Multiple development environments</li>
+<li>Multiple testing environments</li>
+<li>A Staging or Pre-Production</li>
+<li>A Production environment</li>
+</ul>
+<ol type="1">
+<li>In the Solace Cloud Console, navigate to the <strong>Environments</strong> tab <img alt="env-setup-1.png" src="img/6b674b558726f62.png"></li>
+<li>In the <strong>Environments</strong> tab, there is a default environment created for you called &#34;Default&#34; <img alt="env-setup-2.png" src="img/c1f2f7ff450e022e.png"></li>
+<li>Click on the <strong>...</strong> buttons next to the Default environment and select <strong>Runtime Configuration Settings</strong><img alt="env-setup-3.png" src="img/5e5ab58e9bb4c7cb.png"></li>
+<li>Click on the <strong>Auto on Promotion</strong> radio button to enable automatic promotion of configuration changes from Event Portal to the associated PubSub+ Cloud broker <img alt="env-setup-4.png" src="img/983158dd78ebafaf.png"></li>
+<li>Click <strong>Save</strong> to save the changes</li>
+<li>Optional: You can edit some of the environment details like name and description by clicking on the <strong>Edit</strong> button under the <strong>...</strong> menu <img alt="env-setup-optional.png" src="img/7ffc7a5f08e72f75.png"></li>
+</ol>
+<h2 is-upgraded>Modeled Event Mesh Setup</h2>
+<p>A modeled event mesh represents an actual event mesh or event flow operating in a specific runtime environment. Modeled event meshes help you define and visualize event flows between publishing and subscribing applications within your event-driven architecture (EDA).</p>
+<ol type="1">
+<li>In the Solace Cloud Console, navigate to the <strong>Runtime Event Manager</strong> tab <img alt="mem-setup-1.png" src="img/302bae2dd7e550b0.png"></li>
+<li>Click on the <strong>Create Modeled Event Mesh</strong> button <img alt="mem-setup-2.png" src="img/47bec09f34f04cd3.png"></li>
+<li>Fill in the details for the modeled event mesh: <ul>
+<li>Name : <code>Dev-Mesh</code></li>
+<li>Type : <code>Solace</code></li>
+<li>Description : <code>Development Modeled Event Mesh</code></li>
+<li>Environment : Select <code>Default</code> environment</li>
+</ul>
+</li>
+<li>Click <strong>Create</strong> to create the modeled event mesh <img alt="mem-setup-3.png" src="img/ed55433de9edddd2.png"></li>
+<li>You will see the newly created modeled event mesh in the list <img alt="mem-setup-4.png" src="img/ffc6d4e4c909a1d9.png"></li>
+<li>Click on the modeled event mesh name to view its details</li>
+<li>Under the <strong>Event Broker Connections</strong> tab, click on <strong>Connect Event Broker</strong><img alt="mem-setup-5.png" src="img/b5b5d1272be2000.png"></li>
+<li>Select the PubSub+ Cloud broker you created earlier (e.g., <code>ep-codelab</code>) and click <strong>Add</strong><img alt="mem-setup-6.png" src="img/49abf58eedec5a0f.png"></li>
+<li>You should now see the broker connection listed under the <strong>Event Broker Connections</strong> tab <img alt="mem-setup-7.png" src="img/a7811a7e811023dc.png"></li>
+</ol>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have an environment configured with automatic promotion enabled and a modeled event mesh connected to your PubSub+ Cloud broker.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Design EDA using the Event Portal" duration="0">
+        <p>Duration : 10 minutes</p>
+<p>Event Portal is a cloud-based event management tool that enables you to discover, create, design, share, manage, and govern the assets and resources in your event-driven architecture (EDA). It makes developing and deploying event-driven applications and integration easier for developers and architects.</p>
+<h2 is-upgraded>Navigate to the Event Portal</h2>
+<ol type="1">
+<li>From the Solace Cloud Console, click <strong>Designer</strong> in the left navigation <img alt="designer-tab.png" src="img/637f1dd824ad44ed.png"></li>
+<li>This will open the Designer view of the Event Portal, where you can create and manage your event-driven architecture designs. <img alt="designer-home.png" src="img/676114a1535a21ff.png"></li>
+</ol>
+<h2 is-upgraded>Design with the AI Design Assistant</h2>
+<ol type="1">
+<li>In the Event Portal Designer, click on the <strong>AI Design Assistant</strong> button located in the top right corner of the screen. <img alt="ai-design-assistant.png" src="img/10862c3a97c9ed5.png"></li>
+<li>In the AI Design Assistant dialog, enter : <ul>
+<li>Your company name : <code>Walmart</code></li>
+<li>A detailed description of the solution you want to design. You can use the below description: <ul>
+<li>Create a retail point-of-sale system with the following: <ul>
+<li>A POS application that publishes order events when customers complete purchases</li>
+<li>An inventory service that subscribes to order events and updates stock levels</li>
+<li>A notification service that sends order confirmations</li>
+<li>Events should include: order created, order completed, inventory updated, and notification sent</li>
+<li>Use a hierarchical topic structure with retail as the root domain</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>You can choose to generate the design in a single application domain or multiple domains.</li>
+<li>Click <strong>Create Application Domains</strong> to proceed to the next step <img alt="ep-designer-1.png" src="img/68d5d5fa2de0bdde.png"></li>
+</ul>
+</li>
+<li>The AI Design Assistant will generate the application domains and present it for your review. Click <strong>Create Applications</strong> to proceed to the next step <img alt="ep-designer-2.png" src="img/a777cba324032e9.png"></li>
+<li>The AI Design Assistant will generate the applications for each domain and present it for your review. Click <strong>Create Events</strong> to proceed to the next step <img alt="ep-designer-3.png" src="img/11b0cfceece431ce.png"></li>
+<li>The AI Design Assistant will generate the events for each application and present it for your review. Click **Review ** to proceed to the next step <img alt="ep-designer-4.png" src="img/e37246938301d5a1.png"></li>
+</ol>
+<aside class="special"><p><strong>Note</strong>: Look at the topic hierarchy generated by the AI Design Assistant. It should reflect the hierarchical structure you specified in the description.</p>
+</aside>
+<ol type="1" start="6">
+<li>You can also promote the design directly to the modeled event mesh you created earlier by selecting the checkbox * <em>Promote Applications and Events to Runtime Event Manager</em>*. Click on **Create Assets** to complete the design process. <img alt="ep-designer-5.png" src="img/91a3a402644334ad.png"></li>
+<li>Once the design is created, you will see the application domains, applications, and events listed in the Event Portal Designer. <img alt="ep-designer-6.png" src="img/3737388ae5e986a9.png"></li>
+<li>The designer view within each application domain will show the applications, events, and their relationships. <img alt="ep-designer-7.png" src="img/ba9e9757979aac57.png"></li>
+<li>In the <strong>Applications</strong> tab, you can see the list of applications created by the AI Design Assistant. <img alt="ep-designer-8.png" src="img/e98fb6827a26f6ae.png"> a. Within each application, you can view the application details, versions, the events it produces and consumes, the queues it has configured and their deployment statuses. <img alt="ep-designer-9.png" src="img/3a8d5fafdc1cbbe4.png"><br><img alt="ep-designer-10.png" src="img/7a84cef24fbc3e4e.png"><br><img alt="ep-designer-11.png" src="img/308ab341b4ab7a93.png"> \</li>
+<li>In the <strong>Events</strong> tab, you can see the list of events created by the AI Design Assistant. <img alt="ep-designer-app-domain-events.png" src="img/55d0d0cc60501b97.png"> a. Within each event, you can view the event details, versions, associated payload schema, and the applications that produce and consume the event. <img alt="ep-designer-app-domain-event-1.png" src="img/523578f88eea85d.png"> b. You can also view the topic address where the event should be published <img alt="ep-designer-app-domain-event-2.png" src="img/2cf97936263e667c.png"></li>
+<li>In the <strong>Schemas</strong> tab, you can see the list of payload schemas created by the AI Design Assistant. <img alt="ep-designer-app-domain-schemas.png" src="img/4e82e9e98b982273.png"> a. Within each schema, you can view the schema details, versions, and the events associated with the schema. <img alt="ep-designer-app-domain-schema-1.png" src="img/2daaf8a32636231c.png"> b. You can also view the schema definition in JSON format.</li>
+<li>Repeat the above steps to explore the other application domains created by the AI Design Assistant.</li>
+</ol>
+<h2 is-upgraded>Customise Design with Icons and Logos</h2>
+<p>In the Event Portal, you can customise the appearance of your applications by changing their icons and logos. This helps in visually distinguishing different applications within your event-driven architecture design. It also helps in branding your applications according to your organisation&#39;s identity and makes it easier for team members to recognize and navigate through the applications in the Event Portal.</p>
+<aside class="warning"><p><strong>Note</strong> : The names of the application domains, applications and events created by the AI Design Assistant may vary each time you run the design process. The steps below will guide you on how to customise the icons and logos regardless of the specific names used.</p>
+</aside>
+<ol type="1">
+<li>Navigate to any of the application domains created by the AI Design Assistant e.g. <strong>Notification Service</strong><img alt="custom-icons-ep-designer.png" src="img/5448c4971871595c.png"></li>
+<li>Click on any of the applications within the domain e.g. <strong>OrderConfirmationService</strong><img alt="custom-icons-app.png" src="img/84b5d5583bcd7814.png"></li>
+<li>In the details panel on the right, click on the <strong>...</strong> buttons and then the <strong>Edit Appearance</strong> button <img alt="custom-icons-app-edit-appearence.png" src="img/d505cae1f8622fb0.png"></li>
+<li>This opens the appearance customisation dialogue where you can change the icon, logo, and accent colour of the application<br><img alt="custom-icons-app-icon-color-change.png" src="img/f487c0ab467e9a2d.png"><br><img alt="custom-icons-app-icon-color-changed.png" src="img/726c49bf1f8fe452.png"></li>
+<li>You can do the same for other applications within the application domain</li>
+<li>You can also customise the colour of the events within the application domain by a. Click on any event b. In the details panel on the right, click on the <strong>...</strong> buttons and then the <strong>Edit Appearance</strong> button c. Select an <strong>accent color</strong> and click <strong>Save</strong></li>
+</ol>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have an event-driven architecture design created by the AI Design Assistant with customised application icons and event colours.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Design new events and application flows" duration="0">
+        <p>Duration : 15 minutes</p>
+<aside class="warning"><p><strong>Note</strong> : The names of the application domains, applications and events created by the AI Design Assistant may vary each time you run the design process. The steps below will guide you on how to create new events and application flows regardless of the specific names used.</p>
+</aside>
+<h2 is-upgraded>Create a new event</h2>
+<ol type="1">
+<li>In the Event Portal Designer, navigate to an application domain where you want to create a new event e.g. <strong>Inventory</strong><img alt="app-domain-designer.png" src="img/7ce59c50c0c65a2b.png"></li>
+<li>Right-click on the canvas and select <strong>Create Solace Event</strong><img alt="new-event-dialog.png" src="img/3c74cd9849f635bd.png"></li>
+<li>Fill in the event details: <ul>
+<li>Name : <code>OutOfStockAlert</code><img alt="new-event-created.png" src="img/3d79b99e3b85ff6d.png"></li>
+</ul>
+</li>
+<li>Click on the newly created event to open its details panel and click <strong>Edit Full Details</strong><img alt="edit-new-event.png" src="img/66b484f70b686a1.png"></li>
+<li>Fill in the full event details: <ul>
+<li>Description : <code>Event published when an item is out of stock</code></li>
+<li>Topic Address : <code>retail/inventory/stock/outofstockalert/v1/{productId}/{location}</code></li>
+<li>Schema : Create a new schema using the <strong>Quick Create Schema</strong> button with a simple JSON schema defining the payload structure</li>
+<li>Click <strong>Save</strong> to save the event details</li>
+</ul>
+</li>
+</ol>
+<aside class="warning"><p><strong>Note</strong>: The JSON Schema for the new event will be used in the later steps to create a test message.</p>
+</aside>
+<p><img alt="new-event-details-1.png" src="img/39c64e0148487871.png"><br><img alt="new-event-select-schema.png" src="img/a9ccb8dd26e66f9a.png"><br><img alt="new-event-new-schema.png" src="img/76c4ff88fbaef9f0.png"> 6. Once the event is created, you will see it listed in the <strong>Events</strong> tab of the application domain as well as in the designer view <img alt="new-event-listed-events-tab.png" src="img/3f5f221a69d27dc1.png"> 7. You can also view the newly created schema in the <strong>Schemas</strong> tab of the application domain <img alt="new-event-listed-schemas-tab.png" src="img/c2336897d4c1238.png"> 8. Go back to the designer view of the application domain and hover over the application that will produce the new event e.g. <strong>StockUpdateService</strong><img alt="new-event-produce-event.png" src="img/2350d26dbc5fd07.png"> 9. Pull the <strong>Produces Event</strong> handle (small arrow on the application) and drag it to the newly created event to create a producing relationship <img alt="new-event-producing-relationship.png" src="img/b067690ca624dd36.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configure REST Delivery Points push configuration to broker" duration="0">
+        <p>Duration : 15 minutes</p>
+<p>Now that you have updated your original design with a new event and established a producing relationship, you need to create a consuming application that will forward the event messages to a REST endpoint using a REST Delivery Point ( RDP). You will also push the updated design to the PubSub+ Cloud broker.</p>
+<h2 is-upgraded>Create a consuming application</h2>
+<ol type="1">
+<li>In the Event Portal Designer, navigate to the same application domain where you created the new event e.g. <strong>Inventory</strong></li>
+<li>Right-click on the canvas and select <strong>REST Delivery Point (Webhook)</strong><img alt="new-app-dialog.png" src="img/405fed048e592ace.png"></li>
+<li>Fill in the application details: <ul>
+<li>Name : <code>OutOfStockAlertRDP</code><img alt="new-rdp-created.png" src="img/7ee55973cf0240f5.png"></li>
+</ul>
+</li>
+<li>This RDP application will be linked to another application which denotes the REST API that will effectively receive the messages. You can rename this linked application to something more meaningful like <code>StockManagementAPI</code><img alt="linked-app-renamed.png" src="img/62b944aa3fc1f515.png"></li>
+<li>Hover over the newly created event and pull the <strong>Consumes Event</strong> handle (small arrow on the event) and drag it to the RDP application to create a consuming relationship <img alt="rdp-consuming-relationship-creation.png" src="img/45003826c67d7790.png"><img alt="rdp-consuming-relationship.png" src="img/cc7e55398037ce86.png"></li>
+</ol>
+<h2 is-upgraded>Configure a REST API endpoint</h2>
+<ol type="1">
+<li>Quickly set up a request catcher service to act as the REST endpoint that will receive the messages from the RDP. a. Navigate to <a href="https://requestcatcher.com/" target="_blank">https://requestcatcher.com/</a><br> b. Enter the name of the linked application from above e.g. StockManagementAPI in the input provided and click on the button <strong>Get Started</strong><img alt="request-catcher-setup.png" src="img/a6d109dbbc81592d.png"> c. This creates a unique endpoint URL for you to use in the RDP configuration later. Copy this URL and save it for later use. <img alt="request-catcher-endpoint.png" src="img/3293e99dcddb8be0.png"></li>
+</ol>
+<h2 is-upgraded>Configure RDP and push configuration to broker</h2>
+<aside class="warning"><p><strong>Note</strong> : Please make sure to follow the steps below carefully to successfully configure the RDP and push the configuration to the PubSub+ Cloud broker.</p>
+</aside>
+<ol type="1">
+<li>Click on the newly created RDP application to open its details panel and click <strong>Open Full Application Details</strong><img alt="rdp-edit-full-details.png" src="img/8449b9444279dc14.png"></li>
+<li>In the application details page, you can review the application information, associated events, and queues. Click on the <strong>Advanced Subscription Setup</strong> tab to view the queues associated with the RDP application. <img alt="new-application-details.png" src="img/652bee2e183d4c48.png"><img alt="rdp-queues-tab.png" src="img/8899e6b7a086e50d.png"></li>
+<li>Click on the <strong>Configurations</strong> tab on the left to create the RDP configuration, and then click on the <strong>Create Configuration</strong> button. <img alt="rdp-configurations-tab-click.png" src="img/a364fca1b3437348.png"></li>
+<li>In the RDP Configuration dialogue box:a. <strong>Broker selection</strong> : Select the default environment and broker that you created earlier and click on the button <strong>Next:Define Event Handling</strong><img alt="rdp-configuration-select-broker.png" src="img/d65ee5eafb3c08ef.png">b. Define Event Handling :<ul>
+<li><strong>Queue Name</strong> : Keep the pre-filled value as is</li>
+<li><strong>Queue Configuration</strong> : Keep the default selection as is</li>
+<li><strong>Request Target</strong> : Update the value to <code>/test</code></li>
+<li>Click on the button <strong>Next:Define Destination</strong><img alt="rdp-configuration-event-handling.png" src="img/127cd6653468a62e.png"></li>
+</ul>
+c. Define Destination :<ul>
+<li><strong>RDP Name</strong> : Keep the pre-filled value as is</li>
+<li><strong>Destination Configuration Type</strong> : Keep the default selection of <code>Generic Destination</code> as is</li>
+<li><strong>Authentication Scheme</strong> : Select the value <code>None</code> from the dropdown</li>
+<li><strong>Remote Host</strong> : Enter the URL that you configured in the previous step. <strong>Make sure to remove the protocol and the ending </strong><strong><code>/</code></strong>. For e.g.<code>stockmanagementapi.requestcatcher.com</code></li>
+<li><strong>Remote Port</strong> : Enter the value <code>443</code></li>
+<li><strong>TLS Enabled</strong> : Keep the default selection of <code>TLS Enabled</code> as is</li>
+<li>Click on the button <strong>Next:Review</strong><img alt="rdp-configuration-define-destination.png" src="img/4596412f7cec391e.png"></li>
+</ul>
+d. Review :<ul>
+<li>Review the RDP configuration details <img alt="rdp-config-review-event-handling.png" src="img/5d6d90a6fcb48b00.png"><img alt="rdp-config-review-destination-definition.png" src="img/8cf103003ef8b337.png"></li>
+<li>Click on the button <strong>Start Promotion</strong> to deploy the configuration to the selected PubSub+ Cloud broker</li>
+</ul>
+</li>
+<li>Configuration Promotion:<ul>
+<li>Click on the <strong>Preview Promotion</strong> button to review the promotion details <img alt="rdp-promotion-preview.png" src="img/65ab1fd8008fdff3.png"></li>
+<li>In the preview screen, click on the individual sections to review the changes that will be applied to the broker <img alt="rdp-promotion-preview-changes.png" src="img/d0c097120279414.png"></li>
+<li>Once reviewed, click on the <strong>Promote</strong> button to initiate the promotion</li>
+<li>You can see the promotion status in the <strong>Promotions</strong> tab of the application details page <img alt="rdp-promotion-status.png" src="img/e01cfaa75a0e4900.png"></li>
+</ul>
+<aside class="warning"><p><strong>Note</strong>: In case there is an error during promotion, you can click on the <strong>Remove Application</strong> button to revert the configuration and fix it again. <img alt="remove-application.png" src="img/279b134a52c1b60a.png"></p>
+</aside>
+</li>
+</ol>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have a new event configured, a consuming RDP application set up, and the updated design successfully pushed to the PubSub+ Cloud broker.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Test end-to-end message flow with REST consumers" duration="0">
+        <p>Duration : 10 minutes</p>
+<p>Till now, we have :</p>
+<ul>
+<li>Provisioned a PubSub+ Cloud broker associated with an environment and linked it to a modeled event mesh</li>
+<li>Designed an event-driven architecture using the AI Design Assistant in Event Portal</li>
+<li>Created a new event and application flow</li>
+<li>Configured a REST Delivery Point (RDP) to forward event messages to a REST endpoint</li>
+<li>Pushed the updated design to the PubSub+ Cloud broker</li>
+</ul>
+<p>Now, its time to test a single message flow from a producer application to the REST endpoint via the PubSub+ Cloud broker.</p>
+<aside class="warning"><p><strong>Note</strong> : The names of the application domains, applications and events created by the AI Design Assistant and your specific use case may vary each time you run the design process. The steps below will guide you on how to use the schema to create and send a test message.</p>
+</aside>
+<h2 is-upgraded>Create a test message</h2>
+<ol type="1">
+<li>In the Event Portal Designer, navigate to the application domain where you created the new event e.g. <strong>Inventory</strong></li>
+<li>Click on the <strong>Schemas</strong> tab and open the schema associated with the new event e.g. <strong>OutOfStockAlertSchema</strong><img alt="test-message-schema-tab.png" src="img/a9e82ec62b59c24.png"></li>
+<li>Copy the JSON schema definition to use it for creating a test message <img alt="test-message-schema-definition.png" src="img/481b04a49f01f648.png"></li>
+<li>Use the copied schema to create a sample JSON message. You can use any AI tool to generate a sample JSON object based on the schema.</li>
+<li>This generated JSON object will be used as the payload for the test message to be sent to the PubSub+ Cloud broker.</li>
+</ol>
+<h2 is-upgraded>Send a test message</h2>
+<ol type="1">
+<li>In the Solace Cloud Console, navigate to the <strong>Cluster Manager</strong> tab and select the PubSub+ Cloud broker you provisioned earlier. <img alt="test-message-cluster-manager.png" src="img/1da2fa26eda6086c.png"></li>
+<li>On the broker details page, click on the <strong>Connect</strong> tab to get the connection details. <img alt="test-message-broker-connect-tab.png" src="img/2dd4a452d4099e21.png"></li>
+<li>Copy the <strong>password</strong> value for the <strong>solace-cloud-client</strong> username. <img alt="test-message-copy-password.png" src="img/a6ea92563027c924.png"></li>
+<li>Click on the <strong>Open Broker Manager</strong> link in the top right corner to open the PubSub+ Broker Manager in a new tab. <img alt="test-message-open-broker-manager.png" src="img/557edeefe334a079.png"></li>
+<li>In the PubSub+ Broker Manager, navigate to the <strong>Try-Me</strong> tab on the left navigation. <img alt="test-message-try-me-tab.png" src="img/d642cbe4810b1c2b.png"></li>
+<li>In the <strong>Try-Me</strong> tab, on the <strong>Publisher</strong> side, fill in the copied password for the <strong>solace-cloud-client</strong> username and click <strong>Connect</strong><img alt="test-message-try-me-publisher.png" src="img/ec08a6c5f964cdfe.png"></li>
+<li>In the <strong>Topic</strong> field, enter the topic address of the new event e.g. <code>retail/inventory/stock/outofstockalert/v1/SKU-12345/NL-WH-01</code></li>
+<li>In the <strong>Message Payload</strong> field, paste the sample JSON message you created earlier. <img alt="test-message-payload.png" src="img/c8f16a121eb7a414.png"></li>
+<li>Click on the <strong>Publish Message</strong> button to send the test message to the PubSub+ Cloud broker. <img alt="test-message-publish-button.png" src="img/f2a6e103785f959.png"></li>
+</ol>
+<h2 is-upgraded>Verify message delivery at REST endpoint</h2>
+<ol type="1">
+<li>Go back to the request catcher service tab where you set up the REST endpoint earlier.</li>
+<li>You should see a new request received in the request catcher dashboard. <img alt="test-message-request-received.png" src="img/a5830d6e2d34e052.png"></li>
+<li>You can verify that the payload of the received request matches the sample JSON message you just sent from the Try-Me Publisher. <img alt="test-message-verify-payload.png" src="img/aef9e7700247e291.png"></li>
+</ol>
+<p>This confirms that the end-to-end message flow from the producer application to the REST endpoint via the PubSub+ Cloud broker is working as expected.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Summarize key takeaways and next steps" duration="0">
+        <p>Duration : 5 minutes</p>
+<h2 is-upgraded>Summary</h2>
+<p>In the above exercises you have designed, coded and deployed an event driven flow using Solace Event Portal and Solace PubSub+ Cloud. Through this codelab, you have learned how to:</p>
+<ul>
+<li>Set up a Solace cloud broker</li>
+<li>Configure environment and modeled event mesh</li>
+<li>Design an EDA model in Event Portal</li>
+<li>Create and implement events and application flows</li>
+<li>Push configurations from Event Portal to live brokers</li>
+<li>Test end-to-end message flows</li>
+</ul>
+<h2 is-upgraded>Next steps</h2>
+<p>You can continue your learning journey with Solace by exploring the following resources:</p>
+<ul>
+<li>Do more advanced trainings using the Solace Learning Paths on <a href="https://training.solace.com/learn" target="_blank">Solace Academy</a></li>
+<li>Visit the <a href="https://solace.dev/" target="_blank">Solace Developer Portal</a> for more codelabs, tutorials, and documentation</li>
+<li>Join the <a href="https://solace.community/" target="_blank">Solace Community Forum</a> to connect with other developers and get support</li>
+<li>Explore the <a href="https://www.youtube.com/@Solacedotcom" target="_blank">Solace YouTube Channel</a> for video tutorials and webinars</li>
+</ul>
+<p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
+<p>Thanks for participating in this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>! If you found any issues along the way we&#39;d appreciate it if you&#39;d raise them by clicking the Report a mistake button at the bottom left of this codelab.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
