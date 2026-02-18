@@ -60,60 +60,85 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Solace Cloud Account and broker provisioning" duration="25">
-        <h2 is-upgraded>Step 1: Solace Cloud Account</h2>
+      <google-codelab-step label="Solace Cloud Account and broker provisioning" duration="0">
+        <h2 is-upgraded>Solace Cloud Account</h2>
 <p>In case you do not have an active Solace cloud account, you can register for one via the link: <a href="https://console.solace.cloud/login/new-account?product=event-streaming" target="_blank">Solace trial account registration</a>.<br> You can log in to the newly created Solace cloud account using the link : <a href="https://console.solace.cloud/home?login=true" target="_blank">Solace Cloud Account Login</a>. Once you have registered and logged in to the Solace cloud account, you can get started with provisioning a Solace developer grade broker which will be used in the next sections.</p>
-<h2 is-upgraded>Step 2 : Environment setup</h2>
-<p>Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like this: <img alt="cloud-console-home.png" src="img/7013eb76037fed49.png"></p>
-<ul>
-<li>Click on the <strong>Environments</strong> button as shown below :<br><img alt="settings-environment.png" src="img/1ea6970c2db402c1.png"></li>
-<li>Click on the <strong>...</strong> of the default created environment as below and click <strong>Enable Runtime Configuration</strong> as below: <img alt="env-enable-runtime-config.png" src="img/302930d464b85709.png"> This will allow you to push configuration objects for Solace queues, ACL profiles, and credentials to the broker directly from the Event Portal</li>
-</ul>
-<h2 is-upgraded>Step 3: Solace broker provisioning</h2>
-<ul>
-<li>Click on &#34;Cluster Manager&#34; to go into where you create and manage your broker services as below : <img alt="cluster-manager-sidebar.png" src="img/5ba8d9a41d2f8de6.png"></li>
-<li>Then click the &#34;Create service&#34; button to create a new Solace cloud broker instance. You can see that this service is associated with the <strong>Default</strong> environment that is available.</li>
-<li>Ensure you have selected Developer Service, your choice as the cloud service provider,</li>
-<li>and then click the map to find a region close to you: <img alt="broker_create_service.jpg" src="img/c2a16615a02dc4ea.jpg"></li>
-</ul>
-<p>Give your Solace PubSub+ Cloud service instance a name of your choice and then let it start!.</p>
-<aside class="warning"><p> As a guide, try to keep your broker name short for this session</p>
-</aside>
-<p>Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc. It takes about 5 minutes, and then you&#39;ll be ready!</p>
-<p>It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud. Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
-<p>Once the Solace broker is up and running, click on the broker name and enter it.</p>
-<ul>
-<li>Once your service is deployed and ready, click on it to go into it and look at some basic configuration information: <img alt="broker_console.png" src="img/317f41284b791582.png"></li>
-<li>Notice some buttons across the top:</li>
-<li>The &#34;Connect&#34; tab shows you all the required connection information for your messaging pub/sub applications (e.g. host, username, password, etc.), which we&#39;ll need in later steps. The info can be grouped either by protocol or by programming language.</li>
-<li>At the top-right, there should be a button saying &#34;Open PubSub+ Broker Manager&#34;. Click on that to go into the Manager GUI.</li>
-<li>From this webapp, you&#39;ll be able to view configured and runtime information, create new queues, create usernames and profiles, and other various administrative tasks for the Solace broker. <img alt="pubsubManager.png" src="img/86c89b5a3abc3e13.png"></li>
-<li>On the left side of the screen are the main sections to navigate through:</li>
-<li><strong>Message VPN</strong>: VPN-level stats and config (a Message VPN is a virtual partition of a single broker... one Solace broker can host multiple Message VPNs, and each VPN can have different authorization schemes and topic spaces; client/messaging application activity happens within the scope of a VPN)</li>
-<li><strong>Clients</strong>: information about connected and configured client applications</li>
-<li><strong>Queues</strong>: used for Guaranteed / persistent messaging</li>
-<li><strong>Connectors</strong>: helpful wizards to connect to a variety of web services</li>
-<li><strong>Access Control</strong>: where you create new client usernames, ACL profiles, and client profiles</li>
-<li><strong>Replay</strong>: where you can enable replay, to allow the broker to send previous messages again</li>
-</ul>
-<h2 is-upgraded>Step 4: Runtime Event Manager</h2>
-<ul>
-<li>In the main cloud console, click on the <strong>Runtime Event Manager</strong> as shown :<br><img alt="runtime-event-mgr-sidebar.png" src="img/6a168902f161a3e.png"></li>
-<li>Click on the <strong>Create Modeled Event Mesh</strong> button and create a new Modeled Event Mesh (MEM) as shown :<br><img alt="create-mem-popup.png" src="img/48e2e085156c0cd5.png"></li>
-</ul>
-<aside class="special"><p> Note the environment associated with each MEM that you create. This groups EDA artefacts and their deployments across all brokers associated with a particular environment.</p>
-</aside>
-<ul>
-<li>Enter the newly create MEM and navigate to the <strong>Event Broker Connections</strong> tab and click on the <strong>Connect Event Broker</strong> button as below :<br><img alt="new-mem.png" src="img/459d5a420ce46d77.png"></li>
-<li>Select the newly created broker, and you should be able to see a screen as below :<br><img alt="mem-to-broker-assoc.png" src="img/505ccbe85c3cf374.png"></li>
-</ul>
-<aside class="special"><p> You will see that :</p>
+<h2 is-upgraded>Provision Your First Solace PubSub Broker</h2>
+<h3 is-upgraded>Navigate to Cluster Manager</h3>
 <ol type="1">
-<li>The broker is connected to the MEM</li>
-<li>The connection between the broker, MEM and the Event Portal is automatically managed by the Event Portal using a cloud hosted Event Management Agent (EMA)</li>
-<li>To test the connection, click on the <strong>Run Discovery Scan</strong> button which will trigger a scan of your broker</li>
-<li>The status of the scan is displayed under the <strong>Discovery Scans</strong> section</li>
+<li>In the Solace Cloud Console, click <strong>Cluster Manager</strong> in the left navigation <img alt="broker-setup-1.png" src="img/58ef0b648d73d459.png"></li>
+<li>Click <strong>Create Service</strong> (or the <strong>+</strong> button if you have existing services) <img alt="broker-setup-2.png" src="img/d187420aeba7e27a.png"></li>
 </ol>
+<h3 is-upgraded>Configure Your Service</h3>
+<ol type="1">
+<li>Fill in the service configuration details:</li>
+</ol>
+<ul>
+<li>Name : Choose a concise name (e.g., <code>solace-masterclass</code>)</li>
+<li>Environment : Leave as <strong>Default</strong></li>
+<li>Cloud : Choose your preferred cloud provider (AWS, Azure, or GCP)</li>
+<li>Region : Select a region closest to your location</li>
+<li>Broker Release : Leave as default (latest stable)</li>
+<li>Service Type : Select <strong>Developer</strong> (free tier) <img alt="broker-setup-3.png" src="img/a5ac69ec9cec6df.png"></li>
+</ul>
+<ol type="1" start="2">
+<li>Click <strong>Create Service</strong></li>
+</ol>
+<h3 is-upgraded>Wait for Provisioning</h3>
+<ol type="1">
+<li>The service will take 3-5 minutes to provision</li>
+<li>Status will show as <strong>Creating...</strong><img alt="broker-setup-4.png" src="img/ed2f31fedc0c8359.png"></li>
+<li>Once complete, the broker details page will load <img alt="broker-setup-5.png" src="img/6f018e2b8d9a22ac.png"></li>
+</ol>
+<h3 is-upgraded>Explore Your Broker</h3>
+<ol type="1">
+<li>Navigate through the tabs:</li>
+</ol>
+<ul>
+<li><strong>Connect</strong>: Connection details and credentials <img alt="broker-connect-tab.png" src="img/f3d7986db71045f7.png"></li>
+<li><strong>Manage</strong>: Service management and configuration <img alt="broker-manage-tab.png" src="img/a55e7ed38a844642.png"></li>
+</ul>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have a running PubSub+ broker service with status &#34;Running&#34; in your Cluster Manager.</p>
+</aside>
+<h2 is-upgraded>Configure environment and modelled event mesh</h2>
+<h3 is-upgraded>Environment Setup</h3>
+<p>Environments in Solace Cloud represent the runtime environments within your organisation. For example, you may have</p>
+<ul>
+<li>Multiple development environments</li>
+<li>Multiple testing environments</li>
+<li>A Staging or Pre-Production</li>
+<li>A Production environment</li>
+</ul>
+<ol type="1">
+<li>In the Solace Cloud Console, navigate to the <strong>Environments</strong> tab <img alt="env-setup-1.png" src="img/6b674b558726f62.png"></li>
+<li>In the <strong>Environments</strong> tab, there is a default environment created for you called &#34;Default&#34; <img alt="env-setup-2.png" src="img/c1f2f7ff450e022e.png"></li>
+<li>Click on the <strong>...</strong> buttons next to the Default environment and select <strong>Runtime Configuration Settings</strong><img alt="env-setup-3.png" src="img/5e5ab58e9bb4c7cb.png"></li>
+<li>Click on the <strong>Auto on Promotion</strong> radio button to enable automatic promotion of configuration changes from Event Portal to the associated PubSub+ Cloud broker <img alt="env-setup-4.png" src="img/983158dd78ebafaf.png"></li>
+<li>Click <strong>Save</strong> to save the changes</li>
+<li>Optional: You can edit some of the environment details like name and description by clicking on the <strong>Edit</strong> button under the <strong>...</strong> menu <img alt="env-setup-optional.png" src="img/7ffc7a5f08e72f75.png"></li>
+</ol>
+<h3 is-upgraded>Modeled Event Mesh Setup</h3>
+<p>A modeled event mesh represents an actual event mesh or event flow operating in a specific runtime environment. Modeled event meshes help you define and visualise event flows between publishing and subscribing applications within your event-driven architecture (EDA).</p>
+<ol type="1">
+<li>In the Solace Cloud Console, navigate to the <strong>Runtime Event Manager</strong> tab <img alt="mem-setup-1.png" src="img/302bae2dd7e550b0.png"></li>
+<li>Click on the <strong>Create Modeled Event Mesh</strong> button <img alt="mem-setup-2.png" src="img/47bec09f34f04cd3.png"></li>
+<li>Fill in the details for the modeled event mesh:</li>
+</ol>
+<ul>
+<li>Name : <code>Dev-Mesh</code></li>
+<li>Type : <code>Solace</code></li>
+<li>Description : <code>Development Modeled Event Mesh</code></li>
+<li>Environment : Select <code>Default</code> environment</li>
+</ul>
+<ol type="1" start="4">
+<li>Click <strong>Create</strong> to create the modeled event mesh <img alt="mem-setup-3.png" src="img/ed55433de9edddd2.png"></li>
+<li>You will see the newly created modeled event mesh in the list <img alt="mem-setup-4.png" src="img/ffc6d4e4c909a1d9.png"></li>
+<li>Click on the modeled event mesh name to view its details</li>
+<li>Under the <strong>Event Broker Connections</strong> tab, click on <strong>Connect Event Broker</strong><img alt="mem-setup-5.png" src="img/b5b5d1272be2000.png"></li>
+<li>Select the PubSub+ Cloud broker you created earlier (e.g., <code>ep-codelab</code>) and click <strong>Add</strong><img alt="mem-setup-6.png" src="img/49abf58eedec5a0f.png"></li>
+<li>You should now see the broker connection listed under the <strong>Event Broker Connections</strong> tab <img alt="mem-setup-7.png" src="img/a7811a7e811023dc.png"></li>
+</ol>
+<aside class="special"><p><strong>Checkpoint</strong>: You should now have an environment configured with automatic promotion enabled and a modeled event mesh connected to your PubSub+ Cloud broker.</p>
 </aside>
 
 
@@ -134,6 +159,8 @@
 <li>Select on a file and click  <strong>Open</strong>, this will result in the application domain being imported as below : <img alt="ep-app-domain-imported.png" src="img/77cfd424d87d6acf.png"></li>
 </ul>
 <aside class="special"><p> you can import as many application domains as you wish, but for time considerations it&#39;s advisable to choose one example for implementation.</p>
+</aside>
+<aside class="warning"><p> Please note that the initial visualisation of the application domain might be a bit different from the screenshot. You can rearrange the objects as per your preference and save the layout for easier navigation in the future.</p>
 </aside>
 <ul>
 <li>Inside the application domain, you should be able to see the objects from your selected industry as below :<ul>
@@ -213,17 +240,17 @@
 <aside class="special"><p> Do note that the first time visualization of the events and their interactions might differ from what you see in the screenshot.<br> You can reorder the objects as per your preference</p>
 </aside>
 <ul>
-<li>Click on the <strong>Order Service</strong>, and then on the <strong>Open Application</strong> which pops up as below : <img alt="edit-order-service-1.png" src="img/d98fcf647832bf1f.png"></li>
-<li>The <strong>Order Service</strong> application screen displays you the various events that are published and subscribed by this version of the application. It also describes the various environments this application is deployed on : <img alt="editing-order-service-1.png" src="img/58d1cabab2c22da5.png"></li>
-<li>Click on the <strong>Runtime</strong> tab at the top of the application, and you can see the various environments, brokers and the status of the application configuration deployment as below : <img alt="order-service-runtime-tab.png" src="img/39d88433ad47d3e0.png"></li>
-</ul>
-<aside class="special"><p> You can see the <strong>dev</strong> broker associated with the <strong>default</strong> environment and the MEM that you created earlier. In case of multiple brokers and environments they would be listed here as available</p>
-</aside>
-<ul>
-<li>Click on the <strong>+</strong> button by the broker which will show a modal window to set up credentials for the application to connect to the broker. <strong>Make sure to keep a note of these credentials as they will be required in the following steps.</strong><img alt="order-service-creds.png" src="img/4bfa828fe369374e.png"></li>
-<li>Clicking on the <strong>Save Credentials and Continue</strong> button generates a preview of the configuration that will be deployed to the broker as below : <img alt="order-service-preview-1.png" src="img/7b14e159d42aa2f7.png"></li>
-<li>You will see a <strong>Configuring</strong> status for a short duration during which the EMA deploys the configuration onto the broker.</li>
-<li>Once the deployment is completed, you can see the deployed application version on the broker as below : <img alt="order-service-creds-deployed.png" src="img/196e2b457f9927f8.png"></li>
+<li>Click on the <strong>Order Service</strong>, and then on the <strong>Open Application</strong> which pops up as below : <img alt="edit-order-service-1.png" src="img/75e3a02b9911cb6f.png"></li>
+<li>The <strong>Order Service</strong> application screen displays you the various events that are published and subscribed by this version of the application : <img alt="editing-order-service-1.png" src="img/dff1fffc96783ac8.png"></li>
+<li>Click on the <strong>Configurations</strong> tab on the left sidebar as below : <img alt="configuring-order-service-1.png" src="img/c7cb12156cd1d4c.png"></li>
+<li>This opens up the configuration screen, click on the <strong>Create Configurations</strong> button as shown: <img alt="order-service-create-configuration.png" src="img/22f3494c4669ba3a.png"></li>
+<li>A modal window opens up as below, first select the environment and the broker that you have created earlier and click on the <strong>Next:Define Event Handling</strong> button : <img alt="order-service-select-env-broker.png" src="img/c5c566d737c63457.png"></li>
+<li>For now, we are not configuring any consumers (or subscriptions) for this application, so click on the <strong>Next: Define Access Control</strong> button directly. <img alt="order-service-define-event-handling.png" src="img/ab62e788eb913cd8.png"></li>
+<li>For authentication, select the <strong>Basic</strong> access type and enter a client usename and password of your choice as below. <strong>Make sure to keep a note of these credentials as they will be required in the following steps.</strong><img alt="order-service-access-control.png" src="img/44dda125c0ad3a3d.png"></li>
+<li>Review the configuration in both the <strong>Define Event Handling</strong> and <strong>Define Access Control</strong> tabs and if everything looks as expected, click <strong>Start Promotion</strong> as below : <img alt="order-service-start-promotion.png" src="img/81ed173f57ac87fd.png"></li>
+<li>An intermediate screen is shown as below indicating some design mismatches, but you can safely ignore them for now and click on the <strong>Preview Promotion</strong> button as below : <img alt="order-service-design-mismatches.png" src="img/ca634659448cc42b.png"></li>
+<li>The final promotion preview is shown as below, detailing the various configuration objects that will be created on the broker. Click on the <strong>Promote</strong> button as shown : <img alt="order-service-final-promotion-preview.png" src="img/2f8772b46592689.png"></li>
+<li>Once the deployment is completed, you can see the deployed application version on the broker as below : <img alt="order-service-creds-deployed.png" src="img/fca48aae0810ab2a.png"></li>
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
@@ -232,20 +259,21 @@
 <li>Once the application is up and running, open the application using the url: <a href="http://localhost:9002/" target="_blank">http://localhost:9002/</a> in the Chrome browser (or any one available in the VM)</li>
 <li>You should see a page which looks like this : <img alt="Order-Service-Application.png" src="img/a9e0187a4d4c4f0a.png"></li>
 <li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
-<li>The connection parameters for the Order Service application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/5263e29cb746dec3.png"></li>
+<li>The connection parameters for the Order Service application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/1e1b23a376e27f62.png"></li>
 <li>Make a note of the following properties in a separate file as they will be required for the following steps: <ul>
 <li>Public Endpoint</li>
 <li>Message VPN<br><img alt="brokerconsole_connect_creds_java_highlighted.png" src="img/ac24f5fa0ca5bfb7.png"></li>
 </ul>
+<aside class="warning"><p> Just take the endpoint and message vpn details for now, the username and password are the ones you configured in the earlier step in the Event Portal.</p>
+</aside>
 </li>
-<li>The credentials (username and password) were configured in the previous step.</li>
 <li>Fill in the connection details in the appropriate text box and click on the <strong>Connect to broker</strong> button</li>
 <li>You should see a screen as below with the appropriate connection status : <img alt="order-service-broker-connected.png" src="img/d4d35cd6d236f44f.png"></li>
 <li>Click on the <strong>Create a new basket for ordering</strong> button to simulate a new basket as below: <img alt="order-service-basket-init.png" src="img/2d3b9fd0a9148c9f.png"></li>
 <li>In the background after 10–15 seconds, the basket is converted into an order and an <em>Order-Created</em> event is automatically triggered, and the status of the order is automatically updated to CREATED as below : <img alt="order-created.png" src="img/1b9f18fce6cc668c.png"></li>
 <li>The <em>Order-Created</em> is published to the topic defined in the Event Portal design as below : <img alt="ep-Order-created-event.png" src="img/136b64ddd4cb1aca.png"></li>
 <li>If you observe the logs closely, you will see that the broker sends back an <strong>ACK or Acknowledge</strong> for every <strong>Order-Created</strong> event that is being published. This is because we are publishing these events as <strong>Persistent</strong> events.</li>
-<li>You can also verify this quickly by using the <strong>Try-Me</strong> tab. How to do this would have been shown in the earlier half of the day when we discussed the Solace Broker features.</li>
+<li>You can also verify this quickly by using the <strong>Try-Me</strong> tab.</li>
 <li>Feel free to trigger a few more orders using the UI and observe the payload and topics on which the events are published. <aside class="special"><p> If you need help using the <strong>Try-me</strong> then feel free to ask any of the Solace members running the masterclass for assistance.</p>
 </aside>
 </li>
@@ -260,7 +288,7 @@
 <li>Similar to how you deployed the credentials for the <strong>Order Service</strong> in the previous step, you will need to deploy the application and credentials for the <strong>Inventory-FraudCheck-Service</strong> as well.</li>
 <li>In the <strong>Designer</strong> screen, enter the Acme Retail application domain</li>
 <li>Click on the <strong>Inventory and FraudCheck Service</strong> and open the application</li>
-<li>Navigate to the <strong>Runtime</strong> tab on the application and add credentials for the application and deploy them to the broker.</li>
+<li>Navigate to the <strong>Configuration</strong> tab on the application and add credentials for the application and deploy them to the broker.</li>
 </ul>
 <aside class="special"><p> Make a note of the credentials (username and password) that you enter as they will be used in the following steps for deploying and running the application</p>
 </aside>
@@ -293,34 +321,21 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>Since in the case of Acme Retail, it is critical that no messages are lost during application downtime and also no subscribing application should be able to delete the queue object; an architectural choice was made to use <strong>Durable - Exclusive</strong> queue configurations.</p>
 <p>To fix the error encountered above, you need to create the Queue object as below :</p>
 <ul>
-<li>Open the <strong>Inventory and FraudCheck Service</strong> and click <strong>Edit This Version</strong> on the top right as below : <img alt="consumer-config-inventory-service.png" src="img/e7e823ade154069a.png"></li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-tab and then <strong>Add Consumer</strong> as below : <img alt="consumer-config-inventory-service-step2.png" src="img/be60e32b3e99920a.png"></li>
-<li>Fill in the follwing details in the form : <ul>
+<li>Open the <strong>Inventory and FraudCheck Service</strong> and click <strong>Advanced Subscription Setup</strong> as below : <img alt="consumer-config-inventory-service.png" src="img/ec3d3d9e015a2c9e.png"></li>
+<li>Click on the <strong>Create Consumer</strong> as below and enter the following details in the popup window : <img alt="consumer-config-inventory-service-step2.png" src="img/ed15e106e66fd465.png"><ul>
 <li>Name : <code>all-orders-placed</code></li>
 <li>Type : Solace Event Queue</li>
 </ul>
 </li>
-<li>Click on the <strong>Add Subscriptions</strong> button which will open up a sidebar. Select the <strong>Order Created</strong> event and its associated subscription as below : <img alt="inventory-serivice-subscriptions-step1.png" src="img/52e1855a2824e4a5.png"></li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic subscription based on your application design <img alt="inventory-serivice-subscriptions-step1.png" src="img/fdba79a668caa1c5.png"></li>
 </ul>
-<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries</p>
+<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries. You can also explore the modal window which tells you how it has derived the subscription.</p>
 </aside>
 <ul>
-<li>Click on the <strong>Manage Queue Configuration</strong> button which opens up a sidebar, fill in the below configuration in the configuration pane : <pre><code language="language-JSON" class="language-JSON">{
-&#34;accessType&#34;: &#34;exclusive&#34;,
-&#34;maxMsgSpoolUsage&#34;: 5000,
-&#34;queueName&#34;: &#34;all-orders-placed&#34;
-}
-</code></pre>
-</li>
-</ul>
-<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
-</aside>
-<ul>
-<li>At the end you should have something like this : <img alt="inventory-service-consumer-1.png" src="img/5b1766290913e6c6.png"></li>
-<li>Click <strong>Save Version</strong> and navigate to the <strong>Runtime</strong> tab.</li>
-<li>You should see the status as <strong>Update Required</strong> on the broker</li>
-<li>Click <strong>Push Updates to Event Broker</strong>, which shows a preview of all the changes that will be pushed to the broker <img alt="inventory-service-update-broker.png" src="img/a09514f752c34d33.png"></li>
-<li>Click <strong>Push Changes</strong> which will trigger the configuration push to the broker</li>
+<li>Click on the <strong>Configurations</strong> tab on the left sidebar, select the environment and broker selected previously and click on the button <strong>Next:Define Event Handling</strong>.</li>
+<li>In the <strong>Define Event Handling</strong> tab, you should see the consumer created in the earlier step : <img alt="inventory-service-consumer-setup-1.png" src="img/1d34d30bc5a1300f.png"></li>
+<li>Click on the <strong>Next:Define Access Control</strong> button, but no action is requried on this sub-step as the credentials have already been configured for this application.</li>
+<li>Click <strong>Review</strong> and then <strong>Start Promotion</strong>. This will signal Event Portal to push only the new configuration objects to the broker.</li>
 <li>With the above steps, a new queue has been created with the required subscription which can now be connected to by the <strong>Inventory-FraudCheck-Service</strong></li>
 </ul>
 <aside class="special"><p> Make a note of the above steps as you will be creating multiple queues with similar configuration for the other applications.</p>
@@ -336,28 +351,21 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>For each incoming <strong>Order-Created</strong> event, an <strong>Order-Confirmed</strong> event will be published as the stock reservation and fraud check passes.</p>
 <p>This <strong>Order-Confirmed</strong> needs to be subscribed by the <strong>Order Service</strong>. Follow the below steps to enable this flow :</p>
 <ul>
-<li>Navigate to the Designer screen and open the <strong>Order Service</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-section and start creating a new consumer with the below settings : <ul>
-<li>Name : all-order-updates</li>
+<li>Navigate to the Designer screen and open the <strong>Order Service</strong> application.</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings : <ul>
+<li>Name : <code>all-order-updates</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Order Confirmed</strong> event and confirm the suggested subscription</li>
-<li>Queue configuration :</li>
 </ul>
-<pre><code language="language-JSON" class="language-JSON">  {
-  &#34;accessType&#34;: &#34;exclusive&#34;,
-  &#34;maxMsgSpoolUsage&#34;: 5000,
-  &#34;queueName&#34;: &#34;all-order-updates&#34;
-  }
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="order-service-all-order-updates-queue.png" src="img/d0e49131a4b82ef.png"></li>
+</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic <ul>
+<li>You should have a subscription setup which looks like this : <img alt="order-service-all-order-updates-queue.png" src="img/2b48d02c90d5cb43.png"></li>
 </ul>
 </li>
 </ul>
-<aside class="special"><p> As we incorporate new features, we will update this queue&#39;s subscriptions with additional event topics.</p>
+<aside class="special"><p> We have already incorporated all the subscriptions required for this exercise.</p>
 </aside>
 <ul>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker.</li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab and push the updates to the event broker as you have done for the previous applications.</li>
 <li>Publish a few more orders from the <strong>Order-Service</strong> and see it being processed in the console logs.</li>
 <li>Go back to the <strong>Order-Service,</strong> and you will observe that the status of the newly created order is showing as VALIDATED as the orders are processed by the <strong>Inventory-FraudCheck-Service</strong></li>
 </ul>
@@ -374,38 +382,17 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <h3 is-upgraded>How to run?</h3>
 <h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
 <ul>
-<li>Navigate to the Designer screen and open the <strong>Payment Service</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-section and start creating a new consumer with the below settings : <ul>
-<li>Name : all-orders-confirmed</li>
+<li>Navigate to the Designer screen and open the <strong>Payment Service</strong> application.</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings : <ul>
+<li>Name : <code>all-orders-confirmed</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Order Confirmed</strong> event and confirm the suggested subscription</li>
-<li>Queue configuration :</li>
-</ul>
-<pre><code language="language-JSON" class="language-JSON">{
-&#34;accessType&#34;: &#34;exclusive&#34;,
-&#34;maxMsgSpoolUsage&#34;: 5000,
-&#34;queueName&#34;: &#34;all-orders-confirmed&#34;
-}
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="payment-service-all-orders-confirmed-queue.png" src="img/1a044cd689fec8e.png"></li>
 </ul>
 </li>
-</ul>
-<aside class="special"><p> As we incorporate new features, we will update this queue&#39;s subscriptions with additional event topics.</p>
-</aside>
-<ul>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
-<li>Now that we have configured the queue for feeding the <strong>Payment Service</strong>, we have to make sure that the <strong>Order-Service</strong> can also receive the <em>Payment Created</em> events. This is done by updating the subscription list of the <em>all-order-updates</em> queue with the topic pattern of the <em>Payment Created</em> events.</li>
-<li>You can do this by : <ul>
-<li>Navigate to the Designer screen and open the <strong>Order Service</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-section and in the consumer named <strong>all-order-updates</strong> click on <strong>Add Subscriptions</strong> button</li>
-<li>Make sure to select only the <strong>Payment Created</strong> and <strong>Payment Updated</strong> events as below : <img alt="order-service-update-queue-subscription-paymentEvents.png" src="img/3dbb17f3b75e99ce.png"></li>
-<li>Add the subscription and close the sidebar</li>
-<li>At this stage, you should have a queue with the following subscriptions : <img alt="order-service-all-order-updates-queue-v2.png" src="img/2a803f3b11dc6974.png"></li>
-<li>Save the version, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic <ul>
+<li>You should have a subscription setup which looks like this : <img alt="payment-service-all-orders-confirmed-queue.png" src="img/c4ec20e1efaf7cde.png"></li>
 </ul>
 </li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab and push the updates to the event broker as you have done for the previous applications.</li>
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
@@ -414,7 +401,7 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <li>Run the command : <code>mvn clean install</code></li>
 <li>Run the command : <code>java -jar target/payment-service-0.0.1-SNAPSHOT.jar -h HOST_URL -v VPN-NAME -u USER_NAME -p PASSWORD</code> and observe the console to see what events are getting processed and subsequently produced</li>
 </ul>
-<aside class="special"><p> The credentials (username and password) for the Payment Service are the same as you configured on the Runtime tab for this application</p>
+<aside class="special"><p> The credentials (username and password) for the Payment Service are the same as you configured on the Configuration tab for this application</p>
 </aside>
 <h3 is-upgraded>Testing</h3>
 <p>To do a complete end-to-end test of the current flow, you can quickly publish a few more orders from the <strong>Order-Service</strong> and see the following events being produced and consumed across the three applications :</p>
@@ -439,38 +426,17 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <h3 is-upgraded>How to run?</h3>
 <h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
 <ul>
-<li>Navigate to the Designer screen and open the <strong>Shipping Service</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-section and start creating a new consumer with the below settings :<ul>
-<li>Name : all-payments-confirmed</li>
+<li>Navigate to the Designer screen and open the <strong>Shipping Service</strong> application.</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings : <ul>
+<li>Name : <code>all-payments-confirmed</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Payment Updated</strong> event and confirm the suggested subscription</li>
-</ul>
-<aside class="special"><p> You can refer to the Event Portal topic design to identify what event and topic taxonomy is in play here to understand the Solace topic routing concept better.</p>
-</aside>
-<ul>
-<li>Queue configuration :</li>
-</ul>
-<pre><code language="language-JSON" class="language-JSON">{
-&#34;accessType&#34;: &#34;exclusive&#34;,
-&#34;maxMsgSpoolUsage&#34;: 5000,
-&#34;queueName&#34;: &#34;all-payments-confirmed&#34;
-}
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="shipping-service-all-payments-confirmed-queue.png" src="img/48814cb414ec3c21.png"></li>
 </ul>
 </li>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
-<li>Now that we have configured the queue for feeding the <strong>Shipping Service</strong>, we have to make sure that the <strong>Order-Service</strong> can also receive the <em>Shipment Created</em> events. This is done by updating the subscription list of the <em>all-order-updates</em> queue with the topic pattern of the Shipment Created events.</li>
-<li>You can do this by :<ul>
-<li>Navigate to the Designer screen and open the <strong>Order Service</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-section and in the consumer named <strong>all-order-updates</strong> click on <strong>Add Subscriptions</strong> button</li>
-<li>Make sure to select only the <strong>Shipment Created</strong> event as below : <a href="img/retail-domain-usecase/order-service-update-queue-subscription-shipmentEvents" target="_blank">order-service-update-queue-subscription-shipmentEvents</a></li>
-<li>Add the subscription and close the sidebar</li>
-<li>At this stage, you should have a queue with the following subscriptions : <img alt="order-service-all-order-updates-queue-v2.png" src="img/19cacccb6dccebd5.png"></li>
-<li>Save the version, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic <ul>
+<li>You should have a subscription setup which looks like this : <img alt="shipping-service-all-payments-confirmed-queue.png" src="img/8d168346eaa3103a.png"></li>
 </ul>
 </li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab and push the updates to the event broker as you have done for the previous applications.</li>
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
@@ -535,17 +501,16 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <aside class="special"><p> Do note that the first time visualization of the events and their interactions might differ from what you see in the screenshot.<br> You can reorder the objects as per your preference</p>
 </aside>
 <ul>
-<li>Click on the <strong>Account Management</strong>, and then on the <strong>Open Application</strong> which pops up as below : <img alt="edit-account-management-1.png" src="img/8ad4f993c880a158.png"></li>
-<li>The <strong>Account Management</strong> application screen displays you the various events that are published and subscribed by this version of the application. It also describes the various environments this application is deployed on : <img alt="editing-acc-management-1.png" src="img/d9811548bb94bf22.png"></li>
-<li>Click on the <strong>Runtime</strong> tab at the top of the application, and you can see the various environments, brokers and the status of the application configuration deployment as below : <img alt="acc-mgt-runtime-tab.png" src="img/e59c0cf4026b051c.png"></li>
-</ul>
-<aside class="special"><p> You can see the <strong>dev</strong> broker associated with the <strong>default</strong> environment and the MEM that you created earlier. In case of multiple brokers and environments they would be listed here as available</p>
-</aside>
-<ul>
-<li>Click on the <strong>Add Application</strong> button by the broker which will show a modal window to set up credentials for the application to connect to the broker. <strong>Make sure to keep a note of these credentials as they will be required in the following steps.</strong><img alt="acc-mgt-creds.png" src="img/80023edd61fc0d63.png"></li>
-<li>Clicking on the <strong>Save Credentials and Continue</strong> button generates a preview of the configuration that will be deployed to the broker as below : <img alt="acc-mgt-preview1.png" src="img/4db22f0396c623e.png"></li>
-<li>You will see a <strong>Configuring</strong> status for a short duration during which the EMA deploys the configuration onto the broker.</li>
-<li>Once the deployment is completed, you can see the deployed application version on the broker as below : <img alt="acc-mgt-creds-deployed.png" src="img/f8f0b5ee3e5d2263.png"></li>
+<li>Click on the <strong>Account Management</strong>, and then on the <strong>Open Application</strong> which pops up as below : <img alt="edit-account-management-1.png" src="img/31c63284d7f8e730.png"></li>
+<li>The <strong>Account Management</strong> application screen displays you the various events that are published and subscribed by this version of the application. <img alt="editing-acc-management-1.png" src="img/f1c51a08f82a7a94.png"></li>
+<li>Click on the <strong>Configuration</strong> tab on the left of the sidebar as below. This opens up the configuration screen, click on the <strong>Create Configurations</strong> button as shown: <img alt="configuring-acc-management-1.png" src="img/959dd0f47ac4d4c5.png"></li>
+<li>A modal window opens up as below, first select the environment and the broker that you have created earlier and click on the Next:Define Event Handling button : <img alt="configuring-acc-mgt-2.png" src="img/1d555972ec28d8c2.png"></li>
+<li>For now, we are not configuring any consumers (or subscriptions) for this application, so click on the Next: Define Access Control button directly. <img alt="configuring-acc-mgt-3.png" src="img/c1b077670466900f.png"></li>
+<li>For authentication, select the <strong>Basic</strong> access type and enter a client username and password of your choice as below. Make sure to keep a note of these credentials as they will be required in the following steps. <img alt="configuring-acc-mgt-3.png" src="img/c980ff531b4a8c75.png"></li>
+<li>Review the configuration in both the Define Event Handling and Define Access Control tabs and if everything looks as expected, click Start Promotion as below : <img alt="configuring-acc-mgt-5.png" src="img/c67f4a57cc07b0dc.png"></li>
+<li>An intermediate screen is shown as below indicating some design mismatches, but you can safely ignore them for now and click on the Preview Promotion button as below : <img alt="configuring-acc-mgt-6.png" src="img/b7815a81d5dd32e1.png"></li>
+<li>The final promotion preview is shown as below, detailing the various configuration objects that will be created on the broker. Click on the Promote button as shown : <img alt="configuring-acc-mgt-7.png" src="img/7043009cb35752cf.png"></li>
+<li>Once the deployment is completed, you can see the deployed application version on the broker as below : <img alt="acc-mgt-deployed.png" src="img/b349374745c925ad.png"></li>
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
@@ -554,7 +519,7 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <li>Once the application is up and running, open the application using the url: <a href="http://localhost:9092/" target="_blank">http://localhost:9092/</a></li>
 <li>You should see a page which looks like this : <img alt="Account-management-application.png" src="img/8c96cf3d8e76bd3f.png"></li>
 <li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
-<li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/5263e29cb746dec3.png"></li>
+<li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/1e1b23a376e27f62.png"></li>
 <li>Make a note of the following properties in a separate file as they will be required for the following steps: <ul>
 <li>Public Endpoint</li>
 <li>Message VPN<br><img alt="brokerconsole_connect_creds_java_highlighted.png" src="img/ac24f5fa0ca5bfb7.png"></li>
@@ -579,7 +544,7 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <li>Similar to how you deployed the credentials for the <strong>Account Management</strong> in the previous step, you will need to deploy the application and credentials for the <strong>Core Banking</strong> as well.</li>
 <li>In the <strong>Designer</strong> screen, enter the Acme Bank application domain</li>
 <li>Click on the <strong>Core Banking</strong> and open the application</li>
-<li>Navigate to the <strong>Runtime</strong> tab on the application and add credentials for the application and deploy them to the broker.</li>
+<li>Navigate to the <strong>Configuration</strong> tab on the application and add credentials for the application and deploy them to the broker.</li>
 </ul>
 <aside class="special"><p> Make a note of the credentials (username and password) that you enter as they will be used in the following steps for deploying and running the application</p>
 </aside>
@@ -612,34 +577,22 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>Given the criticality for Acme Bank to maintain message integrity during application downtime, alongside the imperative that subscribing applications cannot delete queue objects, an architectural decision was made to implement <strong>Durable-Exclusive</strong> queue configurations.</p>
 <p>To fix the error encountered above, you need to manually create the Queue object as below :</p>
 <ul>
-<li>Open the <strong>Core Banking</strong> and click <strong>Edit This Version</strong> on the top right as below : <img alt="consumer-config-core-banking.png" src="img/ada43ed4e33bc24b.png"></li>
-<li>Click on the <strong>Runtime Configuration</strong> sub-tab and then <strong>Add Consumer</strong> as below : <img alt="consumer-config-core-banking-step2.png" src="img/a6cecff2ac774e7.png"></li>
-<li>Fill in the follwing details in the form : <ul>
+<li>Open the <strong>Core Banking</strong> application and click <strong>Advanced Subscription Setup</strong> as below : : <img alt="consumer-config-core-banking.png" src="img/da22874e0b3e867.png"></li>
+<li>Click on the <strong>Create Consumer</strong> as below and enter the following details in the popup window : <img alt="consumer-config-core-banking-1.png" src="img/302ac7e180c3feee.png"><ul>
 <li>Name : <code>accounts-opened</code></li>
 <li>Type : Solace Event Queue</li>
 </ul>
 </li>
-<li>Click on the <strong>Add Subscriptions</strong> button which will open up a sidebar. Select the <strong>Account Opened</strong> event and its associated subscription as below : <img alt="core-banking-subscriptions-step1.png" src="img/42e4da6110fb115f.png"></li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic subscription based on your application design</li>
+<li>Event Portal identifies multiple possible subscriptions for this consumer, so ensure you select the correct one as below : <img alt="core-banking-subscriptions-1.png" src="img/50bd548b0b7e742f.png"></li>
 </ul>
-<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries</p>
+<aside class="warning"><p> Do you recollect how Solace topic filtering and matching works? Feel free to ask any of the Solace presenters if you have any queries. You can also explore the modal window which tells you how it has derived the subscription.</p>
 </aside>
 <ul>
-<li>Click on the <strong>Manage Queue Configuration</strong> button which opens up a sidebar, fill in the below configuration in the configuration pane : <pre><code language="language-JSON" class="language-JSON">{
-&#34;accessType&#34;: &#34;exclusive&#34;,
-&#34;maxMsgSpoolUsage&#34;: 5000,
-&#34;queueName&#34;: &#34;accounts-opened&#34;
-}
-</code></pre>
-</li>
-</ul>
-<aside class="warning"><p> Does the <strong>Access Type</strong> parameter ring any bells and how it influences the consumption of events from the queue, benefits, limitations, alternative solutions?<br> Feel free to discuss with your fellow participants and the Solace presenters on this differentiating Solace feature.</p>
-</aside>
-<ul>
-<li>At the end you should have something like this : <img alt="core-banking-consumer-1.png" src="img/7b3ced2e6b21acc0.png"></li>
-<li>Click <strong>Save Version</strong> and navigate to the <strong>Runtime</strong> tab.</li>
-<li>You should see the status as <strong>Update Required</strong> on the broker</li>
-<li>Click <strong>Push Updates to Event Broker</strong>, which shows a preview of all the changes that will be pushed to the broker <img alt="core-banking-update-broker.png" src="img/6a88820ad1085f37.png"></li>
-<li>Click <strong>Push Changes</strong> which will trigger the configuration push to the broker</li>
+<li>Click on the <strong>Configurations</strong> tab on the left sidebar, select the environment and broker selected previously and click on the button <strong>Next:Define Event Handling</strong></li>
+<li>In the <strong>Define Event Handling</strong> tab, you should see the consumer created in the earlier step : <img alt="core-banking-consumer-setup-1.png" src="img/4a56bcae47f91a53.png"></li>
+<li>Click on the <strong>Next:Define Access Control</strong> button, but no action is requried on this sub-step as the credentials have already been configured for this application.</li>
+<li>Click <strong>Review</strong> and then <strong>Start Promotion</strong>. This will signal Event Portal to push only the new configuration objects to the broker.</li>
 <li>With the above steps, a new queue has been created with the required subscription which can now be connected to by the <strong>Core-Banking</strong></li>
 </ul>
 <aside class="special"><p> Make a note of the above steps as you will be creating multiple queues with similar configuration for the other applications.</p>
@@ -657,25 +610,18 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <h3 is-upgraded>How to run?</h3>
 <h4 is-upgraded><strong>Part 1 : Broker Configuration</strong></h4>
 <ul>
-<li>Navigate to the Designer screen and open the <strong>Fraud Detection</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
-<li>Name : all-transactions</li>
+<li>Navigate to the Designer screen and open the <strong>Fraud Detection</strong> application.</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings : <ul>
+<li>Name : <code>all-transactions</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Deposit</strong>, <strong>Transfer</strong> and <strong>Withdrawal</strong> events and confirm the suggested subscription</li>
-<li>Queue configuration :</li>
-</ul>
-<pre><code language="language-JSON" class="language-JSON">  {
-  &#34;accessType&#34;: &#34;exclusive&#34;,
-  &#34;maxMsgSpoolUsage&#34;: 5000,
-  &#34;queueName&#34;: &#34;all-transactions&#34;
-  }
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="fraud-detection-consumer.png" src="img/3ace30671325b92b.png"></li>
 </ul>
 </li>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
-<li>Now that you have created the queue object for feeding the <strong>Fraud Detection</strong> service, we can build and start the application.</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic <ul>
+<li>You should have a subscription setup which looks like this : <img alt="fraud-detection-subscriptions.png" src="img/6e02f3eb38e40937.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab, create configurations and credentials for pushing to the event broker as you have done for the previous applications.</li>
+<li>Now that you have created the configuration for feeding the <strong>Fraud Detection</strong> service, we can build and start the application.</li>
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
@@ -707,24 +653,17 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 <p>The <strong>Account Management</strong> application subscribes to the <em>Fraud Detected</em> event and validates if the transaction is actually fraudulent. If found fraudulent, a corresponding <em>Fraud Confirmed</em> event is triggered and the linked account is suspended by publishing an <em>Account Suspended</em> event.</p>
 <ul>
 <li>Start with creating a new queue for subscribing to the <em>Fraud Detected</em> event</li>
-<li>Navigate to the Designer screen and open the <strong>Account Management</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
-<li>Name : fraud-detected-events</li>
+<li>Navigate to the Designer screen and open the <strong>Account Management</strong> application.</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings :<ul>
+<li>Name : <code>fraud-detected-events</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Fraud Detected</strong> event and confirm the suggested subscription</li>
-<li>Queue configuration :</li>
-</ul>
-<pre><code language="language-JSON" class="language-JSON">  {
-  &#34;accessType&#34;: &#34;exclusive&#34;,
-  &#34;maxMsgSpoolUsage&#34;: 5000,
-  &#34;queueName&#34;: &#34;fraud-detected-events&#34;
-  }
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="acnt-mgt-fraud-detected-queue-config.png" src="img/9942212b3ef29621.png"></li>
 </ul>
 </li>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic<ul>
+<li>You should have a subscription setup which looks like this : <img alt="acnt-mgt-fraud-detected-queue-config.png" src="img/4cef3c6c54041903.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab and push the updates to the event broker as you have done for the previous applications.</li>
 <li>Navigate to the folder : <strong>solace-masterclass/banking-domain/account-management</strong></li>
 </ul>
 <aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
@@ -802,27 +741,19 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 </li>
 </ul>
 <h3 is-upgraded>4.2 Core Banking</h3>
-<p>The <em>Account Suspended</em> event published in the previous step is subscribed to by the <strong>Core Banking</strong> application which stops all transactions on that account number immediately.</p>
+<p>The <em>Account Suspended</em> event published in the previous step is subscribed to by the <strong>Core Banking</strong> application which stops all transactions on that account number immediately. *</p>
 <ul>
 <li>Start with creating a new queue for subscribing to the <em>Account Suspended</em> event</li>
-<li>Navigate to the Designer screen and open the <strong>Core Banking</strong> application. Click on the <strong>Edit this Version</strong> button.</li>
-<li>Click on the <strong>Runtime Configuration</strong> subsection and start creating a new consumer with the below settings :<ul>
-<li>Name : accounts-suspended</li>
+<li>In the <strong>Advanced Subscription Setup</strong> tab, create a new consumer with the below settings : <ul>
+<li>Name : <code>accounts-suspended</code></li>
 <li>Type : Solace Event Queue</li>
-<li>Event and subscriptions : Select the <strong>Account Suspended</strong> event and confirm the suggested subscription</li>
-<li>Queue configuration :</li>
-</ul>
-<pre><code language="language-JSON" class="language-JSON">  {
-  &#34;accessType&#34;: &#34;exclusive&#34;,
-  &#34;maxMsgSpoolUsage&#34;: 5000,
-  &#34;queueName&#34;: &#34;accounts-suspended&#34;
-  }
-</code></pre>
-<ul>
-<li>You should have a consumer setup which looks like this : <img alt="core-banking-account-suspended-consumer.png" src="img/44f8eb3885ff1abc.png"></li>
 </ul>
 </li>
-<li>Once the consumer is created, navigate to the <strong>Runtime</strong> tab and push the updates to the event broker</li>
+<li>Clicking on the <strong>+</strong> symbol for the subscriptions opens up a modal window offering you a pre-selected topic <ul>
+<li>You should have a subscription setup which looks like this : <img alt="core-banking-account-suspended-consumer.png" src="img/1371b2120bf89799.png"></li>
+</ul>
+</li>
+<li>Once the consumer is created, navigate to the <strong>Configuration</strong> tab and push the updates to the event broker as you have done for the previous applications.</li>
 <li>Navigate to the location :<strong>solace-masterclass/banking-domain/core-banking</strong></li>
 </ul>
 <aside class="warning"><p> If you need any assistance in this, please feel free to reach out to the Solace instructors nearby.</p>
@@ -853,7 +784,7 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
       });
     }
 </code></pre>
-<aside class="special"><p> This code snippet builds a handler for processing the events attracted to the queue * <em>accounts-suspended</em>*</p>
+<aside class="special"><p> This code snippet builds a handler for processing the events attracted to the queue <strong>accounts-suspended</strong></p>
 </aside>
 </li>
 </ul>
