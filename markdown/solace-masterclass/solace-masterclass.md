@@ -52,7 +52,7 @@ Due to time limit considerations, we will be implementing only a selected subset
 
 Duration: 0:25:00
 
-### Step 1: Solace Cloud Account
+### Solace Cloud Account
 
 In case you do not have an active Solace cloud account, you can register for one via the
 link: [Solace trial account registration](https://console.solace.cloud/login/new-account?product=event-streaming). \
@@ -61,81 +61,105 @@ link : [Solace Cloud Account Login](https://console.solace.cloud/home?login=true
 Once you have registered and logged in to the Solace cloud account, you can get started with provisioning a Solace
 developer grade broker which will be used in the next sections.
 
-### Step 2 : Environment setup
-Once you are logged in to the Solace cloud portal with the details you registered with , you should see something like
-this:
-  ![cloud-console-home.png](img/broker-setup/cloud-console-home.png)
+### Provision Your First Solace PubSub Broker
 
-- Click on the **Environments** button as shown below : \
-  ![settings-environment.png](img/broker-setup/settings-environment.png)
-- Click on the **...** of the default created environment as below and click **Enable Runtime Configuration** as below:
-  ![env-enable-runtime-config.png](img/broker-setup/env-enable-runtime-config.png)
-  This will allow you to push configuration objects for Solace queues, ACL profiles, and credentials to the broker directly from the Event Portal
+Duration: 10 minutes
 
-### Step 3: Solace broker provisioning
+#### Navigate to Cluster Manager
 
-- Click on "Cluster Manager" to go into where you create and manage your broker services as below :
-  ![cluster-manager-sidebar.png](img/broker-setup/cluster-manager-sidebar.png)
-- Then click the "Create service" button to create a new Solace cloud broker instance. You can see that this service is associated with the **Default** environment that is available.
-- Ensure you have selected Developer Service, your choice as the cloud service provider,
-- and then click the map to find a region close to you:
-  ![broker_create_service.jpg](img/broker-setup/broker_create_service.jpg)
+1. In the Solace Cloud Console, click **Cluster Manager** in the left navigation
+   ![broker-setup-1.png](img/broker-provisioning/broker-setup-1.png)
+2. Click **Create Service** (or the **+** button if you have existing services)
+   ![broker-setup-2.png](img/broker-provisioning/broker-setup-2.png)
 
-Give your Solace PubSub+ Cloud service instance a name of your choice and then let it start!.
-> aside negative As a guide, try to keep your broker name short for this session
+#### Configure Your Service
 
-Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured,
-load-balancer setup, monitoring enabled, etc.
-It takes about 5 minutes, and then you'll be ready!
-> It is safe to navigate away from the "Solace is starting" page while the broker is being deployed in the cloud. Feel
-> free to explore the rest of Solace Mission Control, including the Event Portal!
+1. Fill in the service configuration details:
+  - Name : Choose a concise name (e.g., `solace-masterclass`)
+  - Environment : Leave as **Default**
+  - Cloud : Choose your preferred cloud provider (AWS, Azure, or GCP)
+  - Region : Select a region closest to your location
+  - Broker Release : Leave as default (latest stable)
+  - Service Type : Select **Developer** (free tier)
+    ![broker-setup-3.png](img/broker-provisioning/broker-setup-3.png)
 
-Once the Solace broker is up and running, click on the broker name and enter it.
+2. Click **Create Service**
 
-- Once your service is deployed and ready, click on it to go into it and look at some basic configuration
-  information:
-  ![broker_console.png](img/broker-setup/broker_console.png)
+#### Wait for Provisioning
 
-- Notice some buttons across the top:
+1. The service will take 3-5 minutes to provision
+2. Status will show as **Creating...**
+   ![broker-setup-4.png](img/broker-provisioning/broker-setup-4.png)
+3. Once complete, the broker details page will load
+   ![broker-setup-5.png](img/broker-provisioning/broker-setup-5.png)
 
-* The "Connect" tab shows you all the required connection information for your messaging pub/sub applications (e.g.
-  host, username, password, etc.), which we'll need in later steps. The info can be grouped either by protocol or by
-  programming language.
-* At the top-right, there should be a button saying "Open PubSub+ Broker Manager". Click on that to go into the Manager
-  GUI.
+#### Explore Your Broker
 
-- From this webapp, you'll be able to view configured and runtime information, create new queues, create usernames and
-  profiles, and other various administrative tasks for the Solace broker.
-  ![pubsubManager.png](img/broker-setup/pubsubManager.png)
+1. Navigate through the tabs:
+  - **Connect**: Connection details and credentials
+    ![broker-connect-tab.png](img/broker-provisioning/broker-connect-tab.png)
+  - **Manage**: Service management and configuration
+    ![broker-manage-tab.png](img/broker-provisioning/broker-manage-tab.png)
 
-- On the left side of the screen are the main sections to navigate through:
+> aside positive **Checkpoint**: You should now have a running PubSub+ broker service with status "Running" in your
+> Cluster Manager.
 
-* **Message VPN**: VPN-level stats and config (a Message VPN is a virtual partition of a single broker... one Solace
-  broker can host multiple Message VPNs, and each VPN can have different authorization schemes and topic spaces;
-  client/messaging application activity happens within the scope of a VPN)
-* **Clients**: information about connected and configured client applications
-* **Queues**: used for Guaranteed / persistent messaging
-* **Connectors**: helpful wizards to connect to a variety of web services
-* **Access Control**: where you create new client usernames, ACL profiles, and client profiles
-* **Replay**: where you can enable replay, to allow the broker to send previous messages again
+---
 
-### Step 4: Runtime Event Manager
+### Configure environment and modelled event mesh
 
-- In the main cloud console, click on the **Runtime Event Manager** as shown : \
-  ![runtime-event-mgr-sidebar.png](img/broker-setup/runtime-event-mgr-sidebar.png)
-- Click on the **Create Modeled Event Mesh** button and create a new Modeled Event Mesh (MEM) as shown : \
-  ![create-mem-popup.png](img/broker-setup/create-mem-popup.png)
-> aside positive Note the environment associated with each MEM that you create. This groups EDA artefacts and their deployments across all brokers associated with a particular environment.
+#### Environment Setup
 
-- Enter the newly create MEM and navigate to the **Event Broker Connections** tab and click on the **Connect Event Broker** button as below : \
-![new-mem.png](img/broker-setup/new-mem.png)
-- Select the newly created broker, and you should be able to see a screen as below : \
-![mem-to-broker-assoc.png](img/broker-setup/mem-to-broker-assoc.png)
-> aside positive You will see that :
-> 1. The broker is connected to the MEM
-> 2. The connection between the broker, MEM and the Event Portal is automatically managed by the Event Portal using a cloud hosted Event Management Agent (EMA)
-> 3. To test the connection, click on the **Run Discovery Scan** button which will trigger a scan of your broker
-> 4. The status of the scan is displayed under the **Discovery Scans** section
+Environments in Solace Cloud represent the runtime environments within your organisation. For example, you may have
+
+- Multiple development environments
+- Multiple testing environments
+- A Staging or Pre-Production
+- A Production environment
+
+1. In the Solace Cloud Console, navigate to the **Environments** tab
+   ![env-setup-1.png](img/env-mem-setup/env-setup-1.png)
+2. In the **Environments** tab, there is a default environment created for you called "Default"
+   ![env-setup-2.png](img/env-mem-setup/env-setup-2.png)
+3. Click on the **...** buttons next to the Default environment and select **Runtime Configuration Settings**
+   ![env-setup-3.png](img/env-mem-setup/env-setup-3.png)
+4. Click on the **Auto on Promotion** radio button to enable automatic promotion of configuration changes from Event
+   Portal to the associated PubSub+ Cloud broker
+   ![env-setup-4.png](img/env-mem-setup/env-setup-4.png)
+5. Click **Save** to save the changes
+6. Optional: You can edit some of the environment details like name and description by clicking on the **Edit** button
+   under the **...** menu
+   ![env-setup-optional.png](img/env-mem-setup/env-setup-optional.png)
+
+#### Modeled Event Mesh Setup
+
+A modeled event mesh represents an actual event mesh or event flow operating in a specific runtime environment. Modeled
+event meshes help you define and visualise event flows between publishing and subscribing applications within your
+event-driven architecture (EDA).
+
+1. In the Solace Cloud Console, navigate to the **Runtime Event Manager** tab
+   ![mem-setup-1.png](img/env-mem-setup/mem-setup-1.png)
+2. Click on the **Create Modeled Event Mesh** button
+   ![mem-setup-2.png](img/env-mem-setup/mem-setup-2.png)
+3. Fill in the details for the modeled event mesh:
+  - Name : `Dev-Mesh`
+  - Type : `Solace`
+  - Description : `Development Modeled Event Mesh`
+  - Environment : Select `Default` environment
+4. Click **Create** to create the modeled event mesh
+   ![mem-setup-3.png](img/env-mem-setup/mem-setup-3.png)
+5. You will see the newly created modeled event mesh in the list
+   ![mem-setup-4.png](img/env-mem-setup/mem-setup-4.png)
+6. Click on the modeled event mesh name to view its details
+7. Under the **Event Broker Connections** tab, click on **Connect Event Broker**
+   ![mem-setup-5.png](img/env-mem-setup/mem-setup-5.png)
+8. Select the PubSub+ Cloud broker you created earlier (e.g., `ep-codelab`) and click **Add**
+   ![mem-setup-6.png](img/env-mem-setup/mem-setup-6.png)
+9. You should now see the broker connection listed under the **Event Broker Connections** tab
+   ![mem-setup-7.png](img/env-mem-setup/mem-setup-7.png)
+
+> aside positive **Checkpoint**: You should now have an environment configured with automatic promotion enabled and a
+> modeled event mesh connected to your PubSub+ Cloud broker.
 
 ## Event Portal design
 
@@ -162,6 +186,9 @@ In summary, the Event Portal streamlines event management, making it an essentia
 
 > aside positive you can import as many application domains as you wish,
 > but for time considerations it's advisable to choose one example for implementation.
+
+> aside negative Please note that the initial visualisation of the application domain might be a bit different from the screenshot. 
+> You can rearrange the objects as per your preference and save the layout for easier navigation in the future.
 
 - Inside the application domain, you should be able to see the objects from your selected industry as below :
     - Retail industry :
@@ -292,7 +319,7 @@ relevant events which it uses for showing realtime status updates on the order l
     - Public Endpoint
     - Message VPN \
       ![brokerconsole_connect_creds_java_highlighted.png](img/commons/brokerconsole_connect_creds_java_highlighted.png)
-- The credentials (username and password) were configured in the previous step.
+    > aside negative Just take the endpoint and message vpn details for now, the username and password are the ones you configured in the earlier step in the Event Portal.
 - Fill in the connection details in the appropriate text box and click on the **Connect to broker** button
 - You should see a screen as below with the appropriate connection status :
   ![order-service-broker-connected.png](img/retail-domain-usecase/order-service-broker-connected.png)
@@ -306,8 +333,7 @@ relevant events which it uses for showing realtime status updates on the order l
 - If you observe the logs closely, you will see that the broker sends back an **ACK or Acknowledge** for every
   **Order-Created** event that is being published. This is because we are publishing these events as **Persistent**
   events.
-- You can also verify this quickly by using the **Try-Me** tab. How to do this would have been shown in the earlier half
-  of the day when we discussed the Solace Broker features.
+- You can also verify this quickly by using the **Try-Me** tab. 
 - Feel free to trigger a few more orders using the UI and observe the payload and topics on which the events are
   published.
   > aside positive If you need help using the **Try-me** then feel free to ask any of the Solace members running the
