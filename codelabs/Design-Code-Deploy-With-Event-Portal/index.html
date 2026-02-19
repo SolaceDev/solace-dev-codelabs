@@ -28,13 +28,13 @@
                   environment="web"
                   feedback-link="">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="0">
+      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
         <p>In this codelab, you&#39;ll experience the complete lifecycle of event-driven architecture design and deployment using Solace Event Portal and PubSub+ Cloud. You&#39;ll learn how to:</p>
 <ul>
 <li>Register for a Solace Cloud trial account</li>
 <li>Provision a PubSub+ Cloud broker service</li>
 <li>Configure environment and modeled event mesh</li>
-<li>Design an EDA model using the AI Designer in Event Portal</li>
+<li>Design an EDA model using the AI Design Assistant in Event Portal</li>
 <li>Create and manage application domains</li>
 <li>Design application flows with events and topics</li>
 <li>Customise Event Portal with custom icons and logos</li>
@@ -64,7 +64,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Register for Solace Cloud Trial" duration="0">
+      <google-codelab-step label="Register for Solace Cloud Trial" duration="5">
         <h2 is-upgraded>Create Your Account</h2>
 <ol type="1">
 <li>Navigate to <a href="https://console.solace.cloud/" target="_blank">https://console.solace.cloud/</a></li>
@@ -94,7 +94,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Provision Your First PubSub&#43; Broker" duration="0">
+      <google-codelab-step label="Provision Your First PubSub&#43; Broker" duration="10">
         <h2 is-upgraded>Navigate to Cluster Manager</h2>
 <ol type="1">
 <li>In the Solace Cloud Console, click <strong>Cluster Manager</strong> in the left navigation <img alt="broker-setup-1.png" src="img/58ef0b648d73d459.png"></li>
@@ -133,7 +133,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Configure environment and modelled event mesh" duration="0">
+      <google-codelab-step label="Configure environment and modelled event mesh" duration="15">
         <h2 is-upgraded>Environment Setup</h2>
 <p>Environments in Solace Cloud represent the runtime environments within your organisation. For example, you may have</p>
 <ul>
@@ -175,9 +175,8 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Design EDA using the Event Portal" duration="0">
-        <p>Duration : 10 minutes</p>
-<p>Event Portal is a cloud-based event management tool that enables you to discover, create, design, share, manage, and govern the assets and resources in your event-driven architecture (EDA). It makes developing and deploying event-driven applications and integration easier for developers and architects.</p>
+      <google-codelab-step label="Design EDA using the Event Portal" duration="10">
+        <p>Event Portal is a cloud-based event management tool that enables you to discover, create, design, share, manage, and govern the assets and resources in your event-driven architecture (EDA). It makes developing and deploying event-driven applications and integration easier for developers and architects.</p>
 <h2 is-upgraded>Navigate to the Event Portal</h2>
 <ol type="1">
 <li>From the Solace Cloud Console, click <strong>Designer</strong> in the left navigation <img alt="designer-tab.png" src="img/637f1dd824ad44ed.png"></li>
@@ -236,9 +235,8 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Design new events and application flows" duration="0">
-        <p>Duration : 15 minutes</p>
-<aside class="warning"><p><strong>Note</strong> : The names of the application domains, applications and events created by the AI Design Assistant may vary each time you run the design process. The steps below will guide you on how to create new events and application flows regardless of the specific names used.</p>
+      <google-codelab-step label="Design new events and application flows" duration="15">
+        <aside class="warning"><p><strong>Note</strong> : The names of the application domains, applications and events created by the AI Design Assistant may vary each time you run the design process. The steps below will guide you on how to create new events and application flows regardless of the specific names used.</p>
 </aside>
 <h2 is-upgraded>Create a new event</h2>
 <ol type="1">
@@ -264,9 +262,8 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Configure REST Delivery Points push configuration to broker" duration="0">
-        <p>Duration : 15 minutes</p>
-<p>Now that you have updated your original design with a new event and established a producing relationship, you need to create a consuming application that will forward the event messages to a REST endpoint using a REST Delivery Point ( RDP). You will also push the updated design to the PubSub+ Cloud broker.</p>
+      <google-codelab-step label="Configure REST Delivery Points push configuration to broker" duration="15">
+        <p>Now that you have updated your original design with a new event and established a producing relationship, you need to create a consuming application that will forward the event messages to a REST endpoint using a REST Delivery Point ( RDP). You will also push the updated design to the PubSub+ Cloud broker.</p>
 <h2 is-upgraded>Create a consuming application</h2>
 <ol type="1">
 <li>In the Event Portal Designer, navigate to the same application domain where you created the new event e.g. <strong>Inventory</strong></li>
@@ -325,9 +322,8 @@ d. Review :<ul>
 
       </google-codelab-step>
     
-      <google-codelab-step label="Test end-to-end message flow with REST consumers" duration="0">
-        <p>Duration : 10 minutes</p>
-<p>Till now, we have :</p>
+      <google-codelab-step label="Test end-to-end message flow with REST consumers" duration="10">
+        <p>Till now, we have :</p>
 <ul>
 <li>Provisioned a PubSub+ Cloud broker associated with an environment and linked it to a modeled event mesh</li>
 <li>Designed an event-driven architecture using the AI Design Assistant in Event Portal</li>
@@ -369,9 +365,8 @@ d. Review :<ul>
 
       </google-codelab-step>
     
-      <google-codelab-step label="Summarize key takeaways and next steps" duration="0">
-        <p>Duration : 5 minutes</p>
-<h2 is-upgraded>Summary</h2>
+      <google-codelab-step label="Summarize key takeaways and next steps" duration="5">
+        <h2 is-upgraded>Summary</h2>
 <p>In the above exercises you have designed, coded and deployed an event driven flow using Solace Event Portal and Solace PubSub+ Cloud. Through this codelab, you have learned how to:</p>
 <ul>
 <li>Set up a Solace cloud broker</li>
