@@ -14,7 +14,7 @@ link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/Desi
 
 ## What you'll learn: Overview
 
-Duration: 5 minutes
+Duration: 0:05:00
 
 In this codelab, you'll experience the complete lifecycle of event-driven architecture design and deployment using
 Solace Event Portal and PubSub+ Cloud.
@@ -23,7 +23,7 @@ You'll learn how to:
 - Register for a Solace Cloud trial account
 - Provision a PubSub+ Cloud broker service
 - Configure environment and modeled event mesh
-- Design an EDA model using the AI Designer in Event Portal
+- Design an EDA model using the AI Design Assistant in Event Portal
 - Create and manage application domains
 - Design application flows with events and topics
 - Customise Event Portal with custom icons and logos
@@ -54,7 +54,7 @@ By the end of this codelab, you'll have:
 
 ## Register for Solace Cloud Trial
 
-Duration: 5 minutes
+Duration: 0:05:00
 
 ### Create Your Account
 
@@ -87,7 +87,7 @@ Duration: 5 minutes
 
 ## Provision Your First PubSub+ Broker
 
-Duration: 10 minutes
+Duration: 0:10:00
 
 ### Navigate to Cluster Manager
 
@@ -132,7 +132,7 @@ Duration: 10 minutes
 
 ## Configure environment and modelled event mesh
 
-Duration: 15 minutes
+Duration: 0:15:00
 
 ### Environment Setup
 
@@ -190,7 +190,7 @@ event-driven architecture (EDA).
 
 ## Design EDA using the Event Portal
 
-Duration : 10 minutes
+Duration: 0:10:00
 
 Event Portal is a cloud-based event management tool that enables you to discover, create, design, share, manage, and
 govern the assets and resources in your event-driven architecture (EDA). It makes developing and deploying event-driven
@@ -298,7 +298,7 @@ members to recognize and navigate through the applications in the Event Portal.
 
 ## Design new events and application flows
 
-Duration : 15 minutes
+Duration: 0:15:00
 
 > aside negative **Note** : The names of the application domains, applications and events created by the AI Design
 > Assistant may vary each time you run the design process. The steps below will guide you on how to create new events
@@ -340,7 +340,7 @@ Duration : 15 minutes
 
 ## Configure REST Delivery Points push configuration to broker
 
-Duration : 15 minutes
+Duration: 0:15:00
 
 Now that you have updated your original design with a new event and established a producing relationship, you need to
 create a consuming application that will forward the event messages to a REST endpoint using a REST Delivery Point (
@@ -432,7 +432,7 @@ RDP). You will also push the updated design to the PubSub+ Cloud broker.
 
 ## Test end-to-end message flow with REST consumers
 
-Duration : 10 minutes
+Duration: 0:10:00
 
 Till now, we have :
 - Provisioned a PubSub+ Cloud broker associated with an environment and linked it to a modeled event mesh
@@ -488,7 +488,7 @@ broker is working as expected.
 
 ## Summarize key takeaways and next steps
 
-Duration : 5 minutes
+Duration: 0:05:00
 
 ### Summary
 
