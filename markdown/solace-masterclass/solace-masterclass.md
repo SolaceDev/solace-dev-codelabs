@@ -203,7 +203,33 @@ In summary, the Event Portal streamlines event management, making it an essentia
 
 ## Use case implementation
 
-Duration: 0:01:00
+Duration: 0:10:00
+
+For the hands-on excercise, we will be using GitHub Codespaces which provides a cloud-based development environment with all the necessary tools and software pre-installed. 
+
+### Setup GitHub Codespace
+
+> aside negative Please note that using GitHub Codespace requires a GitHub account. \
+> If you do not have a GitHub account, you can create one for free by visiting [GitHub Sign Up](https://github.com/signup) \
+> If your enterprise GitHub account does not have access to GitHub Codespaces, you can use a personal GitHub account to access the Codespaces environment for this workshop.
+
+#### Step 1: **Open the Workshop Repository**
+
+Visit [Solace Developer Workshops](https://github.com/SolaceDev/solace-developer-workshops/)
+![020-github-workshop-repo.png](img/codespace-setup/020-github-workshop-repo.png)
+
+#### Step 2: Click **Open in GitHub Codespaces**
+![020-open-github-codespaces.png](img/codespace-setup/020-open-github-codespaces.png)
+
+#### Step 3: Choose **Change Options** → set machine type to **4-core**
+![020-codepsaces-change-options.png](img/codespace-setup/020-codepsaces-change-options.png)
+
+#### Step 4: Click **Create Codespace**
+![020-codespace-ready.png](img/codespace-setup/020-codespace-ready.png)
+
+> aside negative Please note that the codespace may take a few minutes to initialise. You will see some logs in the terminal during the initialization process. Once the setup is complete, you will have a ready-to-use development environment in the cloud.
+
+### Use case selection
 
 Based on use case of your choice, please follow the appropriate chapter below :
 
@@ -306,10 +332,11 @@ relevant events which it uses for showing realtime status updates on the order l
   ![order-service-creds-deployed.png](img/retail-domain-usecase/order-service-creds-deployed.png)
 
 ##### **Part 2 : Application build and deployment**
+- In the codespace terminal, create a new terminal window by clicking on the **+** icon on the terminal pane 
 - Navigate to the directory: **solace-masterclass/retail-domain/order-service**
-- Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
+- Run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
-  url: [http://localhost:9002/](http://localhost:9002/) in the Chrome browser (or any one available in the VM)
+  url that is shown in the popup within the codespace.
 - You should see a page which looks like this :
   ![Order-Service-Application.png](img/retail-domain-usecase/Order-Service-Application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
@@ -673,11 +700,10 @@ Confirmed_ and corresponding _Account Suspended_ events.
   ![acc-mgt-deployed.png](img/banking-domain-usecase/acc-mgt-deployed.png)
 
 ##### **Part 2 : Application build and deployment**
-
-- Navigate to the directory: **solace-masterclass/banking-domain/account-management**
-- Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
-- Once the application is up and running, open the application using the
-  url: [http://localhost:9092/](http://localhost:9092/)
+- In the codespace terminal, create a new terminal window by clicking on the **+** icon on the terminal pane
+- Navigate to the directory: **solace-masterclass/retail-domain/order-service**
+- Run the command : `mvn clean spring-boot:run`
+- Once the application is up and running, open the application using the url that is shown in the popup within the codespace.
 - You should see a page which looks like this :
   ![Account-management-application.png](img/banking-domain-usecase/Account-management-application.png)
 - Here you can connect to your Solace cloud broker instance to publish and subscribe events.
