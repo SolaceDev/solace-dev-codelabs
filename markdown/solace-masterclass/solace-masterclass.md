@@ -332,8 +332,9 @@ relevant events which it uses for showing realtime status updates on the order l
   ![order-service-creds-deployed.png](img/retail-domain-usecase/order-service-creds-deployed.png)
 
 ##### **Part 2 : Application build and deployment**
+- In the codespace terminal, create a new terminal window by clicking on the **+** icon on the terminal pane 
 - Navigate to the directory: **solace-masterclass/retail-domain/order-service**
-- Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
+- Run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the
   url that is shown in the popup within the codespace.
 - You should see a page which looks like this :
@@ -699,9 +700,9 @@ Confirmed_ and corresponding _Account Suspended_ events.
   ![acc-mgt-deployed.png](img/banking-domain-usecase/acc-mgt-deployed.png)
 
 ##### **Part 2 : Application build and deployment**
-
-- Navigate to the directory: **solace-masterclass/banking-domain/account-management**
-- Open a terminal in this folder and run the command : `mvn clean spring-boot:run`
+- In the codespace terminal, create a new terminal window by clicking on the **+** icon on the terminal pane
+- Navigate to the directory: **solace-masterclass/retail-domain/order-service**
+- Run the command : `mvn clean spring-boot:run`
 - Once the application is up and running, open the application using the url that is shown in the popup within the codespace.
 - You should see a page which looks like this :
   ![Account-management-application.png](img/banking-domain-usecase/Account-management-application.png)
