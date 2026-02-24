@@ -186,12 +186,12 @@ Click on the "Connect" button of both the Publisher and the Subscriber.  The gre
 ### Solace Cloud
 
 > aside negative
-> **NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console, probably located on the tab left of the Broker Manager.
+> **NOTE:** if using **Solace Cloud**, you will need to enter your client application credentials here, rather than using the `default` values.  These can be found on the "Connect" tab of the Cloud console
 
 ![picture](img/connect.png)
 
 
-Choose, "Solace Web Messaging" and copy the username, password, and port for Secure `wss`. Back on the Try Me! tab, click the little right-arrow `>` next to the "Connect" button to open the dropdown list, and enter your connection information (make sure you use the correct port number).
+Choose, "Solace Web Messaging" and copy the password. Back on the Try Me! tab, click the little right-arrow `>` next to the "Connect" button to open the dropdown list, and enter your password information, rest all should be correct by default. Then hit "Connect" and ensure you are connected.
 
 ![picture](img/try-me-cloud.png)
 
@@ -202,16 +202,6 @@ Choose, "Solace Web Messaging" and copy the username, password, and port for Sec
 Once you are connected, hit the "Subscribe" button on the right to add a single topic subscription to the Subscriber application (currently `try-me` topic). On the left side, try Publishing some messages and ensure they go through.
 
 Try changing the topic and see what happens. Try unsubscribing and see what happens. When using **Direct** messaging, subscribing clients must be online (and subscribed) in order to receive published messages.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -265,15 +255,6 @@ You can read more about [topic wildcard subscriptions](https://docs.solace.com/P
 > Try modifying your subscription on the Try Me! apps to use wildcards, and publish matching topics with the publisher.
 
 
-
-
-
-
-
-
-
-
-
 ## Creating a Queue for Guaranteed Delivery
 
 Duration: 0:03:00
@@ -321,13 +302,6 @@ Click "Create" and that's it... your queue now has topic subscriptions to attrac
 
 > aside positive
 > Some brokers call this "topic-to-queue chaining" or "topic-to-queue mapping", but in Solace this is just how to do pub/sub with persistence: it gives the one-to-many option of delivery, but all the benefits of queued delivery (persistence, exclusive or round-robin delivery, redeliveries, TTL, DMQ, etc.).
-
-
-
-
-
-
-
 
 
 ## Persistent Pub/Sub Try Me!
