@@ -176,8 +176,23 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Use case implementation" duration="1">
-        <p>Based on use case of your choice, please follow the appropriate chapter below :</p>
+      <google-codelab-step label="Use case implementation" duration="10">
+        <p>For the hands-on excercise, we will be using GitHub Codespaces which provides a cloud-based development environment with all the necessary tools and software pre-installed.</p>
+<h2 is-upgraded>Setup GitHub Codespace</h2>
+<aside class="warning"><p> Please note that using GitHub Codespace requires a GitHub account.<br> If you do not have a GitHub account, you can create one for free by visiting <a href="https://github.com/signup" target="_blank">GitHub Sign Up</a><br> If your enterprise GitHub account does not have access to GitHub Codespaces, you can use a personal GitHub account to access the Codespaces environment for this workshop.</p>
+</aside>
+<h3 is-upgraded>Step 1: <strong>Open the Workshop Repository</strong></h3>
+<p>Visit <a href="https://github.com/SolaceDev/solace-developer-workshops/" target="_blank">Solace Developer Workshops</a><img alt="020-github-workshop-repo.png" src="img/d1c25542dbb54053.png"></p>
+<h3 is-upgraded>Step 2: Click <strong>Open in GitHub Codespaces</strong></h3>
+<p class="image-container"><img alt="020-open-github-codespaces.png" src="img/c8b3db6c2efe7f3a.png"></p>
+<h3 is-upgraded>Step 3: Choose <strong>Change Options</strong> → set machine type to <strong>4-core</strong></h3>
+<p class="image-container"><img alt="020-codepsaces-change-options.png" src="img/60d647967310b081.png"></p>
+<h3 is-upgraded>Step 4: Click <strong>Create Codespace</strong></h3>
+<p class="image-container"><img alt="020-codespace-ready.png" src="img/9e58b434ac348897.png"></p>
+<aside class="warning"><p> Please note that the codespace may take a few minutes to initialise. You will see some logs in the terminal during the initialization process. Once the setup is complete, you will have a ready-to-use development environment in the cloud.</p>
+</aside>
+<h2 is-upgraded>Use case selection</h2>
+<p>Based on use case of your choice, please follow the appropriate chapter below :</p>
 <ul>
 <li>Retail: Sections 6 and 7</li>
 <li>Banking: Sections 8 and 9</li>
@@ -254,9 +269,10 @@
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
+<li>In the codespace terminal, create a new terminal window by clicking on the <strong>+</strong> icon on the terminal pane</li>
 <li>Navigate to the directory: <strong>solace-masterclass/retail-domain/order-service</strong></li>
-<li>Open a terminal in this folder and run the command : <code>mvn clean spring-boot:run</code></li>
-<li>Once the application is up and running, open the application using the url: <a href="http://localhost:9002/" target="_blank">http://localhost:9002/</a> in the Chrome browser (or any one available in the VM)</li>
+<li>Run the command : <code>mvn clean spring-boot:run</code></li>
+<li>Once the application is up and running, open the application using the url that is shown in the popup within the codespace.</li>
 <li>You should see a page which looks like this : <img alt="Order-Service-Application.png" src="img/a9e0187a4d4c4f0a.png"></li>
 <li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
 <li>The connection parameters for the Order Service application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/1e1b23a376e27f62.png"></li>
@@ -514,9 +530,10 @@ at com.solace.messaging.receiver.PersistentMessageReceiverImpl.startAsync(Persis
 </ul>
 <h4 is-upgraded><strong>Part 2 : Application build and deployment</strong></h4>
 <ul>
-<li>Navigate to the directory: <strong>solace-masterclass/banking-domain/account-management</strong></li>
-<li>Open a terminal in this folder and run the command : <code>mvn clean spring-boot:run</code></li>
-<li>Once the application is up and running, open the application using the url: <a href="http://localhost:9092/" target="_blank">http://localhost:9092/</a></li>
+<li>In the codespace terminal, create a new terminal window by clicking on the <strong>+</strong> icon on the terminal pane</li>
+<li>Navigate to the directory: <strong>solace-masterclass/retail-domain/order-service</strong></li>
+<li>Run the command : <code>mvn clean spring-boot:run</code></li>
+<li>Once the application is up and running, open the application using the url that is shown in the popup within the codespace.</li>
 <li>You should see a page which looks like this : <img alt="Account-management-application.png" src="img/8c96cf3d8e76bd3f.png"></li>
 <li>Here you can connect to your Solace cloud broker instance to publish and subscribe events.</li>
 <li>The connection parameters for the Account management application can be captured from below : <img alt="brokerconsole_connect_creds_java.png" src="img/1e1b23a376e27f62.png"></li>

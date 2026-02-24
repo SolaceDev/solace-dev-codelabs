@@ -2,13 +2,13 @@
   "environment": "web",
   "format": "html",
   "prefix": "https://storage.googleapis.com",
-  "mainga": "UA-3921398-10",
-  "updated": "2021-06-18T18:20:55+08:00",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-24T13:32:45Z",
   "id": "get-started-basics",
   "duration": 42,
-  "title": "A Solace Primer - Getting Started with Solace PubSub+ Event Broker",
+  "title": "A Solace Primer - Getting Started with Solace Event Broker",
   "summary": "Absolute basics of first connecting to a Solace event broker",
-  "source": "get-started-basics.md",
+  "source": "main/markdown/get-started-basics/get-started-basics.md",
   "theme": "",
   "status": [
     "published"

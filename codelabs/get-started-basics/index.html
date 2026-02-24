@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>A Solace Primer - Getting Started with Solace PubSub&#43; Event Broker</title>
+  <title>A Solace Primer - Getting Started with Solace Event Broker</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -20,18 +20,19 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid="UA-3921398-10"
+                  codelab-ga4id=""
                   id="get-started-basics"
-                  title="A Solace Primer - Getting Started with Solace PubSub&#43; Event Broker"
+                  title="A Solace Primer - Getting Started with Solace Event Broker"
                   environment="web"
                   feedback-link="https://solace.community/">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="1">
         <p>Hello and welcome!  If you&#39;ve never interacted with a Solace event broker before, you&#39;re in the right place. In this introductory CodeLab, you&#39;ll learn how to:</p>
 <ul>
-<li>Setup a <strong>Solace PubSub+ event broker</strong>, and/or start a <strong>PubSub+ Cloud</strong> service</li>
-<li>Login to the PubSub+ Manager GUI</li>
+<li>Setup a <strong>Solace Event broker</strong>, and/or start a <strong>PubSub Cloud</strong> service</li>
+<li>Login to the Broker Manager GUI</li>
 <li>Utilize test WebSockets applications to send and receive data using <strong>Publish-Subscribe</strong>, the fundamental communication pattern for event-driven applications</li>
 <li>Improve routing and filtering using <strong>topic hierarchies and wildcards</strong></li>
 <li>Create a durable queue for <strong>Guaranteed</strong> Messaging</li>
@@ -46,28 +47,35 @@
       </google-codelab-step>
     
       <google-codelab-step label="Prerequisites" duration="1">
-        <p>In order to complete this CodeLab, you will need to get access to a Solace PubSub+ event broker.</p>
-<p>At minimum, you will need to have internet access and a browser to use Solace PubSub+ Cloud.</p>
-<p>To run the software broker, you&#39;ll need to have Docker, VirtualBox, VMWare Player, or another similar technology available to you.  More details in the next step.</p>
+        <p>In order to complete this CodeLab, you will need to get access to a Solace Event Broker. At minimum, you will need to have internet access and a browser to use Solace PubSub Cloud. To run the software broker, you&#39;ll need to have Docker, VirtualBox, VMWare Player, or another similar technology available to you.  More details in the next step.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Starting a Solace PubSub&#43; Event Broker" duration="10">
-        <p>Let&#39;s get access to a Solace PubSub+ event broker!</p>
-<h2 is-upgraded>PubSub+ Cloud</h2>
+      <google-codelab-step label="Starting a Solace PubSub Event Broker" duration="10">
+        <p>Let&#39;s get access to a Solace Event Broker!</p>
+<h2 is-upgraded>Solace Cloud</h2>
 <p>Super easy, with no setup or hardware or anything required.  <em>Solace as a Service</em>!  Point your browser to <a href="https://console.solace.cloud/login/new-account" target="_blank">console.solace.cloud</a> to sign up for a free account.</p>
 <p class="image-container"><img alt="picture" src="img/141ea03bdd9ebc1d.png"></p>
 <p>Enter your specifics, and get signed up for an account.</p>
-<p>Once you are logged in, you should see something like this:</p>
-<p class="image-container"><img alt="picture" src="img/55cf7b7d79664e5.png"></p>
-<p>Click on &#34;Cluster Manager&#34; to go into where you create and manage your broker services.  Then click the big &#34;+&#34; Plus button to create a new Service.  Ensure you have selected Developer Service, choose a cloud provider you&#39;d like to host the broker, and then click the map to find a region close to you:</p>
-<p class="image-container"><img alt="picture" src="img/8c1c4a649ca6c677.png"></p>
-<p>Give your Solace PubSub+ Cloud service instance a name, and then tell it to start!  Under the covers, a Solace event broker will be deployed and configured in the cloud you indicated, ports configured, load-balancer setup, monitoring enabled, etc.  It takes about 5 minutes, and then you&#39;ll be ready!</p>
+<p>Once you are logged in, you should see something like this: <img alt="cloud-console.png" src="img/57097ecbfa37faf0.png"></p>
+<p>In the Solace Cloud Console, click <strong>Cluster Manager</strong> in the left navigation <img alt="broker-setup-1.png" src="img/58ef0b648d73d459.png"></p>
+<p>Click <strong>Create Service</strong> (or the <strong>+</strong> button if you have existing services) <img alt="broker-setup-2.png" src="img/d187420aeba7e27a.png"></p>
+<p>Fill in the service configuration details:</p>
+<ul>
+<li>Name : Choose a concise name (e.g., <code>ep-codelab</code>)</li>
+<li>Environment : Leave as <strong>Default</strong></li>
+<li>Cloud : Choose your preferred cloud provider (AWS, Azure, or GCP)</li>
+<li>Region : Select a region closest to your location</li>
+<li>Broker Release : Leave as default (latest stable)</li>
+<li>Service Type : Select <strong>Developer</strong> (free tier) <img alt="broker-setup-3.png" src="img/a5ac69ec9cec6df.png"></li>
+</ul>
+<p>Click <strong>Create Service</strong></p>
+<p>The service will take 3-5 minutes to provision Status will show as <strong>Creating...</strong><img alt="broker-setup-4.png" src="img/ed2f31fedc0c8359.png"> Once complete, the broker details page will load <img alt="broker-setup-5.png" src="img/6f018e2b8d9a22ac.png"></p>
 <aside class="special"><p> It is safe to navigate away from the &#34;Solace is starting&#34; page while the broker is being deployed in the cloud.  Feel free to explore the rest of Solace Mission Control, including the Event Portal!</p>
 </aside>
 <h2 is-upgraded>Software Broker</h2>
-<p>There are multiple options on how to install/download/configure/run the PubSub+ broker:</p>
+<p>There are multiple options on how to install/download/configure/run the Solace event broker:</p>
 <ul>
 <li>If you have Docker installed, this is <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">probably the easist way</a>. Simply copy this line into a terminal to pull the latest image from Docker Hub, and boot it:</li>
 </ul>
@@ -93,13 +101,13 @@
     
       <google-codelab-step label="Log in to the Management GUI" duration="2">
         <p>Ok, now that we (are pretty sure we) have a Solace broker up and running, let&#39;s log in to it!</p>
-<h2 is-upgraded>Solace PubSub+ Cloud</h2>
+<h2 is-upgraded>Solace Cloud Broker</h2>
 <p>Once your service is deployed and ready, simply click on it to go into it and look at some basic configuration information:</p>
-<p class="image-container"><img alt="picture" src="img/317f41284b791582.png"></p>
+<p class="image-container"><img alt="picture" src="img/f58c1c088238377d.png"></p>
 <p>Notice some of the buttons across the top:</p>
 <ul>
 <li>The &#34;Connect&#34; tab shows you all the required connection information for your messaging pub/sub applications (e.g. host, username, password, etc.), which we&#39;ll need in later steps. The info can be grouped either by protocol or by programming language.</li>
-<li>At the top-right, there should be a button saying &#34;Open PubSub+ Broker Manager&#34;.  Click on that to go into the Manager GUI.</li>
+<li>At the top-right, there should be a button saying &#34;Open Broker Manager&#34;.  Click on that to go into the Manager GUI.</li>
 </ul>
 <h2 is-upgraded>Installed Software Broker</h2>
 <p>If you&#39;ve installed Solace on your local host (laptop or whatever), point your browser to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a>.  Or whatever IP address where it&#39;s running.  Just remember to use port 8080 for the managment access. You should see a login screen like:</p>
@@ -111,7 +119,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Looking around the PubSub&#43; Manager" duration="5">
+      <google-codelab-step label="Looking around the Broker Manager" duration="5">
         <p>Welcome to the Solace event broker management GUI!  From this webapp, you&#39;ll be able to view configured and runtime information, create new queues, create usernames and profiles, and other various administrative tasks for the Solace broker.</p>
 <p class="image-container"><img alt="picture" src="img/86c89b5a3abc3e13.png"></p>
 <p>On the left side of the screen are the main sections to navigate through:</p>
@@ -135,14 +143,14 @@
     
       <google-codelab-step label="Try Me!" duration="5">
         <p>On the left menu, click the <strong>Try Me!</strong> button to load the two WebSocket test apps: a Publisher (left) and a Subscriber (right).</p>
-<p class="image-container"><img alt="picture" src="img/38836a78964d1b4.png"></p>
+<p class="image-container"><img alt="picture" src="img/a3d83852ccb1b677.png"></p>
 <p>Click on the &#34;Connect&#34; button of both the Publisher and the Subscriber.  The green &#34;Connected&#34; icon should light up. This creates <em>two WebSocket connections</em> from your browser using a JavaScript API into the Solace event broker. The two apps are going to talk to each other <em>through</em> the Solace broker, even though they are running on the same page.</p>
 <h2 is-upgraded>Solace Cloud</h2>
-<aside class="warning"><p><strong>NOTE:</strong> if using <strong>Solace Cloud</strong>, you will need to enter your client application credentials here, rather than using the <code>default</code> values.  These can be found on the &#34;Connect&#34; tab of the Cloud console, probably located on the tab left of the PubSub+ Manager.</p>
+<aside class="warning"><p><strong>NOTE:</strong> if using <strong>Solace Cloud</strong>, you will need to enter your client application credentials here, rather than using the <code>default</code> values.  These can be found on the &#34;Connect&#34; tab of the Cloud console</p>
 </aside>
-<p class="image-container"><img alt="picture" src="img/38a33aada9340558.png"></p>
-<p>Choose, &#34;Solace Web Messaging&#34; and copy the username, password, and port for Secure <code>wss</code>. Back on the Try Me! tab, click the little right-arrow <code>></code> next to the &#34;Connect&#34; button to open the dropdown list, and enter your connection information (make sure you use the correct port number).</p>
-<p class="image-container"><img alt="picture" src="img/f296fe7f337cf9b4.png"></p>
+<p class="image-container"><img alt="picture" src="img/d5e993eaffcbc9e7.png"></p>
+<p>Choose, &#34;Solace Web Messaging&#34; and copy the password. Back on the Try Me! tab, click the little right-arrow <code>></code> next to the &#34;Connect&#34; button to open the dropdown list, and enter your password information, rest all should be correct by default. Then hit &#34;Connect&#34; and ensure you are connected.</p>
+<p class="image-container"><img alt="picture" src="img/5231e56ab0507476.png"></p>
 <h2 is-upgraded>Connected!</h2>
 <p>Once you are connected, hit the &#34;Subscribe&#34; button on the right to add a single topic subscription to the Subscriber application (currently <code>try-me</code> topic). On the left side, try Publishing some messages and ensure they go through.</p>
 <p>Try changing the topic and see what happens. Try unsubscribing and see what happens. When using <strong>Direct</strong> messaging, subscribing clients must be online (and subscribed) in order to receive published messages.</p>
@@ -235,11 +243,11 @@
       </google-codelab-step>
     
       <google-codelab-step label="Persistent Pub/Sub Try Me!" duration="5">
-        <p>Now that a queue is created for the consumer, we can test it out with the Try Me! test apps again. On the Try Me! tab, on right right side Subscriber, click the &#34;Bind to endpoint to receive guaranteed messages&#34; button: <img alt="picture" src="img/349d70d7a3aad56a.png"></p>
-<p>Enter the name of your queue, and hit &#34;Start Consume&#34;: <img alt="picture" src="img/4fd55f5a5ba3f277.png"></p>
+        <p>Now that a queue is created for the consumer, we can test it out with the Try Me! test apps again. On the Try Me! tab, on right right side Subscriber, click the &#34;Bind to endpoint to receive guaranteed messages&#34; button: <img alt="picture" src="img/518e40de4edb8f51.png"></p>
+<p>Enter the name of your queue, and hit &#34;Start Consume&#34;: <img alt="picture" src="img/e8a7b937b28fa614.png"></p>
 <p>This will <em>bind</em> the Subscriber application to the queue, and any data that the queue receives will be send to the application.</p>
-<p>Now you&#39;re ready to publish. On the Publisher side, change the topic to something that will match the (wildcarded?) subscription you added to the queue. Ensure that you have changed the &#34;Delivery Mode&#34; (aka quality of service) to <strong>Persistent</strong>: <img alt="picture" src="img/e788e3a58b8c706f.png"></p>
-<p>Hit &#34;Publish&#34; and make sure your messages appear on the other side. <img alt="picture" src="img/7229ad3bf7c89421.png"></p>
+<p>Now you&#39;re ready to publish. On the Publisher side, change the topic to something that will match the (wildcarded?) subscription you added to the queue. Ensure that you have changed the &#34;Delivery Mode&#34; (aka quality of service) to <strong>Persistent</strong>: <img alt="picture" src="img/80ed8711a05c982e.png"></p>
+<p>Hit &#34;Publish&#34; and make sure your messages appear on the other side. <img alt="picture" src="img/83f9ffa99afa68e5.png"></p>
 <p>Now try disconnecting the Subscriber application, and publish a few more messages. Reconnect the subscriber and rebind to the queue and observe what happens.</p>
 <aside class="warning"><p><strong>NOTE:</strong> it is possible to publish your messages as &#34;Direct&#34;, and they will still go into the queue if the topic subscription matches. This is called <em>message promotion</em> and is a more advanced concept. For use cases where end-to-end persistence is desired, ensure the publisher has set the Delivery Mode of the message to &#34;Persistent&#34; for sending Guaranteed messages.</p>
 </aside>
@@ -271,7 +279,7 @@
         <p>This CodeLab has shown the very basics of application messaging using publish-subscribe and the Solace event broker.  For next steps, please consider one of these other CodeLab tutorials:</p>
 <ul>
 <li><a href="https://codelabs.solace.dev/codelabs/exploring-solace-native-apis/index.html" target="_blank">Exploring Solace Native APIs - The Basics</a></li>
-<li><a href="https://codelabs.solace.dev/codelabs/solace-event-enable-rest/index.html" target="_blank">How to Event-Enable your REST Architecture with Solace PubSub+</a></li>
+<li><a href="https://codelabs.solace.dev/codelabs/solace-event-enable-rest/index.html" target="_blank">How to Event-Enable your REST Architecture with Solace Event Broker</a></li>
 </ul>
 <p>Thank you for your time.  Please come find us on <a href="https://solace.community/" target="_blank">Solace Community</a> to ask any questions!</p>
 <p class="image-container"><img alt="Soly Image Caption" src="img/44f356558033e250.gif"></p>
