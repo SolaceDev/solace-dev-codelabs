@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2024-10-06T19:32:32Z",
+  "updated": "2026-02-25T21:06:13Z",
   "id": "flink-streaming-2-10",
   "duration": 65,
   "title": "Integration Guide: Feeding Flink Streaming 2.10 from a Solace Message Bus",

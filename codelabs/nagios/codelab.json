@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-06T15:03:06-08:00",
+  "updated": "2026-02-25T21:06:13Z",
   "id": "nagios",
   "duration": 130,
   "title": "Integration Guide: Nagios Monitoring Toolset",
   "summary": "",
-  "source": "nagios.md",
+  "source": "main/markdown/integrations/nagios/nagios.md",
   "theme": "",
   "status": [
     "published"

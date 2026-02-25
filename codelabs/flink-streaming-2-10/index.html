@@ -45,7 +45,7 @@
 <li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
 <li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
 <li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
-<li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a></li>
+<li><a href="https://nightlies.apache.org/flink/flink-docs-stable/" target="_blank">Flink Streaming Documentation</a></li>
 <li><a href="https://nightlies.apache.org/flink/flink-docs-release-1.13/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html" target="_blank">Flink SourceFunction Class Documentation</a></li>
 <li><a href="https://flink.apache.org/" target="_blank">Appache Flink</a></li>
 </ul>
@@ -116,7 +116,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
     
       <google-codelab-step label="Integrating with Flink Streaming" duration="30">
         <p>This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in <a href="https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/flink-jms-connector" target="_blank">src/flink-jms-connector</a>.</p>
-<p>The general Flink Streaming support for connectors is documented in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a>. The configuration outlined in this document makes use of a custom SourceFunction to achieve the desired integration with Solace via JMS.</p>
+<p>The general Flink Streaming support for connectors is documented in the <a href="https://nightlies.apache.org/flink/flink-docs-stable/" target="_blank">Flink Streaming Documentation</a>. The configuration outlined in this document makes use of a custom SourceFunction to achieve the desired integration with Solace via JMS.</p>
 <p>This integration guide demonstrates how to configure a Flink Streaming application to receive JMS messages using a custom receiver. Accomplishing this requires completion of the following steps.</p>
 <ul>
 <li>Step 1 - Obtain access to Solace event broker and JMS API, see the <a href="http://solace.dev" target="_blank">Solace Developer Portal</a></li>
@@ -305,7 +305,7 @@ Note: By default, the Solace software event broker &#34;default&#34; message VPN
 (config)#
 </code></pre>
 <h2 is-upgraded>Step 3 – Coding a JMS SourceFunction for Flink</h2>
-<p>From <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html" target="_blank">Flink Streaming Documentation</a> there are details on how to build a custom SourceFunction and a template.  In this section of the document will use this template and build a <code>JMSQueueSource</code>.</p>
+<p>From <a href="https://nightlies.apache.org/flink/flink-docs-stable/" target="_blank">Flink Streaming Documentation</a> there are details on how to build a custom SourceFunction and a template.  In this section of the document will use this template and build a <code>JMSQueueSource</code>.</p>
 <p>The <code>JMSQueueSource</code> extends <code>org.apache.flink.streaming.api.functions.source.SourceFunction</code>.  This will result in the following methods created:</p>
 <ul>
 <li><code>JMSQueueSource</code> constructor – Synchronously called once as the <code>QueueSource</code> is initially created.</li>
