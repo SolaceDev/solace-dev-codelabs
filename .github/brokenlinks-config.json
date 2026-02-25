@@ -10,5 +10,5 @@
       "pattern": "/solacevmr:8080/"
     }
   ],
-  "aliveStatusCodes": [403, 400, 200, 0, 503]
+  "aliveStatusCodes": [403, 400, 200, 0, 503, 429]
 }
