@@ -1,6 +1,15 @@
-![Update Codelabs Site](https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/site-update.yml/badge.svg)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/e66602c6-9a94-4095-a7c4-4e37ff2cdd41/deploy-status)](https://app.netlify.com/sites/codelabs-solace/deploys)
-[![Weekly link checker](https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml/badge.svg)](https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml)
+
+<div align="center">
+	<img src="https://devrelassets.z9.web.core.windows.net/solace-developers-logo.svg" alt="Solace Developers Logo" width="300" />
+	<br/>
+	<img src="https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/site-update.yml/badge.svg" alt="Update Codelabs Site" />
+	<a href="https://app.netlify.com/sites/codelabs-solace/deploys">
+		<img src="https://api.netlify.com/api/v1/badges/e66602c6-9a94-4095-a7c4-4e37ff2cdd41/deploy-status" alt="Netlify Status" />
+	</a>
+	<a href="https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml">
+		<img src="https://github.com/SolaceDev/solace-dev-codelabs/actions/workflows/fullbrokenlink.yml/badge.svg" alt="Weekly link checker" />
+	</a>
+</div>
 
 
 # Solace Codelabs
