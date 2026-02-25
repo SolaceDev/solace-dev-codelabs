@@ -9,7 +9,13 @@ jobs:
   weekly_broken_Link_Checker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: "yes"
@@ -17,8 +23,8 @@ jobs:
 
       - name: Create Issue
         if: failure()
-        uses: JasonEtco/create-an-issue@v2.9.1
-        env: 
+        uses: JasonEtco/create-an-issue@v2.9.2
+        env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           filename: .github/action-issue-template.md

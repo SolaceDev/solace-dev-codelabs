@@ -32,7 +32,7 @@ These links contain information related to this guide:
 * [Solace JMS API Online Reference Documentation](http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html) 
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm) 
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm) 
-* [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html)
+* [Flink Streaming Documentation](https://nightlies.apache.org/flink/flink-docs-stable/)
 * [Flink SourceFunction Class Documentation](https://nightlies.apache.org/flink/flink-docs-release-1.13/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html)
 * [Appache Flink](https://flink.apache.org/)
 
@@ -109,7 +109,7 @@ Duration: 0:30:00
 
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in [src/flink-jms-connector](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/flink-jms-connector).
 
-The general Flink Streaming support for connectors is documented in the [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html). The configuration outlined in this document makes use of a custom SourceFunction to achieve the desired integration with Solace via JMS. 
+The general Flink Streaming support for connectors is documented in the [Flink Streaming Documentation](https://nightlies.apache.org/flink/flink-docs-stable/). The configuration outlined in this document makes use of a custom SourceFunction to achieve the desired integration with Solace via JMS. 
 
 This integration guide demonstrates how to configure a Flink Streaming application to receive JMS messages using a custom receiver. Accomplishing this requires completion of the following steps. 
 
@@ -350,7 +350,7 @@ They are configured as follows:
 
 ### Step 3 – Coding a JMS SourceFunction for Flink
 
-From [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html) there are details on how to build a custom SourceFunction and a template.  In this section of the document will use this template and build a `JMSQueueSource`.
+From [Flink Streaming Documentation](https://nightlies.apache.org/flink/flink-docs-stable/) there are details on how to build a custom SourceFunction and a template.  In this section of the document will use this template and build a `JMSQueueSource`.
 
 The `JMSQueueSource` extends `org.apache.flink.streaming.api.functions.source.SourceFunction`.  This will result in the following methods created:
 

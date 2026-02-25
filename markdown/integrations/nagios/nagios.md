@@ -792,7 +792,7 @@ Default install paths and files
 
 This section lists minimal files required for Solace Nagios setup. Please contact [Solace Professional Services](https://solace.com/contact-us/)  to get a tarball package with the files and required plugin files. 
 
-* [setup_nagiossolace.txt](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/setup_nagiossolace.txt)
+* [setup_nagiossolace.txt](https://raw.githubusercontent.com/SolaceLabs/solace-integration-guides/refs/heads/master/src/nagios/setup_nagiossolace.txt)
 * [mk_nagiossolace.cfg](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/mk_nagiossolace.cfg)
 * [solace.cfg](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/solace.cfg)
 * [solace-templaterouter.cfg](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nagios/solace-templaterouter.cfg)

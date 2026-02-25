@@ -39,7 +39,7 @@ These links contain information related to this guide:
 * [Solace Feature Guide](https://docs.solace.com/Features/Core-Concepts.htm)
 * [Solace Command Line Interface Reference](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm)
 * [Apama Streaming Analytics Documentation](https://documentation.softwareag.com/apama/)
-* [Connecting Apama Applications to External Components](https://documentation.softwareag.com/onlinehelp/Rohan/Apama/v10-7/apama10-7/10-7_Connecting_Apama_Applications_to_External_Components.pdf)
+* [Connecting Apama Applications to External Components](https://documentation.softwareag.com/apama/v912/apama912/9-12_Connecting_Apama_Applications_to_External_Components.pdf)
 
 
 ## Get Solace Messaging
@@ -119,7 +119,7 @@ This integration guide demonstrates how to configure a Apama Streaming Analytics
 
 * Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal](http://solace.dev)
 * Step 2 - Configuration of the Solace Event Broker.
-* Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](https://techcommunity.softwareag.com/en_en/apama-downloads.html)
+* Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](https://www.cumulocity.com/product/apama-community-edition/)
 * Step 4 – Coding Solace message producer
 * Step 5 – Coding Apama Event Processing Language AKA MonitorScript
 * Step 6 - Configuring Apama correlator-integrated adapter for JMS
@@ -319,7 +319,7 @@ They are configured as follows:
 
 The Apama Streaming Analytics can be obtained one of 2 ways.     
 1.	If you are in an organization that is an existing Apama customer, it is likely your organization already has Apama Streaming Analytics and corporate policies about their use.  You will have to contact your application management team in regards to a Apama Streaming Analytics license.
-2.	If you are new to Apama Streaming Analytics, you can obtain Apama Community Edition from the [Apama Community Edition Downloads](https://techcommunity.softwareag.com/en_en/apama-downloads.html). For help getting started with your Apama Streaming Analytics Community Edition you can refer to [Apama Community Edition Docs](https://documentation.softwareag.com/apama/).
+2.	If you are new to Apama Streaming Analytics, you can obtain Apama Community Edition from the [Apama Community Edition Downloads](https://www.cumulocity.com/product/apama-community-edition/). For help getting started with your Apama Streaming Analytics Community Edition you can refer to [Apama Community Edition Docs](https://documentation.softwareag.com/apama/).
 
 ### Step 4 – Coding Solace message producer
 

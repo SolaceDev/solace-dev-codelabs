@@ -1409,7 +1409,7 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
 The following examples demonstrate how to receive and send messages using EJB transactions. Examples are given for both BMT and CMT in GitHub:
 
 * [EJBSample-XA-BMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-BMT/ejbModule/)
-* [EJBSample-XA-CMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule/)
+* [EJBSample-XA-CMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/tree/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule)
 
 For building and deployment instructions refer to the Sample Application Code section.
 

@@ -822,7 +822,7 @@ Duration: 0:02:00
 
 There are two associated files you can use for reference:
 
-*    [spring.xml](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-fuse/spring.xml)
+*    [spring.xml](https://raw.githubusercontent.com/SolaceLabs/solace-integration-guides/refs/heads/master/src/jboss-fuse/spring.xml)
 *    [blueprint.xml](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-fuse/blueprint.xml)
 
 

@@ -683,7 +683,7 @@ tools:
      tool_name: "tool_name"
 ```
 > aside positive
-> Note that this is a developing open source framework and more built-in tools will be developed and introduced. Learn more about the available tools from the [Built-in Tool documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/user-guide/builtin-tools/)
+> Note that this is a developing open source framework and more built-in tools will be developed and introduced. Learn more about the available tools from the [Built-in Tool documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/builtin-tools/)
 
 **1. Artifact Management Tools**
 
@@ -794,7 +794,7 @@ Solace Agent Mesh plugins ecosystem also encourages community contributions thro
 3. Install the plugin of choice
 
 
-To learn more about plugins, the differences between plugins and agents, and how to create your first plugin check out the Solace Agent Mesh [Plugins documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/concepts/plugins)
+To learn more about plugins, the differences between plugins and agents, and how to create your first plugin check out the Solace Agent Mesh [Plugins documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/plugins)
 
 ## Adding MCP Agents
 Duration: 0:05:00
@@ -979,7 +979,7 @@ Now that you have the File Agent up and running, you can run any of the followin
 "Read the contents of test.txt"
 ```
 
-To learn more about MCP integrations with the Solace Agent mesh, refer to the [MCP Integration](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/tutorials/mcp-integration) section in the documentation
+To learn more about MCP integrations with the Solace Agent mesh, refer to the [MCP Integration](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/developing/tutorials/mcp-integration) section in the documentation
 
 
 ## Next Steps
