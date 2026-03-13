@@ -1015,12 +1015,12 @@ The sample above requires configuration of JNDI mapped-names to the resource nam
 			<transaction-type>Bean</transaction-type>
 			<resource-ref>
 				<res-ref-name>myReplyQueue</res-ref-name>
-				<res-autd>Application</res-autd>
+				<res-auth>Application</res-auth>
 				<mapped-name>java:/jms/myReplyQueue</mapped-name>
 			</resource-ref>
 			<resource-ref>
 				<res-ref-name>myCF</res-ref-name>
-				<res-autd>Application</res-autd>
+				<res-auth>Application</res-auth>
 				<mapped-name>java:/jms/myCF</mapped-name>
 			</resource-ref>
 		</session>
