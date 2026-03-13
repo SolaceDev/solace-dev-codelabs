@@ -1,0 +1,77 @@
+# Solace Agent Mesh Agent Configuration
+
+log:
+  stdout_log_level: INFO
+  log_file_level: DEBUG
+  log_file: a2a_agent.log
+
+
+apps:
+  - name: "MarketplaceAgent_app"
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+
+    app_config:
+      namespace: "${NAMESPACE}"
+      supports_streaming: true
+      agent_name: "MarketplaceAgent"
+      display_name: "Marketplace Agent"
+      model: 
+        *general_model
+      trust_manager:
+        enabled: true
+        card_publish_interval_seconds: 10
+        card_expiration_days: 7
+        verification_mode: "permissive"  # or "strict" for production
+        clock_skew_tolerance_seconds: 300
+        enable_time_validation: true
+        jwt_default_ttl_seconds: 36000
+        jwt_max_ttl_seconds: 864000
+
+      instruction: |
+        You are a helpful AI assistant named Marketplace Agent.
+        Using the users and orders tools you help shop administrators to find orders and customer data that matches their prompts. To find a users orders you can either attempt to get orders by userid or get a list of orders and filter the matching orders.
+      
+      tools: 
+        - group_name: artifact_management
+          tool_type: builtin-group
+        - tool_type: mcp
+          connection_params:
+            type: streamable-http
+            url: "${MCP_MARKETPLACE_URL, http://localhost:8081/mcp-listener}"
+            headers:
+              Authorization: "Bearer ${MCP_MARKETPLACE_TOKEN, nokey}"          
+      session_service: 
+        type: ${PERSISTENCE_TYPE, sql}
+        database_url: ${DATABASE_URL, sqlite:///agent_019aa779_b318_73d0_9f23_80ff919db0b2.db}
+        default_behavior: PERSISTENT
+      artifact_service: 
+        type: ${ARTIFACT_SERVICE_TYPE, s3}
+        bucket_name: ${S3_BUCKET_NAME}
+        endpoint_url: ${S3_ENDPOINT_URL}
+        aws_region: ${AWS_REGION, us-east-1}
+        artifact_scope: namespace
+      
+      artifact_handling_mode: "reference"
+      enable_embed_resolution: true
+      enable_artifact_content_instruction: true
+
+      # Agent Card Definition
+      agent_card:
+        description: |
+          A helpful AI assistant for marketplace administrators to find order and customer information.
+        defaultInputModes: [text] 
+        defaultOutputModes: [text, file] 
+        skills: []
+      
+      # Discovery & Communication
+      agent_card_publishing: 
+        interval_seconds: 10
+      agent_discovery: 
+        enabled: true
+      inter_agent_communication:
+        allow_list: [] 
+        request_timeout_seconds: 600
+

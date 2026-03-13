@@ -1,0 +1,57 @@
+_format_version: "3.0"
+_info:
+  select_tags:
+  - llm
+services:
+- name: service1
+  host: localhost
+  port: 32000
+  routes:
+  - name: route1
+    paths:
+    - /llm-route/v1/chat/completions
+    plugins:
+    - name: ai-proxy-advanced
+      instance_name: "ai-proxy-llm"
+      config:
+        genai_category: text/generation
+        llm_format: openai
+        max_request_body_size: 1048576
+        model_name_header: true
+        response_streaming: allow
+        targets:
+        - route_type: "llm/v1/chat"
+          model:
+            provider: "openai"
+            options:
+              upstream_url: ${{ env "DECK_LLM_BACK_END_URL" }}            
+    - name: ai-prompt-decorator
+      instance_name: ai-prompt-decorator-llm
+      config:
+        max_request_body_size: 1048576
+        prompts:
+          prepend:
+          - role: system
+            content: "You will always respond in the style of a pirate."
+    - name: pre-function
+      instance_name: ai-pre-transform-llm    
+      config:
+        access:
+        - |-
+          local function transform_payload(data)
+            if data.messages then
+              for i, message in ipairs(data.messages) do
+                if message.role == "system" and type(message.content) == "table" then
+                  if #message.content == 1 and message.content[1].type == "text" then
+                    message.content = message.content[1].text
+                  end
+                end
+              end
+            end
+            return data
+          end
+          local body = kong.request.get_body()
+          if body and type(body) == "table" then
+            local transformed = transform_payload(body)
+            kong.service.request.set_body(transformed)
+          end
