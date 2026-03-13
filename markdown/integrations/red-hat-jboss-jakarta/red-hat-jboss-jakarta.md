@@ -1,13 +1,13 @@
-author: Tamimi
+author: Gabor
 summary: The JBoss Enterprise Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace event broker.
-id: red-hat-jboss-eap
+id: red-hat-jboss-jakarta
 tags: iguide
 categories: Jboss, Integration
 environments: Web
 status: Published
-feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/red-hat-jboss-eap
+feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/red-hat-jboss-Jakarta
 
-# Integration Guide: Red Hat JBoss EAP v6 and v7
+# Integration Guide: Red Hat JBoss EAP v8+ and Wildfly v27+
 
 ## Overview
 Duration: 0:05:00
@@ -48,7 +48,7 @@ These links contain information related to this guide:
 Duration: 0:10:00
 
 
-This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:
+This tutorial requires access to a Solace Broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:
 
 <table>
   <tr>
@@ -91,7 +91,7 @@ There are several ways you can get access to Solace messaging and find these req
 
 ![](img/connectivity-info.png)
 
-### Option 2: Start a Solace PubSub+ Software Event Broker
+### Option 2: Start a Solace Software Broker
 
 * Follow [these instructions](https://solace.com/downloads/) to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.
 * The messaging connectivity information are the following:
@@ -102,9 +102,9 @@ There are several ways you can get access to Solace messaging and find these req
 
     Note: By default, the Solace software event broker "default" message VPN has authentication disabled.
 
-### Option 3: Get access to a Solace PubSub+ appliance
+### Option 3: Get access to a Solace Broker appliance
 
-* Contact your Solace PubSub+ appliance administrators and obtain the following:
+* Contact your Solace Broker appliance administrators and obtain the following:
     * A Solace Message-VPN where you can produce and consume direct and persistent messages
     * The host name or IP address of the appliance hosting your Message-VPN
     * A username and password to access the appliance
@@ -114,7 +114,7 @@ There are several ways you can get access to Solace messaging and find these req
 ## Integrating with JBoss Application Server
 Duration: 0:40:00
 
-Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ event broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
+Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace Broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
 
 In order to illustrate JBoss Application Server integration, the following sections will highlight the required JBoss configuration changes, and provide sample code for sending and receiving messages using Enterprise Java Beans. 
 
@@ -122,7 +122,7 @@ This EJB sample consists of two enterprise beans, a Message Driven Bean and a Se
 
 The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS event broker. 
 
-* Step 1 - Configure the Solace PubSub+ event broker
+* Step 1 - Configure the Solace Broker
 * Step 2 – Deploy the Solace Resource Adapter to the JBoss Application Server
 * Step 3 – Connect to Solace JMS provider
   * Configure resource adapter
@@ -275,7 +275,7 @@ The following entities on the Solace event broker need to be configured at a min
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace event broker configuration.
 
-The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
+The recommended approach for configuring a event broker is using [Solace PubSub+ Manager](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm), Solace's browser-based administration console packaged with the Solace Broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.
 
 For more details related to event broker CLI see [Solace-CLI](https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm). Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization](https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm).
 
@@ -895,7 +895,7 @@ Source code for an Enterprise Java Beans (EJB) application for JBoss, implementi
 
 There are three variants:
 
-* [EJBSample/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample/ejbModule) - used in this basic application sample.
+* [EJBSample/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample/ejbModule) - used in this basic application sample.
 * EJBSample-XA-BMT/ejbModule - used in the `Working with Transactions` sample.
 * EJBSample-XA-CMT/ejbModule - used in the `Working with Transactions` sample.
 
@@ -950,7 +950,7 @@ public class ConsumerMDB implements MessageListener {
 
 The full source code for this example is available in the following source:
 
- * [ConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample/ejbModule/com/solace/sample/ConsumerMDB.java)
+ * [ConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample/ejbModule/com/solace/sample/ConsumerMDB.java)
 
 ### Sending Messages to Solace – Sample code
 
@@ -1030,7 +1030,7 @@ The sample above requires configuration of JNDI mapped-names to the resource nam
 
 The full source code for this example is available in the following sources:
 
- * [ProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample/ejbModule/com/solace/sample/ProducerSB.java)
+ * [ProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample/ejbModule/com/solace/sample/ProducerSB.java)
 
 ### Building the samples
 
@@ -1041,7 +1041,7 @@ Follow these steps to create and build your project:
 1. Clone this project from GitHub
 ```
 git clone https://github.com/SolaceLabs/solace-integration-guides.git
-cd solace-integration-guides/src/jboss-eap/EJBSample/ejbModule/
+cd solace-integration-guides/src/jboss-jakarta/EJBSample/ejbModule/
 ```
 1. Create a new "EJB project" in Eclipse, set the target runtime to JBoss EAP. Optionally check the "Add your project to an EAR" to create an Enterprise Archive instead of an EJB JAR.
 
@@ -1198,7 +1198,7 @@ The following sections outline how to configure these items.
 Before starting, here is some background information on the server certificate required by the event broker. This is from the [Solace documentation](https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm ):
 
 ```
-To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace PubSub+ event broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
+To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace Broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
 ```
 
 To configure the server certificate, first copy the server certificate to the Solace event broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
@@ -1428,8 +1428,8 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
 
 The following examples demonstrate how to receive and send messages using EJB transactions. Examples are given for both BMT and CMT in GitHub:
 
-* [EJBSample-XA-BMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-BMT/ejbModule/)
-* [EJBSample-XA-CMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/tree/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule)
+* [EJBSample-XA-BMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample-XA-BMT/ejbModule/)
+* [EJBSample-XA-CMT/ejbModule](https://github.com/SolaceLabs/solace-integration-guides/tree/master/src/jboss-jakarta/EJBSample-XA-CMT/ejbModule)
 
 For building and deployment instructions refer to the Sample Application Code section.
 
@@ -1459,7 +1459,7 @@ public class XAConsumerMDB implements MessageListener {
 
 The full source code for this example is available here:
 
-*    [XAConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule/com/solace/sample/XAConsumerMDB.java)
+*    [XAConsumerMDB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample-XA-CMT/ejbModule/com/solace/sample/XAConsumerMDB.java)
 
 ##### Sending Messages to Solace over XA Transaction – CMT Sample Code
 
@@ -1490,7 +1490,7 @@ public class XAProducerSB implements Producer, ProducerLocal {
     
 The full source code for this example is available here:
 
-* [XAProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule/com/solace/sample/XAProducerSB.java)
+* [XAProducerSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample-XA-CMT/ejbModule/com/solace/sample/XAProducerSB.java)
 
 
 ##### Sending Messages to Solace over XA Transaction – BMT Sample Code
@@ -1545,7 +1545,7 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
     
 The full source code for this example is available here:
 
-*    [XAProducerBMTSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap/EJBSample-XA-BMT/ejbModule/com/solace/sample/XAProducerBMTSB.java)
+*    [XAProducerBMTSB.java](https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-jakarta/EJBSample-XA-BMT/ejbModule/com/solace/sample/XAProducerBMTSB.java)
 
 
 
