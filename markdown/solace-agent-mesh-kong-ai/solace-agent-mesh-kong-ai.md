@@ -231,11 +231,11 @@ You will instantly recognize this style when you interact with Solace Agent Mesh
 
 ### Create an AI Proxy for LLM Calls in Kong AI Gateway
 
-To prepare the Kong AI Gateway use the declaration in [solace-ai-proxy.yaml](http://localhost:8080/builds/static/code/sam-deck-config/solace-ai-proxy.yaml)
+To prepare the Kong AI Gateway use this declaration: [solace-ai-proxy.yaml](files/solace-ai-proxy.yaml)
 
-First set the URL of your backend LLM as an environment variable, the URL must be for an OpenAI API compatible endpoint. As an example it could look  like `https://lite-llm.example.com/v1/chat/completions`
+First set the URL of your backend LLM as an environment variable, the URL must be for an OpenAI API compatible endpoint. As an example it could look  like `https://lite-llm.example.com`
 ```
-export DECK_LLM_BACK_END_URL={http or https}://{YOUR HOST}:{YOUR PORT}/v1/chat/completions
+export DECK_LLM_BACK_END_URL={http or https}://{YOUR HOST}:{YOUR PORT}
 ```
 
 Then make sure you have set the `DECK_KONNECT_CONTROL_PLANE_NAME`
@@ -260,14 +260,14 @@ echo $KONNECT_PROXY_URL
 If not set refer back to the previous section.
 
 Let's verify the LLM Proxy is working by sending a prompt to the model.
-Replace `[INSERT_API_KEY]` with the key for your back end LLM server. 
+Replace `[INSERT_API_KEY]` with the key for your back end LLM server. Also specify the model replacing `[MODEL_NAME]` with the model you want to use - e.g. `vertex-claude-4-5-sonnet`
 
 ```
 curl --variable %KONNECT_PROXY_URL --expand-url '{{KONNECT_PROXY_URL}}/llm-route/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer [INSERT_API_KEY]' \
 --data '{
-    "model": "vertex-claude-4-5-sonnet",
+    "model": "[MODEL_NAME]",
     
     "messages": [
         {
@@ -368,6 +368,11 @@ From here, choose "Advanced Setup" to spin up an instance of the Agent Mesh that
 
 
 #### Configure your LLM endpoint, API Key, and Model name
+
+
+> aside positive
+> In the `LLM Provider` list box select `OpenAI Compatible Provider`, set the `LLM Endpoint URL` to the URL you sued in the preceding section (`{{KONNECT_PROXY_URL}}/llm-route`)and finally type or select the model you want so use in `LLM Model Name`.
+
 
 ![LLM Endpoint](img/ai_provider.png)
 
