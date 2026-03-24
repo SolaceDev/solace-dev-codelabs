@@ -263,7 +263,7 @@ Let's verify the LLM Proxy is working by sending a prompt to the model.
 Replace `[INSERT_API_KEY]` with the key for your back end LLM server. Also specify the model replacing `[MODEL_NAME]` with the model you want to use - e.g. `vertex-claude-4-5-sonnet`
 
 ```
-curl --variable %KONNECT_PROXY_URL --expand-url '{{KONNECT_PROXY_URL}}/llm-route/v1/chat/completions' \
+curl "$KONNECT_PROXY_URL/llm-route/v1/chat/completions" \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer [INSERT_API_KEY]' \
 --data '{
