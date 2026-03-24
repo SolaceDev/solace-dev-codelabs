@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-13T16:52:00Z",
+  "id": "red-hat-jboss-jakarta",
+  "duration": 165,
+  "title": "Integration Guide: Red Hat JBoss EAP v8+ and Wildfly v27+",
+  "summary": "The JBoss Enterprise Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace event broker.",
+  "source": "main/markdown/integrations/red-hat-jboss-jakarta/red-hat-jboss-jakarta.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "jboss",
+    "integration"
+  ],
+  "tags": [
+    "iguide",
+    "web"
+  ],
+  "feedback": "https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/red-hat-jboss-Jakarta",
+  "url": "red-hat-jboss-jakarta"
+}

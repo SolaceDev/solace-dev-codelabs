@@ -271,7 +271,7 @@ pip install solace-agent-mesh
 
 You have two options to run and connect to a Solace Broker
 1. Software: using a docker image to run it locally
-2. Cloud: using self served cloud instance
+2. Cloud: using a managed-service cloud instance
 
 Follow the steps defined in the [getting started with Solace](https://solace.com/products/event-broker/software/getting-started/) page 
 
