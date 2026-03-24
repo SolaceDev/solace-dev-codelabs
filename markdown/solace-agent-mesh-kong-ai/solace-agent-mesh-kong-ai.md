@@ -701,7 +701,7 @@ export ISSUER_URL=$(curl -sX GET "https://us.api.konghq.com/v1/auth-servers" -H 
 
 Configure a scope in your auth server using the [``/v1/auth-servers/$AUTHZ_SERVER_ID/scopes``](https://developer.konghq.com/api/konnect/kong-identity/v1/#/operations/createAuthServerScope) endpoint:
 
-:::code{showCopyAction=true showLineNumbers=false language=shell}
+```
 curl -sX POST "https://us.api.konghq.com/v1/auth-servers/$AUTHZ_SERVER_ID/scopes" \
   -H "Authorization: Bearer $KONNECT_TOKEN"\
   -H "Content-Type: application/json" \
@@ -712,7 +712,7 @@ curl -sX POST "https://us.api.konghq.com/v1/auth-servers/$AUTHZ_SERVER_ID/scopes
     "include_in_metadata": false,
     "enabled": true
   }' | jq
-:::
+```
 
 Expected response
 
@@ -937,7 +937,7 @@ It refers to some **Kong Identity** endpoints and secrets, besides the actual Au
 
 Let's go through them:
 
-* **resource (`DECK_MCP_AUTH_URL`)**: that's the **MCP Tool URL**, exposed by the Kong Data Plane. Considering our declaration should be like this: `http://$KONNECT_PROXY_URL/mcp-listener`.
+* **resource (`DECK_MCP_AUTH_URL`)**: that's the **MCP Tool URL**, exposed by the Kong Data Plane. Considering our declaration should be like this: `$KONNECT_PROXY_URL/mcp-listener`.
 
 * **authorization_servers (`DECK_KONG_IDENTITY_AUTHZ_URL`)**: that's the Kong Identity Authorization endpoint. Although it's required, for Client Credentials Grant, it's ignored. It should be something like: `https://4bim7lj9i47ef25x.us.identity.konghq.com/auth/authorize`
 
@@ -948,7 +948,7 @@ Let's go through them:
 Before submiting the new declaration we have to set the decK environment variables:
 
 ```
-export DECK_MCP_AUTH_URL=http://$KONNECT_PROXY_URL/mcp-listener
+export DECK_MCP_AUTH_URL=$KONNECT_PROXY_URL/mcp-listener
 export DECK_KONG_IDENTITY_AUTHZ_URL=$ISSUER_URL/authorize
 export DECK_KONG_IDENTITY_INTROSPECTION_URL=$ISSUER_URL/introspect
 export DECK_CLIENT_ID=$CLIENT_ID
@@ -974,19 +974,14 @@ Let's create an agent in SAM that uses the MCP tools we just exposed. As the MCP
 
 We need to obtain a token from Kong Identity that our agent uses to connect to the MCP server.
 
-Get the Issuer URL:
+Obtain a token:
 ```
-export ISSUER_URL=$(curl -sX GET "https://us.api.konghq.com/v1/auth-servers" -H "Authorization: Bearer $KONNECT_TOKEN" | jq -r '.data[0].issuer')
-```
-
-And get a token:
-```
-export TOKEN=$(curl -s -X POST "$ISSUER_URL/oauth/token" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "grant_type=client_credentials" \
-  -d "client_id=$CLIENT_ID" \
-  -d "client_secret=$CLIENT_SECRET" \
-  -d "scope=scope1" | jq -r '.access_token')
+  export TOKEN=$(curl -s -X POST "$ISSUER_URL/oauth/token" \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d "grant_type=client_credentials" \
+    -d "client_id=$CLIENT_ID" \
+    -d "client_secret=$CLIENT_SECRET" \
+    -d "scope=scope1" | jq -r '.access_token')
 ```
 
 Let's add the token as an environment variable to the SAM environment:
