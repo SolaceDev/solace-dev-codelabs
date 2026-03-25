@@ -24,14 +24,14 @@ Learn more about [Solace Agent Mesh](https://solacelabs.github.io/solace-agent-m
 ![Solace Agent Mesh and Kong AI Gateway](img/010_architecture.png)
 
 Agentic AI requires a shift from isolated models and agents to **dynamic orchestration of autonomous agents** that work together to solve complex business problems. 
-Combining Solace Agent Mesh (SAM) with Kong AI Gateway creates **a resilient, governed, and scalable infrastructure for Agentic AI**.
+Combining Solace Agent Mesh with Kong AI Gateway creates **a resilient, governed, and scalable infrastructure for Agentic AI**.
 
-**Solace Agent Mesh (SAM)** provides event-driven orchestration and a connective layer for AI components such as agents and tools. An **Orchestrator Agent** decomposes prompts into specific sub-tasks, ensuring that agents receive only the data they need which minimises model costs and processing latency.
+**Solace Agent Mesh ** provides event-driven orchestration and a connective layer for AI components such as agents and tools. An **Orchestrator Agent** decomposes prompts into specific sub-tasks, ensuring that agents receive only the data they need which minimises model costs and processing latency.
 An **asynchronous, broker-centric architecture** allows agents to run in parallel without blocking workflows, maintaining system responsiveness even during long-running reasoning tasks. 
 
 **Kong AI Gateway** evolved from industry leading API management principles into **a centralised governance and security layer for LLMs, tools and agents**. Kong can automatically convert existing REST APIs into Model Context Protocol (MCP) tools, allowing AI agents to discover and invoke APIs and enterprise services without manual backend modifications.
 
-The combination of these platforms delivers **end-to-end observability**. SAM’s Visualizer traces the lifecycle of a prompt as agents work to fulfil the prompt. Kong’s AI analytics **track token usage and costs in real-time**. Together, these capabilities provide the explainability, and economic controls necessary to transform agentic AI into a secure and scalable enterprise capability.
+The combination of these platforms delivers **end-to-end observability**. Solace Agent Mesh’s Visualizer traces the lifecycle of a prompt as agents work to fulfil the prompt. Kong’s AI analytics **track token usage and costs in real-time**. Together, these capabilities provide the explainability, and economic controls necessary to transform agentic AI into a secure and scalable enterprise capability.
 
 ### What is Agent Mesh
 
@@ -195,7 +195,7 @@ Inside of Solace Cloud navigate to the 'Cluster Manager'
 Create a new Service to handle our Solace Agent Mesh traffic
 ![alt text](img/036_solaceBrokerCreation.png)
 
-We will use the credentials from the WebSockets connect tab in Solace Cloud to connect Solace Agent Mesh (SAM) to your broker.
+We will use the credentials from the WebSockets connect tab in Solace Cloud to connect Solace Agent Mesh to your broker.
 ![alt text](img/037_solaceBrokerCredentials.png)
 
 
@@ -214,7 +214,7 @@ Kong AI Gateway is a powerful set of features built on top of Kong Gateway, desi
 
 The AI Gateway provides many other additional capabilities suchas AI usage observability, governance, and tuning through prompt engineering.
 
-![SAM Init](img/050_AIProxy.png)
+![Solace Agent Mesh Init](img/050_AIProxy.png)
 
 We are using the prompt engineering capabilities to add a prompt decorator that instructs the LLM to reply in the style of a pirate:
 ```
@@ -350,7 +350,7 @@ In the newly created directory, initialize a new instance of an agent mesh proje
 sam init --gui
 ```
 
-![SAM Init](img/saminit.png)
+![Solace Agent Mesh Init](img/saminit.png)
 
 From here, choose "Advanced Setup" to spin up an instance of the Agent Mesh that uses the Solace Broker as the communication backbone. 
 
@@ -402,7 +402,7 @@ From here, choose "Advanced Setup" to spin up an instance of the Agent Mesh that
 
 #### Review and Initialize the final configuration
 
-![SAM final](img/finalinit.png)
+![Solace Agent Mesh final](img/finalinit.png)
 
 🎉 You have now successfully configured your Solace Agent Mesh environment! 
 
@@ -433,7 +433,7 @@ Here is a quick explanation on what this folder structure reflects:
 
 - `.sam` - This directory contains framework-specific settings such as plugin configurations
 
-- `config` - Houses all configuration YAML files for your SAM project, organized into several key components such as agents, gateways,logging settings, and common configuration settings shared across all agents and gateways (e.g. broker connection settings, model definitions, and service configurations)
+- `config` - Houses all configuration YAML files for your Solace Agent Mesh project, organized into several key components such as agents, gateways,logging settings, and common configuration settings shared across all agents and gateways (e.g. broker connection settings, model definitions, and service configurations)
 
 > aside positive
 > The shared configuration file employs YAML anchors (& and *) for referencing common elements throughout the configuration structure.
@@ -452,9 +452,9 @@ This file configures the web user interface gateway, which provides a browser-ba
 **Configuration Management**
 
 - Each configuration file defines one or more applications that can run independently
-- The SAM framework supports agent applications, gateway applications, and plugin applications
+- The Solace Agent Mesh framework supports agent applications, gateway applications, and plugin applications
 - Configuration files are automatically generated by commands like `sam add agent`, `sam add gateway`, or `sam plugin add`
-- You can run individual configuration files using sam run <config-file>
+- You can run individual configuration files using `sam run <config-file>`
 
 
 ### Running the Solace Agent Mesh
@@ -469,7 +469,7 @@ sam run
 
 Duration: 0:05:00
 
-### Use SAM Webui to access Bedrock LLMs
+### Use Solace Agent Mesh Webui to access Bedrock LLMs
 
 Launch the webui in your browser by visiting `http://localhost:7000`.
 
@@ -486,18 +486,18 @@ Why are there waves in the ocean?
 ```
 
 
-![Chat with SAM Webui](img/196_webui-chat.png)
+![Chat with Solace Agent Mesh Webui](img/196_webui-chat.png)
 
 When you click the "Visualizer" icon (see the red arrow in the screenshot above) you can inspect what happened under the covers - the interactions between webui, agents and LLMs.
 
-Please note: SAM provides more [gateways](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/gateways) than the webui such as REST or Event Gateways. For example, these allow you to trigger agentic workflows by listening to new order events on a topic or queue in the Solace Broker.
+Please note: Solace Agent Mesh provides more [gateways](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/gateways) than the webui such as REST or Event Gateways. For example, these allow you to trigger agentic workflows by listening to new order events on a topic or queue in the Solace Broker.
 
 ![Understand agent interactions](img/196_webui-visualizer.png)
 
 
 ### Observe LLM Usage in Kong AI Gateway
 
-As you have likely noticed from the responses in SAM chat (arr!) - the LLM calls from SAM were routed thorugh the Kong AI Gateway. To review and keep track of LLM usage review the [AI Gateway](https://cloud.konghq.com/us/ai-manager) analytics in Kong Konnect 
+As you have likely noticed from the responses in Solace Agent Mesh chat (arr!) - the LLM calls from Solace Agent Mesh were routed thorugh the Kong AI Gateway. To review and keep track of LLM usage review the [AI Gateway](https://cloud.konghq.com/us/ai-manager) analytics in Kong Konnect 
 
 ![LLM Analytics](img/196_kong-ai-gateway.png)
 
@@ -505,7 +505,7 @@ As you have likely noticed from the responses in SAM chat (arr!) - the LLM calls
 
 Duration: 0:10:00
 
-The SAM Orchestrator agent, which we setup in the previously can coordinate workflows between agents. So agents can be instructed to solve specific tasks with the help of MCP tools and resources available to them.
+The Solace Agent Mesh Orchestrator agent, which we setup in the previously can coordinate workflows between agents. So agents can be instructed to solve specific tasks with the help of MCP tools and resources available to them.
 
 In this module we are going to configure an agent to use an MCP server hosted in Kong MCP Gateway.
 
@@ -523,7 +523,7 @@ This created two Kong Gateway Services, one of which is the marketplace MCP serv
 
 Read up on how to expose tools on the MCP Gateway at [AI/MCP Gateway and Kong MCP Server technical breakdown](https://medium.com/@claudioacquaviva/kong-ai-mcp-gateway-and-kong-mcp-server-technical-breakdown-13420f610ee6).
 
-### Adding the Marketplace MCP Server to SAM as an Agent
+### Adding the Marketplace MCP Server to Solace Agent Mesh as an Agent
 
 #### Stop Solace Agent Mesh
 
@@ -573,7 +573,7 @@ apps:
             url: "${MCP_MARKETPLACE_URL, http://localhost:8080/mcp-listener}"
 ```
 
-### Use SAM Webui to test the Agent and MCP Server
+### Use Solace Agent Mesh Webui to test the Agent and MCP Server
 
 Launch the webui in your browser by visiting `http://localhost:7000`.
 
@@ -590,7 +590,7 @@ Now you can enable the Visualizer and enter a prompt to search for users.
 ```
 What users are in the marketplace?
 ```
-![Chat with SAM Webui](img/197_webui-prompt.png)
+![Chat with Solace Agent Mesh Webui](img/197_webui-prompt.png)
 
 Once results are returned you can see the Orchestrator triggered our new Marketplace Agent to obtain user information from the MCP server.
 ![Find users](img/197_webui-users.png)
@@ -963,9 +963,9 @@ deck gateway sync --konnect-control-plane-name $DECK_KONNECT_CONTROL_PLANE_NAME 
 
 This configuration adds a `ai-mcp-oauth2` plugin to the MCP Proxy that evaluates and verifies the OAuth2 access token that a client such as our Marketplace Agent supplies.
 
-Let's create an agent in SAM that uses the MCP tools we just exposed. As the MCP server is secured the agent needs to know the URL of the tool and an OAuth2 token for authorized access.
+Let's create an agent in Solace Agent Mesh that uses the MCP tools we just exposed. As the MCP server is secured the agent needs to know the URL of the tool and an OAuth2 token for authorized access.
 
-### Adding the Marketplace MCP Server to SAM as an Agent
+### Adding the Marketplace MCP Server to Solace Agent Mesh as an Agent
 
 #### Obtain the marketplace_agent.yaml
 [marketplace_agent.yaml](assets/marketplace_agent.yaml), and save it to the directory `solace-agent-mesh-demo/configs/agents`.
@@ -984,7 +984,7 @@ Obtain a token:
     -d "scope=scope1" | jq -r '.access_token')
 ```
 
-Let's add the token as an environment variable to the SAM environment:
+Let's add the token as an environment variable to the Solace Agent Mesh environment:
 ``` 
 export MCP_MARKETPLACE_TOKEN=${TOKEN}
 ``` 
@@ -1003,7 +1003,7 @@ sam run
 
 The agent is declared in a YAML configuration file [marketplace_agent.yaml](assets/marketplace_agent.yaml)
 
-This file declares the agent's capabilitities and defines the tools it has access to, note that we set the tool URL (`MCP_MARKETPLACE_URL`) and the token `MCP_MARKETPLACE_TOKEN` via the SAM environment:
+This file declares the agent's capabilitities and defines the tools it has access to, note that we set the tool URL (`MCP_MARKETPLACE_URL`) and the token `MCP_MARKETPLACE_TOKEN` via the Solace Agent Mesh environment:
 ```code{showCopyAction=false showLineNumbers=false language=yaml}
 apps:
   - name: "MarketplaceAgent__app"
@@ -1027,13 +1027,13 @@ apps:
               Authorization: "Bearer ${MCP_MARKETPLACE_TOKEN}"     
 ```
 
-### Use SAM Webui to test we can securely access the MCP Server
+### Use Solace Agent Mesh Webui to test we can securely access the MCP Server
 
 Launch the webui in your browser by visiting `http://localhost:7000`.
 
 
 Enable the Visualizer and enter a prompt to search for users.
-![Chat with SAM Webui](img/197_webui-prompt.png)
+![Chat with Solace Agent Mesh Webui](img/197_webui-prompt.png)
 
 Once results are returned you can see the Orchestrator triggered the Marketplace Agent to obtain user information.
 ![Find users](img/197_webui-users.png)
@@ -1064,15 +1064,15 @@ You ...
 
 ✅ spun up Kong AI Gateway and configured an LLM proxy to mediate and observe all LLM calls.  
 ✅ installed and initialized  Agent Mesh, connecting it to a broker and routing LLM traffic through Kong.  
-✅ used the SAM WebUI to interact with the orchestrator agent and visualize multi‑agent workflows end‑to‑end.  
+✅ used the Solace Agent Mesh WebUI to interact with the orchestrator agent and visualize multi‑agent workflows end‑to‑end.  
 ✅ added Marketplace Agent that uses Kong-hosted MCP Server to call  tools for users and orders in the marketplace.  
-✅ secured MCP server adding OAuth2, generating tokens, and verifying that SAM agents access protected MCP tools.  
+✅ secured MCP server adding OAuth2, generating tokens, and verifying that Solace Agent Mesh agents access protected MCP tools.  
 
 And while doing so we demonstrated:
 * Solace Agent Mesh provides powerful event‑driven orchestration, enabling autonomous agents and LLMs to collaborate asynchronously, scale independently, and execute complex workflows efficiently.
 * Kong AI Gateway unifies and governs LLM access, offering standardized OpenAI‑compatible endpoints, real‑time observability, prompt engineering, and secure mediation of all model interactions.
 * MCP Gateway seamlessly exposes enterprise APIs as MCP tools, allowing agents in Solace Agent Mesh to dynamically discover and use backend capabilities without manual service integration.
-* Combining Agent Mesh with Kong creates end‑to‑end visibility and cost control, with SAM’s Visualizer showing agent interactions and Kong providing analytics on token usage, governance, and security.
+* Combining Agent Mesh with Kong creates end‑to‑end visibility and cost control, with Solace Agent Mesh’s Visualizer showing agent interactions and Kong providing analytics on token usage, governance, and security.
 
 The joint architecture enables secure, production‑ready Agentic AI, supporting OAuth‑secured MCP servers, machine‑to‑machine authorization, and scalable multi-agent workflows suited for real enterprise environments. 
 
