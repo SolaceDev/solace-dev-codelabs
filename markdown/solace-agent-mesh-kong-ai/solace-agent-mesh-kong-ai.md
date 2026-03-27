@@ -231,7 +231,7 @@ You will instantly recognize this style when you interact with Solace Agent Mesh
 
 ### Create an AI Proxy for LLM Calls in Kong AI Gateway
 
-To prepare the Kong AI Gateway use this declaration: [solace-ai-proxy.yaml](files/solace-ai-proxy.yaml)
+To prepare the Kong AI Gateway use this declaration: [solace-ai-proxy.yaml](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/solace-ai-proxy.yaml)
 
 First set the URL of your backend LLM as an environment variable, the URL must be for an OpenAI API compatible endpoint. As an example it could look  like `https://lite-llm.example.com`
 ```
@@ -511,7 +511,7 @@ In this module we are going to configure an agent to use an MCP server hosted in
 
 ### Prepare Kong MCP Gateway
 
-To prepare the Kong MCP Gateway use the declaration in [solace_marketplace_mcp](assets/solace_marketplace_mcp) - download it and then apply the settings:
+To prepare the Kong MCP Gateway use the declaration in [solace_marketplace_mcp](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/solace_marketplace_mcp) - download it and then apply the settings:
 
 ```
 deck gateway reset --konnect-control-plane-name $DECK_KONNECT_CONTROL_PLANE_NAME --konnect-token $KONNECT_TOKEN -f
@@ -530,7 +530,7 @@ Read up on how to expose tools on the MCP Gateway at [AI/MCP Gateway and Kong MC
 Stop your solace agent mesh project if its already running, e.g. by pressing `Control+C` in your shell.
 
 #### Obtain the marketplace_agent.yaml
-[marketplace_agent.yaml](assets/marketplace_agent.yaml), and save it to the directory `solace-agent-mesh-demo/configs/agents`.
+[marketplace_agent.yaml](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/marketplace_agent.yaml), and save it to the directory `solace-agent-mesh-demo/configs/agents`.
 
 
 #### Set Variables for the Agent 
@@ -930,7 +930,7 @@ Kong Identity provides the standard endpoint ```$ISSUER_URL/.well-known/openid-c
 
 ### Prepare Kong MCP Gateway
 
-To prepare the Kong MCP Gateway use the declaration in [solace_marketplace_mcp_secure.yaml](http://localhost:8080/builds/static/code/sam-deck-config/solace_marketplace_mcp_secure.yaml)
+To prepare the Kong MCP Gateway use the declaration in [solace_marketplace_mcp_secure.yaml](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/solace_marketplace_mcp_secure.yaml)
 
 
 It refers to some **Kong Identity** endpoints and secrets, besides the actual Authorization URL, the standard endpoint ```$ISSUER_URL/.well-known/openid-configuration``` provides the required configuration parameters.
@@ -968,7 +968,7 @@ Let's create an agent in Solace Agent Mesh that uses the MCP tools we just expos
 ### Adding the Marketplace MCP Server to Solace Agent Mesh as an Agent
 
 #### Obtain the marketplace_agent.yaml
-[marketplace_agent.yaml](assets/marketplace_agent.yaml), and save it to the directory `solace-agent-mesh-demo/configs/agents`.
+[marketplace_agent.yaml](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/marketplace_agent.yaml), and save it to the directory `solace-agent-mesh-demo/configs/agents`.
 
 #### Obtain an Access Token for the MCP Server
 
@@ -1001,7 +1001,7 @@ sam run
 
 ### Review the Agent Definition
 
-The agent is declared in a YAML configuration file [marketplace_agent.yaml](assets/marketplace_agent.yaml)
+The agent is declared in a YAML configuration file [marketplace_agent.yaml](https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh-kong-ai/files/marketplace_agent.yaml)
 
 This file declares the agent's capabilitities and defines the tools it has access to, note that we set the tool URL (`MCP_MARKETPLACE_URL`) and the token `MCP_MARKETPLACE_TOKEN` via the Solace Agent Mesh environment:
 ```code{showCopyAction=false showLineNumbers=false language=yaml}
