@@ -582,4 +582,4 @@ This course was just an introduction to Spring Cloud Streams, but we've included
 - [Functional Composition with Spring Cloud Functions](http://cloud.spring.io/spring-cloud-stream/spring-cloud-stream.html#_functional_composition)
 - [Content Type Negotiation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#content-type-management)
 - [Actuator for metrics](https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#spring-cloud-stream-overview-metrics-emitter)
-- [Sleuth for tracing](https://cloud.spring.io/spring-cloud-sleuth/single/spring-cloud-sleuth.html)
+- [Sleuth for tracing](https://docs.spring.io/spring-cloud-stream/reference/kafka/kafka-streams-binder/tracing-using-spring-cloud-sleuth.html)
