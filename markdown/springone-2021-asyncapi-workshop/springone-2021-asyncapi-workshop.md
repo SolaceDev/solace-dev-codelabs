@@ -213,7 +213,7 @@ An event mesh is:
 ### Valuable Resources:
 
 - [What is an Event Mesh?](https://solace.com/what-is-an-event-mesh/)
-- [Event Mesh - Resources](https://solace.com/resources/event-mesh)
+- [Event Mesh - Resources](https://solace.com/solutions/initiative/event-mesh/)
 - [How to Build an Event Mesh with Solace PubSub+](https://www.youtube.com/watch?v=8Pln8dNSd4U)
 
 ## API Products
