@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-09-01T16:12:26+05:30",
+  "updated": "2026-08-05T15:41:13Z",
   "id": "springone-2021-asyncapi-workshop",
   "duration": 51,
   "title": "Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh",
   "summary": "SpringOne 2021 workshop for Developing Asynchronous APIs for the Event-Driven World Using Spring Cloud Stream, AsyncAPI, and an Event Mesh",
-  "source": "springone-2021-asyncapi-workshop.md",
+  "source": "main/markdown/springone-2021-asyncapi-workshop/springone-2021-asyncapi-workshop.md",
   "theme": "",
   "status": [
     "hidden"
