@@ -4,13 +4,16 @@ id: solace-agent-mesh
 tags: 
 categories: Solace, Agent Mesh, AI
 environments: Web
-status: Published
+status: Hidden
 feedback link: https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh
 
 # Getting started with Solace Agent Mesh - An Agent Orchestration Framework
 
 ## What you'll learn: Overview
 Duration: 0:02:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 In this codelab, you'll gain a foundational understanding of the [Solace Agent Mesh](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/). You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
 
@@ -20,6 +23,9 @@ By the end of this codelab, you'll be equipped to get started with Solace Agent 
 
 ## Introduction to the Solace Agent Mesh
 Duration: 0:07:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 ### Problem statement
 Building effective agentic systems presents a complex challenge that extends far beyond simply deploying AI models. AI Agents are siloed systems that operate in isolation, and are unable to effectively communicate or share capabilities across organizational boundaries. **By definition and design, Agents are inherently domain-specific, designed to excel in narrow use cases but struggling to collaborate or leverage expertise from other specialized agents, creating fragmented AI ecosystems that fail to realize their collective potential.**
@@ -108,6 +114,9 @@ For more information and a deep dive on the Solace Agent Mesh, you can check out
 ## Key Components and Architecture
 Duration: 0:15:00
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 Solace Agent Mesh represents a sophisticated enterprise-grade platform that orchestrates AI agents. At its core, the **Orchestrator** serves as the intelligent brain that decomposes complex tasks and routes them to specialized **Agents** built using the Agent Development Kit (ADK), while **Gateways** created with the Gateway Development Kit (GDK) provide secure multi-protocol entry points. The platform's foundation rests on the **Solace Broker** for enterprise messaging, complemented by essential Services including **LLM integration**, **embeddings management**, **artifact storage**, and **conversation history tracking**. This unified architecture creates a robust, enterprise-ready platform for deploying and managing AI agent ecosystems at scale.
 
 ![SAM Component](img/sam_components.jpg)
@@ -179,6 +188,9 @@ The foundational infrastructure layer providing multi-provider LLM access, exten
 ## Use Cases and Applications
 Duration: 0:05:00
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 Solace Agent Mesh is versatile and can be applied to various domains. Here are some examples of where Agent Mesh could be very helpful
 
 ### Intelligent Enterprise Automation
@@ -215,6 +227,9 @@ Solace Agent Mesh demonstrates significant value in providing AI-powered integra
 
 ## Getting Started with Solace Agent Mesh
 Duration: 0:10:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 ### Prerequisites 
 
@@ -337,6 +352,9 @@ Review and Initialize the final configuration
 ## Running Solace Solace Agent Mesh
 Duration: 0:05:00
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 After initializing your Solace Agent Mesh instance, you will find out the following files and directories has been created in your project folder
 
 ```bash
@@ -414,6 +432,9 @@ For the remaining of any prompts you execute to Solace Agent Mesh, you can alway
 
 ## Adding Agents 
 Duration: 0:05:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.
 
@@ -515,6 +536,9 @@ apps:
 
 ## Understanding the YAML configuration of agents
 Duration: 0:05:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 The Solace Agent Mesh framework is controlled by YAML configuration files that define agents, gateways, and plugins, allowing for configuration-driven development without code changes.
 
@@ -673,6 +697,9 @@ This configuration approach is particularly valuable for building complex multi-
 ## Built-in tools
 Duration: 0:07:00
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 Built-in tools in the Solace Agent Mesh are a comprehensive set of capabilities that enable agents to perform complex tasks, interact with various systems, and collaborate effectively within the mesh ecosystem. These tools extends the native capabilities offered by the [Agent Development Kit (ADK)](https://google.github.io/adk-docs/). This of these tool as native functionalities that agents have access to like "functions" instead of building these from scratch. 
 
 The Solace Agent Mesh comes with a series of built-in tools natively to the platform. Each built-in tool name is defined in the `tools` section of the application configuration for the agent in the yaml config file as follows
@@ -745,6 +772,9 @@ This yaml configuration of a Web Agent uses two types of tools: a built-in tool 
 Duration: 0:10:00
 
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 Plugins serve as the backbone of the Solace Agent Mesh extensible architecture, providing a structured way to package, distribute, and incorporate new features into any SAM deployment. They are modular Python packages that extend the agent mesh's capabilities through specialized components that integrate seamlessly with the A2A protocol.
 
 To spin up the list of the core plugins offered by the Solace Agent Mesh, execute the following
@@ -798,6 +828,9 @@ To learn more about plugins, the differences between plugins and agents, and how
 
 ## Adding MCP Agents
 Duration: 0:05:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 As mentioned earlier, the Solace Agent Mesh is an agent agnostic framework. Agents are YAML configuration driven and can be authored using 
 
@@ -985,6 +1018,9 @@ To learn more about MCP integrations with the Solace Agent mesh, refer to the [M
 ## Next Steps
 Duration: 0:05:00
 
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
+
 Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:
 
 ### 📚 Explore the Documentation
@@ -1032,6 +1068,9 @@ As you move towards production use cases:
 
 ## Takeaways
 Duration: 0:07:00
+
+> aside positive
+> 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
 Throughout this codelab, you've gained valuable insights into Solace Agent Mesh and its capabilities. Here are the key takeaways to remember:
 
