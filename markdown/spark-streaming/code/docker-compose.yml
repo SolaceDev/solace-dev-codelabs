@@ -1,0 +1,38 @@
+services:
+  solace:
+    image: solace/solace-pubsub-standard:latest
+    hostname: solace-broker
+    ports:
+      - "8080:8080"     # Broker Manager
+      - "55555:55555"   # SMF plaintext
+      - "55443:55443"   # SMF TLS
+      - "8008:8008"     # WebSocket
+    environment:
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=admin
+    shm_size: 1g
+    ulimits:
+      nofile:
+        soft: 2448
+        hard: 42192
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  spark:
+    image: apache/spark:3.5.2-python3
+    hostname: spark
+    depends_on:
+      solace:
+        condition: service_healthy
+    ports:
+      - "8888:8888"   # Jupyter, if you add it to the entrypoint
+      - "4040:4040"   # Spark UI
+    volumes:
+      - ./notebooks:/opt/spark-notebooks
+    command: >
+      /opt/spark/bin/spark-shell
+      --packages com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7
+      --conf spark.driver.host=spark

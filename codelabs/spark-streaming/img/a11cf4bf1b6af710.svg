@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 460" font-family="Figtree, Arial, sans-serif">
+  <rect x="0" y="0" width="980" height="460" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="490" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#03213B">Solace &#8596; Databricks Structured Streaming</text>
+
+  <!-- Solace broker -->
+  <g>
+    <rect x="30" y="150" width="170" height="160" rx="10" fill="#093B5F"/>
+    <text x="115" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#FFFFFF">Solace</text>
+    <text x="115" y="205" text-anchor="middle" font-size="12" fill="#ABFF88">Event Broker</text>
+
+    <rect x="50" y="220" width="130" height="34" rx="6" fill="#00C895"/>
+    <text x="115" y="241" text-anchor="middle" font-size="12" fill="#03213B">Source Queue</text>
+
+    <rect x="50" y="264" width="130" height="34" rx="6" fill="#C2F7FF"/>
+    <text x="115" y="285" text-anchor="middle" font-size="12" fill="#03213B">Last Value Queue</text>
+  </g>
+
+  <!-- Arrow broker -> connector (read) -->
+  <path d="M200 205 H295" stroke="#093B5F" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="248" y="196" text-anchor="middle" font-size="11" fill="#03213B">readStream</text>
+
+  <!-- Arrow connector -> broker (write) -->
+  <path d="M295 290 H200" stroke="#093B5F" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="248" y="312" text-anchor="middle" font-size="11" fill="#03213B">writeStream</text>
+
+  <!-- Databricks cluster boundary -->
+  <rect x="300" y="90" width="430" height="330" rx="12" fill="#F4F4F4" stroke="#093B5F" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="515" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#03213B">Databricks Cluster</text>
+
+  <!-- Worker nodes -->
+  <rect x="320" y="130" width="180" height="170" rx="10" fill="#FFFFFF" stroke="#093B5F" stroke-width="1.5"/>
+  <text x="410" y="152" text-anchor="middle" font-size="12" font-weight="700" fill="#03213B">Worker Nodes</text>
+
+  <rect x="335" y="165" width="150" height="40" rx="6" fill="#00C895"/>
+  <text x="410" y="186" text-anchor="middle" font-size="11" fill="#03213B">format(&quot;solace&quot;)</text>
+  <text x="410" y="199" text-anchor="middle" font-size="10" fill="#03213B">connector instances</text>
+
+  <rect x="335" y="215" width="150" height="34" rx="6" fill="#C7FFCB"/>
+  <text x="410" y="236" text-anchor="middle" font-size="11" fill="#03213B">DataSource V2</text>
+
+  <rect x="335" y="257" width="150" height="34" rx="6" fill="#EAEAEA"/>
+  <text x="410" y="278" text-anchor="middle" font-size="11" fill="#03213B">DataFrame</text>
+
+  <!-- Arrow worker -> driver -->
+  <path d="M500 210 H560" stroke="#093B5F" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Driver / Delta -->
+  <rect x="560" y="130" width="150" height="170" rx="10" fill="#FFFFFF" stroke="#093B5F" stroke-width="1.5"/>
+  <text x="635" y="152" text-anchor="middle" font-size="12" font-weight="700" fill="#03213B">Driver</text>
+
+  <rect x="575" y="170" width="120" height="34" rx="6" fill="#FFF7C2"/>
+  <text x="635" y="191" text-anchor="middle" font-size="11" fill="#03213B">Micro-batches</text>
+
+  <path d="M635 204 V222" stroke="#093B5F" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="575" y="224" width="120" height="34" rx="6" fill="#00C895"/>
+  <text x="635" y="245" text-anchor="middle" font-size="11" fill="#03213B">Delta Table</text>
+
+  <!-- Checkpoint -->
+  <rect x="575" y="264" width="120" height="34" rx="6" fill="#C2F7FF"/>
+  <text x="635" y="285" text-anchor="middle" font-size="10" fill="#03213B">UC Volume</text>
+  <text x="635" y="296" text-anchor="middle" font-size="9" fill="#03213B">checkpoint</text>
+
+  <!-- checkpoint arrow -->
+  <path d="M560 281 H595" stroke="#093B5F" stroke-width="1.5" fill="none" stroke-dasharray="3 2" marker-end="url(#arrow)"/>
+
+  <!-- Back arrow driver->worker for write path -->
+  <path d="M560 260 H500" stroke="#093B5F" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <g font-size="11" fill="#03213B">
+    <rect x="320" y="335" width="14" height="14" fill="#00C895"/>
+    <text x="340" y="346">Solace connector / broker object</text>
+
+    <rect x="320" y="358" width="14" height="14" fill="#C2F7FF"/>
+    <text x="340" y="369">Checkpoint / offset state</text>
+
+    <rect x="560" y="335" width="14" height="14" fill="#FFF7C2"/>
+    <text x="580" y="346">Spark Structured Streaming</text>
+  </g>
+
+  <text x="515" y="405" text-anchor="middle" font-size="11" fill="#093B5F" font-style="italic">
+    Since connector 3.1.0, Solace connections run on worker nodes, not the driver.
+  </text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L6,3 z" fill="#093B5F"/>
+    </marker>
+  </defs>
+</svg>

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Integration Guide: Spark Streaming 3.2</title>
+  <title>Streaming between Solace and Databricks</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -20,578 +20,492 @@
   </style>
 </head>
 <body>
-   
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
   <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
                   id="spark-streaming"
-                  title="Integration Guide: Spark Streaming 3.2"
+                  title="Streaming between Solace and Databricks"
                   environment="web"
-                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/integrations/spark-streaming">
+                  feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/issues">
     
-      <google-codelab-step label="What you&#39;ll learn: Overview" duration="5">
-        <p>This document demonstrates how to integrate Solace Java Message Service (JMS) with the Spark Streaming custom receiver for consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both the Spark Streaming and Solace JMS.</p>
-<p>The target audience of this document is developers using the Hadoopv2 with knowledge of both the Spark and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Spark refer to the referenced documents below.</p>
-<p>This document is divided into the following sections to cover the Solace JMS integration with Spark Streaming:</p>
+      <google-codelab-step label="What you&#39;ll build" duration="3">
+        <aside class="warning"><p><strong>This codelab is under construction.</strong> The steps and code are complete, but several screenshots are still placeholders. Don&#39;t rely on the images yet, follow the text and code blocks instead.</p>
+</aside>
+<p>This codelab is written for <strong>Databricks</strong>. You will use the <a href="https://github.com/SolaceProducts/pubsubplus-connector-spark" target="_blank">Solace Spark connector</a> to move events between a Solace event broker and Spark Structured Streaming, running on a Databricks cluster.</p>
+<p class="image-container"><img alt="Architecture: Solace and Databricks Structured Streaming" src="img/a11cf4bf1b6af710.svg"></p>
+<p>The connector implements Spark&#39;s DataSource V2 API and registers itself under <code>format("solace")</code>. Once it&#39;s installed, moving data in either direction is a single Structured Streaming read or write:</p>
 <ul>
-<li>Integrating with Spark Streaming</li>
-<li>Performance Considerations</li>
-<li>Working with Solace High Availability</li>
-<li>Debugging Tips</li>
-<li>Advanced Topics including: <ul>
-<li>Authentication (LDAP example)</li>
-<li>Using TLS Communication</li>
-<li>Working with Solace Disaster Recovery</li>
+<li><strong>Read path:</strong> a Solace queue is consumed by connector instances that run <strong>on the Databricks worker nodes</strong>, and land as rows in a DataFrame you can transform and write to a Delta table.</li>
+<li><strong>Write path:</strong> DataFrame rows go out through <code>writeStream.format("solace")</code> and are published to a topic.</li>
 </ul>
-</li>
-</ul>
-<h2 is-upgraded>Related Documentation</h2>
-<p>These links contain information related to this guide:</p>
+<p>Pay attention to that &#34;on the worker nodes&#34; detail as you go through this codelab. It&#39;s the reason you&#39;ll set up a Last Value Queue in Step 3, and it&#39;s why Step 6 spends some extra time on checkpointing.</p>
+<p>This codelab is written for Databricks, but self-managed Spark works too. Four steps differ, each one is called out inline in a <strong>Self-managed Spark</strong> box, and Appendix A pulls all of them together in one table.</p>
+<p>Every code sample here is also available as runnable code in the <a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/spark-streaming/code" target="_blank"><code>spark-streaming/code</code></a> folder: a Databricks notebook, a self-managed <code>spark-submit</code> project, a sample publisher, and a <code>docker-compose.yml</code> if you don&#39;t have a Databricks workspace handy.</p>
+<h2 is-upgraded>Prerequisites</h2>
 <ul>
-<li><a href="http://solace.dev" target="_blank">Solace Developer Portal</a></li>
-<li><a href="http://docs.solace.com/Solace-JMS-API/JMS-home.htm" target="_blank">Solace Messaging API for JMS</a></li>
-<li><a href="http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html" target="_blank">Solace JMS API Online Reference Documentation</a></li>
-<li><a href="https://docs.solace.com/Features/Core-Concepts.htm" target="_blank">Solace Feature Guide</a></li>
-<li><a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace Command Line Interface Reference</a></li>
-<li><a href="https://spark.apache.org/docs/latest/streaming-custom-receivers.html" target="_blank">Spark Streaming Custom Receivers Documentation</a></li>
-<li><a href="https://spark.apache.org/docs/latest/api/java/org/apache/spark/streaming/receiver/Receiver.html" target="_blank">Spark Receiver Class Documentation</a></li>
+<li>A Solace event broker service (Solace Cloud, software broker, or appliance)</li>
+<li>A Databricks workspace with permission to create a cluster and install Maven libraries</li>
+<li>Basic familiarity with Spark Structured Streaming</li>
 </ul>
+<h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
+<ul class="checklist">
+<li>How to provision the Solace broker objects the connector needs, including the Last Value Queue</li>
+<li>How to install the connector on a Databricks cluster and read Solace messages into a DataFrame</li>
+<li>How to checkpoint to a Unity Catalog Volume and survive a stream restart without losing or duplicating data</li>
+<li>How to publish DataFrame rows back to Solace as messages</li>
+<li>How to move credentials into Databricks secrets</li>
+<li>How to tune the connector for throughput, parallelism, and high availability</li>
+</ul>
+<aside class="warning"><p><strong>Note:</strong> this codelab targets connector version <code>3.1.7</code>. A 4.x line exists for Spark 4.0, Scala 2.13, and Java 17 on DBR 17.3 LTS, see the Recap step for a link.</p>
+</aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Get Solace Messaging" duration="10">
-        <p>This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:</p>
+      <google-codelab-step label="Get Solace messaging" duration="4">
+        <p>You need a Solace event broker to send and receive messages. Already have access to one with a message VPN? Skip to the bottom of this step and fill in the connection details table.</p>
+<aside class="special"><p> The fastest way to get one is a free Solace Cloud service.</p>
+</aside>
+<p><a href="https://console.solace.cloud/login/new-account" target="_blank">Sign up for a free Solace Cloud account</a> and create a messaging service. It takes a couple of minutes and gives you a fully configured broker.</p>
+<h2 is-upgraded>Alternative: software broker or appliance</h2>
+<ul>
+<li><strong>Software broker:</strong> run the free, feature-complete Solace Standard edition as a Docker container. See the <a href="https://solace.com/downloads/" target="_blank">Solace downloads page</a> and the <a href="https://docs.solace.com/Software-Broker/Software-Broker-Set-Up/Configuring-Broker-Docker-Container.htm" target="_blank">software broker quick start</a>.</li>
+<li><strong>Appliance:</strong> if your organization already runs a Solace appliance, ask your broker administrator for a message VPN and client username.</li>
+</ul>
+<h2 is-upgraded>Find your connection details</h2>
+<p>Open the Solace Cloud console for your service and go to the <strong>Connect</strong> tab. You need the <strong>SMF host</strong> here, not the JMS URI. The connector talks to Solace over native Solace Message Format (SMF), not JMS.</p>
+<aside class="warning"><p><strong>Common mistake:</strong> don&#39;t grab the JMS connection URI. Use the SMF host from the Connect tab instead: it looks like <code>tcps://<host>:55443</code> for TLS or <code>tcp://<host>:55555</code> for plaintext.</p>
+</aside>
+<p>Fill in this table now. You&#39;ll use every value in it for the rest of the codelab.</p>
 <table>
-<tr><td colspan="1" rowspan="1"><p>Resource</p>
-</td><td colspan="1" rowspan="1"><p>Value</p>
-</td><td colspan="1" rowspan="1"><p>Description</p>
+<tr><td colspan="1" rowspan="1"><p>Value</p>
+</td><td colspan="1" rowspan="1"><p>Yours</p>
 </td></tr>
-<tr><td colspan="1" rowspan="1"><p>Host</p>
-</td><td colspan="1" rowspan="1"><p>String</p>
-</td><td colspan="1" rowspan="1"><p>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
-</td><td colspan="1" rowspan="1"><p>String</p>
-</td><td colspan="1" rowspan="1"><p>The event broker Message VPN that this client should connect to. </p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Client Username</p>
-</td><td colspan="1" rowspan="1"><p>String</p>
-</td><td colspan="1" rowspan="1"><p>The client username. (See Notes below)</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Client Password</p>
-</td><td colspan="1" rowspan="1"><p>String</p>
-</td><td colspan="1" rowspan="1"><p>The client password. (See Notes below)</p>
-</td></tr>
-</table>
-<p>There are several ways you can get access to Solace messaging and find these required properties.</p>
-<h2 is-upgraded>Option 1: Use Solace Cloud</h2>
-<ul>
-<li>Follow <a href="https://solace.com/products/platform/cloud/" target="_blank">these instructions</a> to quickly spin up a cloud-based Solace messaging service for your applications.</li>
-<li>The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need: <ul>
-<li>Host:Port (use the JMS URI)</li>
-<li>Message VPN</li>
-<li>Client Username</li>
-<li>Client Password</li>
-</ul>
-</li>
-</ul>
-<p class="image-container"><img src="img/8ffc1af5fcd5a90b.png"></p>
-<h2 is-upgraded>Option 2: Start a Solace PubSub+ Software Event Broker</h2>
-<ul>
-<li>Follow <a href="https://solace.com/downloads/" target="_blank">these instructions</a> to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.</li>
-<li>The messaging connectivity information are the following:<ul>
-<li>Host: &lt;public_ip&gt; (IP address assigned to the software event broker in tutorial instructions)</li>
-<li>Message VPN: default</li>
-<li>Client Username: sampleUser (can be any value)</li>
-<li>Client Password: samplePassword (can be any value)</li>
-</ul>
-Note: By default, the Solace software event broker &#34;default&#34; message VPN has authentication disabled.</li>
-</ul>
-<h2 is-upgraded>Option 3: Get access to a Solace PubSub+ appliance</h2>
-<ul>
-<li>Contact your Solace PubSub+ appliance administrators and obtain the following: <ul>
-<li>A Solace Message-VPN where you can produce and consume direct and persistent messages</li>
-<li>The host name or IP address of the appliance hosting your Message-VPN</li>
-<li>A username and password to access the appliance</li>
-</ul>
-</li>
-</ul>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Integrating with Spark Streaming" duration="25">
-        <p>The general Spark Streaming support for custom receivers is documented in the <a href="https://spark.apache.org/docs/latest/streaming-custom-receivers.html" target="_blank">Spark Streaming Custom Receivers Documentation</a>. The configuration outlined in this document makes use of a custom receiver to achieve the desired integration with Solace.</p>
-<p>This integration guide demonstrates how to configure a Spark Streaming application to receive JMS messages using a custom receiver. The following steps are required to accomplish this:</p>
-<ul>
-<li>Step 1 – Configuring the Solace PubSub+ event broker</li>
-<li>Step 2 – Coding a JMS custom receiver</li>
-<li>Step 3 – Deploying JMS receiver</li>
-</ul>
-<h2 is-upgraded>Description of Resources Required</h2>
-<p>This integration guide will demonstrate creation of Solace JMS custom receiver and configuring the receiver to receive messages. This section outlines the resources that are required/created and used in the subsequent sections.</p>
-<h3 is-upgraded>Solace Resources</h3>
-<p>The following event broker resources are required for the integration sample in this document.</p>
-<table>
-<tr><td colspan="1" rowspan="1"><p>Resource</p>
-</td><td colspan="1" rowspan="1"><p>Value</p>
-</td><td colspan="1" rowspan="1"><p>Description</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Event Broker Host</p>
-</td><td colspan="2" rowspan="4"><p>Refer to step Get Solace Messaging  for values</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Message VPN</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Client Username</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Client Password</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Solace Queue</p>
-</td><td colspan="1" rowspan="1"><p>Q/requests</p>
-</td><td colspan="1" rowspan="1"><p>Solace destination of messages produced and consumed </p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>JNDI Connection Factory</p>
-</td><td colspan="1" rowspan="1"><p>JNDI/CF/spring</p>
-</td><td colspan="1" rowspan="1"><p>The JNDI Connection factory for controlling Solace JMS connection properties</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>JNDI Queue Name</p>
-</td><td colspan="1" rowspan="1"><p>JNDI/Q/requests</p>
-</td><td colspan="1" rowspan="1"><p>The JNDI name of the queue used in the samples</p>
-</td></tr>
-</table>
-<h3 is-upgraded>Spark Resources</h3>
-<p>The following Spark resources are required for code integration:</p>
-<table>
-<tr><td colspan="1" rowspan="1"><p>Resource</p>
-</td><td colspan="1" rowspan="1"><p>Description</p>
-</td></tr>
-<tr><td colspan="2" rowspan="1"><p>org.apache.spark.storage.StorageLevel</p>
+<tr><td colspan="2" rowspan="1"><p>SMF host (e.g. <code>tcps://mr-xxxx.messaging.solace.cloud:55443</code>)</p>
 </td><td colspan="1" rowspan="1"></td></tr>
-<tr><td colspan="1" rowspan="1"><p>org.apache.spark.streaming.receiver.Receiver</p>
-</td><td colspan="1" rowspan="1"><p>Class implementing Receiver</p>
+<tr><td colspan="2" rowspan="1"><p>Message VPN</p>
+</td><td colspan="1" rowspan="1"></td></tr>
+<tr><td colspan="2" rowspan="1"><p>Client username</p>
+</td><td colspan="1" rowspan="1"></td></tr>
+<tr><td colspan="2" rowspan="1"><p>Client password</p>
+</td><td colspan="1" rowspan="1"></td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Provision your broker objects" duration="8">
+        <p>Before the connector can read or write anything, you need a source queue and a <strong>Last Value Queue (LVQ)</strong> on the broker. This step is the same on every platform.</p>
+<h2 is-upgraded>Create the source queue</h2>
+<ol type="1">
+<li>In Solace Cloud (or Broker Manager), go to <strong>Queues</strong> and create a new queue, for example <code>spark/orders/source</code>.</li>
+<li>Add a topic subscription for the topic the connector should consume, for example <code>solace/spark/stream/orders</code>.</li>
+</ol>
+<p class="image-container"><img alt="PLACEHOLDER: In Broker Manager, open Queues, select the source queue you just created, and screenshot the queue&amp;rsquo;s Config tab with the Max Delivered Unacknowledged Messages Per Flow field visible and set to 200" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="special"><p> Set <strong>Maximum Delivered Unacknowledged Messages per Flow</strong> to twice the <code>batchSize</code> you plan to use for the read stream (Step 5 uses <code>batchSize</code> 100, so set this to 200). This is the single biggest throughput lever in the whole setup, and it&#39;s easy to forget. Too low a value here throttles the connector no matter how well you tune the Spark side.</p>
+</aside>
+<h2 is-upgraded>Create the Last Value Queue</h2>
+<p>Since connector 3.1.0, the Solace connection runs <strong>on the Spark worker nodes</strong> instead of the driver. That&#39;s better use of the cluster and better throughput, but it also means the worker nodes need somewhere to report their progress back to, since they&#39;re not talking to the driver directly anymore. That&#39;s what the LVQ is for. It sits on the broker next to the Spark checkpoint, and when the stream restarts, the connector reads it to figure out the last message it fully processed.</p>
+<p>Create the LVQ manually with these properties:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Property</p>
+</td><td colspan="1" rowspan="1"><p>Value</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Access type</p>
+</td><td colspan="1" rowspan="1"><p>Exclusive</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Spool quota</p>
+</td><td colspan="1" rowspan="1"><p>0</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Owner</p>
+</td><td colspan="1" rowspan="1"><p>the client username the connector authenticates as</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Non-owner permission</p>
+</td><td colspan="1" rowspan="1"><p>No Access</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Subscription</p>
+</td><td colspan="1" rowspan="1"><p>the topic you will set as <code>lvq.topic</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>ACL</p>
+</td><td colspan="1" rowspan="1"><p>Publish <strong>and</strong> Subscribe on that topic</p>
 </td></tr>
 </table>
-<h2 is-upgraded>Step 1 – Configuring the Solace Event Broker</h2>
-<p>The Solace event broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Spark application.</p>
+<p class="image-container"><img alt="PLACEHOLDER: In Broker Manager, create the LVQ (Queues &gt; Create Queue), then screenshot its Config tab with Access Type set to Exclusive, Spool Quota set to 0, Owner set to your connector&amp;rsquo;s client username, and Permission set to No Access all visible in one frame" src="img/ff3dbd643a246bcf.png"></p>
+<p>Or let the connector create it for you: enable <strong>Allow Client to Create Endpoints</strong> on the client profile your connector&#39;s username uses, and grant Publish and Subscribe ACL on the LVQ topic. The connector creates the LVQ itself, with the right properties already set.</p>
+<p class="image-container"><img alt="PLACEHOLDER: In Broker Manager, go to Client Profiles, open the profile your connector&amp;rsquo;s username uses, and screenshot the Service tab with the Allow Client to Create Endpoints toggle switched on" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="special"><p> This codelab walks through manual creation, since most readers don&#39;t administer their own broker and might not have permission to touch client profiles. If you do have that access, self-provisioning saves you a step.</p>
+</aside>
+<aside class="warning"><p> Don&#39;t delete or modify the LVQ or its offset state between runs. That&#39;s the same as losing your Spark checkpoint: the connector won&#39;t know where it left off.</p>
+</aside>
+<aside class="warning"><p> Solace partitioned queues aren&#39;t supported in connector 3.1.7.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create your cluster and install the connector" duration="7">
+        <h2 is-upgraded>Create the cluster</h2>
+<p>Create a Databricks cluster on one of the two certified runtimes:</p>
 <ul>
-<li>A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.</li>
-<li>Client connectivity configurations like usernames and profiles</li>
-<li>Guaranteed messaging endpoints for receiving and sending messages.</li>
-<li>Appropriate JNDI mappings enabling JMS clients to connect to the Solace event broker configuration.</li>
+<li><strong>DBR 15.4 LTS</strong> (Spark 3.5.0, Scala 2.12)</li>
+<li><strong>DBR 16.4 LTS</strong> (Spark 3.5.2, Scala 2.12)</li>
 </ul>
-<p>The recommended approach for configuring a event broker is using <a href="https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm" target="_blank">Solace PubSub+ Manager</a>, Solace&#39;s browser-based administration console packaged with the Solace PubSub+ event broker. This document uses CLI as the reference to remain concise - look for related settings if using Solace PubSub+ Manager.</p>
-<p>For more details related to event broker CLI see <a href="https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm" target="_blank">Solace-CLI</a>. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see <a href="https://docs.solace.com/Configuring-and-Managing/CLI-User-Access-Levels.htm?Highlight=cli%20access%20level" target="_blank">User Authentication and Authorization</a>.</p>
-<h3 is-upgraded>Creating a Message VPN</h3>
-<p>If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the &#34;Message VPN&#34; in the connection details page.</p>
-<p>This section outlines how to create a message-VPN called &#34;Solace_Spring_VPN&#34; on the event broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the configuration when connecting to the messaging event broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application&#39;s use case.</p>
-<pre><code>&gt; home
-&gt; enable
-# configure
-(config)# create message-vpn Solace_Spring_VPN
-(config-msg-vpn)# authentication
-(config-msg-vpn-auth)# user-class client
-(config-msg-vpn-auth-user-class)# basic auth-type none
-(config-msg-vpn-auth-user-class)# exit
-(config-msg-vpn-auth)# exit
-(config-msg-vpn)# no shutdown
-(config-msg-vpn)# exit
-(config)#
-(config)# message-spool message-vpn Solace_Spring_VPN
-(config-message-spool)# max-spool-usage 2000
-(config-message-spool)# exit
-(config)#
-</code></pre>
-<h3 is-upgraded>Configuring Client Usernames &amp; Profiles</h3>
-<p>This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace event broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.</p>
-<p>The chosen client username of &#34;spark_user&#34; will be required by the Spark application when connecting to the Solace event broker.</p>
-<pre><code>(config)# client-profile default message-vpn Solace_Spark_VPN
-(config-client-profile)# message-spool allow-guaranteed-message-receive
-(config-client-profile)# message-spool allow-guaranteed-message-send
-(config-client-profile)# message-spool allow-transacted-sessions
-(config-client-profile)# exit
-(config)#
-(config)# create client-username spark_user message-vpn Solace_Spark_VPN
-(config-client-username)# acl-profile default 
-(config-client-username)# client-profile default
-(config-client-username)# no shutdown
-(config-client-username)# exit
-(config)#
-</code></pre>
-<h3 is-upgraded>Setting up Guaranteed Messaging Endpoints</h3>
-<p>This integration guide shows receiving messages within the Spark application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive PubSub+ queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is &#34;Q/requests&#34;.</p>
-<pre><code>(config)# message-spool message-vpn Solace_Spark_VPN
-(config-message-spool)# create queue Q/receive
-(config-message-spool-queue)# access-type exclusive
-(config-message-spool-queue)# max-spool-usage 2000
-(config-message-spool-queue)# permission all delete
-(config-message-spool-queue)# no shutdown
-(config-message-spool-queue)# exit
-(config-message-spool)# exit
-(config)#
-</code></pre>
-<h3 is-upgraded>Setting up Solace JNDI References</h3>
-<p>To enable the JMS clients to connect and look up the Queue destination required by Spark, there are two JNDI objects required on the Solace  event broker:</p>
-<ul>
-<li>A connection factory: JNDI/Sol/CF <ul>
-<li>Note: Ensure <code>direct-transport</code> is disabled for JMS persistent messaging</li>
-</ul>
-</li>
-<li>A queue destination: JNDI/Q/receive</li>
-</ul>
-<p>They are configured as follows:</p>
-<pre><code>(config)# jndi message-vpn Solace_Spark_VPN
-(config-jndi)# create connection-factory JNDI/Sol/CF
-(config-jndi-connection-factory)# property-list messaging-properties
-(config-jndi-connection-factory-pl)# property default-delivery-mode persistent
-(config-jndi-connection-factory-pl)# exit
-(config-jndi-connection-factory)# property-list transport-properties
-(config-jndi-connection-factory-pl)# property direct-transport false
-(config-jndi-connection-factory-pl)# exit
-(config-jndi-connection-factory)# exit
-(config-jndi)#
-(config-jndi)# create queue JNDI/Q/receive
-(config-jndi-queue)# property physical-name Q/receive
-(config-jndi-queue)# exit
-(config-jndi)# 
-(config-jndi)# no shutdown
-(config-jndi)# exit
-(config)#
-</code></pre>
-<h2 is-upgraded>Step 2 – Coding a JMS custom receiver</h2>
-<p>From <a href="https://spark.apache.org/docs/latest/api/java/org/apache/spark/streaming/receiver/Receiver.html" target="_blank">Spark Receiver Class Documentation</a> there is details on how to build a custom receiver and a template. We will use this template and build a <code>PubSubPlusJMSReceiver</code>, which will stream events from the PubSub+ event broker through a JMS connection, using JNDI lookup of the queue to receive from.</p>
-<p>The <code>PubSubPlusJMSReceiver</code> extends the <code>org.apache.spark.streaming.receiver.Receiver</code> and implements the <code>javax.jms.MessageListener</code>.  This will result in the following methods created:</p>
-<ul>
-<li><code>PubSubPlusJMSReceiver</code> constructor – Synchronously called once as the Receiver is initially created.</li>
-<li><code>org.apache.spark.streaming.receiver.Receiver.onStart()</code> – Asynchronously called once as the Receiver is started.</li>
-<li><code>org.apache.spark.streaming.receiver.Receiver.onStop()</code> – Asynchronously called once as the Receiver is stopped</li>
-<li><code>javax.jms.MessageListener.onMessage()</code> – Asynchronously called on every message received from Solace</li>
-</ul>
-<pre><code language="language-Java" class="language-Java">public class PubSubPlusJMSReceiver extends Receiver&lt;String&gt; implements MessageListener {
-  private static final long serialVersionUID = 1L;
-  private static final String SOLJMS_INITIAL_CONTEXT_FACTORY =
-              &#34;com.solacesystems.jndi.SolJNDIInitialContextFactory&#34;;
-
-  public JMSReceiver( ) {
-    super(StorageLevel.MEMORY_ONLY_SER_2());
-  }
-
-  @Override
-  public void onStart() {
-    // TODO Auto-generated from spark.streaming.receiver
-  }
-
-  @Override
-  public void onStop() {
-    // TODO Auto-generated from spark.streaming.receiver
-  }
-
-  @Override
-  public void onMessage(Message arg0) {
-    // TODO Auto-generated from javax.jms.MessageListener 
-  }
-}
-</code></pre>
-<p>In the constructor we need to collect information to information needed to connect to Solace and build the JMS environment.</p>
-<pre><code language="language-Java" class="language-Java">public PubSubPlusJMSReceiver(String brokerURL,
-                             String vpn,
-                             String username,
-                             String password,
-                             String jndiQueueName,
-                             String jndiConnectionFactory,
-                             StorageLevel storageLevel)
-{
-  super(storageLevel);
-  _brokerURL = brokerURL;
-  _vpn = vpn;
-  _username = username;
-  _password = password;
-  _queueName = jndiQueueName;
-  _connectionFactory = jndiConnectionFactory;
-}
-</code></pre>
-<p>Next, in the <code>onStart()</code> method we need to look up the JMS connection factory and queue then connect to receive messages:</p>
-<pre><code language="language-Java" class="language-Java">@Override
-public void onStart()
-{
-  log.info(&#34;Starting up...&#34;);
-  try
-  {
-    Hashtable&lt;String, String&gt; env = new Hashtable&lt;String, String&gt;();
-    env.put(InitialContext.INITIAL_CONTEXT_FACTORY,
-                  SOLJMS_INITIAL_CONTEXT_FACTORY);
-    env.put(InitialContext.PROVIDER_URL, _brokerURL);
-    env.put(Context.SECURITY_PRINCIPAL, _username);
-    env.put(Context.SECURITY_CREDENTIALS, _password);
-    env.put(SupportedProperty.SOLACE_JMS_VPN, _vpn);
-    javax.naming.Context context = new javax.naming.InitialContext(env);
-    ConnectionFactory factory = (ConnectionFactory) context.lookup(_connectionFactory);
-    Destination queue = (Destination) context.lookup(_queueName);
-    _connection = factory.createConnection();
-    _connection.setExceptionListener(new JMSReceiverExceptionListener());
-    Session session = _connection.createSession(false,
-        Session.CLIENT_ACKNOWLEDGE);
-
-    MessageConsumer consumer;
-    consumer = session.createConsumer(queue);
-    consumer.setMessageListener(this);
-    _connection.start();
-    log.info(&#34;Completed startup.&#34;);
-  } catch (Exception ex) {
-    // Caught exception, try a restart
-    log.error(&#34;Callback onStart caught exception, restarting &#34;, ex);
-    restart(&#34;Callback onStart caught exception, restarting &#34;, ex);
-  }
-}
-</code></pre>
-<p>Finally, when receiving messages from the PubSub+ broker they need to be stored into Spark:</p>
-<pre><code language="language-Java" class="language-Java">@Override
-public void onMessage(Message message) {
-  log.info(&#34;Callback onMessage received&#34; + message);
-  store(message.toString());
-  try {
-    message.acknowledge();
-  } catch (JMSException ex) {
-    log.error(&#34;Callback onMessage failed to ack message&#34;, ex);
-  }
-}
-</code></pre>
-<h2 is-upgraded>Step 3 – Deploying JMS Receiver</h2>
-<p>This section will demo the use of the JMS receiver by creating a Java Spark Streaming example program, which counts the words in the input stream from the JMS receiver. For details of how the example works refer to the Java version of the <a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html#a-quick-example" target="_blank">Spark Streaming Quick Example documentation</a>, which demonstrates a similar use case.</p>
-<p>Following code snippet shows how <code>PubSubPlusJMSReceiver</code> is invoked:</p>
-<pre><code language="language-Java" class="language-Java">public static void main(String[] args) throws Exception {
-  // Create the context with a 1 second batch size
-  SparkConf sparkConf = new SparkConf().setAppName(&#34;JavaCustomReceiver&#34;);
-  JavaStreamingContext ssc = new JavaStreamingContext(sparkConf, new Duration(1000));
-  // Create a input stream with the custom receiver on provided PubSub+ broker connection config
-  JavaReceiverInputDStream&lt;String&gt; lines = ssc.receiverStream(
-      new PubSubPlusJMSReceiver(args[0], args[1], args[2], args[3], args[4], args[5],
-                                StorageLevel.MEMORY_ONLY_SER_2()));
-  ...
-}
-</code></pre>
-<h3 is-upgraded>Demo pre-requisites</h3>
-<ul>
-<li>Working Spark deployment: this can be a cluster of Spark machines or a standalone local installation.</li>
-<li>Working and configured Solace PubSub+ deployment - refer to the previous sections.</li>
-</ul>
-<h3 is-upgraded>Demo run</h3>
-<p>The demo code shall be first built, then submitted to Spark. Within a cluster of Spark machines you can build and submit jobs from any machine. For simplicity, a local Spark installation is assumed here.</p>
+<p class="image-container"><img alt="PLACEHOLDER: In the Databricks workspace, go to Compute &gt; Create compute, and screenshot the configuration panel with the Databricks Runtime Version dropdown showing 15.4 LTS or 16.4 LTS and the Use Photon Acceleration checkbox both visible in the same frame" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="warning"><p> On DBR 15.4 LTS, the connector is only certified with <strong>Photon acceleration turned off</strong>. Check that toggle before you finish creating the cluster. Cluster policies and cloned clusters are the two most common ways it quietly gets turned back on.</p>
+</aside>
+<h2 is-upgraded>Install the connector</h2>
 <ol type="1">
-<li>Clone this project from GitHub</li>
+<li>On the cluster&#39;s <strong>Libraries</strong> tab, choose <strong>Install new</strong> → <strong>Maven</strong>.</li>
+<li>Enter the coordinates: <code>com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7</code>.</li>
 </ol>
-<pre><code language="language-bash" class="language-bash">git clone https://github.com/SolaceLabs/solace-integration-guides.git
-cd solace-integration-guides/src/spark-streaming
-export PROJECT_HOME=$(pwd)
+<p class="image-container"><img alt="PLACEHOLDER: On the cluster&amp;rsquo;s Libraries tab, click Install new, select Maven, and screenshot the install dialog with the Coordinates field showing com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7 typed in and legible" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="warning"><p> If an older version of the connector is already on this cluster, remove it first. Leftover jars from a previous version cause version conflicts, and the connector won&#39;t start.</p>
+</aside>
+<aside class="special"><p> On Shared compute clusters, you need permission to install from Maven Central and access the resulting jars. If the install fails, that permission is the first thing to check with your workspace admin. See the <a href="https://docs.databricks.com/en/libraries/index.html" target="_blank">Databricks library permissions documentation</a>.</p>
+</aside>
+<h2 is-upgraded>Create a notebook</h2>
+<p>Create a Python notebook and attach it to the cluster. Everything from Step 5 on runs here.</p>
+<aside class="special"><p> This connector is certified on Azure Databricks, but the Databricks runtime is the same across AWS and Google Cloud too, so every step here applies unchanged on those clouds.</p>
+</aside>
+<aside class="warning"><p><strong>Self-managed Spark:</strong> install with <code>spark-submit --packages com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7</code>, or <code>--jars</code> if you&#39;re air-gapped. You also need to set <code>sparkRuntimePlatform</code> to <code>OTHER</code> on every stream, since it defaults to <code>DATABRICKS</code> and otherwise runs a Unity Catalog check you don&#39;t need. See Appendix A for the full picture.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Read from Solace into a DataFrame" duration="10">
+        <p>This part is the same everywhere. In your notebook, start a read stream against the source queue you created in Step 3:</p>
+<pre><code language="language-python" class="language-python">df = (spark.readStream
+      .format(&#34;solace&#34;)
+      .option(&#34;host&#34;, &#34;tcps://&lt;host&gt;:55443&#34;)
+      .option(&#34;vpn&#34;, &#34;&lt;vpn&gt;&#34;)
+      .option(&#34;username&#34;, &#34;&lt;user&gt;&#34;)
+      .option(&#34;password&#34;, &#34;&lt;password&gt;&#34;)
+      .option(&#34;queue&#34;, &#34;&lt;source-queue&gt;&#34;)
+      .option(&#34;lvq.name&#34;, &#34;&lt;lvq-name&gt;&#34;)
+      .option(&#34;lvq.topic&#34;, &#34;&lt;lvq-topic&gt;&#34;)
+      .option(&#34;connectRetries&#34;, 2)
+      .option(&#34;reconnectRetries&#34;, 2)
+      .option(&#34;batchSize&#34;, 100)
+      .option(&#34;partitions&#34;, 1)
+      .option(&#34;includeHeaders&#34;, True)
+      .load())
+
+display(df)
 </code></pre>
-<ol type="1">
-<li>Build the demo</li>
-</ol>
-<pre><code language="language-bash" class="language-bash">mvn package
-# this will generate jar libraries
-# note the jar variant that includes required dependencies
-ls target/*.jar
+<p>Publish a few test messages to your source topic (Broker Manager&#39;s <strong>Try Me!</strong> panel works fine) and watch them show up:</p>
+<p class="image-container"><img alt="PLACEHOLDER: In your Databricks notebook, run the readStream cell from this step, publish a few test messages from Broker Manager&amp;rsquo;s Try Me panel, then screenshot the display(df) output once rows appear in the results table" src="img/ff3dbd643a246bcf.png"></p>
+<h2 is-upgraded>Source schema</h2>
+<p>Every DataFrame the connector produces has this shape:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Column</p>
+</td><td colspan="1" rowspan="1"><p>Type</p>
+</td><td colspan="1" rowspan="1"><p>Meaning</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Id</code></p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>Replication group message ID of the incoming message</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Payload</code></p>
+</td><td colspan="1" rowspan="1"><p>Binary</p>
+</td><td colspan="1" rowspan="1"><p>Message payload</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>PartitionKey</code></p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>Partition key, if present in the message</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Topic</code></p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>Topic the message was published to</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>TimeStamp</code></p>
+</td><td colspan="1" rowspan="1"><p>Timestamp</p>
+</td><td colspan="1" rowspan="1"><p>Sender timestamp if present, otherwise receipt time at the connector</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Headers</code></p>
+</td><td colspan="1" rowspan="1"><p>Map&lt;String, Binary&gt;</p>
+</td><td colspan="1" rowspan="1"><p>Present only when <code>includeHeaders</code> is <code>true</code></p>
+</td></tr>
+</table>
+<h2 is-upgraded>Transform and write to Delta</h2>
+<p><code>Payload</code> comes through as raw bytes, so cast it and parse it into a structured column:</p>
+<pre><code language="language-python" class="language-python">from pyspark.sql.functions import col, from_json
+
+parsed = df.select(
+    col(&#34;Id&#34;),
+    col(&#34;Topic&#34;),
+    col(&#34;TimeStamp&#34;),
+    from_json(col(&#34;Payload&#34;).cast(&#34;string&#34;), order_schema).alias(&#34;order&#34;))
+
+(parsed.writeStream
+      .format(&#34;delta&#34;)
+      .option(&#34;checkpointLocation&#34;, &#34;&lt;checkpoint-path&gt;&#34;)
+      .toTable(&#34;orders_bronze&#34;))
 </code></pre>
-<ol type="1">
-<li>Submit to Spark</li>
-</ol>
-<pre><code language="language-bash" class="language-bash"># Substitute &#34;/path/to/spark&#34; to local Spark install directory
-export SPARK_HOME=&#34;/path/to/spark&#34;
-# Substitute from the configuration described in the Solace Resources section
-export HOST=&#34; &lt;Solace Event Broker Host&gt;&#34;
-export MESSAGE_VPN=&#34;&lt;Message VPN&gt;&#34;
-export USERNAME=&#34;&lt;Client Username&gt;&#34;
-export PASSWORD=&#34;&lt;Client Password&gt;&#34;
-export JNDI_QUEUE=&#34;&lt;JNDI Queue Name&gt;&#34;
-export JNDI_CF=&#34;&lt;JNDI Connection Factory&gt;&#34;
-# This example configures 4 local threads in the --master parameter
-$SPARK_HOME/bin/spark-submit \
-  --class com.solace.sample.PubSubPlusJMSReceiverTest \
-  --master local[4] \
-  $PROJECT_HOME/target/pubsubplus-jms-to-spark-streaming-demo-0.0.1-jar-with-dependencies.jar \
-  $HOST \
-  $MESSAGE_VPN \
-  $USERNAME \
-  $PASSWORD \
-  $JNDI_QUEUE \
-  $JNDI_CF
+<p>Leave <code>checkpointLocation</code> alone for now. Step 6 covers what needs to happen there on Databricks.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Checkpoint to a Unity Catalog Volume" duration="8">
+        <p>A few things to know before you touch any Databricks-specific options, since they apply on any platform:</p>
+<ul>
+<li>The connector acknowledges messages and writes processed message IDs to the Spark checkpoint once Spark signals commit, meaning Spark is done with that data.</li>
+<li>That&#39;s where the LVQ from Step 3 comes in: it holds the offset state so the worker nodes and the driver can agree on where to pick back up after a restart.</li>
+<li>Checkpoint writes can still fail, say during an instance crash. The connector handles duplicates in most cases, but keep your downstream systems idempotent anyway. That&#39;s the guide&#39;s own advice, and it&#39;s worth taking seriously.</li>
+</ul>
+<h2 is-upgraded>Why Databricks needs extra options here</h2>
+<p>Databricks executor nodes can&#39;t reach Unity Catalog Volumes directly. So when your checkpoint path is a UC Volume, the connector has to authenticate through unified auth using a <strong>Databricks workspace-level service principal</strong>:</p>
+<pre><code language="language-python" class="language-python">      .option(&#34;sparkRuntimePlatform&#34;, &#34;DATABRICKS&#34;)
+      .option(&#34;databricksSecretScope&#34;, &#34;solace-dev-credentials&#34;)
+      .option(&#34;databricksHost&#34;, &#34;databricks-host&#34;)
+      .option(&#34;databricksClientId&#34;, &#34;databricks-client-id&#34;)
+      .option(&#34;databricksClientSecret&#34;, &#34;databricks-client-secret&#34;)
+      .option(&#34;databricksClientSecretRefreshInterval&#34;, 1440)
 </code></pre>
+<p class="image-container"><img alt="PLACEHOLDER: In Catalog Explorer, open your checkpoint Volume&amp;rsquo;s Permissions tab and screenshot the grant list showing your workspace service principal with access, alongside the Volume&amp;rsquo;s full path (e.g. /Volumes/main/default/checkpoints) so the UC path pattern is visible" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="warning"><p><code>databricksHost</code>, <code>databricksClientId</code>, and <code>databricksClientSecret</code> are <strong>secret names inside the scope</strong>, not the actual values. It&#39;s easy to read them as the literal host, ID, and secret, but they&#39;re just pointers to where those live.</p>
+</aside>
+<aside class="warning"><p> The service principal needs access to both the UC Volume you&#39;re checkpointing to and the secret scope. Grant one but not the other and it fails in a way that won&#39;t obviously point you back to the missing permission.</p>
+</aside>
+<aside class="warning"><p><strong>Secret rotation: </strong><code>databricksClientSecretRefreshInterval</code> defaults to 1440 minutes. Rotating the secret is your platform admin&#39;s job, not the connector&#39;s, but the refresh interval needs to fire after rotation finishes and before the old secret expires. Get the timing wrong and the connector keeps using the old secret until the next cycle. No restart needed once the interval is set correctly.</p>
+</aside>
+<aside class="special"><p> The UC Volume check only kicks in when the checkpoint path contains <code>Volumes</code>. Checkpointing to plain DBFS on Databricks? None of the <code>databricks*</code> options apply, which is why some jobs work fine without anyone ever touching this section.</p>
+</aside>
+<aside class="warning"><p><strong>Self-managed Spark:</strong> set <code>sparkRuntimePlatform</code> to <code>OTHER</code> and point <code>checkpointLocation</code> at S3, HDFS, or another shared filesystem instead. Skip the <code>databricks*</code> options entirely. Just make sure it&#39;s actually shared storage: a local path on a multi-node cluster isn&#39;t, and that&#39;s the most common way this breaks.</p>
+</aside>
+<h2 is-upgraded>Prove it survives a restart</h2>
+<p>Don&#39;t just take this on faith. Try it:</p>
 <ol type="1">
-<li>Send test messages to the PubSub+ queue, which will be streamed to Spark, then observe the logs. You can send individual messages from the <a href="https://docs.solace.com/Broker-Manager/PubSub-Manager-Overview.htm?Highlight=Try%20Me#Test-Messages" target="_blank">Try Me!</a> tab of the PubSub+ Broker Manager. To generate larger number of messages it is recommended to use the <a href="https://docs.solace.com/SDKPerf/SDKPerf.htm" target="_blank">SDKPerf tool</a>.</li>
+<li>With the stream running, publish a few messages and confirm they land in the Delta table.</li>
+<li>Stop the stream (<code>query.stop()</code> in the notebook, or cancel the running cell).</li>
+<li>Restart the read stream with the same <code>checkpointLocation</code>, <code>queue</code>, and <code>lvq.name</code>.</li>
+<li>Publish a few more messages and confirm the table picks up exactly where it left off, with no gap and no duplicates.</li>
 </ol>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Performance Considerations" duration="5">
-        <p>In the provided example above persistent messaging was used on the  event broker and the Spark Streaming client connected to a queue. This design pattern provides the highest level of reliability as each message is persisted on the Solace Event Broker and will not be lost in case of a client failure. This message pattern consumes the most resources on the Solace Event Broker and is not the most performant.</p>
-<p>If the client does not want to receive messages that where missed while it was offline, does not want to receive older messages if it is unable to keep up to the published message flow, or wants the highest throughput with lowest latency; then direct messaging is the recommended pattern.</p>
-<p>To achieve direct messaging, configure the connection-factory to enable this feature.</p>
-<pre><code>(config)# jndi message-vpn Solace_Spark_VPN
-(config-jndi)# connection-factory JNDI/Sol/CF
-(config-jndi-connection-factory)# property-list transport-properties
-(config-jndi-connection-factory-pl)# property direct-transport true
+      <google-codelab-step label="Publish back to Solace" duration="8">
+        <p>Now the other direction: turning DataFrame rows into Solace messages. This is the same on every platform.</p>
+<pre><code language="language-python" class="language-python">query = (result_df.writeStream
+         .format(&#34;solace&#34;)
+         .option(&#34;host&#34;, &#34;tcps://&lt;host&gt;:55443&#34;)
+         .option(&#34;vpn&#34;, &#34;&lt;vpn&gt;&#34;)
+         .option(&#34;username&#34;, &#34;&lt;user&gt;&#34;)
+         .option(&#34;password&#34;, &#34;&lt;password&gt;&#34;)
+         .option(&#34;topic&#34;, &#34;solace/spark/stream/processing/result&#34;)
+         .option(&#34;batchSize&#34;, 100)
+         .option(&#34;publishAckTimeout&#34;, 5000)
+         .option(&#34;publishAckTimeoutFailOnError&#34;, True)
+         .outputMode(&#34;append&#34;)
+         .option(&#34;checkpointLocation&#34;, &#34;&lt;uc-volume-path&gt;&#34;)
+         .start())
+</code></pre>
+<h2 is-upgraded>Sink schema</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Column</p>
+</td><td colspan="1" rowspan="1"><p>Required</p>
+</td><td colspan="1" rowspan="1"><p>Notes</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Id</code></p>
+</td><td colspan="1" rowspan="1"><p><strong>Yes</strong></p>
+</td><td colspan="1" rowspan="1"><p>The connector throws without it; used to track published-message state. Overridden by the deprecated <code>id</code> option.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Payload</code></p>
+</td><td colspan="1" rowspan="1"><p><strong>Yes</strong></p>
+</td><td colspan="1" rowspan="1"><p>Binary. The connector throws without it.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Topic</code></p>
+</td><td colspan="1" rowspan="1"><p>Conditional</p>
+</td><td colspan="1" rowspan="1"><p>Required unless the <code>topic</code> option is set. The option overrides the column when both are present.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>PartitionKey</code></p>
+</td><td colspan="1" rowspan="1"><p>No</p>
+</td><td colspan="1" rowspan="1"><p>Matters when a partitioned queue subscribes downstream</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>TimeStamp</code></p>
+</td><td colspan="1" rowspan="1"><p>No</p>
+</td><td colspan="1" rowspan="1"><p>Maps to Sender Timestamp on the outgoing Solace message</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>Headers</code></p>
+</td><td colspan="1" rowspan="1"><p>No</p>
+</td><td colspan="1" rowspan="1"><p>Applied only when <code>includeHeaders</code> is <code>true</code></p>
+</td></tr>
+</table>
+<aside class="warning"><p> The <code>id</code> option is deprecated, so carry an <code>Id</code> column on your DataFrame instead of using it.</p>
+</aside>
+<aside class="special"><p><code>publishAckTimeout</code> defaults to 5000 ms and <code>publishAckTimeoutFailOnError</code> defaults to <code>true</code>. That means a slow broker fails the batch loudly instead of quietly losing messages. Tune the timeout to match your real network latency and batch size, and leave <code>publishAckTimeoutFailOnError</code> on unless you have a good reason not to. When a publish fails, the message ID gets logged with the exception.</p>
+</aside>
+<h2 is-upgraded>Two publish patterns</h2>
+<p><code>writeStream</code> as shown above covers most cases. If a single micro-batch needs to reach Solace and somewhere else too, like a second Delta table or an external API, reach for <code>forEachBatch</code> instead:</p>
+<pre><code language="language-python" class="language-python">def send_batch(batch_df, batch_id):
+    (batch_df.write
+        .format(&#34;solace&#34;)
+        .option(&#34;host&#34;, &#34;tcps://&lt;host&gt;:55443&#34;)
+        .option(&#34;vpn&#34;, &#34;&lt;vpn&gt;&#34;)
+        .option(&#34;username&#34;, &#34;&lt;user&gt;&#34;)
+        .option(&#34;password&#34;, &#34;&lt;password&gt;&#34;)
+        .option(&#34;topic&#34;, &#34;solace/spark/stream/processing/result&#34;)
+        .save())
+    batch_df.write.format(&#34;delta&#34;).mode(&#34;append&#34;).saveAsTable(&#34;orders_published&#34;)
 
-(config)# jndi message-vpn Solace_Spark_VPN
-(config-jndi)# create topic JNDI/T/receive
-(config-jndi-queue)# property physical-name T/receive
-(config-jndi-queue)# exit
+(result_df.writeStream
+    .foreachBatch(send_batch)
+    .option(&#34;checkpointLocation&#34;, &#34;&lt;uc-volume-path&gt;&#34;)
+    .start())
 </code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Working with Solace High Availability (HA)" duration="5">
-        <p>The <a href="https://docs.solace.com/Solace-JMS-API/JMS-Intro.htm" target="_blank">Developer Guide for Solace JMS API</a> section &#34;Establishing Connections&#34; and &#34;Managing Sessions&#34; provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.</p>
-<p>Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes.</p>
-<p>In <a href="https://docs.solace.com/Configuring-and-Managing/Configuring-JNDI-Objects.htm" target="_blank">Configuring JNDI Objects</a>, the Solace CLI commands correctly configured the required JNDI properties to reasonable values. Note: the retry parameters re all defaults, these commands are repeated here for completeness.</p>
-<pre><code>(config)# jndi message-vpn solace_VPN
-(config-jndi)# create connection-factory JNDI/Sol/CF
-(config-jndi-connection-factory)# property-list transport-properties
-(config-jndi-connection-factory-pl)# property &#34;reconnect-retry-wait&#34; &#34;3000&#34;
-(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;20&#34;
-(config-jndi-connection-factory-pl)# property &#34;connect-retries-per-host&#34; &#34;5&#34;
-(config-jndi-connection-factory-pl)# property &#34;connect-retries&#34; &#34;1&#34;
-(config-jndi-connection-factory-pl)# exit
-(config-jndi-connection-factory)# exit
-(config-jndi)# exit
-(config)#
+      <google-codelab-step label="Move your credentials into Databricks secrets" duration="6">
+        <p>Go back to the read stream you wrote in Step 5 and delete the plaintext <code>username</code> and <code>password</code> values. If the connector&#39;s running on Databricks, there&#39;s no reason not to use Databricks secrets instead.</p>
+<pre><code language="language-python" class="language-python">      .option(&#34;host&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;host&#34;))
+      .option(&#34;vpn&#34;, &#34;default&#34;)
+      .option(&#34;username&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;username&#34;))
+      .option(&#34;password&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;password&#34;))
 </code></pre>
+<p class="image-container"><img alt="PLACEHOLDER: Using the Databricks CLI, run databricks secrets list-secrets solace-dev-credentials and screenshot the terminal output showing the secret keys (host, username, password) without revealing their values, since secret values never display in plaintext" src="img/ff3dbd643a246bcf.png"></p>
+<aside class="special"><p> Already created a secret scope in the previous step for the Unity Catalog service principal? Reuse it here instead of creating a second one.</p>
+</aside>
+<p>The same pattern works for OAuth. Pull <code>solace.oauth.client.client-id</code>, <code>solace.oauth.client.credentials.client-secret</code>, and <code>solace.oauth.client.auth-server.truststore.password</code> from the scope, and set <code>solace.apiProperties.AUTHENTICATION_SCHEME</code> to <code>AUTHENTICATION_SCHEME_OAUTH2</code>.</p>
+<pre><code language="language-python" class="language-python">      .option(&#34;solace.apiProperties.AUTHENTICATION_SCHEME&#34;, &#34;AUTHENTICATION_SCHEME_OAUTH2&#34;)
+      .option(&#34;solace.oauth.client.client-id&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;oauth-client-id&#34;))
+      .option(&#34;solace.oauth.client.credentials.client-secret&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;oauth-client-secret&#34;))
+      .option(&#34;solace.oauth.client.auth-server.truststore.password&#34;, dbutils.secrets.get(scope=&#34;solace-dev-credentials&#34;, key=&#34;truststore-password&#34;))
+</code></pre>
+<aside class="special"><p> You can also keep certificates in cloud object storage and restrict access through Unity Catalog to just the clusters that need to reach Solace. See the <a href="https://docs.databricks.com/en/data-governance/unity-catalog/index.html" target="_blank">Databricks data governance documentation</a> for how.</p>
+</aside>
+<aside class="warning"><p><strong>Self-managed Spark: </strong><code>dbutils</code> doesn&#39;t exist outside Databricks, so use OAuth2 client credentials, a rotating token file, or a client certificate instead. Appendix A has the option names for all three.</p>
+</aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Debugging Tips for Solace JMS API Integration" duration="5">
-        <p>The key component for debugging integration issues with the Solace JMS API is to enable API logging. Spark was written using Jakarta Commons Logging API (JCL), Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring the Solace JMS API logging is very similar to configuring any other Spark application. The following example shows how to enable debug logging in the Solace JMS API using log4j. One note to consider is that since the Solace JMS API has a dependency on the Solace Java API (JCSMP) both of the following logging components should be enabled and tuned when debugging to get full information. By default info logs will be written to the consol. Following example sets both to debug level:</p>
-<pre><code>log4j.category.com.solacesystems.jms=DEBUG
-log4j.category.com.solacesystems.jcsmp=DEBUG
-</code></pre>
-<p>Above lines can be added to the <code>log4j.properties</code> configuration file located at the <code>$SPARK_HOME/conf</code> directory. Note: if no <code>log4j.properties</code> configuration file exists then the contents of the <code>log4j.properties.template</code> file can be used as a starting point. With this you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.</p>
-<pre><code language="language-log" class="language-log">22/01/31 09:11:22 INFO TcpClientChannel: Client-2: Connecting to host &#39;orig=tcps://mr-xyz.messaging.solace.cloud:55443, scheme=tcps://, host=mr-xyz.messaging.solace.cloud, port=55443&#39; (host 1 of 1, smfclient 2, attempt 1 of 1, this_host_attempt: 1 of 1)
-22/01/31 09:11:22 INFO SNIUtil: Server Name Indication (SNI) automatically applied by using provided hostname
-22/01/31 09:11:22 INFO SSLSmfClient: SSLEngine Supported Protocols: [SSLV3, TLSV1, TLSV1.1, TLSV1.2]
-22/01/31 09:11:22 INFO SSLSmfClient: Application Specified Protocols: [SSLv3, TLSv1, TLSv1.1, TLSv1.2]
-22/01/31 09:11:22 INFO TcpClientChannel: Client-2: Connected to host &#39;orig=tcps://mr-xyz.messaging.solace.cloud:55443, scheme=tcps://, host=mr-xyz.messaging.solace.cloud, port=55443&#39; (smfclient 2)
-</code></pre>
+      <google-codelab-step label="Scale and operate" duration="7">
+        <h2 is-upgraded>Parallelism</h2>
+<p><code>partitions</code> controls how many consumers read from the queue at once, spread across your worker nodes. It defaults to <code>1</code>.</p>
+<aside class="special"><p> Set <code>partitions=0</code> and you get one consumer per worker node, which scales automatically as you add nodes. That&#39;s what you want on an autoscaling Databricks cluster. On a fixed-size cluster, pick a fixed number instead so your broker-side connection count stays predictable.</p>
+</aside>
+<h2 is-upgraded>Throughput</h2>
+<p><code>batchSize</code> defaults to <strong>1</strong>, which is why a connector you haven&#39;t touched yet feels slow. Whatever value you pick, set Maximum Delivered Unacknowledged Messages on the source queue (Step 3) to twice that. <code>queue.receiveWaitTimeout</code> (default 10000 ms) controls how long the connector waits before it submits a partial micro-batch instead of waiting for a full one.</p>
+<h2 is-upgraded>Idle connections</h2>
+<p><code>connectIdleTimeoutInMillis</code> and <code>connectIdleTimeoutCheckInMillis</code> are both off by default, and you need to set both to turn the feature on. It&#39;s worth doing on long-running clusters where Spark sessions don&#39;t shut down cleanly. When an idle connection closes, any pending unacknowledged messages get redelivered, so make sure your downstream is idempotent. The connection comes back on restart, or as soon as new messages arrive while the job is running.</p>
+<h2 is-upgraded>Replay</h2>
+<p>Set <code>replayStrategy</code> to <code>BEGINNING</code>, <code>TIMEBASED</code>, or <code>REPLICATION-GROUP-MESSAGE-ID</code>, along with whichever of <code>replayStartTime</code> (format <code>yyyy-MM-dd'T'HH:mm:ss</code>), <code>replayStartTimeTimezone</code> (default UTC), or <code>replayReplicationGroupMessageId</code> the strategy needs. This is how you rebuild a Delta table without republishing source data, and it needs the replay log turned on at the broker.</p>
+<h2 is-upgraded>Recovery edge cases</h2>
+<ul>
+<li><code>ackLastProcessedMessages</code> acknowledges the previous run&#39;s messages on restart. Only use it if downstream genuinely finished processing them, and note it does nothing if a replay strategy is set.</li>
+<li><code>ignoreCheckpointMessageIdComparisonError</code> handles messages arriving from a different replication group. Left at the default (<code>false</code>), the connector throws <code>SolaceReplicationGroupMessageIdNotComparableException</code> and stops. Set it to <code>true</code> and it logs a warning and treats the message as new, with no deduplication.</li>
+</ul>
+<h2 is-upgraded>High availability and disaster recovery</h2>
+<p><code>connectRetries</code>, <code>reconnectRetries</code> (default 3), <code>connectRetriesPerHost</code>, and <code>reconnectRetryWaitInMillis</code> (default 3000) control how the connector reconnects, and you can give it a comma-separated host list for active and standby sites. Set any of the retry counts to <code>-1</code> to retry forever.</p>
+<h2 is-upgraded>Cluster policy gotcha</h2>
+<p>Remember the Shared compute permission from Step 4? It bites in production too: a cluster policy change can quietly remove the ability to install the connector library, and the first sign is a job that stopped working with no code change behind it. Photon turning back on after a cluster clone is the same story.</p>
+<h2 is-upgraded>Escape hatch</h2>
+<p>Anything you can&#39;t set directly, <code>solace.apiProperties.<Property></code> passes straight through to the underlying Solace Java API, for example <code>solace.apiProperties.reapply_subscriptions=false</code> or <code>solace.apiProperties.pub_ack_window_size=50</code>. The <a href="https://docs.solace.com/API-Developer-Online-Ref-Documentation/java/com/solacesystems/jcsmp/JCSMPProperties.html" target="_blank">JCSMPProperties documentation</a> has the full list.</p>
+<aside class="warning"><p><strong>Self-managed Spark: </strong><code>partitions=0</code> still works, but it tracks whatever worker count you have right now rather than scaling with it, so pick a value on purpose. Everything else here applies as-is.</p>
+</aside>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Advanced Topics" duration="25">
-        <h2 is-upgraded>Authentication (LDAP example)<a name="authentication-ldap-example" target="_blank"></a></h2>
-<p>JMS Client authentication is handled by the PubSub+ event broker. The broker supports a variety of authentications schemes as described in <a href="https://docs.solace.com/Configuring-and-Managing/Configuring-Client-Authentication.htm" target="_blank">the Solace documentation</a>. In this section we will show how to configure the PubSub+ Event Broker to pass the authentication username/password through to an LDAP,(Active-Directory) server to incorporate with enterprise level authentication mechanisms.  TLS client certificate, OAuth and Kerberos are also possible.</p>
+      <google-codelab-step label="Recap and next steps" duration="2">
+        <p>You now know how to:</p>
 <ul>
-<li>First an LDAP profile needs to be created, this includes:</li>
-<li>Admin Username and Password to do LDAP lookups</li>
-<li>Part of the LDAP structure to check for users</li>
-<li>Location of LDAP server(s)</li>
-<li>Search filter, how to compare Client Username to LDAP Structure.</li>
+<li>✅ Read Solace messages into a Spark DataFrame, on worker nodes, with a Last Value Queue backing recovery</li>
+<li>✅ Write DataFrame rows back to Solace as messages</li>
+<li>✅ Checkpoint to a Unity Catalog Volume and survive a stream restart without losing or duplicating data</li>
 </ul>
-<pre><code>(config)# create authentication ldap-profile ActiveDirectoryIntegration
-(config/authentication/ldap-profile)# admin dn DomainAdmin password xxxxxx
-(config/authentication/ldap-profile)# search base-dn dc=lab,dc=solace,dc=com
-(config/authentication/ldap-profile)# ldap-server ldap://192.168.1.56 index 1
-(config/authentication/ldap-profile)# search filter &#34;(sAMAccountName = $CLIENT_USERNAME)&#34;
-(config/authentication/ldap-profile)# no shut
-(config/authentication/ldap-profile)# exit
-</code></pre>
-<p>Finally the LDAP profile will need to be enabled for the message VPN.  Note that there is no code change from the Application/API.  As the authentication is pass-through from the  event broker to the LDAP server.</p>
-<pre><code>(config)# message-vpn Solace_Spark_VPN
-(config/message-vpn)# authentication user-class client
-(...message-vpn/authentication/user-class)# basic
-(...e-vpn/authentication/user-class/basic)# auth-type ldap ActiveDirectoryIntegration
-(...e-vpn/authentication/user-class/basic)# exit
-</code></pre>
-<h2 is-upgraded>Enabling TLS on the PubSub+ Event Broker<a name="using-tls-communication" target="_blank"></a></h2>
-<p>TLS may already be enabled on your Event Broker, for example if using PubSub+ Cloud. In this case you can skip this section.</p>
-<p>To enable secure connections (TLS) to the Solace event broker, the following configuration must be updated on the Solace event broker.</p>
+<h2 is-upgraded>Keep going</h2>
 <ul>
-<li>Server Certificate</li>
-<li>TLS/SSL Service Listen Port</li>
-<li>Enable TLS/SSL over SMF in the Message VPN</li>
+<li><a href="https://github.com/SolaceDev/solace-dev-codelabs/tree/master/markdown/spark-streaming/code" target="_blank">Runnable code assets for this codelab</a>: the Databricks notebook, the self-managed project, the sample publisher, and docker-compose</li>
+<li><a href="https://solace.com/connectors/" target="_blank">Solace connector for Spark on the Databricks Hub</a></li>
+<li><a href="https://solace.com/connectors/?fwp_connectors_search=spark" target="_blank">Apache Spark Hub entry</a></li>
+<li><a href="https://github.com/SolaceProducts/pubsubplus-connector-spark" target="_blank">SolaceProducts/pubsubplus-connector-spark on GitHub</a></li>
+<li><a href="https://github.com/SolaceProducts/pubsubplus-connector-spark/blob/master/README.md" target="_blank">Solace Spark connector user guide</a></li>
+<li><a href="https://solace.community/" target="_blank">Solace Community</a></li>
 </ul>
-<p>The following sections outline how to configure these items.</p>
-<h4 is-upgraded>Configuring the Server Certificate</h4>
-<p>Before starting, here is some background information on the server certificate required by the event broker. This is from the <a href="https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm" target="_blank">Solace documentation</a>:</p>
-<p>&#34;To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace PubSub+ event broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.&#34;</p>
-<p>To configure the server certificate, first copy the server certificate to the Solace event broker. For the purposes of this example, assume the server certificate file is named &#34;mycert.pem&#34;.</p>
-<pre><code># copy sftp://[&lt;username&gt;@]&lt;ip-addr&gt;/&lt;remote-pathname&gt;/mycert.pem /certs
-&lt;username&gt;@&lt;ip-addr&gt;&#39;s password:
-#
+<aside class="special"><p> There&#39;s also a 4.x line of this connector for <strong>Spark 4.0, Scala 2.13, and Java 17 on DBR 17.3 LTS</strong>. Check the <a href="https://github.com/SolaceProducts/pubsubplus-connector-spark/releases" target="_blank">pubsubplus-connector-spark releases page</a> for details.</p>
+</aside>
+<p>Comparing stream processors? Try the <a href="https://codelabs.solace.dev/codelabs/flink-streaming-2-10/index.html" target="_blank">Solace and Apache Flink codelab</a> next.</p>
+<p>Thanks for completing this codelab! Let us know what you thought in the <a href="https://solace.community/" target="_blank">Solace Community Forum</a>. If you found any issues along the way, use the <strong>Report a mistake</strong> button at the bottom left of this page.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Appendix A: Running on self-managed Spark" duration="5">
+        <p>Not on Databricks at all? Here&#39;s every difference from the steps above in one place, plus the self-managed authentication options in full.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Step</p>
+</td><td colspan="1" rowspan="1"><p>On Databricks</p>
+</td><td colspan="1" rowspan="1"><p>On self-managed Spark</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Install (Step 4)</p>
+</td><td colspan="1" rowspan="1"><p>Cluster Libraries → Maven</p>
+</td><td colspan="1" rowspan="1"><p><code>spark-submit --packages com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7</code>, or <code>--jars</code> offline</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Platform option (Step 4)</p>
+</td><td colspan="1" rowspan="1"><p><code>sparkRuntimePlatform</code> defaults to <code>DATABRICKS</code>, nothing to set</p>
+</td><td colspan="1" rowspan="1"><p>Set <code>sparkRuntimePlatform</code> to <code>OTHER</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Runtime (Step 4)</p>
+</td><td colspan="1" rowspan="1"><p>DBR 15.4 LTS or DBR 16.4 LTS</p>
+</td><td colspan="1" rowspan="1"><p>Spark 3.5.x, Scala 2.12, JDK 11</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Checkpoint (Step 6)</p>
+</td><td colspan="1" rowspan="1"><p>Unity Catalog Volume plus workspace service principal</p>
+</td><td colspan="1" rowspan="1"><p>S3, HDFS, or another shared filesystem. No <code>databricks*</code> options</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Credentials (Step 8)</p>
+</td><td colspan="1" rowspan="1"><p><code>dbutils.secrets.get</code></p>
+</td><td colspan="1" rowspan="1"><p>OAuth2 client credentials, rotating token file, or client certificate</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Parallelism (Step 9)</p>
+</td><td colspan="1" rowspan="1"><p><code>partitions=0</code> tracks the autoscaling cluster</p>
+</td><td colspan="1" rowspan="1"><p><code>partitions=0</code> tracks a fixed worker count, so choose deliberately</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Self-managed authentication options</h2>
+<p><strong>1. OAuth2 client credentials</strong></p>
+<pre><code language="language-python" class="language-python">      .option(&#34;solace.apiProperties.AUTHENTICATION_SCHEME&#34;, &#34;AUTHENTICATION_SCHEME_OAUTH2&#34;)
+      .option(&#34;solace.oauth.client.auth-server-url&#34;, &#34;&lt;auth-server-url&gt;&#34;)
+      .option(&#34;solace.oauth.client.client-id&#34;, &#34;&lt;client-id&gt;&#34;)
+      .option(&#34;solace.oauth.client.credentials.client-secret&#34;, &#34;&lt;client-secret&gt;&#34;)
+      .option(&#34;solace.oauth.client.auth-server.truststore.file&#34;, &#34;&lt;truststore-path&gt;&#34;)
+      .option(&#34;solace.oauth.client.token.refresh.interval&#34;, 60)
 </code></pre>
-<p>Then set the server certificate for the Solace event broker.</p>
-<pre><code>(config)# ssl server-certificate mycert.pem
-(config)#
+<p>Keep the refresh interval (default 60 seconds) shorter than your token&#39;s expiry.</p>
+<p><strong>2. Rotating token read from file</strong></p>
+<pre><code language="language-python" class="language-python">      .option(&#34;solace.oauth.client.access-token&#34;, &#34;/absolute/path/to/token&#34;)
+      .option(&#34;solace.oauth.client.token.refresh.interval&#34;, 60)
 </code></pre>
-<h4 is-upgraded>Configure TLS/SSL Service Listen Port</h4>
-<p>By default, the Solace event broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace event broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.</p>
-<pre><code>(config)# service smf
-(config-service-smf)# shutdown
-All SMF and WEB clients will be disconnected.
-Do you want to continue (y/n)? y
-(config-service-smf)# listen-port 55403 ssl
-(config-service-smf)# no shutdown
-(config-service-smf)# exit
-(config)#
+<p>A token loses some of its lifetime between being written and being read, so keep that gap small. If the file stops updating, the connector retries according to <code>reconnectRetries</code>, then gives up.</p>
+<p><strong>3. Client certificate</strong></p>
+<pre><code language="language-python" class="language-python">      .option(&#34;solace.apiProperties.AUTHENTICATION_SCHEME&#34;, &#34;AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE&#34;)
+      .option(&#34;solace.apiProperties.SSL_TRUST_STORE&#34;, &#34;&lt;truststore-path&gt;&#34;)
+      .option(&#34;solace.apiProperties.SSL_KEY_STORE&#34;, &#34;&lt;keystore-path&gt;&#34;)
 </code></pre>
-<h4 is-upgraded>Enable TLS/SSL within the Message VPN</h4>
-<p>By default within Solace message VPNs both the plain-text and SSL services are enabled. If the Message VPN defaults remain unchanged, then this section can be skipped. However, if within the current application VPN, this service has been disabled, then for secure communication to succeed it should be enabled. The steps below show how to enable SSL within the messaging (SMF) service to allow secure client connections from the Spark Streaming client.</p>
-<pre><code>(config)# message-vpn solace_VPN
-(config-msg-vpn)# service smf
-(config-msg-vpn-service-smf)# ssl
-(config-msg-vpn-service-ssl)# no shutdown
-(config-msg-vpn-service-ssl)# exit
-(config-msg-vpn-service-smf)# exit
-(config-msg-vpn-service)# exit
-(config-msg-vpn)# exit
-(config)#
+<p>Set the matching truststore/keystore format and password properties alongside these.</p>
+<h2 is-upgraded>Dependency and spark-submit reference</h2>
+<p>Maven:</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.solacecoe.connectors&lt;/groupId&gt;
+    &lt;artifactId&gt;pubsubplus-connector-spark&lt;/artifactId&gt;
+    &lt;version&gt;3.1.7&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
-<h2 is-upgraded>Configuring Secure Connections on the Spark Client</h2>
-<h4 is-upgraded>Updating the provider URL</h4>
-<p>In order to signal to the PubSub+ JMS API that the connection should be a secure connection, the protocol must be updated in &#34;Solace Event Broker Host&#34;:</p>
-<pre><code>tcps://&lt;host&gt;:&lt;port&gt;
+<p>sbt:</p>
+<pre><code language="language-scala" class="language-scala">libraryDependencies += &#34;com.solacecoe.connectors&#34; % &#34;pubsubplus-connector-spark&#34; % &#34;3.1.7&#34;
 </code></pre>
-<h4 is-upgraded>Adding SSL Related Configuration</h4>
-<p>Additionally, if using a self-signed server certificate, the Solace JMS API must be able to validate the server certificate of the Solace Event Broker in order to establish a secure connection. To do this, the following trust store parameters need to be provided in the jndi.properties file:</p>
-<p>First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace Event Broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.</p>
-<pre><code>env.put(SupportedProperty.Solace_JMS_SSL_TrustStore, ___Path_or_URL___)
-</code></pre>
-<p>It is also required to provide a trust store password. This password allows the Solace JMS API to validate the integrity of the contents of the trust store. This is done through the following parameter.</p>
-<pre><code>env.put(SupportedProperty.Solace_JMS_SSL_TrustStorePassword, ___Password___)
-</code></pre>
-<p>There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: &#34;jks&#34; for Java Key Store or &#34;pkcs12&#34;. Setting the trust store format is done through the following parameter.</p>
-<pre><code>env.put(SupportedProperty.Solace_JMS_SSL_TrustStoreFormat, jks)
-</code></pre>
-<p>And finally, the authentication scheme must be selected. Solace JMS supports the following authentication schemes for secure connections:</p>
-<ul>
-<li>AUTHENTICATION_SCHEME_BASIC</li>
-<li>AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE</li>
-</ul>
-<p>This integration example will use basic authentication. So the required parameter is as follows:</p>
-<pre><code>env.put(SupportedProperty.Solace_JMS_Authentication_Scheme,AUTHENTICATION_SCHEME_BASIC)
-</code></pre>
-<h2 is-upgraded>Working with Solace Disaster Recovery<a name="working-with-solace-disaster-recovery" target="_blank"></a></h2>
-<p>The [Solace-FG] section &#34;Data Center Replication&#34; contains a sub-section on &#34;Application Implementation&#34; which details items that need to be considered when working with Solace&#34;s Data Center Replication feature. This integration guide will show how the following items required to have a Spark Streaming client successfully connect to a backup data center using the Solace Data Center Replication feature.</p>
-<ul>
-<li>Configuring a Host List within the Spark Streaming client</li>
-<li>Configuring JMS Reconnection Properties within Solace JNDI</li>
-<li>Configuring Message Driven Bean Re-activation in the Event of Activation Failures</li>
-<li>Disaster Recovery Behavior Notes</li>
-</ul>
-<h3 is-upgraded>Configuring a Host List within the Spark Streaming client</h3>
-<p>As described in [Solace-Docs], the host list provides the address of the backup data center. This is configured within the Spark Streaming client through the ConnectionURL configuration property value (of a respective JCA entity) as follows:</p>
-<pre><code>tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
-</code></pre>
-<p>The active site and standby site addresses are provided as a comma-separated list of &#34;Connection URIs&#34;.  When connecting, the Solace JMS connection will first try the active site and if it is unable to successfully connect to the active site, then it will try the standby site. This is discussed in much more detail in the referenced Solace documentation</p>
-<h3 is-upgraded>Configuring reasonable JMS Reconnection Properties within Solace JNDI</h3>
-<p>In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the &#34;reconnect retries&#34; parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of &#34;-1&#34; to force the Solace JMS API to reconnect indefinitely.</p>
-<p>The reconnect retries is tuned in the Solace event broker CLI as follows:</p>
-<pre><code>config)# jndi message-vpn solace_VPN
-(config-jndi)# connection-factory JNDI/Sol/CF
-(config-jndi-connection-factory)# property-list transport-properties
-(config-jndi-connection-factory-pl)# property &#34;reconnect-retries&#34; &#34;-1&#34;
-(config-jndi-connection-factory-pl)# exit
-(config-jndi-connection-factory)# exit
-(config-jndi)# exit
-(config)#
+<p>A complete <code>spark-submit</code> command for a self-managed cluster:</p>
+<pre><code language="language-bash" class="language-bash">spark-submit \
+  --packages com.solacecoe.connectors:pubsubplus-connector-spark:3.1.7 \
+  --conf spark.executor.instances=3 \
+  --class com.example.SolaceSparkJob \
+  ./solace-spark-selfmanaged.jar \
+  --sparkRuntimePlatform OTHER
 </code></pre>
 
 
