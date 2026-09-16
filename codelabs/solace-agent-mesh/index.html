@@ -29,7 +29,9 @@
                   feedback-link="https://github.com/SolaceDev/solace-dev-codelabs/blob/master/markdown/solace-agent-mesh">
     
       <google-codelab-step label="What you&#39;ll learn: Overview" duration="2">
-        <p>In this codelab, you&#39;ll gain a foundational understanding of the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh</a>. You&#39;ll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>In this codelab, you&#39;ll gain a foundational understanding of the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh</a>. You&#39;ll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.</p>
 <p>By the end of this codelab, you&#39;ll be equipped to get started with Solace Agent Mesh, including learning the building blocks, installation prerequisites, running built-in agents, and connecting different types of agents. You&#39;ll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.</p>
 <p class="image-container"><img alt="SAM Arch" src="img/3d4bcaab27b64893.png"></p>
 
@@ -37,7 +39,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="Introduction to the Solace Agent Mesh" duration="7">
-        <h2 is-upgraded>Problem statement</h2>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<h2 is-upgraded>Problem statement</h2>
 <p>Building effective agentic systems presents a complex challenge that extends far beyond simply deploying AI models. AI Agents are siloed systems that operate in isolation, and are unable to effectively communicate or share capabilities across organizational boundaries. <strong>By definition and design, Agents are inherently domain-specific, designed to excel in narrow use cases but struggling to collaborate or leverage expertise from other specialized agents, creating fragmented AI ecosystems that fail to realize their collective potential.</strong></p>
 <p class="image-container"><img alt="Fragmented" src="img/a3864d5d59ef93ff.png"></p>
 <p>To make intelligent decisions and respond to dynamic conditions, agentic systems must rely on event-driven actions that flow into the organization. While solving the core AI challenge represents only 20% of the effort, the remaining 80% involves the much more complex task of connecting AI models to the disparate data sources, legacy systems, APIs, and organizational knowledge that exist across isolated silos—making data accessibility and integration the true bottleneck in delivering practical AI value</p>
@@ -115,7 +119,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="Key Components and Architecture" duration="15">
-        <p>Solace Agent Mesh represents a sophisticated enterprise-grade platform that orchestrates AI agents. At its core, the <strong>Orchestrator</strong> serves as the intelligent brain that decomposes complex tasks and routes them to specialized <strong>Agents</strong> built using the Agent Development Kit (ADK), while <strong>Gateways</strong> created with the Gateway Development Kit (GDK) provide secure multi-protocol entry points. The platform&#39;s foundation rests on the <strong>Solace Broker</strong> for enterprise messaging, complemented by essential Services including <strong>LLM integration</strong>, <strong>embeddings management</strong>, <strong>artifact storage</strong>, and <strong>conversation history tracking</strong>. This unified architecture creates a robust, enterprise-ready platform for deploying and managing AI agent ecosystems at scale.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Solace Agent Mesh represents a sophisticated enterprise-grade platform that orchestrates AI agents. At its core, the <strong>Orchestrator</strong> serves as the intelligent brain that decomposes complex tasks and routes them to specialized <strong>Agents</strong> built using the Agent Development Kit (ADK), while <strong>Gateways</strong> created with the Gateway Development Kit (GDK) provide secure multi-protocol entry points. The platform&#39;s foundation rests on the <strong>Solace Broker</strong> for enterprise messaging, complemented by essential Services including <strong>LLM integration</strong>, <strong>embeddings management</strong>, <strong>artifact storage</strong>, and <strong>conversation history tracking</strong>. This unified architecture creates a robust, enterprise-ready platform for deploying and managing AI agent ecosystems at scale.</p>
 <p class="image-container"><img alt="SAM Component" src="img/8228332dfdef0e1b.jpg"></p>
 <h2 is-upgraded>Solace Event Broker / Event Mesh</h2>
 <p>The central messaging backbone that provides intelligent topic-based routing, fault-tolerant delivery, and horizontal scaling for all Agent-to-Agent (A2A) protocol communications across the entire system.</p>
@@ -181,7 +187,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="Use Cases and Applications" duration="5">
-        <p>Solace Agent Mesh is versatile and can be applied to various domains. Here are some examples of where Agent Mesh could be very helpful</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Solace Agent Mesh is versatile and can be applied to various domains. Here are some examples of where Agent Mesh could be very helpful</p>
 <h2 is-upgraded>Intelligent Enterprise Automation</h2>
 <p>Agent orchestration through Solace Agent mesh excels in customer service systems that intelligently route inquiries to specialized agents based on intent and context, dramatically improving response times and customer satisfaction. The event-driven architecture allows service representatives to handle complex queries by delegating specialized aspects to purpose-built AI agents while maintaining conversation continuity. Organizations deploy these systems to provide consistent, 24/7 customer support that combines human expertise with AI capabilities, reducing resolution times and improving service quality while scaling efficiently to handle peak demand periods without degradation in performance.</p>
 <h2 is-upgraded>Event-Triggered Analysis</h2>
@@ -207,7 +215,9 @@
       </google-codelab-step>
     
       <google-codelab-step label="Getting Started with Solace Agent Mesh" duration="10">
-        <h2 is-upgraded>Prerequisites</h2>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<h2 is-upgraded>Prerequisites</h2>
 <ul>
 <li>[Optional] <a href="https://solace.com/products/event-broker/software/getting-started/" target="_blank">Solace Event Broker</a></li>
 <li>Python 3.11+</li>
@@ -282,7 +292,9 @@ source venv/bin/activate
       </google-codelab-step>
     
       <google-codelab-step label="Running Solace Solace Agent Mesh" duration="5">
-        <p>After initializing your Solace Agent Mesh instance, you will find out the following files and directories has been created in your project folder</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>After initializing your Solace Agent Mesh instance, you will find out the following files and directories has been created in your project folder</p>
 <pre><code language="language-bash" class="language-bash">.
 ├── .env
 ├── .sam
@@ -336,7 +348,9 @@ source venv/bin/activate
       </google-codelab-step>
     
       <google-codelab-step label="Adding Agents" duration="5">
-        <p>As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>As mentioned earlier, Agents are specialized processing units built around ADK. They provide domain-specific knowledge and capabilities and can operate independently and be deployed separately.</p>
 <h2 is-upgraded>Agent Anatomy</h2>
 <p class="image-container"><img alt="anatomy" src="img/3aaba4ff832a9296.png"></p>
 <p>In Solace Agent Mesh, Agents are configuration driven vial YAML files and there are multiple ways to develop an agent:</p>
@@ -434,7 +448,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Understanding the YAML configuration of agents" duration="5">
-        <p>The Solace Agent Mesh framework is controlled by YAML configuration files that define agents, gateways, and plugins, allowing for configuration-driven development without code changes.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>The Solace Agent Mesh framework is controlled by YAML configuration files that define agents, gateways, and plugins, allowing for configuration-driven development without code changes.</p>
 <p>Agent configuration files in Solace Agent Mesh are stored in the <code>configs/agents/</code> directory. Each agent has its own YAML file that defines its behavior, capabilities, and integration settings.</p>
 <h2 is-upgraded>Key Components of Agent YAML Files</h2>
 <p>A typical agent configuration YAML file includes these key sections:</p>
@@ -592,7 +608,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Built-in tools" duration="7">
-        <p>Built-in tools in the Solace Agent Mesh are a comprehensive set of capabilities that enable agents to perform complex tasks, interact with various systems, and collaborate effectively within the mesh ecosystem. These tools extends the native capabilities offered by the <a href="https://google.github.io/adk-docs/" target="_blank">Agent Development Kit (ADK)</a>. This of these tool as native functionalities that agents have access to like &#34;functions&#34; instead of building these from scratch.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Built-in tools in the Solace Agent Mesh are a comprehensive set of capabilities that enable agents to perform complex tasks, interact with various systems, and collaborate effectively within the mesh ecosystem. These tools extends the native capabilities offered by the <a href="https://google.github.io/adk-docs/" target="_blank">Agent Development Kit (ADK)</a>. This of these tool as native functionalities that agents have access to like &#34;functions&#34; instead of building these from scratch.</p>
 <p>The Solace Agent Mesh comes with a series of built-in tools natively to the platform. Each built-in tool name is defined in the <code>tools</code> section of the application configuration for the agent in the yaml config file as follows</p>
 <pre><code language="language-yaml" class="language-yaml">tools:
    - tool_type: builtin
@@ -644,7 +662,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Plugins Ecosystem" duration="10">
-        <p>Plugins serve as the backbone of the Solace Agent Mesh extensible architecture, providing a structured way to package, distribute, and incorporate new features into any SAM deployment. They are modular Python packages that extend the agent mesh&#39;s capabilities through specialized components that integrate seamlessly with the A2A protocol.</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Plugins serve as the backbone of the Solace Agent Mesh extensible architecture, providing a structured way to package, distribute, and incorporate new features into any SAM deployment. They are modular Python packages that extend the agent mesh&#39;s capabilities through specialized components that integrate seamlessly with the A2A protocol.</p>
 <p>To spin up the list of the core plugins offered by the Solace Agent Mesh, execute the following</p>
 <pre><code>sam plugin catalog
 </code></pre>
@@ -681,7 +701,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Adding MCP Agents" duration="5">
-        <p>As mentioned earlier, the Solace Agent Mesh is an agent agnostic framework. Agents are YAML configuration driven and can be authored using</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>As mentioned earlier, the Solace Agent Mesh is an agent agnostic framework. Agents are YAML configuration driven and can be authored using</p>
 <p>In this step, we are going to add an MCP agent using the graphical user interface.</p>
 <p>From your terminal instance, execute this command from your terminal</p>
 <pre><code>sam add agent --gui
@@ -822,7 +844,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Next Steps" duration="5">
-        <p>Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:</p>
 <h2 is-upgraded>📚 Explore the Documentation</h2>
 <p>Visit the <a href="https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/" target="_blank">Solace Agent Mesh Documentation</a> for comprehensive guides, API references, and advanced concepts. The documentation provides in-depth information on:</p>
 <ul>
@@ -874,7 +898,9 @@ apps:
       </google-codelab-step>
     
       <google-codelab-step label="Takeaways" duration="7">
-        <p>Throughout this codelab, you&#39;ve gained valuable insights into Solace Agent Mesh and its capabilities. Here are the key takeaways to remember:</p>
+        <aside class="special"><p> 🎉 <strong>A new version of Solace Agent Mesh is here!</strong> This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the <a href="https://docs.solace.com/Agent-Mesh/agent-mesh.htm" target="_blank">new Solace Agent Mesh documentation</a> to get started, or download the free <a href="https://solace.com/products/agent-mesh/download" target="_blank">Solace Agent Mesh desktop app</a>.</p>
+</aside>
+<p>Throughout this codelab, you&#39;ve gained valuable insights into Solace Agent Mesh and its capabilities. Here are the key takeaways to remember:</p>
 <h2 is-upgraded>Architectural Benefits</h2>
 <ul>
 <li><strong>Event-Driven Foundation</strong>: Solace Agent Mesh leverages event-driven architecture to create resilient, scalable agent communication patterns based on the Solace Event Broker.</li>
