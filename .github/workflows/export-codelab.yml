@@ -12,19 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4
         with:
           go-version: '1.20.5'
       
       - name: Checkout Current Branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
         with:
           fetch-depth: 0
           token: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
           path: main
 
       - name: Checkout claat repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0

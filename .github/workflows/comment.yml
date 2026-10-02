@@ -8,8 +8,8 @@ jobs:
     name: Add guidelines comment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: harupy/comment-on-pr@master
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+      - uses: harupy/comment-on-pr@c0522c44600040927a120b9309b531e3cb6f8d48 # master
         env:
           GITHUB_TOKEN: ${{ secrets.SOLACE_COMMUNITY_BOT_ULTIMATE }}
         with:
