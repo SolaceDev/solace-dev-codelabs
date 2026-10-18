@@ -16,7 +16,7 @@ This document demonstrates how to integrate the Solace Java Message Service (JMS
 
 ![Sequence Diagram](img/solace2apama.png)
 
-Apama CEP has been used in many real-time applications, i.e. HFT, trade surveillance, auto hedging, real-time betting, real-time analytics, real-time firewall and etc. Apama CEP has its place in streaming space with little footprint. Flink and Spark are all implemented in Java and Scala with inherited JVM disadvantages. [How can Apama’s EPL run faster than both C and Java®?](https://www.softwareag.com/corporate/images/SAG_Apama_EPL_FS_Jun14_Web_tcm16-122355.pdf)
+Apama CEP has been used in many real-time applications, i.e. HFT, trade surveillance, auto hedging, real-time betting, real-time analytics, real-time firewall and etc. Apama CEP has its place in streaming space with little footprint. Flink and Spark are all implemented in Java and Scala with inherited JVM disadvantages. [How can Apama’s EPL run faster than both C and Java®?](https://softwareag-usa.s3.amazonaws.com/Content/Apama/SAG_The_Apama_Platform_20PG_WP_Jun16-Web.pdf)
 
 Solace has been the OPEN messaging leader in the industry, and is widely adopted by many financial firms and vertical industries. Solace's ultra wide bandwidth and low latency event broker works well with Apama hand-in-hand.
 
