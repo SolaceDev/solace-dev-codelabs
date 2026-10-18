@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2026-02-25T21:06:13Z",
+  "updated": "2026-10-18T00:53:51Z",
   "id": "apamajms",
   "duration": 35,
   "title": "Integration Guide: Feeding Apama CEP 10.0 from a Solace Message Bus",
