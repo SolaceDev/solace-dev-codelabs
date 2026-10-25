@@ -15,7 +15,7 @@ Duration: 0:02:00
 > aside positive
 > 🎉 **A new version of Solace Agent Mesh is here!** This codelab covers an earlier version and is kept for reference. The latest release is a major upgrade — a redesigned architecture, improved performance, and powerful new capabilities. Explore the [new Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) to get started, or download the free [Solace Agent Mesh desktop app](https://solace.com/products/agent-mesh/download).
 
-In this codelab, you'll gain a foundational understanding of the [Solace Agent Mesh](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/). You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
+In this codelab, you'll gain a foundational understanding of the [Solace Agent Mesh](https://docs.solace.com/Agent-Mesh/agent-mesh.htm). You'll explore the architecture, key components, and benefits of the Solace Agent Mesh, learning how it enables scalable, event-driven communication between AI agents and services. The introduction covers the evolution of event-driven architectures and highlights real-world use cases where agent mesh technology can be applied.
 
 By the end of this codelab, you'll be equipped to get started with Solace Agent Mesh, including learning the building blocks, installation prerequisites, running built-in agents, and connecting different types of agents. You'll understand how to develop custom agents, leverage plugins and tools, and build multi-agent systems that harness the power of event mesh and standardized protocols for robust, collaborative AI solutions.
 
@@ -531,7 +531,7 @@ apps:
 ![markitdown](img/markitdown.png)
 
 > aside positive
-> Check out the [examples](https://github.com/SolaceLabs/solace-agent-mesh/tree/main/examples/agents) directory for other agent yaml configurations.
+> Check out the [examples](https://github.com/SolaceProducts/solace-agent-mesh) directory for other agent yaml configurations.
 
 
 ## Understanding the YAML configuration of agents
@@ -710,7 +710,7 @@ tools:
      tool_name: "tool_name"
 ```
 > aside positive
-> Note that this is a developing open source framework and more built-in tools will be developed and introduced. Learn more about the available tools from the [Built-in Tool documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/builtin-tools/)
+> Note that this is a developing open source framework and more built-in tools will be developed and introduced. Learn more about the available tools from the [Built-in Tool documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm)
 
 **1. Artifact Management Tools**
 
@@ -824,7 +824,7 @@ Solace Agent Mesh plugins ecosystem also encourages community contributions thro
 3. Install the plugin of choice
 
 
-To learn more about plugins, the differences between plugins and agents, and how to create your first plugin check out the Solace Agent Mesh [Plugins documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/components/plugins)
+To learn more about plugins, the differences between plugins and agents, and how to create your first plugin check out the Solace Agent Mesh [Plugins documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm)
 
 ## Adding MCP Agents
 Duration: 0:05:00
@@ -1012,7 +1012,7 @@ Now that you have the File Agent up and running, you can run any of the followin
 "Read the contents of test.txt"
 ```
 
-To learn more about MCP integrations with the Solace Agent mesh, refer to the [MCP Integration](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/developing/tutorials/mcp-integration) section in the documentation
+To learn more about MCP integrations with the Solace Agent mesh, refer to the [MCP Integration](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) section in the documentation
 
 
 ## Next Steps
@@ -1024,13 +1024,13 @@ Duration: 0:05:00
 Now that you have a foundational understanding of Solace Agent Mesh and have deployed your first agent ecosystem, here are some recommended next steps to continue your journey:
 
 ### 📚 Explore the Documentation
-Visit the [Solace Agent Mesh Documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/) for comprehensive guides, API references, and advanced concepts. The documentation provides in-depth information on:
+Visit the [Solace Agent Mesh Documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) for comprehensive guides, API references, and advanced concepts. The documentation provides in-depth information on:
 - Creating custom agents with specific capabilities
 - Understanding the A2A protocol in detail
 - Advanced deployment patterns
 
 ### 🤝 Join the Community
-- Star and watch the [Solace Agent Mesh Repository](https://github.com/SolaceLabs/solace-agent-mesh) to stay updated with the latest developments
+- Star and watch the [Solace Agent Mesh Repository](https://github.com/SolaceProducts/solace-agent-mesh) to stay updated with the latest developments
 - Explore community plugins in the [Solace Community Plugins Repository](https://github.com/solacecommunity/solace-agent-mesh-plugins)
 - Join the [Solace Community Forum](https://solace.community/) to connect with other developers and get support
 
@@ -1095,10 +1095,10 @@ Throughout this codelab, you've gained valuable insights into Solace Agent Mesh 
 - **Scalable Architecture**: The event-driven foundation allows the system to scale horizontally as demand increases.
 
 ### Getting Support and Resources
-- The [Solace Agent Mesh GitHub repository](https://github.com/SolaceLabs/solace-agent-mesh) contains the core framework code, examples, and documentation.
+- The [Solace Agent Mesh GitHub repository](https://github.com/SolaceProducts/solace-agent-mesh) contains the core framework code, examples, and documentation.
 - The [Solace Community Plugins Repository](https://github.com/solacecommunity/solace-agent-mesh-plugins) offers extensibility through community-developed plugins.
 - The [Solace Blog](https://solace.com/blog) regularly features articles about Agent Mesh use cases and best practices.
-- The comprehensive [Solace Agent Mesh documentation](https://solacelabs.github.io/solace-agent-mesh/docs/documentation/getting-started/introduction/) provides detailed guides and reference materials.
+- The comprehensive [Solace Agent Mesh documentation](https://docs.solace.com/Agent-Mesh/agent-mesh.htm) provides detailed guides and reference materials.
 
 Solace Agent Mesh represents a significant advancement in building enterprise-grade agentic systems that can collaborate effectively at scale. By combining the power of event-driven architecture with modern AI capabilities, it provides a robust foundation for building the next generation of intelligent applications.
 
